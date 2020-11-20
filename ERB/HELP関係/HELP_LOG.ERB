@@ -6,58 +6,14 @@
 ;ミッションログ해설メイン페이지
 ;--------------------------------------------------
 @DICTIONARY_ENDING_MAIN
-P = 0
-P:1 = 2
 $PRINT_LIST
 DRAWLINE
-IF P == 0
 		PRINTL [ 0] 견습 서모너
 	IF DAY:1 > 10 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
 		PRINTL [ 1] 초심자 서모너
 	ELSE
 		PRINTL [ 1] ????
 	ENDIF
-	IF DAY:1 > 20 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
-		PRINTL [ 2] 반사람분 서모너
-	ELSE
-		PRINTL [ 2] ????
-	ENDIF
-	IF DAY:1 > 30 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
-		PRINTL [ 3] 미실장
-	ELSE
-		PRINTL [ 3] ????
-	ENDIF
-	IF DAY:1 > 40 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
-		PRINTL [ 4] 미실장
-	ELSE
-		PRINTL [ 4] ????
-	ENDIF
-	IF FLAG:周回횟수 >= 1 || FLAG:5 == 9
-		PRINTL [ 5] 미실장
-	ELSE
-		PRINTL [ 5] ????
-	ENDIF
-	IF 0
-		PRINTL [ 6] 미실장
-	ELSE
-		PRINTL [ 6] ????
-	ENDIF
-	IF 0
-		PRINTL [ 7] 미실장
-	ELSE
-		PRINTL [ 7] ????
-	ENDIF
-	IF 0
-		PRINTL [ 8] 미실장
-	ELSE
-		PRINTL [ 8] ????
-	ENDIF
-	IF 0
-		PRINTL [ 9] 미실장
-	ELSE
-		PRINTL [ 9] ????
-	ENDIF
-ELSEIF P == 1
 	IF FLAG:처녀탈취人数 > 0
 		PRINTL [10] 처음인 존재
 	ELSE
@@ -108,7 +64,6 @@ ELSEIF P == 1
 	ELSE
 		PRINTL [19] ????
 	ENDIF
-ELSEIF P == 2
 	IF FLAG:奴隷매각最高額（음란창부） >= 150000
 		PRINTL [20] 고급 창부의 어획료
 	ELSE
@@ -139,19 +94,12 @@ ELSEIF P == 2
 	ELSE
 		PRINTL [25] ????
 	ENDIF
-ENDIF
 DRAWLINE
-PRINTFORMLC \@(P <= 0) ? %" " * 18% # [1001]이전 페이지\@
 PRINTLC [1000]돌아간다
-PRINTFORMLC \@(P >= P:1) ? %" " * 18% # [1009]다음 페이지\@
 $INPUT_LOOP
 INPUT
 IF RESULT == 1000
 	RETURN 0
-ELSEIF RESULT == 1001 && P > 0
-	P -= 1
-ELSEIF RESULT == 1009 && P < P:1
-	P += 1
 ELSEIF RESULT < 0 || RESULT > 49
 	GOTO INPUT_LOOP
 ELSE
@@ -183,109 +131,6 @@ ELSE
 	PRINTW 
 ENDIF
 
-@DICTIONARY_ENDING_2
-IF DAY:1 > 20 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
-	PRINTL 〔반사람분 서모너〕
-	PRINTL 지금은 만들어지지 않았습니다.
-	PRINTL 
-	PRINTW 
-ELSE
-	PRINTL 〔????〕
-	PRINTL 취득조건：2회째의 할당량 납금을 끝마친다
-	PRINTL 
-	PRINTW 
-ENDIF
-
-@DICTIONARY_ENDING_3
-IF DAY:1 > 30 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
-	PRINTL 〔미실장〕
-	PRINTL 지금은 만들어지지 않았습니다.
-	PRINTL 
-	PRINTW 
-ELSE
-	PRINTL 〔????〕
-	PRINTL 취득조건：3회째의 할당량 납금을 끝마친다
-	PRINTL 
-	PRINTW 
-ENDIF
-
-@DICTIONARY_ENDING_4
-IF DAY:1 > 40 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
-	PRINTL 〔미실장〕
-	PRINTL 지금은 만들어지지 않았습니다.
-	PRINTL 
-	PRINTW 
-ELSE
-	PRINTL 〔????〕
-	PRINTL 취득조건：4회째의 할당량 납금을 끝마친다
-	PRINTL 
-	PRINTW 
-ENDIF
-
-@DICTIONARY_ENDING_5
-IF FLAG:周回횟수 >= 1 || FLAG:5 == 9
-PRINTL 〔미실장〕
-PRINTL 지금은 만들어지지 않았습니다.
-PRINTL 
-PRINTW 
-ELSE
-PRINTL 〔????〕
-PRINTL 취득조건：모든 납금을 끝마친다
-PRINTL 
-PRINTW 
-ENDIF
-
-@DICTIONARY_ENDING_6
-IF 0
-PRINTL 〔미실장〕
-PRINTL 현재 실장되어 있지 않습니다
-PRINTL 
-PRINTW 
-ELSE
-PRINTL 〔????〕
-PRINTL 취득조건：현재 실장되어 있지 않습니다
-PRINTL 
-PRINTW 
-ENDIF
-
-@DICTIONARY_ENDING_7
-IF 0
-PRINTL 〔미실장〕
-PRINTL 현재 실장되어 있지 않습니다
-PRINTL 
-PRINTW 
-ELSE
-PRINTL 〔????〕
-PRINTL 취득조건：현재 실장되어 있지 않습니다
-PRINTL 
-PRINTW 
-ENDIF
-
-@DICTIONARY_ENDING_8
-IF 0
-PRINTL 〔미실장〕
-PRINTL 현재 실장되어 있지 않습니다
-PRINTL 
-PRINTW 
-ELSE
-PRINTL 〔????〕
-PRINTL 취득조건：현재 실장되어 있지 않습니다
-PRINTL 
-PRINTW 
-ENDIF
-
-@DICTIONARY_ENDING_9
-IF 0
-PRINTL 〔미실장〕
-PRINTL 현재 실장되어 있지 않습니다
-PRINTL 
-PRINTW 
-ELSE
-PRINTL 〔????〕
-PRINTL 취득조건：현재 실장되어 있지 않습니다
-PRINTL 
-PRINTW 
-ENDIF
 
 @DICTIONARY_ENDING_10
 IF FLAG:처녀탈취人数 > 0

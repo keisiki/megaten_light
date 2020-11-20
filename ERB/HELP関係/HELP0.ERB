@@ -27,7 +27,7 @@ DRAWLINE
 PRINTL 어느 항목에 대해서 조사합니까？
 PRINTLC [ 1] 능력
 PRINTLC [ 2] 각인
-PRINTLC [ 3] 소질(작성중)
+;PRINTLC [ 3] 소질(작성중)
 PRINTLC [ 4] 경험
 PRINTLC [ 5] 구슬
 PRINTLC [ 6] 소스
@@ -54,9 +54,9 @@ ELSEIF RESULT == 1
 ELSEIF RESULT == 2
 	;각인
 	CALL DICTIONARY_MARK_MAIN
-ELSEIF RESULT == 3
-	;소질
-	CALL DICTIONARY_TALENT_MAIN
+;ELSEIF RESULT == 3
+;	;소질
+;	CALL DICTIONARY_TALENT_MAIN
 ELSEIF RESULT == 4
 	;경험
 	CALL DICTIONARY_EXP_MAIN
@@ -292,8 +292,7 @@ PRINTW 높으면 동성 성애 조교를 했을때 느끼는 반감이 내려가
 
 ;수간중독
 @DICTIONARY_ABL_22
-PRINTL 현재 미실장.
-PRINTW 
+PRINTW 현재 미실장. 
 
 ;=============================================================================
 ;用語辞典――각인
@@ -564,8 +563,7 @@ PRINTW 페티시즘의 경향이 강하고, 촉수 싫은 분에게는 무연의
 ;흡혈경험
 @DICTIONARY_EXP_56
 PRINTL 그 이름과 같이, 몇번 피를 빨아 들여졌는지를 나타냅니다.
-PRINTL 현재 이것을 취득할 수 있는 커멘드는 존재하지 않습니다
-PRINTW 
+PRINTW 현재 이것을 취득할 수 있는 커멘드는 존재하지 않습니다
 
 ;수간경험
 @DICTIONARY_EXP_57
@@ -595,8 +593,7 @@ PRINTW 능력 「촬영 기능」을 상승시키는데 필요하게 됩니다.
 ;피사경험
 @DICTIONARY_EXP_63
 PRINTL 비디오 카메라, 또는 카메라로 조교 풍경을 촬영당한 회수를 나타냅니다.
-PRINTL 「비디오 카메라」나 「카메라」를 사용시 피조교측의 경험이 상승합니다.
-PRINTW 
+PRINTW 「비디오 카메라」나 「카메라」를 사용시 피조교측의 경험이 상승합니다.
 
 ;가창경험
 @DICTIONARY_EXP_64
@@ -634,11 +631,7 @@ PRINTW 또, 주인이 취득할 수는 없습니다。
 
 ;라이브경험
 @DICTIONARY_EXP_74
-PRINTL 현재 미실장
-PRINTL 
-PRINTL 
-PRINTW 
-
+PRINTW 현재 미실장
 ;변기경험
 @DICTIONARY_EXP_75
 PRINTL 공중 변소로 사용된 횟수를 나타냅니다.
@@ -647,9 +640,7 @@ PRINTW 또, 주인이 「음란」의 소질을 얻는데 필요하게 됩니다
 
 ;ＴＳ경험
 @DICTIONARY_EXP_80
-PRINTL 성전환 횟수를 나타냅니다.
-PRINTL 
-PRINTW 
+PRINTW 성전환 횟수를 나타냅니다.
 
 ;=============================================================================
 ;用語辞典――珠
