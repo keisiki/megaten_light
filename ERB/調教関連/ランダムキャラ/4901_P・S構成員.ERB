@@ -1,0 +1,1970 @@
+﻿;ARGは生成キャラの등록번호
+@RANDOMCHARA_4901, ARGS, ARG, ARG:1
+#LOCALSSIZE 1
+SELECTCASE ARGS
+	CASE "一人称"
+		IF TALENT:ARG:남자 == 1
+			SELECTCASE RAND:5
+				CASE 0
+					RESULTS = 나
+				CASE 1
+					RESULTS = ボク
+				CASE 2
+					RESULTS = 俺
+				CASE 3
+					RESULTS = オレ
+				CASE 4
+					RESULTS = ボブ
+			ENDSELECT
+		ELSE
+			SELECTCASE RAND:8
+				CASE 0
+					RESULTS = 저
+				CASE 1
+					RESULTS = 나
+				CASE 2
+					RESULTS = 나
+				CASE 3
+					RESULTS = わたくし
+				CASE 4
+					RESULTS = ワタクシ
+				CASE 5
+					RESULTS = あちき
+				CASE 6
+					RESULTS = 소첩
+				CASE 7
+					RESULTS = 소녀
+				CASE 8
+					RESULTS = ボク
+			ENDSELECT
+		ENDIF
+	CASE "二人称"
+		RESULTS = %CALLNAME:MASTER%
+	CASE "체력"
+		RETURN RAND(1500, 2000)
+	CASE "기력"
+		RETURN RAND(1500, 2000)
+	CASE "속성"
+		RETURN RAND(100, 200), RAND(100, 200)
+	CASE "종족"
+		RETURN 0
+	CASE "스킬"
+			SELECTCASE RAND:30
+				CASE 0
+					ABL:ARG:스킬1 = 324;매혹물어뜯기
+
+ABL:ARG:습득스킬1 = 201;돌격
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 306;악셀클로
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1121;파라라아이
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 326;베어먹기
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 2415;라쿠카쟈오토
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 2406;이악물기
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 514;雄たけび
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 2423;황천의회심
+ABL:ARG:습득LV15 = 45
+
+				CASE 1
+					ABL:ARG:스킬1 = 801;부후
+
+ABL:ARG:습득스킬1 = 2403;일할의마맥
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 804;마하・부후
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 601;테트라쟈
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 808;아이온의비
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 2416;마카카쟈오토
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 1132;마계의조사
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 817;대냉계
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 1139;사신의점호
+ABL:ARG:습득LV15 = 45
+
+				CASE 2
+					ABL:ARG:스킬1 = 2431;민속학
+
+ABL:ARG:습득스킬1 = 531;하이・애널라이즈
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 515;도발
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 510;토라에스트
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 2432;유혹
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 522;에스트마
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 514;포효
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 344;마음의외침
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 607;마하애널라이즈
+ABL:ARG:습득LV15 = 45
+
+				CASE 3
+					ABL:ARG:스킬1 = 2430;아이템숙련
+
+ABL:ARG:습득스킬1 = 2416;마카카쟈오토
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 2431;민속학
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 2415;라쿠카쟈오토
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 531;하이・애널라이즈
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 2414;타루카쟈오토
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 2427;서드아이
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 2417;스쿠카쟈오토
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 610;수호의방패
+ABL:ARG:습득LV15 = 45
+
+				CASE 4
+					ABL:ARG:스킬1 = 110;퀵드로
+
+ABL:ARG:습득스킬1 = 2419;어드바이스
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 113;산탄사격
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 2418;코칭
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 112;연속사격
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 128;비구가드킬
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 118;부기우기
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 515;도발
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 2420;관통
+ABL:ARG:습득LV15 = 45
+
+				CASE 5
+					ABL:ARG:스킬1 = 1906;기가
+
+ABL:ARG:습득스킬1 = 1801;그라이
+ABL:ARG:습득LV1 = 6
+ABL:ARG:습득스킬3 = 1601;아쿠아
+ABL:ARG:습득LV3 = 8
+ABL:ARG:습득스킬5 = 404;メ디아
+ABL:ARG:습득LV5 = 14
+ABL:ARG:습득스킬7 = 1704;마하・갈
+ABL:ARG:습득LV7 = 18
+ABL:ARG:습득스킬9 = 512;컨센트레이트
+ABL:ARG:습득LV9 = 24
+ABL:ARG:습득스킬11 = 1129;バイツァ・ダスト
+ABL:ARG:습득LV11 = 28
+ABL:ARG:습득스킬13 = 1608;피어트렌트
+ABL:ARG:습득LV13 = 34
+ABL:ARG:습득스킬15 = 2092;禁忌の肝抉り刃
+ABL:ARG:습득LV15 = 38
+
+				CASE 6
+					ABL:ARG:스킬1 = 335;테일
+
+ABL:ARG:습득스킬1 = 1101;시바브
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 237;베어넘기기
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1123;신경가스
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 327;전광석화
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 518;무거운한숨
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 330;휘감기
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 338;전술가드킬
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 334;광란의촉수
+ABL:ARG:습득LV15 = 45
+
+				CASE 7
+					ABL:ARG:스킬1 = 2408;治癒促進（小）
+
+ABL:ARG:습득스킬1 = 2403;일할의마맥
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 240;비공찌르기
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 2401;이할의활천
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 2413;기공(대)
+ABL:ARG:습득LV7 = 70
+ABL:ARG:습득스킬9 = 229;백열찌르기
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 227;타격가드킬
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 224;분노의철권
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 2062;만마의일격
+ABL:ARG:습득LV15 = 45
+
+				CASE 8
+					ABL:ARG:스킬1 = 5;대나무베기
+
+ABL:ARG:습득스킬1 = 2414;타루카쟈오토
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 4;양팔찍기
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 2417;스쿠카쟈오토
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 12;이단찌르기
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 505;デク・ンダ
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 125;멸살수전
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 534;베어내기
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 513;트라프리
+ABL:ARG:습득LV15 = 45
+
+				CASE 9
+ABL:ARG:스킬1 = 101;백발침
+
+ABL:ARG:습득스킬1 = 708;파이어브레스
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 25;안개베기
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 809;아이스브레스
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 106;천우의춤
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 520;포그브레스
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 522;에스트마
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 60;길로틴블레이드
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 1008;회오리
+ABL:ARG:습득LV15 = 45
+
+				CASE 10
+ABL:ARG:스킬1 = 2432;유혹
+
+ABL:ARG:습득스킬1 = 1202;해피스텝
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 1213;캔디보이스
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1203;고양의노래
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 1223;자장가
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 1232;마계의조사
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 537;용분의춤
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 2091;멸망의가창
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 1214;파이널누드
+ABL:ARG:습득LV15 = 45
+
+				CASE 11
+ABL:ARG:스킬1 = 901;지오
+
+ABL:ARG:습득스킬1 = 2403;일할의마맥
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 904;마하・지오
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1211;마린카린
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 20;愛の채찍
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 140;저격
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 930;산뢰격
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 238;절묘타
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 1227;유혹의안개
+ABL:ARG:습득LV15 = 45
+
+				CASE 12
+ABL:ARG:스킬1 = 401;디아
+
+ABL:ARG:습득스킬1 = 2403;일할의마맥
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 409;펨파트라
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 420;자애의기도
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 417;리캄
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 403;디아라한
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 416;암리타
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 418;사마리캄
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 2428;치유의파동
+ABL:ARG:습득LV15 = 45
+
+				CASE 13
+ABL:ARG:스킬1 = 1401;무도
+
+ABL:ARG:습득스킬1 = 2403;일할의마맥
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 1809;다무도
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1402;마하무도
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 1438;도무디
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 521;리베라마
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 542;악마의위협
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 1406;어둠의심판
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 1403;축시의참배
+ABL:ARG:습득LV15 = 45
+
+				CASE 14
+ABL:ARG:스킬1 = 1301;한마
+
+ABL:ARG:습득스킬1 = 2403;일할의마맥
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 1307;빛의벽
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1302;마한마
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 1304;빛의심판
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 528;라이트마
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 524;파워브레스
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 539;다크브레스
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 419;리캄도라
+ABL:ARG:습득LV15 = 45
+
+				CASE 15
+ABL:ARG:스킬1 = 1001;잔
+
+ABL:ARG:습득스킬1 = 2403;일할의마맥
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 1004;마하・잔
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1121;パララ・アイ
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 1230;브레인버스트
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 606;사이코배리어
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 1011;東衝波
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 2427;서드아이
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 602;테트라칸
+ABL:ARG:습득LV15 = 45
+
+				CASE 16
+ABL:ARG:스킬1 = 701;아기
+
+ABL:ARG:습득스킬1 = 2403;일할의마맥
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 704;마하・라기
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1222;도루미나
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 509;데・카쟈
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 1221;프린파
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 730;지양의붉음
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 2001;메기도
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 603;마카라칸
+ABL:ARG:습득LV15 = 45
+
+				CASE 17
+ABL:ARG:스킬1 = 201;돌격
+
+ABL:ARG:습득스킬1 = 2400;일할의활천
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 515;도발
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 203;마구날뛰기
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 514;雄たけび
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 348;혈제
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 511;기합
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 336;전력공격
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 2006;옥쇄파
+ABL:ARG:습득LV15 = 45
+
+				CASE 18
+ABL:ARG:스킬1 = 14;일문자베기
+
+ABL:ARG:습득스킬1 = 2400;일할의활천
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 25;안개베기
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 11;이검난무
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 15;강절단
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 9;번개찌르기
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 10;데스바운드
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 7;산산조각베기
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 26;낭아천주참
+ABL:ARG:습득LV15 = 45
+
+				CASE 19
+ABL:ARG:스킬1 = 202;숏잽
+
+ABL:ARG:습득스킬1 = 2400;일할의활천
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 204;돌려차기
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 208;수비무너뜨리기
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 327;전광석화
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 350;물어-뜯기
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 2422;추격의심득
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 209;오의방어부수기
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 225;신등거출팔백만격
+ABL:ARG:습득LV15 = 45
+
+				CASE 20
+ABL:ARG:스킬1 = 1239;천사의스마일
+ABL:ARG:스킬2 = 1152;악마의윙크
+
+ABL:ARG:습득스킬1 = 547;Go-Round
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 548;Breakin' Through
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1153;Burn my Dread
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 549;Light the Fire up in the Night
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 550;Time to Make History
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 1837;Mass Destruction
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 551;Laser Beam
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 1737;너의기억
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 430;Never More
+ABL:ARG:습득LV17 = 60
+
+				CASE 21
+ABL:ARG:스킬1 = 2436;무도의마음가짐
+ABL:ARG:스킬2 = 65;마구패기
+
+ABL:ARG:습득스킬1 = 2437;마술의소양
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 1512;극락떨구기
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 933;전격가드브레이크
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 1532;지변가드브레이크
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 1537;칸타렐라요리
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 217;지모의만찬
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 918;루나카미
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 938;진리의번개
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 1538;Damnatio・Memoriae
+ABL:ARG:습득LV17 = 60
+
+				CASE 22
+ABL:ARG:스킬1 = 2437;마술의소양
+ABL:ARG:스킬2 = 429;백은의팔
+
+ABL:ARG:습득스킬1 = 418;사마리캄
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 416;암리타
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 406;메・디아라한
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 422;천사의혈배
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 424;영세의기도
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 1238;트라이앵글・나이트메어
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 421;스티티
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 423;스리스티
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 540;초래의무도
+ABL:ARG:습득LV17 = 60
+
+				CASE 23
+ABL:ARG:스킬1 = 2437;마술의소양
+ABL:ARG:스킬2 = 1337;9자자르기
+
+ABL:ARG:습득스킬1 = 720;쿠리카라의흑룡
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 415;결계부・치유
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 611;존승다라니
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 608;결계부・물리
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 752;퇴마부・카구츠치
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 609;결계부・마법
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 2093;만마조복
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 428;소마신권현
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 2090;鬼遣らい
+ABL:ARG:습득LV17 = 60
+
+				CASE 24
+ABL:ARG:스킬1 = 2437;마술의소양
+ABL:ARG:스킬2 = 2088;신벌대행
+
+ABL:ARG:습득스킬1 = 912;우뢰의세례
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 1332;파마가드브레이크
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1432;주살가드브레이크
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 1310;티없는위광
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 1414;천년의저주
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 1321;열반
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 1408;죽어줄래？
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 1320;회전설법
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 2089;즉결이단심문회
+ABL:ARG:습득LV17 = 60
+
+				CASE 25
+ABL:ARG:스킬1 = 2437;마술의소양
+ABL:ARG:스킬2 = 1042;잔・쯔바이파
+
+ABL:ARG:습득스킬1 = 1038;소닉붐
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 1032;충격가드브레이크
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 1125;뉴록런치
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 1230;브레인버스트
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 1130;샤후라
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 1722;요화열풍
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 1009;이계의바람
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 1007;림도라
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 1043;림도라온
+ABL:ARG:습득LV17 = 60
+
+				CASE 26
+ABL:ARG:스킬1 = 2437;마술의소양
+ABL:ARG:스킬2 = 751;아기랏슈
+
+ABL:ARG:습득스킬1 = 710;파이어스톰
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 733;화염가드브레이크
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 810;절대영도
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 1904;히트카이저
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 711;데들리번
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 1609;아쿠아리타이드
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 2003;메기도라온
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 718;트리스아기온
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 2087;4대소환
+ABL:ARG:습득LV17 = 60
+
+				CASE 27
+ABL:ARG:스킬1 = 2436;무도의마음가짐
+ABL:ARG:스킬2 = 142;Yippee・ki・yay
+
+ABL:ARG:습득스킬1 = 106;천우의춤
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 129;비구가드브레이크
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 127;오절절우
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 2420;관통
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 143;안타까움난사
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 120;저스티스샷
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 525;히트라이저
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 107;고천열풍탄
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 137;Make・My・Day
+ABL:ARG:습득LV17 = 60
+
+				CASE 28
+ABL:ARG:스킬1 = 2436;무도의마음가짐
+ABL:ARG:스킬2 = 63;아라이소
+
+ABL:ARG:습득스킬1 = 37;어두운밤의검
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 31;검격가드브레이크
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 38;무사차
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 2420;관통
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 29;천경지폭단
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 6;허공참파
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 525;히트라이저
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 64;화차베기
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 19;프라라야
+ABL:ARG:습득LV17 = 60
+
+				CASE 29
+ABL:ARG:스킬1 = 2436;무도의마음가짐
+ABL:ARG:스킬2 = 251;나한장
+
+ABL:ARG:습득스킬1 = 252;열진각
+ABL:ARG:습득LV1 = 7
+ABL:ARG:습득스킬3 = 228;타격가드브레이크
+ABL:ARG:습득LV3 = 13
+ABL:ARG:습득스킬5 = 230;천열찌르기
+ABL:ARG:습득LV5 = 17
+ABL:ARG:습득스킬7 = 2420;관통
+ABL:ARG:습득LV7 = 23
+ABL:ARG:습득스킬9 = 226;예광구리가라축
+ABL:ARG:습득LV9 = 27
+ABL:ARG:습득스킬11 = 239;팔상발파
+ABL:ARG:습득LV11 = 33
+ABL:ARG:습득스킬13 = 525;히트라이저
+ABL:ARG:습득LV13 = 37
+ABL:ARG:습득스킬15 = 220;싸움의마왕
+ABL:ARG:습득LV15 = 45
+ABL:ARG:습득스킬17 = 347;명계의문
+ABL:ARG:습득LV17 = 60
+			ENDSELECT
+;	CASE "전투소질"
+;		IF RAND:4 == 0
+;			RESULTS = 비전투원
+;			RETURN 1
+;		ELSEIF RAND:5 == 0
+;			RESULTS = 서머너
+;			RESULTS:1 = 이능자
+;			RETURN 1, 1
+;		ELSEIF RAND:5 == 0
+;			RESULTS = 서머너
+;			RESULTS:1 = 건슬링거
+;			RESULTS:2 = 도구지식
+;			RETURN 3, 1, 1
+;		ELSEIF RAND:5 == 0
+;			RESULTS = 페르소나구사자
+;			RETURN 1
+;		ELSEIF RAND:5 == 0
+;			RESULTS = 데빌시프터
+;			RETURN 1
+;		ELSEIF RAND:5 == 0
+;			RESULTS = 식노
+;			RETURN 1
+;		ELSE
+;			RESULTS = 이능자
+;			RESULTS:1 = 석세서
+;			RETURN 1, 1
+;		ENDIF
+;	CASE "링크악마"
+;		IF TALENT:ARG:데빌시프터 == 1 || TALENT:ARG:페르소나구사자 == 1 || TALENT:ARG:식노 == 1
+;			IF TALENT:ARG:남자 == 1
+;				SELECTCASE RAND:5
+;					CASE 0
+;						RETURN [[キャラ:슬라임]]
+;					CASE 1
+;						RETURN [[キャラ:잭프로스트]]
+;					CASE 2
+;						RETURN [[キャラ:오니]]
+;					CASE 3
+;						RETURN [[キャラ:인큐버스]]
+;					CASE 4
+;						RETURN [[キャラ:이누가미]]
+;				ENDSELECT
+;			ELSE
+;				SELECTCASE RAND:5
+;					CASE 0
+;						RETURN [[キャラ:다크엘프]]
+;					CASE 1
+;						RETURN [[キャラ:픽시]]
+;					CASE 2
+;						RETURN [[キャラ:엘프]]
+;					CASE 3
+;						RETURN [[キャラ:서큐버스]]
+;					CASE 4
+;						RETURN [[キャラ:네코마타]]
+;				ENDSELECT
+;			ENDIF
+;		ELSE
+;			RETURN 0
+;		ENDIF
+	CASE "초기스테이터스比率"
+		RETURN 10, 10, 10, 10, 10, 10
+	CASE "相性"
+		SELECTCASE GET_TYPE(ARG:1)
+			CASE "파마"
+				RETURN 0
+			CASEELSE
+				RETURN 100
+		ENDSELECT
+	CASE "소질"
+		RETURN GETNUM(TALENT, "아픔에약함")
+	CASE "除外소질"
+		RETURN GETNUM(TALENT, "바늘다루기"), GETNUM(TALENT, "조합지식")
+	;처녀は特別 0は랜덤(20%), 1なら처녀, 2なら非처녀
+	CASE "처녀"
+		IF  RAND:10 == 0
+			RETURN 2
+		ELSE
+			RETURN 1
+		ENDIF
+	;戻り値は0:랜덤 1:소인체형 2:유아체형 4:큰체형 5:거체
+	CASE "体型"
+		SELECTCASE RAND:21
+			CASE IS < 7
+				RETURN 2
+			CASE IS < 14
+				RETURN 3
+			CASE IS < 22
+				RETURN 4
+		ENDSELECT
+	;戻り値は0:랜덤 1:절벽　2:빈유　3:並　4:거유　5:폭유
+	CASE "가슴"	
+		IF TALENT:ARG:남자 == 0 && TALENT:ARG:큰체형 == 1
+			SELECTCASE RAND:20
+				CASE IS < 4
+					RETURN 1
+				CASE IS < 8
+					RETURN 2
+				CASE IS < 10
+					RETURN 3
+				CASE IS < 15
+					RETURN 4
+				CASE IS < 21
+					RETURN 5
+			ENDSELECT
+		ELSEIF TALENT:ARG:남자 == 0
+			SELECTCASE RAND:20
+				CASE IS < 4
+					RETURN 1
+				CASE IS < 8
+					RETURN 2
+				CASE IS < 10
+					RETURN 3
+				CASE IS < 15
+					RETURN 4
+				CASE IS < 21
+					RETURN 5
+			ENDSELECT
+		ELSEIF TALENT:ARG:오토코노코 == 1
+			SELECTCASE RAND:4
+				CASE IS < 2
+					RETURN 2
+				CASE IS < 4
+					RETURN 1
+			ENDSELECT
+		ELSE
+			RETURN 1
+		ENDIF
+	;통상の인간と肉体部位が違う場合はここで直接代入してください
+	CASE "肉体部位"
+		RETURN 0
+	CASE "ABL"
+		SELECTCASE ABLNAME:(ARG:1)
+			CASE "순종", "욕망", "기교"
+				RETURN !RAND:3+!RAND:5
+			CASE "Ｃ감각", "Ｖ감각", "Ｂ감각"
+				RETURN !RAND:5
+			CASE "마조끼", "노출증", "봉사정신"
+				RETURN !RAND:10
+			CASE "새드끼"
+				RETURN !RAND:5 * !ABL:ARG:마조끼
+			CASE "Ａ감각", "자위중독", "정액중독", "레즈끼", "ＢＬ끼", "섹스중독"
+				RETURN !RAND:10
+		ENDSELECT
+	;EXPはABLが1이상ある場合、ある程度調整される(ただし、ABL0の時は調整が動かないので適当に초기値をきめてください)
+	CASE "EXP"
+		;全く손付かずの場合
+		SIF !GROUPMATCH(1, !TALENT:ARG:처녀, ABL:ARG:Ｃ감각, ABL:ARG:Ｖ감각, ABL:ARG:Ａ감각, ABL:ARG:Ｂ감각, ABL:ARG:기교)
+			RETURN 0
+		SELECTCASE EXPNAME:(ARG:1)
+			CASE "Ｖ경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "Ａ경험"
+				RETURN RAND(0, 20) * !RAND:5
+			CASE "절정경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "사정경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "성교경험"
+				RETURN 0
+			CASE "질사경험"
+				RETURN EXP:ARG:사정경험/2*EXP:ARG:성교경험 > 0
+			CASE "자위경험"
+				RETURN RAND(0, 20)
+			CASE "조교자위경험"
+				RETURN 0
+			CASE "정액경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "봉사쾌락경험"
+				RETURN 0
+			CASE "펠라경험"
+				RETURN RAND(0, 10) * RAND:2
+			CASE "애정경험"
+				RETURN 0
+			CASE "고통쾌락경험"
+				RETURN RAND(0, 20) * !RAND:4
+			CASE "방뇨경험"
+				RETURN 0
+			CASE "가학쾌락경험"
+				RETURN RAND(0, 10) * !RAND:4
+			CASE "야외노출경험"
+				RETURN 0
+			CASE "레즈경험"
+				RETURN RAND(0, 20) * !RAND:4
+			CASE "ＢＬ경험"
+				RETURN RAND(0, 20) * !RAND:4
+			CASE "이상경험"
+				RETURN 0
+			CASE "긴박경험"
+				RETURN RAND(0, 10) * EXP:ARG:고통쾌락경험 > 0
+		ENDSELECT
+	CASE "모자"
+		IF TALENT:ARG:남자 == 0
+			SELECTCASE RAND:10
+				CASE IS < 1
+					RETURN [[衣装:프로스트두건]]
+				CASE IS < 3
+					RETURN [[衣装:리본]]
+				CASE IS < 7
+					RETURN [[衣装:헤어밴드]]
+				CASE IS < 10
+					RETURN [[衣装:모자]]
+			ENDSELECT
+		ENDIF
+	CASE "옷"
+		IF IS_MALE(ARG)
+			RETURN [[衣装:와이셔츠]]
+		ELSE
+			RETURN [[衣装:블라우스]]
+		ENDIF
+	CASE "하의"
+		IF IS_MALE(ARG)
+			RETURN [[衣装:바지]]
+		ELSE
+			IF RAND:5 > 2
+				RETURN [[衣装:스커트]]
+			ELSEIF RAND:2
+				RETURN [[衣装:롱스커트]]
+			ELSE
+				RETURN [[衣装:바지]]
+			ENDIF
+		ENDIF
+	CASE "전신복"
+		RETURN 0
+	CASE "손"
+		RETURN 0
+	CASE "속옷（상）"
+		IF IS_MALE(ARG)
+			RETURN 0
+		ELSE
+			IF RAND:5
+				RETURN [[衣装:브래지어]]
+			ELSE
+				RETURN 0
+			ENDIF
+		ENDIF
+
+	CASE "속옷（하）"
+		IF IS_MALE(ARG)
+			IF RAND:5
+				RETURN [[衣装:트렁크스]]
+			ELSE
+				RETURN [[衣装:부메랑팬츠]]
+			ENDIF
+		ELSE
+			LOCALS = 속옷（상）
+			IF CFLAG:ARG:LOCALS == 0
+				RETURN 0
+			ENDIF
+			IF RAND:2 == 0
+				RETURN [[衣装:줄무늬팬티]]
+			ELSE
+				RETURN [[衣装:팬티]]
+			ENDIF
+		ENDIF
+	CASE "전신속옷"
+		RETURN 0
+	CASE "양말"
+		IF IS_MALE(ARG)
+			RETURN [[衣装:양말]]
+		ELSEIF RAND:2 == 0
+			RETURN [[衣装:니삭스]]
+		ELSE
+			RETURN [[衣装:양말]]
+		ENDIF
+	CASE "신발"
+		IF IS_MALE(ARG)
+			IF RAND:2 == 0
+				RETURN [[衣装:스니커]]
+			ELSE
+				RETURN [[衣装:가죽구두]]
+			ENDIF
+		ELSE
+			IF RAND:2 == 0
+				RETURN [[衣装:슈즈]]
+			ELSE
+				RETURN [[衣装:부츠]]
+			ENDIF
+		ENDIF
+	CASE "그외"
+		RETURN RAND:10 ? 0 # [[衣装:안경]]
+	CASE "회화타입"
+	;악마汎用사용しています0:랜덤 1:女_아이　2:女_소녀　3:女_若者　4:女_大人　5:女_성녀　6:女_古風　7:男_若者　8:男_大人　9:짐승_ケダモノ 
+
+
+		IF TALENT:ARG:큰체형 == 1 && TALENT:ARG:남자 == 0
+			IF RAND:8 == 0
+					RETURN 4
+			ENDIF
+		ELSEIF ABL:ARG:습득스킬15 == 2423 ;황천의회심
+				IF RAND:3 == 0
+					RETURN 9
+				ENDIF
+		ELSEIF ABL:ARG:습득스킬15 == 26 || ABL:ARG:습득스킬15 == 64 || ABL:ARG:습득스킬15 == 513
+				IF RAND:2 == 0
+					RETURN 8
+				ENDIF
+		ELSEIF TALENT:ARG:남자 == 0
+					SELECTCASE RAND:8
+							CASE 0
+								RETURN 1
+							CASE 1
+								RETURN 2
+							CASE 2
+								RETURN 3
+							CASE 3
+								RETURN 4
+							CASE 4
+								RETURN 5
+							CASE 5
+								RETURN 6
+							CASE 6
+								RETURN 12
+							CASE 7
+								RETURN 13
+					ENDSELECT
+		ELSE
+			SELECTCASE RAND:4
+				CASE 0
+					RETURN 7
+				CASE 1
+					RETURN 8
+				CASE 2
+					RETURN 10
+				CASE 3
+					RETURN 11
+			ENDSELECT
+		ENDIF
+	CASE "이름"
+		RESULTS = 
+		IF TALENT:ARG:후타나리 == 1
+			RESULTS += "달려있는 "
+		ELSEIF TALENT:ARG:처녀 == 0 && TALENT:ARG:남자 == 0
+			RESULTS += "개통당한 "
+		ENDIF
+		IF ABL:ARG:회화타입 == 303
+			RESULTS += "사춘기 "
+		ELSEIF ABL:ARG:회화타입 == 308
+			RESULTS += "요염한 "
+			TALENT:ARG:큰체형 = 1
+			TALENT:ARG:유아체형 = 0
+		ELSEIF TALENT:ARG:유아체형 == 1 && TALENT:ARG:남자 == 0
+			RESULTS += "귀여운 "
+		ELSEIF TALENT:ARG:유아체형 == 1 && TALENT:ARG:남자 == 1
+			RESULTS += "꼬맹이 "
+		ELSEIF TALENT:ARG:큰체형 == 1 && TALENT:ARG:남자 == 1
+			RESULTS += "거구의 "
+		ENDIF
+		IF TALENT:ARG:절벽 == 1
+			RESULTS += "절벽 "
+		ELSEIF TALENT:ARG:빈유 == 1
+			RESULTS += "빈유 "
+		ELSEIF TALENT:ARG:폭유 == 1
+			RESULTS += "폭유 "
+		ELSEIF TALENT:ARG:거유 == 1
+			RESULTS += "거유 "
+		ENDIF
+		IF ABL:ARG:회화타입 == 304
+			RESULTS += "여고생 "
+		ELSEIF ABL:ARG:회화타입 == 302
+			RESULTS += "로리 "
+		ENDIF
+		IF ABL:ARG:습득스킬15 == 2423;황천의회심
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "늑대인간"
+			ELSE
+				RESULTS += "늑대소녀"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:잔학 = 1;カーチャンまとめ用
+			TALENT:ARG:동물귀 = 1
+			TALENT:ARG:짐승 = 1
+			TALENT:ARG:꼬리 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1139;사신의점호
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "네크로맨서"
+			ELSE
+				RESULTS += "영능력자"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도착적 = 1
+			TALENT:ARG:영매체질 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 607;마하애널라이즈
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "탐정"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "탐정"
+			ELSE 
+				RESULTS += "여형사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도구지식 = 2
+			TALENT:ARG:매혹 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 610;수호의방패
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "안락의자 탐정"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "방과후 탐정"
+			ELSE 
+				RESULTS += "니트 탐정"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도구지식 = 3
+			ELSEIF ABL:ARG:습득스킬15 == 2420;관통
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "건파이터"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "건파이터"
+			ELSE 
+				RESULTS += "여거너"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:건슬링거 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 2092;禁忌の肝抉り刃
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "도락가"
+			ELSE 
+				RESULTS += "팔방미인"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:서머너 = 1
+			TALENT:ARG:도구지식 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 334;광란의촉수
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "촉수사"
+			ELSE 
+				RESULTS += "촉수사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:촉수사역술 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 2062;만마의일격
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "권사"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "권사"
+			ELSE 
+				RESULTS += "여권사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:자제심 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 513;트라프리
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "사무라이"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "사무라이"
+			ELSE 
+				RESULTS += "여자 사무라이"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:석세서 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1008;회오리
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "닌자"
+			ELSE 
+				RESULTS += "봉마인"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도구지식 = 2
+		ELSEIF ABL:ARG:습득스킬15 == 1214;파이널누드
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "아이돌"
+			ELSE 
+				RESULTS += "아이돌"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:매력 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1227;유혹의안개
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "마스터"
+			ELSE 
+				RESULTS += "여왕님"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:프라이드높음 = 1
+			TALENT:ARG:새드 = 1
+			TALENT:ARG:마조 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 2428;치유의파동
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "위커"
+			ELSE
+				RESULTS += "위치"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:치료 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1403;축시의참배
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "주술사"
+			ELSE
+				RESULTS += "마녀"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:조합지식 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 419;리캄도라
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "무사"
+			ELSE
+				RESULTS += "무녀"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:헌신적 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 602;테트라칸
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "초능력자"
+			ELSE
+				RESULTS += "초능력자"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도구지식 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 603;마카라칸
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "마술사"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "마법사"
+			ELSE
+				RESULTS += "여마법사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:냉정 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 2006;옥쇄파
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "반쵸"
+			ELSE
+				RESULTS += "스케방"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:반항적 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 26;낭아천주참
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "검사"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "검사"
+			ELSE
+				RESULTS += "여검사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:영맹 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 225;신등거출팔백만격
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "격투가"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "격투가"
+			ELSE
+				RESULTS += "여격투가"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:꿋꿋함 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1737;너의기억
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "명가수"
+			ELSE
+				RESULTS += "디바"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:인기 = 1
+			TALENT:ARG:매력 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 938;진리의번개
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "포주"
+			ELSE
+				RESULTS += "여제님"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:새드 = 1
+			TALENT:ARG:프라이드높음 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 423;스리스티
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "드루이드"
+			ELSE
+				RESULTS += "드루이드"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:도구지식 = 2
+			TALENT:ARG:치료 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 428;소마신권현
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "음양사"
+			ELSE
+				RESULTS += "음양사"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:헌신적 = 1
+			TALENT:ARG:치료 = 1
+			TALENT:ARG:영매체질 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1320;회전설법
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "사도"
+			ELSE
+				RESULTS += "성녀"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:헌신적 = 1
+			TALENT:ARG:치료 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1007;림도라
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "싸이마스터"
+			ELSE
+				RESULTS += "싸이키커"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:도구지식 = 2
+		ELSEIF ABL:ARG:습득스킬15 == 718;트리스아기온
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "마도사"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "마도사"
+			ELSE
+				RESULTS += "여마도사"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:도구지식 = 2
+			TALENT:ARG:냉정 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 107;고천열풍탄
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "드라군"
+			ELSE 
+				RESULTS += "드라군"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:건슬링거 = 1
+			TALENT:ARG:도구지식 = 3
+		ELSEIF ABL:ARG:습득스킬15 == 64;화차베기
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "검성"
+			ELSE
+				RESULTS += "검성"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:250 = 1
+			TALENT:ARG:석세서 = 1
+			TALENT:ARG:영맹 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 220;싸움의마왕
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "투왕"
+			ELSE
+				RESULTS += "투왕"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:도구지식 = 2
+			TALENT:ARG:꿋꿋함 = 1
+			TALENT:ARG:자제심 = 1
+		ENDIF
+		IF TALENT:ARG:큰체형 == 1 && TALENT:ARG:남자 == 0 && ABL:ARG:습득스킬15 != 938 && ABL:ARG:습득스킬15 != 1227 && ABL:ARG:회화타입 != 303 && ABL:ARG:회화타입 != 302 && ABL:ARG:회화타입 != 304
+			RESULTS += " 누님 "
+		ENDIF
+	CASE "愛称"
+		    RESULTS = 
+		IF TALENT:ARG:후타나리 == 1
+			RESULTS += "달려있는 "
+		ELSEIF TALENT:ARG:처녀 == 0 && TALENT:ARG:남자 == 0
+			RESULTS += "개통당한 "
+		ENDIF
+		IF ABL:ARG:회화타입 == 303
+			RESULTS += "사춘기 "
+		ELSEIF ABL:ARG:회화타입 == 308
+			RESULTS += "요염한 "
+			TALENT:ARG:큰체형 = 1
+			TALENT:ARG:유아체형 = 0
+		ELSEIF TALENT:ARG:유아체형 == 1 && TALENT:ARG:남자 == 0
+			RESULTS += "귀여운 "
+		ELSEIF TALENT:ARG:유아체형 == 1 && TALENT:ARG:남자 == 1
+			RESULTS += "꼬맹이 "
+		ELSEIF TALENT:ARG:큰체형 == 1 && TALENT:ARG:남자 == 1
+			RESULTS += "거구의 "
+		ENDIF
+		IF TALENT:ARG:절벽 == 1
+			RESULTS += "절벽 "
+		ELSEIF TALENT:ARG:빈유 == 1
+			RESULTS += "빈유 "
+		ELSEIF TALENT:ARG:폭유 == 1
+			RESULTS += "폭유 "
+		ELSEIF TALENT:ARG:거유 == 1
+			RESULTS += "거유 "
+		ENDIF
+		IF ABL:ARG:회화타입 == 304
+			RESULTS += "여고생 "
+		ELSEIF ABL:ARG:회화타입 == 302
+			RESULTS += "로리 "
+		ENDIF
+		IF ABL:ARG:습득스킬15 == 2423;황천의회심
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "늑대인간"
+			ELSE
+				RESULTS += "늑대소녀"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:잔학 = 1;カーチャンまとめ用
+			TALENT:ARG:동물귀 = 1
+			TALENT:ARG:짐승 = 1
+			TALENT:ARG:꼬리 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1139;사신의점호
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "네크로맨서"
+			ELSE
+				RESULTS += "영능력자"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도착적 = 1
+			TALENT:ARG:영매체질 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 607;마하애널라이즈
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "탐정"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "탐정"
+			ELSE 
+				RESULTS += "여형사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도구지식 = 2
+			TALENT:ARG:매혹 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 610;수호의방패
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "안락의자 탐정"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "방과후 탐정"
+			ELSE 
+				RESULTS += "니트 탐정"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도구지식 = 3
+			ELSEIF ABL:ARG:습득스킬15 == 2420;관통
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "건파이터"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "건파이터"
+			ELSE 
+				RESULTS += "여거너"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:건슬링거 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 2092;禁忌の肝抉り刃
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "도락가"
+			ELSE 
+				RESULTS += "팔방미인"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:서머너 = 1
+			TALENT:ARG:도구지식 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 334;광란의촉수
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "촉수사"
+			ELSE 
+				RESULTS += "촉수사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:촉수사역술 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 2062;만마의일격
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "권사"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "권사"
+			ELSE 
+				RESULTS += "여권사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:자제심 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 513;트라프리
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "사무라이"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "사무라이"
+			ELSE 
+				RESULTS += "여자 사무라이"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:석세서 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1008;회오리
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "닌자"
+			ELSE 
+				RESULTS += "봉마인"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도구지식 = 2
+		ELSEIF ABL:ARG:습득스킬15 == 1214;파이널누드
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "아이돌"
+			ELSE 
+				RESULTS += "아이돌"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:매력 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1227;유혹의안개
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "마스터"
+			ELSE 
+				RESULTS += "여왕님"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:프라이드높음 = 1
+			TALENT:ARG:새드 = 1
+			TALENT:ARG:마조 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 2428;치유의파동
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "위커"
+			ELSE
+				RESULTS += "위치"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:치료 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1403;축시의참배
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "주술사"
+			ELSE
+				RESULTS += "마녀"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:조합지식 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 419;리캄도라
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "무사"
+			ELSE
+				RESULTS += "무녀"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:헌신적 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 602;테트라칸
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "초능력자"
+			ELSE
+				RESULTS += "초능력자"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:도구지식 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 603;마카라칸
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "마술사"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "마법사"
+			ELSE
+				RESULTS += "여마법사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:냉정 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 2006;옥쇄파
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "반쵸"
+			ELSE
+				RESULTS += "스케방"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:반항적 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 26;낭아천주참
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "검사"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "검사"
+			ELSE
+				RESULTS += "여검사"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:영맹 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 225;신등거출팔백만격
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "격투가"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "격투가"
+			ELSE
+				RESULTS += "여격투가"
+			ENDIF
+			TALENT:ARG:이능자 = 1
+			TALENT:ARG:꿋꿋함 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1737;너의기억
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "명가수"
+			ELSE
+				RESULTS += "디바"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:인기 = 1
+			TALENT:ARG:매력 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 938;진리의번개
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "포주"
+			ELSE
+				RESULTS += "여제님"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:새드 = 1
+			TALENT:ARG:프라이드높음 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 423;스리스티
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "드루이드"
+			ELSE
+				RESULTS += "드루이드"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:도구지식 = 2
+			TALENT:ARG:치료 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 428;소마신권현
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "음양사"
+			ELSE
+				RESULTS += "음양사"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:헌신적 = 1
+			TALENT:ARG:치료 = 1
+			TALENT:ARG:영매체질 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1320;회전설법
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "사도"
+			ELSE
+				RESULTS += "성녀"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:헌신적 = 1
+			TALENT:ARG:치료 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 1007;림도라
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "싸이마스터"
+			ELSE
+				RESULTS += "싸이키커"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:도구지식 = 2
+		ELSEIF ABL:ARG:습득스킬15 == 718;트리스아기온
+			IF TALENT:ARG:남자 == 1
+				 RESULTS += "마도사"
+			ELSEIF ABL:ARG:회화타입 == 304
+				RESULTS += "마도사"
+			ELSE
+				RESULTS += "여마도사"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:도구지식 = 2
+			TALENT:ARG:냉정 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 107;고천열풍탄
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "드라군"
+			ELSE 
+				RESULTS += "드라군"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:건슬링거 = 1
+			TALENT:ARG:도구지식 = 3
+		ELSEIF ABL:ARG:습득스킬15 == 64;화차베기
+			IF TALENT:ARG:남자 == 1 
+				RESULTS += "검성"
+			ELSE
+				RESULTS += "검성"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:250 = 1
+			TALENT:ARG:석세서 = 1
+			TALENT:ARG:영맹 = 1
+		ELSEIF ABL:ARG:습득스킬15 == 220;싸움의마왕
+			IF TALENT:ARG:남자 == 1
+				RESULTS += "투왕"
+			ELSE
+				RESULTS += "투왕"
+			ENDIF
+			TALENT:ARG:달인 = 1
+			TALENT:ARG:도구지식 = 2
+			TALENT:ARG:꿋꿋함 = 1
+			TALENT:ARG:자제심 = 1
+		ENDIF
+		IF TALENT:ARG:큰체형 == 1 && TALENT:ARG:남자 == 0 && ABL:ARG:습득스킬15 != 938 && ABL:ARG:습득스킬15 != 1227 && ABL:ARG:회화타입 != 303 && ABL:ARG:회화타입 != 302 && ABL:ARG:회화타입 != 304
+			RESULTS += " 누님 "
+		ENDIF
+	CASE "해설"
+		RESULTS = 　팬텀소사이어티에 의해 포획당한 이능자
+		RESULTS:1 = 　
+		RESULTS:2 = 　■능력 개요：
+		IF ABL:ARG:습득스킬15 == 2423;황천의회심
+			RESULTS:3 = 　　　늑대의 영혼에 사로잡힌 사람。전술스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 1139;사신의점호
+			RESULTS:3 = 　　　영혼을 내려、사망자와 이야기를 주고 받는 생업의 사람。빙결계스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 607;마하애널라이즈
+			RESULTS:3 = 　　　입과 발로 돈을 만들어내는 바람과도 같은 무법자。관찰력・협상력을 살린 기술과 이동에 관계된 특기를 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 610;수호의방패
+			RESULTS:3 = 　　　독자적인 논리에 뒷받침 된 지성의 덩어리。도구、보조 스킬을 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 2420;관통
+			RESULTS:3 = 　　　화기의 취급에 뛰어난 전사。특수한 총를 취급해、비구 스킬을 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 2092;禁忌の肝抉り刃
+			RESULTS:3 = 　　　도락으로 지식과 경험을 모으는 사람。넓고 얕게 다종 다양한 기능을 습득 한다。다양하게 할 수 있지만、다른 사람보다 능동적인 노력이 필요하다。 
+		ELSEIF ABL:ARG:습득스킬15 == 334;광란의촉수
+			RESULTS:3 = 　　　전투용으로 품종개량된 촉수를 기르는 전사。조금 야한 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 2062;만마의일격
+			RESULTS:3 = 　　　대륙의 유파를 이어받는 무술이나 기공을 습득한 사람。자신을 강화하는 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 513;트라프리
+			RESULTS:3 = 　　　전장의 꽃인 전쟁인。공격에 특화한 스킬을 습득 한다。
+		ELSEIF ABL:ARG:습득스킬15 == 1008;회오리
+			RESULTS:3 = 　　　어둠에 숨어 그림자로 살아가는 자。비구・보조・브레스 등 다양한 스킬을 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 1214;파이널누드
+			RESULTS:3 = 　　　사람들을 열광시키는 자。댄스・보이스계 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 1227;유혹의안개
+			RESULTS:3 = 　　　여왕님。전격의 마법과 매혹계、채찍계의 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 2428;치유의파동
+			RESULTS:3 = 　　　켈트계의 백마술을 행사하는 자。회복계 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 1403;축시의참배
+			RESULTS:3 = 　　　주술을 익힌 자。주살・약체계 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 419;리캄도라
+			RESULTS:3 = 　　　특정한 신을 섬기는 자。파마・강화계 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 602;테트라칸
+			RESULTS:3 = 　　　초능력을 발현시킨 자。충격계의 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 603;마카라칸
+			RESULTS:3 = 　　　마술을 익힌 자。화염계를 중심으로 마법스킬을 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 2006;옥쇄파
+			RESULTS:3 = 　　　일본의 불량소년그룹의 리더。의협이 넘치는 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 26;낭아천주참
+			RESULTS:3 = 　　　주로 검을 사용하여 싸우는 전사。검격계의 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 225;신등거출팔백만격
+			RESULTS:3 = 　　　자신의 육체 하나로 싸우는 전사。타격계 스킬을 중심으로 습득한다。
+		ELSEIF ABL:ARG:습득스킬15 == 1737;너의기억
+			RESULTS:3 = 　　　압도적인 가창력으로 모든 존재를 매료하는 가희(歌姫). 그 노래는 세상을 바꿀 힘이 있다。
+		ELSEIF ABL:ARG:습득스킬15 == 938;진리의번개
+			RESULTS:3 = 　　　여제. 지상에서 가장 강한 자. 탁월한 재치를 유감없이 발휘한다。
+		ELSEIF ABL:ARG:습득스킬15 == 423;스리스티
+			RESULTS:3 = 　　　켈트계 백마술의 권위로써 달인。의료신의 힘을 체현한다。
+		ELSEIF ABL:ARG:습득스킬15 == 428;소마신권현
+			RESULTS:3 = 　　　음양 오행에 통하고 별을 읽는 희세의 주술사. 귀신을 사역해 산령 온갖 도깨비를 불제。
+		ELSEIF ABL:ARG:습득스킬15 == 1320;회전설법
+			RESULTS:3 = 　　　천벌의 지상 대행자로써 교의의 독점 제공자. 스스로의 신을 위해 모든 적을 토벌해 멸한다。
+		ELSEIF ABL:ARG:습득스킬15 == 1007;림도라
+			RESULTS:3 = 　P　　K와 ESP를 겸비하는 이례의 능력자. 능력의 현현은 충격파가 되어 적을 덮친다。
+		ELSEIF ABL:ARG:습득스킬15 == 718;트리스아기온
+			RESULTS:3 = 　　　마도의 오의를 연구하는 사람. 화염의 본질을 알아 4대원소를 자재로 조종한다。
+		ELSEIF ABL:ARG:습득스킬15 == 107;고천열풍탄
+			RESULTS:3 = 　　　화룡의 브레스같은 대화력을 조종하는 제압자. 용기병이라고도 불린다。
+		ELSEIF ABL:ARG:습득스킬15 == 64;화차베기
+			RESULTS:3 = 　　　검에 모든 것을 바쳐 극을 추구하는 사람. 검선일여의 체현자。
+		ELSEIF ABL:ARG:습득스킬15 == 220;싸움의마왕
+			RESULTS:3 = 　　　맨주먹(徒손空拳)으로 지고를 목표로 하는 「무」의 체현자. 탁월한 격투 능력을 자랑한다。
+		ENDIF
+		RESULTS:4 = 　■성격：
+	IF ABL:ARG:회화타입 == 302
+		RESULTS:4 += "일반적인 어린애"
+	ELSEIF ABL:ARG:회화타입 == 303
+		RESULTS:4 += "사춘기 여자애와 같음"
+	ELSEIF ABL:ARG:회화타입 == 304
+		RESULTS:4 += "일반적인 청소년"
+	ELSEIF ABL:ARG:회화타입 == 305
+		RESULTS:4 += "일반적인 성인 여성"
+	ELSEIF ABL:ARG:회화타입 == 306
+		RESULTS:4 += "딱딱하고 보수적"
+	ELSEIF ABL:ARG:회화타입 == 307
+		RESULTS:4 += "시대 착오적 고풍스러움"
+	ELSEIF ABL:ARG:회화타입 == 308
+		RESULTS:4 += "시대 착오적인 기녀와 같음"
+	ELSEIF ABL:ARG:회화타입 == 311
+		RESULTS:4 += "시대 착오적인 무인과 같음"
+	ELSEIF ABL:ARG:회화타입 == 316
+		RESULTS:4 += "일반적인 청소년"
+	ELSEIF ABL:ARG:회화타입 == 317
+		RESULTS:4 += "침착함"
+	ELSEIF ABL:ARG:회화타입 == 318
+		RESULTS:4 += "신사적임"
+	ELSEIF ABL:ARG:회화타입 == 324
+		RESULTS:4 += "반항적임"
+	ELSEIF ABL:ARG:회화타입 == 329
+		RESULTS:4 += "파악 불가"
+	ENDIF
+		RESULTS:5 =
+		RESULTS:6 =
+
+			IF RAND:30 == 0
+		RESULTS:6 = 　■추정 정신 연령：100세 이상
+	ENDIF
+		RESULTS:7 = 　■포획지：
+			SELECTCASE RAND:13
+				CASE 0
+					RESULTS:7 += "도쿄"
+				CASE 1
+					RESULTS:7 += "관도지방"
+				CASE 2
+					RESULTS:7 += "관서지방"
+				CASE 3
+					RESULTS:7 += "도호쿠지방"
+				CASE 4
+					RESULTS:7 += "훗카이도"
+				CASE 5
+					RESULTS:7 += "나가노"
+				CASE 6
+					RESULTS:7 += "호쿠리쿠"
+				CASE 7
+					RESULTS:7 += "토카이"
+				CASE 8
+					RESULTS:7 += "킨키지방"
+				CASE 9
+					RESULTS:7 += "츄고쿠"
+				CASE 10
+					RESULTS:7 += "시고쿠지방"
+				CASE 11
+					RESULTS:7 += "규슈지방"
+				CASE 12
+					RESULTS:7 += "오키나와"
+			ENDSELECT
+		RESULTS:8 = 　■혈액형：
+			SELECTCASE RAND:4
+				CASE 0
+					RESULTS:8 += "Ａ형" 
+				CASE 1
+					RESULTS:8 += "Ｂ형"
+				CASE 2
+					RESULTS:8 += "ＡＢ형"
+				CASE 3
+					RESULTS:8 += "Ｏ형"
+			ENDSELECT
+		RESULTS:9 = 　■전직：
+			SELECTCASE RAND:6
+				CASE 0
+					RESULTS:9 += "군인"
+				CASE 1
+					RESULTS:9 += "학생"
+				CASE 2
+					RESULTS:9 += "일반인"
+				CASE 3
+					RESULTS:9 += "뒷사회 일원"
+				CASE 4
+					RESULTS:9 += "P.S 조직원" 
+				CASE 5
+					RESULTS:9 += "자칭 정의의 사도"
+			ENDSELECT
+
+	SELECTCASE RAND:3
+		CASE 0
+			IF TALENT:ARG:처녀 == 0 && TALENT:ARG:남자 == 0
+				RESULTS:10 = 　■처녀 상실 내역
+					RESULTS:11 = 　포획시 포획자에 의해 강간 당함 
+		CALL ADDS_ABNORMAL_EXP , "처녀상실（강간）" , ARG
+					EXP:ARG:50 += 2
+				IF RAND:5 == 0
+					TALENT:RESULT:남성혐오 = 1
+				ENDIF
+
+			ENDIF
+		CASE 1
+			IF TALENT:ARG:처녀 == 0 && TALENT:ARG:남자 == 0
+				RESULTS:10 = 　■처녀 상실 내역
+					RESULTS:11 = 　포획 후 저항 의지 박탈을 위해 윤간을 행함 
+		CALL ADDS_ABNORMAL_EXP , "처녀상실（윤간）" , ARG
+					TALENT:RESULT:저항 = 0
+				IF RAND:5 == 0
+						TALENT:RESULT:남성혐오 = 1
+				ENDIF
+				IF RAND:5 == 0
+						TALENT:RESULT:비관적 = 1
+				ENDIF
+					EXP:ARG:50 += 3
+					EXP:ARG:윤간경험 += 10
+					EXP:ARG:정액경험 += 60
+					EXP:ARG:질사경험 += 25
+					EXP:ARG:0 += 40
+					EXP:ARG:1 += 20
+					EXP:ARG:성교경험 += 50
+					EXP:ARG:펠라경험 += 40
+			ENDIF
+		CASE 2
+			IF TALENT:ARG:처녀 == 0 && TALENT:ARG:남자 == 0
+				RESULTS:10 = 　■처녀 상실 내역
+				SELECTCASE RAND:5
+					CASE 0
+						RESULTS:11 = 　생일에 
+					CASE 1
+					RESULTS:11 = 　여름방학에 
+					CASE 2
+						RESULTS:11 = 　크리스마스에 
+					CASE 3
+						RESULTS:11 = 　발렌타인 데이에 
+					CASE 4
+						RESULTS:11 = 　부모님의 결혼기념일에 
+				ENDSELECT
+				SELECTCASE RAND:5
+					CASE 0
+						RESULTS:11 += " 러브호텔에서、"
+					CASE 1
+						RESULTS:11 += " 집에서、"
+					CASE 2
+						RESULTS:11 += " 초등학교에서、"
+					CASE 3
+						RESULTS:11 += " 시립 수영장에서、"
+					CASE 4
+						RESULTS:11 += " 근처의 공원에서、"
+				ENDSELECT
+				SELECTCASE RAND:10
+					CASE 0
+						RESULTS:11 += "아버지"
+					CASE 1
+						RESULTS:11 += "모르는 아저씨"
+					CASE 2
+						RESULTS:11 += "근처의 아저씨"
+					CASE 3
+						RESULTS:11 += "오빠"
+					CASE 4
+						RESULTS:11 += "담임 선생님"
+					CASE 5
+						RESULTS:11 += "동급생 남자아이"
+					CASE 6
+						RESULTS:11 += "상급생 남자아이"
+					CASE 7
+						RESULTS:11 += "동생"
+					CASE 8
+						RESULTS:11 += "넷에서 알게된 대학생들"
+					CASE 9
+						RESULTS:11 += "노신사와 그 애견"
+				ENDSELECT
+				SELECTCASE RAND:8
+					CASE 0
+						RESULTS:11 += "에게 강간당했다"
+					CASE 1
+						RESULTS:11 += "에게 후배위로 범해졌다"
+					CASE 2
+						RESULTS:11 += "와 러브러브 섹스를 했다"
+					CASE 3
+						RESULTS:11 += "에게 스스로 바쳤다"
+					CASE 4
+						RESULTS:11 += "에게 1회 1만엔으로 하게 해 주었다"
+					CASE 5
+						RESULTS:11 += "에게 강간당했다"
+					CASE 6
+						RESULTS:11 += "에게 강간당했다"
+					CASE 7
+						RESULTS:11 += "에게 강간당했다"
+					CASE 8
+						RESULTS:11 += "에게 강간당했다"
+				ENDSELECT
+			ELSEIF EXP:ARG:Ａ경험 > 0 && TALENT:ARG:남자 == 1
+				RESULTS:10 = 　■항문 개통 내역
+				SELECTCASE RAND:5
+					CASE 0
+						RESULTS:11 = 　생일에 
+					CASE 1
+						RESULTS:11 = 　여름방학에 
+					CASE 2
+						RESULTS:11 = 　크리스마스에 
+					CASE 3
+						RESULTS:11 = 　발렌타인 데이에 
+					CASE 4
+						RESULTS:11 = 　부모님의 결혼기념일에 
+					CASE 5
+						RESULTS:11 = 　어느날 
+				ENDSELECT
+				SELECTCASE RAND:5
+					CASE 0
+						RESULTS:11 += " 러브호텔에서、"
+					CASE 1
+						RESULTS:11 += " 집에서、"
+					CASE 2
+						RESULTS:11 += " 초등학교에서、"
+					CASE 3
+						RESULTS:11 += " 시립 수영장에서、"
+					CASE 4
+						RESULTS:11 += " 근처의 공원에서、"
+				ENDSELECT
+				SELECTCASE RAND:12
+					CASE 0
+						RESULTS:11 += "아버지"
+					CASE 1
+						RESULTS:11 += "모르는 아저씨"
+					CASE 2
+					RESULTS:11 += "근처의 아저씨"
+					CASE 3
+						RESULTS:11 += "오빠"
+					CASE 4
+						RESULTS:11 += "담임 선생님"
+					CASE 5
+						RESULTS:11 += "동급생 남자아이"
+					CASE 6
+						RESULTS:11 += "상급생 남자아이"
+					CASE 7
+						RESULTS:11 += "동생"
+					CASE 8
+						RESULTS:11 += "넷에서 알게된 대학생들"
+					CASE 9
+						RESULTS:11 += "노신사와 그 애견"
+					CASE 10
+						RESULTS:11 += "짐승같은 선배"
+					CASE 11
+						RESULTS:11 += "작업복이 어울리는 '우홋' 멋진 남자"
+				ENDSELECT
+				SELECTCASE RAND:5
+					CASE 0
+						RESULTS:11 += "에게 강간당했다"
+					CASE 1
+						RESULTS:11 += "에게 후배위로 범해졌다"
+					CASE 2
+						RESULTS:11 += "와 러브러브 섹스를 했다"
+					CASE 3
+						RESULTS:11 += "에게 스스로 바쳤다"
+					CASE 4
+						RESULTS:11 += "에게 1회 1만엔으로 하게 해 주었다"
+				ENDSELECT
+			ENDIF
+	ENDSELECT
+	;最後に呼び出すので何らかの調整が필요한場合はここで
+	CASE "最終調整"
+		RETURN 0
+ENDSELECT

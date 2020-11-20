@@ -1,0 +1,2292 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:MAG.ERB
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		XXXX/XX/XX		------					新規作成
+;	002		2019/09/26		空気 					SHOP화면・조교화면の顔グラを個別に選択できるように
+;	003		2020/02/02		木綿豆腐 				데빌시프터/식노/악마憑きは악마변신時の화면の顔グラを설정できるように
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+@SHOPCOMABLE_122
+RESULT:1 = 4
+RESULTS = 동료마강화
+RETURN 1
+
+@SHOP_COM_122
+#LOCALSIZE 5
+LOCAL:4 = RESULT
+$INPUT_LOOP
+CALL INPUT_CHARA_LIST("ＭＡＧ를 사용하여 강화할 캐릭터를 선택하세요", "CASTING_SHOP_COM_122")
+IF RESULT != 1000
+	CALL ENHANCE(RESULT, A)
+	GOTO INPUT_LOOP
+ENDIF
+RETURN LOCAL:4
+
+@CASTING_SHOP_COM_122(ARG)
+SIF CFLAG:ARG:노역フラグ == 3 || CFLAG:ARG:この場に居ないフラグ || CFLAG:ARG:필터링フラグ
+	RETURN 0
+RETURN 1
+
+;ARG:0…대상キャラ		LOCAL:3…開始時の行数(行削除用)
+;ARG:1…リストの人数	LOCAL:4…스킬변경可否共通판정(이능자でないMASTER、페르소나구사자、달인は변경不可)
+;LOCAL:0…計算用		LOCAL:5…空き스킬位置(ABL:ARG:(LOCAL:5)で空き스킬。無い場合は-1)
+;LOCAL:1…RESULT保護	LOCAL:6…기본능력강화コスト
+;LOCAL:2…リスト位置	LOCAL:7…조마레벨アップコスト
+@ENHANCE(ARG, ARG:1)
+#LOCALSIZE 10
+#DIMS CONST FUNCNAME = "ENHANCE_BASE", "MAG_SKILL_RANKUP", "MAG_SKILL_DELETE", "", "MAG_ENHANCE_ATTACK", "MAG_ENHANCE_DEFTYPE", "MAG_GROWTH"
+#DIMS CONST MANTRAFUNC = "SET_MANTRA_SKILL", "MANTRA_BASESTATUS", "DOWNLOAD_MANTRA"
+#DIM どっちの강화？ , 1
+
+LOCAL:1 = RESULT, FINDELEMENT(Q, ARG, 0, ARG:1), LINECOUNT
+
+;IF ((TALENT:ARG:데빌시프터 || TALENT:ARG:식노) && TALENT:ARG:이능자) || TALENT:ARG:악마빙의자
+IF (TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자)
+	;IF (TALENT:ARG:이능자 || ABL:ARG:종족 != 0 || TALENT:ARG:악마빙의자) && !TALENT:ARG:달인 && !TALENT:ARG:페르소나구사자
+		PRINTL 어느 쪽의 강화를 실행하겠습니까?
+		PRINTL ※기본능력강화는 인간시 추천
+		PRINTL
+		CALL INPUT_YN("인간시","초기변신악마")
+		SIF RESULT == 0
+			どっちの강화？  = 2
+		SIF RESULT == 1
+			どっちの강화？  = 1
+	;ELSE
+	;	どっちの강화？  = 1
+	;ENDIF
+ELSE
+	どっちの강화？  = 1
+ENDIF
+
+DO
+	LOCAL = GETNUM(ABL, @"\@ TALENT:ARG:데빌시프터 || TALENT:ARG:악마빙의자 || TALENT:ARG:식노 && どっちの강화？ == 1 ? 초기변신악마 # \@스킬1")
+	
+;	LOCAL:4 = (ARG != MASTER || TALENT:ARG:이능자) && !TALENT:ARG:페르소나구사자 && !TALENT:ARG:달인
+;	LOCAL:4 = ( (ARG != MASTER || TALENT:ARG:이능자) && ( (!TALENT:ARG:페르소나구사자 && !TALENT:ARG:달인) || (TALENT:ARG:식노 || TALENT:ARG:데빌시프터)) && ((!TALENT:ARG:악마빙의자 || どっちの강화？ == 2)) || (ARG == MASTER && (ABL:ARG:종족 == 36 || ABL:ARG:종족 == 73)))
+;	LOCAL:4 = ((TALENT:ARG:이능자 || ABL:ARG:종족 != 0 || TALENT:ARG:악마빙의자) && !TALENT:ARG:달인 && !TALENT:ARG:페르소나구사자) || ((TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자) && どっちの강화？  == 1)
+	;↑が元々　↓長すぎるので分割
+	LOCAL:4 = ((TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자) && どっちの강화？  == 1)
+	LOCAL:4 += ((TALENT:ARG:이능자 || ABL:ARG:종족 != 0 || TALENT:ARG:악마빙의자) && !TALENT:ARG:달인 && !TALENT:ARG:페르소나구사자)
+	;↓純서머너をMPで識別
+	LOCAL:4 += (MAXBASE:ARG:ＭＰ == 0 && TALENT:ARG:서머너 == 5)
+	IF (TALENT:ARG:이능자 || TALENT:ARG:달인 || TALENT:ARG:인수라)&&(どっちの강화？  == 2|| (TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자)==0)
+		LOCAL:5 = FINDELEMENT(ABL:ARG:0, 0, LOCAL, LOCAL + FLAG:이능자스킬数)
+	ELSE
+		LOCAL:5 = FINDELEMENT(ABL:ARG:0, 0, LOCAL, LOCAL + FLAG:스킬数)
+	ENDIF
+	LOCAL:6 = (FLAG:전투난이도 > 3 ? 100 # 250) * (CFLAG:ARG:능력강화횟수 / 3 + 1) * (CFLAG:ARG:능력강화횟수 / 3 + 2) * ＭＡＧ강화ＣＰ보정(ARG) / 1000
+	LOCAL:7 = MAX(1, 2 * (BASE:ARG:LV - 1) * BASE:ARG:LV * (BASE:ARG:LV + 1))
+	LOCAL:8 = MAXBASE:ARG:ＭＡＧ * MIN(5, CFLAG:ARG:장비보정변경횟수) / 10
+	LOCAL:9 = EXIST_PICTURE(NO:ARG, 100)
+	FOR LOCAL, 0, MAX(0, BASE:ARG:LV - BASE:MASTER:LV)
+		TIMES LOCAL:7, 1.20
+	NEXT
+	CLEARLINE LINECOUNT - LOCAL:3
+	DRAWLINE
+	PRINTFORML %조사처리(NAME:ARG,"를")% 어떻게 하겠습니까? %" " * MAX(0, 24 - STRLENS(NAME:ARG))%(현재 ＭＡＧ：{BASE:ARG:ＭＡＧ, 8})\n
+;	PRINTFORM \@ ARG != MASTER ? [1]기본능력강화(필요ＭＡＧ：{LOCAL:6, 8})\n # \@
+;	IF ARG == MASTER && FLAG:경험ED数 > 6
+	IF ARG == MASTER
+		PRINTFORM [ 1] 기본능력강화(필요ＭＡＧ：{LOCAL:6 * 100, 8})\n
+	ELSEIF ARG != MASTER
+		PRINTFORM [ 1] 기본능력강화(필요ＭＡＧ：{LOCAL:6, 8})\n
+	ENDIF
+	PRINTFORM \@ LOCAL:4 ? [ 2] 스킬 랭크업\n[ 3] 스킬 소거\n # \@\@ LOCAL:4 && ABL:ARG:종족 != 45 ? [ 4] 스킬 습득\n # \@
+	PRINTFORM \@ ((ABL:ARG:종족 && ABL:ARG:종족 != 36) || TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자) && どっちの강화？ == 1 ? [ 5] 공격성능강화\n # \@
+	PRINTFORM \@ ((ABL:ARG:종족 && ABL:ARG:종족 != 45) || TALENT:ARG:데빌시프터 || TALENT:ARG:악마빙의자) && どっちの강화？ == 1 ? [ 6] 방어내성강화\n # \@
+	PRINTFORM [ 7] 체력・기력강화 
+	PRINTFORML 　　　　최대체력{MAXBASE:ARG:체력,8,RIGHT}　최대기력{MAXBASE:ARG:기력,8,RIGHT}
+	PRINTFORM \@ ABL:ARG:종족 == 45 ? [ 8] 조마레벨업(현재LV：{BASE:ARG:LV, 3} / 필요ＭＡＧ：{LOCAL:7, 8})\n # \@
+	IF TALENT:ARG:식노 && どっちの강화？  == 1
+		PRINTFORM \@ GETBIT(FLAG:만트라개방度, 1) ? [ 9] 스킬세트\n[10] 스테이터스세트\n # \@
+		SETBIT FLAG:만트라개방度, 0	;シナリオ進行による制限が実装されるまでの仮措置
+		PRINTFORM \@ FLAG:만트라개방度 ? [11] 만트라취득\n # \@
+	ENDIF
+	SIF ( ABL:ARG:종족 == 0 || ABL:ARG:종족 == 36 || SKILL_EQUIPTHEORY_IS_HAVE_SKILL(ARG) ) && SOFT_ON("마장술")
+		PRINTL [12] 장비강화
+	SIF ( ABL:ARG:종족 == 0 || ABL:ARG:종족 == 36 ) && BASE:ARG:LV > 80
+		PRINTFORML [13] 장비능력보정변경　(필요ＭＡＧ：{LOCAL:8, 8})
+	SIF ( ABL:ARG:종족 == 0 || ABL:ARG:종족 == 36 ) && !((ARG == 0 && 무기소질수(ARG) > 10) || (ARG > 0 && 무기소질수(ARG) > 1))
+		PRINTFORML [14] 무기수련
+	SIF LOCAL:9 || CFLAG:ARG:顔グラ > 0
+		PRINTFORML [20] 화상변경
+	PRINTFORM %"\n" * MAX(0, 10 + LOCAL:3 - LINECOUNT)%
+	DRAWLINE
+	PRINTFORMLC \@ LOCAL:2 > 0 ? [107] 이전 캐릭터 # %" " * 16% \@
+	PRINTFORMLC [100] 돌아간다
+	PRINTFORMLC \@ LOCAL:2 < ARG:1 - 1 ? [109] 다음 캐릭터 # %" " * 16% \@
+	DO
+		INPUT
+		LOCAL = RESULT == 100 || (RESULT == 107 && LOCAL:2 > 0) || (RESULT == 109 && LOCAL:2 < ARG:1 - 1)
+;		LOCAL |= RESULT == 1 && ARG != MASTER
+;		LOCAL |= RESULT == 1 && ARG == MASTER && FLAG:경험ED数 > 6
+		LOCAL |= RESULT == 1
+		LOCAL |= INRANGE(RESULT, 2, 3) && LOCAL:4
+		LOCAL |= RESULT == 4 && (LOCAL:4 && ABL:ARG:종족 != 45 && LOCAL:5 >= 0)
+		LOCAL |= RESULT == 5 && ((ABL:ARG:종족 && ABL:ARG:종족 != 36) || TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자)
+		LOCAL |= RESULT == 6 && ((ABL:ARG:종족 && ABL:ARG:종족 != 45) || TALENT:ARG:데빌시프터 || TALENT:ARG:악마빙의자)
+		LOCAL |= RESULT == 7 || (RESULT == 8 && ABL:ARG:종족 == 45 && BASE:ARG:ＭＡＧ >= LOCAL:7)
+		LOCAL |= RESULT == 9 && TALENT:ARG:식노 && GETBIT(FLAG:만트라개방度, 1)
+		LOCAL |= RESULT == 10 && TALENT:ARG:식노 && GETBIT(FLAG:만트라개방度, 1)
+		LOCAL |= RESULT == 11 && TALENT:ARG:식노 && FLAG:만트라개방度
+		LOCAL |= RESULT == 12 && (ABL:ARG:종족 == 0 || ABL:ARG:종족 == 36 || SKILL_EQUIPTHEORY_IS_HAVE_SKILL(ARG)) && SOFT_ON("마장술")
+		LOCAL |= RESULT == 13 && ( ABL:ARG:종족 == 0 || ABL:ARG:종족 == 36 ) && BASE:ARG:LV > 80
+		LOCAL |= RESULT == 14 && ( ABL:ARG:종족 == 0 || ABL:ARG:종족 == 36 ) && !((ARG == 0 && 무기소질수(ARG) > 10) || (ARG > 0 && 무기소질수(ARG) > 1))
+		LOCAL |= RESULT == 20 && (LOCAL:9 || CFLAG:ARG:顔グラ > 0)
+		IF !LOCAL
+			CLEARLINE 1
+			;SIF (RESULT == 1 && ARG != MASTER && BASE:ARG:ＭＡＧ < LOCAL:6) || (RESULT == 8 && ABL:ARG:종족 == 45 && BASE:ARG:ＭＡＧ < LOCAL:7)
+			;	REUSELASTLINE ＭＡＧが발りません
+			SIF RESULT == 4 && LOCAL:4 && ABL:ARG:종족 != 45 && LOCAL:5 < 0
+				REUSELASTLINE 비어있는 스킬 칸이 없습니다
+		ENDIF
+		IF TALENT:ARG:식노 && どっちの강화？ == 1 && RESULT == 3
+			CLEARLINE 1
+			REUSELASTLINE 식노는 스킬소거를 할 수 없습니다
+			LOCAL = 0
+		ENDIF
+	LOOP !LOCAL
+	LOCAL = RESULT
+	SELECTCASE LOCAL
+		CASE 1
+			CALLFORM %FUNCNAME:(LOCAL - 1)% (ARG)
+		CASE 2 TO 3
+			CALLFORM %FUNCNAME:(LOCAL - 1)% (ARG,どっちの강화？)
+		CASE 3
+			CALLFORM %FUNCNAME:(LOCAL - 1)% (ARG,どっちの강화？)
+		CASE 4
+			CALL MAG_LEARN_SKILL(ARG,どっちの강화？, ABLNAME:(LOCAL:5))
+		CASE 5
+			CALLFORM %FUNCNAME:(LOCAL - 1)% (ARG)
+		CASE 6
+			CALLFORM %FUNCNAME:(LOCAL - 1)% (ARG)
+		CASE 7
+			CALLFORM %FUNCNAME:(LOCAL - 1)% (ARG)
+		CASE 8
+			PRINTFORMW %NAME:ARG%의 레벨이 1 올랐습니다(현재 LV：{++BASE:ARG:LV})
+			BASE:ARG:ＭＡＧ -= LOCAL:7
+			CALL EVENT_LEVELUP(ARG, 1)
+			TRYCALLFORM EVENT_LEVELUP_{NO:ARG}(1)
+			CALL SYNC_STATUS(ARG)
+		CASE 9
+			CALL SET_MANTRA_SKILL(ARG)
+		CASE 10
+			CALL MANTRA_BASESTATUS(ARG)
+		CASE 11
+			CALL DOWNLOAD_MANTRA(7, 7, ARG)
+		CASE 12
+			CALL 장비강화 ,ARG
+		CASE 13
+			IF BASE:ARG:ＭＡＧ >= LOCAL:8
+				CALL 장비능력보정변경 ,ARG
+				SIF RESULT == 1
+					BASE:ARG:ＭＡＧ -= LOCAL:8
+			ELSE
+				PRINTFORMW 필요MAG가 부족합니다
+			ENDIF
+		CASE 14
+			CALL 무기수련,ARG
+		CASE 20
+			CALL 顔グラ변경,ARG
+		CASE 107
+			ARG = Q:(--LOCAL:2)
+		CASE 109
+			ARG = Q:(++LOCAL:2)
+	ENDSELECT
+LOOP LOCAL != 100
+RETURN LOCAL:1
+
+;===================================================
+;기본능력강화
+;===================================================
+@ENHANCE_BASE,ARG
+#DIM ＣＰ보정
+PRINTL □ 기본능력강화
+
+;能力ＵＰに필요な値を計算
+LOCAL:1 = CFLAG:ARG:능력강화횟수
+;/3 + 1
+SELECTCASE FLAG:전투난이도
+	CASE 1 TO 6
+		LOCAL:10 = 250
+	CASE 4,5,6
+		LOCAL:10 = 100
+ENDSELECT
+SIF ARG == MASTER
+	LOCAL:10 *= 100
+LOCAL:2 = 0
+ＣＰ보정 = ＭＡＧ강화ＣＰ보정(ARG)
+FOR LOCAL, 0 ,10
+	LOCAL:2 += (LOCAL:1/3+1) * (LOCAL:1/3+2)
+	SIF LOCAL == 0
+		LOCAL:3 = LOCAL:2*LOCAL:10 * ＣＰ보정 / 1000
+	SIF LOCAL == 4
+		LOCAL:4 = LOCAL:2*LOCAL:10 * ＣＰ보정 / 1000
+	SIF LOCAL == 9
+		LOCAL:5 = LOCAL:2*LOCAL:10 * ＣＰ보정 / 1000
+	LOCAL:1++
+NEXT
+
+
+PRINTFORML 어느 능력을 강화합니까？　　(現在ＭＡＧ：{BASE:ARG:ＭＡＧ})
+PRINTFORML (필요ＭＡＧ １:{LOCAL:3,6}　５:{LOCAL:4,6}　１０:{LOCAL:5,6}
+PRINTL  +1   +5  +10
+FOR LOCAL,1,7
+	PRINTFORML [{LOCAL}] [{LOCAL+10}] [{LOCAL+20}]%GET_BASESTATUS(LOCAL),5% {MAXBASE:ARG:(GET_BASESTATUS(LOCAL))-CFLAG:ARG:(GET_BASESTATUS(LOCAL) + "강화횟수"),4} + {CFLAG:ARG:(GET_BASESTATUS(LOCAL) + "강화횟수"),4}
+NEXT
+DRAWLINE
+PRINTL [0] 돌아간다
+
+$INPUT_LOOP
+INPUT
+IF RESULT == 0
+	RETURN 0
+ELSEIF RESULT < 7 && RESULT > 0
+	IF BASE:ARG:ＭＡＧ < LOCAL:3
+		PRINTFORMW ＭＡＧ가 충분하지 않습니다
+		RESTART
+	ENDIF
+	PRINTFORMW %NAME:ARG%의 %조사처리(GET_BASESTATUS(RESULT),"가")% 1 올랐다
+	CFLAG:ARG:능력강화횟수 += 1
+	CFLAG:ARG:(GET_BASESTATUS(RESULT) + "강화횟수") += 1
+	CALL CONTROL_MAG,ARG,-LOCAL:3
+	CFLAG:ARG:강화사용ＭＡＧ += LOCAL:3
+ELSEIF RESULT < 17 && RESULT > 10
+	IF BASE:ARG:ＭＡＧ < LOCAL:4
+		PRINTFORMW ＭＡＧ가 충분하지 않습니다
+		RESTART
+	ENDIF
+	PRINTFORMW %NAME:ARG%의 %조사처리(GET_BASESTATUS(RESULT-10),"가")% 5 올랐다
+	CFLAG:ARG:능력강화횟수 += 5
+	CFLAG:ARG:(GET_BASESTATUS(RESULT-10) + "강화횟수") += 5
+	CALL CONTROL_MAG,ARG,-LOCAL:4
+	CFLAG:ARG:강화사용ＭＡＧ += LOCAL:4
+ELSEIF RESULT < 27 && RESULT > 20
+	IF BASE:ARG:ＭＡＧ < LOCAL:5
+		PRINTFORMW ＭＡＧ가 충분하지 않습니다
+		RESTART
+	ENDIF
+	PRINTFORMW %NAME:ARG%의 %조사처리(GET_BASESTATUS(RESULT-20),"가")% 10 올랐다
+	CFLAG:ARG:능력강화횟수 += 10
+	CFLAG:ARG:(GET_BASESTATUS(RESULT-20) + "강화횟수") += 10
+	CALL CONTROL_MAG,ARG,-LOCAL:5
+	CFLAG:ARG:강화사용ＭＡＧ += LOCAL:5
+ELSE
+	GOTO INPUT_LOOP
+ENDIF
+CALL SYNC_STATUS,ARG
+LOCAL:1 = CFLAG:ARG:능력강화횟수/3 + 1
+;IF BASE:ARG:ＭＡＧ < LOCAL:10*LOCAL:1*(LOCAL:1+1)*(900+MAXBASE:ARG:CP)/1000
+;	PRINTW ＭＡＧが발りなくなったので終了します。
+;	RETURN 0
+;ENDIF
+RESTART
+
+
+;===================================================
+;스킬랭크アップ
+;===================================================
+@MAG_SKILL_RANKUP,ARG,ARG:1
+#DIM 素質ないよ , 1
+#DIM 필요ＭＡＧ , 1
+#DIM ＣＰ보정, 1
+#DIM どっちの강화？ , 1
+
+どっちの강화？ = ARG:1
+
+PRINTFORML □ 스킬 랭크업　　(現在ＭＡＧ：{BASE:ARG:ＭＡＧ})
+DRAWLINE
+
+IF どっちの강화？  > 0
+	PRINTL 어느 스킬을 랭크업하겠습니까？
+	SIF TALENT:ARG:데빌시프터 && どっちの강화？  == 1
+		PRINTL ※데빌시프터は초기변신악마の스킬を랭크アップさせることが出来ます
+;ELSEIF TALENT:ARG:데빌시프터 && (TALENT:ARG:달인 || TALENT:ARG:이능자)
+ELSEIF TALENT:ARG:데빌시프터
+	
+	PRINTL 어느 스킬을 랭크업하겠습니까？
+	PRINTL ※데빌시프터는 초기변신악마의 스킬을 랭크업하는 것이 가능합니다
+	PRINTL
+	CALL INPUT_YN("인간시","초기변신악마")
+	IF RESULT == 0
+		どっちの강화？  = 2
+	ELSE
+		どっちの강화？  = 1
+	ENDIF
+	PRINTL
+	PRINTL 어느 스킬을 랭크업하겠습니까？
+ELSEIF TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+	
+	PRINTL 어느 스킬을 랭크업하겠습니까？
+	PRINTL ※악마빙의자는 변신악마의 스킬을 랭크업하는 것이 가능합니다
+	PRINTL
+	CALL INPUT_YN("인간시","변신악마")
+	IF RESULT == 0
+		どっちの강화？  = 2
+	ELSE
+		どっちの강화？  = 1
+	ENDIF
+	PRINTL
+	PRINTL 어느 스킬을 랭크업하겠습니까？
+ELSE
+	PRINTL 어느 스킬을 랭크업하겠습니까？
+	SIF TALENT:ARG:데빌시프터
+		PRINTL ※데빌시프터는 초기변신악마의 스킬을 랭크업하는 것이 가능합니다
+	どっちの강화？  = 1
+ENDIF
+
+FOR LOCAL,0,FLAG:이능자스킬数
+;	IF TALENT:ARG:데빌시프터 == 0 && TALENT:ARG:식노 == 0
+	IF (TALENT:ARG:데빌시프터 == 0 && TALENT:ARG:식노 == 0 && TALENT:ARG:악마빙의자 == 0) || どっちの강화？  == 2
+		LOCALS = 스킬{LOCAL+1}
+	ELSE
+		LOCALS = 초기변신악마스킬{LOCAL+1}
+	ENDIF
+	IF GETBIT(FLAG:カスタムゲーム화면,1)
+		IF ABL:ARG:LOCALS > 0
+			RESULT = 0
+			TRYCALLFORM SKILL_RANKUP_{ABL:ARG:LOCALS}
+			SIF RESULT == 0
+				SETCOLOR 0x404040
+			CALLFORM SKILL_NAME_{ABL:ARG:LOCALS},ARG
+			PRINTFORM 　[{LOCAL+1}]%RESULTS,38,LEFT%
+			RESETCOLOR
+		ENDIF
+		SIF LOCAL == 2 || LOCAL == 5 || LOCAL == 8
+			PRINTL
+	ELSE
+		IF ABL:ARG:LOCALS > 0
+			RESULT = 0
+			TRYCALLFORM SKILL_RANKUP_{ABL:ARG:LOCALS}
+			SIF RESULT == 0
+				SETCOLOR 0x404040
+			CALLFORM SKILL_NAME_{ABL:ARG:LOCALS},ARG
+			PRINTFORM 　[{LOCAL+1}]%RESULTS,20,LEFT%
+			RESETCOLOR
+		ENDIF
+		SIF LOCAL % 4 == 3
+			PRINTL
+	ENDIF
+NEXT
+
+DRAWLINE
+PRINTL [0] 돌아간다
+
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 0
+	RETURN 0
+ELSEIF RESULT < 1 || RESULT > FLAG:이능자스킬数
+	GOTO INPUT_LOOP
+ELSE
+;	IF TALENT:ARG:데빌시프터 == 0 && TALENT:ARG:식노 == 0
+	IF (TALENT:ARG:데빌시프터 == 0 && TALENT:ARG:식노 == 0 && TALENT:ARG:악마빙의자 == 0) || どっちの강화？  == 2
+		LOCALS = 스킬{RESULT}
+	ELSE
+		LOCALS = 초기변신악마스킬{RESULT}
+	ENDIF
+	RESULT = 0
+	VARSET D,-1
+	LOCAL:1 = 0
+	TRYCALLFORM SKILL_RANKUP_{ABL:ARG:LOCALS}
+	IF RESULT == 0
+		REUSELASTLINE 랭크업 할 수 없는 스킬입니다。
+		GOTO INPUT_LOOP
+	ENDIF
+	LOCAL:1 = RESULT
+	CALLFORM SKILL_RANK_{ABL:ARG:LOCALS}
+	LOCAL:2 = RESULT
+	SIF FLAG:스킬속성표시설정 == 1
+		CALL SKILL_EXPLAIN_PERFORMANCE, (ABL:ARG:LOCALS), ARG
+	CALLFORM SKILL_EXPLAIN_{ABL:ARG:LOCALS}
+	DRAWLINE
+	$PRINT_LIST
+	ＣＰ보정 = ＭＡＧ강화ＣＰ보정(ARG)
+	FOR LOCAL,1,LOCAL:1+1
+		CALLFORM SKILL_NAME_{D:LOCAL}
+		CALLFORM SKILL_SUCCESSION_TYPE_{D:LOCAL}
+		IF TALENT:ARG:GET_SUCCESSION(RESULT) == 0
+			素質ないよ = 1
+		ELSE
+			素質ないよ = 0
+		ENDIF
+		CALLFORM SKILL_RANK_{D:LOCAL}
+		필요ＭＡＧ = (POWER(RESULT,3)-POWER(LOCAL:2,3))*200*(1+素質ないよ) * ＣＰ보정 / 1000
+		;식노はMAG量10倍
+		SIF TALENT:ARG:식노 && どっちの강화？ != 2
+			필요ＭＡＧ *= 10
+		PRINTFORML [{LOCAL}] %RESULTS,20,LEFT% {필요ＭＡＧ} ＭＡＧ
+	NEXT
+	DRAWLINE
+	PRINTL [0] 돌아간다
+	$INPUT_LOOP1
+	INPUT
+	IF RESULT == 0
+		RESTART
+	ELSEIF D:RESULT > 0
+		LOCAL = D:RESULT
+		IF CHECK_SKILL(ARG,LOCAL) > 0 || (TALENT:ARG:식노 && CDFLAG:ARG:식노습득스킬:LOCAL && どっちの강화？ != 2)
+			REUSELASTLINE 이미 습득한 스킬입니다。
+			GOTO INPUT_LOOP1
+		ENDIF
+		CALLFORM SKILL_SUCCESSION_TYPE_{LOCAL}
+		IF TALENT:ARG:GET_SUCCESSION(RESULT) == 0
+			素質ないよ = 1
+		ELSE
+			素質ないよ = 0
+		ENDIF
+		
+		CALLFORM SKILL_RANK_{LOCAL}
+		필요ＭＡＧ = (POWER(RESULT,3)-POWER(LOCAL:2,3))*200*(1+素質ないよ) * ＣＰ보정 / 1000
+		;식노はMAG量10倍
+		SIF TALENT:ARG:식노 && どっちの강화？ != 2
+			필요ＭＡＧ *= 10
+		IF BASE:ARG:ＭＡＧ < 필요ＭＡＧ
+			REUSELASTLINE ＭＡＧ가 충분하지 않습니다
+			GOTO INPUT_LOOP1
+		ENDIF
+		SIF FLAG:스킬속성표시설정 == 1
+			CALL SKILL_EXPLAIN_PERFORMANCE, LOCAL, ARG
+		TRYCALLFORM SKILL_EXPLAIN_{LOCAL}
+		DRAWLINE
+		PRINTL 좋습니까?
+		CALL INPUT_YN,"Yes","No",2
+
+		SELECTCASE RESULT
+			CASE 0
+				CALL CONTROL_MAG, ARG, -필요ＭＡＧ
+				CALLFORM SKILL_NAME_{ABL:ARG:LOCALS}
+				PRINTFORM %조사처리(NAME:ARG,"는")% 한순간의 번뜩임으로 %조사처리(RESULTS,"를")% 
+
+				;D:(RAND:(LOCAL:1))に登録された番号の스킬を습득
+				ABL:ARG:LOCALS = LOCAL
+				;식노は습득스킬추가
+				SIF TALENT:ARG:식노 && どっちの강화？ != 2
+					CDFLAG:ARG:식노습득스킬:LOCAL = 1
+				CALLFORM SKILL_NAME_{ABL:ARG:LOCALS}
+				PRINTFORMW %조사처리(RESULTS,"으로")% 랭크업 시켰다!
+			CASE 1
+				GOTO PRINT_LIST
+		ENDSELECT
+		
+	ELSE
+		GOTO INPUT_LOOP1
+	ENDIF
+	
+ENDIF
+RESTART
+
+
+;===================================================
+;스킬변이
+;===================================================
+@MAG_SKILL_MUTATION,ARG
+PRINTFORML □ 스킬 변이　　(현재 ＭＡＧ：{BASE:ARG:ＭＡＧ})
+DRAWLINE
+PRINTL 어느 스킬을 변이시키겠습니까?
+
+
+
+FOR LOCAL,0,FLAG:이능자스킬数
+	IF TALENT:ARG:데빌시프터 == 0 && TALENT:ARG:식노 == 0 && TALENT:ARG:악마빙의자 == 0
+		LOCALS = 스킬{LOCAL+1}
+	ELSE
+		LOCALS = 초기변신악마스킬{LOCAL+1}
+	ENDIF
+	IF ABL:ARG:LOCALS > 0
+		CALLFORM SKILL_NAME_{ABL:ARG:LOCALS},ARG
+		PRINTFORM 　[{LOCAL+1}]%RESULTS,20,LEFT%
+		CALLFORM SKILL_RANK_{ABL:ARG:LOCALS}
+		LOCAL:2 = POWER(RESULT,3)*500
+		;식노はMAG量10倍
+		SIF TALENT:ARG:식노
+			LOCAL:2 *= 10
+		LOCALS = ({LOCAL:2}MAG)
+		PRINTFORM %LOCALS,11%
+	ENDIF
+	SIF LOCAL % 3 == 2 || LOCAL+1 == FLAG:이능자스킬数
+		PRINTL 
+NEXT
+DRAWLINE
+PRINTL [0] 돌아간다
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 0
+	RETURN 0
+ELSEIF RESULT < 1 || RESULT > FLAG:이능자스킬数
+	GOTO INPUT_LOOP
+ELSE
+	LOCALS = 스킬{RESULT}
+	SIF ABL:ARG:LOCALS < 1
+		GOTO INPUT_LOOP
+	CALLFORM SKILL_RANK_{ABL:ARG:LOCALS}
+	LOCAL:2 = POWER(RESULT,3)*500
+	;식노はMAG量10倍
+	SIF TALENT:ARG:식노
+		LOCAL:2 *= 10
+	IF BASE:ARG:ＭＡＧ < LOCAL:2
+		REUSELASTLINE ＭＡＧ가 충분하지 않습니다
+		GOTO INPUT_LOOP
+	ENDIF
+	
+	;변이候補リスト作成
+	VARSET D,-1
+	LOCAL:1 = 0
+	FOR LOCAL,1,3000
+		RESULT = 0
+		TRYCALLFORM SKILL_RANK_{LOCAL}
+		;랭크±1まで、0は변이不可
+		SIF RESULT == 0 || RESULT < LOCAL:2-1 || RESULT > LOCAL:2+1
+			CONTINUE
+		;継承不能스킬は변이候補に入らないようにする
+		CALLFORM SKILL_SUCCESSION_TYPE_{LOCAL}
+		SIF RESULT == 23
+			CONTINUE
+		SIF CHECK_SKILL(ARG,LOCAL) == 1
+			CONTINUE
+		D:(LOCAL:1) = LOCAL
+		LOCAL:1 += 1
+	NEXT
+	IF LOCAL:1 == 0
+		PRINTFORMW ………실패했다
+		RESTART
+	ENDIF
+	CALL CONTROL_MAG,ARG,-POWER(LOCAL:2,3)*500
+	CALLFORM SKILL_NAME_{ABL:ARG:LOCALS}
+	PRINTFORM %조사처리(NAME:ARG,"는")% %조사처리(RESULTS,"를")% 잊고, 
+	
+	;D:(RAND:(LOCAL:1))に登録された番号の스킬を습득
+	LOCAL = D:(RAND:(LOCAL:1))
+	ABL:ARG:LOCALS = LOCAL
+	;식노は습득스킬추가
+	SIF TALENT:ARG:식노
+		CDFLAG:ARG:식노습득스킬:LOCAL = 1
+	CALLFORM SKILL_NAME_{ABL:ARG:LOCALS}
+	PRINTFORMW %조사처리(RESULTS,"를")% 습득했다!
+ENDIF
+CALL SYNC_STATUS,ARG
+CALL HEALTH_CHARA,ARG
+
+;===================================================
+;스킬습득
+;===================================================
+@MAG_LEARN_SKILL,ARG,ARG:1,ARGS
+#DIM どっちの강화？ , 1
+
+どっちの강화？ = ARG:1
+
+PRINTL □ 스킬 습득
+SIF TALENT:ARG:데빌시프터 && どっちの강화？ <= 1
+	PRINTL 　※데빌시프터는 초기변신악마의 스킬을 습득시키는 것이 가능합니다
+
+DRAWLINE
+CALL SHOW_LEARN_SKILL,ARG
+
+
+IF RESULT == 0
+	RETURN 0
+ELSE
+	DRAWLINE
+	LOCAL = RESULT
+	;コストを計算
+	CALLFORM SKILL_RANK_{LOCAL}
+	LOCAL:1 = RESULT
+	LOCAL:2 = POWER(RESULT,3)*150 * ＭＡＧ강화ＣＰ보정(ARG) / 1000
+	;식노はMAG量10倍
+	SIF TALENT:ARG:식노 && どっちの강화？ != 2
+		LOCAL:2 *= 10
+	TRYCCALLFORM 継承不能_{LOCAL}
+		SIF RESULT
+			LOCAL:2 *= 3
+	CATCH
+	ENDCATCH
+	CALLFORM SKILL_SUCCESSION_TYPE_{LOCAL}
+	SIF TALENT:ARG:GET_SUCCESSION(RESULT) == 0
+		LOCAL:2 *= 2
+	CALLFORM SKILL_NAME_{LOCAL}
+	PRINTFORML □%RESULTS%
+	SIF FLAG:스킬속성표시설정 == 1
+		CALL SKILL_EXPLAIN_PERFORMANCE, LOCAL, ARG
+	TRYCALLFORM SKILL_EXPLAIN_{LOCAL}
+	PRINTFORML 스킬랭크:{LOCAL:1,2}　　필요ＭＡＧ:{LOCAL:2,8}
+	DRAWLINE
+	PRINTFORML %CALLNAME:ARG,20,LEFT%(현재 ＭＡＧ：{BASE:ARG:ＭＡＧ})
+	IF TALENT:ARG:식노 && CDFLAG:ARG:식노습득스킬:LOCAL && どっちの강화？ != 2
+		PRINTFORMW 이미 습득한 스킬입니다
+		RESTART
+	ELSEIF LOCAL:2 > BASE:ARG:ＭＡＧ
+		PRINTFORMW ＭＡＧ가 부족합니다
+		RESTART
+	ENDIF
+	PRINTL 습득합니까？
+	CALL INPUT_YN,"Yes","No",2
+
+	SELECTCASE RESULT
+		CASE 0
+			ABL:ARG:ARGS = LOCAL
+			;식노は습득스킬추가
+			SIF TALENT:ARG:식노 && どっちの강화？ != 2
+				CDFLAG:ARG:식노습득스킬:LOCAL = 1
+			CALL CONTROL_MAG , ARG , -LOCAL:2
+			CALLFORM SKILL_NAME_{LOCAL}
+			PRINTFORMW %조사처리(CALLNAME:ARG,"는")% %조사처리(RESULTS,"를")% 습득했다
+			ITEM:(10000+LOCAL) -= 1
+		CASE 1
+			RESTART
+	ENDSELECT
+ENDIF
+RETURN 0
+
+;======================================
+;스킬소거
+;======================================
+@MAG_SKILL_DELETE,ARG,ARG:1
+#DIM 필요ＭＡＧ, 1
+#DIM ＣＰ보정, 1
+#DIM どっちの강화？ , 1
+
+どっちの강화？ = ARG:1
+
+PRINTFORML □ 스킬 소거　　(現在ＭＡＧ：{BASE:ARG:ＭＡＧ})
+DRAWLINE
+
+IF どっちの강화？ 
+	PRINTL 어느 스킬을 소거하겠습니까？
+	SIF TALENT:ARG:데빌시프터 && どっちの강화？  == 1
+		PRINTL ※데빌시프터는 초기변신악마의 스킬을 소거하는 것이 가능합니다
+;ELSEIF TALENT:ARG:데빌시프터 && (TALENT:ARG:달인 || TALENT:ARG:이능자)
+ELSEIF TALENT:ARG:데빌시프터
+		
+	PRINTL 어느 스킬을 소거하겠습니까？
+	PRINTL ※데빌시프터는 초기변신악마의 스킬을 소거하는 것이 가능합니다
+	PRINTL
+	CALL INPUT_YN("인간시","초기변신악마")
+	IF RESULT == 0
+		どっちの강화？  = 2
+	ELSE
+		どっちの강화？  = 1
+	ENDIF
+	PRINTL
+	PRINTL 어느 스킬을 소거하겠습니까？
+ELSEIF TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+	
+	PRINTL 어느 스킬을 소거하겠습니까？
+	PRINTL 　※악마빙의자는 변신악마의 스킬을 소거하는 것이 가능합니다
+	PRINTL
+	CALL INPUT_YN("인간시","변신악마")
+	IF RESULT == 0
+		どっちの강화？  = 2
+	ELSE
+		どっちの강화？  = 1
+	ENDIF
+	PRINTL
+	PRINTL 어느 스킬을 소거하겠습니까？
+ELSE
+	PRINTL 어느 스킬을 소거하겠습니까？
+	SIF TALENT:ARG:데빌시프터
+		PRINTL 　※데빌시프터는 초기변신악마의 스킬을 소거하는 것이 가능합니다
+	どっちの강화？  = 1
+ENDIF
+
+ＣＰ보정 = ＭＡＧ강화ＣＰ보정(ARG)
+FOR LOCAL,0,FLAG:이능자스킬数
+	IF (TALENT:ARG:데빌시프터 == 0 && TALENT:ARG:식노 == 0) || どっちの강화？  == 2
+		LOCALS = 스킬{LOCAL+1}
+	ELSE
+		LOCALS = 초기변신악마스킬{LOCAL+1}
+	ENDIF
+	IF GETBIT(FLAG:カスタムゲーム화면,1)
+		IF ABL:ARG:LOCALS > 0
+			CALLFORM SKILL_NAME_{ABL:ARG:LOCALS},ARG
+			PRINTFORM 　[{LOCAL+1}]%RESULTS,38,LEFT% 
+			CALLFORM SKILL_RANK_{ABL:ARG:LOCALS}
+			PRINTFORM {POWER(RESULT,2)*200 * ＣＰ보정 / 1000, 11} ＭＡＧ
+		ENDIF
+		SIF LOCAL % 2 == 1 && LOCAL <= 8
+			PRINTL 
+	ELSE
+		IF ABL:ARG:LOCALS > 0
+			CALLFORM SKILL_NAME_{ABL:ARG:LOCALS},ARG
+			PRINTFORM 　[{LOCAL+1}]%RESULTS,20,LEFT% 
+			CALLFORM SKILL_RANK_{ABL:ARG:LOCALS}
+			PRINTFORM {POWER(RESULT,2)*200 * ＣＰ보정 / 1000, 11} ＭＡＧ
+		ENDIF
+		SIF LOCAL % 3 == 2 || LOCAL+1 == FLAG:이능자스킬数
+			PRINTL 
+	ENDIF
+NEXT
+DRAWLINE
+PRINTL [0] 돌아간다
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 0
+	RETURN 0
+ELSEIF RESULT < 1 || RESULT > FLAG:이능자스킬数
+	GOTO INPUT_LOOP
+ELSE
+	IF (TALENT:ARG:데빌시프터 == 0 && TALENT:ARG:식노 == 0) || どっちの강화？  == 2
+		LOCALS = 스킬{RESULT}
+	ELSE
+		LOCALS = 초기변신악마스킬{RESULT}
+	ENDIF
+	SIF ABL:ARG:LOCALS < 1
+		GOTO INPUT_LOOP
+	CALLFORM SKILL_RANK_{ABL:ARG:LOCALS}
+	필요ＭＡＧ = POWER(RESULT,2)*200 * ＣＰ보정 / 1000
+	IF BASE:ARG:ＭＡＧ < 필요ＭＡＧ
+		REUSELASTLINE ＭＡＧ가 충분하지 않습니다
+		CLEARLINE 2
+		GOTO INPUT_LOOP
+	ENDIF
+	
+	CALL CONTROL_MAG,ARG, -필요ＭＡＧ
+	CALLFORM SKILL_NAME_{ABL:ARG:LOCALS}
+	PRINTFORMW %조사처리(NAME:ARG,"는")% %조사처리(RESULTS,"를")% 잊었다.
+	LOCAL:1 = ABL:ARG:LOCALS
+	ABL:ARG:LOCALS = 0
+	;대상キャラが악마で장비지식스킬が削除대상で장비지식스킬系をまったく소지していない場合は장비を해제する
+	CALL SKILL_EQUIPTHEORY_DEL_SKILL, ARG, LOCAL:1
+ENDIF
+CALL SYNC_STATUS,ARG
+CALL HEALTH_CHARA,ARG
+
+
+
+
+
+;===================================================
+;通常공격カスタ마이ズ
+;===================================================
+@MAG_ENHANCE_ATTACK,ARG
+#LOCALSIZE 5
+#DIM 필요ＭＡＧ기본치, 1
+
+DRAWLINE
+PRINTFORML □통상공격 성능변경　　(현재ＭＡＧ：{BASE:ARG:ＭＡＧ})
+DRAWLINE
+PRINTL 무엇을 변경하겠습니까？
+SIF TALENT:ARG:데빌시프터
+	PRINTL 　※데빌시프터는 초기변신악마의 통상공격속성을 변화시킬 수 있습니다
+
+SELECTCASE (TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자 ? ABL:ARG:초기링크악마사거리 # ABL:ARG:사거리)
+	CASE 1
+		LOCALS = Ｓ
+	CASE 2
+		LOCALS = Ｍ
+	CASE 3
+		LOCALS = Ｌ
+ENDSELECT
+PRINTFORML [1]사거리　　 （%LOCALS%）
+SELECTCASE (TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자 ? ABL:ARG:초기링크악마공격범위 # ABL:ARG:공격범위)
+	CASE 1
+		LOCALS = 1체
+	CASE 2
+		LOCALS = 1열
+	CASE 3
+		LOCALS = 전체
+ENDSELECT
+PRINTFORML [2]공격범위 （%LOCALS%）
+IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+	PRINTFORML [3]속성　　 （%GET_TYPE(ABL:ARG:초기링크악마공격상성)%）
+ELSE
+	PRINTFORML [3]속성　　 （%GET_TYPE(ABL:ARG:공격상성)%）
+ENDIF
+PRINTL [4]초기화
+DRAWLINE
+PRINTL [0]돌아간다
+필요ＭＡＧ기본치 = POWER(CSVBASE(NO:ARG, GETNUM(BASE, "LV"), 0), 2) * (ABL:ARG:종족 == 36 ? 905/1000 # 1)
+CALL INPUTINT,0,1,2,3,4
+SELECTCASE RESULT
+	CASE 0
+		RETURN 0
+	CASE 1
+		$PRINT_RANGE
+		VARSET LOCAL
+		IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+			SIF ABL:ARG:초기링크악마사거리 != 1 && ABL:ARG:초기링크악마공격범위 != 3
+				LOCAL:1 = 1
+			SIF ABL:ARG:초기링크악마사거리 != 2 && ABL:ARG:초기링크악마공격범위 != 3
+				LOCAL:2 = 1
+			SIF ABL:ARG:초기링크악마사거리 != 3
+				LOCAL:3 = 1
+		
+		ELSE
+			SIF ABL:ARG:사거리 != 1 && ABL:ARG:공격범위 != 3
+				LOCAL:1 = 1
+			SIF ABL:ARG:사거리 != 2 && ABL:ARG:공격범위 != 3
+				LOCAL:2 = 1
+			SIF ABL:ARG:사거리 != 3
+				LOCAL:3 = 1
+		
+		ENDIF
+		
+		;사거리
+		DRAWLINE
+		SIF LOCAL:1
+			PRINTFORML [1]Ｓ （후열에서 공격 불가능）　　　　　　　　{50* 필요ＭＡＧ기본치, 8}ＭＡＧ
+		SIF LOCAL:2
+			PRINTFORML [2]Ｍ （후열에서 공격 가능）　　　　　　　　　{250*필요ＭＡＧ기본치,8}ＭＡＧ
+		SIF LOCAL:3
+			PRINTFORML [3]Ｌ （후열에서 적 후열에 공격 가능）{500*필요ＭＡＧ기본치,8}ＭＡＧ
+		PRINTFORML ※사거리가 늘어날수록 명중률이 저하됩니다
+		DRAWLINE
+		PRINTL [0]돌아간다
+		$INPUT_LOOP_RANGE
+		INPUT
+		IF RESULT == 0
+			RESTART
+		ELSEIF RESULT == 1 && BASE:ARG:ＭＡＧ >= 50*필요ＭＡＧ기본치 && LOCAL:1
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마사거리 = 1
+			ELSE
+				ABL:ARG:사거리 = 1
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 50*필요ＭＡＧ기본치
+			RESTART
+		ELSEIF RESULT == 2 && BASE:ARG:ＭＡＧ >= 250*필요ＭＡＧ기본치 && LOCAL:2
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마사거리 = 2
+			ELSE
+				ABL:ARG:사거리 = 2
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 250*필요ＭＡＧ기본치
+			RESTART
+		ELSEIF RESULT == 3 && BASE:ARG:ＭＡＧ >= 500*필요ＭＡＧ기본치 && LOCAL:3
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마사거리 = 3
+			ELSE
+				ABL:ARG:사거리 = 3
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 500*필요ＭＡＧ기본치
+			RESTART
+		ELSE
+			GOTO INPUT_LOOP_RANGE
+		ENDIF
+	CASE 2
+		$PRINT_SPHERE
+		VARSET LOCAL
+		IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+			SIF ABL:ARG:초기링크악마공격범위 != 1
+				LOCAL:1 = 1
+			SIF ABL:ARG:초기링크악마공격범위 != 2
+				LOCAL:2 = 1
+			SIF ABL:ARG:초기링크악마공격범위 != 3 && ABL:ARG:초기링크악마사거리 == 3
+				LOCAL:3 = 1
+		ELSE
+			SIF ABL:ARG:공격범위 != 1
+				LOCAL:1 = 1
+			SIF ABL:ARG:공격범위 != 2
+				LOCAL:2 = 1
+			SIF ABL:ARG:공격범위 != 3 && ABL:ARG:사거리 == 3
+				LOCAL:3 = 1
+		ENDIF
+		;공격범위
+		DRAWLINE
+		SIF LOCAL:1
+			PRINTFORML [1]1체　　{10*필요ＭＡＧ기본치,10}ＭＡＧ
+		SIF LOCAL:2
+			PRINTFORML [2]1열　　{500*필요ＭＡＧ기본치,10}ＭＡＧ
+		SIF LOCAL:3
+			PRINTFORML [3]전체　　{2500*필요ＭＡＧ기본치,10}ＭＡＧ
+		PRINTFORML ※공격 범위가 넓을 수록 공격력이 저하됩니다
+		PRINTFORML ※범위를 전체로 만들기 위해서는 사거리가 Ｌ일 필요가 있습니다
+		DRAWLINE
+		PRINTL [0] 돌아간다
+		$INPUT_LOOP_SPHERE
+		INPUT
+		IF RESULT == 0
+			RESTART
+		ELSEIF RESULT == 1 && BASE:ARG:ＭＡＧ >= 10*필요ＭＡＧ기본치 && LOCAL:1
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마공격범위 = 1
+			ELSE
+				ABL:ARG:공격범위 = 1
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 10*필요ＭＡＧ기본치
+			RESTART
+		ELSEIF RESULT == 2 && BASE:ARG:ＭＡＧ >= 500*필요ＭＡＧ기본치 && LOCAL:2
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마공격범위 = 2
+			ELSE
+				ABL:ARG:공격범위 = 2
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 500*필요ＭＡＧ기본치
+			RESTART
+		ELSEIF RESULT == 3 && BASE:ARG:ＭＡＧ >= 2500*필요ＭＡＧ기본치 && LOCAL:3
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마공격범위 = 3
+			ELSE
+				ABL:ARG:공격범위 = 3
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 2500*필요ＭＡＧ기본치
+			RESTART
+		ELSE
+			GOTO INPUT_LOOP_SPHERE
+		ENDIF
+	CASE 3
+		;相性
+		$PRINT_TYPE
+		VARSET LOCAL
+		IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+			SIF ABL:ARG:초기링크악마공격상성 != 0
+				LOCAL:1 = 1
+			SIF ABL:ARG:초기링크악마공격상성 != 1
+				LOCAL:2 = 1
+			SIF ABL:ARG:초기링크악마공격상성 != 2
+				LOCAL:3 = 1
+			SIF ABL:ARG:초기링크악마공격상성 != 3
+				LOCAL:4 = 1
+		ELSE
+			SIF ABL:ARG:공격상성 != 0
+				LOCAL:1 = 1
+			SIF ABL:ARG:공격상성 != 1
+				LOCAL:2 = 1
+			SIF ABL:ARG:공격상성 != 2
+				LOCAL:3 = 1
+			SIF ABL:ARG:공격상성 != 3
+				LOCAL:4 = 1
+		ENDIF
+		DRAWLINE
+		SIF LOCAL:1
+			PRINTFORML [1] 검격　　{100*필요ＭＡＧ기본치*(1+(TALENT:ARG:무기)),10}ＭＡＧ
+		SIF LOCAL:2
+			PRINTFORML [2] 비구　　{100*필요ＭＡＧ기본치*(1+(TALENT:ARG:사격무기)),10}ＭＡＧ
+		SIF LOCAL:3
+			PRINTFORML [3] 타격　　{100*필요ＭＡＧ기본치*(1+(TALENT:ARG:갈퀴 || TALENT:ARG:날개 || TALENT:ARG:갈퀴발 || TALENT:ARG:꼬리)),10}ＭＡＧ
+		SIF LOCAL:4
+			PRINTFORML [4] 전술　　{100*필요ＭＡＧ기본치*(1+(TALENT:ARG:팔 || TALENT:ARG:발)),10}ＭＡＧ
+		DRAWLINE
+		PRINTL [0] 돌아간다
+		$INPUT_LOOP_TYPE
+		INPUT
+		IF RESULT == 0
+			RESTART
+		ELSEIF RESULT == 1 && BASE:ARG:ＭＡＧ >= 100*필요ＭＡＧ기본치*(1+(TALENT:ARG:무기)) && LOCAL:1
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마공격상성 = 0
+			ELSE
+				ABL:ARG:공격상성 = 0
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 100*필요ＭＡＧ기본치*(1+(TALENT:ARG:무기))
+			RESTART
+		ELSEIF RESULT == 2 && BASE:ARG:ＭＡＧ >= 100*필요ＭＡＧ기본치*(1+(TALENT:ARG:사격무기)) && LOCAL:2
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마공격상성 = 1
+			ELSE
+				ABL:ARG:공격상성 = 1
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 100*필요ＭＡＧ기본치*(1+(TALENT:ARG:사격무기))
+			RESTART
+		ELSEIF RESULT == 3 && BASE:ARG:ＭＡＧ >= 100*필요ＭＡＧ기본치*(1+(TALENT:ARG:갈퀴 || TALENT:ARG:날개 || TALENT:ARG:갈퀴발 || TALENT:ARG:꼬리)) && LOCAL:3
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마공격상성 = 2
+			ELSE
+				ABL:ARG:공격상성 = 2
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 100*필요ＭＡＧ기본치*(1+(TALENT:ARG:갈퀴 || TALENT:ARG:날개 || TALENT:ARG:갈퀴발 || TALENT:ARG:꼬리))
+			RESTART
+		ELSEIF RESULT == 4 && BASE:ARG:ＭＡＧ >= 100*필요ＭＡＧ기본치*(1+(TALENT:ARG:팔 || TALENT:ARG:발)) && LOCAL:4
+			IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+				ABL:ARG:초기링크악마공격상성 = 3
+			ELSE
+				ABL:ARG:공격상성 = 3
+			ENDIF
+			BASE:ARG:ＭＡＧ -= 100*필요ＭＡＧ기본치*(1+(TALENT:ARG:팔 || TALENT:ARG:발))
+			RESTART
+		ELSE
+			GOTO INPUT_LOOP_TYPE
+		ENDIF
+ENDSELECT
+
+
+;===================================================
+;내성변경
+;===================================================
+@MAG_ENHANCE_DEFTYPE,ARG
+#DIM LCOLOR
+#DIM LLINK
+#DIM LLOCK
+#DIM LTRANCE
+#LOCALSIZE 2
+LCOLOR = GETCOLOR()
+DRAWLINE
+PRINTFORML □내성강화　　(현재ＭＡＧ：{BASE:ARG:ＭＡＧ})
+IF TALENT:ARG:데빌시프터 || TALENT:ARG:악마빙의자
+	PRINTL 　※데빌시프터는 초기변신악마의 내성을 강화할 수 있습니다
+SIF TALENT:ARG:악마빙의자
+	PRINTL 　※악마빙의자는 변신악마의 내성을 강화할 수 있습니다
+	IF !LLOCK	;RESTART対策のロック
+		LLINK   = CFLAG:ARG:링크악마	;リンク先を保存
+		LTRANCE = CFLAG:ARG:악마변신	;변신していたかを保存。今の仕様だとしてないはずだけど念のため
+		SIF LLINK >= 0 && LTRANCE	;초기변신악마以外に변신していた場合はまず변신해제
+			CALL ACTION_2310(ARG)
+		CFLAG:ARG:링크악마 = -1	;リンク先を초기변신악마に
+		SIF LLINK < 0 !& LTRANCE	;元々초기변신악마に변신していた場合以外はここで초기변신악마に변신
+			CALL ACTION_2310(ARG)
+		LLOCK = 1
+	ENDIF
+ENDIF
+DRAWLINE
+PRINTFORML %CALLNAME:ARG, 20, LEFT%
+
+;변경済み相性の표시
+IF CFLAG:ARG:변경相性1
+	PRINTFORM 현재 강화된 내성：%GET_TYPE(CFLAG:ARG:변경相性1 - 1) % 
+	CALL SET_AISYOU_COLOR(CFLAG:ARG:변경相性치1)
+	PRINTFORML \@ CFLAG:ARG:변경相性치1 < 0 ? 흡 # 　 \@\@ CFLAG:ARG:변경相性치1 != 999 ? {ABS(CFLAG:ARG:변경相性치1), 3}％ # %" "%반사 \@
+	SETCOLOR LCOLOR
+ENDIF
+
+IF CFLAG:ARG:추가변경相性1
+	PRINTFORM 추가 강화된 내성：%GET_TYPE(CFLAG:ARG:추가변경相性1 - 1) % 
+	CALL SET_AISYOU_COLOR(CFLAG:ARG:추가변경相性치1)
+	PRINTFORML \@ CFLAG:ARG:추가변경相性치1 < 0 ? 흡 # 　 \@\@ CFLAG:ARG:추가변경相性치1 != 999 ? {ABS(CFLAG:ARG:추가변경相性치1), 3}％ # %" "%반사 \@
+	SETCOLOR LCOLOR
+ELSE
+	PRINTFORML 계약한 동료마는 추가로 내성을 변경할 수 있습니다 (소비MAG 통상의10배）
+ENDIF
+DRAWLINE
+
+;변경する相性の選択
+PRINTL 어느 내성을 변경하겠습니까？
+FOR LOCAL, 0, FLAG:相性数 - 1
+	PRINTFORM [{LOCAL, 2}]%GET_TYPE(LOCAL)% 
+	CALL SET_AISYOU_COLOR(MAXBASE:ARG:(GET_TYPE(LOCAL)))
+	PRINTFORM \@ MAXBASE:ARG:(GET_TYPE(LOCAL)) < 0 ? 흡 # 　 \@
+	PRINTFORM \@ MAXBASE:ARG:(GET_TYPE(LOCAL)) != 999 ? {ABS(MAXBASE:ARG:(GET_TYPE(LOCAL))), 3}％ # %" "%반사 \@　
+	PRINTFORM \@ LOCAL % 6 == 5 ? \n # \@
+	SETCOLOR LCOLOR
+NEXT
+PRINTL 
+IF CFLAG:ARG:변경相性1
+	PRINTL [100] 돌아간다　　　　[200] 초기화
+ELSE
+	PRINTL [100] 돌아간다
+ENDIF
+$INPUT_LOOP
+INPUT
+IF RESULT == 100
+	IF TALENT:ARG:데빌시프터 || TALENT:ARG:악마빙의자
+		SIF LLINK < 0 !& LTRANCE		;元々초기변신악마に변신していた場合以外はまず변신해제
+			CALL ACTION_2310(ARG)
+		CFLAG:ARG:링크악마 = LLINK	;リンク先を戻す
+		SIF LLINK >= 0 && LTRANCE		;초기변신악마以外に변신していた場合はここで변신
+			CALL ACTION_2310(ARG)
+		LLOCK = 0
+	ENDIF
+	RETURN 0
+ELSEIF RESULT == 200 && CFLAG:ARG:변경相性1
+	PRINTFORM 소비한 ＭＡＧ는 되돌아오지 않습니다. 계속 하시겠습니까?
+	PRINTL
+	CALL INPUT_YN, "초기화한다", "초기화하지 않는다"
+	IF RESULT == 0
+		CFLAG:ARG:변경相性1 = 0
+		CFLAG:ARG:변경相性치1 = 0
+		CFLAG:ARG:추가변경相性1 = 0
+		CFLAG:ARG:추가변경相性치1 = 0
+		CALL SYNC_STATUS,ARG
+		CALL HEALTH_CHARA,ARG
+		RETURN 0
+	ELSE
+		GOTO INPUT_LOOP
+	ENDIF
+ELSEIF RESULT < 0 || RESULT >= FLAG:相性数-1
+	GOTO INPUT_LOOP
+ENDIF
+LOCAL:1 = RESULT
+DRAWLINE
+
+;相性변경の소비MAG計算
+PRINTFORML %GET_TYPE(LOCAL:1)%의 방어내성을 어떻게 합니까?
+PRINTFORM 현재：\@(MAXBASE:ARG:(GET_TYPE(LOCAL:1)) < 0) ? 흡 # 　\@
+PRINTFORM \@ ((MAXBASE:ARG:(GET_TYPE(LOCAL:1)) != 999)) ? {ABS(MAXBASE:ARG:(GET_TYPE(LOCAL:1))),4}％ # %" " *2%반사 \@
+
+;PRINTFORM 現在：
+;IF MAXBASE:ARG:GET_TYPE(LOCAL:1) == 999
+;	PRINTFORML 반사
+;ELSEIF MAXBASE:ARG:GET_TYPE(LOCAL:1) == 0
+;	PRINTFORML 無効
+;ELSE
+;	PRINTFORML {MAXBASE:ARG:GET_TYPE(LOCAL:1)}％
+;ENDIF
+
+PRINTL
+SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) > 100 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999
+	PRINTFORML [1]통상 필요ＭＡＧ：{50*(BASE:ARG:CP)}
+SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) > 50 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999
+	PRINTFORML [2]반감 필요ＭＡＧ：{500*(BASE:ARG:CP)}
+SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) != 0
+	PRINTFORML [3]무효 필요ＭＡＧ：{2500*(BASE:ARG:CP)}
+SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) >= 0
+	PRINTFORML [4]흡수 필요ＭＡＧ：{5000*(BASE:ARG:CP)}
+SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999
+	PRINTFORML [5]반사 필요ＭＡＧ：{5000*(BASE:ARG:CP)}
+DRAWLINE
+PRINTL [0] 돌아간다
+$INPUT_LOOP_2
+INPUT
+
+IF RESULT == 0
+	RESTART
+ELSEIF RESULT == 1 && MAXBASE:ARG:GET_TYPE(LOCAL:1) > 100 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999 && BASE:ARG:ＭＡＧ >= 50*(BASE:ARG:CP)
+	CFLAG:ARG:변경相性1 = LOCAL:1+1
+	CFLAG:ARG:변경相性치1 = 100
+	BASE:ARG:ＭＡＧ -= 50*(BASE:ARG:CP)
+ELSEIF RESULT == 2 && MAXBASE:ARG:GET_TYPE(LOCAL:1) > 50 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999 && BASE:ARG:ＭＡＧ >= 500*(BASE:ARG:CP)
+	CFLAG:ARG:변경相性1 = LOCAL:1+1
+	CFLAG:ARG:변경相性치1 = 50
+	BASE:ARG:ＭＡＧ -= 500*(BASE:ARG:CP)
+ELSEIF RESULT == 3 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 0 && BASE:ARG:ＭＡＧ >= 2500*(BASE:ARG:CP)
+	CFLAG:ARG:변경相性1 = LOCAL:1+1
+	CFLAG:ARG:변경相性치1 = 0
+	BASE:ARG:ＭＡＧ -= 2500*(BASE:ARG:CP)
+ELSEIF RESULT == 4 && MAXBASE:ARG:GET_TYPE(LOCAL:1) >= 0 && BASE:ARG:ＭＡＧ >= 5000*(BASE:ARG:CP)
+	CFLAG:ARG:변경相性1 = LOCAL:1+1
+	CFLAG:ARG:변경相性치1 = -50
+	BASE:ARG:ＭＡＧ -= 5000*(BASE:ARG:CP)
+ELSEIF RESULT == 5 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999 && BASE:ARG:ＭＡＧ >= 5000*(BASE:ARG:CP)
+	CFLAG:ARG:변경相性1 = LOCAL:1+1
+	CFLAG:ARG:변경相性치1 = 999
+	BASE:ARG:ＭＡＧ -= 5000*(BASE:ARG:CP)
+ELSE
+	GOTO INPUT_LOOP_2
+ENDIF
+
+CALL SYNC_STATUS,ARG
+IF TALENT:ARG:데빌시프터 || TALENT:ARG:악마빙의자
+	SIF LLINK < 0 !& LTRANCE		;元々초기변신악마に변신していた場合以外はまず변신해제
+		CALL ACTION_2310(ARG)
+	CFLAG:ARG:링크악마 = LLINK	;リンク先を戻す
+	SIF LLINK >= 0 && LTRANCE		;초기변신악마以外に변신していた場合はここで변신
+		CALL ACTION_2310(ARG)
+	LLOCK = 0
+ENDIF
+
+;계약済の場合、추가の相性변경
+;IF TALENT:ARG:아내|| TALENT:ARG:남편 || TALENT:ARG:음마 || TALENT:ARG:노리개
+IF 계약(ARG) || ARG == MASTER
+	;相性を再표시
+	IF CFLAG:ARG:변경相性1
+		PRINTFORM 현재 강화된 내성：%GET_TYPE(CFLAG:ARG:변경相性1 - 1) % 
+		CALL SET_AISYOU_COLOR(CFLAG:ARG:변경相性치1)
+		PRINTFORML \@ CFLAG:ARG:변경相性치1 < 0 ? 흡 # 　 \@\@ CFLAG:ARG:변경相性치1 != 999 ? {ABS(CFLAG:ARG:변경相性치1), 3}％ # %" "%반사 \@
+		SETCOLOR LCOLOR
+	ENDIF
+	
+	IF CFLAG:ARG:추가변경相性1
+		PRINTFORM 추가강화している相性：%GET_TYPE(CFLAG:ARG:추가변경相性1 - 1) % 
+		CALL SET_AISYOU_COLOR(CFLAG:ARG:추가변경相性치1)
+		PRINTFORML \@ CFLAG:ARG:추가변경相性치1 < 0 ? 吸 # 　 \@\@ CFLAG:ARG:추가변경相性치1 != 999 ? {ABS(CFLAG:ARG:추가변경相性치1), 3}％ # %" "%반사 \@
+		SETCOLOR LCOLOR
+	ENDIF
+	DRAWLINE
+	
+	
+	;변경する相性の選択
+	PRINTL 어떤 내성을 추가변경 하시겠습니까?
+	FOR LOCAL, 0, FLAG:相性数 - 1
+		PRINTFORM [{LOCAL, 2}]%GET_TYPE(LOCAL)% 
+		CALL SET_AISYOU_COLOR(MAXBASE:ARG:(GET_TYPE(LOCAL)))
+		PRINTFORM \@ MAXBASE:ARG:(GET_TYPE(LOCAL)) < 0 ? 흡 # 　 \@
+		PRINTFORM \@ MAXBASE:ARG:(GET_TYPE(LOCAL)) != 999 ? {ABS(MAXBASE:ARG:(GET_TYPE(LOCAL))), 3}％ # %" "%반사 \@　
+		PRINTFORM \@ LOCAL % 6 == 5 ? \n # \@
+		SETCOLOR LCOLOR
+	NEXT
+	PRINTL 
+	PRINTL [100] 돌아간다
+	
+	$INPUT_LOOP4
+	INPUT
+	IF RESULT == 100
+		IF TALENT:ARG:데빌시프터 || TALENT:ARG:악마빙의자
+			SIF LLINK < 0 !& LTRANCE		;元々초기변신악마に변신していた場合以外はまず변신해제
+				CALL ACTION_2310(ARG)
+			CFLAG:ARG:링크악마 = LLINK	;リンク先を戻す
+			SIF LLINK >= 0 && LTRANCE		;초기변신악마以外に변신していた場合はここで변신
+				CALL ACTION_2310(ARG)
+			LLOCK = 0
+		ENDIF
+		RETURN 0
+	ELSEIF RESULT < 0 || RESULT >= FLAG:相性数-1
+		GOTO INPUT_LOOP4
+	ENDIF
+	LOCAL:1 = RESULT
+	DRAWLINE
+	
+	;相性변경の소비MAG計算
+	PRINTFORML %GET_TYPE(LOCAL:1)%의 방어상성을 어떡합니까？
+	PRINTFORM 현재：\@(MAXBASE:ARG:(GET_TYPE(LOCAL:1)) < 0) ? 흡 # 　\@
+	PRINTFORM \@ ((MAXBASE:ARG:(GET_TYPE(LOCAL:1)) != 999)) ? {ABS(MAXBASE:ARG:(GET_TYPE(LOCAL:1))),4}％ # %" " *2%반사 \@
+	
+	;PRINTFORM 현재：
+	;IF MAXBASE:ARG:GET_TYPE(LOCAL:1) == 999
+	;	PRINTFORML 반사
+	;ELSEIF MAXBASE:ARG:GET_TYPE(LOCAL:1) == 0
+	;	PRINTFORML 無効
+	;ELSE
+	;	PRINTFORML {MAXBASE:ARG:GET_TYPE(LOCAL:1)}％
+	;ENDIF
+
+	PRINTL
+	SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) > 100 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999
+		PRINTFORML [1]통상 필요ＭＡＧ：{50*(BASE:ARG:CP)*10}
+	SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) > 50 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999
+		PRINTFORML [2]반감 필요ＭＡＧ：{500*(BASE:ARG:CP)*10}
+	SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) != 0
+		PRINTFORML [3]무효 필요ＭＡＧ：{2500*(BASE:ARG:CP)*10}
+	SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) >= 0
+		PRINTFORML [4]흡수 필요ＭＡＧ：{5000*(BASE:ARG:CP)*10}
+	SIF MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999
+		PRINTFORML [5]반사 필요ＭＡＧ：{5000*(BASE:ARG:CP)*10}
+	DRAWLINE
+	PRINTL [0] 돌아간다
+	$INPUT_LOOP_3
+	INPUT
+
+	IF RESULT == 0
+		RESTART
+	ELSEIF RESULT == 1 && MAXBASE:ARG:GET_TYPE(LOCAL:1) > 100 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999 && BASE:ARG:ＭＡＧ >= 50*(BASE:ARG:CP)*10
+		CFLAG:ARG:추가변경相性1 = LOCAL:1+1
+		CFLAG:ARG:추가변경相性치1 = 100
+		BASE:ARG:ＭＡＧ -= 50*(BASE:ARG:CP)*10
+	ELSEIF RESULT == 2 && MAXBASE:ARG:GET_TYPE(LOCAL:1) > 50 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999 && BASE:ARG:ＭＡＧ >= 500*(BASE:ARG:CP)*10
+		CFLAG:ARG:추가변경相性1 = LOCAL:1+1
+		CFLAG:ARG:추가변경相性치1 = 50
+		BASE:ARG:ＭＡＧ -= 500*(BASE:ARG:CP)*10
+	ELSEIF RESULT == 3 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 0 && BASE:ARG:ＭＡＧ >= 2500*(BASE:ARG:CP)*10
+		CFLAG:ARG:추가변경相性1 = LOCAL:1+1
+		CFLAG:ARG:추가변경相性치1 = 0
+		BASE:ARG:ＭＡＧ -= 2500*(BASE:ARG:CP)*10
+	ELSEIF RESULT == 4 && MAXBASE:ARG:GET_TYPE(LOCAL:1) >= 0 && BASE:ARG:ＭＡＧ >= 5000*(BASE:ARG:CP)*10
+		CFLAG:ARG:추가변경相性1 = LOCAL:1+1
+		CFLAG:ARG:추가변경相性치1 = -50
+		BASE:ARG:ＭＡＧ -= 5000*(BASE:ARG:CP)*10
+	ELSEIF RESULT == 5 && MAXBASE:ARG:GET_TYPE(LOCAL:1) != 999 && BASE:ARG:ＭＡＧ >= 5000*(BASE:ARG:CP)*10
+		CFLAG:ARG:추가변경相性1 = LOCAL:1+1
+		CFLAG:ARG:추가변경相性치1 = 999
+		BASE:ARG:ＭＡＧ -= 5000*(BASE:ARG:CP)*10
+	ELSE
+		GOTO INPUT_LOOP_3
+	ENDIF
+ENDIF
+CALL SYNC_STATUS,ARG
+IF TALENT:ARG:데빌시프터 || TALENT:ARG:악마빙의자
+	SIF LLINK < 0 !& LTRANCE		;元々초기변신악마に변신していた場合以外はまず변신해제
+		CALL ACTION_2310(ARG)
+	CFLAG:ARG:링크악마 = LLINK	;リンク先を戻す
+	SIF LLINK >= 0 && LTRANCE		;초기변신악마以外に변신していた場合はここで변신
+		CALL ACTION_2310(ARG)
+	LLOCK = 0
+ENDIF
+
+
+
+@MAG_GROWTH,ARG
+DRAWLINE
+PRINTL □체력・기력강화
+DRAWLINE
+PRINTL 어느쪽을 강화하겠습니까？
+PRINTFORML %NAME:ARG,20,LEFT%(현재ＭＡＧ：{BASE:ARG:ＭＡＧ})
+IF ARG == MASTER
+;---- EDIT 기력체력강화 START -------------------------
+	LOCAL = MAXBASE:ARG:체력
+
+	PRINTFORML 체력 (현재의 최대치:{LOCAL})
+
+	SIF BASE:ARG:ＭＡＧ < POWER(LOCAL/100,2)*2*(5+LOCAL/500+LOCAL/3000*5)
+		SETCOLOR 0x404040
+	PRINTFORML   [ 1] +100 / {POWER(LOCAL/100,2)*2*(5+LOCAL/500+LOCAL/3000*5),7,RIGHT}MAG
+
+	LOCAL:1 = 0
+	LOCAL:2 = 0
+	FOR LOCAL:5,0,2
+		FOR LOCAL:6,0,5
+			LOCAL:2 += POWER(LOCAL/100,2)*2*(5+LOCAL/500+LOCAL/3000*5)
+			LOCAL += 100
+		NEXT
+		SIF LOCAL:1
+			BREAK
+		LOCAL:1 += LOCAL:2
+	NEXT
+
+	SIF BASE:ARG:ＭＡＧ < LOCAL:1
+		SETCOLOR 0x404040
+	PRINTFORML   [ 6] +500 / {LOCAL:1,7,RIGHT}MAG
+
+	SIF BASE:ARG:ＭＡＧ < LOCAL:2
+		SETCOLOR 0x404040
+	PRINTFORML   [11]+1000 / {LOCAL:2,7,RIGHT}MAG
+	RESETCOLOR
+
+	LOCAL = MAXBASE:ARG:기력
+
+	PRINTFORML 기력 (현재의 최대치:{LOCAL})
+
+	SIF BASE:ARG:ＭＡＧ < POWER(LOCAL/100,2)*4*(5+LOCAL/500+LOCAL/3000*5)
+		SETCOLOR 0x404040
+	PRINTFORML   [ 2] +100 / {POWER(LOCAL/100,2)*4*(5+LOCAL/500+LOCAL/3000*5),7,RIGHT}MAG
+
+	LOCAL:3 = 0
+	LOCAL:4 = 0
+	FOR LOCAL:5,0,2
+		FOR LOCAL:6,0,5
+			LOCAL:4 += POWER(LOCAL/100,2)*4*(5+LOCAL/500+LOCAL/3000*5)
+			LOCAL += 100
+		NEXT
+		SIF LOCAL:3
+			BREAK
+		LOCAL:3 += LOCAL:4
+	NEXT
+
+	SIF BASE:ARG:ＭＡＧ < LOCAL:3
+		SETCOLOR 0x404040
+	PRINTFORML   [ 7] +500 / {LOCAL:3,7,RIGHT}MAG
+
+	SIF BASE:ARG:ＭＡＧ < LOCAL:4
+		SETCOLOR 0x404040
+	PRINTFORML   [12]+1000 / {LOCAL:4,7,RIGHT}MAG
+	RESETCOLOR
+
+ELSE
+	LOCAL = MAXBASE:ARG:체력
+
+	PRINTFORML 체력 (현재의 최대치:{LOCAL})
+
+	SIF BASE:ARG:ＭＡＧ < POWER(LOCAL/100,2)*(5+LOCAL/500+LOCAL/3000*5)
+		SETCOLOR 0x404040
+	PRINTFORML   [ 1] +100 / {POWER(LOCAL/100,2)*(5+LOCAL/500+LOCAL/3000*5),7,RIGHT}MAG
+
+	LOCAL:1 = 0
+	LOCAL:2 = 0
+	FOR LOCAL:3,0,2
+		FOR LOCAL:4,0,5
+			LOCAL:2 += POWER(LOCAL/100,2)*(5+LOCAL/500+LOCAL/3000*5)
+			LOCAL += 100
+		NEXT
+		SIF LOCAL:1
+			BREAK
+		LOCAL:1 += LOCAL:2
+	NEXT
+
+	SIF BASE:ARG:ＭＡＧ < LOCAL:1
+		SETCOLOR 0x404040
+	PRINTFORML   [ 6] +500 / {LOCAL:1,7,RIGHT}MAG
+
+	SIF BASE:ARG:ＭＡＧ < LOCAL:2
+		SETCOLOR 0x404040
+	PRINTFORML   [11]+1000 / {LOCAL:2,7,RIGHT}MAG
+
+	RESETCOLOR
+
+	LOCAL = MAXBASE:ARG:기력
+
+	PRINTFORML 기력 (현재의 최대치:{LOCAL})
+
+	SIF BASE:ARG:ＭＡＧ < POWER(LOCAL/100,2)*2*(5+LOCAL/500+LOCAL/3000*5)
+		SETCOLOR 0x404040
+	PRINTFORML   [ 2] +100 / {POWER(LOCAL/100,2)*2*(5+LOCAL/500+LOCAL/3000*5),7,RIGHT}MAG
+
+	LOCAL:3 = 0
+	LOCAL:4 = 0
+	FOR LOCAL:5,0,2
+		FOR LOCAL:6,0,5
+			LOCAL:4 += POWER(LOCAL/100,2)*2*(5+LOCAL/500+LOCAL/3000*5)
+			LOCAL += 100
+		NEXT
+		SIF LOCAL:3
+			BREAK
+		LOCAL:3 += LOCAL:4
+	NEXT
+
+	SIF BASE:ARG:ＭＡＧ < LOCAL:3
+		SETCOLOR 0x404040
+	PRINTFORML   [ 7] +500 / {LOCAL:3,7,RIGHT}MAG
+
+	SIF BASE:ARG:ＭＡＧ < LOCAL:4
+		SETCOLOR 0x404040
+	PRINTFORML   [12]+1000 / {LOCAL:4,7,RIGHT}MAG
+	RESETCOLOR
+ENDIF
+DRAWLINE
+PRINTL [0]돌아간다
+
+$INPUT_LOOP
+INPUT
+IF RESULT == 0
+	RETURN 0
+ELSEIF RESULT == 1
+	IF ARG == MASTER
+		IF BASE:ARG:ＭＡＧ < POWER(MAXBASE:ARG:체력/100,2)*2*(5+MAXBASE:ARG:체력/500+MAXBASE:ARG:체력/3000*5)
+			PRINTW ＭＡＧ가 충분하지 않습니다
+			GOTO INPUT_LOOP
+		ENDIF
+		CALL CONTROL_MAG,ARG,-POWER(MAXBASE:ARG:체력/100,2)*2*(5+MAXBASE:ARG:체력/500+MAXBASE:ARG:체력/3000*5)
+	ELSE
+		IF BASE:ARG:ＭＡＧ < POWER(MAXBASE:ARG:체력/100,2)*(5+MAXBASE:ARG:체력/500+MAXBASE:ARG:체력/3000*5)
+			PRINTW ＭＡＧ가 충분하지 않습니다
+			GOTO INPUT_LOOP
+		ENDIF
+		CALL CONTROL_MAG,ARG,-POWER(MAXBASE:ARG:체력/100,2)*(5+MAXBASE:ARG:체력/500+MAXBASE:ARG:체력/3000*5)
+	ENDIF
+	SIF BASE:ARG:체력 == MAXBASE:ARG:체력
+		BASE:ARG:체력 += 100
+	MAXBASE:ARG:체력 += 100
+	PRINTFORMW %NAME:ARG%의 체력이 {MAXBASE:ARG:체력}이 되었다
+ELSEIF RESULT == 2
+	IF ARG == MASTER
+		IF BASE:ARG:ＭＡＧ < POWER(MAXBASE:ARG:기력/100,2)*4*(5+MAXBASE:ARG:기력/500+MAXBASE:ARG:기력/3000*5)
+			PRINTW ＭＡＧ가 충분하지 않습니다
+			GOTO INPUT_LOOP
+		ENDIF
+		CALL CONTROL_MAG,ARG,-POWER(MAXBASE:ARG:기력/100,2)*4*(5+MAXBASE:ARG:기력/500+MAXBASE:ARG:기력/3000*5)
+	ELSE
+		IF BASE:ARG:ＭＡＧ < POWER(MAXBASE:ARG:기력/100,2)*2*(5+MAXBASE:ARG:기력/500+MAXBASE:ARG:기력/3000*5)
+			PRINTW ＭＡＧ가 충분하지 않습니다
+			GOTO INPUT_LOOP
+		ENDIF
+		CALL CONTROL_MAG,ARG,-POWER(MAXBASE:ARG:기력/100,2)*2*(5+MAXBASE:ARG:기력/500+MAXBASE:ARG:기력/3000*5)
+	ENDIF
+	SIF BASE:ARG:기력 == MAXBASE:ARG:기력
+		BASE:ARG:기력 += 100
+	MAXBASE:ARG:기력 += 100
+	PRINTFORMW %NAME:ARG%의 기력이 {MAXBASE:ARG:기력}이 되었다
+ELSEIF RESULT == 6
+	IF BASE:ARG:ＭＡＧ < LOCAL:1
+		PRINTW ＭＡＧ가 충분하지 않습니다
+		GOTO INPUT_LOOP
+	ENDIF
+	CALL CONTROL_MAG,ARG,-LOCAL:1
+	SIF BASE:ARG:체력 == MAXBASE:ARG:체력
+		BASE:ARG:체력 += 500
+	MAXBASE:ARG:체력 += 500
+	PRINTFORMW %NAME:ARG%의 체력이{MAXBASE:ARG:체력}이 되었다
+ELSEIF RESULT == 7
+	IF BASE:ARG:ＭＡＧ < LOCAL:3
+		PRINTW ＭＡＧ가 충분하지 않습니다
+		GOTO INPUT_LOOP
+	ENDIF
+	CALL CONTROL_MAG,ARG,-LOCAL:3
+	SIF BASE:ARG:기력 == MAXBASE:ARG:기력
+		BASE:ARG:기력 += 500
+	MAXBASE:ARG:기력 += 500
+	PRINTFORMW %NAME:ARG%의 기력이 {MAXBASE:ARG:기력}이 되었다
+ELSEIF RESULT == 11
+	IF BASE:ARG:ＭＡＧ < LOCAL:2
+		PRINTW ＭＡＧ가 충분하지 않습니다
+		GOTO INPUT_LOOP
+	ENDIF
+	CALL CONTROL_MAG,ARG,-LOCAL:2
+	SIF BASE:ARG:체력 == MAXBASE:ARG:체력
+		BASE:ARG:체력 += 1000
+	MAXBASE:ARG:체력 += 1000
+	PRINTFORMW %NAME:ARG%의 체력이 {MAXBASE:ARG:체력}이 되었다
+ELSEIF RESULT == 12
+	IF BASE:ARG:ＭＡＧ < LOCAL:4
+		PRINTW ＭＡＧ가 충분하지 않습니다
+		GOTO INPUT_LOOP
+	ENDIF
+	CALL CONTROL_MAG,ARG,-LOCAL:4
+	SIF BASE:ARG:기력 == MAXBASE:ARG:기력
+		BASE:ARG:기력 += 1000
+	MAXBASE:ARG:기력 += 1000
+	PRINTFORMW %NAME:ARG%의 기력이 {MAXBASE:ARG:기력}이 되었다
+;---- EDIT 기력체력강화 END   -------------------------
+ELSE
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;===================================================
+;顔グラ변경
+;===================================================
+@顔グラ변경,ARG
+#LOCALSIZE 11
+#DIM IMG_TYPE
+#DIM IMG_SIZE
+#DIM LCOUNT,2
+#DIM 顔グラ종류選択
+VARSET LOCAL
+IF EXIST_PICTURE(NO:ARG, 1)
+	IMG_TYPE = 1
+	IMG_SIZE = 6
+ELSEIF EXIST_PICTURE(NO:ARG, 0)
+	IMG_TYPE = 0
+	IMG_SIZE = 4
+ELSE
+	PRINTFORMW 이 캐릭터는 화상을 갖고있지 않습니다
+	CFLAG:ARG:顔グラ = 0
+	CFLAG:ARG:SHOP顔グラ = 0
+	CFLAG:ARG:조교顔グラ = 0
+	CFLAG:ARG:악마변신顔グラ = 0
+	CFLAG:ARG:汎用악마변신顔グラ = 0
+	RETURN
+ENDIF
+PRINTFORML 현재 화상
+IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE)
+FOR LCOUNT,0,IMG_SIZE
+	CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+	PRINTL
+NEXT
+IF CFLAG:ARG:SHOP顔グラ != CFLAG:ARG:顔グラ
+	IF EXIST_PICTURE(NO:ARG, 1)
+		IMG_TYPE = 1
+		IMG_SIZE = 6
+	ELSEIF EXIST_PICTURE(NO:ARG, 0)
+		IMG_TYPE = 0
+		IMG_SIZE = 4
+	ENDIF
+	PRINTFORML SHOP화면용 화상
+	IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE, 0)
+	FOR LCOUNT,0,IMG_SIZE
+		CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+		PRINTL
+	NEXT
+ENDIF
+IF CFLAG:ARG:조교顔グラ != CFLAG:ARG:顔グラ
+	IF EXIST_PICTURE(NO:ARG, 1)
+		IMG_TYPE = 1
+		IMG_SIZE = 6
+	ELSEIF EXIST_PICTURE(NO:ARG, 0)
+		IMG_TYPE = 0
+		IMG_SIZE = 4
+	ENDIF
+	PRINTFORML 조교화면용 화상
+	IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE, 1)
+	FOR LCOUNT,0,IMG_SIZE
+		CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+		PRINTL
+	NEXT
+ENDIF
+;---- EDIT 003 ADD START -------------------------
+IF CFLAG:ARG:악마변신顔グラ != CFLAG:ARG:顔グラ
+	IF EXIST_PICTURE(NO:ARG, 1)
+		IMG_TYPE = 1
+		IMG_SIZE = 6
+	ELSEIF EXIST_PICTURE(NO:ARG, 0)
+		IMG_TYPE = 0
+		IMG_SIZE = 4
+	ENDIF
+	PRINTFORML 악마변신용 화상
+	IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE, 2)
+	FOR LCOUNT,0,IMG_SIZE
+		CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+		PRINTL
+	NEXT
+ENDIF
+IF CFLAG:ARG:汎用악마변신顔グラ != CFLAG:ARG:顔グラ
+	IF EXIST_PICTURE(NO:ARG, 1)
+		IMG_TYPE = 1
+		IMG_SIZE = 6
+	ELSEIF EXIST_PICTURE(NO:ARG, 0)
+		IMG_TYPE = 0
+		IMG_SIZE = 4
+	ENDIF
+	PRINTFORML 전용악마변신용 화상
+	IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE, 3)
+	FOR LCOUNT,0,IMG_SIZE
+		CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+		PRINTL
+	NEXT
+ENDIF
+;一つしか변신先を持たない人たち向け
+IF TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+	CALL INPUT_SELECT,1,"기본 화상",2,"SHOP화면용",3,"조교화면용",4,"악마변신용"
+	IF RESULT == 1
+		PRINTFORML 어느 화상으로 변경하겠습니까？
+		FOR LCOUNT:1,0,10
+			IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+				LOCAL:(LCOUNT:1) = LCOUNT:1
+				PRINTFORM [{LCOUNT:1,2}]
+				FOR LCOUNT,0,IMG_SIZE
+					SIF LCOUNT > 0
+						PRINT 　　
+					CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+					PRINTL
+				NEXT
+				PRINTL
+			ELSE
+				LOCAL:(LCOUNT:1) = 10
+			ENDIF
+		NEXT
+		LOCAL:(LCOUNT:1) = 10
+		PRINTFORML [10] 변경하지 않는다
+		CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+		IF RESULT < 10
+			CFLAG:ARG:顔グラ = RESULT
+			CFLAG:ARG:SHOP顔グラ = RESULT
+			CFLAG:ARG:조교顔グラ = RESULT
+			CFLAG:ARG:악마변신顔グラ = RESULT
+		ENDIF
+	ELSE
+		顔グラ종류選択 = RESULT
+		PRINTFORML 어느 화상으로 변경하겠습니까？
+		FOR LCOUNT:1,0,10
+			IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+				LOCAL:(LCOUNT:1) = LCOUNT:1
+				PRINTFORM [{LCOUNT:1,2}]
+				FOR LCOUNT,0,IMG_SIZE
+					SIF LCOUNT > 0
+						PRINT 　　
+					CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+					PRINTL
+				NEXT
+				PRINTL
+			ELSE
+				LOCAL:(LCOUNT:1) = 10
+			ENDIF
+		NEXT
+		LOCAL:(LCOUNT:1) = 10
+		PRINTFORML [10] 기본과 똑같이 한다
+		CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+		IF RESULT < 10
+			IF 顔グラ종류選択 == 2
+				CFLAG:ARG:SHOP顔グラ = RESULT
+			ELSEIF 顔グラ종류選択 == 3
+				CFLAG:ARG:조교顔グラ = RESULT
+			ELSEIF 顔グラ종류選択 == 4
+				CFLAG:ARG:악마변신顔グラ = RESULT
+			ENDIF
+		ELSEIF RESULT == 10
+			IF 顔グラ종류選択 == 2
+				CFLAG:ARG:SHOP顔グラ = CFLAG:ARG:顔グラ
+			ELSEIF 顔グラ종류選択 == 3
+				CFLAG:ARG:조교顔グラ = CFLAG:ARG:顔グラ
+			ELSEIF 顔グラ종류選択 == 4
+				CFLAG:ARG:악마변신顔グラ = CFLAG:ARG:顔グラ
+			ENDIF
+		ENDIF
+	ENDIF
+;변신先を複数持つ人たち向け　이능자데빌시프터も설정だけは出来る　意味ないけど
+ELSEIF TALENT:ARG:데빌시프터
+	CALL INPUT_SELECT,1,"기본용 화상",2,"SHOP화면용",3,"조교화면용",4,"악마변신용",5,"전용악마변신용"
+	IF RESULT == 1
+		PRINTFORML 어느 화상으로 변경하겠습니까？
+		FOR LCOUNT:1,0,10
+			IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+				LOCAL:(LCOUNT:1) = LCOUNT:1
+				PRINTFORM [{LCOUNT:1,2}]
+				FOR LCOUNT,0,IMG_SIZE
+					SIF LCOUNT > 0
+						PRINT 　　
+					CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+					PRINTL
+				NEXT
+				PRINTL
+			ELSE
+				LOCAL:(LCOUNT:1) = 10
+			ENDIF
+		NEXT
+		LOCAL:(LCOUNT:1) = 10
+		PRINTFORML [10] 변경하지 않는다
+		CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+		IF RESULT < 10
+			CFLAG:ARG:顔グラ = RESULT
+			CFLAG:ARG:SHOP顔グラ = RESULT
+			CFLAG:ARG:조교顔グラ = RESULT
+			CFLAG:ARG:악마변신顔グラ = RESULT
+			CFLAG:ARG:汎用악마변신顔グラ = RESULT
+		ENDIF
+	ELSE
+		顔グラ종류選択 = RESULT
+		PRINTFORML 어느 화상으로 변경하겠습니까？
+		FOR LCOUNT:1,0,10
+			IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+				LOCAL:(LCOUNT:1) = LCOUNT:1
+				PRINTFORM [{LCOUNT:1,2}]
+				FOR LCOUNT,0,IMG_SIZE
+					SIF LCOUNT > 0
+						PRINT 　　
+					CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+					PRINTL
+				NEXT
+				PRINTL
+			ELSE
+				LOCAL:(LCOUNT:1) = 10
+			ENDIF
+		NEXT
+		LOCAL:(LCOUNT:1) = 10
+		PRINTFORML [10] 기본과 똑같이 한다
+		CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+		IF RESULT < 10
+			IF 顔グラ종류選択 == 2
+				CFLAG:ARG:SHOP顔グラ = RESULT
+			ELSEIF 顔グラ종류選択 == 3
+				CFLAG:ARG:조교顔グラ = RESULT
+			ELSEIF 顔グラ종류選択 == 4
+				CFLAG:ARG:악마변신顔グラ = RESULT
+			ELSEIF 顔グラ종류選択 == 5
+				CFLAG:ARG:汎用악마변신顔グラ = RESULT
+			ENDIF
+		ELSEIF RESULT == 10
+			IF 顔グラ종류選択 == 2
+				CFLAG:ARG:SHOP顔グラ = CFLAG:ARG:顔グラ
+			ELSEIF 顔グラ종류選択 == 3
+				CFLAG:ARG:조교顔グラ = CFLAG:ARG:顔グラ
+			ELSEIF 顔グラ종류選択 == 4
+				CFLAG:ARG:악마변신顔グラ = CFLAG:ARG:顔グラ
+			ELSEIF 顔グラ종류選択 == 5
+				CFLAG:ARG:汎用악마변신顔グラ = CFLAG:ARG:顔グラ
+			ENDIF
+		ENDIF
+	ENDIF
+;---- EDIT 003 ADD END -------------------------
+ELSE
+	CALL INPUT_SELECT,1,"기본 화상",2,"SHOP화면용",3,"조교화면용"
+	IF RESULT == 1
+		PRINTFORML 어느 화상으로 변경하겠습니까？
+		FOR LCOUNT:1,0,10
+			IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+				LOCAL:(LCOUNT:1) = LCOUNT:1
+				PRINTFORM [{LCOUNT:1,2}]
+				FOR LCOUNT,0,IMG_SIZE
+					SIF LCOUNT > 0
+						PRINT 　　
+					CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+					PRINTL
+				NEXT
+				PRINTL
+			ELSE
+				LOCAL:(LCOUNT:1) = 10
+			ENDIF
+		NEXT
+		LOCAL:(LCOUNT:1) = 10
+		PRINTFORML [10] 변경하지 않는다
+		CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+		IF RESULT < 10
+			CFLAG:ARG:顔グラ = RESULT
+			CFLAG:ARG:SHOP顔グラ = RESULT
+			CFLAG:ARG:조교顔グラ = RESULT
+		ENDIF
+	ELSE
+		顔グラ종류選択 = RESULT
+		PRINTFORML 어느 화상으로 변경하겠습니까？
+		FOR LCOUNT:1,0,10
+			IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+				LOCAL:(LCOUNT:1) = LCOUNT:1
+				PRINTFORM [{LCOUNT:1,2}]
+				FOR LCOUNT,0,IMG_SIZE
+					SIF LCOUNT > 0
+						PRINT 　　
+					CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+					PRINTL
+				NEXT
+				PRINTL
+			ELSE
+				LOCAL:(LCOUNT:1) = 10
+			ENDIF
+		NEXT
+		LOCAL:(LCOUNT:1) = 10
+		PRINTFORML [10] 기본과 똑같이 한다
+		CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+		IF RESULT < 10
+			IF 顔グラ종류選択 == 2
+				CFLAG:ARG:SHOP顔グラ = RESULT
+			ELSEIF 顔グラ종류選択 == 3
+				CFLAG:ARG:조교顔グラ = RESULT
+			ENDIF
+		ELSEIF RESULT == 10
+			IF 顔グラ종류選択 == 2
+				CFLAG:ARG:SHOP顔グラ = CFLAG:ARG:顔グラ
+			ELSEIF 顔グラ종류選択 == 3
+				CFLAG:ARG:조교顔グラ = CFLAG:ARG:顔グラ
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+
+; 이미지 표시전 리셋 여부 확인 2020-05-09
+@CHECK_IMG_RESET,ARG
+IF (CFLAG:ARG:顔グラ == 0) 
+	CFLAG:ARG:顔グラ = NO:ARG
+ENDIF
+IF (CFLAG:ARG:SHOP顔グラ == 0) 
+	CFLAG:ARG:SHOP顔グラ = CFLAG:ARG:顔グラ
+ENDIF
+IF (CFLAG:ARG:조교顔グラ == 0) 
+	CFLAG:ARG:조교顔グラ = CFLAG:ARG:顔グラ
+ENDIF
+IF (CFLAG:ARG:악마변신顔グラ == 0) 
+	CFLAG:ARG:악마변신顔グラ = CFLAG:ARG:顔グラ
+ENDIF
+IF (CFLAG:ARG:汎用악마변신顔グラ == 0) 
+	CFLAG:ARG:汎用악마변신顔グラ = CFLAG:ARG:顔グラ
+ENDIF
+
+@顔グラ변경2,ARG
+#LOCALSIZE 11
+#DIM IMG_TYPE
+#DIM IMG_SIZE
+#DIM LCOUNT,2
+#DIM 顔グラ종류選択
+#DIM SELECTFACETYPE
+#DIMS FACEMODENAME
+#DIM DYNAMIC INPUT_IMAGE_NO,1
+VARSET LOCAL
+
+SIF CFLAG:ARG:이미지처리타입 == 1
+	CALL CHECK_IMG_RESET,ARG
+
+IF EXIST_PICTURE(NO:ARG, 1)
+	IMG_TYPE = 1
+	IMG_SIZE = 6
+ELSEIF EXIST_PICTURE(NO:ARG, 0)
+	IMG_TYPE = 0
+	IMG_SIZE = 4
+; 화상 없는 캐릭터도 수정 가능하도록 예외처리 2020-05-09
+;ELSE
+;	PRINTFORMW 이 캐릭터는 화상을 갖고있지 않습니다
+;	CFLAG:ARG:顔グラ = 0
+;	CFLAG:ARG:SHOP顔グラ = 0
+;	CFLAG:ARG:조교顔グラ = 0
+;	CFLAG:ARG:악마변신顔グラ = 0
+;	CFLAG:ARG:汎用악마변신顔グラ = 0
+;	RETURN
+ELSE
+;RACE ICON CHECK
+	
+ENDIF
+IF CFLAG:ARG:이미지처리타입 == 1
+	PRINTFORML 이미지모드 : 커스텀
+ELSE
+	PRINTFORML 이미지모드 : 오리지널
+ENDIF
+PRINTFORML 현재 화상
+IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE)
+FOR LCOUNT,0,IMG_SIZE
+	CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+	PRINTL
+NEXT
+IF CFLAG:ARG:이미지처리타입 == 1
+	PRINTFORML 화상 번호 : {CFLAG:ARG:顔グラ}
+ENDIF
+PRINTL
+;IF CFLAG:ARG:SHOP顔グラ != CFLAG:ARG:顔グラ
+	IMG_TYPE = 0
+	IMG_SIZE = 4
+	PRINTFORML SHOP화면용 화상
+	IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE, 0)
+	FOR LCOUNT,0,IMG_SIZE
+		CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+		PRINTL
+	NEXT
+	IF CFLAG:ARG:이미지처리타입 == 1
+		PRINTFORML 화상 번호 : {CFLAG:ARG:SHOP顔グラ}
+	ENDIF
+	PRINTL
+;ENDIF
+;IF CFLAG:ARG:조교顔グラ != CFLAG:ARG:顔グラ
+	IMG_TYPE = 1
+	IMG_SIZE = 6
+	PRINTFORML 조교화면용 화상
+	IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE, 1)
+	FOR LCOUNT,0,IMG_SIZE
+		CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+		PRINTL
+	NEXT
+	IF CFLAG:ARG:이미지처리타입 == 1
+		PRINTFORML 화상 번호 : {CFLAG:ARG:조교顔グラ}
+	ENDIF
+	PRINTL
+;ENDIF
+;---- EDIT 003 ADD START -------------------------
+IF TALENT:ARG:식노 || TALENT:ARG:악마빙의자 || TALENT:ARG:데빌시프터
+	IMG_TYPE = 0
+	IMG_SIZE = 4
+	PRINTFORML 악마변신용 화상
+	IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE, 2)
+	FOR LCOUNT,0,IMG_SIZE
+		CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+		PRINTL
+	NEXT
+	IF CFLAG:ARG:이미지처리타입 == 1
+		PRINTFORML 화상 번호 : {CFLAG:ARG:악마변신顔グラ}
+	ENDIF
+	PRINTL
+ENDIF
+IF TALENT:ARG:데빌시프터
+	IMG_TYPE = 0
+	IMG_SIZE = 4
+	PRINTFORML 전용악마변신용 화상
+	IMG_TYPE = GET_IMG_TYPE(ARG, IMG_TYPE, 3)
+	FOR LCOUNT,0,IMG_SIZE
+		CALL WRITE_IMG, NO:ARG, IMG_TYPE, LCOUNT+1
+		PRINTL
+	NEXT
+	IF CFLAG:ARG:이미지처리타입 == 1
+		PRINTFORML 화상 번호 : {CFLAG:ARG:汎用악마변신顔グラ}
+	ENDIF
+	PRINTL
+ENDIF
+IF CFLAG:ARG:이미지처리타입 == 1
+	$이미지처리선택
+	IF TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+		CALL INPUT_SELECT,1,"기본 화상",2,"SHOP화면용",3,"조교화면용",4,"악마변신용",6,"전체변경",99,"이미지타입변경",100,"돌아간다"
+		SELECTFACETYPE = RESULT
+	ELSEIF TALENT:ARG:데빌시프터
+		CALL INPUT_SELECT,1,"기본 화상",2,"SHOP화면용",3,"조교화면용",4,"악마변신용",4,"악마변신용",5,"전용악마변신용",6,"전체변경",99,"이미지타입변경",100,"돌아간다"
+		SELECTFACETYPE = RESULT
+	ELSE
+		CALL INPUT_SELECT,1,"기본 화상",2,"SHOP화면용",3,"조교화면용",6,"전체변경",99,"이미지타입변경",100,"돌아간다"
+		SELECTFACETYPE = RESULT
+	ENDIF
+	IF SELECTFACETYPE == 99
+		PRINTFORML 이미지타입을 변경하면 커스텀이미지 사용 모드로 들어갑니다.
+		PRINTFORML 변경할 경우 현재 설정된 이미지가 초기화됩니다.
+		PRINTFORML 변경하겠습니까？
+		CALL INPUT_SELECT,1,"오리지널",2,"커스텀",3,"변경하지 않는다"
+		IF RESULT == 1
+			CFLAG:ARG:이미지처리타입 = 0
+			CFLAG:ARG:顔グラ = 0
+			CFLAG:ARG:조교顔グラ = 0
+			CFLAG:ARG:SHOP顔グラ = 0
+			CFLAG:ARG:악마변신顔グラ = 0
+			CFLAG:ARG:汎用악마변신顔グラ = 0
+		ELSEIF RESULT == 2
+			CFLAG:ARG:이미지처리타입 = 1
+			CALL CHECK_IMG_RESET,ARG
+		ENDIF
+	ELSEIF SELECTFACETYPE == 100
+	ELSEIF SELECTFACETYPE > 0
+		$이미지번호입력
+		PRINTFORML 변경할 이미지 번호를 입력해주세요.
+		INPUT
+		INPUT_IMAGE_NO = RESULT
+		IF SELECTFACETYPE == 2
+			IMG_SIZE = 4
+			IF EXIST_PICTURE(INPUT_IMAGE_NO, 0)
+				FOR LCOUNT,0,IMG_SIZE
+					CALL WRITE_IMG, INPUT_IMAGE_NO, 0, LCOUNT+1
+					PRINTL
+				NEXT
+				PRINTFORML 위 이미지로 변경하겠습니까?
+				CALL INPUT_SELECT,1,"확인",2,"취소"
+				IF RESULT == 1
+					CFLAG:ARG:SHOP顔グラ = INPUT_IMAGE_NO
+					RESTART
+				ELSE
+					GOTO 이미지번호입력
+				ENDIF
+			ELSE
+				PRINTFORML 해당이미지가 없습니다.
+				GOTO 이미지번호입력
+			ENDIF
+		ELSE
+			IMG_SIZE = 6
+			IF EXIST_PICTURE(INPUT_IMAGE_NO, 1)
+				FOR LCOUNT,0,IMG_SIZE
+					CALL WRITE_IMG, INPUT_IMAGE_NO, 1, LCOUNT+1
+					PRINTL
+				NEXT
+				PRINTFORML 위 이미지로 변경하겠습니까?
+				CALL INPUT_SELECT,1,"확인",2,"취소"
+				IF RESULT == 1
+					IF SELECTFACETYPE == 1
+						CFLAG:ARG:顔グラ = INPUT_IMAGE_NO
+					ELSEIF SELECTFACETYPE == 3
+						CFLAG:ARG:조교顔グラ = INPUT_IMAGE_NO
+					ELSEIF SELECTFACETYPE == 4
+						CFLAG:ARG:악마변신顔グラ = INPUT_IMAGE_NO
+					ELSEIF SELECTFACETYPE == 5
+						CFLAG:ARG:汎用악마변신顔グラ = INPUT_IMAGE_NO
+					ELSEIF SELECTFACETYPE == 6
+						CFLAG:ARG:顔グラ = INPUT_IMAGE_NO
+						CFLAG:ARG:조교顔グラ = INPUT_IMAGE_NO
+						CFLAG:ARG:SHOP顔グラ = INPUT_IMAGE_NO
+						CFLAG:ARG:악마변신顔グラ = INPUT_IMAGE_NO
+						CFLAG:ARG:汎用악마변신顔グラ = INPUT_IMAGE_NO
+					ENDIF
+					RESTART
+				ELSE
+					GOTO 이미지번호입력
+				ENDIF
+			ELSE
+				PRINTFORML 해당이미지가 없습니다.
+				GOTO 이미지번호입력
+			ENDIF
+		ENDIF
+	ENDIF
+ELSE
+	;一つしか변신先を持たない人たち向け
+	IF TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+		CALL INPUT_SELECT,1,"기본 화상",2,"SHOP화면용",3,"조교화면용",4,"악마변신용",99,"이미지타입변경"
+		IF RESULT == 1
+			PRINTFORML 어느 화상으로 변경하겠습니까？
+			FOR LCOUNT:1,0,10
+				IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+					LOCAL:(LCOUNT:1) = LCOUNT:1
+					PRINTFORM [{LCOUNT:1,2}]
+					FOR LCOUNT,0,IMG_SIZE
+						SIF LCOUNT > 0
+							PRINT 　　
+						CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+						PRINTL
+					NEXT
+					PRINTL
+				ELSE
+					LOCAL:(LCOUNT:1) = 10
+				ENDIF
+			NEXT
+			LOCAL:(LCOUNT:1) = 10
+			PRINTFORML [10] 변경하지 않는다
+			CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+			IF RESULT < 10
+				CFLAG:ARG:顔グラ = RESULT
+				CFLAG:ARG:SHOP顔グラ = RESULT
+				CFLAG:ARG:조교顔グラ = RESULT
+				CFLAG:ARG:악마변신顔グラ = RESULT
+			ENDIF
+		ELSEIF RESULT == 99
+			PRINTFORML 이미지타입을 변경하면 커스텀이미지 사용 모드로 들어갑니다.
+			PRINTFORML 변경할 경우 현재 설정된 이미지가 초기화됩니다.
+			PRINTFORML 변경하겠습니까？
+			CALL INPUT_SELECT,1,"오리지널",2,"커스텀",3,"변경하지 않는다"
+			IF RESULT == 1
+				CFLAG:ARG:이미지처리타입 = 0
+				CFLAG:ARG:顔グラ = 0
+				CFLAG:ARG:조교顔グラ = 0
+				CFLAG:ARG:SHOP顔グラ = 0
+				CFLAG:ARG:악마변신顔グラ = 0
+				CFLAG:ARG:汎用악마변신顔グラ = 0
+			ELSEIF RESULT == 2
+				CFLAG:ARG:이미지처리타입 = 1
+				CALL CHECK_IMG_RESET,ARG
+			ENDIF
+		ELSE
+			顔グラ종류選択 = RESULT
+			PRINTFORML 어느 화상으로 변경하겠습니까？
+			FOR LCOUNT:1,0,10
+				IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+					LOCAL:(LCOUNT:1) = LCOUNT:1
+					PRINTFORM [{LCOUNT:1,2}]
+					FOR LCOUNT,0,IMG_SIZE
+						SIF LCOUNT > 0
+							PRINT 　　
+						CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+						PRINTL
+					NEXT
+					PRINTL
+				ELSE
+					LOCAL:(LCOUNT:1) = 10
+				ENDIF
+			NEXT
+			LOCAL:(LCOUNT:1) = 10
+			PRINTFORML [10] 기본과 똑같이 한다
+			CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+			IF RESULT < 10
+				IF 顔グラ종류選択 == 2
+					CFLAG:ARG:SHOP顔グラ = RESULT
+				ELSEIF 顔グラ종류選択 == 3
+					CFLAG:ARG:조교顔グラ = RESULT
+				ELSEIF 顔グラ종류選択 == 4
+					CFLAG:ARG:악마변신顔グラ = RESULT
+				ENDIF
+			ELSEIF RESULT == 10
+				IF 顔グラ종류選択 == 2
+					CFLAG:ARG:SHOP顔グラ = CFLAG:ARG:顔グラ
+				ELSEIF 顔グラ종류選択 == 3
+					CFLAG:ARG:조교顔グラ = CFLAG:ARG:顔グラ
+				ELSEIF 顔グラ종류選択 == 4
+					CFLAG:ARG:악마변신顔グラ = CFLAG:ARG:顔グラ
+				ENDIF
+			ENDIF
+		ENDIF
+	;변신先を複数持つ人たち向け　이능자데빌시프터も설정だけは出来る　意味ないけど
+	ELSEIF TALENT:ARG:데빌시프터
+		CALL INPUT_SELECT,1,"기본용 화상",2,"SHOP화면용",3,"조교화면용",4,"악마변신용",5,"전용악마변신용",99,"이미지타입변경"
+		IF RESULT == 1
+			PRINTFORML 어느 화상으로 변경하겠습니까？
+			FOR LCOUNT:1,0,10
+				IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+					LOCAL:(LCOUNT:1) = LCOUNT:1
+					PRINTFORM [{LCOUNT:1,2}]
+					FOR LCOUNT,0,IMG_SIZE
+						SIF LCOUNT > 0
+							PRINT 　　
+						CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+						PRINTL
+					NEXT
+					PRINTL
+				ELSE
+					LOCAL:(LCOUNT:1) = 10
+				ENDIF
+			NEXT
+			LOCAL:(LCOUNT:1) = 10
+			PRINTFORML [10] 변경하지 않는다
+			CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+			IF RESULT < 10
+				CFLAG:ARG:顔グラ = RESULT
+				CFLAG:ARG:SHOP顔グラ = RESULT
+				CFLAG:ARG:조교顔グラ = RESULT
+				CFLAG:ARG:악마변신顔グラ = RESULT
+				CFLAG:ARG:汎用악마변신顔グラ = RESULT
+			ENDIF
+		ELSEIF RESULT == 99
+			PRINTFORML 이미지타입을 변경하면 커스텀이미지 사용 모드로 들어갑니다.
+			PRINTFORML 변경할 경우 현재 설정된 이미지가 초기화됩니다.
+			PRINTFORML 변경하겠습니까？
+			CALL INPUT_SELECT,1,"오리지널",2,"커스텀",3,"변경하지 않는다"
+			IF RESULT == 1
+				CFLAG:ARG:이미지처리타입 = 0
+				CFLAG:ARG:顔グラ = 0
+				CFLAG:ARG:조교顔グラ = 0
+				CFLAG:ARG:SHOP顔グラ = 0
+				CFLAG:ARG:악마변신顔グラ = 0
+				CFLAG:ARG:汎用악마변신顔グラ = 0
+			ELSEIF RESULT == 2
+				CFLAG:ARG:이미지처리타입 = 1
+				CALL CHECK_IMG_RESET,ARG
+			ENDIF
+		ELSE
+			顔グラ종류選択 = RESULT
+			PRINTFORML 어느 화상으로 변경하겠습니까？
+			FOR LCOUNT:1,0,10
+				IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+					LOCAL:(LCOUNT:1) = LCOUNT:1
+					PRINTFORM [{LCOUNT:1,2}]
+					FOR LCOUNT,0,IMG_SIZE
+						SIF LCOUNT > 0
+							PRINT 　　
+						CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+						PRINTL
+					NEXT
+					PRINTL
+				ELSE
+					LOCAL:(LCOUNT:1) = 10
+				ENDIF
+			NEXT
+			LOCAL:(LCOUNT:1) = 10
+			PRINTFORML [10] 기본과 똑같이 한다
+			CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+			IF RESULT < 10
+				IF 顔グラ종류選択 == 2
+					CFLAG:ARG:SHOP顔グラ = RESULT
+				ELSEIF 顔グラ종류選択 == 3
+					CFLAG:ARG:조교顔グラ = RESULT
+				ELSEIF 顔グラ종류選択 == 4
+					CFLAG:ARG:악마변신顔グラ = RESULT
+				ELSEIF 顔グラ종류選択 == 5
+					CFLAG:ARG:汎用악마변신顔グラ = RESULT
+				ENDIF
+			ELSEIF RESULT == 10
+				IF 顔グラ종류選択 == 2
+					CFLAG:ARG:SHOP顔グラ = CFLAG:ARG:顔グラ
+				ELSEIF 顔グラ종류選択 == 3
+					CFLAG:ARG:조교顔グラ = CFLAG:ARG:顔グラ
+				ELSEIF 顔グラ종류選択 == 4
+					CFLAG:ARG:악마변신顔グラ = CFLAG:ARG:顔グラ
+				ELSEIF 顔グラ종류選択 == 5
+					CFLAG:ARG:汎用악마변신顔グラ = CFLAG:ARG:顔グラ
+				ENDIF
+			ENDIF
+		ENDIF
+	;---- EDIT 003 ADD END -------------------------
+	ELSE
+		CALL INPUT_SELECT,1,"기본 화상",2,"SHOP화면용",3,"조교화면용",99,"이미지타입변경"
+		IF RESULT == 1
+			PRINTFORML 어느 화상으로 변경하겠습니까？
+			FOR LCOUNT:1,0,10
+				IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+					LOCAL:(LCOUNT:1) = LCOUNT:1
+					PRINTFORM [{LCOUNT:1,2}]
+					FOR LCOUNT,0,IMG_SIZE
+						SIF LCOUNT > 0
+							PRINT 　　
+						CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+						PRINTL
+					NEXT
+					PRINTL
+				ELSE
+					LOCAL:(LCOUNT:1) = 10
+				ENDIF
+			NEXT
+			LOCAL:(LCOUNT:1) = 10
+			PRINTFORML [10] 변경하지 않는다
+			CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+			IF RESULT < 10
+				CFLAG:ARG:顔グラ = RESULT
+				CFLAG:ARG:SHOP顔グラ = RESULT
+				CFLAG:ARG:조교顔グラ = RESULT
+			ENDIF
+		ELSEIF RESULT == 99
+			PRINTFORML 이미지타입을 변경하면 커스텀이미지 사용 모드로 들어갑니다.
+			PRINTFORML 변경할 경우 현재 설정된 이미지가 초기화됩니다.
+			PRINTFORML 변경하겠습니까？
+			CALL INPUT_SELECT,1,"오리지널",2,"커스텀",3,"변경하지 않는다"
+			IF RESULT == 1
+				CFLAG:ARG:이미지처리타입 = 0
+				CFLAG:ARG:顔グラ = 0
+				CFLAG:ARG:조교顔グラ = 0
+				CFLAG:ARG:SHOP顔グラ = 0
+				CFLAG:ARG:악마변신顔グラ = 0
+				CFLAG:ARG:汎用악마변신顔グラ = 0
+			ELSEIF RESULT == 2
+				CFLAG:ARG:이미지처리타입 = 1
+				CALL CHECK_IMG_RESET,ARG
+			ENDIF
+		ELSE
+			顔グラ종류選択 = RESULT
+			PRINTFORML 어느 화상으로 변경하겠습니까？
+			FOR LCOUNT:1,0,10
+				IF EXIST_PICTURE(NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100)
+					LOCAL:(LCOUNT:1) = LCOUNT:1
+					PRINTFORM [{LCOUNT:1,2}]
+					FOR LCOUNT,0,IMG_SIZE
+						SIF LCOUNT > 0
+							PRINT 　　
+						CALL WRITE_IMG, NO:ARG, LCOUNT:1 * 100 + IMG_TYPE % 100, LCOUNT+1
+						PRINTL
+					NEXT
+					PRINTL
+				ELSE
+					LOCAL:(LCOUNT:1) = 10
+				ENDIF
+			NEXT
+			LOCAL:(LCOUNT:1) = 10
+			PRINTFORML [10] 기본과 똑같이 한다
+			CALL INPUTINT(LOCAL:0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4,LOCAL:5,LOCAL:6,LOCAL:7,LOCAL:8,LOCAL:9,LOCAL:10)
+			IF RESULT < 10
+				IF 顔グラ종류選択 == 2
+					CFLAG:ARG:SHOP顔グラ = RESULT
+				ELSEIF 顔グラ종류選択 == 3
+					CFLAG:ARG:조교顔グラ = RESULT
+				ENDIF
+			ELSEIF RESULT == 10
+				IF 顔グラ종류選択 == 2
+					CFLAG:ARG:SHOP顔グラ = CFLAG:ARG:顔グラ
+				ELSEIF 顔グラ종류選択 == 3
+					CFLAG:ARG:조교顔グラ = CFLAG:ARG:顔グラ
+				ENDIF
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+
+@ＭＡＧ강화ＣＰ보정(ARG)
+#FUNCTION
+RETURNF MIN((ABL:ARG:종족 == 36 ? 905 # 900+MAXBASE:ARG:CP), 1100)
+
+
+@스킬변경可能確かめ(ARG)
+#FUNCTION
+;인간시のみだと　1
+;변신後のみだと　2
+;両方とも可だと　3　を返す
+LOCAL:0 = 0
+LOCAL:1 = 0
+
+SIF (TALENT:ARG:이능자 || ABL:ARG:종족 != 0 || TALENT:ARG:악마빙의자) && !TALENT:ARG:달인 && !TALENT:ARG:페르소나구사자
+	LOCAL:0 = 1
+SIF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
+	LOCAL:1 = 2
+
+RETURNF LOCAL:0 + LOCAL:1

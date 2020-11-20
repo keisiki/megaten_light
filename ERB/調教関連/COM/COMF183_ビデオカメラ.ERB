@@ -1,0 +1,228 @@
+﻿;-------------------------------------------------
+;비디오카메라
+;특수커맨드
+;-------------------------------------------------
+@COMNAME183
+RESULTS = 비디오카메라
+SIF TEQUIP:28
+	RESULTS = 촬영終了
+@ACT_COM183
+#DIM LCOUNT
+;カウントは10回とする
+K = 10
+
+;촬영者の処理
+$INPUT_LOOP
+IF TEQUIP:28 == 0 && ASSI >= 0
+	PRINTL 촬영자를 선택해주세요　도중에 변경은 불가능합니다
+	PRINTL （촬영자를 변경하는경우、일단 촬영을 종료해주세요）
+	PRINTL 
+	PRINTFORML [0] %CALLNAME:MASTER%
+	PRINTFORML [1] %CALLNAME:ASSI%
+	PRINTFORML 
+	INPUT
+	IF RESULT == 0
+		FLAG:22 = 1
+		PRINTFORML 촬영자는 %CALLNAME:MASTER%입니다
+	ELSEIF RESULT == 1 && ASSI > 0
+		FLAG:22 = 2
+		PRINTFORML 촬영자는 %CALLNAME:ASSI%입니다
+	ELSE
+		GOTO INPUT_LOOP
+	ENDIF
+ELSEIF TEQUIP:28 == 0
+	FLAG:22 = 1
+	PRINTFORML 촬영자는 %CALLNAME:MASTER%입니다
+ENDIF
+
+
+TSTR:0 = 비디오카메라
+;CALL KOJO_MESSAGE_COM
+
+
+;着脱の処理
+IF TEQUIP:28
+;ビデオ촬영がされていれば終了させる
+;テープは終了時に数を減らす、さらにこれまでの値段と経験を加算する
+	TEQUIP:28 = 0
+	ITEM:43 -= 1
+	CALL PRICE_VIDEO
+	PRINTW ★★★비디오 촬영을 종료합니다★★★
+ELSE
+;ビデオ촬영してなければ초기化して開始
+;TODO 起動조건を作成する
+	TEQUIP:28 = 1
+	TFLAG:70 = 0
+	FOR LCOUNT, 0, K
+		S = LCOUNT + 110
+		TCVAR:S = -1
+	NEXT
+	PRINTW ★★★비디오 촬영을 시작합니다★★★
+ENDIF
+
+;의존도ベクトル
+TFLAG:33 = 0
+
+
+RETURN 1
+
+;-------------------------------------------------
+;装着継続の処理
+;-------------------------------------------------
+@EQUIP_COM183
+;촬영開始時はカウントに入れない
+IF TFLAG:70 == 0
+	TFLAG:70 += 1
+	RETURN 1
+ENDIF
+
+;-------------------------------------------------
+;ソース추가処理
+;-------------------------------------------------
+;소비체력、기력
+DOWNBASE:TARGET:체력 += 0
+DOWNBASE:TARGET:기력 += 50
+
+SOURCE:TARGET:무서움 += 1000
+SOURCE:TARGET:일탈 += 400
+SOURCE:TARGET:반감 += 700
+
+
+;-------------------------------------------------
+;特殊ソース処理
+;-------------------------------------------------
+;억압、저항持ちには、억울ソース추가
+SIF TALENT:32 || TALENT:34
+	SOURCE:TARGET:울굴 += 700
+
+;고통を伴わない마조끼及び마조の処理は先にしておく
+;마조끼を見る
+A = 1000
+IF ABL:9 == 0
+	TIMES A , 0.80
+	SOURCE:TARGET:액체 += 0
+	SOURCE:TARGET:욕정 += 0
+ELSEIF ABL:9 == 1
+	TIMES A , 1.00
+	SOURCE:TARGET:액체 += 20
+	SOURCE:TARGET:욕정 += 30
+ELSEIF ABL:9 == 2
+	TIMES A , 1.20
+	SOURCE:TARGET:액체 += 40
+	SOURCE:TARGET:욕정 += 70
+ELSEIF ABL:9 == 3
+	TIMES A , 1.40
+	SOURCE:TARGET:액체 += 70
+	SOURCE:TARGET:욕정 += 120
+ELSEIF ABL:9 == 4
+	TIMES A , 1.50
+	SOURCE:TARGET:액체 += 110
+	SOURCE:TARGET:욕정 += 180
+ELSEIF ABL:9 == 5
+	TIMES A , 1.70
+	SOURCE:TARGET:액체 += 150
+	SOURCE:TARGET:욕정 += 250
+ELSEIF ABL:9 == 6
+	TIMES A , 1.90
+	SOURCE:TARGET:액체 += 200
+	SOURCE:TARGET:욕정 += 300
+ELSEIF ABL:9 == 7
+	TIMES A , 2.10
+	SOURCE:TARGET:액체 += 250
+	SOURCE:TARGET:욕정 += 350
+ELSEIF ABL:9 == 8
+	TIMES A , 2.30
+	SOURCE:TARGET:액체 += 300
+	SOURCE:TARGET:욕정 += 400
+ELSEIF ABL:9 == 9
+	TIMES A , 2.50
+	SOURCE:TARGET:액체 += 350
+	SOURCE:TARGET:욕정 += 450
+ELSEIF ABL:9 >= 10
+	TIMES A , 3.00
+	SOURCE:TARGET:액체 += 500
+	SOURCE:TARGET:욕정 += 500
+ENDIF
+SOURCE:TARGET:노출 += A
+
+
+;-------------------------------------------------
+;経験の処理
+;-------------------------------------------------
+IF FLAG:22 == 1
+	CALL ADDS_EXP("촬영경험", 1, MASTER)
+;	PRINTL 主人촬영경험＋１
+ELSEIF FLAG:22 == 2
+	CALL ADDS_EXP("촬영경험", 1, ASSI)
+;	PRINTL 조수촬영경험＋１
+ENDIF
+;EXP:TARGET:63 += 1
+;PRINTL 奴隷피사경험＋１
+CALL ADDS_EXP("피사경험", 1, TARGET)
+;의존도ベクトルを強制的に변경
+SIF TFLAG:33 == 1 || TFLAG:33 == 2
+	TFLAG:33 = 3
+
+;의존도보정値(복종で1、예속で2　強制변경なのでリセット）
+IF TALENT:5 && ASSIPLAY == 0
+	TFLAG:30 = 1
+ELSEIF TALENT:8 && ASSIPLAY == 0
+	TFLAG:30 = 2
+ENDIF
+
+
+;-------------------------------------------------
+;ビデオの処理
+;-------------------------------------------------
+;カウントは10回とします
+K = 10
+
+;テープ残量がなくなると強制的にEQUIPフラグを外す、さらにビデオの値段と経験の処理をする
+IF TFLAG:70 <= 0 || TFLAG:70 >= K
+	TEQUIP:28 = 0
+	ITEM:43 -= 1
+	;촬영内容の保存
+;	S = TFLAG:70+10
+	S = TFLAG:70 + 109
+;	FLAG:S = SELECTCOM
+	IF TFLAG:90
+		;特殊な場合
+		;TFLAG:90によって記録される
+		
+		TCVAR:S = TFLAG:90
+		;用が済んだTFLAG:90は초기化しておくか
+		TFLAG:90 = 0
+	ELSE
+		TCVAR:S = SELECTCOM
+	ENDIF
+	TFLAG:70 += 1
+	CALL PRICE_VIDEO
+	PRINTL ＜테이프의 잔량이 없어졌습니다　비디오촬영을정지합니다＞
+	RETURN 1
+ELSE
+	PRINTFORML ＜비디오촬영중{TFLAG:70}/{K}＞
+ENDIF
+
+;촬영内容の保存
+;S = TFLAG:70+10
+;FLAG:S = SELECTCOM
+S = TFLAG:70 + 109
+IF TFLAG:90
+	TCVAR:S = TFLAG:90
+	TFLAG:90 = 0
+ELSE
+	TCVAR:S = SELECTCOM
+ENDIF
+TFLAG:70 += 1
+
+
+RETURN 1
+
+
+;===================================================
+;조교타입
+;===================================================
+@COMTYPE_183
+RETURN COMTYPE("특수커맨드계")
+
+

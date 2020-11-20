@@ -1,0 +1,69 @@
+﻿;=================================================================================
+;인스톨소프트・악세사리による레벨アップ時능력値ボーナス
+;=================================================================================
+;ARG   대상キャラ
+;ARG:1 試行횟수
+@LVUP_BOOSTER,ARG,ARG:1
+#LOCALSIZE 2
+#LOCALSSIZE 1
+#DIM DYNAMIC 適用횟수,1
+#DIMS DYNAMIC 능력値名,6 = "힘","지혜","마력","인내력","속도","운"
+#DIMS DYNAMIC 인스톨소프트名,6 = "헤라클레스","오디세우스","오르페우스","오리온","아킬레스","테세우스"
+#DIMS DYNAMIC 악세사리名,6 = "스트렝스소스","인텔리전스소스","매직소스","바이탈리티소스","어질리티소스","럭키소스"
+#DIM DYNAMIC 上昇値,6
+#DIM DYNAMIC ループ,1
+
+FOR 適用횟수,0,ARG:1
+	;능력値名・イン스톨名・악세사리名を랜덤にシャッフル
+	FOR ループ,6-1,0,-1
+		LOCAL = RAND(ループ+1)
+		LOCALS = %능력値名:ループ%
+		능력値名:ループ = %능력値名:LOCAL%
+		능력値名:LOCAL  = %LOCALS%
+
+		LOCALS = %인스톨소프트名:ループ%
+		인스톨소프트名:ループ = %인스톨소프트名:LOCAL%
+		인스톨소프트名:LOCAL  = %LOCALS%
+
+		LOCALS = %악세사리名:ループ%
+		악세사리名:ループ = %악세사리名:LOCAL%
+		악세사리名:LOCAL  = %LOCALS%
+	NEXT
+
+	;シャッフルした順番で능력値上昇판정
+	FOR ループ,0,6
+		IF !IS_HUMAN(ARG) && NUM_SUMMONER() && EQUIP:MASTER:(인스톨소프트名:ループ)
+		ELSEIF EQUIP:ARG:악세사리 == GETNUM(ITEM,악세사리名:ループ)
+		ELSE
+			CONTINUE
+		ENDIF
+		LOCAL  = 1250
+		LOCAL:1 = 100 - CFLAG:ARG:능력강화횟수 - CFLAG:ARG:(능력値名:ループ+"강화횟수") + BASE:ARG:LV
+		SIF LOCAL:1 == 0
+			LOCAL:1 = 1
+		LOCAL /= LOCAL:1
+		LOCAL *= 100
+		SIF RAND(10000) >= LOCAL
+			CONTINUE
+
+		上昇値:(GET_BASESTATUS_NUM(능력値名:ループ)-1) += 1
+		CFLAG:ARG:능력강화횟수 += 1
+		CFLAG:ARG:(능력値名:ループ+"강화횟수") += 1
+		MAXBASE:ARG:(능력値名:ループ) += 1
+		BREAK
+	NEXT
+NEXT
+
+SIF MAX(上昇値:0,上昇値:1,上昇値:2,上昇値:3,上昇値:4,上昇値:5) == 0
+	RETURN
+
+DRAWLINE
+PRINTFORML □%!IS_HUMAN(ARG) ? "ＣＯＭＰ" # "악세사리"%の効果で능력値が増強された
+FOR LOCAL,1,7
+	LOCALS = %GET_BASESTATUS(LOCAL)%
+	PRINTFORML %LOCALS,4%：{BASE:ARG:LOCALS,4}({MAXBASE:ARG:LOCALS,4}) [ +{上昇値:(LOCAL-1),2}]
+NEXT
+DRAWLINE
+RETURN
+
+

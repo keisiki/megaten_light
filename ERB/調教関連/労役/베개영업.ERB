@@ -1,0 +1,474 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:베개.ERB
+;	Facility	:사무소에 관한 함수군입니다.
+;
+;	Licence		:ライセンスフリー
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		2014/09/17		----					ネトリス
+;	002		2014/12/28		----					秩混치の変動が正しく行われていなかったのを수정、など
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;사무소
+;각각의 사무소의 대응한 얼라인먼트 조정을 한다
+;메시아 사무소라면 L, 가이아 사무소는 C사무소는 N에 들러 가는
+;수입은 없유지비가 걸린다(유지비는 높든 좋을지)
+;[[점포:선전フラグ]]:ARG를 인맥치로 사용
+;인맥치는 사무소에서 봉사 활동을 함으로써 얻어 각각의 사무소에서 독자적으로 관리하는
+;인맥치를 소비함으로써 각각의 사무소에 대응한 사이광과 교환할 수
+;
+;==========================================================
+;ARRANGE_CHARA_COMMODITY_MANAGEMENT_베개
+;봉사 활동 개별 설정
+;초기 설정은 기도
+;<인수>
+;	ARG=점포 번호
+;< 돌아가치>
+;	없음
+;========================================================
+@ARRANGE_CHARA_COMMODITY_MANAGEMENT_베개,ARG
+
+P = 0
+$INPUT_LOOP_2
+;표시하는 캐릭터를 추출(Q:*에 표시하는 캐릭터의 등록 번호, LOCAL:2에 인원)
+VARSET Q, -1
+A = 0
+REPEAT CHARANUM
+	SIF CFLAG:COUNT:노역フラグ != 10 + ARG
+		CONTINUE
+	Q:A = COUNT
+	A += 1
+REND
+LOCAL:2 = A
+
+$PRINT_LIST
+DRAWLINE
+PRINTFORML 이용 방법을 고르세요　＜page.{P + 1}＞
+DRAWLINE
+PRINTFORML 　　　　　　　　　　　　　　　　　 면회　오럴  본방
+REPEAT リスト표시数()
+	LOCAL = Q:(COUNT + P * リスト표시数())
+	SIF LOCAL < 0 || CFLAG:LOCAL:この場に居ないフラグ == 1
+		CONTINUE
+	CALL ARRANGE_SETCOLOR, LOCAL
+
+	CALL ARRANGE_TARGETSIGN, LOCAL
+
+	CALL ARRANGE_CHARALIST, LOCAL
+	CALL ARRANGE_FALLTALENT, LOCAL
+	CALL ARRANGE_SEX, LOCAL
+	
+	FOR LOCAL:2, 1, 4
+		PRINTFORM 　-　
+		SIF CFLAG:LOCAL:個別성적서비스 != LOCAL:2
+			SETCOLOR COLOR("灰色")
+		PRINTFORM \@ CFLAG:LOCAL:個別성적서비스 == LOCAL:2 ? Ｏ # Ｘ \@
+		RESETCOLOR
+	NEXT
+	
+	PRINTL 
+REND
+RESETCOLOR
+DRAWLINE
+PRINTFORMLC \@(P <= 0) ? %" " * 16% # [1007]이전 페이지\@
+PRINTLC [1000]돌아간다
+PRINTFORMLC \@(P >= (LOCAL:2 - 1) / リスト표시数()) ? %" " * 16% # [1009]다음 페이지\@
+
+$INPUT_LOOP_1
+INPUT
+IF RESULT == 1000
+	RETURN 0
+ELSEIF RESULT == 1007
+	IF P > 0
+		P -= 1
+		GOTO PRINT_LIST
+	ELSE
+		GOTO INPUT_LOOP_1
+	ENDIF
+ELSEIF RESULT == 1009
+	LOCAL = (LOCAL:2 - 1) / リスト표시数()
+	IF P < LOCAL
+		P += 1
+		GOTO PRINT_LIST
+	ELSE
+		GOTO INPUT_LOOP_1
+	ENDIF
+ELSEIF RESULT < 0 || RESULT >= CHARANUM || MATCH(Q,RESULT) == 0
+	GOTO INPUT_LOOP_1
+ENDIF
+
+LOCAL:1 = RESULT
+
+CFLAG:(LOCAL:1):個別성적서비스 += 1
+SIF CFLAG:(LOCAL:1):個別성적서비스 > 3
+	CFLAG:(LOCAL:1):個別성적서비스 = 1
+
+GOTO INPUT_LOOP_2
+
+
+;==========================================================
+;@EXTEND_MANAGEMENT_베개
+; 베개の규모확장処理
+;<引数>
+;	ARG = 점포번호
+;<戻り値>
+;	なし
+;==========================================================
+@EXTEND_MANAGEMENT_베개, ARG
+PRINTFORML 현재, 이 사무소의 레벨은 {점포("규모", ARG)}입니다.
+
+LOCAL = 5000 * 점포("규모", ARG)
+IF 점포("규모", ARG) >= 5
+	PRINTFORMW 이 사무소는 더 이상 개축할 수 없습니다.
+	RETURN 0
+ELSEIF MONEY < LOCAL
+	PRINTFORMW 개축하려면 ￥{LOCAL}이 필요합니다. 자금이 부족합니다.
+	RETURN 0
+ELSE
+	PRINTFORML ￥{LOCAL}으로 개축합니다. 개축하겠습니까?
+ENDIF
+
+CALL INPUT_YN, "YES", "NO"
+SIF RESULT == 1
+	RETURN 0
+CALL 점포演算("규모", ARG,1, "+")
+MONEY -= LOCAL
+
+;==========================================================
+;MANAGEMENT_베개
+; 베개での活動処理
+;
+;<引数>
+;	ARG = 점포번호
+;<사용変数>
+;	속성変動値   = 各活動で変動した数値の保管
+;	配置人数     = 베개に配置しているキャラの人数
+;	최대参拝人数 = 現在の베개규모での최대参拝人数、최대値は베개に改装규모による
+;	参拝人数     = 相손にする人数
+;	베개규모     = 参拝人数と속성変動値の底上げに影響する
+;	敬拝値       = [[점포:인기]]:ARG に収める数値をまとめて保管する
+;<戻り値>
+;	なし
+;========================================================
+@MANAGEMENT_베개, ARG
+#DIM 속성変動値
+#DIM 配置人数
+#DIM 최대参拝人数
+#DIM 参拝人数
+#DIM 베개규모
+#DIM 敬拝値
+#DIM 입봉사횟수
+#DIM Ｖ봉사횟수
+#DIM Ａ봉사횟수
+
+
+;베개の改装레벨を保存
+베개규모 = 점포("규모", ARG)
+;최대参拝人数の설정
+SELECTCASE 베개규모
+	CASE 1
+		최대参拝人数 = 5
+	CASE 2
+		최대参拝人数 = 10
+	CASE 3
+		최대参拝人数 = 20
+	CASE 4
+		최대参拝人数 = 40
+	CASE 5
+		최대参拝人数 = 80
+ENDSELECT
+
+;配置されているキャラがいるか체크
+LOCAL:1 = 0
+FOR LOCAL, 0, CHARANUM
+	;配置されていないキャラを弾く
+	SIF CFLAG:LOCAL:노역フラグ != 10+ARG
+		CONTINUE
+	配置人数 += 1
+NEXT
+;誰も配置されていない場合は戻る
+SIF 配置人数 == 0
+	RETURN
+
+;活動処理
+;LOCAL = キャラ번호
+;LOCAL:1 = 多목적に사용
+FOR LOCAL, 0, CHARANUM
+	;配置されていないキャラを弾く
+	SIF CFLAG:LOCAL:노역フラグ != 10+ARG
+		CONTINUE
+	;초기化
+	입봉사횟수 = 0
+	Ｖ봉사횟수 = 0
+	Ａ봉사횟수 = 0
+
+	;봉사別処理
+	SELECTCASE CFLAG:LOCAL:個別성적서비스
+		;祈り
+		CASE 1
+			PRINTFORMW %조사처리(CALLNAME:LOCAL,"가")% 높으신 분들께 웃음을 팔고 다녔다
+			;祈りでの변화は0～1(MAX0～4)
+			속성変動値 = RAND:(2+베개규모/2)
+			敬拝値 += 1
+			;이벤트구상
+			T = TARGET
+			TARGET = LOCAL
+			TFLAG:13 = 65
+			CALL KOJO_MESSAGE_EVENT
+			TARGET = T
+		;입봉사
+		CASE 2
+			;봉사する人数を決める
+			参拝人数 = RAND:최대参拝人数
+			;参拝人数が0の場合はお祈りをする
+			IF 参拝人数 == 0
+				PRINTFORMW 찾는 사람이 없었기 때문에, %조사처리(CALLNAME:LOCAL,"는")% 하루종일 푹 쉬었다.
+				;祈りでの변화は0～1(MAX0～4)
+				속성変動値 = RAND:(2+베개규모/2)
+				敬拝値 += 1
+				;이벤트구상
+				T = TARGET
+				TARGET = LOCAL
+				TFLAG:13 = 65
+				CALL KOJO_MESSAGE_EVENT
+				TARGET = T
+				GOTO SKIP_1
+			ENDIF
+			
+			;베개の종류によって分ける
+			SELECTCASE 점포("종류",ARG)
+				;メシア베개
+				CASE 99
+					SELECTCASE RAND:(2+베개규모)
+						CASE 1
+							PRINTFORML %조사처리(CALLNAME:LOCAL,"는")% 파티에 참석하여 {参拝人数}명의 높으신 분들의 페니스에 입으로 즐거움을 주었다
+						CASEELSE
+							PRINTFORML %조사처리(CALLNAME:LOCAL,"는")% 파티에서 {参拝人数}명의 높으신 분들에게 입으로 봉사했다
+					ENDSELECT
+
+			ENDSELECT
+			;이벤트구상
+			T = TARGET
+			TARGET = LOCAL
+			TFLAG:13 = 66
+			CALL KOJO_MESSAGE_EVENT
+			TARGET = T
+			;취득경험計算
+			TCVAR:LOCAL:획득펠라경험 = 参拝人数
+			;TCVAR:LOCAL:획득봉사쾌락경험 = 参拝人数
+			;혀놀림がある場合は정액경험にボーナス
+			LOCAL:1 = 参拝人数
+			SIF TALENT:LOCAL:혀놀림
+				LOCAL:1 += 1 + LOCAL:1 / 2
+			TCVAR:LOCAL:획득정액경험 = LOCAL:1
+			;崇拝値は1+획득정액경험
+			敬拝値 += 1 + TCVAR:LOCAL:획득정액경험
+			;획득경험표시
+			CALL SHOW_ADD_EXP, LOCAL
+			
+			;입봉사での변화は0～2(MAX0～7)
+			속성変動値 = RAND:(3+베개규모)
+
+		;性봉사
+		CASE 3
+			;봉사する人数を決める
+			参拝人数 = RAND:최대参拝人数
+			;参拝人数が0の場合はお祈りをする
+			IF 参拝人数 == 0
+				PRINTFORMW 찾는 사람이 없었기 때문에, %조사처리(CALLNAME:LOCAL,"는")% 하루종일 푹 쉬었다.
+				;祈りでの변화は0～1(MAX0～4)
+				속성変動値 = RAND:(2+베개규모/2)
+				敬拝値 += 1
+				;이벤트구상
+				T = TARGET
+				TARGET = LOCAL
+				TFLAG:13 = 65
+				CALL KOJO_MESSAGE_EVENT
+				TARGET = T
+				GOTO SKIP_1
+			ENDIF
+			
+			;베개の종류によって分ける
+			SELECTCASE 점포("종류",ARG)
+				;メシア베개
+				CASE 99
+					SELECTCASE RAND:2
+						CASE 1
+							PRINTFORML %조사처리(CALLNAME:LOCAL,"는")% 파티에 참석하여 {参拝人数}명의 높으신 분들의 페니스에 몸으로 영업했다
+						CASEELSE
+							PRINTFORML %조사처리(CALLNAME:LOCAL,"는")% 파티에서 {参拝人数}명의 높으신 분들에게 몸으로 봉사했다
+					ENDSELECT
+			ENDSELECT
+			
+			;이벤트구상
+			T = TARGET
+			TARGET = LOCAL
+			TFLAG:13 = 67
+			CALL KOJO_MESSAGE_EVENT
+			TARGET = T
+			;취득경험計算
+			;とりあえず一人に付き一発にしておく
+			FOR LOCAL:1, 0, 参拝人数
+				SELECTCASE RAND:3
+					CASE 1
+						입봉사횟수 ++
+					CASE 2
+						Ｖ봉사횟수 ++
+					CASEELSE
+						Ａ봉사횟수 ++
+				ENDSELECT
+				
+				;키스경험処理：適当に랜덤で
+				SIF RAND:2 == 0
+					TCVAR:LOCAL:획득키스경험 += 1
+				
+			NEXT
+			TCVAR:LOCAL:획득펠라경험 += 입봉사횟수
+			TCVAR:LOCAL:획득Ｖ경험 += Ｖ봉사횟수
+			TCVAR:LOCAL:획득Ａ경험 += Ａ봉사횟수
+			TCVAR:LOCAL:획득봉사쾌락경험 += Ｖ봉사횟수 + Ａ봉사횟수
+			TCVAR:LOCAL:획득정액경험 += 입봉사횟수 + Ｖ봉사횟수 + Ａ봉사횟수
+			TCVAR:LOCAL:획득성교경험 += Ｖ봉사횟수 + Ａ봉사횟수
+			TCVAR:LOCAL:획득질사경험 += Ｖ봉사횟수
+			敬拝値 += 1 + 입봉사횟수 + 2*(Ｖ봉사횟수 + Ａ봉사횟수)
+			IF TALENT:LOCAL:혀놀림
+				TCVAR:LOCAL:획득정액경험 += 입봉사횟수 / 2
+				敬拝値 += 입봉사횟수 / 2
+			ENDIF
+			;획득경험표시
+			CALL SHOW_ADD_EXP, LOCAL
+			;체력の소비
+			PRINTFORML 체력 - {参拝人数*10}
+			BASE:LOCAL:체력 -= 参拝人数*10
+
+			;임신用
+			SIF CFLAG:LOCAL:자궁내피임결계 == 0
+				CFLAG:LOCAL:信者の中出氏による임신판정 = TCVAR:LOCAL:획득질사경험*2
+
+			;性봉사での변화は1～4(MAX1～9)
+			속성変動値 = 1 + RAND:(4+베개규모)
+
+	ENDSELECT
+	$SKIP_1
+	;数値が1이상なら속성値変動
+;	IF LOCAL:1
+;		;베개によって変動が変わる
+;		SELECTCASE 점포("종류", ARG)
+;			CASE 13
+;				LOCAL:2 = 255
+;			CASE 14
+;				LOCAL:2 = 0
+;			CASE 15
+;				LOCAL:2 = 127
+;		ENDSELECT
+;		;キャラの속성値変動
+;		CALL CHANGE_CHARA_LC, LOCAL, LOCAL:2, LOCAL:1
+;		CALL SYNC_STATUS, LOCAL
+;	ENDIF
+
+	PRINTW
+	DRAWLINE
+
+NEXT
+[[점포:인기]]:ARG += 敬拝値
+;==========================================================
+;@베개_敬拝値_交換
+; 敬拝値を交換するための処理
+;<引数>
+;	ARG = 점포번호
+;<戻り値>
+;	なし
+;==========================================================
+@베개_敬拝値_交換, ARG
+;소지敬拝値と値段を比べるため
+LOCAL:1 = 100
+LOCAL:2 = 500
+LOCAL:3 = 1000
+LOCAL:4 = 1000
+LOCAL:5 = 500
+
+$LOOP_1
+PRINTFORML 요청할 것을 고르세요　　　인맥치：{[[점포:인기]]:ARG}
+
+SELECTCASE 점포("종류",ARG)
+	CASE 99
+			PRINTFORML [1] 납치 조력 (프리미엄 랜덤뽑기)    100
+		SIF 의뢰フラグ:95:0 == 2
+			PRINTFORML [2] 뒷사회 영업 승인                 500
+		SIF 의뢰フラグ:95:0 > 2
+			PRINTFORML [3] 공공사업 끼어들기 (환금)        1000
+		SIF 의뢰フラグ:95:0 == 4 && 이벤트フラグ:95:3 == 0
+			PRINTFORML [4] 악마 방송 출현권                1000
+		SIF 의뢰フラグ:95:4 == 2
+			PRINTFORML [5] 히다카 마이 납치                 500
+ENDSELECT
+
+PRINTFORML [100] 돌아가다
+
+SELECTCASE 점포("종류",ARG)
+	;ガイア베개
+	CASE 99
+		CALL INPUTINT( 1, 2, 3, 4, 5, 100)
+
+ENDSELECT
+
+;戻るを選択した場合
+IF RESULT == 100
+	RETURN
+;敬拝値が발りない場合はループ
+ELSEIF LOCAL:RESULT > [[점포:인기]]:ARG
+	PRINTFORMW 인맥치가 충분하지 않습니다
+	GOTO LOOP_1
+ENDIF
+
+
+SELECTCASE 점포("종류",ARG)
+	CASE 99
+		SELECTCASE RESULT
+			CASE 1
+				CALL CHARA_KIDNAP_1
+				RETURN 0
+
+			CASE 2
+				PRINTFORMW 높으신 분들의 힘으로 오자와가 요청한 뒷배경 확보를 어떻게든 할 수 있었다.
+				PRINTFORMW 근시일 내에 오자와에게 생색을 내러 가야 겠다....
+				의뢰フラグ:95:0 = 3
+				이벤트フラグ:95:0 = 2
+				RETURN 0
+			CASE 3
+				PRINTFORMW 높으신분들의 인맥으로 단기사업에 끼여들어 적당한 수입을 얻을 수 있었다.
+				MONEY += 100000
+				RETURN 0
+			CASE 4
+				PRINTFORMW 높으신 분들도 당연히 악마의 존재를 알고 적당히 사용하고 있었다.
+				PRINTFORML 전파나 사진의 뒤편에선 그 기운 등의 영향을 받을 일도 없고 단지 순수히 그 외모만을 즐길 수 있었다.
+				PRINTFORML 심지어는 마계에 판매되는 프로그램까지 있는 판국이다.
+				PRINTFORML 바로 그런 사업에 끼어들을 자격을 얻어 내었다.
+				PRINTFORML 오자와의 프로덕션을 통해 적당한 수익을 얻을 수 있을 것이다.
+				이벤트フラグ:95:0 = 4
+				이벤트フラグ:95:3 = 1
+				RETURN 0
+			CASE 5
+				CALL MAI_KIDNAP
+				RETURN 0
+		ENDSELECT
+
+ENDSELECT
+RETURN
+
+;敬拝値支払い
+[[점포:인기]]:ARG -= LOCAL:RESULT
+
+
+;==========================================================
+;@베개_敬拝値_交換
+; 敬拝値を交換するための処理
+;<引数>
+;	ARG = 점포번호
+;<戻り値>
+;	なし
+;==========================================================
+
+

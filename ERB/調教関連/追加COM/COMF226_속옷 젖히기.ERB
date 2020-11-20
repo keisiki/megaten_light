@@ -1,0 +1,300 @@
+﻿;-------------------------------------------------
+;바지내리기
+;-------------------------------------------------
+@CHECK_COM_ABLE226
+#LOCALSSIZE 1
+;해제는 언제든 가능
+;SIF TEQUIP:TARGET:가랑이앞열림
+;	RETURN 1
+;촉수조교中はダメ
+SIF TEQUIP:25
+	RETURN 0
+;무릅까지 내리고 있으면 안됨(이미 드러나 있으면 왜 젖힘?)
+SIF TEQUIP:가랑이앞열림 == 1
+	RETURN 0
+;가능한 옷 제외하면 안됨
+SIF (TEQUIP:하의 != 211 && TEQUIP:속옷（하） != 601 && TEQUIP:하의 != 215 && TEQUIP:전신속옷 != 703 && TEQUIP:전신속옷 != 710 && TEQUIP:전신속옷 != 713 && TEQUIP:전신속옷 != 715 && TEQUIP:전신속옷 != 716 && TEQUIP:전신속옷 != 718 && TEQUIP:속옷（하） != 602 && TEQUIP:속옷（하） != 604 && TEQUIP:속옷（하） != 605 && TEQUIP:속옷（하） != 609 && TEQUIP:속옷（하） != 610 && TEQUIP:속옷（하） != 611 && TEQUIP:속옷（하） != 622)
+	RETURN 0
+;속옷, 전신 속옷이 있고 위가 치마나 벗고있으면 가능
+IF (TEQUIP:속옷（하） || TEQUIP:전신속옷) && (TEQUIP:스커트걷어올림 || (TEQUIP:하의 == 0 && TEQUIP:전신복 == 0))
+	RETURN 1
+;아님 하카마나 불루마면 가능
+ELSEIF TEQUIP:하의 == 211 || TEQUIP:하의 == 215
+	RETURN 1
+ELSE
+	RETURN 0
+ENDIF
+	
+RETURN 1
+
+@COMNAME226,ARG
+#LOCALSSIZE 1
+;부르마:211 ;하카마:215
+IF TEQUIP:하의 == 211 || TEQUIP:하의 == 215
+	LOCALS = 하의
+;수영복류 ;래핑리본:718
+ELSEIF TEQUIP:전신속옷 == 718 || TEQUIP:전신속옷 == 703 || TEQUIP:전신속옷 == 710 || TEQUIP:전신속옷 == 713 || TEQUIP:전신속옷 == 715 || TEQUIP:전신속옷 == 716
+	LOCALS = 전신속옷
+;젖힐 수 있는 속옷 ;드로워즈 : 601
+ELSEIF TEQUIP:속옷（하） == 601 || TEQUIP:속옷（하） == 602 || TEQUIP:속옷（하） == 604 || TEQUIP:속옷（하） == 605 || TEQUIP:속옷（하） == 609 || TEQUIP:속옷（하） == 610 || TEQUIP:속옷（하） == 611 || TEQUIP:속옷（하） == 622
+	LOCALS = 속옷（하）
+ELSE
+	RETURN 0
+ENDIF
+
+IF TEQUIP:가랑이앞열림 == 0
+	SELECTCASE CFLAG:LOCALS
+		CASE [[衣装:하카마]]
+			RESULTS = 하카마 걷어올리기
+		CASE [[衣装:래핑리본]]
+			RESULTS = 리본 제치기
+		CASE [[衣装:드로워즈]]
+			RESULTS = 드로워즈 단추 열기
+		CASEELSE
+			IF LOCALS == "전신속옷"
+				RESULTS = 수영복 제치기
+			ELSEIF LOCALS == "하의"
+				RESULTS = 브루마 제치기
+			ELSE
+				RESULTS = 속옷 제치기
+			ENDIF
+	ENDSELECT
+ELSE
+	SELECTCASE CFLAG:LOCALS
+		CASE [[衣装:드로워즈]]
+			RESULTS = 드로워즈 단추 닫기
+		CASE [[衣装:래핑리본]]
+			RESULTS = 리본 바로 입히기
+		CASE [[衣装:하카마]]
+			RESULTS = 하카마 바로 입히기
+		CASEELSE
+			IF LOCALS == "전신속옷"
+				RESULTS = 수영복 바로 입히기
+			ELSEIF LOCALS == "하의"
+				RESULTS = 브루마 바로 입히기
+			ELSE
+				RESULTS = 속옷 바로 입히기
+			ENDIF
+	ENDSELECT
+ENDIF
+
+@ACT_COM226
+#LOCALSSIZE 1
+CALL COMNAME226
+LOCALS = %RESULTS%
+PRINTFORML %LOCALS%
+TSTR:0 = %LOCALS%
+;-------------------------------------------------
+;実行決定
+;-------------------------------------------------
+;CALL KOJO_MESSAGE_COM
+
+;조교대상→조교者
+TFLAG:28 = 2
+
+;작업の処理
+IF TEQUIP:110 == 0
+	TEQUIP:110 = 2
+	TEQUIP:98 = -1
+	TEQUIP:99 = -1
+	TEQUIP:100 = -1
+	;TEQUIP:101 = -1
+	TEQUIP:102 = 1
+	TEQUIP:103 = 1
+	TEQUIP:104 = 1
+ELSE
+	TEQUIP:110 = 0
+	TEQUIP:98 = 2
+	TEQUIP:99 = 2
+	TEQUIP:100 = 2
+	;TEQUIP:101 = 2
+	TEQUIP:102 = 4
+	TEQUIP:103 = 4
+	TEQUIP:104 = 4
+ENDIF
+
+
+;-------------------------------------------------
+;ソース추가処理
+;-------------------------------------------------
+;소비체력、기력
+DOWNBASE:TARGET:체력 += 50
+DOWNBASE:TARGET:기력 += 90
+
+SOURCE:TARGET:달성 = 20
+SOURCE:TARGET:무서움 = 120
+SOURCE:TARGET:액체 = 10
+SOURCE:TARGET:노출 = 300
+SOURCE:TARGET:굴종 = 450
+SOURCE:TARGET:일탈 = 150
+SOURCE:TARGET:반감 = 150
+
+;ビデオ
+IF TEQUIP:28
+	SOURCE:TARGET:액체 += 50
+	SOURCE:TARGET:욕정 += 100
+	SOURCE:TARGET:반감 += 200
+ENDIF
+
+;-------------------------------------------------
+;特殊ソース処理
+;-------------------------------------------------
+;억압、저항持ちには、억울ソース추가
+SIF TALENT:32 || TALENT:34
+	SOURCE:TARGET:울굴 += 150
+
+;처녀、정조관념
+IF TALENT:0
+	TIMES SOURCE:TARGET:무서움 , 1.20
+	TIMES SOURCE:TARGET:굴종 , 1.20
+	TIMES SOURCE:TARGET:반감 , 1.20
+	SOURCE:TARGET:노출 += 300
+	IF TALENT:30
+		TIMES SOURCE:TARGET:노출 , 2.00
+		TIMES SOURCE:TARGET:일탈 , 2.00
+	ENDIF
+ENDIF
+
+;-------------------------------------------------
+;경험の処理
+;-------------------------------------------------
+;레즈경험
+
+A = 1
+IF IS_LESBIAN(TARGET,PLAYER)
+	CALL ADDS_EXP("레즈경험", A, TARGET)
+	CALL ADDS_EXP("레즈경험", A, PLAYER)
+ELSEIF IS_GAY(TARGET,PLAYER)
+	CALL ADDS_EXP("ＢＬ경험", A, TARGET)
+	CALL ADDS_EXP("ＢＬ경험", A, PLAYER)
+ENDIF
+
+;의존도ベクトル
+TFLAG:33 = 3
+
+;의존도보정値(복종で1、예속で2）
+IF TALENT:5 && ASSIPLAY == 0
+	TFLAG:30 += 1
+ELSEIF TALENT:8 && ASSIPLAY == 0
+	TFLAG:30 += 2
+ENDIF
+
+
+RETURN 1
+
+@MESSAGE_COM226
+#LOCALSSIZE 1
+;부르마:211 ;하카마:215
+IF TEQUIP:하의 == 211 || TEQUIP:하의 == 215
+	LOCALS = 하의
+;수영복류 ;래핑리본:718
+ELSEIF TEQUIP:전신속옷 == 718 || TEQUIP:전신속옷 == 703 || TEQUIP:전신속옷 == 710 || TEQUIP:전신속옷 == 713 || TEQUIP:전신속옷 == 715 || TEQUIP:전신속옷 == 716
+	LOCALS = 전신속옷
+;젖힐 수 있는 속옷 ;드로워즈 : 601
+ELSEIF TEQUIP:속옷（하） == 601 || TEQUIP:속옷（하） == 602 || TEQUIP:속옷（하） == 604 || TEQUIP:속옷（하） == 605 || TEQUIP:속옷（하） == 609 || TEQUIP:속옷（하） == 610 || TEQUIP:속옷（하） == 611 || TEQUIP:속옷（하） == 622
+	LOCALS = 속옷（하）
+ELSE
+	RETURN 0
+ENDIF
+
+;전회と今回の조교者が同じで、전회の조교が정상위であり、抜かないフラグがある場合
+IF TEQUIP:TARGET:110 == 2
+	IF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0 && TEQUIP:19 == 0
+		PRINTFORM %CALLNAME:PLAYER%는 저항하는 %CALLNAME:TARGET%의 
+	ELSEIF TEQUIP:19 == 1
+		PRINTFORM %CALLNAME:PLAYER%는 묶여있는 %CALLNAME:TARGET%의 
+	ELSE
+		PRINTFORM %CALLNAME:PLAYER%는 %CALLNAME:TARGET%의 
+	ENDIF
+	SELECTCASE CFLAG:LOCALS
+		CASE [[衣装:하카마]]
+			PRINTFORM 하카마를 발목부터 고간까지 걷어
+			IF TEQUIP:속옷（하） == 0
+				PRINT 올려 
+			ELSE
+				PRINT 올리고 속옷을 제쳐 
+			ENDIF
+		CASE [[衣装:래핑리본]]
+			PRINT 비소를 숨기고 있는 리본을 비껴내 
+		CASE [[衣装:드로워즈]]
+			PRINT 드로워즈 가운데 달린 단추들을 열어서 
+		CASEELSE
+			IF LOCALS == "하의"
+				IF TEQUIP:속옷（하） == 0
+					PRINT 브루마의 중요한 부위를 비껴내 
+				ELSE
+					PRINT 브루마와 속옷의 가랑이를 각각 다름 방향으로 비껴내 
+				ENDIF
+			ELSEIF LOCALS == "전신속옷"
+				PRINT 수영복의 중요한 부분을 제쳐서 
+			ELSE
+				PRINT 속옷이 숨기는 가장 중요한 부분을 비껴내어 
+			ENDIF
+	ENDSELECT
+	IF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+			PRINT 억지로 
+	ENDIF
+	;남자
+	IF TALENT:140
+		PRINT 남근을 
+	;후타나리
+	ELSEIF TALENT:139
+		PRINT 남근이 솟아난 균열을 
+	;유아체형
+	ELSEIF TALENT:100
+		PRINT 어린 균열을 
+	;음모없음
+	ELSEIF TALENT:129
+		PRINT 맨들맨들한 균열을 
+	ELSE
+		PRINT 숨겨진 균열을 
+	ENDIF
+	IF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+			PRINT 강제로 
+	ENDIF	
+	PRINTL 드러냈다 
+;해제時
+ELSE
+	PRINTFORM %CALLNAME:PLAYER%는 %CALLNAME:TARGET%의 
+	SELECTCASE CFLAG:LOCALS
+		CASE [[衣装:드로워즈]]
+			PRINT 드로워즈에 열려있는 단추를 닫아 
+		CASE [[衣装:하카마]]
+			PRINT 걷어올려진 하카마의 자락을 내려 
+		CASE [[衣装:래핑리본]]
+			PRINT 리본이 비껴내어진 부분을 고쳐 
+		CASEELSE
+			IF LOCALS == "하의"
+				IF TEQUIP:속옷（하） == 0
+					PRINT 비껴진 브루마를 고쳐 
+				ELSE
+					PRINT 비껴진 브루마와 속옷을 고쳐 
+				ENDIF
+			ELSEIF LOCALS == "전신속옷"
+				PRINT 수영복의 중요한 부분을 바로잡아 
+			ELSE
+				PRINT 속옷이 숨기는 가장 중요한 부분을 바로잡아 
+			ENDIF
+	ENDSELECT
+	IF TEQUIP:19 == 1
+		PRINT 치부를 대충 숨겼다
+	ELSE
+		PRINT 옷 매무새를 다듬게 했다
+	ENDIF
+	IF TEQUIP:속옷（하） > 0
+		CALL MOVE_STAIN("바기나", TARGET, "속옷（하）", TARGET)
+	ELSEIF TEQUIP:전신속옷 > 0
+		CALL MOVE_STAIN("바기나", TARGET, "전신속옷", TARGET)
+	ELSEIF TEQUIP:하의 > 0
+		CALL MOVE_STAIN("바기나", TARGET, "하의", TARGET)
+	ELSEIF TEQUIP:전신복 > 0
+		CALL MOVE_STAIN("바기나", TARGET, "전신복", TARGET)
+	ENDIF
+ENDIF
+
+;===================================================
+;조교타입
+;===================================================
+@COMTYPE_226
+RETURN COMTYPE("특수커맨드계")
+

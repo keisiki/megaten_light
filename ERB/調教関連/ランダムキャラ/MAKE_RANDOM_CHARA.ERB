@@ -1,0 +1,703 @@
+﻿;-------------------------------------------
+;랜덤キャラ作成
+;引数は타입, LV, 性別
+;-------------------------------------------
+;2019/07/26　JK好き　魔乳に暫定対応
+@MAKE_RANDOM_CHARA, ARG = -1, ARG:1 = 5, ARG:2 = -1
+#DIM CHARA, 1
+#DIM TYPE, 1
+;fixme:何個스킬が返ってくるかわからなかったのでとりあえずそこそこ多くってことで100個ぐらい増やしとく　誰か、ルール作って最適化しといて
+#DIM LSKILLS, 100
+#LOCALSIZE 6
+#LOCALSSIZE 2
+VARSET RESULT
+VARSET RESULTS
+;-------------------------
+;キャラの決定
+;-------------------------
+WHILE !EXISTCSV(ARG, 0)
+	ARG = RAND(4901, 4910)
+WEND
+;-------------------------
+;キャラ추가
+;-------------------------
+CALL ADD_NEW_COMPANION, ARG, 200
+;キャラが作成出来ない場合は帰る
+SIF RESULT == 0
+	RETURN 0
+CHARA = RESULT:1
+;デバッグ中は即전투참가出来るように변경
+SIF FLAG:DEBUG
+	CFLAG:CHARA:전투참가불가능 = 0
+;-------------------------
+;性別
+;랜덤の場合、남자10%　오토코노코5%　女45%　후타나리40%
+;-------------------------
+IF ARG:2 >= 0
+	SELECTCASE ARG:2
+		CASE 1
+			TALENT:CHARA:남자 = 1
+		CASE 2
+			TALENT:CHARA:남자 = 1
+			TALENT:CHARA:오토코노코 = 1
+		CASE 3
+			TALENT:CHARA:후타나리 = 1
+	ENDSELECT
+ELSE
+	SELECTCASE RAND:100
+		CASE IS < 10
+			TALENT:CHARA:남자 = 1
+		CASE IS < 15
+			TALENT:CHARA:남자 = 1
+			TALENT:CHARA:오토코노코 = 1
+		CASE IS < 55
+			TALENT:CHARA:후타나리 = 1
+	ENDSELECT
+ENDIF
+
+;-------------------------
+;체력・기력
+;-------------------------
+CALLFORM RANDOMCHARA_{ARG}, "체력", CHARA
+BASE:CHARA:체력 = RESULT / 100 * 100
+MAXBASE:CHARA:체력 = BASE:CHARA:체력
+CALLFORM RANDOMCHARA_{ARG}, "기력", CHARA
+BASE:CHARA:기력 = RESULT / 100 * 100
+MAXBASE:CHARA:기력 = BASE:CHARA:기력
+;-------------------------
+;속성
+;-------------------------
+CALLFORM RANDOMCHARA_{ARG}, "속성", CHARA
+CFLAG:CHARA:善悪치 = RESULT
+CFLAG:CHARA:秩混치 = RESULT:1
+;-------------------------
+;종족
+;-------------------------
+ABL:CHARA:종족 = 0
+;-------------------------
+;전투소질
+;-------------------------
+VARSET RESULTS
+CALLFORM RANDOMCHARA_{ARG}, "전투소질", CHARA
+LOCAL = 0
+WHILE RESULTS:LOCAL != ""
+	TALENT:CHARA:(RESULTS:LOCAL) = RESULT:LOCAL
+	LOCAL++
+WEND
+;-------------------------
+;스테이터스
+;-------------------------
+BASE:CHARA:LV = ARG:1
+BASE:CHARA:ＥＸＰ = 5*(ARG:1-1)*(ARG:1+1)*(ARG:1)/3
+;ステ합계基準値
+LOCAL:1 = ARG:1 * 3 / 2 + 18
+CALLFORM RANDOMCHARA_{ARG}, "초기스테이터스比率", CHARA
+LOCAL:2 = SUMARRAY(RESULT, 0, 6)
+LOCAL:3 = 0
+FOR LOCAL, 0, 6
+	BASE:CHARA:GET_BASESTATUS(LOCAL+1) = LOCAL:1 * RESULT:LOCAL / LOCAL:2
+	LOCAL:3 += BASE:CHARA:GET_BASESTATUS(LOCAL+1)
+NEXT
+;切り捨てられたぶんを랜덤に추가
+WHILE LOCAL:1 > LOCAL:3
+	BASE:CHARA:GET_BASESTATUS(RAND(1,7)) += 1
+	LOCAL:3++
+WEND
+;一定횟수で랜덤移動
+FOR LOCAL, 0, LOCAL:1 / 8
+	LOCAL:2 = RAND(1,7)
+	SIF BASE:CHARA:GET_BASESTATUS(LOCAL:2) <= 1
+		CONTINUE
+	BASE:CHARA:GET_BASESTATUS(RAND(1,7)) += 1
+	BASE:CHARA:GET_BASESTATUS(LOCAL:2) -= 1
+NEXT
+;---------------------------------------------
+;링크악마
+;---------------------------------------------
+CALLFORM RANDOMCHARA_{ARG}, "링크악마", CHARA
+CFLAG:CHARA:초기링크악마 = RESULT
+;링크악마があるときのATTACK설정;後から변경も出来るしとりあえず無難な타격相性に
+IF RESULT
+	ABL:CHARA:초기링크악마공격상성 = 2
+	ABL:CHARA:초기링크악마최저공격횟수 = 1
+	ABL:CHARA:초기링크악마최대공격횟수 = 1
+	ABL:CHARA:초기링크악마사거리= 1
+	ABL:CHARA:초기링크악마공격범위 = 1
+ENDIF
+;-------------------------
+;스킬
+;LSKILLS配列に스킬を入れたのち
+;깨달음えられるか見て落としこむ
+;-------------------------
+VARSET LSKILLS
+LOCAL:1 = 0
+;페르소나구사자は스킬を得ない
+IF !TALENT:CHARA:페르소나구사자
+	;식노は下記스킬が入る
+	IF TALENT:CHARA:식노
+		LSKILLS = [[스킬:물고늘어지기]]
+		LSKILLS:1 = [[스킬:씹어흩뿌리기]]
+		LSKILLS:2 = [[스킬:대상제]]
+		LSKILLS:3 = [[스킬:최후의만찬]]
+		LOCAL:1 = 4
+	ENDIF
+	CALLFORM RANDOMCHARA_{ARG}, "스킬", CHARA
+	LOCAL = 0
+	WHILE RESULT:LOCAL
+		LSKILLS:(LOCAL:1) = RESULT:LOCAL
+		LOCAL++
+		LOCAL:1++
+	WEND
+	;식노・シフターは초기악마の스킬をいれていく
+	IF TALENT:CHARA:식노 || TALENT:CHARA:데빌시프터
+		FOR LOCAL, 1, FLAG:스킬数 + 1
+			LOCAL:2 = CSVABL(CFLAG:CHARA:초기링크악마, GETNUM(ABL, @"스킬{LOCAL}"), 0)
+			SIF !LOCAL:2
+				CONTINUE
+			TRYCCALLFORM 적専用_{LOCAL:2}
+				SIF RESULT
+					CONTINUE
+			CATCH
+			ENDCATCH
+			LSKILLS:(LOCAL:1) = LOCAL:2
+			LOCAL:1++
+		NEXT
+		FOR LOCAL, 1, 20
+			LOCAL:2 = CSVABL(CFLAG:CHARA:초기링크악마, GETNUM(ABL, @"습득스킬{LOCAL}"), 0)
+			SIF !LOCAL:2
+				CONTINUE
+			TRYCCALLFORM 적専用_{LOCAL:2}
+				SIF RESULT
+					CONTINUE
+			CATCH
+			ENDCATCH
+			LSKILLS:(LOCAL:1) = LOCAL:2
+			LOCAL:1++
+		NEXT
+	ENDIF
+	LOCAL = 0
+	LOCAL:3 = 1
+	;랭크の低い順に並べ替えていく
+	WHILE LOCAL:1
+		IF LSKILLS:(LOCAL+1) == 0
+			LOCAL = 0
+			LOCAL:1--
+		ENDIF
+		LOCAL:3 = 0
+		CALLFORM SKILL_RANK_{LSKILLS:(LOCAL:1)}
+		LOCAL:4 = RESULT
+		CALLFORM SKILL_RANK_{LSKILLS:(LOCAL:1+1)}
+		SIF RESULT < LOCAL:4
+			SWAP LSKILLS:LOCAL, LSKILLS:(LOCAL:1+1)
+		LOCAL++
+	WEND
+	FOR LOCAL, 1, 4
+		IF LSKILLS:LOCAL
+			LOCALS = \@CFLAG:CHARA:초기링크악마 ? 초기변신악마# \@스킬{LOCAL}
+			ABL:CHARA:LOCALS = LSKILLS:LOCAL
+		ENDIF
+	NEXT
+	LOCAL:1 = BASE:CHARA:LV+RAND:4
+	FOR LOCAL, 1, 21
+		IF LSKILLS:(LOCAL + 3)
+			LOCALS = \@CFLAG:CHARA:초기링크악마 ? 초기변신악마# \@습득스킬{LOCAL}
+			LOCALS:1 = \@CFLAG:CHARA:초기링크악마 ? 초기변신악마# \@습득LV{LOCAL}
+			ABL:CHARA:LOCALS = LSKILLS:(LOCAL+3)
+			CALLFORM SKILL_RANK_{LSKILLS:(LOCAL+3)}
+			ABL:CHARA:(LOCALS:1) = MAX(RESULT * 4 + RAND:4, LOCAL:1 + RAND(1, 4))
+			LOCAL:1 = ABL:CHARA:(LOCALS:1)
+		ENDIF
+	NEXT
+ENDIF
+;-------------------------
+;相性
+;-------------------------
+FOR LOCAL, 0, FLAG:相性数+1
+	CALLFORM RANDOMCHARA_{ARG}, "相性", CHARA, LOCAL
+	BASE:CHARA:GET_TYPE(LOCAL) = RESULT
+NEXT
+;-------------------------
+;소질
+;소질は優先テーブル内から3つとる
+;-------------------------
+VARSET RESULT
+CALLFORM RANDOMCHARA_{ARG}, "소질", CHARA
+;優先されている数を調べる
+LOCAL:1 = 1
+FOR LOCAL, 0, 50
+	SIF !RESULT:(LOCAL:1)
+		CONTINUE
+	LOCAL:1++
+NEXT
+FOR LOCAL, 0, LOCAL:1
+	SWAP RESULT:LOCAL, RESULT:(RAND:(LOCAL:1))
+NEXT
+;優先を保存
+FOR LOCAL, 0, 3
+	SIF TALENTNAME:(RESULT:LOCAL) == ""
+		CONTINUE
+	SIF !RESULT:LOCAL
+		CONTINUE
+	LOCAL:(LOCAL+3) = RESULT:LOCAL
+NEXT
+VARSET RESULT
+CALLFORM RANDOMCHARA_{ARG}, "除外소질", CHARA
+LOCAL:1 = 0
+;소질は랜덤で5%の확률로発現
+FOR LOCAL, 10, 137
+	;디폴트での除外소질
+	SIF GROUPMATCH(TALENTNAME:LOCAL, "", "弱み", "질투", "즉각함락", "자위광", "섹스광", "애널광", "음유", "고양이혀", "망신", "여우", "요호", "수수께끼의매력", "흡혈귀", "새드", "마조")
+		CONTINUE
+	;体型関係はここでは除外
+	SIF GROUPMATCH(TALENTNAME:LOCAL, "유아체형", "큰체형", "거체", "빈유", "절벽", "거유", "폭유")
+		CONTINUE
+	;優先は판정しない
+	SIF GROUPMATCH(LOCAL, LOCAL:1, LOCAL:2, LOCAL:3)
+		CONTINUE
+	;除外소질
+	SIF MATCH(RESULT, LOCAL)
+		CONTINUE
+	TALENT:CHARA:LOCAL = RAND:100 > 95
+	;発現소질数を카운트
+	LOCAL:1++
+NEXT
+
+;この時点での発現소질を調整
+;LOCAL:2 = RAND(3, 6)
+SELECTCASE RAND:10
+	;殆どの場合 発現소질を3～5個に減らす
+	CASE IS < 5
+		LOCAL:2 = RAND(3, 6)
+	;20%　発現소질を3～10個に減らす
+	CASE IS < 8
+		LOCAL:2 = RAND(3, 11)
+	;10%　フィーバー 3～25
+	CASE IS < 9
+		LOCAL:2 = RAND(3, 26)
+ENDSELECT
+WHILE LOCAL:2 < MATCH(TALENT:CHARA:0, 1, 10, 137)
+	LOCAL = RAND(10, 137)
+	SIF !TALENT:CHARA:LOCAL
+		CONTINUE
+	TALENT:CHARA:LOCAL = 0
+	LOCAL:1--
+WEND
+;退避しておいた優先소질をつける
+FOR LOCAL, 3, 6
+	SIF TALENTNAME:(LOCAL:LOCAL) == ""
+		CONTINUE
+	SIF !LOCAL:LOCAL
+		CONTINUE
+	TALENT:CHARA:(LOCAL:LOCAL) = 1
+NEXT
+
+;両立不能な소질を削っていく
+;処理が怪しいので旧来処理はコメントアウト
+;地味に1グループずつ処理する方式に변경
+;LOCAL = 0
+;SPLIT "겁쟁이_꿋꿋함/솔직함_반항적/건방짐_얌전함/프라이드높음_프라이드낮음/무관심_호기심/낙관적_비관적/억압_해방/부끄럼쟁이_부끄럼없음/젖기쉬움_젖기어려움/습득빠름_습득느림/악취둔감_악취민감/쾌감에솔직_쾌감을부정/Ｃ둔감_Ｃ민감/Ｖ둔감_Ｖ민감/Ａ둔감_Ａ민감/Ｂ민감_Ｂ둔감/회복빠름_회복느림/정조관념_정조관결여", "/", RESULTS
+;WHILE RESULTS:LOCAL != ""
+;	LOCAL++
+;	SPLIT RESULTS:LOCAL, "_", LOCALS
+;	IF !TALENT:CHARA:LOCALS || TALENT:CHARA:(LOCALS:1)
+;		LOCAL++
+;		CONTINUE
+;	ENDIF
+;	IF GROUPMATCH(GETNUM(TALENT, LOCALS), LOCAL:3, LOCAL:4, LOCAL:5)
+;		TALENT:CHARA:(LOCALS:1) = 0
+;	ELSEIF GROUPMATCH(GETNUM(TALENT, LOCALS:1), LOCAL:3, LOCAL:4, LOCAL:5)
+;		TALENT:CHARA:LOCALS = 0
+;	ELSE
+;		IF RAND:2
+;			TALENT:CHARA:LOCALS = 0
+;		ELSE
+;			TALENT:CHARA:(LOCALS:1) = 0
+;		ENDIF
+;	ENDIF
+;	LOCAL++
+;WEND
+IF TALENT:CHARA:겁쟁이 == 1 && TALENT:CHARA:꿋꿋함 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:겁쟁이 = 1
+		TALENT:CHARA:꿋꿋함 = 0
+	ELSE
+		TALENT:CHARA:겁쟁이 = 0
+		TALENT:CHARA:꿋꿋함 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:솔직함 == 1 && TALENT:CHARA:반항적 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:솔직함   = 1
+		TALENT:CHARA:반항적 = 0
+	ELSE
+		TALENT:CHARA:솔직함   = 0
+		TALENT:CHARA:반항적 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:건방짐 == 1 && TALENT:CHARA:얌전함 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:건방짐   = 1
+		TALENT:CHARA:얌전함 = 0
+	ELSE
+		TALENT:CHARA:건방짐   = 0
+		TALENT:CHARA:얌전함 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:프라이드높음 == 1 && TALENT:CHARA:프라이드낮음 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:프라이드높음 = 1
+		TALENT:CHARA:프라이드낮음 = 0
+	ELSE
+		TALENT:CHARA:프라이드높음 = 0
+		TALENT:CHARA:프라이드낮음 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:무관심 == 1 && TALENT:CHARA:호기심 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:무관심 = 1
+		TALENT:CHARA:호기심 = 0
+	ELSE
+		TALENT:CHARA:무관심 = 0
+		TALENT:CHARA:호기심 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:낙관적 == 1 && TALENT:CHARA:비관적 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:낙관적 = 1
+		TALENT:CHARA:비관적 = 0
+	ELSE
+		TALENT:CHARA:낙관적 = 0
+		TALENT:CHARA:비관적 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:억압 == 1 && TALENT:CHARA:해방 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:억압 = 1
+		TALENT:CHARA:해방 = 0
+	ELSE
+		TALENT:CHARA:억압 = 0
+		TALENT:CHARA:해방 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:부끄럼쟁이 == 1 && TALENT:CHARA:부끄럼없음 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:부끄럼쟁이 = 1
+		TALENT:CHARA:부끄럼없음   = 0
+	ELSE
+		TALENT:CHARA:부끄럼쟁이 = 0
+		TALENT:CHARA:부끄럼없음   = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:젖기쉬움 == 1 && TALENT:CHARA:젖기어려움 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:젖기쉬움 = 1
+		TALENT:CHARA:젖기어려움 = 0
+	ELSE
+		TALENT:CHARA:젖기쉬움 = 0
+		TALENT:CHARA:젖기어려움 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:습득빠름 == 1 && TALENT:CHARA:습득느림 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:습득빠름 = 1
+		TALENT:CHARA:습득느림 = 0
+	ELSE
+		TALENT:CHARA:습득빠름 = 0
+		TALENT:CHARA:습득느림 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:악취둔감 == 1 && TALENT:CHARA:악취민감 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:악취둔감 = 1
+		TALENT:CHARA:악취민감 = 0
+	ELSE
+		TALENT:CHARA:악취둔감 = 0
+		TALENT:CHARA:악취민감 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:쾌감에솔직 == 1 && TALENT:CHARA:쾌감을부정 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:쾌감에솔직 = 1
+		TALENT:CHARA:쾌감을부정 = 0
+	ELSE
+		TALENT:CHARA:쾌감에솔직 = 0
+		TALENT:CHARA:쾌감을부정 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:Ｃ둔감 == 1 && TALENT:CHARA:Ｃ민감 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:Ｃ둔감 = 1
+		TALENT:CHARA:Ｃ민감 = 0
+	ELSE
+		TALENT:CHARA:Ｃ둔감 = 0
+		TALENT:CHARA:Ｃ민감 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:Ｖ둔감 == 1 && TALENT:CHARA:Ｖ민감 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:Ｖ둔감 = 1
+		TALENT:CHARA:Ｖ민감 = 0
+	ELSE
+		TALENT:CHARA:Ｖ둔감 = 0
+		TALENT:CHARA:Ｖ민감 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:Ａ둔감 == 1 && TALENT:CHARA:Ａ민감 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:Ａ둔감 = 1
+		TALENT:CHARA:Ａ민감 = 0
+	ELSE
+		TALENT:CHARA:Ａ둔감 = 0
+		TALENT:CHARA:Ａ민감 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:Ｂ민감 == 1 && TALENT:CHARA:Ｂ둔감 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:Ｂ민감 = 1
+		TALENT:CHARA:Ｂ둔감 = 0
+	ELSE
+		TALENT:CHARA:Ｂ민감 = 0
+		TALENT:CHARA:Ｂ둔감 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:회복빠름 == 1 && TALENT:CHARA:회복느림 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:회복빠름 = 1
+		TALENT:CHARA:회복느림 = 0
+	ELSE
+		TALENT:CHARA:회복빠름 = 0
+		TALENT:CHARA:회복느림 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:정조관념 == 1 && TALENT:CHARA:정조관결여 == 1
+	IF RAND:2 == 0
+		TALENT:CHARA:정조관념   = 1
+		TALENT:CHARA:정조관결여 = 0
+	ELSE
+		TALENT:CHARA:정조관념  = 0
+		TALENT:CHARA:정조관결여 = 1
+	ENDIF
+ENDIF
+IF TALENT:CHARA:바이 && (TALENT:CHARA:남성혐오 || TALENT:CHARA:여성혐오)
+	IF GROUPMATCH(TALENT:CHARA:바이, LOCAL:3, LOCAL:4, LOCAL:5)
+		TALENT:CHARA:남성혐오 = 0
+		TALENT:CHARA:여성혐오 = 0
+	ELSEIF GROUPMATCH(TALENT:CHARA:남성혐오, LOCAL:3, LOCAL:4, LOCAL:5) || GROUPMATCH(TALENT:CHARA:여성혐오, LOCAL:3, LOCAL:4, LOCAL:5)
+		TALENT:CHARA:바이 = 0
+	ELSE
+		IF RAND:2
+			TALENT:CHARA:바이 = 0
+		ELSE
+			TALENT:CHARA:남성혐오 = 0
+			TALENT:CHARA:여성혐오 = 0
+		ENDIF
+	ENDIF
+ENDIF
+;-------------------
+;처녀
+;-------------------
+CALLFORM RANDOMCHARA_{ARG}, "처녀", CHARA
+IF RESULT == 0
+	TALENT:CHARA:처녀 = !RAND:5
+ELSE
+	TALENT:CHARA:처녀 = RESULT == 1 ? 1 # 0
+ENDIF
+;-------------------
+;体型・가슴・形質
+;-------------------
+CALLFORM RANDOMCHARA_{ARG}, "가슴サイズ", CHARA
+IF RESULT == 0
+	SELECTCASE RAND:100
+		CASE IS < 5
+			TALENT:CHARA:절벽 = 1
+		CASE IS < 25
+			TALENT:CHARA:빈유 = 1
+		CASE IS < 45
+			TALENT:CHARA:거유 = 1
+		CASE IS < 50
+			TALENT:CHARA:폭유 = 1
+		CASE IS < 52
+			TALENT:CHARA:魔乳 = 1
+	ENDSELECT
+ELSE
+	SELECTCASE RESULT
+		CASE 1
+			TALENT:CHARA:절벽 = 1
+		CASE 2
+			TALENT:CHARA:빈유 = 1
+		CASE 4
+			TALENT:CHARA:거유 = 1
+		CASE 5
+			TALENT:CHARA:폭유 = 1
+		CASE 6
+			TALENT:CHARA:魔乳 = 1
+	ENDSELECT
+ENDIF
+CALLFORM RANDOMCHARA_{ARG}, "体型", CHARA
+IF RESULT == 0
+	SELECTCASE RAND:100
+		CASE IS < 15
+			TALENT:CHARA:유아체형 = 1
+		CASE IS < 30
+			TALENT:CHARA:큰체형 = 1
+		CASE IS < 35
+			TALENT:CHARA:거체 = 1
+	ENDSELECT
+ELSE
+	SELECTCASE RESULT
+		CASE 1
+			TALENT:CHARA:소인체형 = 1
+		CASE 2
+			TALENT:CHARA:유아체형 = 1
+		CASE 4
+			TALENT:CHARA:큰체형 = 1
+		CASE 5
+			TALENT:CHARA:거체 = 1
+	ENDSELECT
+ENDIF
+CALLFORM RANDOMCHARA_{ARG}, "肉体部位", CHARA
+IF RESULT == 0
+	TALENT:CHARA:머리 = 1
+	TALENT:CHARA:눈 = 1
+	TALENT:CHARA:입 = 1
+	TALENT:CHARA:팔 = 1
+	TALENT:CHARA:발 = 1
+ENDIF
+;남자の場合の調整
+IF IS_MALE(CHARA)
+	TALENT:CHARA:처녀 = 0
+	CFLAG:CHARA:元가슴サイズ = BUST(CHARA)
+	TALENT:CHARA:절벽 = 0
+	TALENT:CHARA:빈유 = 0
+	TALENT:CHARA:거유 = 0
+	TALENT:CHARA:폭유 = 0
+	TALENT:CHARA:魔乳 = 0
+	SWAP TALENT:CHARA:Ｖ민감,CFLAG:CHARA:元Ｖ민감
+ENDIF
+
+;-------------------
+;ABL
+;-------------------
+FOR LOCAL, 0, 50
+	CALLFORM RANDOMCHARA_{ARG}, "ABL", CHARA, LOCAL
+	ABL:CHARA:LOCAL = RESULT
+NEXT
+;一部ABLの調整
+ABL:CHARA:Ｖ감각 *= !TALENT:CHARA:처녀 * !IS_MALE(CHARA)
+ABL:CHARA:레즈끼 *= !IS_MALE(CHARA)
+ABL:CHARA:레즈중독 *= !IS_MALE(CHARA)
+ABL:CHARA:ＢＬ끼 *= IS_MALE(CHARA)
+ABL:CHARA:ＢＬ중독 *= IS_MALE(CHARA)
+;-------------------
+;EXP
+;-------------------
+FOR LOCAL, 0, 100
+	CALLFORM RANDOMCHARA_{ARG}, "EXP", CHARA, LOCAL
+	EXP:CHARA:LOCAL = RESULT
+NEXT
+;一部EXPの調整
+EXP:CHARA:Ｖ경험 = !TALENT:CHARA:처녀 * MAX(EXP:CHARA:Ｖ경험, ABL:CHARA:Ｖ감각*10) * !IS_MALE(CHARA)
+EXP:CHARA:Ａ경험 = MAX(EXP:CHARA:Ａ경험, ABL:CHARA:Ａ감각*10)
+EXP:CHARA:사정경험 *= IS_MALE(CHARA)
+EXP:CHARA:성교경험 = RAND(EXP:CHARA:Ｖ경험, EXP:CHARA:Ｖ경험 + EXP:CHARA:Ａ경험+1)
+EXP:CHARA:자위경험 = MAX(EXP:CHARA:자위경험, ABL:CHARA:자위중독*50)
+EXP:CHARA:질사경험 = MIN(EXP:CHARA:질사경험, EXP:CHARA:사정경험, EXP:CHARA:성교경험)
+EXP:CHARA:봉사쾌락경험 = MAX(EXP:CHARA:봉사쾌락경험, ABL:CHARA:봉사정신*20)
+EXP:CHARA:레즈경험 = MAX(EXP:CHARA:레즈경험, ABL:CHARA:레즈끼*10+ABL:CHARA:레즈중독*20)*!IS_MALE(CHARA)
+EXP:CHARA:ＢＬ경험 = MAX(EXP:CHARA:ＢＬ경험, ABL:CHARA:ＢＬ끼*10+ABL:CHARA:ＢＬ중독*20)*IS_MALE(CHARA)
+SIF IS_MALE(CHARA)
+	EXP:CHARA:펠라경험 = MAX(EXP:CHARA:펠라경험, EXP:CHARA:ＢＬ경험)
+EXP:CHARA:고통쾌락경험 = MAX(EXP:CHARA:고통쾌락경험, ABL:CHARA:마조끼*20)
+EXP:CHARA:가학쾌락경험 = MAX(EXP:CHARA:가학쾌락경험, ABL:CHARA:새드끼*20)
+
+;-------------------
+;衣装
+;-------------------
+FOR LOCAL, 0, 12
+	CALLFORM RANDOMCHARA_{ARG}, GET_CLOTHESNAME(LOCAL), CHARA
+	CFLAG:CHARA:GET_CLOTHESNAME(LOCAL) = RESULT
+	CFLAG:CHARA:("초기"+GET_CLOTHESNAME(LOCAL)) = RESULT
+NEXT
+;-------------------------
+;구상타입決定
+;とりあえず악마汎用구상を사용しています
+;-------------------------
+CALLFORM RANDOMCHARA_{ARG}, "회화타입", CHARA
+IF  RESULT == 0
+		IF IS_MALE(CHARA)
+			SELECTCASE RAND:4
+				CASE 0
+					ABL:CHARA:회화타입 = 316
+				CASE 1
+					ABL:CHARA:회화타입 = 317
+				CASE 2
+					ABL:CHARA:회화타입 = 318
+				CASE 3
+					ABL:CHARA:회화타입 = 324
+			ENDSELECT
+		ELSE
+			SELECTCASE RAND:6
+				CASE 0
+					ABL:CHARA:회화타입 = 302
+				CASE 1
+					ABL:CHARA:회화타입 = 303
+				CASE 2
+					ABL:CHARA:회화타입 = 304
+				CASE 3
+					ABL:CHARA:회화타입 = 305
+				CASE 4
+					ABL:CHARA:회화타입 = 306
+				CASE 5
+					ABL:CHARA:회화타입 = 307
+			ENDSELECT
+		ENDIF
+ELSE
+	SELECTCASE RESULT
+		CASE 1
+			ABL:CHARA:회화타입 = 302
+		CASE 2
+			ABL:CHARA:회화타입 = 303
+		CASE 3
+			ABL:CHARA:회화타입 = 304
+		CASE 4
+			ABL:CHARA:회화타입 = 305
+		CASE 5
+			ABL:CHARA:회화타입 = 306
+		CASE 6
+			ABL:CHARA:회화타입 = 307
+		CASE 7
+			ABL:CHARA:회화타입 = 316
+		CASE 8
+			ABL:CHARA:회화타입 = 317
+		CASE 9
+			ABL:CHARA:회화타입 = 329
+		CASE 10
+			ABL:CHARA:회화타입 = 318
+		CASE 11
+			ABL:CHARA:회화타입 = 324
+	ENDSELECT
+ENDIF
+;-------------------------
+;이름・呼び方
+;-------------------------
+CALLFORM RANDOMCHARA_{ARG}, "이름", CHARA
+NAME:CHARA = %RESULTS%
+CALLFORM RANDOMCHARA_{ARG}, "愛称", CHARA
+CALLNAME:CHARA = %RESULTS%
+CALLFORM RANDOMCHARA_{ARG}, "一人称", CHARA
+CSTR:CHARA:一人称 = %RESULTS%
+CALLFORM RANDOMCHARA_{ARG}, "二人称", CHARA
+CSTR:CHARA:二人称 = %RESULTS%
+;-------------------
+;해설
+;-------------------
+VARSET RESULTS
+CALLFORM RANDOMCHARA_{ARG}, "해설", CHARA
+FOR LOCAL, 1, 21
+	CSTR:CHARA:@"해설{LOCAL}" = %RESULTS:(LOCAL-1)%
+NEXT
+
+CALL SYNC_STATUS, CHARA
+CALL HEALTH_CHARA, CHARA
+;CALL MESSAGE_B(1, @"%CALLNAME:CHARA%を作成しました")
+RETURN 1, CHARA, ARG

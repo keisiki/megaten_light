@@ -1,0 +1,289 @@
+﻿;EVENT_S.ERB、EVENT_SUB、추가処理及びサブ이벤트
+
+
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:EVENT_S.ERB
+;
+;	Licence		:ライセンスフリー
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX		----					新規作成
+;	001		2019/03/28		TR(SAYA)				ヘッダー作成。シャ세트マが3日持続する様に
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+;-------------------------------------------------
+;日付が変わった時の이벤트
+;-------------------------------------------------
+@EVENT_NEXTDAY
+$INPUT_LOOP
+;不思議の根持ちで정액경험が300以上で生える
+IF TARGET >= 0 
+	IF TALENT:TARGET:138 == 1 && EXP:TARGET:20 >= 300 && TALENT:139 == 0 && !IS_MALE(TARGET)
+		DRAWLINE
+		PRINTFORML ……아무래도 [이상한뿌리]의 효과가 나타날 것 같다
+		PRINTFORMW %타겟을()% [후타나리]로 만들겠습니까?
+		PRINTL [0] - 한다
+		PRINTL [1] - 하지 않는다
+		INPUT
+		IF RESULT == 0
+			PRINTFORML %NAME:TARGET%의 [이상한뿌리]는 [후타나리]가 되었다
+			TALENT:139 = 1
+		ELSEIF RESULT == 1
+			PRINTFORML %조사처리(NAME:TARGET,"는")% [이상한뿌리]를 잃었다
+		ELSE
+			GOTO INPUT_LOOP
+		ENDIF
+		DRAWLINE
+		WAIT
+		TALENT:TARGET:138 = 0
+	ENDIF
+ENDIF
+
+$INPUT_LOOP_2
+;구현持ちで레즈경험2500以上で生える
+IF TARGET >= 0 
+	IF TALENT:TARGET:146 == 1 && EXP:TARGET:40 >= 2500 && TALENT:139 == 0 && !IS_MALE(TARGET)
+		DRAWLINE
+		PRINTFORML ……아무래도 [구현]의 효과가 나타날 것 같다
+		PRINTFORML %타겟을()% [후타나리]로 만들겠습니까?
+		PRINTL [0] - 한다
+		PRINTL [1] - 하지 않는다
+		INPUT
+		IF RESULT == 0
+			PRINTFORML %조사처리(NAME:TARGET,"는")% [구현]에 의해 [후타나리]가 되었다
+			TALENT:139 = 1
+		ELSEIF RESULT == 1
+			PRINTFORML %조사처리(NAME:TARGET,"는")% [구현]을 잃었다
+		ELSE
+			GOTO INPUT_LOOP_2
+		ENDIF
+		DRAWLINE
+		WAIT
+		TALENT:TARGET:146 = 0
+	ENDIF
+ENDIF
+
+;방뇨경험３０以上で오줌싸개がつく
+IF TARGET >= 0 
+	IF TALENT:57 == 0
+		IF (TALENT:TARGET:151 && EXP:TARGET:31 >= 10) || (TALENT:TARGET:151 == 0 && EXP:TARGET:31 >= 30)
+			PRINTFORMW （무우･･･ 이게 뭐야？）
+			PRINTFORM %타겟은()% 
+			SIF TALENT:TARGET:151 && EXP:TARGET:31 >= 10
+			PRINTFORM 실례를
+			SIF TALENT:TARGET:151 == 0 && EXP:TARGET:31 >= 30 
+			PRINTFORM 실수를 
+			PRINTFORMW 해버린 것 같다……
+			PRINTFORMW %타겟은()% [오줌싸개]가 되었다
+			TALENT:TARGET:57 = 1
+		ENDIF
+	ENDIF
+ENDIF
+
+IF TARGET >= 0 
+	;반발각인３があり、かつ유치である時に
+	IF TALENT:TARGET:151 && MARK:3 == 3
+		;욕망が5かつ순종が5かつ마조끼が5かつ이상경험が７以上になる
+		SIF ABL:TARGET:1 >= 5 && ABL:TARGET:0 >= 5 && ABL:TARGET:9 >= 5 && EXP:TARGET:50 >= 7
+			CALL EVENT_YOUJI
+	;반발각인３があり、かつ유치がない時
+	ELSEIF TALENT:TARGET:151 == 0 && MARK:3 == 3
+		;욕망が5かつ순종が5かつ마조끼が5かつ이상경험が９以上に加え노출５と오줌싸개がある
+		SIF ABL:TARGET:1 >= 5 && ABL:TARGET:0 >= 5 && ABL:TARGET:9 >= 5 && ABL:TARGET:8 >= 5 && EXP:TARGET:50 >= 9 && TALENT:57 == 1
+			CALL EVENT_YOUJI
+	ENDIF
+
+	;実装したいけどしてない部分を予定関数だけ書いてコメントアウト
+	;	IF FLAG:(정액ボテ腹) == 1
+	;		IF EQUIP:TARGET:(바이브付きパンツ各種) == 0
+				;暫定措置として、固定で100ml流出
+				;추가流出として子宮の現在容量/최대容量で流出量が減る
+				;(0除算を除算するため1%は固定で減少、최대で20%)。
+				IF CFLAG:TARGET:子宮現在容量 <= 100
+					CFLAG:TARGET:子宮現在容量 = 0
+				ELSE
+					CFLAG:TARGET:子宮現在容量 -= 100
+					SELECTCASE CFLAG:TARGET:子宮現在容量
+					CASE IS <= 5000
+						CFLAG:TARGET:子宮現在容量 -= CFLAG:TARGET:子宮現在容量 / (20 / (CFLAG:TARGET:子宮최대容量 / CFLAG:TARGET:子宮現在容量) + 1)
+					CASE IS >= 20000
+						CFLAG:TARGET:子宮現在容量 -= CFLAG:TARGET:子宮現在容量 / 10
+					ENDSELECT
+				ENDIF
+	;		ENDIF
+	;	ENDIF
+ENDIF
+
+
+;바람기：바람경험５０以上＆放置日数２０以上
+FOR LOCAL, 1, CHARANUM
+	IF TALENT:LOCAL:바람기 == 0 && EXP:LOCAL:바람경험 >= 30 && CFLAG:LOCAL:放置日数 >= 20
+		PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 불장난에 빠져버린 모양이다
+		SETCOLOR COLOR("붉은색")
+		PRINTFORMW %조사처리(NAME:LOCAL,"는")% 【바람기】를 얻었다
+		RESETCOLOR
+		PRINTL 　
+		DRAWLINE
+		TALENT:LOCAL:바람기 = 1
+	ENDIF
+NEXT
+
+SIF FLAG:미조교시함락
+	CALL ENAMORED_CHECK
+
+;生活費소비
+;PRINTL
+;LOCAL:1 = 0
+;IF FLAG:조교난이도 != 1 && DAY > 10
+;	FOR LOCAL,0,CHARANUM
+;		IF ABL:LOCAL:종족 == 0 && LOCAL != MASTER && CFLAG:LOCAL:매각가능 > 0 && TALENT:LOCAL:붕괴 == 0
+;			LOCAL:2 = POWER(BASE:LOCAL:LV/(함락(LOCAL)+1),2)*10
+;			;충성도で軽減
+;			LOCAL:2 *= (100-MIN(10000,BASE:LOCAL:충성도)*95/10000)
+;			LOCAL:2 /= 100
+;			
+;			LOCAL:1 += LOCAL:2
+;		ENDIF
+;	NEXT
+;ENDIF
+;IF LOCAL:1 > 0
+;	PRINTFORMW 生活費として￥{LOCAL:1}を支払った
+;	MONEY -= LOCAL:1
+;ENDIF
+
+@EVENT_YOUJI
+;유아퇴행
+PRINTFORMW %CALLNAME:TARGET%의 모습이 이상하다……
+PRINTFORMW %타겟은()% 가혹한 조교에 버티지 못하고 【유아퇴행】해버린 것 같다……
+SIF TALENT:151
+	TALENT:151 = 0
+TALENT:150 = 1
+MARK:3 = 0
+
+
+;-------------------------------------------------
+;朝になった時の이벤트
+;-------------------------------------------------
+@EVENT_NEWDAY
+#DIM LCOUNT
+;포장마차の借金返済이벤트
+;SIF FLAG:23 == 1 && MONEY >= 100000
+;	CALL RETURN_LOAN
+
+;奴隷렌탈の期日が来た場合の奴隷返却処理
+;FOR LCOUNT, 0, CHARANUM
+;	IF CFLAG:LCOUNT:12 == 1 && CFLAG:LCOUNT:13 == DAY
+;		A = LCOUNT
+;		CALL RETURN_SLAVE
+;	ENDIF
+;NEXT
+
+;창관バイトが終わった場合の終了処理
+;FOR LCOUNT, 0, CHARANUM
+;	IF CFLAG:LCOUNT:12 == 2
+;		A = LCOUNT
+;		CALL END_PROSTITUTION
+;	ENDIF
+;NEXT
+
+
+;전체の임신판정の処理
+;関数内に임신기능OFF時のフラグリセットも持たせたのでここで行う
+;CALL IN_VAGINA
+	
+SIF FLAG:임신기능
+	;전체の임신発깨달음時の이벤트
+	CALL GET_CHILD
+
+;배란유발제と자궁내피임결계と그외薬効果終了処理
+FOR LCOUNT, 0, CHARANUM
+	IF CFLAG:LCOUNT:108
+		CFLAG:LCOUNT:108--
+		SIF CFLAG:LCOUNT:108 == 0
+			PRINTFORMW %CALLNAME:LCOUNT%의 자궁내피임결계의 효과가 끊어졌다
+	ELSEIF CFLAG:LCOUNT:109
+		CFLAG:LCOUNT:109--
+		SIF CFLAG:LCOUNT:109 == 0
+			PRINTFORMW %CALLNAME:LCOUNT%의 배란유발제의 효과가 끊어졌다
+	ENDIF
+	IF CFLAG:LCOUNT:117
+		CFLAG:LCOUNT:117--
+		SIF CFLAG:LCOUNT:117 == 0
+			PRINTFORMW %CALLNAME:LCOUNT%의 바람꽃의이슬의 효과가 끊어졌다
+	ENDIF
+	IF CFLAG:LCOUNT:無限사정薬フラグ
+		CFLAG:LCOUNT:無限사정薬フラグ--
+		SIF CFLAG:LCOUNT:無限사정薬フラグ == 0
+			PRINTFORMW %CALLNAME:LCOUNT%의 샤세트마의 효과가 끊어졌다
+	ENDIF
+NEXT
+
+;仕送り이벤트
+CALL REMITTANCE
+
+;출산･育児室関連
+IF FLAG:출산기능ONOFF
+	FOR LOCAL:0, 0, CHARANUM
+		IF TALENT:(LOCAL:0):153
+			;출산2日前からは臨月突入で조교不可に
+			IF (CFLAG:(LOCAL:0):110 - 2) == DAY
+				DRAWLINE
+				;C = LOCAL:0
+				CALL REACH_FULL_TERM(LOCAL:0)
+			;출산予定日なら출산
+			ELSEIF CFLAG:(LOCAL:0):110 <= DAY
+				DRAWLINE
+				;C = LOCAL:0
+				CALL CHILD_BIRTH(LOCAL:0)
+			ENDIF
+		ELSEIF TALENT:(LOCAL:0):154
+			;출산後翌日には育児室への訪問を問う이벤트発生
+			;親離れで조교可能に
+			IF (CFLAG:(LOCAL:0):110 + 1) <= DAY && TFLAG:701 != DAY
+				DRAWLINE
+
+				LOCAL:2 = -1
+				IF CFLAG:(LOCAL:0):乳母かな？
+					FOR LOCAL:1, 0, CHARANUM
+						IF CFLAG:(LOCAL:0):娘の産みの親の固有번호親 == CFLAG:(LOCAL:1):キャラ固有の번호
+							LOCAL:2 = LOCAL:1
+							BREAK
+						ENDIF
+					NEXT
+				ELSE
+					LOCAL:2 = LOCAL:0
+				ENDIF
+				
+				IF LOCAL:2 == -1
+					PRINTFORML 이제 없는 누군가의 출산으로부터 하루가 지났습니다
+				ELSE
+					PRINTFORML %CALLNAME:(LOCAL:2)%의 출산으로부터 하루가 지났습니다
+				ENDIF
+				;C = LOCAL:0
+				CALL DEPEARENT(LOCAL:0)
+			ENDIF
+		ENDIF
+		
+	NEXT
+ENDIF
+
+FOR LCOUNT, 0, CHARANUM
+	;成長経過日数処理
+	SIF TALENT:LCOUNT:아이 && TALENT:LCOUNT:유생고정 == 0
+		CFLAG:LCOUNT:娘の誕生経過日数++
+	
+	;娘成長이벤트
+	;IF MARK:LCOUNT:6 >= 1 && DAY >= (CFLAG:LCOUNT:娘の誕生日 + 15) && CFLAG:LCOUNT:娘の誕生日 != 0
+	;	CALL CHILD_GROWTH2
+	;ELSEIF MARK:LCOUNT:6 >= 1 && DAY >= (CFLAG:LCOUNT:娘の誕生日 + 5) && CFLAG:LCOUNT:娘の誕生日 != 0
+	;	CALL CHILD_GROWTH
+	;ENDIF
+	IF MARK:LCOUNT:6 >= 1 && CFLAG:LCOUNT:娘の誕生経過日数 >= 15  && CFLAG:LCOUNT:娘の誕生日 != 0
+		CALL CHILD_GROWTH2(LCOUNT)
+	ELSEIF MARK:LCOUNT:6 >= 1 && CFLAG:LCOUNT:娘の誕生経過日数 >= 5  && CFLAG:LCOUNT:娘の誕生日 != 0
+		CALL CHILD_GROWTH(LCOUNT)
+	ENDIF
+NEXT

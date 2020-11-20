@@ -1,0 +1,118 @@
+﻿;-------------------------------------------------
+;프레젠트
+;コミュ니케ション系コマンド、레벨3
+;-------------------------------------------------
+@ACT_COM23
+PRINTL 프레젠트
+
+PRINTFORML 무엇을 선물합니까？
+PRINTFORML [0] 스마일（공짜）
+SIF MONEY >= 500
+	PRINTFORML [1] 술(￥1000)
+SIF MONEY >= 1500
+	PRINTFORML [2] 일용품(￥2500)
+SIF MONEY >= 4000
+	PRINTFORML [3] 악세사리(￥10000)
+SIF MONEY >= 10000
+	PRINTFORML [4] 옷(￥25000)
+SIF MONEY >= 50000
+	PRINTFORML [5] 이계의 술(￥150000)
+PRINTFORML [100] 역시 그만둔다
+
+INPUT
+IF RESULT != 100 && (RESULT < 0 || RESULT > 6)
+	RESTART
+ELSEIF RESULT == 1 && MONEY < 1000
+	RESTART
+ELSEIF RESULT == 2 && MONEY < 2500
+	RESTART
+ELSEIF RESULT == 3 && MONEY < 10000
+	RESTART
+ELSEIF RESULT == 4 && MONEY < 25000
+	RESTART
+ELSEIF RESULT == 5 && MONEY < 150000
+	RESTART
+ELSEIF RESULT == 0
+	;花を프레젠트
+	TFLAG:17 = 0
+ELSEIF RESULT == 1
+	;酒を프레젠트
+	TFLAG:17 = 1
+	MONEY -= 1000
+ELSEIF RESULT == 2
+	;日用品を프레젠트
+	TFLAG:17 = 2
+	MONEY -= 2500
+ELSEIF RESULT == 3
+	;악세사리を프레젠트
+	TFLAG:17 = 3
+	MONEY -= 10000
+ELSEIF RESULT == 4
+	;옷を프레젠트
+	TFLAG:17 = 4
+	MONEY -= 25000
+ELSEIF RESULT == 5
+	;凄い酒を프레젠트
+	TFLAG:17 = 5
+	MONEY -= 150000
+ELSEIF RESULT >= 100
+	PRINTFORMW 선물을 주는 것을 정지하겠습니다
+	RETURN 0
+ENDIF
+
+TSTR:0 = 프레젠트
+;CALL KOJO_MESSAGE_COM
+
+;-------------------------------------------------
+;ソース추가処理
+;-------------------------------------------------
+;소비체력、기력
+DOWNBASE:TARGET:체력 += 10
+DOWNBASE:TARGET:기력 += 20
+
+IF TFLAG:17 == 0
+	SOURCE:TARGET:복종 = 1000
+	SOURCE:TARGET:일탈 = 100
+ELSEIF TFLAG:17 == 1
+	SOURCE:TARGET:복종 = 1500
+	SOURCE:TARGET:일탈 = 150
+ELSEIF TFLAG:17 == 2
+	SOURCE:TARGET:복종 = 2500
+	SOURCE:TARGET:일탈 = 250
+ELSEIF TFLAG:17 == 3
+	SOURCE:TARGET:복종 = 3500
+	SOURCE:TARGET:일탈 = 350
+ELSEIF TFLAG:17 == 4
+	SOURCE:TARGET:복종 = 5000
+	SOURCE:TARGET:일탈 = 500
+ELSEIF TFLAG:17 == 5
+	SOURCE:TARGET:복종 = 7000
+	SOURCE:TARGET:일탈 = 700
+ENDIF
+
+;애정경험
+IF (TALENT:3 == 1 || TALENT:6 == 1) && ASSIPLAY == 0 && TFLAG:17 > 0
+	A = TFLAG:17
+;	PRINTS EXPNAME:23
+;	PRINTVL +A
+	CALL ADDS_EXP("애정경험", A, TARGET)
+;	PRINTFORML 애정경험(주인)＋１
+	CALL ADDS_EXP("애정경험", 1, MASTER)
+ENDIF
+
+;의존도ベクトル
+TFLAG:33 = 4
+
+;의존도보정値
+SIF (TALENT:3 == 1 || TALENT:6 == 1) && ASSIPLAY == 0
+	TFLAG:30 += TFLAG:17
+
+
+RETURN 1
+
+;===================================================
+;조교타입
+;===================================================
+@COMTYPE_23
+RETURN COMTYPE("커뮤계")
+

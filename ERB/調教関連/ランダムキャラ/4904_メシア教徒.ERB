@@ -1,0 +1,281 @@
+﻿;ARGは生成キャラの등록번호
+@RANDOMCHARA_4904, ARGS, ARG, ARG:1
+#LOCALSSIZE 1
+SELECTCASE ARGS
+	CASE "一人称"
+		RESULTS = \@IS_MALE(ARG) ? 私#私\@
+	CASE "二人称"
+		RESULTS = %CALLNAME:MASTER%
+	CASE "체력"
+		RETURN RAND(800, 1800)
+	CASE "기력"
+		RETURN RAND(1200, 2500)
+	CASE "속성"
+		RETURN RAND(100, 180), RAND(150, 255)
+	CASE "종족"
+		RETURN 0
+	CASE "전투소질"
+;メシア教徒はほとんどが이능자 2割が템플나이트 1%がアデプト 1割が비전투원
+		SELECTCASE RAND:100
+			CASE IS < 1
+				RESULTS = 영매체질
+				RESULTS:1 = 이능자
+				RETURN 1, 1,
+			CASE IS < 10
+				RESULTS = 비전투원
+				RETURN 1
+			CASE IS < 30
+				RESULTS = 이능자
+				RESULTS:1 = 석세서
+				RETURN 1, 1
+			CASEELSE
+				RESULTS = 이능자
+				RESULTS:1 = 도구지식
+				RETURN 1, 1
+		ENDSELECT
+	CASE "링크악마"
+		RETURN 0
+	CASE "초기스테이터스比率"
+		RETURN 7, 12, 10, 7, 7, 5
+	CASE "스킬"
+		SIF TALENT:ARG:이능자 == 0
+			RETURN 0
+		RESULT = [[스킬:한마]]
+		RESULT:1 = [[스킬:마한마]]
+		RESULT:2 = [[스킬:파마의뇌광]]
+		SELECTCASE RAND:4
+			CASE 0
+				RESULT:3 = [[스킬:잔]]
+				RESULT:4 = [[스킬:잔마]]
+				RESULT:5 = [[스킬:마하・잔]]
+				RESULT:6 = [[스킬:림도라]]
+			CASE 1
+				RESULT:3 = [[스킬:데・카쟈]]
+				RESULT:4 = [[스킬:마카쟈마]]
+				RESULT:5 = [[스킬:스쿤・다]]
+				RESULT:6 = [[스킬:타룬・다]]
+			CASE 2
+				RESULT:3 = [[스킬:마구날뛰기]]
+				RESULT:4 = [[스킬:회전베기]]
+				RESULT:5 = [[스킬:돌려차기]]
+				RESULT:6 = [[스킬:자폭]]
+			CASE 3
+				RESULT:3 = [[스킬:일할의마맥]]
+				RESULT:4 = [[스킬:리캄]]
+				RESULT:5 = [[스킬:사마리캄]]
+				RESULT:6 = [[스킬:리캄도라]]
+		ENDSELECT
+		RETURN RESULT
+	CASE "相性"
+		SELECTCASE GET_TYPE(ARG:1)
+			CASE "파마"
+				RETURN 0
+			CASEELSE
+				RETURN 100
+		ENDSELECT
+	CASE "소질"
+		RETURN GETNUM(TALENT, "저항"), GETNUM(TALENT, "억압"), GETNUM(TALENT, "헌신적"), GETNUM(TALENT, "자제심"), GETNUM(TALENT, "쾌감을부정"), GETNUM(TALENT, "일선을넘지않음"), GETNUM(TALENT, "정조관념"),GETNUM(TALENT, "악취민감")
+	CASE "除外소질"
+		RETURN GETNUM(TALENT, "솔직함"), GETNUM(TALENT, "프라이드낮음"), GETNUM(TALENT, "정조관결여"), GETNUM(TALENT, "낙관적"), GETNUM(TALENT, "소악마")
+	;처녀は特別 0は랜덤(20%), 1なら처녀, 2なら非처녀
+	CASE "처녀"
+		IF RAND:10 == 0
+			RETURN 2
+		ELSE 
+			RETURN 1
+		ENDIF
+	;戻り値は0:랜덤 1:소인체형 2:유아체형 4:큰체형 5:거체
+	CASE "体型"
+		RETURN 0
+	;戻り値は0:랜덤 1:절벽　2:빈유　3:並　4:거유　5:폭유
+	CASE "가슴"
+		RETURN 0
+	;통상の인간と肉体部位が違う場合はここで直接代入してください
+	CASE "肉体部位"
+		RETURN 0
+	CASE "ABL"
+		SELECTCASE ABLNAME:(ARG:1)
+			CASE "순종", "욕망", "기교"
+				RETURN !RAND:5+!RAND:10
+			CASE "Ｃ감각", "Ｖ감각", "Ｂ감각"
+				RETURN !RAND:4
+			CASE "마조끼", "노출증", "봉사정신"
+				RETURN !RAND:10
+			CASE "새드끼"
+				RETURN !RAND:10 * !ABL:ARG:마조끼
+			CASE "Ａ감각", "자위중독", "정액중독", "레즈끼", "ＢＬ끼", "섹스중독"
+				RETURN !RAND:20
+		ENDSELECT
+	;EXPはABLが1이상ある場合、ある程度調整される(ただし、ABL0の時は調整が動かないので適当に초기値をきめてください)
+	CASE "EXP"
+		;全く손付かずの場合
+		SIF !GROUPMATCH(1, !TALENT:ARG:처녀, ABL:ARG:Ｃ감각, ABL:ARG:Ｖ감각, ABL:ARG:Ａ감각, ABL:ARG:Ｂ감각, ABL:ARG:기교)
+			RETURN 0
+		SELECTCASE EXPNAME:(ARG:1)
+			CASE "Ｖ경험"
+				RETURN RAND(0, 20) * !RAND:3
+			CASE "Ａ경험"
+				RETURN RAND(0, 20) * !RAND:10
+			CASE "절정경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "사정경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "성교경험"
+				RETURN 0
+			CASE "질사경험"
+				RETURN EXP:ARG:사정경험/2*EXP:ARG:성교경험 > 0
+			CASE "자위경험"
+				RETURN RAND(0, 20)
+			CASE "조교자위경험"
+				RETURN 0
+			CASE "정액경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "봉사쾌락경험"
+				RETURN 0
+			CASE "펠라경험"
+				RETURN RAND(0, 10) * !RAND:4
+			CASE "애정경험"
+				RETURN 0
+			CASE "고통쾌락경험"
+				RETURN RAND(0, 20) * !RAND:8
+			CASE "방뇨경험"
+				RETURN 0
+			CASE "가학쾌락경험"
+				RETURN RAND(0, 10) * !RAND:8
+			CASE "야외노출경험"
+				RETURN 0
+			CASE "레즈경험"
+				RETURN RAND(0, 20) * !RAND:8
+			CASE "ＢＬ경험"
+				RETURN RAND(0, 20) * !RAND:8
+			CASE "이상경험"
+				RETURN 0
+			CASE "긴박경험"
+				RETURN RAND(0, 10) * EXP:ARG:고통쾌락경험 > 0
+		ENDSELECT
+	CASE "모자"
+		IF RAND:2
+			RETURN 0
+		ELSE
+			RETURN [[衣装:모자]]
+		ENDIF
+	CASE "옷"
+		RETURN 0
+	CASE "하의"
+		IF TALENT:ARG:석세서
+			RETURN [[衣装:바지]]
+		ELSE
+			RETURN 0
+		ENDIF
+	CASE "전신복"
+		IF TALENT:ARG:석세서
+			RETURN [[衣装:전신갑주]]
+		ELSE
+			RETURN [[衣装:법의]]
+		ENDIF
+	CASE "손"
+		RETURN 0
+	CASE "속옷（상）"
+		IF IS_MALE(ARG)
+			RETURN 0
+		ELSE
+			RETURN [[衣装:브래지어]]
+		ENDIF
+	CASE "속옷（하）"
+		IF IS_MALE(ARG)
+			IF RAND:5
+				RETURN [[衣装:훈도시]]
+			ELSE
+				RETURN [[衣装:트렁크스]]
+			ENDIF
+		ELSE
+			RETURN [[衣装:팬티]]
+		ENDIF
+	CASE "전신속옷"
+		RETURN 0
+	CASE "양말"
+		RETURN [[衣装:하이삭스]]
+	CASE "신발"
+		RETURN [[衣装:부츠]]
+	CASE "겉옷"
+		IF TALENT:ARG:이능자
+			RETURN [[衣装:망토]]
+		ELSE
+			RETURN 0
+		ENDIF
+	CASE "그외"
+		RETURN [[衣装:벨트]]
+	;악마汎用사용しています0:랜덤 1:女_아이　2:女_소녀　3:女_若者　4:女_大人　5:女_淑女　6:女_古風　7:男_若者　8:男_大人　9:짐승_ケダモノ
+	CASE "회화타입"
+		IF TALENT:ARG:남자 == 0
+			SIF RAND:5 > 2
+				RETURN 5
+		ELSE
+			RETURN 0
+		ENDIF
+	CASE "이름"
+		IF (TALENT:ARG:魔乳 == 1 || TALENT:ARG:폭유 == 1) && TALENT:ARG:처녀 == 1
+			RESULTS = 성유(聖乳)
+		ELSEIF ABL:ARG:Ｖ감각 >= 1 && EXP:ARG:정액경험 > 10
+			RESULTS = 배덕
+		ELSEIF ABL:ARG:Ａ감각 >= 1 && EXP:ARG:Ａ경험 >= 15
+			RESULTS = 애널광
+		ELSE
+			RESULTS = 전(前)
+		ENDIF
+		IF TALENT:ARG:광기 == 1
+			RESULTS += "광신자"
+		ELSEIF TALENT:ARG:영매체질 == 1
+			RESULTS += "숙달자"
+		ELSEIF TALENT:ARG:석세서
+			RESULTS += "템플나이트"
+		ELSEIF TALENT:ARG:이능자
+			RESULTS += "메시아교도"
+		ELSE
+			RESULTS += "메시아교신자"
+		ENDIF
+	CASE "愛称"
+		IF TALENT:ARG:폭유 == 1 && TALENT:ARG:처녀 == 1
+			RESULTS = 성유(聖乳)의 
+		ELSEIF ABL:ARG:Ｖ감각 >= 1 && EXP:ARG:정액경험 > 10
+			RESULTS = 배덕
+		ELSEIF ABL:ARG:Ａ감각 >= 1 && EXP:ARG:Ａ경험 >= 15
+			RESULTS = 애널광
+		ELSE
+			RESULTS = 전(前)
+		ENDIF
+		IF TALENT:ARG:광기 == 1
+			RESULTS += "광신자"
+		ELSEIF TALENT:ARG:영매체질 == 1
+			RESULTS += "숙달자"
+		ELSEIF TALENT:ARG:석세서
+			RESULTS += "템플나이트"
+		ELSEIF TALENT:ARG:이능자
+			RESULTS += "메시아교도"
+		ELSE
+			RESULTS += "메시아교신자"
+		ENDIF
+	CASE "해설"
+		RESULTS = TOKYO를 중심으로 급속히 세력을 늘리고 있는 신흥 종교 메시아교의 신자。「믿는 자 모두 구해지리라」
+		IF TALENT:ARG:영매체질
+			RESULTS:1 = 신자중에서도 특별히 메시아에 가깝다고 여겨지는 상층계급、「숙달자」에 속해 있었다
+		ELSEIF TALENT:ARG:석세서
+			RESULTS:1 = 교단내의 엘리트 집단「템플나이트」의 전 구성원。특수한 무기의 취급이 허가되고 있다
+		ELSEIF TALENT:ARG:이능자
+			RESULTS:1 = 신의 기적과도 같은 힘을 가진 구세주에 가까워지기 위해、이능의 힘을 몸에 익힌 신자도 많다
+		ELSE 
+			RESULTS:1 = 메시아교내에는 엄격한 격차가 존재해、낮은 쪽에 속하는 일반 신자의 생활은 극히 어렵다
+		ENDIF
+		RESULTS:2 = 　
+		RESULTS:3 = (이하Wikipedia로부터 발췌)
+		RESULTS:4 = 메시아 교회는 구세주（메시아）의 출현을 믿어、그 힘으로 세계가 구해진다고 말하고있다
+		RESULTS:5 = 질서를 존중해、모든 것은 법의 아래에서 관리되어야한다고 생각하며
+		RESULTS:6 = 기본적으로는 조용한 태도로 자비 깊게 사람들에게 가르침을 말하는 태도로 타인과 접하지만
+		RESULTS:7 = 법에 따르지 않는 사람이나 구세주의 출현을 부정하는 사람에 대해서는 매우 단호한 태도를 취한다
+		RESULTS:8 = 완전한 피라미드형 계급체계 하에서 성립되고 있어、질서와 평화는 있지만 개인의 자유는 없는것과 같다
+		RESULTS:9 = 통제된 세상을 어지럽히는 악마는 그들에게 있어 사악한 존재이기 때문에 악마와의 공생을 생각하는 가이아교와는 대립하고 있다
+		RESULTS:10 = 교도는 흰 바탕에 푸른 라인이 들어간 복장으로 통일되어있고、계급이나 신분에 의해 복식이 다르다
+	;最後に呼び出すので何らかの調整が필요한場合はここで
+	CASE "最終調整"
+		RETURN 0
+ENDSELECT

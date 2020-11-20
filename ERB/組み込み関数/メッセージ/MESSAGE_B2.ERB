@@ -1,0 +1,22 @@
+﻿;-------------------------------------------------
+;구상用バトルMESSAGE　とりあえず5行まで対応
+;ARGは止まるかたまらないか、ARGSに行の内容と名前を
+;-------------------------------------------------
+@MESSAGE_B2(ARGS:6 = "MESSAGE", ARG = 0, ARGS = "", ARGS:1 = "", ARGS:2 = "", ARGS:3 = "", ARGS:4 = "", ARGS:5 = "")
+SIF ARGS == ""
+	RETURN 0
+SIF STRLENS(ARGS:6) % 2 == 1
+	ARGS:6 += " "
+PRINTFORML ┏┓＠%ARGS:6 + "┏" + "━" * ((66 - STRLENS(ARGS:6)+1) / 2)%┓
+FOR LOCAL, 0, 5
+	IF !(ARGS:LOCAL == "")
+		PRINTFORML ┃%ARGS:LOCAL, 72, LEFT%┃
+	ELSE
+		BREAK
+	ENDIF
+NEXT
+IF ARG == 0
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ELSE
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ENDIF

@@ -1,0 +1,42 @@
+﻿;========================================
+;불결セット関数
+;ARGのARGSにARGS:1の불결をつける
+;========================================
+@SET_STAIN(ARGS, ARGS:1, ARG = -99)
+#LOCALSIZE 1
+SIF ARG == -99
+	ARG = TARGET
+SELECTCASE ARGS
+	CASE "입"
+		LOCAL = 0
+	CASE "손"
+		LOCAL = 1
+	CASE "페니스"
+		LOCAL = 2
+	CASE "바기나"
+		LOCAL = 3
+	CASE "애널"
+		LOCAL = 4
+	CASE "가슴"
+		LOCAL = 5
+	CASE "질내"
+		LOCAL = 6
+	CASE "머리카락"
+		LOCAL = 7
+ENDSELECT
+SELECTCASE ARGS:1
+	CASE "애액"
+		SETBIT STAIN:ARG:LOCAL, 0
+	CASE "페니스"
+		SETBIT STAIN:ARG:LOCAL, 1
+	CASE "정액"
+		SETBIT STAIN:ARG:LOCAL, 2
+	CASE "애널"
+		SETBIT STAIN:ARG:LOCAL, 3
+	CASE "모유"
+		SETBIT STAIN:ARG:LOCAL, 4
+	CASE "점액"
+		SETBIT STAIN:ARG:LOCAL, 5
+	CASE "파과혈"
+		SETBIT STAIN:ARG:LOCAL, 6
+ENDSELECT

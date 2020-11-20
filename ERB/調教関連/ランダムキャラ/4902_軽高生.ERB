@@ -1,0 +1,237 @@
+﻿;ARGは生成キャラの등록번호
+@RANDOMCHARA_4902, ARGS, ARG, ARG:1
+#LOCALSSIZE 1
+SELECTCASE ARGS
+	CASE "一人称"
+		RESULTS = \@IS_MALE(ARG) ? 俺#あたし\@
+	CASE "二人称"
+		RESULTS = %CALLNAME:MASTER%
+	CASE "체력"
+		RETURN RAND(1000, 1800)
+	CASE "기력"
+		RETURN RAND(1000, 1500)
+	CASE "속성"
+		RETURN RAND(84, 164), RAND(85, 164)
+	CASE "종족"
+		RETURN 0
+	CASE "전투소질"
+		IF RAND:20
+			RESULTS = 비전투원
+			RETURN 1
+		ELSE
+			RESULTS = 이능자
+			RESULTS:1 = 도구지식
+			RETURN 1, 1
+		ENDIF
+	CASE "링크악마"
+		RETURN 0
+	CASE "초기스테이터스比率"
+		RETURN 7, 7, 7, 7, 7, 10
+	CASE "스킬"
+		SIF TALENT:ARG:이능자 == 0
+			RETURN 0
+		SELECTCASE RAND:5
+			CASE 0
+				RESULT = [[스킬:아기]]
+				RESULT:1 = [[스킬:아기라오]]
+				RESULT:2 = [[스킬:아기다인]]
+			CASE 1
+				RESULT = [[스킬:부후]]
+				RESULT:1 = [[스킬:부후라]]
+				RESULT:2 = [[스킬:부후다인]]
+			CASE 2
+				RESULT = [[스킬:지오]]
+				RESULT:1 = [[스킬:지온가]]
+				RESULT:2 = [[스킬:지오다인]]
+			CASE 3
+				RESULT = [[스킬:잔]]
+				RESULT:1 = [[스킬:잔마]]
+				RESULT:2 = [[스킬:잔다인]]
+			CASE 3
+				RESULT = [[스킬:돌격]]
+				RESULT:1 = [[스킬:숏잽]]
+				RESULT:2 = [[스킬:일할의활천]]
+		ENDSELECT
+		SELECTCASE RAND:4
+			CASE 0
+				RESULT:3 = [[스킬:디아]]
+				RESULT:4 = [[스킬:디아라마]]
+				RESULT:5 = [[스킬:파트라]]
+			CASE 1
+				RESULT:3 = [[스킬:라쿠・카쟈]]
+				RESULT:4 = [[스킬:타루・카쟈]]
+				RESULT:5 = [[스킬:디아라마]]
+			CASE 2
+				RESULT:3 = [[스킬:마카・카쟈]]
+				RESULT:4 = [[스킬:스쿠・카쟈]]
+				RESULT:5 = [[스킬:텐타라후]]
+			CASE 3
+				RESULT:3 = [[스킬:섹시댄스]]
+				RESULT:4 = [[스킬:하피루마]]
+				RESULT:5 = [[스킬:해피스텝]]
+		ENDSELECT
+		RETURN RESULT
+	CASE "相性"
+		SELECTCASE GET_TYPE(ARG:1)
+			CASE "파마"
+				RETURN 0
+			CASEELSE
+				RETURN 100
+		ENDSELECT
+	CASE "소질"
+		RETURN GETNUM(TALENT, "건방짐"), GETNUM(TALENT, "반항적"), GETNUM(TALENT, "호기심"), GETNUM(TALENT, "낙관적"), GETNUM(TALENT, "눈에띄고싶어함"), GETNUM(TALENT, "아픔에약함"), GETNUM(TALENT, "쾌감에솔직")
+	CASE "除外소질"
+		RETURN GETNUM(TALENT, "저항"), GETNUM(TALENT, "억압"), GETNUM(TALENT, "도착적"), GETNUM(TALENT, "도착적"), GETNUM(TALENT, "바늘다루기")
+	;처녀は特別 0は랜덤(20%), 1なら처녀, 2なら非처녀
+	CASE "처녀"
+		RETURN RAND:2 + 1
+	;戻り値は0:랜덤 1:소인체형 2:유아체형 4:큰체형 5:거체
+	CASE "体型"
+		RETURN 0
+	;戻り値は0:랜덤 1:절벽　2:빈유　3:並　4:거유　5:폭유
+	CASE "가슴"
+		RETURN 0
+	;통상の인간と肉体部位が違う場合はここで直接代入してください
+	CASE "肉体部位"
+		RETURN 0
+	CASE "ABL"
+		SELECTCASE ABLNAME:(ARG:1)
+			CASE "순종", "욕망", "기교"
+				RETURN !RAND:5+!RAND:10
+			CASE "Ｃ감각", "Ｖ감각", "Ｂ감각"
+				RETURN !RAND:4
+			CASE "마조끼", "노출증", "봉사정신"
+				RETURN !RAND:10
+			CASE "새드끼"
+				RETURN !RAND:10 * !ABL:ARG:마조끼
+			CASE "Ａ감각", "자위중독", "정액중독", "레즈끼", "ＢＬ끼", "섹스중독"
+				RETURN !RAND:20
+		ENDSELECT
+	;EXPはABLが1이상ある場合、ある程度調整される(ただし、ABL0の時は調整が動かないので適当に초기値をきめてください)
+	CASE "EXP"
+		;全く손付かずの場合
+		SIF !GROUPMATCH(1, !TALENT:ARG:처녀, ABL:ARG:Ｃ감각, ABL:ARG:Ｖ감각, ABL:ARG:Ａ감각, ABL:ARG:Ｂ감각, ABL:ARG:기교)
+			RETURN 0
+		SELECTCASE EXPNAME:(ARG:1)
+			CASE "Ｖ경험"
+				RETURN RAND(0, 20) * !RAND:3
+			CASE "Ａ경험"
+				RETURN RAND(0, 20) * !RAND:10
+			CASE "절정경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "사정경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "성교경험"
+				RETURN 0
+			CASE "질사경험"
+				RETURN EXP:ARG:사정경험/2*EXP:ARG:성교경험 > 0
+			CASE "자위경험"
+				RETURN RAND(0, 20)
+			CASE "조교자위경험"
+				RETURN 0
+			CASE "정액경험"
+				RETURN RAND(0, 20) * RAND:2
+			CASE "봉사쾌락경험"
+				RETURN 0
+			CASE "펠라경험"
+				RETURN RAND(0, 10) * !RAND:4
+			CASE "애정경험"
+				RETURN 0
+			CASE "고통쾌락경험"
+				RETURN RAND(0, 20) * !RAND:8
+			CASE "방뇨경험"
+				RETURN 0
+			CASE "가학쾌락경험"
+				RETURN RAND(0, 10) * !RAND:8
+			CASE "야외노출경험"
+				RETURN 0
+			CASE "레즈경험"
+				RETURN RAND(0, 20) * !RAND:8
+			CASE "ＢＬ경험"
+				RETURN RAND(0, 20) * !RAND:8
+			CASE "이상경험"
+				RETURN 0
+			CASE "긴박경험"
+				RETURN RAND(0, 10) * EXP:ARG:고통쾌락경험 > 0
+		ENDSELECT
+	CASE "모자"
+		IF RAND:5
+			RETURN 0
+		ELSE
+			RETURN [[衣装:모자]]
+		ENDIF
+	CASE "옷"
+		IF IS_MALE(ARG)
+			RETURN [[衣装:와이셔츠]]
+		ELSE
+			RETURN [[衣装:블라우스]]
+		ENDIF
+	CASE "하의"
+		IF IS_MALE(ARG)
+			RETURN [[衣装:바지]]
+		ELSE
+			RETURN [[衣装:스커트]]
+		ENDIF
+	CASE "전신복"
+		RETURN 0
+	CASE "손"
+		RETURN 0
+	CASE "속옷（상）"
+		IF IS_MALE(ARG)
+			RETURN 0
+		ELSE
+			IF RAND:5
+				RETURN [[衣装:브래지어]]
+			ELSE
+				RETURN 0
+			ENDIF
+		ENDIF
+	CASE "속옷（하）"
+		IF IS_MALE(ARG)
+			IF RAND:5
+				RETURN [[衣装:트렁크스]]
+			ELSE
+				RETURN [[衣装:부메랑팬츠]]
+			ENDIF
+		ELSE
+			LOCALS = 속옷（상）
+			IF CFLAG:ARG:LOCALS == 0
+				RETURN 0
+			ELSE
+				RETURN [[衣装:팬티]]
+			ENDIF
+		ENDIF
+	CASE "전신속옷"
+		RETURN 0
+	CASE "양말"
+		RETURN [[衣装:하이삭스]]
+	CASE "신발"
+		RETURN [[衣装:가죽구두]]
+	CASE "겉옷"
+		RETURN [[衣装:블레이저교복]]
+	CASE "그외"
+		RETURN RAND:10 ? 0 # [[衣装:안경]]
+	CASE "회화타입"
+	;악마汎用사용しています0:랜덤 1:女_아이　2:女_소녀　3:女_若者　4:女_大人　5:女_淑女　6:女_古風　7:男_若者　8:男_大人　9:짐승_ケダモノ
+		RETURN 0
+	CASE "이름"
+		RESULTS = 카루코자카고 학생
+	CASE "愛称"
+		RESULTS = 카루코자카고 학생
+	CASE "해설"
+		RESULTS = 카루코자카고교의 학생
+		IF TALENT:ARG:이능자
+			RESULTS:1 = 이능의 힘을 숨기고 있다
+		ELSE
+			RESULTS:1 = 일반 학생이며、전투력은 없다
+		ENDIF
+		RESULTS:3 = 카루코자카고교는『진・여신전생if』에 등장하는 가공의 고등학교이며
+		RESULTS:4 = 마신황을 자칭하는 하자마의 손에 의해、탈출이 불가능한 마계가 되어버렸다
+		RESULTS:5 = 하자마는 학생들을 죽이지 않고、괴롭히려고 했기 때문에、상당수의 학생의 무사가 확인되고、
+		RESULTS:6 = 좀비군이나 좀비쨩이라는、학생들이 오염된 결과의 끝도 확인할 수 있다
+		RESULTS:8 = 파란 블레이저교복과 줄무늬 양말이 특징으로、『여신이문록 페르소나』나『페르소나２』등에서도
+		RESULTS:9 = 그들의 모습을 볼 수 있다
+	;最後に呼び出すので何らかの調整が필요한場合はここで
+	CASE "最終調整"
+		RETURN 0
+ENDSELECT
