@@ -1,0 +1,2404 @@
+﻿;==================================================
+;キャラクター스테이터스の표시関連
+;==================================================
+@SHOPCOMABLE_110
+RESULT:1 = 4
+RESULTS = 능력확인
+RETURN CHARANUM > 0
+
+@SHOP_COM_110
+#LOCALSIZE 3
+;P = 0
+Z = 0
+;표시させるキャラを抽出（Q:*に표시するキャラの登録番号、LOCAL:2に人数）
+CALL INPUT_CHARA_LIST("스테이터스를 표시하고 싶은 캐릭터를 선택해주세요", "CASTING_SHOW_STATUS" , "UP_PRINT_SHOP_COM_110" , , "MODECHANGE_SHOP_COM_110")
+IF RESULT != 1000
+	CALL SHOW_CHARADATA_PAGE(FLAG:SHOPコマンド == 110 ? 1 # 2, A)
+	RESTART
+ENDIF
+RETURN 0
+
+@CASTING_SHOW_STATUS(ARG:0)
+SIF CFLAG:(ARG:0):ボスフラグ
+	RETURN 0
+SIF CFLAG:(ARG:0):PTフラグ == 0 && (FLAG:(20000+NO:(ARG:0)) < 100 || EQUIP:MASTER:마인드시커)
+	RETURN 0
+SIF FLAG:SHOPコマンド == [[SHOP:탐색]] && (CFLAG:(ARG:0):所属ＣＯＭＰ == -1 || ABL:(ARG:0):종족 == 0) && CFLAG:(ARG:0):PTフラグ == 1
+	RETURN 0
+SIF CFLAG:(ARG:0):노역フラグ == 3 && (FLAG:SHOPコマンド != 110)
+	RETURN 0
+SIF CFLAG:(ARG:0):この場に居ないフラグ == 1
+	RETURN 0
+SIF CFLAG:(ARG:0):필터링フラグ
+	RETURN 0
+SIF Z == 1 && !함락(ARG:0)
+	RETURN 0
+SIF Z == 2 && !CFLAG:(ARG:0):노역フラグ
+	RETURN 0
+SIF Z == 3 && CFLAG:(ARG:0):매각가능 && !CFLAG:(ARG:0):매각불가フラグ
+	RETURN 0
+RETURN 1
+
+@UP_PRINT_SHOP_COM_110
+PRINTFORML 스테이터스를 표시하고 싶은 캐릭터를 선택해주세요　\@ A > リスト표시数() ? ＜page.{P + 1}/{A / リスト표시数() + 1}＞ # \@
+DRAWLINE
+PRINTL 　　　☆:조교중 ★:조수 ○:조수가능 ●:전 조수
+
+@MODECHANGE_SHOP_COM_110 , ARG
+SELECTCASE ARG
+	CASE -1
+		PRINTL 
+		PRINTFORMLC [1010]전원
+		PRINTFORMLC [1011]함락
+		PRINTFORMLC [1012]노역중
+		PRINTFORMLC [1013]매각불가
+	CASE 1010 TO 1013
+		Z = ARG - 1010
+		RETURN ARG , -1
+		
+ENDSELECT
+RETURN ARG , 1
+
+
+;-------------------------------------------------
+;스테이터스표시(各キャラごと)
+;-------------------------------------------------
+@SHOW_CHARADATA_PAGE, ARG, ARG:1
+#DIM LCNT
+#DIM LREDRAW
+#DIM LRESULT
+#DIM LCOUNT
+#LOCALSIZE 6
+
+LOCAL = ARG							;ページ判別はLOCALで
+U = RESULT
+LOCAL:1 = FINDELEMENT(Q, RESULT)	;リストの何人눈かをLOCAL:1に保存
+LOCAL:2 = ARG:1						;リストは何人分あるかをLOCAL:2に保存
+LOCAL:5 = LINECOUNT					;現在の行数をLOCAL:5に保存、$PRINT_PAGEに戻るときにCLEARLINE LINECOUNT - LOCAL:5
+
+LREDRAW = CURRENTREDRAW()
+LRESULT = RESULT
+장비스킬ページ = 0
+REDRAW 2
+
+$PRINT_PAGE
+CLEARLINE LINECOUNT - LOCAL:5
+;아군でない場合、赤표시
+SIF CFLAG:U:PTフラグ == 0
+	SETCOLOR 0x66EEEE
+CUSTOMDRAWLINE =
+;IF U != MASTER && FLAG:12 & 4
+;	CALL PRINT_SLAVE_STATUS
+;ELSEIF U == MASTER && FLAG:12 & 4
+;	CALL PRINT_MASTER_STATUS
+;ENDIF
+CALL SHOW_INFO_NAME
+CALLFORM SHOW_INFO_PAGE_{LOCAL}
+PRINTFORM \@ LINECOUNT - LOCAL:5 < 38 ? %"\n" * (38 - LINECOUNT + LOCAL:5)% # \@
+RESETCOLOR
+PRINTFORMLC \@(LOCAL == 1) ? %" " * 16% # [1007]이전 페이지\@
+PRINTLC   [1000]리스트로 돌아간다
+PRINTFORMLC \@ LOCAL == 4 ? %" " * 16% # [1009]다음 페이지\@
+PRINTL 
+PRINTFORMLC \@(LOCAL:1 == 0) ? %" " * 16% # [1001]이전 캐릭터\@
+PRINTFORMLC   %" " * 18%
+PRINTFORMLC \@(LOCAL:1 == LOCAL:2-1) ? %" " * 16% # [1003]다음 캐릭터\@
+PRINTFORMLC \@ABL:U:스킬1 && LOCAL == 2 ? [1020]스킬 정렬 # %" " * 16%\@
+$INPUT_LOOP_2
+INPUTS
+IF RESULTS == "1007" && LOCAL > 1
+	LOCAL -= 1
+	GOTO PRINT_PAGE
+ELSEIF RESULTS == "1009" && LOCAL < 4
+	LOCAL += 1
+	GOTO PRINT_PAGE
+ELSEIF RESULTS == "1001" && LOCAL:1 > 0
+	LOCAL:1 -= 1
+	U = Q:(LOCAL:1)
+	장비스킬ページ = 0
+	GOTO PRINT_PAGE
+ELSEIF RESULTS == "1003" && LOCAL:1 < LOCAL:2-1
+	LOCAL:1 += 1
+	U = Q:(LOCAL:1)
+	장비스킬ページ = 0
+	GOTO PRINT_PAGE
+ELSEIF LOCAL == 2 && RESULTS == "1020"
+	IF (TALENT:U:이능자 || TALENT:U:달인 || TALENT:U:인수라) && CFLAG:U:악마변신 == 0
+		$INPUT_LOOP_SKILLCHANGE_INOU
+		DRAWLINE
+		PRINTL 첫번째 스킬을 선택해주세요
+		IF GETBIT (FLAG:カスタムゲーム화면,1)
+			PRINTL
+			FOR LCNT, 0, FLAG:이능자스킬数
+				LOCALS = 스킬{LCNT + 1}
+				IF ABL:U:LOCALS
+					CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+					PRINTFORM 　[{LCNT + 1}]%RESULTS, 38, LEFT%
+				ENDIF
+				SIF LCNT % 2 == 1
+					PRINTL
+			NEXT
+			DRAWLINE
+			PRINTL 　[0] 취소
+		ELSE
+			FOR LCNT, 0, FLAG:이능자스킬数
+				LOCALS = 스킬{LCNT + 1}
+				IF ABL:U:LOCALS
+					CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+					PRINTFORM 　[{LCNT + 1}]%RESULTS, 20, LEFT%
+				ENDIF
+				PRINTFORM \@ (LCNT & 3) == 3 ? \n # \@
+			NEXT
+			PRINTL 　[0] 취소
+		ENDIF
+		INPUT
+		SIF !RESULT
+			GOTO PRINT_PAGE
+		SIF !INRANGE(RESULT, 1, FLAG:이능자스킬数) || ABL:U:@"스킬{RESULT}" <= 0
+			GOTO INPUT_LOOP_SKILLCHANGE_INOU
+		LOCALS:1 = 스킬{RESULT}
+		DRAWLINE
+		PRINTFORML 두번째 스킬을 선택해 주세요
+		IF GETBIT (FLAG:カスタムゲーム화면,1)
+			PRINTL
+			FOR LCNT, 0, FLAG:이능자스킬数
+				LOCALS = 스킬{LCNT + 1}
+				SIF ABL:U:LOCALS == ABL:U:(LOCALS:1)
+					SETCOLOR 102, 255, 255
+				IF ABL:U:LOCALS
+					CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+					PRINTFORM 　[{LCNT + 1}]%RESULTS, 38, LEFT%
+				ENDIF
+				RESETCOLOR
+				PRINTFORM \@ (LCNT & 3) == 3 ? \n # \@
+				SIF LCNT % 2 == 1
+					PRINTL
+			NEXT
+			DRAWLINE
+			PRINTL 　[0] 취소
+		ELSE
+			FOR LCNT, 0, FLAG:이능자스킬数
+				LOCALS = 스킬{LCNT + 1}
+				SIF ABL:U:LOCALS == ABL:U:(LOCALS:1)
+					SETCOLOR 102, 255, 255
+				IF ABL:U:LOCALS
+					CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+					PRINTFORM 　[{LCNT + 1}]%RESULTS, 20, LEFT%
+				ENDIF
+				RESETCOLOR
+				PRINTFORM \@ (LCNT & 3) == 3 ? \n # \@
+			NEXT
+		PRINTL 　[0] 취소
+		ENDIF
+		INPUT
+		SIF !RESULT
+			GOTO PRINT_PAGE
+		SIF !INRANGE(RESULT, 1, FLAG:이능자스킬数) || ABL:U:@"스킬{RESULT}" <= 0
+			GOTO INPUT_LOOP_SKILLCHANGE
+		LOCALS:2 = 스킬{RESULT}
+		SWAP ABL:U:(LOCALS:1), ABL:U:(LOCALS:2)
+		GOTO PRINT_PAGE
+	ELSE
+		$INPUT_LOOP_SKILLCHANGE
+		DRAWLINE
+		PRINTL 첫번째 스킬을 선택해주세요
+		IF GETBIT (FLAG:カスタムゲーム화면,1)
+			PRINTL
+			FOR LCNT, 0, FLAG:스킬数
+				LOCALS = 스킬{LCNT + 1}
+				IF ABL:U:LOCALS
+					CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+					PRINTFORM 　[{LCNT + 1}]%RESULTS, 38, LEFT%
+				ENDIF
+				SIF LCNT % 2 == 1
+					PRINTL
+			NEXT
+			DRAWLINE
+			PRINTL 　　[0] 취소
+		ELSE
+			FOR LCNT, 0, FLAG:스킬数
+				LOCALS = 스킬{LCNT + 1}
+				IF ABL:U:LOCALS
+					CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+					PRINTFORM 　[{LCNT + 1}]%RESULTS, 20, LEFT%
+				ENDIF
+				PRINTFORM \@ (LCNT & 3) == 3 ? \n # \@
+			NEXT
+			PRINTL 　[0] 취소
+		ENDIF
+			INPUT
+		SIF !RESULT
+			GOTO PRINT_PAGE
+		SIF !INRANGE(RESULT, 1, FLAG:스킬数) || ABL:U:@"스킬{RESULT}" <= 0
+			GOTO INPUT_LOOP_SKILLCHANGE
+		LOCALS:1 = 스킬{RESULT}
+		DRAWLINE
+		PRINTFORML 두번째 스킬을 선택해 주세요
+		IF GETBIT (FLAG:カスタムゲーム화면,1)
+			PRINTL
+			FOR LCNT, 0, FLAG:스킬数
+				LOCALS = 스킬{LCNT + 1}
+				SIF ABL:U:LOCALS == ABL:U:(LOCALS:1)
+					SETCOLOR 102, 255, 255
+				IF ABL:U:LOCALS
+					CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+					PRINTFORM 　[{LCNT + 1}]%RESULTS, 38, LEFT%
+				ENDIF
+				RESETCOLOR
+				SIF LCNT % 2 == 1
+					PRINTL
+			NEXT
+			DRAWLINE
+			PRINTL 　　[0] 취소
+		ELSE
+			FOR LCNT, 0, FLAG:스킬数
+				LOCALS = 스킬{LCNT + 1}
+				SIF ABL:U:LOCALS == ABL:U:(LOCALS:1)
+					SETCOLOR 102, 255, 255
+				IF ABL:U:LOCALS
+					CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+					PRINTFORM 　[{LCNT + 1}]%RESULTS, 20, LEFT%
+				ENDIF
+				RESETCOLOR
+				PRINTFORM \@ (LCNT & 3) == 3 ? \n # \@
+			NEXT
+			PRINTL 　[0] 취소
+		ENDIF
+		INPUT
+		SIF !RESULT
+			GOTO PRINT_PAGE
+		SIF !INRANGE(RESULT, 1, FLAG:스킬数) || ABL:U:@"스킬{RESULT}" <= 0
+			GOTO INPUT_LOOP_SKILLCHANGE
+		LOCALS:2 = 스킬{RESULT}
+		SIF TALENT:U:페르소나구사자
+			SWAP DITEMTYPE:現在の페르소나(U):페르소나(LOCALS:1), DITEMTYPE:現在の페르소나(U):페르소나(LOCALS:2)
+		SWAP ABL:U:(LOCALS:1), ABL:U:(LOCALS:2)
+		GOTO PRINT_PAGE
+	ENDIF
+ELSEIF LOCAL == 2 && RESULTS == "2000"
+	CALL PRINT_LINKAGE
+	GOTO PRINT_PAGE
+ELSEIF LOCAL == 2 && INRANGE(TOINT(RESULTS), 1, FLAG:이능자스킬数)
+	;0x01とか突っ込まれると落ちるので%RESULTS%はアウト。再度TOINTかけるのは必須かと
+	LOCALS = 스킬{TOINT(RESULTS)}
+	IF ABL:U:LOCALS > 0
+		SIF FLAG:스킬속성표시설정 == 1
+			CALL SKILL_EXPLAIN_PERFORMANCE, ABL:U:LOCALS, U
+		TRYCALLFORM SKILL_EXPLAIN_{ABL:U:LOCALS}
+		WAIT
+		GOTO PRINT_PAGE
+	ELSE
+		GOTO INPUT_LOOP_2
+	ENDIF
+ELSEIF LOCAL == 2 && INRANGE(TOINT(RESULTS), 21, 41)
+	LOCALS = 장비스킬{TOINT(RESULTS) - 20}
+	IF ABL:U:LOCALS > 0
+		SIF FLAG:스킬속성표시설정 == 1
+			CALL SKILL_EXPLAIN_PERFORMANCE, ABL:U:LOCALS, U
+		TRYCALLFORM SKILL_EXPLAIN_{ABL:U:LOCALS}
+		WAIT
+		GOTO PRINT_PAGE
+	ELSE
+		GOTO INPUT_LOOP_2
+	ENDIF
+;ELSEIF LOCAL == 2 && TOINT(RESULTS) >= 40 && TOINT(RESULTS) <= 43 && TALENT:U:페르소나구사자
+;	RESULT = TOINT(RESULTS) - 40
+;	LOCALS = 소지페르소나{RESULT}
+;	IF RESULT == 0 && CFLAG:U:초기페르소나ナンバー
+;		CALL PERSONA_STATUS(CFLAG:U:초기페르소나ナンバー)
+;		WAIT
+;		GOTO PRINT_PAGE
+;	ELSEIF EQUIP:U:LOCALS
+;		CALL PERSONA_STATUS(EQUIP:U:LOCALS)
+;		WAIT
+;		GOTO PRINT_PAGE
+;	ELSE
+;		GOTO INPUT_LOOP_2
+;	ENDIF
+ELSEIF LOCAL == 2 && RESULTS == "50" && GET_DEVIL(U) && GROUPMATCH(FLAG:SHOPコマンド , [[SHOP:셋업]] , [[SHOP:능력확인]]) && SKILL_EQUIPTHEORY_IS_HAVE_SKILL(U) == 0
+	CALL CHANGE_PLUGIN_SOFT, U
+	;CALL EQUIPMENT, U , 6
+	GOTO PRINT_PAGE
+ELSEIF LOCAL == 2 && RANGE(TOINT(RESULTS), 50, 56) && !TFLAG:전투中 && ( ABL:U:종족 == 0 || ABL:U:종족 == 36 || SKILL_EQUIPTHEORY_IS_HAVE_SKILL(U) )
+	IF GETBIT(FLAG:스테이터스화면타입, 2)
+		CALL EQUIP_CHANGE, TOINT(RESULTS) - 50, U, 1
+	ELSE
+		CALL EQUIPMENT, U , TOINT(RESULTS) - 50
+	ENDIF
+	
+	;스테이터스参照用リスト作り直し
+	VARSET Q , -1
+	FOR LCOUNT, 0, CHARANUM
+		CALL CASTING_SHOW_STATUS(LCOUNT)
+		SIF RESULT
+			Q:FINDELEMENT(Q, -1) = LCOUNT
+	NEXT
+	장비스킬ページ = 0
+	GOTO PRINT_PAGE
+
+;ELSEIF LOCAL == 2 && RESULTS == "페르소나변경" && !TFLAG:전투中 && TALENT:U:페르소나구사자
+;	CALL CHANGE_PERSONA(U)
+;ELSEIF LOCAL == 2 && RESULTS == "악마변경" && !TFLAG:전투中 && TALENT:U:데빌시프터 && !TALENT:U:이능자 && !TALENT:U:페르소나구사자 && !TALENT:U:석세서 && !TALENT:U:건슬링거 && !TALENT:U:달인
+;	CALL ACTION_2311, U
+
+;페르소나または악마변경
+ELSEIF LOCAL == 2 && (RESULTS == "페르소나변경" || RESULTS == "악마변경") && !TFLAG:전투中
+	;페르소나구사자の場合
+	IF TALENT:U:페르소나구사자
+		CALL CHANGE_PERSONA(U)
+	;純데빌시프터の場合
+	ELSEIF TALENT:U:데빌시프터 && !TALENT:U:석세서 && !TALENT:U:달인 && !TALENT:U:이능자 && !TALENT:U:건슬링거
+		CALL ACTION_2311, U
+	ENDIF
+
+ELSEIF LOCAL == 2 && RESULTS == "57" && !TFLAG:전투中 && TALENT:U:건슬링거 > 0 && EQUIP:U:총 > 0
+	CALL EQUIP_SPECIAL_BULLET, U
+	GOTO PRINT_PAGE
+ELSEIF LOCAL == 2 && RANGE(TOINT(RESULTS), 4000, 4999)
+	LOCAL:3 = TOINT(RESULTS)
+	CALLFORM 発動者조건_{LOCAL:3}, U
+	IF RESULT && GETBIT(FLAG:(1202+LOCAL:3 / 63), LOCAL:3 % 63)
+		CALLFORM SKILL_NAME_{LOCAL:3}
+		PRINTFORML %RESULTS%
+		
+		PRINT 발동자　
+		CALLFORM SKILL_COSTTYPE_{LOCAL:3}, ARG
+		IF RESULT == 2
+			CALLFORM SKILL_COST_{LOCAL:3}, ARG
+			PRINTFORM ＨＰ{RESULT,3}％　
+		ELSE
+			CALLFORM SKILL_COST_{LOCAL:3}, ARG
+			PRINTFORM ＭＰ{RESULT,3}　　
+		ENDIF
+		CALLFORM 참가人数_{LOCAL:3}
+		FOR LOCAL:4, 1, RESULT + 1
+			PRINTFORM 참가자{LOCAL:4}　
+			CALLFORM 링케이지コスト타입_{LOCAL:3}, LOCAL:4
+			IF RESULT == 2
+				CALLFORM 링케이지コスト_{LOCAL:3}, LOCAL:4
+				PRINTFORM ＨＰ{RESULT,3}％　
+			ELSE
+				CALLFORM 링케이지コスト_{LOCAL:3}, LOCAL:4
+				PRINTFORM ＭＰ{RESULT,3}　　
+			ENDIF
+		NEXT
+		PRINTL 
+		;참가者が決まってなかったりして落ちる스킬があるので…
+		;SIF FLAG:스킬속성표시설정 == 1
+		;	CALL SKILL_EXPLAIN_PERFORMANCE, LOCAL:3, U
+		TRYCALLFORM SKILL_EXPLAIN_{LOCAL:3}
+		WAIT
+		GOTO PRINT_PAGE
+	ELSE
+		GOTO INPUT_LOOP_2
+	ENDIF
+ELSEIF LOCAL:2 && RESULTS == "<" && ABL:U:장비스킬9
+	SIF --장비스킬ページ < 0
+		장비스킬ページ = ABL:U:장비스킬16 ? 2 # 1
+	GOTO PRINT_PAGE
+ELSEIF LOCAL:2 && RESULTS == ">" && ABL:U:장비스킬9
+	SIF ++장비스킬ページ > (ABL:U:장비스킬16 ? 2 # 1)
+		장비스킬ページ = 0
+	GOTO PRINT_PAGE
+ELSEIF RESULTS == "≫"
+	FLAG:ウィンドウ내성표시설정 = ++FLAG:ウィンドウ내성표시설정 % 3
+	GOTO PRINT_PAGE
+ELSEIF RESULTS == "≪"
+	FLAG:ウィンドウ내성표시설정 = (FLAG:ウィンドウ내성표시설정 + 2) % 3
+	GOTO PRINT_PAGE
+ELSEIF RESULTS != "1000"
+	GOTO INPUT_LOOP_2
+ENDIF
+장비스킬ページ = 0
+REDRAW LREDRAW
+RETURN LRESULT
+
+@SHOW_INFO_NAME
+IF FLAG:カスタムゲーム화면
+	PRINTFORM \@ CSTR:U:종족명 != "" ? %CSTR:U:종족명% # %STR:(ABL:U:종족)% \@　　%NAME:U%　　
+	IF TALENT:U:페르소나구사자
+		IF EQUIP:U:장비페르소나
+			PRINTFORM %CSVNAME(DITEMTYPE:(EQUIP:U:장비페르소나):페르소나("NO"))%강마중
+		ELSEIF !EQUIP:U:장비페르소나 && ABL:U:초기페르소나
+			PRINTFORM %CSVNAME(ABL:U:초기페르소나)%강마중
+		ENDIF
+	ENDIF
+	IF TALENT:U:데빌시프터
+		IF CFLAG:U:링크악마 > 0
+			PRINTFORM 　%NAME:FINDCHARA_ID(CFLAG:U:링크악마)%\@ CFLAG:U:악마변신 ? 변신 # 링크 \@중
+		ELSE
+			PRINTFORM 　%CSVNAME(CFLAG:U:초기링크악마)%\@ CFLAG:U:악마변신 ? 변신 # 링크 \@중
+		ENDIF
+	ELSEIF TALENT:U:식노 ||  TALENT:U:악마빙의자
+		PRINTFORM 　%CSVNAME(CFLAG:U:초기링크악마)%변신\@ CFLAG:U:악마변신 ? 중 # 가 \@
+	ENDIF
+ELSE
+	PRINTFORM \@ CSTR:U:종족명 != "" ? %CSTR:U:종족명% # %STR:(ABL:U:종족)% \@　　%CALLNAME:U%　　
+	IF TALENT:U:페르소나구사자
+		IF EQUIP:U:장비페르소나
+			PRINTFORM %CSVCALLNAME(DITEMTYPE:(EQUIP:U:장비페르소나):페르소나("NO"))%강마중
+		ELSEIF !EQUIP:U:장비페르소나 && ABL:U:초기페르소나
+			PRINTFORM %CSVCALLNAME(ABL:U:초기페르소나)%강마중
+		ENDIF
+	ENDIF
+	IF TALENT:U:데빌시프터
+		IF CFLAG:U:링크악마 > 0
+			PRINTFORM 　%CALLNAME:FINDCHARA_ID(CFLAG:U:링크악마)% \@ CFLAG:U:악마변신 ? 변신 # 링크 \@ 중
+		ELSE
+			PRINTFORM 　%CSVCALLNAME(CFLAG:U:초기링크악마)% \@ CFLAG:U:악마변신 ? 변신 # 링크 \@ 중
+		ENDIF
+	ELSEIF TALENT:U:식노 ||  TALENT:U:악마빙의자
+		PRINTFORM 　%CSVCALLNAME(CFLAG:U:초기링크악마)% 변신 \@ CFLAG:U:악마변신 ? 중 # 가 \@
+	ENDIF
+ENDIF
+IF FLAG:악마가챠모드 > 0 && CFLAG:U:PTフラグ > 0
+	IF ((ABL:U:종족 > 0 && ABL:U:종족 < 45 && CFLAG:U:전서소환불가 == 0) || (ABL:U:종족 == 45))
+		IF TALENT:U:ガチャ < 1
+			SETCOLOR 0xCC0000
+			PRINTFORM 　비 가챠산
+			SIF FLAG:악마가챠모드 > 1
+				PRINTFORM (페널티 적용)
+			RESETCOLOR
+		ELSE
+			PRINTFORM 　가챠산
+		ENDIF
+	ENDIF
+ENDIF
+IF GROUPMATCH(위험일(U), -2, 1, 2, 3)
+	LOCAL = GETCOLOR()
+	SETCOLOR 0xCC33FF
+	CALL HEARTB
+	SELECTCASE 위험일(U)
+		CASE 1
+			PRINT 위험일
+		CASE 2
+			PRINT 발정중
+		CASE 3, -2
+			PRINT 만월발정중
+	ENDSELECT
+	CALL HEARTB
+	SETCOLOR LOCAL
+ENDIF
+PRINTFORML \@ TALENT:MASTER:Debug ? 　캐릭터번호:{NO:U, 4} # \@
+RETURN RESULT
+
+;-------------------------------------------------
+;奴隷用汎用스테이터스표시処理
+;-------------------------------------------------
+@PRINT_SLAVE_STATUS
+	IF FLAG:カスタムゲーム화면
+		PRINTFORML 　- \@ TALENT:MASTER:깨달음 ? 의존도:{CFLAG:U:의존도}%" "% # \@스트레스:{CFLAG:U:스트레스치}　이상경험:{EXP:U:이상경험} -
+	ELSE
+		PRINTFORML (\@ TALENT:MASTER:깨달음 ? 의존도:{CFLAG:U:의존도}%" "% # \@스트레스:{CFLAG:U:스트레스치} 이상경험:{EXP:U:이상경험})
+	ENDIF
+	IF NO:U == 4998
+		IF FLAG:カスタムゲーム화면
+			PRINT 　　표면의 직업：
+		ELSE
+		PRINTFORML □ 정보
+			PRINT 표면의 직업	：
+		ENDIF
+		IF CFLAG:U:72 == 0
+			PRINTFORML 비밀
+		ELSEIF CFLAG:U:72 == 1
+			PRINTFORML 순수한 데빌 서머너
+		ELSEIF CFLAG:U:72 == 2
+			PRINTFORML 학생
+		ELSEIF CFLAG:U:72 == 3
+			PRINTFORML 프리터
+		ELSEIF CFLAG:U:72 == 4
+			PRINTFORML 사회인
+		ELSEIF CFLAG:U:72 == 5
+			PRINTFORML 규중의 영애
+		ELSEIF CFLAG:U:72 == 6
+			PRINTFORML 공중변소
+		ELSEIF CFLAG:U:72 == 7
+			PRINTFORML 여왕님
+		ELSEIF CFLAG:U:72 == 8
+			PRINTFORML 도박꾼
+		ELSEIF CFLAG:U:72 == 9
+			PRINTFORML 메이드
+		ELSEIF CFLAG:U:72 == 10
+			PRINTFORML 집사
+		ELSEIF CFLAG:U:72 == 11
+			PRINTFORML 승려
+		ELSEIF CFLAG:U:72 == 12
+			PRINTFORML 수녀
+		ELSEIF CFLAG:U:72 == 13
+			PRINTFORML 무녀
+		ELSEIF CFLAG:U:72 == 20
+			PRINTFORML 학생(카루코자카)
+		ELSEIF CFLAG:U:72 == 21
+			PRINTFORML 학생(엘민)
+		ELSE
+			PRINTL ？
+		ENDIF
+		IF FLAG:カスタムゲーム화면
+			PRINT 　　전투자질：
+		ELSE
+			PRINT 전투자질	：
+		ENDIF
+		PRINT 전투자질	：
+		IF CFLAG:U:당신の専攻分野 == 0
+			PRINTFORML 없음
+		ELSEIF CFLAG:U:당신の専攻分野 == 1
+			PRINTFORML 데빌 서머너
+		ELSEIF CFLAG:U:당신の専攻分野 == 2
+			PRINTFORML 페르소나 구사자
+		ELSEIF CFLAG:U:당신の専攻分野 == 3
+			PRINTFORML 이능자
+		ELSEIF CFLAG:U:당신の専攻分野 == 4
+			PRINTFORML 일반인
+		ELSEIF CFLAG:U:당신の専攻分野 == 5
+			PRINTFORML 식노
+		ELSEIF CFLAG:U:당신の専攻分野 == 6
+			PRINTFORML 달인
+		ELSEIF CFLAG:U:당신の専攻分野 == 7
+			PRINTFORML 데빌 헌터
+		ELSEIF CFLAG:U:당신の専攻分野 == 8
+			PRINTFORML 악마인
+		ELSEIF CFLAG:U:당신の専攻分野 == 10
+			PRINTFORML 데빌 시프터
+		ELSEIF CFLAG:U:당신の専攻分野 == 11
+			PRINTFORML 악마빙의자
+		ELSE
+			PRINTL ？
+		ENDIF
+		SIF CFLAG:U:당신の専攻分野 == 3 || CFLAG:U:당신の専攻分野 == 6
+			PRINTFORML 전공１：%CSVNAME(CFLAG:U:3031,0),10,LEFT%전공２：%CSVNAME(CFLAG:U:3032,0),10,LEFT%
+	ENDIF
+
+	RETURN RESULT
+
+;-------------------------------------------------
+;主人用스테이터스표시処理
+;-------------------------------------------------
+@PRINT_MASTER_STATUS
+CUSTOMDRAWLINE ･
+IF FLAG:カスタムゲーム화면
+	PRINT 　　표면의 직업：
+ELSE
+	PRINTFORML □ 정보
+	PRINT 표면의 직업	：
+ENDIF
+IF CFLAG:MASTER:72 == 0
+	PRINTFORML 비밀
+ELSEIF CFLAG:MASTER:72 == 1
+	PRINTFORML 순수한 데빌 서머너
+ELSEIF CFLAG:MASTER:72 == 2
+	PRINTFORML 학생
+ELSEIF CFLAG:MASTER:72 == 3
+	PRINTFORML 프리터
+ELSEIF CFLAG:MASTER:72 == 4
+	PRINTFORML 사회인
+ELSEIF CFLAG:MASTER:72 == 5
+	PRINTFORML 규중의 영애
+ELSEIF CFLAG:MASTER:72 == 6
+	PRINTFORML 공중변소
+ELSEIF CFLAG:MASTER:72 == 7
+	PRINTFORML 여왕님
+ELSEIF CFLAG:MASTER:72 == 8
+	PRINTFORML 도박꾼
+ELSEIF CFLAG:MASTER:72 == 9
+	PRINTFORML 메이드
+ELSEIF CFLAG:MASTER:72 == 10
+	PRINTFORML 집사
+ELSEIF CFLAG:MASTER:72 == 11
+	PRINTFORML 승려
+ELSEIF CFLAG:MASTER:72 == 12
+	PRINTFORML 수녀
+ELSEIF CFLAG:MASTER:72 == 13
+	PRINTFORML 무녀
+ELSEIF CFLAG:MASTER:72 == 20
+	PRINTFORML 학생(카루코자카)
+ELSEIF CFLAG:MASTER:72 == 21
+	PRINTFORML 학생(엘민)
+ELSE
+	PRINTL ？
+ENDIF
+IF FLAG:カスタムゲーム화면
+	PRINT 　　전투자질：
+ELSE
+	PRINT 전투자질	：
+ENDIF
+IF CFLAG:MASTER:당신の専攻分野 == 0
+	PRINTFORML 없음
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 1
+	PRINTFORML 데빌 서머너
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 2
+	PRINTFORML 페르소나 구사자
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 3
+	PRINTFORML 이능자
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 4
+	PRINTFORML 일반인
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 5
+	PRINTFORML 식노
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 6
+	PRINTFORML 달인
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 7
+	PRINTFORML 데빌 헌터
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 8
+	PRINTFORML 악마인
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 10
+	PRINTFORML 데빌시프터
+ELSEIF CFLAG:MASTER:당신の専攻分野 == 11
+	PRINTFORML 악마빙의자
+ELSE
+	PRINTL ？
+ENDIF
+IF FLAG:カスタムゲーム화면
+	SIF CFLAG:MASTER:당신の専攻分野 == 3 || CFLAG:MASTER:당신の専攻分野 == 6
+		PRINTFORML 　　전공１：%CSVNAME(CFLAG:MASTER:3031,0)%　전공２：%CSVNAME(CFLAG:MASTER:3032,0),10,LEFT%
+ELSE
+	SIF CFLAG:MASTER:당신の専攻分野 == 3 || CFLAG:MASTER:당신の専攻分野 == 6
+		PRINTFORML 전공１：%CSVNAME(CFLAG:MASTER:3031,0),10,LEFT%전공２：%CSVNAME(CFLAG:MASTER:3032,0),10,LEFT%
+ENDIF
+DRAWLINE
+;-------------------------------------------------
+;PRINTFORML □　조교
+;PRINT 堕した奴隷の総数　　　　　:
+;IF (FLAG:30+FLAG:31+FLAG:32) > 9999
+;	;エロ卿「にとり博士、事情を説明してもらおうかね?」
+;	;にとり博士「今少し(자위をする)時間と(로터を買う)予算をいただければ……」
+;	;エロ卿「弁解は罪悪と知り給え」
+;	;PRINT [エロ卿のコレクション]
+;	PRINT [萬 姦 全 籍]
+;ELSEIF (FLAG:30+FLAG:31+FLAG:32) > 999
+;	PRINT [ミレニアム]
+;ELSEIF (FLAG:30+FLAG:31+FLAG:32) > 99
+;	PRINT [百人斬り]
+;ELSE
+;	PRINTFORM {(FLAG:연모人数+FLAG:음란人数+FLAG:복종人数), 5}人
+;ENDIF
+;PRINTFORML 　(今回堕した人数:{(FLAG:今周回연모人数+FLAG:今周回음란人数+FLAG:今周回복종人数), 5}人)
+;SIF FLAG:奴隷매각総数
+;	PRINTFORML 今まで매각した악마の総数　:{FLAG:奴隷매각総数, 5}人(今回매각した人数:{FLAG:奴隷매각数, 5}人)
+;SIF FLAG:연모人数
+;	PRINTFORML 今まで연모にした악마の総数　:{FLAG:연모人数, 5}人(今回연모にした人数:{FLAG:今周回연모人数, 5}人)
+;SIF FLAG:음란人数
+;	PRINTFORML 今まで음란にした악마の総数　:{FLAG:음란人数, 5}人(今回음란にした人数:{FLAG:今周回음란人数, 5}人)
+;SIF FLAG:복종人数
+;	PRINTFORML 今まで복종にした악마の総数　:{FLAG:복종人数, 5}人(今回복종にした人数:{FLAG:今周回복종人数, 5}人)
+;SIF FLAG:인기취득者数
+;	PRINTFORML ビデオで인기を得た악마の総数:{FLAG:인기취득者数, 5}人
+;SIF FLAG:처녀탈취人数
+;	PRINTFORML 처녀を奪った악마の総数　　　:{FLAG:처녀탈취人数, 5}人
+IF FLAG:カスタムゲーム화면
+	PRINTFORML 　　명성：{FLAG:名声}　조교사명성：{FLAG:조교師名声}　조직공헌도：{FLAG:組織貢献度}　투기장명성：{FLAG:闘技場名声}
+ELSE
+	PRINTFORML 명성：{FLAG:名声}　조교사명성：{FLAG:조교師名声}　조직공헌도：{FLAG:組織貢献度}　투기장명성：{FLAG:闘技場名声}
+ENDIF
+;称号・エン디무ング到達표시
+;STRLENS NICKNAME:MASTER
+;SIF FLAG:9 || RESULT > 0
+;	CALL PRINT_MASTER_MEDAL
+;-------------------------------------------------
+;능력확인の処理(1ページ눈・総合)
+;-------------------------------------------------
+;옵션によって표시타입변경
+;조교中での能力표시はこのページが표시される
+@SHOW_INFO_PAGE_1
+LOCAL:1 = GETCOLOR()
+IF FLAG:カスタムゲーム화면
+	SIF FLAG:カスタムゲーム화면
+		PRINTL 
+	PRINTFORM 　체력:({BASE:U:체력, 5}/{MAXBASE:U:체력, 5})　기력:({BASE:U:기력, 5}/{MAXBASE:U:기력, 5})
+	SIF U ==MASTER
+		PRINTL 
+ELSE
+	PRINTFORML 　체력:({BASE:U:체력, 4}/{MAXBASE:U:체력, 4})　기력:({BASE:U:기력, 4}/{MAXBASE:U:기력, 4})
+	ENDIF
+CALLFORM PRINT_%\@ U == MASTER ? MASTER # SLAVE \@%_STATUS
+CUSTOMDRAWLINE ･
+CALL PRINT_APPEARANCE()	;인간以外なら外見표시
+IF (!TALENT:U:남자 || TALENT:U:오토코노코) && CFLAG:U:PTフラグ > 0	;위험일を표시
+	IF FLAG:カスタムゲーム화면
+		PRINT 　 위험일：
+	ELSE
+		PRINT 　위험일：
+	ENDIF
+	SETCOLOR 0xFFCCFF
+	CALL HEART
+	SELECTCASE CFLAG:U:위험일
+		CASE 8
+			PRINT ＦＵＬＬ ＭＯＯＮ
+		CASE 0
+			PRINT ＮＥＷ ＭＯＯＮ
+		CASE IS > 8
+			PRINTFORM {16 - CFLAG:U:위험일}/8 ＯＬＤ ＭＯＯＮ
+		CASEELSE
+			PRINTFORM {CFLAG:U:위험일}/8 ＹＯＵＮＧ ＭＯＯＮ
+	ENDSELECT
+	CALL HEART
+	SETCOLOR LOCAL:1
+	PRINTL
+ENDIF
+IF TALENT:U:임신 == 1 && CFLAG:U:PTフラグ > 0
+	IF FLAG:カスタムゲーム화면
+		PRINT 　 임신중：
+		SETCOLOR 0xFFCCFF
+		CALL HEART
+	ENDIF
+	LOCAL:4 = FINDCHARA_ID(CFLAG:U:父親の固有번호親)
+	SIF LOCAL:4 == -1 && CFLAG:U:父親の固有번호親 < 0
+		LOCAL:4 = CFLAG:U:父親の固有번호親
+	IF LOCAL:4 == U
+		PRINTFORM 자신의 촉수로 임신한 아이
+	ELSEIF LOCAL:4 >= 0
+		PRINTFORM %CALLNAME:(LOCAL:4)%의 아이
+	ELSEIF CFLAG:U:父親失踪 == 1
+		PRINT 이젠 없는 누군가의 아이
+	ELSEIF LOCAL:4 == -2
+		PRINT 촉수의 아이
+	ELSEIF LOCAL:4 == -1
+		PRINT 이름도 모르는 악마의 아이
+	ELSEIF LOCAL:4 < 0
+		PRINT 이름도 모르는 인간의 아이
+	ELSE
+		PRINT 
+	ENDIF
+	IF CFLAG:U:출산予定日 - DAY < 1
+		IF FLAG:カスタムゲーム화면
+			PRINTFORM  출산 준비 완료
+			CALL HEART
+			SETCOLOR LOCAL:1
+			PRINTL 
+		ELSE
+			PRINTFORML  출산 준비 완료
+		ENDIF
+	ELSE
+		IF FLAG:カスタムゲーム화면
+			PRINTFORM 출산까지 앞으로 {CFLAG:U:출산予定日 - DAY}일
+			CALL HEART
+			SETCOLOR LOCAL:1
+			PRINTL 
+		ELSE
+			PRINTFORML  출산까지 앞으로 {CFLAG:U:출산予定日 - DAY}일
+		ENDIF
+	ENDIF
+ENDIF
+IF TALENT:U:육아중 == 1 && CFLAG:U:PTフラグ > 0
+	LOCAL:4 = -1
+	LOCAL:5 = -1
+	IF FLAG:カスタムゲーム화면
+		PRINT 　 육아중：
+		SETCOLOR 0xFFCCFF
+		CALL HEART
+	ENDIF
+	FOR LOCAL:6, 0, CHARANUM
+		SIF CFLAG:U:娘の産みの親の固有번호親 == CFLAG:(LOCAL:6):キャラ固有の번호
+			LOCAL:5 = LOCAL:6
+		SIF CFLAG:(LOCAL:6):キャラ固有の번호 == CFLAG:U:父親の固有번호親
+			LOCAL:4 = (LOCAL:6)
+	NEXT
+	IF GROUPMATCH(U , LOCAL:4 , LOCAL:5) == 2
+		PRINTFORM 자신의 촉수로 임신한 
+	ELSEIF LOCAL:4 >= 0
+		PRINTFORM %조사처리(CALLNAME:(LOCAL:4),"와")% 
+	ELSEIF CFLAG:U:父親失踪 == 1
+		PRINT 이젠 없는 누군가와 
+	ELSEIF LOCAL:4 == -2
+		PRINT 촉수의 아이
+	ELSEIF LOCAL:4 == -1
+		PRINT 이름도 모르는 악마와 
+	ELSEIF LOCAL:4 < 0
+		PRINT 이름도 모르는 인간과 
+	ELSE
+		PRINT 
+	ENDIF
+	IF FLAG:カスタムゲーム화면
+		IF U == LOCAL:5
+			PRINTFORM 자신의 아기 육아중
+		ELSEIF LOCAL:5 >= 0
+			PRINTFORM %CALLNAME:(LOCAL:5)%의 아기 육아중
+		ELSE
+			PRINTFORM 이젠 없는 누군가의 아기 육아중
+		ENDIF
+		SETCOLOR 0xFFCCFF
+		CALL HEART
+		PRINTL
+	ELSE
+		IF U == LOCAL:5
+			PRINTFORML 자신의 아기 육아중
+		ELSEIF LOCAL:5 >= 0
+			PRINTFORML %CALLNAME:(LOCAL:5)%의 아기 육아중
+		ELSE
+			PRINTFORML 이젠 없는 누군가의 아기 육아중
+		ENDIF
+	ENDIF
+
+ENDIF
+CUSTOMDRAWLINE ･
+;弐型표시
+SIF TALENT:U:아이
+	CALL NEW_PRINT_DAUGHTER()	;親
+CALL NEW_PRINT_POPULARITY()		;인기
+CALL NEW_PRINT_ABL()			;能力
+CALL NEW_PRINT_TALENT()			;素質
+SIF U != MASTER
+	CALL NEW_PRINT_MARK()		;각인
+CALL NEW_PRINT_EXP()			;경험
+CALL NEW_PRINT_ABNORMAL_EXP()	;이상경험
+;CALL NEW_PRINT_JUEL()			;珠
+RETURN RESULT
+
+;-------------------------------------------------
+;능력확인の処理(2ページ눈)
+;전투に関係ある能力全てを표시
+;ARGで표시元　1 = 장비변경時
+;-------------------------------------------------
+;主人かそれ以外かで표시타입변경
+@SHOW_INFO_PAGE_2, ARG
+#LOCALSIZE 2
+#DIM LCOUNT
+;呼び出し元で체크ビットを변경
+;0:능력확인
+;1:사교의관
+;2:장비변경
+IF ARG
+	LOCAL = 2
+ELSEIF FLAG:SHOPコマンド == [[SHOP:사교의관]]
+	LOCAL = 1
+ELSE
+	LOCAL = 0
+ENDIF
+
+IF !GETBIT(FLAG:스테이터스화면타입, LOCAL)
+;	;暫定的に
+;	CLEARLINE 1
+;	CALL SET_PICTURE , , , "소거"
+;	CALL STATUS_WINDOW_MAIN , U , 0 , 0
+;	CALL STATUS_WINDOW_BATTLE_STATUS , U , 0 , 46
+;	CALL STATUS_WINDOW_BASE_STATUS , U , 22 , 0
+;	CALL STATUS_WINDOW_DEFTYPE , U , 22 , 50
+;	CALL STATUS_WINDOW_EQUIP , U , 12 , 0
+;	CALL STATUS_WINDOW_SKILL , U , 9 , 46
+;	SIF TALENT:U:데빌시프터 || TALENT:U:페르소나구사자
+;		CALL STATUS_WINDOW_EQUIPDEVIL , U , 9 , 0
+;	CALL SET_PICTURE ,  , 0 , "표시" , 35
+;	CUSTOMDRAWLINE =
+;	RETURN 0
+	CLEARLINE 1
+	CALL SET_PICTURE, , , "소거"
+	CALL STATUS_WINDOW_MAIN,           U,  0,  0
+	IF GETBIT(FLAG:カスタムゲーム화면,1)
+		CALL STATUS_WINDOW_BATTLE_STATUS,  U,  0, 62
+		CALL STATUS_WINDOW_BASE_STATUS,    U, FLAG:二身合体표시 || FLAG:SHOPコマンド == [[SHOP:사교의관]] ? 16 # 24, 10
+		CALL STATUS_WINDOW_DEFTYPE,        U, FLAG:二身合体표시 || FLAG:SHOPコマンド == [[SHOP:사교의관]] ? 16 # 24, 74
+	ELSE
+		CALL STATUS_WINDOW_BATTLE_STATUS,  U,  0, 46
+		CALL STATUS_WINDOW_BASE_STATUS,    U, FLAG:二身合体표시 || FLAG:SHOPコマンド == [[SHOP:사교의관]] ? 16 # 24,  0
+		CALL STATUS_WINDOW_DEFTYPE,        U, FLAG:二身合体표시 || FLAG:SHOPコマンド == [[SHOP:사교의관]] ? 16 # 24, 50
+	ENDIF
+	SIF FLAG:二身合体표시 !| FLAG:SHOPコマンド == [[SHOP:사교의관]]
+		CALL STATUS_WINDOW_EQUIP,      U, 14,  0
+	CALL STATUS_WINDOW_SKILL,          U,  9, 46
+	SIF TALENT:U:데빌시프터 || TALENT:U:페르소나구사자 || TALENT:U:식노 || TALENT:U:악마빙의자
+		CALL STATUS_WINDOW_EQUIPDEVIL, U,  9,  0
+	CALL SET_PICTURE, , 0, "표시", FLAG:二身合体표시 || FLAG:SHOPコマンド == [[SHOP:사교의관]] ? 24 # 35
+	CUSTOMDRAWLINE =
+	RETURN 0
+ENDIF
+
+
+;1行눈に레벨・속성・페르소나相性(페르소나구사자限定)・解析度(악마限定)を표시
+;2行눈にHP・충성도を표시
+;3行눈にMP・ＥＸＰを표시
+;4行눈に通常공격の性能を표시
+CALL PRINT_BASE_STATUS, U
+IF FLAG:カスタムゲーム화면
+	DRAWLINE
+	PRINTFORML 　ＨＰ[{BASE:U:ＨＰ, 5}/{MAXBASE:U:ＨＰ, 5}]　　　　　ＭＡＧ:{BASE:U:ＭＡＧ, 9}/{MAXBASE:U:ＭＡＧ, 9}　　충성도:{BASE:U:충성도, 0}
+	PRINTFORML 　ＭＰ[{BASE:U:ＭＰ, 5}/{MAXBASE:U:ＭＰ, 5}]　　　　　ＥＸＰ:{BASE:U:ＥＸＰ, 9}/{MAXBASE:U:ＥＸＰ, 9}　　ＣＰ:{MAXBASE:U:CP, 0}
+	DRAWLINE
+	PRINTFORM 　通常공격：%GET_TYPE(ABL:U:공격상성)% {ABL:U:최저공격횟수}-{ABL:U:최대공격횟수} 回　사거리%GET_RANGE(ABL:U:사거리)%　
+	PRINTFORML %GET_SPHERE(ABL:U:공격범위)%
+ELSE
+	PRINTFORML ＨＰ[{BASE:U:ＨＰ, 4}/{MAXBASE:U:ＨＰ, 4}]　　　　　충성도:{BASE:U:충성도, 6}　　ＭＡＧ:{BASE:U:ＭＡＧ, 8}/{MAXBASE:U:ＭＡＧ, 8}
+	PRINTFORML ＭＰ[{BASE:U:ＭＰ, 4}/{MAXBASE:U:ＭＰ, 4}]　　　　　ＥＸＰ:{BASE:U:ＥＸＰ, 8}/{MAXBASE:U:ＥＸＰ, 8}　　ＣＰ:{MAXBASE:U:CP, 3}
+	PRINTFORM 通常공격:%GET_TYPE(ABL:U:공격상성), 6, LEFT%　{ABL:U:최저공격횟수, 2}-{ABL:U:최대공격횟수, 2} 回　사거리%GET_RANGE(ABL:U:사거리)%　
+	PRINTFORML %GET_SPHERE(ABL:U:공격범위), 4, LEFT%
+ENDIF
+SIF ABL:U:추가효과 > 0
+	PRINTFORML 　　　　추가효과:%GET_STATE(ABL:U:추가효과), 6, LEFT%　추가효과상성:%GET_TYPE(ABL:U:추가효과상성)%
+
+;인간ならばここに총공격の性能と총공격힘・총명중を2行つかって표시
+IF EQUIP:U:총 > 0
+	DRAWLINE
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　
+	PRINT 총：
+	IF ARG == 1
+		SIF 장비변경時스테이터스変化値(6) > 0
+			SETCOLOR COLOR("aqua")
+		SIF 장비변경時스테이터스変化値(6) < 0
+			SETCOLOR COLOR("gray")
+	ENDIF
+	IF FLAG:カスタムゲーム화면
+		PRINTFORM 공격력 {MAXBASE:U:총공격} 
+	ELSE
+		PRINTFORM 공격력 {MAXBASE:U:총공격,4}
+	ENDIF
+	IF ARG == 1
+		IF FLAG:カスタムゲーム화면
+			IF 장비변경時스테이터스変化値(6) > 0
+				PRINTFORM (↑{장비변경時스테이터스変化値(6)}) 
+			ELSEIF 장비변경時스테이터스変化値(6) < 0
+				PRINTFORM (↓{장비변경時스테이터스変化値(6)}) 
+			ENDIF
+		ELSE
+			IF 장비변경時스테이터스変化値(6) > 0
+				PRINTFORM (↑{장비변경時스테이터스変化値(6)})
+			ELSEIF 장비변경時스테이터스変化値(6) < 0
+				PRINTFORM (↓{장비변경時스테이터스変化値(6)})
+			ENDIF
+		ENDIF
+		RESETCOLOR
+	ENDIF
+	IF ARG == 1
+		SIF 장비변경時스테이터스変化値(7) > 0
+			SETCOLOR COLOR("aqua")
+		SIF 장비변경時스테이터스変化値(7) < 0
+			SETCOLOR COLOR("gray")
+	ENDIF
+		PRINTFORM  명중 {MAXBASE:U:총명중}
+	IF ARG == 1
+		IF FLAG:カスタムゲーム화면
+			IF 장비변경時스테이터스変化値(7) > 0
+				PRINTFORM  (↑{장비변경時스테이터스変化値(7)})
+			ELSEIF 장비변경時스테이터스変化値(7) < 0
+				PRINTFORM  (↓{장비변경時스테이터스変化値(7)})
+			ENDIF
+		ELSE
+			IF 장비변경時스테이터스変化値(7) > 0
+				PRINTFORM (↑{장비변경時스테이터스変化値(7)})
+			ELSEIF 장비변경時스테이터스変化値(7) < 0
+				PRINTFORM (↓{장비변경時스테이터스変化値(7)})
+			ENDIF
+		ENDIF
+		RESETCOLOR
+	ENDIF
+	PRINTL 
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　　　
+	CALLFORM 최저공격횟수_{EQUIP:U:총}
+	IF FLAG:カスタムゲーム화면
+		PRINTFORM 공격횟수 {RESULT}-
+		CALLFORM 최대공격횟수_{EQUIP:U:총}
+		PRINTFORM {RESULT} 回
+		CALLFORM 사거리_{EQUIP:U:총}
+		PRINTFORM 　사거리
+		IF RESULT == 1
+			PRINT Ｓ
+		ELSEIF RESULT == 2
+			PRINT Ｍ
+		ELSEIF RESULT == 3
+			PRINT Ｌ
+		ENDIF
+		CALLFORM 공격범위_{EQUIP:U:총}
+		PRINTFORM 　%GET_SPHERE(RESULT),4,LEFT%
+		PRINTL
+	ELSE
+		PRINTFORM 공격횟수 {RESULT,2}-
+		CALLFORM 최대공격횟수_{EQUIP:U:총}
+		PRINTFORM {RESULT,2}
+		CALLFORM 사거리_{EQUIP:U:총}
+		PRINTFORM 　　사거리：
+		IF RESULT == 1
+			PRINT Ｓ
+		ELSEIF RESULT == 2
+			PRINT Ｍ
+		ELSEIF RESULT == 3
+			PRINT Ｌ
+		ENDIF
+		CALLFORM 공격범위_{EQUIP:U:총}
+		PRINTFORM 　　%GET_SPHERE(RESULT),4,LEFT%
+		PRINTL
+	ENDIF
+ENDIF
+DRAWLINE
+;5〜10行눈に기본能力値と전투能力値を표시
+;棒グラフを표시する処理を추가しました。
+;ステ2Pにつき、1個の*があらわれ,최대で50個（ステ100）まで増え続ける
+;ついでに조교や장비や페르소나の보정なんか加算されてるぶんは水色、減算されてるぶんは灰色になります。
+FOR LCOUNT, 0, 6
+	IF FLAG:カスタムゲーム화면
+		PRINTFORM %GET_BASESTATUS(LCOUNT+1),5%{MAXBASE:U:(GET_BASESTATUS(LCOUNT+1)),5}({BASE:U:(GET_BASESTATUS(LCOUNT+1)),4})　
+	ELSE
+		PRINTFORM %GET_BASESTATUS(LCOUNT+1),4%{MAXBASE:U:(GET_BASESTATUS(LCOUNT+1)),4}({BASE:U:(GET_BASESTATUS(LCOUNT+1)),4})　
+	ENDIF
+	FOR LOCAL,0, 100, 2
+		IF CFLAG:U:PTフラグ > 0
+			SETCOLOR 0xe0e0e0
+			SIF BASE:U:(GET_BASESTATUS(LCOUNT+1)) <= LOCAL
+				SETCOLOR 0x9090E8
+			SIF MAXBASE:U:(GET_BASESTATUS(LCOUNT+1)) <= LOCAL
+				SETCOLOR COLOR("gray")
+		ENDIF
+		IF MAXBASE:U:(GET_BASESTATUS(LCOUNT+1)) > LOCAL || BASE:U:(GET_BASESTATUS(LCOUNT+1)) > LOCAL
+			PRINTFORM %UNICODE(0x258B)%
+		ELSE
+			PRINT  
+		ENDIF
+	NEXT
+	SIF CFLAG:U:PTフラグ > 0
+		RESETCOLOR
+	PRINT 　
+	IF FLAG:カスタムゲーム화면
+		PRINTFORM %GET_BATTLESTATUS(LCOUNT),10,LEFT%
+	ELSE
+		PRINTFORM %GET_BATTLESTATUS(LCOUNT),8,LEFT%
+	ENDIF
+	IF ARG == 1
+		SIF 장비변경時스테이터스変化値(LCOUNT) > 0
+			SETCOLOR COLOR("aqua")
+		SIF 장비변경時스테이터스変化値(LCOUNT) < 0
+			SETCOLOR COLOR("gray")
+	ENDIF
+	IF FLAG:カスタムゲーム화면
+		PRINTFORM {MAXBASE:U:(GET_BATTLESTATUS(LCOUNT)),6} 
+	ELSE
+		PRINTFORM {MAXBASE:U:(GET_BATTLESTATUS(LCOUNT)),5} 
+	ENDIF
+	IF ARG == 1
+		SIF 장비변경時스테이터스変化値(LCOUNT) > 0
+			PRINTFORM (↑{장비변경時스테이터스変化値(LCOUNT)})
+		SIF 장비변경時스테이터스変化値(LCOUNT) < 0
+			PRINTFORM (↓{장비변경時스테이터스変化値(LCOUNT)})
+	ENDIF
+	PRINTL 
+	SIF CFLAG:U:PTフラグ > 0
+		RESETCOLOR
+NEXT
+DRAWLINE
+;11、12行눈に被공격상성と継承可能표시
+SIF FLAG:カスタムゲーム화면
+	PRINT  
+PRINTL 전투상성
+LOCAL:1 = GETCOLOR()
+;現在の色を退避しておく（적の스테이터스を표시した時など）
+FOR LOCAL,0, FLAG:相性数
+	SIF FLAG:カスタムゲーム화면 && LOCAL % 6 == 0
+		PRINT 　 
+	CALL SET_AISYOU_COLOR, MAXBASE:U:(GET_TYPE(LOCAL))
+	PRINTFORM %GET_TYPE(LOCAL) %\@(MAXBASE:U:(GET_TYPE(LOCAL)) < 0) ? 흡 # 　\@
+	PRINTFORM \@ ((MAXBASE:U:(GET_TYPE(LOCAL)) != 999)) ? {ABS(MAXBASE:U:(GET_TYPE(LOCAL))),4}％ # %" " *2%반사 \@　
+	;PRINTFORM {ABS(MAXBASE:U:(GET_TYPE(LOCAL)),4}％
+	SIF LOCAL % 6 == 5
+		PRINTL
+NEXT
+;色を戻す
+SETCOLOR LOCAL:1
+DRAWLINE
+LOCAL:1 = 0
+;장비변경時の変動相性の표시
+IF ARG == 1
+	FOR LOCAL, 0, FLAG:相性数
+		IF 장비변경時相性(LOCAL) != MAXBASE:U:GET_TYPE(LOCAL)
+			SIF FLAG:カスタムゲーム화면 && LOCAL:1 == 0
+				PRINT 　
+			PRINTFORM %GET_TYPE(LOCAL) % \@(장비변경時相性(LOCAL) < 0) ? 흡 # 　\@
+			PRINTFORM \@ 장비변경時相性(LOCAL) != 999 ? {ABS(장비변경時相性(LOCAL)),3}％ # %" " *1%반사 \@　
+			
+			PRINTFORM  → \@(MAXBASE:U:(GET_TYPE(LOCAL)) < 0) ? 흡 # 　\@
+			PRINTFORM \@ ((MAXBASE:U:(GET_TYPE(LOCAL)) != 999)) ? {ABS(MAXBASE:U:(GET_TYPE(LOCAL))),4}％ # %" " *2%반사 \@　
+			SIF LOCAL:1 % 3 == 2
+				PRINTL 
+			LOCAL:1++
+		ENDIF
+	NEXT
+	IF FLAG:カスタムゲーム화면 != 1
+	SIF !LINEISEMPTY()
+		PRINTL 
+	ENDIF
+	SIF LOCAL:1
+		DRAWLINE
+ENDIF
+IF ARG != 1
+	;SIF TALENT:U:이능자 || TALENT:U:달인 || TALENT:U:페르소나구사자 || TALENT:U:데빌시프터 || TALENT:U:식노 || ABL:U:종족 != 0 || TALENT:U:인수라 || TALENT:U:악마빙의자
+		CALL PRINT_SKILL
+	SIF TALENT:U:페르소나구사자 && (ABL:U:초기페르소나 || EQUIP:U:소지페르소나1)
+		CALL PRINT_PERSONA
+ENDIF
+SIF ABL:U:종족 == 0 || ABL:U:종족 == 36
+	CALL PRINT_ESKILL
+IF ARG != 1
+	IF ABL:U:종족 == 0 || ABL:U:종족 == 36 || SKILL_EQUIPTHEORY_IS_HAVE_SKILL(U)
+		CALL PRINT_EQUIP, !TFLAG:전투中
+	ELSEIF GET_DEVIL(U)
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　
+		CALL PRINT_PLUGIN
+	ENDIF
+ENDIF
+;SIF FLAG:SHOPコマンド == [[SHOP:능력확인]]
+;	CALL PRINT_LINKAGE
+RETURN RESULT
+
+;-------------------------------------------------
+;능력확인の処理(3ページ눈)
+;해설표시ページ
+;-------------------------------------------------
+;主人かそれ以外かで표시타입변경
+;@SHOW_INFO_PAGE_3
+;;1行눈に레벨・속성・페르소나相性(페르소나구사자限定)・解析度(악마限定)を표시
+;CALL PRINT_BASE_STATUS, U
+;DRAWLINE
+;;2行눈以降に해설文표시
+;FOR LOCAL,0, 20
+;	IF U == MASTER || NO:U == 3501 || NO:U == 3502 || RANGE(NO:U, 4901, 4910)
+;		PRINTFORML %CSTR:U:(30+LOCAL)%
+;	ELSE
+;		PRINTFORML %CSVCSTR(NO:U,30+LOCAL,0)%
+;	ENDIF
+;NEXT
+;PRINTL
+;DRAWLINE
+@SHOW_INFO_PAGE_3
+#DIM IMG_TYPE = 1
+CALL PRINT_BASE_STATUS(U)	;1行눈に레벨・속성・페르소나相性(페르소나구사자限定)・解析度(악마限定)を표시
+DRAWLINE
+
+;화상표시
+IF FLAG:화상표시설정_능력확인화면 > 0
+	SIF FLAG:화상표시설정_능력확인화면 == 1 || FLAG:화상표시설정_능력확인화면 == 2
+		IMG_TYPE = GET_IMG_TYPE(U, 1)
+	FOR LOCAL, 0, 6 
+		IF  FLAG:화상표시설정_능력확인화면 == 1
+			; IF EXIST_PICTURE(NO:U)
+			; 	CALL WRITE_IMG_2,NO:U,LOCAL + 1
+			IF EXIST_PICTURE(NO:U, IMG_TYPE)
+				CALL WRITE_IMG, NO:U, IMG_TYPE, LOCAL + 1				
+			ELSE
+				CALL RACE_ICON,NO:U,LOCAL + 1,U,1
+				;CALL RACE_ICON,NO:ASSI,ARG,ASSI,1
+			ENDIF
+		ELSEIF FLAG:화상표시설정_능력확인화면 == 2
+			; IF EXIST_PICTURE(NO:U)
+			; 	CALL WRITE_IMG_2,NO:U,LOCAL + 1
+			IF EXIST_PICTURE(NO:U, IMG_TYPE)
+				CALL WRITE_IMG, NO:U, IMG_TYPE, LOCAL + 1
+			ELSE
+				CALL ONI_MARK,U,LOCAL + 1,1
+			ENDIF
+		ELSEIF FLAG:화상표시설정_능력확인화면 == 3
+			CALL ONI_MARK,U,LOCAL + 1,1
+		ENDIF
+		PRINTL
+	NEXT
+ENDIF
+
+FOR LOCAL, 0, 20	;기본的にはCSTRの情報を표시。情報が入ってなさそうなら一応CSVCSTRも見てみる
+	PRINTSL \@ CSTR:U:해설1 == "" ? %CSVCSTR(NO:U, 30 + LOCAL)% # %CSTR:U:@"해설{LOCAL + 1}"% \@
+NEXT
+PRINTL 
+
+;外見・スリーサイズ설정が有効
+IF SETTING_IS_3SIZE()
+	;外見설정　설정していれば머리카락형태・머리카락색깔・눈동자색깔・피부색깔を表示
+	CALL SHOW_APPEARANCE(U)
+	;身長とスリーサイズの표시。身長が설정されてれば표시あり
+	SIF BASE:U:신장 > 0
+		CALL SHOW_INFO_BODYSIZE(U)
+ENDIF
+DRAWLINE
+
+;1ページ눈から勝손に移動。ついでに総数は常に数値표시して、文言はオマケで後ろに付ける形に
+IF U == MASTER
+	PRINTFORM 타락시킨 노예 총수　　　　　 :{(FLAG:연모人数 + FLAG:음란人数 + FLAG:복종人数), 5}인
+	PRINTFORM (이번 타락시킨 인원수:{(FLAG:今周回연모人数 + FLAG:今周回음란人数 + FLAG:今周回복종人数), 5}인)
+	SELECTCASE FLAG:연모人数 + FLAG:음란人数 + FLAG:복종人数
+		CASE IS > 9999
+			;エロ卿「にとり博士、事情を説明してもらおうかね?」
+			;にとり博士「今少し(자위をする)時間と(로터を買う)予算をいただければ……」
+			;エロ卿「弁解は罪悪と知り給え」
+			;PRINT [エロ卿のコレクション]
+			PRINTL [만 간 전 적]
+		CASE IS > 999
+			PRINTL [밀레니엄]
+		CASE IS > 99
+			PRINTL [백인베기]
+		CASEELSE
+			PRINTL 
+	ENDSELECT
+	SIF FLAG:奴隷매각総数
+		PRINTFORML 지금까지 매각한 악마 총수　　:{FLAG:奴隷매각総数, 5}인(이번 매각한 인원수　:{FLAG:奴隷매각数, 5}인)
+	SIF FLAG:연모人数
+		PRINTFORML 지금까지 연모시킨 악마 총수　:{FLAG:연모人数, 5}인(이번 연모시킨 인원수:{FLAG:今周回연모人数, 5}인)
+	SIF FLAG:음란人数
+		PRINTFORML 지금까지 음란시킨 악마 총수　:{FLAG:음란人数, 5}인(이번 음란시킨 인원수:{FLAG:今周回음란人数, 5}인)
+	SIF FLAG:복종人数
+		PRINTFORML 지금까지 복종시킨 악마 총수　:{FLAG:복종人数, 5}인(이번 복종시킨 인원수:{FLAG:今周回복종人数, 5}인)
+	SIF FLAG:인기취득者数
+		PRINTFORML 비디오로 인기얻은 악마 총수 :{FLAG:인기취득者数, 5}인
+	SIF FLAG:처녀탈취人数
+		PRINTFORML 처녀를 빼앗은 악마 총수　　　:{FLAG:처녀탈취人数, 5}인
+	DRAWLINE
+ENDIF
+RETURN RESULT
+
+;============================================================================
+;仲魔間の感情度
+;============================================================================
+@SHOW_INFO_PAGE_4
+#DIM トップ , 10
+#LOCALSIZE 5
+
+;1行눈に레벨・속성・페르소나相性(페르소나구사자限定)・解析度(악마限定)を표시
+CALL PRINT_BASE_STATUS, U
+IF FLAG:ＮＴＲ기능
+	IF 함락(U) || TALENT:U:ＮＴＲ
+		PRINTFORM 　　함락대상:%NTRNAME(CFLAG:U:함락キャラ)%
+		SIF TALENT:MASTER:깨달음 == 1
+			PRINTFORM 　＜호감도{FAVORITE_ID(U,CFLAG:U:함락キャラ),6,RIGHT}＞
+		PRINTL
+	ENDIF
+	DRAWLINE
+	PRINT ◆호감도 순위◆ 
+	SIF TALENT:MASTER:깨달음 == 1
+		PRINTFORM 　＜음란도{CFLAG:U:음란度,6,RIGHT}＞
+	PRINTL
+	DRAWLINE
+	;トップ10算出
+	VARSET トップ , 0
+	FOR LOCAL , -99, 200
+		SIF LOCAL == 0
+			CONTINUE
+		FOR LOCAL:1 , 0 , 10
+	;同性間호감도のキャップが反映されず、깨달음所有時の호감도표시と噛み合わなくなるため修正
+	;		IF トップ:(LOCAL:1) == 0 && ABS(CFLAG:U:(2100+LOCAL)) > 0
+			IF トップ:(LOCAL:1) == 0 && ABS(FAVORITE_ID(U, LOCAL)) > 0
+				トップ:(LOCAL:1) = LOCAL
+				BREAK
+	;		ELSEIF ABS(CFLAG:U:(2100+LOCAL)) > ABS(CFLAG:U:(2100+トップ:(LOCAL:1)))
+			ELSEIF ABS(FAVORITE_ID(U, LOCAL)) > ABS(FAVORITE_ID(U, トップ:(LOCAL:1)))
+				ARRAYSHIFT トップ, 1, LOCAL, LOCAL:1
+				BREAK
+			ENDIF
+		NEXT
+	NEXT
+	FOR LOCAL,0, 10
+		IF (トップ:LOCAL) != MASTER
+			PRINTFORM {LOCAL+1}．%NTRNAME((トップ:LOCAL)),21,LEFT%
+			SIF TALENT:MASTER:깨달음 == 1
+				PRINTFORM 　＜호감도{FAVORITE_ID(U,トップ:LOCAL),6,RIGHT}＞
+			PRINTL
+			;IF ABS(FAVORITE(U,トップ:LOCAL)) > ABS(FAVORITE(U,MASTER))
+			;	PRINTFORM %CALLNAME:U%は%CALLNAME:(LOCAL:4)%のことを%CALLNAME:MASTER%より気にかけている。　
+			;	IF FAVORITE(U,トップ:LOCAL) > 0
+			;		IF FAVORITE(U:トップ:LOCAL) > 1000
+			;			PRINTFORM %CALLNAME:MASTER%より愛している
+			;		ELSEIF FAVORITE(U:トップ:LOCAL) > 500
+			;			PRINTFORM %CALLNAME:MASTER%より気に入っている
+			;			
+			;		ENDIF
+			;	ELSE
+			;	
+			;	
+			;	ENDIF
+			;	IF TALENT:MASTER:깨달음 == 1
+			;	＜호감도{FAVORITE(U,LOCAL:4)}＞
+			;	PRINTL
+			;ELSEIF FAVORITE(U,LOCAL:4) > 10000 && LOCAL:4 != MASTER
+			;	IF TALENT:MASTER:깨달음 == 1
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%の性癖を知り尽くしている。　＜호감도{FAVORITE(U,LOCAL:4)}＞
+			;	ELSE
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%の性癖を知り尽くしている。
+			;	ENDIF
+			;ELSEIF FAVORITE(U,LOCAL:4) > 5000 && LOCAL:4 != MASTER
+			;	IF TALENT:MASTER:깨달음 == 1
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%のことを凄く気に入っている。　＜호감도{FAVORITE(U,LOCAL:4)}＞
+			;	ELSE
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%のことを凄く気に入っている。
+			;	ENDIF
+			;ELSEIF FAVORITE(U,LOCAL:4) > 2500 && LOCAL:4 != MASTER
+			;	IF TALENT:MASTER:깨달음 == 1
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%と確かな絆を感じている。　＜호감도{FAVORITE(U,LOCAL:4)}＞
+			;	ELSE
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%と確かな絆を感じている。
+			;	ENDIF
+			;ELSEIF FAVORITE(U,LOCAL:4) > 1500 && LOCAL:4 != MASTER
+			;	IF TALENT:MASTER:깨달음 == 1
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%との行為を楽しみにしている。　＜호감도{FAVORITE(U,LOCAL:4)}＞
+			;	ELSE
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%との行為を楽しみにしている。
+			;	ENDIF
+			;ELSEIF FAVORITE(U,LOCAL:4) > 1000 && LOCAL:4 != MASTER
+			;	IF TALENT:MASTER:깨달음 == 1
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%のことが気になっている。　＜호감도{FAVORITE(U,LOCAL:4)}＞
+			;	ELSE
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%のことが気になっている。
+			;	ENDIF
+			;ELSEIF LOCAL:4 != MASTER
+			;	IF TALENT:MASTER:깨달음 == 1
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%と性行為を行ったことがある。　＜호감도{FAVORITE(U,LOCAL:4)}＞
+			;	ELSE
+			;		PRINTFORML %CALLNAME:U%は%CALLNAME:(LOCAL:4)%と性行為を行ったことがある。
+			;	ENDIF
+			;ELSE
+			;
+			;ENDIF
+		ELSE
+			PRINTL
+		ENDIF
+	NEXT
+	PRINTL
+ENDIF
+IF U == MASTER
+	DRAWLINE
+	PRINTL 발견된 엔딩
+	DRAWLINE
+	;Ending No.000〜063
+	FOR LOCAL ,0, 64
+		SIF !GETBIT(FLAG:発見ED, LOCAL)
+			CONTINUE
+		PRINT 　
+		SELECTCASE LOCAL
+			CASE 0
+				PRINTL Ending No.000 (팬텀 간부 엔딩)
+			CASE 1
+				
+			CASE 2
+				PRINTL Ending No.002 (조교사 엔딩)
+			CASE 3
+				PRINTL Ending No.003 (조교사 엔딩 "Master of slave")
+			CASE 4
+				
+			CASE 5
+				
+			CASE 6
+				
+			CASE 7
+				
+			CASE 8
+				
+			CASE 9
+				
+			CASE 10
+				PRINTL Ending No.010 (식당 운영 엔딩 "Neutral restaurant")
+			CASE 11
+				
+			CASE 12
+				PRINTL Ending No.012 (창관 경영 엔딩)
+			CASE 13
+				PRINTFORML Ending No.013 (밤의\@TALENT:MASTER:남자 ? 왕 # 여왕 \@엔딩)
+			CASE 14
+				
+			CASE 15
+				PRINTL Ending No.015 (타락 엔딩)
+			CASE 16
+				PRINTL Ending No.016 (위전・여신전생　"신・성왕전설")
+			CASE 17
+				
+			CASE 18
+				PRINTL Ending No.018 (반역의 이야기　"Puella Magi ex Defectionis END")
+			CASE 19
+				PRINTL Ending No.019 (아이돌 엔딩)
+			CASE 20
+				PRINTL Ending No.020 (무투파 하렘 엔딩)
+			CASE 21
+				PRINTL Ending No.021 (캐릭터 단독 엔딩 or 특수 하렘 엔딩)
+			CASE 22
+				PRINTL Ending No.022 (딸 하렘 엔딩　-Little Empire-)
+			CASE 28
+				PRINTL Ending No.028 (여신이문록 페르소나　세베크 편 엔딩　　"be your true mind")
+			CASE 29
+				PRINTL Ending No.029 (여신이문록 페르소나　눈의 여왕 편 엔딩　"be your another mind")
+			CASE 30
+				PRINTL Ending No.030 (페르소나 2 죄 엔딩 "Innocent Sin")
+			CASE 31
+				PRINTL Ending No.031 (페르소나 2 죄　성창기사단 하렘 엔딩 "Ehemann von Longinus")
+			CASE 35
+				PRINTL Ending No.035 (진・여신전생20XX　로우엔드　"Patentibus portis regnum Dei semper")
+			CASE 36
+				PRINTL Ending No.036 (진・여신전생20XX　뉴트럴엔드　"Meipsum iudico")
+			CASE 37
+				PRINTL Ending No.037 (진・여신전생20XX　카오스엔드　"Iuro potentis diabolus Lucifer")
+			CASE 40
+				PRINTL Ending No.040 (진・여신전생 데빌 콜로세움 20XX　True end　"The night before Armageddon")
+			CASE 41
+				PRINTL Ending No.041 (데빌 서바이버 ２　"Strength.")
+			CASE 42
+				PRINTL Ending No.042 (데빌 서바이버 ２　"All for one. One for all.")
+			CASE 43
+				PRINTL Ending No.043 (데빌 서바이버 ２　"Second Stage.")
+			CASE 44
+				PRINTL Ending No.044 (데빌 서바이버 ２　"Anguisheid One END")
+			CASE 45
+				PRINTL Ending No.045 (DIGITAL DEVIL SAGA 아바탈 튜너 ２　"shan-ti shan-ti..")
+			CASE 50
+				PRINTL Ending No.050 (나이트 테일 진노 코시로　TRUE-END　"La Maternite.")
+			CASE 51
+				PRINTL Ending No.051 (나이트 테일 진노 코시로 엔딩　　　"to the HERO.")
+			CASE 52
+				PRINTL Ending No.052 (나이트 테일 진노 코시로　666-END　 "R A G N A R O K .")
+			CASE 55
+				PRINTL Ending No.055 (진・여신전생 III Nocturne Maniacs Dark-END "혼돈왕")
+			CASE 59
+				PRINTL Ending No.059 (大和신족해방　END　“ヤマタイカ”)
+			CASE 60
+				PRINTL Ending No.060 (데빌 칠드런　신세계 엔딩)
+			CASE 61
+				PRINTL Ending No.061 (데빌 칠드런　호시가미 엔딩)
+			CASE 63
+				PRINTL Ending No.063 (식어가는 우주 이야기　"Puella Magi Madoka☆Magica END")
+			CASEELSE
+		ENDSELECT
+	NEXT
+	;Ending No.064〜127
+	FOR LOCAL ,0, 64
+		SIF !GETBIT(FLAG:発見ED2, LOCAL)
+			CONTINUE
+		PRINT 　
+		SELECTCASE LOCAL
+			CASE 0
+				PRINTL Ending No.064 (멜티 블러드　END　“Melty　Blood”)
+			CASE 1
+				PRINTL Ending No.065 (세븐스 드래곤 2020　END　“ＳｅｖｅｎｔＨ−ＨｅａｖｅＮ”)
+			CASEELSE
+		ENDSELECT
+	NEXT
+	PRINTL
+	CALL GLOBAL_BADEND_DISP_BADENDLIST
+ENDIF
+
+DRAWLINE
+RETURN RESULT
+
+;=============================================================================
+;能力표시(弐型표시) 旧版
+;=============================================================================
+;표시順
+; 0,Ｃ감각　　 1,Ｖ감각　　 2,Ａ감각　　 3,Ｂ감각
+;10,순종　　　11,욕망　　　12,기교　　　13,봉사정신
+;14,노출증　　20,새드끼　21,마조끼　22,레즈끼(23,ＢＬ끼)
+;30,자위중독　31,정액중독　32,레즈중독(33,ＢＬ중독)　
+; 0,Ｃ감각　　 1,Ｖ감각　　 2,Ａ감각　　 3,Ｂ감각
+; 4,순종　　　　5,욕망　　　6,기교　　　 7,봉사정신
+; 8,노출증　　　9,새드끼　10,마조끼　11,레즈끼(12,ＢＬ끼)
+;13,자위중독　 14,정액중독　15,레즈중독(16,ＢＬ중독)　
+;@NEW_PRINT_ABL
+;#DIM LCOUNT
+;PRINTL □ 能力
+;X = 0
+;S = 0
+;FOR LCOUNT, 0, 17
+;	X = -1
+;	SELECTCASE LCOUNT
+;		CASE 0 TO 3
+;			X = LCOUNT
+;		CASE 4 TO 8
+;			X = LCOUNT
+;		CASE 9, 10
+;			X = LCOUNT
+;		CASE 11
+;			;男なら레즈끼、女ならＢＬ끼はないよね？
+;			X = 11 + TALENT:U:120
+;		CASE 12, 13
+;			X = LCOUNT + 1
+;		CASE 14
+;			;男なら레즈중독、女ならＢＬ중독はないよね？
+;			X = 15 + TALENT:U:120
+;	ENDSELECT
+;
+;	SIF X < 0
+;		CONTINUE
+;
+;	IF ABL:U:X > 0
+;		PRINTFORM %ABLNAME:X, 8%:LV{ABL:U:X}
+;		S += 1
+;		;改行するのか？ 続けて出힘するのか？
+;		IF S >= 5
+;			PRINTL 
+;			S = 0
+;		ELSE
+;			PRINT 　
+;		ENDIF
+;	ENDIF
+;NEXT
+;SIF S != 0
+;	PRINTL 
+;CUSTOMDRAWLINE ･
+;@NEW_PRINT_ABL
+;#DIM LCOUNT
+;PRINTL □ 能力
+;LOCAL = 0
+;FOR LCOUNT, 0, 24
+;	;표시概要
+;	;　　　　 0,순종 　　　　 1,욕망 　　　　 2,기교 　　　 3,Ｃ감각
+;	;　　　 4,Ｖ감각 　　　 5,Ａ감각 　　　 6,Ｂ감각 　　 7,봉사정신
+;	;　　　 8,노출증 　　 9,마조끼 　　10,새드끼 　　11,레즈끼
+;	;　　12,요리기능 　　13,촬영기능 　　14,가창기능 　　15,자위중독
+;	;　　16,정액중독 　　17,레즈중독 18,섹스중독 　　19,분유중독
+;	;　　20,ＢＬ끼 　　21,ＢＬ중독 　　22,수간중독 　　23,촉수중독
+;	
+;	IF ABL:U:LCOUNT > 0
+;		;표시位置あわせ
+;		IF LCOUNT == 7 || LCOUNT == 9 || LCOUNT == 10 || LCOUNT == 11 || LCOUNT == 12 || LCOUNT == 13 || LCOUNT == 14 || LCOUNT == 15 || LCOUNT == 16 || LCOUNT == 17 || LCOUNT == 19 || LCOUNT == 20 || LCOUNT == 21 || LCOUNT == 22 || LCOUNT == 23
+;			PRINT 　　
+;		ELSEIF LCOUNT == 3 || LCOUNT == 4 || LCOUNT == 5 || LCOUNT == 6 || LCOUNT == 8
+;			PRINT 　　　
+;		ELSEIF LCOUNT == 0 || LCOUNT == 1 || LCOUNT == 2
+;			PRINT 　　　　
+;		ENDIF
+;		
+;		;표시
+;		PRINTFORM %ABLNAME:LCOUNT%:LV{ABL:U:LCOUNT,2}
+;		;数字の표시位置をそろえる
+;		LOCAL += 1
+;		;改行するのか？ 続けて出힘するのか？
+;		IF LOCAL == 4
+;			PRINTL 
+;			LOCAL = 0
+;		ELSE
+;			PRINT 　
+;		ENDIF
+;	ENDIF
+;NEXT
+;PRINTL 
+;CUSTOMDRAWLINE ･
+
+;=============================================================================
+;能力표시(弐型표시) 新板
+;=============================================================================
+;표시概要
+;　　　　 0,순종 　　　　 1,욕망 　　　　 2,기교 　　　 3,Ｃ감각 　　　 4,Ｖ감각
+;　　　 5,Ａ감각 　　　 6,Ｂ감각 　　 7,봉사정신 　　　 8,노출증 　　 9,마조끼
+;　　10,새드끼 　　11,레즈끼 　　12,요리기능 　　13,촬영기능 　　14,가창기능
+;　　15,자위중독 　　16,정액중독 　　17,레즈중독 18,섹스중독 　　19,분유중독
+;　　20,ＢＬ끼 　　21,ＢＬ중독 　　22,수간중독 　　23,촉수중독　　 24,윤간중독
+;　　25,키스중독
+;=============================================================================
+@NEW_PRINT_ABL
+#LOCALSIZE 2
+LOCAL:1 = 0
+PRINTL □ 능력
+FOR LOCAL, 0, 26
+	IF FLAG:カスタムゲーム화면
+		SIF ABL:U:LOCAL
+			PRINTFORM 　　[%ABLNAME:LOCAL, 14,LEFT%LV{ABL:U:LOCAL, 2}]\@ (LOCAL:1++ % 5) == 4 ? \n # \@
+	ELSE
+		SIF ABL:U:LOCAL
+		PRINTFORM %ABLNAME:LOCAL, 12%:LV{ABL:U:LOCAL, 2}\@ (LOCAL:1++ % 5) == 4 ? \n # \@
+	ENDIF
+NEXT
+PRINTFORM \@ LINEISEMPTY() ? # \n \@
+CUSTOMDRAWLINE ･
+RETURN RESULT
+
+;=============================================================================
+;素質표시(弐型표시)
+;=============================================================================
+;PRINT_TALENT （素質）との入れ替え
+@NEW_PRINT_TALENT
+#LOCALSIZE 1
+#DIM LCOUNT
+#DIM MEMO_STR
+PRINTL □ 소질
+;□---------------------------------------------------------------------
+VARSET B
+VARSET C
+VARSET D
+VARSET E
+VARSET F
+VARSET G
+VARSET H
+VARSET I
+VARSET J
+VARSET Z
+
+FOR LCOUNT, 0, 300
+	SIF TALENT:U:LCOUNT == 0
+		CONTINUE
+	;설정されていない素質は弾く
+	LOCALS = %TALENTNAME:LCOUNT%
+	SIF STRLENS(LOCALS) == 0
+		CONTINUE
+
+	SELECTCASE LCOUNT
+	;표시させない素質
+	CASE 213 TO 219
+	;性別
+	CASE 0,1, 139, 140, 157
+		;처녀のみはC:LCOUNTを用いない
+		SIF LCOUNT
+			C:LCOUNT = TALENT:U:LCOUNT
+			C = LCOUNT + 1
+	;性格
+	CASE 10 TO 39, 63, 70, 71, 80 TO 89, 141, 155, 201 TO 212
+		D:LCOUNT = TALENT:U:LCOUNT
+		D = LCOUNT + 1
+	;体質
+	CASE 40 TO 43, 56, 57, 60 TO 62, 72, 90, 91, 100 TO 114, 116 TO 134, 138, 142, 143, 149 TO 151, 159, 175, 176, 231
+		E:LCOUNT = TALENT:U:LCOUNT
+		E = LCOUNT + 1
+	;기능
+	CASE 50 TO 55, 64, 92 TO 94, 135, 136, 144, 146, 152, 156, 158
+		F:LCOUNT = TALENT:U:LCOUNT
+		F = LCOUNT + 1
+	;後天素質
+	CASE 3 TO 9, 73 TO 79, 115, 145, 153, 154, 160, 161, 162 TO 165, 170 TO 174, 180 TO 182
+		G:LCOUNT = TALENT:U:LCOUNT
+		G = LCOUNT + 1
+	;전투資質
+	CASE 132, 200, 220 TO 240, 250 TO 260
+		H:LCOUNT = TALENT:U:LCOUNT
+		H = LCOUNT + 1
+	;出自
+	CASE 197 TO 199
+		I:LCOUNT = TALENT:U:LCOUNT
+		I = LCOUNT + 1
+	;分類していない素質（これがあるのは望ましくない）
+	CASEELSE
+		Z:LCOUNT = TALENT:U:LCOUNT
+		Z = LCOUNT + 1
+	ENDSELECT
+NEXT
+
+;IF C
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+	PRINT 성별：
+	IF C:139
+		PRINTFORM [%TALENTNAME:139%] 
+	ELSEIF C:157
+		PRINTFORM [%TALENTNAME:157%] 
+	ELSEIF C:140
+		PRINTFORM [%TALENTNAME:140%] 
+	ELSE
+		PRINTFORM [여자] 
+	ENDIF
+	;처녀だけはTALENTで判断
+	SIF TALENT:U:처녀
+		PRINTFORM [%TALENTNAME:0%] 
+	SIF TALENT:U:재생처녀
+		PRINTFORM [%TALENTNAME:1%] 
+	PRINTL 
+;ENDIF
+
+IF D
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+	PRINT 성격：
+	MEMO_STR = 6
+	FOR LCOUNT, 1, D
+		IF D:LCOUNT
+			LOCALS = [%TALENTNAME:LCOUNT%]
+			MEMO_STR += STRLENS(LOCALS) + 1
+			IF MEMO_STR > 88
+				PRINTL 
+				SIF FLAG:カスタムゲーム화면
+					PRINT 　　
+				PRINT 　　　
+				MEMO_STR = STRLENS(LOCALS) + 7
+			ENDIF
+			SIF FLAG:二身合体표시 && U == CHARANUM - 1 && !CSVTALENT(NO:U, LCOUNT, 0)
+				SETCOLOR COLOR("aqua")
+			PRINTFORM %LOCALS% 
+			RESETCOLOR
+		ENDIF
+	NEXT
+	PRINTL 
+ENDIF
+
+IF E
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+	PRINT 체질：
+	MEMO_STR = 6
+	FOR LCOUNT, 1, E
+		IF E:LCOUNT
+			LOCALS = [%TALENTNAME:LCOUNT%]
+			IF LCOUNT == GETNUM(TALENT, "유아／유아퇴행")
+				IF MARK:U:6 >= 1
+					LOCALS = [유아] 
+				ELSE
+					LOCALS = [유아퇴행] 
+				ENDIF
+			ELSEIF LCOUNT == GETNUM(TALENT, "소년／소녀")
+				IF IS_MALE(U)
+					LOCALS = [소년] 
+				ELSE
+					LOCALS = [소녀] 
+				ENDIF
+			ELSEIF LCOUNT == GETNUM(TALENT, "魔乳")
+				IF ABL:U:종족 == 1 || ABL:U:종족 == 2
+					LOCALS = [神乳]
+				ELSEIF ABL:U:속성LC == 1 || ABL:U:속성LD == 1
+					LOCALS = [聖乳] 
+				ELSEIF ABL:U:속성LD == 3 || ABL:U:속성LC == 3
+					LOCALS = [魔乳] 
+				ELSE
+					LOCALS = [超乳] 
+				ENDIF
+			ELSEIF LCOUNT == GETNUM(TALENT, "魔尻")
+				IF ABL:U:종족 == 1 || ABL:U:종족 == 2
+					LOCALS = [神尻]
+				ELSEIF ABL:U:속성LC == 1 || ABL:U:속성LD == 1
+					LOCALS = [聖尻] 
+				ELSEIF ABL:U:속성LD == 3 || ABL:U:속성LC == 3
+					LOCALS = [魔尻] 
+				ELSE
+					LOCALS = [超尻] 
+				ENDIF
+
+			ELSEIF LCOUNT == GETNUM(TALENT, "포동포동")
+				SELECTCASE TALENT:U:LCOUNT
+					CASE 1
+						LOCALS = [포동포동] 
+					CASE 2
+						LOCALS = [肥満] 
+				ENDSELECT
+			ENDIF
+			MEMO_STR += STRLENS(LOCALS) + 1
+			IF MEMO_STR > 88
+				PRINTL 
+				SIF FLAG:カスタムゲーム화면
+					PRINT 　　
+				PRINT 　　　
+				MEMO_STR = STRLENS(LOCALS) + 7
+			ENDIF
+			SIF FLAG:二身合体표시 && U == CHARANUM - 1 && !CSVTALENT(NO:U, LCOUNT, 0)
+				SETCOLOR COLOR("aqua")
+			PRINTFORM %LOCALS% 
+			RESETCOLOR
+		ENDIF
+	NEXT
+	PRINTL 
+ENDIF
+
+IF F
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+	PRINT 기능：
+	MEMO_STR = 6
+	FOR LCOUNT, 1, F
+		IF F:LCOUNT
+			LOCALS = [%TALENTNAME:LCOUNT%]
+			MEMO_STR += STRLENS(LOCALS) + 1
+			IF MEMO_STR > 88
+				PRINTL 
+				SIF FLAG:カスタムゲーム화면
+					PRINT 　　
+				PRINT 　　　
+				MEMO_STR = STRLENS(LOCALS) + 7
+			ENDIF
+			SIF FLAG:二身合体표시 && U == CHARANUM - 1 && !CSVTALENT(NO:U, LCOUNT, 0)
+				SETCOLOR COLOR("aqua")
+			PRINTFORM %LOCALS% 
+			RESETCOLOR
+		ENDIF
+	NEXT
+	PRINTL 
+ENDIF
+
+IF G
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+	PRINT 후천：
+	MEMO_STR = 6
+	FOR LCOUNT, 1, G
+		IF G:LCOUNT
+			LOCALS = [%TALENTNAME:LCOUNT%]
+			IF LCOUNT == GETNUM(TALENT, "ＮＴＲ")
+				SELECTCASE TALENT:U:LCOUNT
+					CASE 1
+						LOCALS = [愛ＮＴＲ] 
+					CASE 2
+						LOCALS = [淫ＮＴＲ] 
+					CASE 3
+						LOCALS = [隷ＮＴＲ] 
+				ENDSELECT
+			ENDIF
+			MEMO_STR += STRLENS(LOCALS) + 1
+			IF MEMO_STR > 88
+				PRINTL 
+				SIF FLAG:カスタムゲーム화면
+					PRINT 　　
+				PRINT 　　　
+				MEMO_STR = STRLENS(LOCALS) + 7
+			ENDIF
+			SIF FLAG:二身合体표시 && U == CHARANUM - 1 && !CSVTALENT(NO:U, LCOUNT, 0)
+				SETCOLOR COLOR("aqua")
+			PRINTFORM %LOCALS% 
+			RESETCOLOR
+		ENDIF
+	NEXT
+	PRINTL 
+ENDIF
+
+IF H
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+	PRINT 자질：
+	MEMO_STR = 6
+	FOR LCOUNT, 1, H
+		IF H:LCOUNT
+			LOCALS = [%TALENTNAME:LCOUNT%]
+			SIF LCOUNT == GETNUM(TALENT, "서머너") || LCOUNT == GETNUM(TALENT, "도구지식")
+				LOCALS = [%TALENTNAME:LCOUNT%{TALENT:U:LCOUNT}Lv] 
+			MEMO_STR += STRLENS(LOCALS) + 1
+			IF MEMO_STR > 88
+				PRINTL 
+				SIF FLAG:カスタムゲーム화면
+					PRINT 　　
+				PRINT 　　　
+				MEMO_STR = STRLENS(LOCALS) + 7
+			ENDIF
+			SIF FLAG:二身合体표시 && U == CHARANUM - 1 && !CSVTALENT(NO:U, LCOUNT, 0)
+				SETCOLOR COLOR("aqua")
+			PRINTFORM %LOCALS% 
+			RESETCOLOR
+		ENDIF
+	NEXT
+	PRINTL 
+ENDIF
+
+IF I
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+	PRINT 출신：
+	MEMO_STR = 6
+	FOR LCOUNT, 1, I
+		IF I:LCOUNT
+			LOCALS = [%TALENTNAME:LCOUNT%]
+			;IF LCOUNT == GETNUM(TALENT, "왕족")
+			;	IF TALENT:U:오토코노코 || TALENT:U:후타나리
+			;		LOCALS = [姫？] 
+			;	ELSEIF TALENT:U:남자
+			;		LOCALS = [王子] 
+			;	ELSE
+			;		LOCALS = [姫] 
+			;	ENDIF
+			;ELSEIF LCOUNT == GETNUM(TALENT, "명가")
+			IF LCOUNT == GETNUM(TALENT, "명가")
+				IF TALENT:U:오토코노코 || TALENT:U:후타나리
+					LOCALS = [영애？] 
+				ELSEIF TALENT:U:남자
+					LOCALS = [공자] 
+				ELSE
+					LOCALS = [영애] 
+				ENDIF
+			ENDIF
+			MEMO_STR += STRLENS(LOCALS) + 1
+			IF MEMO_STR > 88
+				PRINTL 
+				SIF FLAG:カスタムゲーム화면
+					PRINT 　　
+				PRINT 　　　
+				MEMO_STR = STRLENS(LOCALS) + 7
+			ENDIF
+			SIF FLAG:二身合体표시 && U == CHARANUM - 1 && !CSVTALENT(NO:U, LCOUNT, 0)
+				SETCOLOR COLOR("aqua")
+			PRINTFORM %LOCALS% 
+			RESETCOLOR
+		ENDIF
+	NEXT
+	PRINTL 
+ENDIF
+
+IF Z
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+	PRINT 미분류：
+	MEMO_STR = 8
+	FOR LCOUNT, 1, Z
+		IF Z:LCOUNT
+			LOCALS = [%TALENTNAME:LCOUNT%]
+			MEMO_STR += STRLENS(LOCALS) + 1
+			IF MEMO_STR > 88
+				PRINTL 
+				SIF FLAG:カスタムゲーム화면
+					PRINT 　　
+				PRINT 　　　　
+				MEMO_STR = STRLENS(LOCALS) + 8
+			ENDIF
+			SIF FLAG:二身合体표시 && U == CHARANUM - 1 && !CSVTALENT(NO:U, LCOUNT, 0)
+				SETCOLOR COLOR("aqua")
+			PRINTFORM %LOCALS% 
+			RESETCOLOR
+		ENDIF
+	NEXT
+	PRINTL 
+ENDIF
+
+;合体消失스킬
+	LOCAL = 0
+FOR LCOUNT, 0, 250
+	SIF LCOUNT > 212 && LCOUNT < 220
+		CONTINUE
+	IF !TALENT:U:LCOUNT
+		IF FLAG:二身合体표시 && U == CHARANUM - 1 && CSVTALENT(NO:U, LCOUNT, 0)
+			LOCAL += 1
+			SIF LOCAL == 1
+				PRINT 消失：
+			SETCOLOR COLOR("gray")
+		ELSE
+			CONTINUE
+		ENDIF
+			LOCALS = [%TALENTNAME:LCOUNT%]
+			MEMO_STR += STRLENS(LOCALS) + 1
+			IF MEMO_STR > 78
+				PRINTL 
+				PRINT 　　　　
+				MEMO_STR = STRLENS(LOCALS) + 8
+			ENDIF
+		PRINTFORM %LOCALS% 
+		RESETCOLOR
+	ENDIF
+NEXT
+
+SIF LOCAL != 0
+	PRINTL 
+
+CUSTOMDRAWLINE ･
+RETURN RESULT
+
+@_PRINT_TALENT_ELEMENT(ARGS, OFFSET)
+#DIM CONST MAXLEN = 88	;EXPで88桁まで표시するのでとりあえずここを限界値に
+#DIM REF OFFSET
+OFFSET += STRLENS(ARGS)
+IF OFFSET > MAXLEN
+	PRINTL 
+	OFFSET = STRLENS(ARGS)
+ENDIF
+PRINTS ARGS
+RETURN RESULT
+
+;=============================================================================
+;각인표시(弐型표시)
+;=============================================================================
+;PRINT_MARK （각인）との入れ替え
+@NEW_PRINT_MARK
+PRINTL □ 각인
+FOR LOCAL, 0, 4
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　　
+		PRINTFORM %MARKNAME:LOCAL%:LV{MARK:U:LOCAL} [%"*" * MARK:U:LOCAL + "." * (3 - MARK:U:LOCAL)%]\@ (LOCAL & 3) == 3 ? \n # 　 \@
+NEXT
+CUSTOMDRAWLINE ･
+RETURN RESULT
+
+;=============================================================================
+;経験표시(弐型표시)
+;=============================================================================
+;표시概要
+;　　　 0.Ｖ경험　　　 1.Ａ경험　　 2.절정경험　　 3.사정경험
+;　　 4.성교경험　　 5.질사경험 　　6.키스경험    10.자위경험
+;11.조교자위경험    20.정액경험21.봉사쾌락경험　22.펠라경험　　
+;    23.애정경험30.고통쾌락경험　　31.방뇨경험32.가학쾌락경험
+;33.야외노출경험　　40.레즈경험　　41.ＢＬ경험　　50.이상경험　　
+;    51.긴박경험　52.Ｖ확장경험　53.Ａ확장경험　　54.분유경험　　
+;    55.촉수경험　　56.흡혈경험　　57.수간경험　　60.출산경험　　
+;　　61.가사경험    62.촬영경험　　63.피사경험　　64.가창경험　　
+;　　70.조교경험    80.ＴＳ경험　　82.윤간경험    83.매각경험    
+;    84.바람경험
+;71.외식노역경험　　72.매춘경험73.렌탈경험　74.라이브경험
+;　　75.변기경험
+@NEW_PRINT_EXP
+#LOCALSIZE 2
+PRINTL □ 경험
+LOCAL:1 = 0
+FOR LOCAL:0, 0, VARSIZE("EXP")
+	;CSVで定義してない物・표시したくない物・後に回したいものを除外
+	IF FLAG:カスタムゲーム화면
+	SIF EXP:U:(LOCAL:0) && !INRANGE(LOCAL:0, 71, 75) && EXPNAME:(LOCAL:0) != ""
+		PRINTFORM 　　[%EXPNAME:(LOCAL:0),14,LEFT%:{EXP:U:(LOCAL:0), 8}]\@ (LOCAL:1++ & 3) == 3 ? \n # \@
+	ELSE
+	SIF EXP:U:(LOCAL:0) && !INRANGE(LOCAL:0, 71, 75) && EXPNAME:(LOCAL:0) != ""
+		PRINTFORM 　%EXPNAME:(LOCAL:0), 12%:{EXP:U:(LOCAL:0), 7}\@ (LOCAL:1++ & 3) == 3 ? \n # \@
+	ENDIF
+NEXT
+PRINTFORM \@ LINEISEMPTY() ? # \n \@
+;노역系はここで추가표시
+LOCAL:1 = 0
+FOR LOCAL:0, 71, 76
+	IF FLAG:カスタムゲーム화면
+	SIF EXP:U:(LOCAL:0)
+		PRINTFORM 　　[%EXPNAME:(LOCAL:0), 14,LEFT%:{EXP:U:(LOCAL:0), 8}]\@ (LOCAL:1++ & 3) == 3 ? \n # \@
+	ELSE
+	SIF EXP:U:(LOCAL:0)
+		PRINTFORM 　%EXPNAME:(LOCAL:0), 12%:{EXP:U:(LOCAL:0), 7}\@ (LOCAL:1++ & 3) == 3 ? \n # \@
+	ENDIF
+NEXT
+PRINTFORM \@ LINEISEMPTY() ? # \n \@
+CUSTOMDRAWLINE ･
+RETURN RESULT
+
+;=============================================================================
+;이상경험
+;=============================================================================
+@NEW_PRINT_ABNORMAL_EXP
+#LOCALSIZE 3
+IF EXP:U:이상경험
+	LOCAL:1 = 0
+	LOCAL:2 = GETCOLOR()
+	PRINTL □ 이상경험
+	SETCOLOR COLOR("red")
+	IF FLAG:カスタムゲーム화면
+		SIF U == MASTER && FLAG:主人出自
+			PRINTFORM \@ (LOCAL:1 & 3) ? # 　　 \@%\@ FLAG:主人出自 == 1 ? [성욕처리담당] # [정액변기] \@%\@ (LOCAL:1++ & 3) == 3 ? \n # 　 \@
+		FOR LOCAL, 0, 64
+			SIF GETBIT(CFLAG:U:이상경험記録, LOCAL)
+				PRINTFORM \@ (LOCAL:1 & 3) ? # 　　 \@%"[" + NAME_ABNORMAL_EXP(LOCAL) + "]"%\@ (LOCAL:1++ & 3) == 3 ? \n # 　 \@
+		NEXT
+		SIF !CFLAG:U:이상경험記録 && (U == MASTER !& FLAG:主人出自)
+			PRINTFORM \@ (LOCAL:1 & 3) ? # 　　 \@%"[？？？？]"%\@ (LOCAL:1++ & 3) == 3 ? \n # 　 \@
+	ELSE
+		SIF U == MASTER && FLAG:主人出自
+			PRINTFORM \@ (LOCAL:1 & 3) ? # 　　 \@%\@ FLAG:主人出自 == 1 ? [성욕처리담당] # [정액변기] \@, 24, LEFT%\@ (LOCAL:1++ & 3) == 3 ? \n # 　 \@
+		FOR LOCAL, 0, 64
+			SIF GETBIT(CFLAG:U:이상경험記録, LOCAL)
+				PRINTFORM \@ (LOCAL:1 & 3) ? # 　　 \@%"[" + NAME_ABNORMAL_EXP(LOCAL) + "]", 24, LEFT%\@ (LOCAL:1++ & 3) == 3 ? \n # 　 \@
+		NEXT
+		SIF !CFLAG:U:이상경험記録 && (U == MASTER !& FLAG:主人出自)
+			PRINTFORM \@ (LOCAL:1 & 3) ? # 　　 \@%"[？？？？]", 24, LEFT%\@ (LOCAL:1++ & 3) == 3 ? \n # 　 \@
+	ENDIF
+	PRINTFORM \@ LINEISEMPTY() ? # \n \@
+	SETCOLOR LOCAL:2
+	CUSTOMDRAWLINE ･
+ENDIF
+RETURN RESULT
+
+;=============================================================================
+;珠표시(弐型표시)
+;=============================================================================
+;표시順
+; 0,쾌Ｃ　 1,쾌Ｖ　 2,쾌Ａ　 3,쾌Ｂ
+; 5,복종　 6,욕정　 7,굴복　 8,습득
+; 9,치정　10,고통　11,공포 100,부정
+@NEW_PRINT_JUEL
+#LOCALSIZE 2
+LOCAL:1 = 0
+PRINTL □ 구슬
+FOR LOCAL , 0 , VARSIZE("PALAM")
+	;CSVで定義してない物・표시したくない物・後に回したいものを除外
+	SIF PALAMNAME:LOCAL != ""
+		PRINTFORM 　%PALAMNAME:LOCAL%의 구슬:{JUEL:U:LOCAL , 7}\@ (LOCAL:1++ & 3) == 3 ? \n # \@
+NEXT
+PRINTFORM \@ LINEISEMPTY() ? # \n \@
+CUSTOMDRAWLINE ･
+RETURN RESULT
+
+;=============================================================================
+;親표시
+;=============================================================================
+@NEW_PRINT_DAUGHTER
+PRINTL □ 가족
+PRINTFORML 친할아버지:%CSTR:U:24%　친할머니:%CSTR:U:25%　　　　외할아버지:%CSTR:U:26%　외할머니:%CSTR:U:27%
+PRINTFORML 　　　　아빠:%CSTR:U:22%　　　　　　　엄마:%CSTR:U:23%
+CUSTOMDRAWLINE ･
+RETURN RESULT
+
+;=============================================================================
+;인기표시
+;=============================================================================
+@NEW_PRINT_POPULARITY
+#DIMS CONST 표시항목 = "요리인기", "매춘인기", "렌탈인기", "아이돌인기", "변기인기", "劇場인기", "노역단가"
+#LOCALSIZE 2
+LOCAL:1 = 0
+PRINTL □ 인기
+IF FLAG:カスタムゲーム화면
+	SIF U == MASTER && (ITEM:포장마차 || ITEM:식당)
+		PRINTFORM 　　[\@ ITEM:식당 ? 식당 # 포장마차 \@인기　　　:{FLAG:요리인기, 8}]\@ (LOCAL:1 ++ & 3) == 3 ? \n #  \@
+	SIF U == MASTER && (ITEM:여관 || ITEM:창관)
+		PRINTFORM 　　[\@ ITEM:창관 ? 창관 # 여관 \@인기　　　:{FLAG:매춘인기, 8}]\@ (LOCAL:1 ++ & 3) == 3 ? \n #  \@
+	FOR LOCAL:0, 0, VARSIZE("표시항목")
+		SIF CFLAG:U:(표시항목:(LOCAL:0))
+			PRINTFORM 　　[%(표시항목:(LOCAL:0)), 14,LEFT%:{CFLAG:U:(표시항목:(LOCAL:0)), 8}]\@ (LOCAL:1 ++ & 3) == 3 ? \n #  \@
+	NEXT
+ELSE
+	SIF U == MASTER && (ITEM:포장마차 || ITEM:식당)
+		PRINTFORM 　　　\@ ITEM:식당 ? 식당 # 포장마차 \@인기:{FLAG:요리인기, 5}\@ (LOCAL:1 ++ & 3) == 3 ? \n #  \@
+	SIF U == MASTER && (ITEM:여관 || ITEM:창관)
+		PRINTFORM 　　　\@ ITEM:창관 ? 창관 # 여관 \@인기:{FLAG:매춘인기, 5}\@ (LOCAL:1 ++ & 3) == 3 ? \n #  \@
+	FOR LOCAL:0, 0, VARSIZE("표시항목")
+		SIF CFLAG:U:(표시항목:(LOCAL:0))
+		PRINTFORM 　%(표시항목:(LOCAL:0)), 12%:{CFLAG:U:(표시항목:(LOCAL:0)), 5}\@ (LOCAL:1 ++ & 3) == 3 ? \n #  \@
+	NEXT
+ENDIF
+PRINTFORM \@ LINEISEMPTY() ? # \n \@
+CUSTOMDRAWLINE ･
+RETURN RESULT
+
+;============================================================================
+;스테이터스화면の一行눈(레벨/속성/페르소나相性/解析度)を표시する。
+; <引数>
+;	ARG   = 표시대상キャラ
+; <戻り値>
+;	なし
+;============================================================================
+@PRINT_BASE_STATUS, ARG
+SIF FLAG:カスタムゲーム화면
+	PRINTL 
+PRINTFORM 　　LV{BASE:ARG:LV, 3}　　　
+CALL PRINT_ALIGNMENT, ARG
+SIF TALENT:ARG:페르소나구사자
+	PRINTFORM 　　페르소나 相性:%MARK_P_FITNESS(ARG)%
+SIF INRANGE(ABL:ARG:종족, 1, 44)
+	PRINTFORM 　　ANALYZE: \@ FLAG:(20000 + NO:ARG) >= 1000 ? COMPLETE! # {FLAG:(20000 + NO:ARG) / 10}％ \@
+PRINTL 
+RETURN RESULT
+
+;============================================================================
+;속성の표시
+; <引数>
+;	ARG   = 표시대상キャラ
+;	ARG:1 = 생략표시有無 (0[생략時]:全文字표시／0以外:머리文字のみ표시)
+;	ARG:2 = 표시대상속성 (0[생략時]:LD軸LC軸両方／1:LD軸／2:LC軸)
+; <戻り値>
+;	なし
+;============================================================================
+@PRINT_ALIGNMENT, ARG, ARG:1=0, ARG:2=0
+#LOCALSIZE 1
+;대상キャラのLD・LC속성を표시する。
+LOCAL = GETCOLOR()	;現在の色を退避しておく
+IF ARG:2 != 2
+	SETCOLOR ALICOLOR(ABL:ARG:속성LD)
+	PRINTFORM \@ ARG:1 ? %SUBSTRING(GET_ALI1(ABL:ARG:속성LD), 0, 1)% # %GET_ALI1(ABL:ARG:속성LD), 7% \@
+	SETCOLOR LOCAL
+ENDIF
+PRINTFORM \@ ARG:2 ? # / \@
+IF ARG:2 != 1
+	SETCOLOR ALICOLOR(ABL:ARG:속성LC)
+	PRINTFORM \@ ARG:1 ? %SUBSTRING(GET_ALI2(ABL:ARG:속성LC), 0, 1)% # %GET_ALI2(ABL:ARG:속성LC), 7% \@
+	SETCOLOR LOCAL
+ENDIF
+RETURN RESULT
+
+;============================================================================
+;소지스킬の표시(스테이터스화면)
+;============================================================================
+@PRINT_SKILL
+#LOCALSIZE 2
+#LOCALSSIZE 2
+SIF FLAG:二身合体표시
+	RETURN 0
+IF GETBIT (FLAG:カスタムゲーム화면,1)
+	PRINTFORM  소지스킬 [2000]링케이지표시
+	IF CFLAG:U:PTフラグ > 0
+		;LOCAL:1 = 표시する습득予定스킬
+		LOCAL:1 = 0
+		
+		FOR LOCAL,1, 21
+			LOCALS:1 = 습득LV{LOCAL}
+			IF ABL:U:(LOCALS:1) > 0
+				IF LOCAL:1 == 0
+					LOCAL:1 = LOCAL
+				ELSE
+					SIF ABL:U:("습득LV" + TOSTR(LOCAL:1)) > ABL:U:(LOCALS:1)
+						LOCAL:1 = LOCAL
+				ENDIF
+			ENDIF
+		NEXT
+		IF LOCAL:1 > 0
+			LOCALS:1 = 습득LV{LOCAL:1}
+			LOCALS = 습득스킬{LOCAL:1}
+			IF ABL:U:(LOCALS:1) > (BASE:U:LV)+5
+				SETCOLOR 0x666666
+				PRINTFORML 　　NEXT[????????]  습득LV {ABL:U:(LOCALS:1)}
+				RESETCOLOR
+			ELSE
+				CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+				SETCOLOR 0x666666
+				PRINTFORML 　　NEXT[%RESULTS%]  습득LV {ABL:U:(LOCALS:1)}
+				RESETCOLOR
+			ENDIF
+		ELSE
+			PRINTL
+		ENDIF
+	ENDIF
+	FOR LOCAL,0, FLAG:스킬数
+		LOCALS = 스킬{LOCAL+1}
+		IF ABL:U:LOCALS
+			CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+			PRINTFORM 　[{LOCAL+1}]%RESULTS,38,LEFT%
+		ENDIF
+		SIF LOCAL % 2 == 1
+			PRINTL
+	NEXT
+ELSE
+	PRINTFORML 소지스킬 [2000]링케이지표시
+	FOR LOCAL,0, FLAG:스킬数
+		LOCALS = 스킬{LOCAL+1}
+		IF ABL:U:LOCALS
+			CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+			PRINTFORM 　[{LOCAL+1}]%RESULTS,20,LEFT%
+		ENDIF
+		SIF LOCAL % 4 == 3
+			PRINTL
+	NEXT
+	IF CFLAG:U:PTフラグ > 0
+		;LOCAL:1 = 표시する습득予定스킬
+		LOCAL:1 = 0
+		
+		FOR LOCAL,1, 21
+			LOCALS:1 = 습득LV{LOCAL}
+			IF ABL:U:(LOCALS:1) > 0
+				IF LOCAL:1 == 0
+					LOCAL:1 = LOCAL
+				ELSE
+					SIF ABL:U:("습득LV" + TOSTR(LOCAL:1)) > ABL:U:(LOCALS:1)
+						LOCAL:1 = LOCAL
+				ENDIF
+			ENDIF
+		NEXT
+		IF LOCAL:1 > 0
+			LOCALS:1 = 습득LV{LOCAL:1}
+			LOCALS = 습득스킬{LOCAL:1}
+			IF ABL:U:(LOCALS:1) > (BASE:U:LV)+5
+				SETCOLOR 0x666666
+				PRINTFORML    NEXT[????????]  습득LV {ABL:U:(LOCALS:1)}
+				RESETCOLOR
+			ELSE
+				CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+				SETCOLOR 0x666666
+				PRINTFORML    NEXT[%RESULTS%]  습득LV {ABL:U:(LOCALS:1)}
+				RESETCOLOR
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+DRAWLINE
+RETURN RESULT
+
+;============================================================================
+;장비소지스킬の표시(스테이터스화면)
+;============================================================================
+@PRINT_PERSONA
+#LOCALSIZE 2
+SIF FLAG:カスタムゲーム화면
+	PRINT  
+PRINTL 소지페르소나
+FOR LOCAL, 0, 4
+	LOCALS = 소지페르소나{LOCAL}
+	IF LOCAL == 0
+		SIF ABL:U:초기페르소나 == 0
+			CONTINUE
+		SIF FLAG:カスタムゲーム화면
+			PRINT 　
+		PRINTFORM [{LOCAL + 40}] %CSVCALLNAME(ABL:U:초기페르소나,0), 20, LEFT%
+	ELSE
+		SIF !EQUIP:U:LOCALS
+			BREAK
+		PRINTFORM [{LOCAL + 40}] %CSVCALLNAME((DITEMTYPE:(EQUIP:U:LOCALS):페르소나("NO")),0), 20, LEFT%
+		LOCAL:1++
+	ENDIF
+NEXT
+PRINTL 
+DRAWLINE
+RETURN RESULT
+
+;============================================================================
+;장비소지스킬の표시(스테이터스화면)
+;============================================================================
+@PRINT_ESKILL
+#LOCALSIZE 2
+LOCAL:1 = 0
+SIF FLAG:カスタムゲーム화면
+	PRINT  
+PRINTL 장비品소지스킬
+FOR LOCAL,0, 21
+	LOCALS = 장비스킬{LOCAL+1}
+	IF ABL:U:LOCALS > 0
+		CALLFORM SKILL_NAME_{ABL:U:LOCALS}, U
+		PRINTFORM 　[{LOCAL + 21}]%RESULTS, 20, LEFT%\@ (LOCAL:1++ & 3) == 3 ? \n # \@
+	ENDIF
+NEXT
+PRINTFORM \@ LINEISEMPTY() ? # \n \@
+DRAWLINE
+RETURN RESULT
+
+;============================================================================
+;조교中の능력확인
+;============================================================================
+@SHOW_CHARADATA, ARG
+U = ARG
+PRINTFORML 　체력:({BASE:U:체력, 4}/{MAXBASE:U:체력, 4})　기력:({BASE:U:기력, 4}/{MAXBASE:U:기력, 4})
+IF U == 0 || U == 4999
+;	CALL PRINT_MASTER_STATUS
+ELSE
+	CALL PRINT_SLAVE_STATUS
+ENDIF
+;弐型표시
+CALL NEW_PRINT_ABL()			;能力
+CALL NEW_PRINT_TALENT()			;素質
+SIF U != MASTER
+	CALL NEW_PRINT_MARK()		;각인
+CALL NEW_PRINT_EXP()			;경험
+CALL NEW_PRINT_ABNORMAL_EXP()	;이상경험
+RETURN RESULT
+
+;============================================================================
+;外見の特徴표시
+;============================================================================
+@PRINT_APPEARANCE
+;人型がそれ以外か
+IF FLAG:カスタムゲーム화면
+	PRINT 　　외모：
+ELSE
+	PRINT 　　외모：
+ENDIF
+;(조마対応版)順番변경
+IF TALENT:U:부정형
+	PRINT 부정형
+ELSEIF TALENT:U:새
+	PRINT 조류
+ELSEIF TALENT:U:파충류
+	PRINT 파충류
+ELSEIF TALENT:U:물고기
+	PRINT 어류
+ELSEIF TALENT:U:짐승
+	PRINT 짐승
+ELSEIF TALENT:U:이형
+	PRINT 이형
+ELSE
+	PRINT 인간
+ENDIF
+PRINT 　　
+FOR LOCAL,301, 320
+	SIF TALENT:U:LOCAL
+		PRINTFORM [%TALENTNAME:LOCAL%]　
+NEXT
+PRINTL 
+RETURN RESULT
+
+@PRINT_LINKAGE
+#LOCALSIZE 3
+DRAWLINE
+FOR LOCAL, 4000, 5000
+	;SIF !GETBIT(FLAG:(1202 + LOCAL / 63), LOCAL % 63)
+	;	CONTINUE
+	TRYCALLFORM LINKAGE_{LOCAL}
+	IF RESULT
+		CALLFORM 発動者조건_{LOCAL}, U
+		IF RESULT
+			IF !GETBIT(FLAG:(1202+LOCAL / 63), LOCAL % 63)
+				PRINTFORM [{LOCAL}] %"？？？？", 20, LEFT% 
+				CALLFORM 참가人数_{LOCAL}
+				LOCAL:2 = RESULT
+				FOR LOCAL:1, 1, 1 + LOCAL:2
+					SIF LOCAL:1 > 1
+						PRINT 　→　
+					PRINT ？？？
+				NEXT
+				PRINT 　→　
+				CALLFORM 참가조건표시_{LOCAL}, 1 + LOCAL:2
+			ELSE
+				CALLFORM SKILL_NAME_{LOCAL}
+				PRINTFORM [{LOCAL}] %RESULTS, 20, LEFT% 
+				CALLFORM 참가人数_{LOCAL}
+				FOR LOCAL:1, 1, 2 + RESULT
+					SIF LOCAL:1 > 1
+						PRINT 　→　
+					CALLFORM 참가조건표시_{LOCAL}, LOCAL:1
+				NEXT
+			ENDIF
+			SIF !LINEISEMPTY()
+				PRINTL 
+		ENDIF
+	ENDIF
+NEXT
+DRAWLINE
+WAIT
+RETURN RESULT
