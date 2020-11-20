@@ -1,0 +1,82 @@
+﻿
+;======================================================
+;장비品の데이터
+;달토끼창천포
+;======================================================
+
+
+@기본능력수정_2548,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+
+@전투능력수정_2548,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_2548,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2548, ARG = -1
+RETURN 1
+
+@최저공격횟수_2548, ARG = -1
+RETURN 3
+
+@최대공격횟수_2548, ARG = -1
+RETURN 5
+
+@사거리_2548, ARG = -1
+RETURN 3
+
+@공격범위_2548, ARG = -1
+RETURN 3
+
+@장비해설_2548
+PRINTL 特殊な加工をされた対악마用機関총。위력は인간が携行可能なサイズでありながら車載機関砲に匹적する。
+PRINTL 세벡社から流出した技術が用いられている模様。
+;M61の説明。달토끼창천포の元ネタが全くわからない　→　페르소나１出展だし세벡絡みにしとこう
+RESETCOLOR
+
+
+@장비箇所_2548
+RETURN GET_EQUIPNUM("총")
+
+@필요레벨_2548
+RETURN 60
+
+@장비조건_2548,ARG
+SIF (BASE:ARG:힘 + BASE:ARG:인내력) > 29 && BASE:ARG:LV > 54
+	RETURN 1
+RETURN 0
+
+@장비조건설명_2548
+PRINTL 장비조건：힘・인내력の합계30以上、LV55～
+
+@구입조건_2548
+;二人組みを撃破
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 5000000
+	RETURN 0
+RETURN 1
+
+@총공격_2548, ARG = -1
+RETURN 77
+
+@총명중_2548, ARG = -1
+RETURN 103
+
+@특수탄창_2548, ARG = -1
+RETURN 2
+
+@GUN_RANDOMTARGET_2548
+RETURN 1
+
+@총타입_2548
+;1 = 핸드건 2 = 샷건 3 = アサルト라이플、머신건 4 = 狙撃라이플 5 = 그외
+RETURN 3
+@속도보정_2548
+RETURN 0

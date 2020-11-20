@@ -1,0 +1,78 @@
+﻿
+;======================================================
+;장비品の데이터
+;悠久の투구
+;Lv51장비からは흡수有り　기본능력に합계+8まで
+;======================================================
+
+@기본능력수정_3040,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 1
+	CASE "마력"
+		RETURN 5
+	CASE "운"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3040,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 39
+	CASE "회피"
+		RETURN 18
+	CASE "마법효과"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@방어상성_3040,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "파마"
+		RETURN 50
+	CASE "화염"
+		RETURN 999
+	CASE "핵열"
+		RETURN -100
+	CASE "수격"
+		RETURN 200
+	CASE "빙결"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@バステ내성_3040,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "PANIC"
+		RETURN -50
+	CASE "HEAT"
+		RETURN -100
+ENDSELECT
+RETURN 0
+
+@장비箇所_3040
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3040
+RETURN 54
+
+@장비조건_3040,ARG
+SIF BASE:ARG:LV < 54
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3040
+PRINTL 장비조건：LV54～
+
+@장비해설_3040
+PRINTL 소문では悠久の時を過ごす태양의돌から作られたと言われる투구。
+PRINTL 　　　　　　　　
+
+
+;東亜디무フェンス
+@구입조건_3040
+RETURN 0
+
+@引継ぎ可不可_3040
+RETURN 0

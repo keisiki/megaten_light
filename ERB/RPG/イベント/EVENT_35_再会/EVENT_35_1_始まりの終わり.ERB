@@ -1,0 +1,423 @@
+﻿;ライセンスフリー
+;リプ레이本のコンバートだから기본회화ばっかりです。
+;2020/03/07　作成者：92473/나나미の人
+;====================
+;内容
+;====================
+@EVENT_35_1
+LOCAL = CHARANUM
+
+;導入開始
+CUSTOMDRAWLINE =
+PRINTFORML ＴＲＰＧリプ레이 再会 第１話
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 　　＞＞사교의관近辺＜＜
+PRINTFORML 
+PRINTFORML ＞나나미と共に사교의관近くを歩いている時、사교의관から픽시が飛んで来た。
+PRINTFORMW ＞사교의관の主の使役する見知った픽시だ。
+PRINTFORMW ＞何か問題が起きたようだ。
+PRINTFORML  （ 注意：この이벤트を進めると時間が経過します、今日の予定は済みましたか？）
+CALL INPUT_YN("픽시の話を聞く", "また今度")
+IF RESULT == 0
+	PRINTFORMW ＞話を聞こう。
+ELSE
+	PRINTFORMW ＞準備を整えたら、またここへ来よう。
+	PRINTFORMW ………
+	PRINTFORMW ……
+	PRINTFORMW …
+	RETURN
+ENDIF
+PRINTFORML 
+PRINTFORML 픽시：
+PRINTFORML 「たいへんたいへん、나나미ちゃん。代々木公園で가이아교도とメシア教徒がヘンなコトしようとしてるの！」
+PRINTFORMW 「ウチの旦那が言うには가이아교도が霊的エネルギーをいっぱい集めて、何か良からぬ事を企んでいるって事だよ！」
+PRINTFORML 霊的エネルギーはマグネタイトって事でいいのか、とか何かってえらくふわっとした話だなとも思うがそれよりも……。
+PRINTFORMW この픽시、사교의관の主に使役されてるんじゃなくて嫁だったのか…知らんかった。
+PRINTFORML ＞そんな時、木刀を持った男子고등학생が道の先を駆け抜けていく。
+PRINTFORMW ＞その男を見るなり나나미の顔色が変わる。
+PRINTFORML 나나미：
+PRINTFORMW 「픽시さん、今はそんなことはどうでもいいの。先輩の様子が変だわ。追いかけなきゃっ！」
+PRINTFORML ＞나나미に置いて行かれた픽시は%CALLNAME:MASTER%に나나미を追う様に頼むと館の主の所へ飛んで行った。
+PRINTFORML 픽시：
+PRINTFORMW 「悪いけど나나미ちゃんの事をお願いね！私は旦那に伝えておくからさ！お礼はするから頼んだよーーー！」
+PRINTFORML 
+PRINTFORML ＞言うだけ言って飛んで行かれてしまった。
+PRINTFORML ＞ともあれ나나미を放っておくわけにもいくまい、追いかけるとしよう。
+PRINTFORMW ＞走る内に나나미から先程の男は나나미の先輩で、鶴来という名である事を聞きだした。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+;導入終了
+;Aパート開始
+PRINTFORML 
+PRINTFORMW 　　＞＞代々木公園＜＜
+PRINTFORML 
+PRINTFORML ＞何かを探している鶴来に追いついた。
+PRINTFORML 나나미：
+PRINTFORML 「せんぱ～い」
+PRINTFORMW 「こんなっ、ところでっ、せん、先輩とっ、会える、なんてっ」」
+PRINTFORML 鶴来：
+PRINTFORMW 「나나미ちゃん？……すげー息切れてるけど大丈남편？」
+PRINTFORML 나나미：
+PRINTFORMW 「ぜーはー、ぜーはー」
+PRINTFORML ＞나나미が息を整えていると선글라스に白수트というヤの付く自由業にしか見えない男が鶴来に話しかけてきた。
+PRINTFORML 怪しい男→野分：
+PRINTFORMW 「すまない、私は野分と言う。一応、神の僕らしい……소년よ、君はどうしてここに？」
+PRINTFORMW 「友達に呼ばれた、か。その友達はどんな友達なのかな？」
+PRINTFORMW 鶴来：
+PRINTFORMW 「…俺の恋人なんだ」
+;나나미が함락済み
+IF FINDCHARA_B([[キャラ:나나미]])== 2 && 함락(RESULT:1)
+	PRINTFORML 나나미：
+	PRINTFORMW 「やっぱり恋人がいたんですねぇ。今となっては納得、というだけですけど」
+ELSE
+	PRINTFORML 나나미：
+	PRINTFORMW 「えええええぇぇぇぇぇ………」
+	PRINTFORMW なんだかショックを受けているようだ。
+ENDIF
+PRINTFORML 野分：
+PRINTFORML 「すまない、そういう意味ではなかったんだ。僕が聞きたかったのは、どういう素性の人なのかということでね」
+PRINTFORMW 「君はここで何が起こるか知っているのかね？」
+PRINTFORML 「その顔だと知らないようだ。ふむ、君の……その、恋人という人は、最近、何か新興宗教とかに……」
+PRINTFORMW 「いや失礼、何か信仰をもっておられるかね？」
+PRINTFORML 鶴来：
+PRINTFORML 「彼女の母親が何か宗教にかぶれていたという話は聞いたけど、彼女自身にはそんなことは聞かないな」
+PRINTFORML 「ただ最近病気になって入院したらしいんだよ。それで今まで全然連絡が取れなくて」
+PRINTFORMW 「今日ようやく、ここで会いたいって連絡が来たんだ」
+PRINTFORML 野分：
+PRINTFORMW 「彼女の母親が信仰していたというのは、聖十字メシア教会かね？それともガイア教団かね」
+PRINTFORMW 鶴来は一般人らしく不思議そうな顔をするだけだ。
+PRINTFORML 나나미：
+PRINTFORMW 「両方ともよくないところですよ」
+PRINTFORML 野分：
+PRINTFORMW 「いいかね。落ち着いて、よく考えて行動したまえ。……君は今、境界線上にいる。これからここで起こることは」
+SETCOLOR COLOR("PASTEL-GREEN")
+PRINTFORMW 
+PRINTFORMW 「この세계の行く末を占うことになるかもしれん」
+PRINTFORMW 
+RESETCOLOR
+PRINTFORMW ＞その時、茂みをかき分けて近づいてくる何者かの발音が聞こえた。
+PRINTFORML 謎の声：
+PRINTFORML 「マガ……ツヒ」
+PRINTFORML 「マガツヒ、喰いてぇ……」
+PRINTFORMW 「マガツヒよこせぇ……」
+PRINTFORMW ＞茂みの中から腹部を異様に膨らませた、아이のような生き物が現れる。
+;나나미ちゃんの해설
+PRINTFORML 나나미：
+PRINTFORML 「あれは유귀：아귀ですね、사교의관で勉強しました！飛び道具は반사されてしまうので注意してください！」
+PRINTFORML 「わたしに총공격をさせたりしないでくださいね！」
+PRINTFORMW 「파마系の魔法が弱点なのでハマなら一発です、大半の속성魔法に対しても내성が無いので魔法공격がオススメですよ！」
+PRINTFORMW 
+PRINTL [0]눈の前の相손を倒す。
+PRINTL [1]周辺を警戒する。
+CALL INPUTINT,0,1
+	IF RESULT == 0
+		PRINTFORML 나나미：
+		PRINTFORML 「わかりました、やりましょう！」
+		PRINTFORML 
+		PRINTFORML ＞아귀の群れが現れた
+		PRINTFORML 
+			CUSTOMDRAWLINE =
+			WAIT
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY, 8, 1093, 10, 0, 0
+			CALL SET_ENEMY, 9, 1093, 10, 0, 0
+			CALL SET_ENEMY, 10, 1093, 10, 0, 0
+			CALL BATTLE_START
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			WAIT
+		PRINTFORML 
+		PRINTFORML ＞아귀の群れを倒した
+		PRINTFORML 
+	ELSEIF RESULT == 1
+		PRINTFORML 野分：
+		PRINTFORML 「눈の前の奴らは任せてもらおう」
+		PRINTFORML 나나미：
+		PRINTFORML 「お願いします、わたしたちは…向こうから来ますよ！」
+		PRINTFORML 
+		PRINTFORML ＞아귀の群れが現れた
+		PRINTFORML 
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CUSTOMDRAWLINE =
+			WAIT
+			CALL SET_ENEMY, 8, 1093, 10, 0, 0
+			CALL SET_ENEMY, 9, 1093, 10, 0, 0
+			CALL SET_ENEMY, 10, 1093, 10, 0, 0
+			CALL BATTLE_START
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			WAIT
+		PRINTFORML 
+		PRINTFORML ＞아귀の群れを倒した
+		PRINTFORML 
+		PRINTFORML 나나미：
+		PRINTFORMW 「やった、倒しましたよ♪　怪我は大丈남편ですか？외상약や마석を使うと怪我を治すことが出来ます」
+		PRINTFORMW 「상태이상もそれぞれ対処法が違うので気を付けてくださいね」
+		;積極的に自分を売り込んでいく나나미ちゃん
+		PRINTFORMW 「わたしが헤드셋を付けて조수をすると회복아이템のアナウンスが出来るので考えてみてくださいね！」
+		PRINTFORMW 「あっ！あっちにもいますよ！」
+		PRINTFORML 
+		PRINTFORML ＞아귀の群れが現れた
+		PRINTFORML 
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CUSTOMDRAWLINE =
+			WAIT
+			CALL SET_ENEMY, 8, 1093, 10, 0, 0
+			CALL SET_ENEMY, 9, 1093, 10, 0, 0
+			CALL SET_ENEMY, 10, 1093, 10, 0, 0
+			CALL BATTLE_START
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			WAIT
+		PRINTFORML 
+		PRINTFORML ＞아귀の群れを倒した
+		PRINTFORML 
+	ENDIF
+;Aパート終了
+;Bパート開始
+PRINTFORML 지령코다마：
+PRINTFORMW 「助けに来てみたら～、적が死んでますよ」
+PRINTFORML 나나미：
+PRINTFORMW 「あ、小枝ちゃんだ～」
+PRINTFORML 지령코다마→小枝：
+PRINTFORMW 「사교의관のオヤジから、나나미ちゃんの손助けをするように言われたですよぅ」
+PRINTFORML 野分：
+PRINTFORML 「君はまだ、あの邪教徒から해방してもらえないのかね」
+PRINTFORMW どうやら鶴来以外は%CALLNAME:MASTER%も含めて사교의관関係者のようだ。
+PRINTFORML 鶴来：
+PRINTFORML 「なんなんだ、今のはいったい？これがさっきあんたが言ってた『何か』ってやつなのか？」
+PRINTFORMW 「沙耶はこんな変な連中がいるような場所に！？」
+PRINTFORML 野分：
+PRINTFORMW 「待ちたまえ。君はここで何が起こっているのか知っているのか」
+PRINTFORML 鶴来：
+PRINTFORMW 「何が待ち受けていようと、沙耶がいるかもしれないんだ。放っておけるか！」
+PRINTFORML 나나미：
+PRINTFORMW 「서머너さん、小枝ちゃん、先輩を止めるから손伝ってください！」
+SETCOLOR COLOR("PASTEL-RED")
+PRINTFORMW 
+PRINTFORMW ――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+PRINTFORMW 
+RESETCOLOR
+;真Ⅲオープニング이벤트で報道される通信塔の暴動事件の舞台。
+;氷川の名前が出てくる最初の話　報道→なお建設責任者であるサイバーズ・コミュ니케ション社の氷川氏は依然行方불명のままです。
+;この事件の際、氷川は신주쿠위생병원に雲隠れし地下で儀式を進める。
+PRINTFORML 
+PRINTFORMW 　　＞＞代々木公園・通信塔＜＜
+PRINTFORML 
+PRINTFORML ＞走り去る鶴来を追っていくと、何か薄い膜でも抜けるような感触があった。
+PRINTFORML ＞結界でもあったかと訝しいでいると、倒れ伏す人影を前に鶴来が立ち竦んでいた。
+PRINTFORML ＞가이아교도を中心にした死体の様に見える、若干違和感を깨달음えるが…。
+PRINTFORML ＞死体の奥には通信塔があり、入り입が開かれたままになっている。
+PRINTFORML ＞周辺からは아귀の声や肉を食む音が聞こえている。
+PRINTFORMW ＞死体の中に沙耶の姿が無いのを見て取ると、鶴来は通信塔に駆け込んでいった。
+PRINTFORML 나나미：
+PRINTFORMW 「先輩無茶しすぎです……なんていうか……すごくやばそうっていうか」
+PRINTFORML ＞通信塔内部も外と同様死体が転がっているが、人ではない物も混じっている。
+PRINTFORML ＞それら死体からは赤く澱んだオーラのようなものが立ち昇り、通信塔の奥へと吸い込まれていく。
+PRINTFORML 野分：
+PRINTFORML 「この通路の先に、地獄への門が開かれようとしている」
+PRINTFORMW 「ガイア教団の무녀が、魔界に通じる扉を開こうとしているのだ」
+PRINTFORML 나나미：
+PRINTFORMW 「危ないので帰りましょうよ。良くないですよ先輩」
+PRINTFORML 鶴来：
+PRINTFORMW 「俺もできれば帰りたいんだけど、ここに沙耶がいる可能性があるんだ」
+;나나미が함락済み
+IF FINDCHARA_B([[キャラ:나나미]])== 2 && 함락(RESULT:1) && TALENT:MASTER:156
+	PRINTFORMW 나나미：（そうなんでしょうけど、わたしとしてはその女はどうでもいいんですよねぇ…）
+	PRINTFORML 나나미の想い人というには熱が無いが、放ってはおけないという気持ちは強そうだ。
+	PRINTFORMW 나나미の心を読んだ%CALLNAME:MASTER%としては、鶴来という男の事もどうでもいいんだが…乗り掛かった舟か。
+ELSE
+	PRINTFORMW 나나미：（その女のために行くのはやめましょってわたしは言ってるんだけどぉぉ！）
+	PRINTFORMW 나나미の心を読んだ%CALLNAME:MASTER%は입に出して言わないと通じないこともあるぞ？と矛盾したことを思う。
+ENDIF
+PRINTFORML 野分：
+PRINTFORMW 「君には我々に任せて帰るという選択肢も残ってはいるのだよ？」
+PRINTFORML 鶴来：
+PRINTFORML 「分かってるよ。けど、そういうわけにはいかないんだ」
+PRINTFORMW 「ここで彼女に会えないと、永遠に会えないような気がするんだ」
+PRINTFORML 野分：
+PRINTFORMW 「よろしい、では行こう」
+PRINTFORML ＞通路を抜けた先の扉を開くと、部屋の奥に円筒形の表面に赤い光で見慣れぬ文字を浮かばせた物体がゆっくりと回っていた。
+PRINTFORML ＞チベット仏教のマニ車と呼ばれる仏具に似ている、これはアマラ車だ。
+PRINTFORML ＞周囲に転がる死体から立ち昇っている赤いオーラがアマラ車に吸い込まれていく。
+PRINTFORML ＞アマラ車の横には祈りを捧げる男が一人と무녀姿で虚ろな눈をした소녀が一人佇んでいる。
+PRINTFORMW ＞소녀を見るなり鶴来が血相を変える。
+PRINTFORML 鶴来：
+PRINTFORMW 「沙耶！」
+PRINTFORML ＞鶴来が呼びかけると소녀の瞳に少し色が戻る、彼女が沙耶のようだ。
+PRINTFORML ＞沙耶に駆け寄ろうと動き出す鶴来を나나미が引き留める。
+PRINTFORMW ＞そうしている内に野分が男に呼びかける。
+PRINTFORML 野分：
+PRINTFORMW 「長谷部さん……いや長谷部！」
+PRINTFORML 男→하세베：
+PRINTFORML 「野分か。俺はこの偽りの세계を創り直すのに손を貸すことにしたよ」
+PRINTFORMW 「お前たちにはそのための礎となってもらう」
+PRINTFORML 野分：
+PRINTFORMW 「あんたはそんなことのために……みんなを？」
+PRINTFORML 하세베：
+PRINTFORML 「俺もお前も、メシア教徒は『そんなこと』のための駒に過ぎなかったのさ」
+PRINTFORML 「……この세계は、神が戯れに創った세계のひとつに過ぎない」
+PRINTFORML 「そこで俺たちは考えた。세계はその中に住んでいる者たちのものであるべきだ、と」
+PRINTFORMW 「……なあ野分、一緒に来い。세계を創り直そう」
+PRINTFORML 野分：
+PRINTFORMW 「なぜ……いまさら、そんなことを言うんだ！」
+PRINTFORML 하세베：
+PRINTFORMW 「そうか。仕方がないな。俺は先に行くよ……チャンスは残しておいてやる」
+PRINTFORML 鶴来：
+PRINTFORMW 「ちょっと待てよ。言ってることはよくわからねーが、沙耶を返せ！」
+PRINTFORMW ＞怪訝な顔をする長谷部を見て野分が沙耶の知り合いだと説明すると、長谷部はあっさりと返答し奥の扉へと消える。
+PRINTFORML 하세베：
+PRINTFORML 「よかろう、どうぞ」
+PRINTFORMW 「これでガイアもメシアも潰えた…」
+;長谷部君退場、アマラ深界でメノラー守ってるよ！別のラスボス用意しなきゃ…
+PRINTFORMW ＞野分が引き留めようと叫ぶのを横눈に鶴来が沙耶を抱きかかえる、すると沙耶の身体から赤いオーラが抜け出していく。
+PRINTFORMW 沙耶：
+PRINTFORMW 「あ……鶴来くん。ごめんなさい……わたし、がんばれなかったかも……」
+PRINTFORMW 「세계が……壊れてしまう。ガイアの人たちが세계を壊して、また創り直そうとしている……新たな세계の主になろうとしているの」
+PRINTFORMW 鶴来：
+PRINTFORMW 「よくわからない、止められないのか？俺に出来ることは？」
+PRINTFORMW 沙耶：
+PRINTFORMW 「わたしを……見つけて……」
+SETCOLOR COLOR("PASTEL-GREEN")
+PRINTFORML 
+PRINTFORML ”生まれ変わった세계で、私に会いに来て”
+PRINTFORMW 
+RESETCOLOR
+;真Ⅲでは祐子先生が以下の台詞
+;最後に決まった운命で……君はここにたどり着いた。これで君は『수태』を生き残るわ。
+;でも、もしかしたらそれは死よりずっと辛い事かも知れない。
+;だけど……私は君を信じてる。……私に…………会いに来て。
+;たとえ세계がどんな姿に変わっても……私が힘になってあげる。
+;これから訪れる세계で、私は「무녀」として創世の中心を成す……
+;きっと君に、道を示してあげられるわ。
+;……分かってる。理解できない事だらけよね。でも、今はもう時間が無いの。
+;……もし君が自分の힘で私の元へたどり着いたなら…その時には教えてあげる。
+;……全ての疑問の答を。そして、私の本当の心の内を……
+;（どいつもこいつも勝손な事言ってんな…）
+PRINTFORML 鶴来：
+PRINTFORMW 「どういう意味なんだよ！？　沙耶？」
+PRINTFORML 나나미：
+PRINTFORMW 「先輩……その人はもう……」
+PRINTFORML ＞沙耶の身体から魂が離れ、アマラ車に吸い込まれる。
+PRINTFORML ＞それを눈の当たりにした鶴来は動揺し、突如割れた床に발を取られて沙耶を取り落としてしまう。
+PRINTFORMW ＞床を割って現れたのは巨大な슬라임だ、周囲に漂う赤いオーラ：マガツヒを흡수してその体躯と힘を大幅に増しているようだ。
+;原作ブロブだけど同類なので추가することないかな…性能面は스킬含めて上書きする。
+PRINTFORML 나나미：
+PRINTFORML 「今度は외도：슬라임ですね、見ての通り巨大化して通常通りの強さとは思えません、注意が필요です！」
+PRINTFORML 「普通なら파마系の魔法が弱点なのでハマなら一発、と言いたいところですが…メタい話をするならＢＯＳＳなので即死は効かないでしょう」
+PRINTFORMW 「物理공격に強い내성がある上に、大半の속성魔法に対して내성が無いので魔法공격がオススメですよ！」
+PRINTFORML 
+PRINTFORML ＞슬라임が現れた
+PRINTFORML 
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	CUSTOMDRAWLINE =
+	WAIT
+	CALL SET_ENEMY, 9, 1028, 20, 0, 1
+	CFLAG:LOCAL:ＨＰ보정 = 1000
+	CFLAG:LOCAL:ＭＰ보정 = 1000
+	BASE:LOCAL:파마 = 0
+	ABL:LOCAL:스킬1 = 102;독침
+	ABL:LOCAL:스킬2 = 506;타룬・다
+	ABL:LOCAL:스킬3 = 1002;잔마
+	ABL:LOCAL:스킬4 = 2005;자폭
+	CALL SYNC_STATUS,LOCAL
+	CALL HEALTH_CHARA,LOCAL
+	CFLAG:LOCAL:行動횟수 = 2
+	CALL BATTLE_START
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	WAIT
+PRINTFORML 
+PRINTFORML ＞슬라임を倒した
+PRINTFORML 
+PRINTFORMW ＞窓の外には稲아내が走り、激しい揺れと共に通信塔が崩れ始める。
+PRINTFORMW ＞野分はその意味に気付いていた、「東京수태」が始まったのだ。
+PRINTFORMW 
+PRINTFORMW ＞「東京수태」――ガイア教団の聖典『ミロク経典』に預言された세계の死と재생のための수태。
+PRINTFORMW 
+PRINTFORML ＞세계はここに滅び、そして生まれ変わろうとしていた。
+PRINTFORML ＞外では周囲の地面がめくれ上がり、『周囲の세계』が反転していく。
+PRINTFORMW ＞これはまずいかと逃げ道を探していると사교의관の主の嫁픽시が飛んでくる。
+PRINTFORML 픽시：
+PRINTFORMW 「こっちこっち！나나미ちゃんも%CALLNAME:MASTER%も早くっ！」
+PRINTFORML 나나미：
+PRINTFORMW 「でも先輩がっ」
+PRINTFORMW ＞振り返ると鶴来は沙耶を追って床に開いた穴に飛び込んでいくところだった。
+PRINTFORML 픽시：
+PRINTFORMW 「あれ、もう駄눈だから」
+PRINTFORML 나나미：
+PRINTFORMW 「駄눈って……えぇっ？！」
+PRINTFORML 픽시：
+PRINTFORMW 「はいはい、逃げるよー。こっちに継ぎ눈があるからねっ」
+PRINTFORMW ＞픽시が言うなり膜を抜ける感触があった。
+PRINTFORMW ＞『東京수태』が起こる。
+PRINTFORMW ＞세계は滅び、인간は皆死に絶える。
+PRINTFORMW ＞巨大な光体を中心とし、세계は球状に。東京は『ボルテクス界』と化す。
+PRINTFORMW ＞『ボルテクス界』。세계が新たに生まれ変わるための子宮。
+;以下인수라の악마化
+;老婆
+;「…무서움多くも、坊ちゃまは貴方に興味をもたれています。
+;ヒトに過ぎない哀れな貴方に、特別に贈り物をあげようと申しております。
+;貴方はこの贈り物を受け取らなくてはなりません。
+;…動いてはいけません。……痛いのは一瞬だけです……」
+;아이の声
+;「これでキミは악마になるんだ…」
+;金머리카락の子どもの손から인수라の中へ奇妙な蟲が入り込む。
+;老婆の声
+;「악마の힘を宿せし禍なる魂"マガタマ"。これで貴方は악마となったのです。
+;坊ちゃまは、いつも見ておられます。くれぐれも退屈させることのないよう……」
+SETCOLOR COLOR("PASTEL-RED")
+PRINTFORMW 
+PRINTFORMW ――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+PRINTFORMW 
+RESETCOLOR
+PRINTFORML 
+PRINTFORMW 　　＞＞代々木公園＜＜
+PRINTFORML 
+PRINTFORML ＞抜けるや先程までの騒ぎが嘘のように静まり返った公園だった。
+PRINTFORMW ＞どうやら隣の세계に踏み込んでいたようだ。
+PRINTFORML 나나미：
+PRINTFORMW 「あ～ん、せんぱ～い！？」
+PRINTFORML ＞나나미の声を聴きながら픽시に눈をやると後で時間を取って説明してくれるとの事だ。
+PRINTFORMW ＞今日の所はさっさと帰って休むことにしよう。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+SETCOLOR COLOR("PASTEL-GREEN")
+PRINTFORML 
+PRINTFORML ＴＲＰＧリプ레이 再会 第１話 始まりの終わり ～ Beginning at the end ～
+PRINTFORMW 
+RESETCOLOR
+;Bパート終了
+;エン디무ング
+PRINTFORMW ＞隣り合った세계でヒトは滅びた、そこはヒトに似た人形：マネカタが搾取される세계だった。
+PRINTFORMW ＞픽시は「こちらの세계」に累を及ぼさない為%CALLNAME:MASTER%に願う。
+PRINTFORMW ＞세계を超えて戦うことを…。
+PRINTFORML 
+PRINTFORML 次回 第２話 ボルテクス界 ～ Rhapsody in Vortex ～
+PRINTFORMW 
+PRINTFORML 鶴来：
+PRINTFORMW 「沙耶、俺は、必ず君を探し出してみせる。세계が生まれ変わっても」
+PRINTFORML 
+;PRINTFORMW 製作中ですよー
+이벤트フラグ:35:0 = 2
+CUSTOMDRAWLINE =
+;- 1ターン経過
+FLAG:휴식フラグ = 1
+BEGIN TURNEND
+RETURN
+

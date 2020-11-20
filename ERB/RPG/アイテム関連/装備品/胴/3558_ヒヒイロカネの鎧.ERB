@@ -1,0 +1,74 @@
+﻿
+;======================================================
+;장비品の데이터
+;히히이로카네갑옷 Lv70/65
+;입수方法未定　罪ではムチャ린다수태　罰ではパパラチャ
+;수태…かなぁ
+;Lv51장비からは흡수有り　기본능력に합계+8まで
+;======================================================
+
+@기본능력수정_3558,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "인내력"
+		RETURN 6
+	CASE "운"
+		RETURN 6
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3558,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 93
+	CASE "회피"
+		RETURN 26
+	CASE "마법효과"
+		RETURN 41
+ENDSELECT
+RETURN 0
+
+@방어상성_3558,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "만능"
+		RETURN 75
+	CASE "비구","타격"
+		RETURN 30
+	CASE "검격","파마","주살"
+		RETURN 0
+	CASE "전격"
+		RETURN 999
+	CASE "빙결"
+		RETURN -100
+
+	CASE "전술"
+		RETURN 125
+	CASE "화염","핵열"
+		RETURN 300
+ENDSELECT
+RETURN 100
+
+@장비箇所_3558
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3558
+RETURN 100
+
+@장비조건_3558,ARG
+SIF BASE:ARG:LV < 100
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3558
+PRINTL 장비조건：LV100～
+
+@장비해설_3558
+PRINTL 幻と言われていた金属で作られた製法불명な超軽量・超硬度の鎧。熱伝導率が極端に高いので注意が필요。
+PRINTL 　　　　　　　　히히이로카네は、有史以前に存在したと言われる超文明時代に使われていた幻の金属で、数千年の間、地中深く眠っていた。
+
+
+;시바르바
+@구입조건_3558
+RETURN 0
+
+@引継ぎ可不可_3558
+RETURN 0

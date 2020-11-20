@@ -1,0 +1,1045 @@
+﻿;0　低명중＋必中の凶悪コンボ対策
+;1　コスト종류
+;2　効果強度
+;3　사거리
+;4　명중　兼　能力上昇공격
+;5　連続공격최대数
+;6　連続공격最小数
+;7　クリティカル 兼　能力上昇방어
+;8　속성　兼　能力上昇명중
+;9　대상
+;10　範囲
+;11　이상　兼　能力上昇회피
+;12　이상속성　兼　能力上昇마법위력
+;13　이상発生　兼　能力上昇마법효과
+;14　・方向性
+;15　種別
+;16　・소비MP
+;17　1체連続공격최대数
+;18　1체連続공격最小数
+;19　初回かどうか　兼　いろいろべんりなやつ
+;20～　そもそも使えない
+;====================
+;조건
+;====================
+@PLAYABLE_EVENT_45
+
+;メガテン系이벤트以外불허가の場合or필터설정されている場合
+SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 || GETBIT(FLAG:EXTRA이벤트필터, 12) == 1
+	RETURN 0
+
+RESULTS = 오리지널 스킬 세팅
+RETURN 1
+
+
+;====================
+;内容
+;====================
+@SHOPCOM_EVENT_45
+PRINTFORML 어서 오십시오、이곳에선 당신만의 오리지널 스킬의 성능을 설정할 수 있습니다
+PRINTFORML 그럼 우선、스킬의 방향성을 선택하시길
+$PATTERN_RETURN
+PRINTFORML 주：방향성을 변경하면、모든 설정이 초기화 됩니다
+PRINTFORM 현재
+	SIF 이벤트フラグ:45:14 == 0
+		PRINTFORML 「공격」
+	SIF 이벤트フラグ:45:14 == 1
+		PRINTFORML 「회복」
+	SIF 이벤트フラグ:45:14 == 2
+		PRINTFORML 「상태이상」
+	SIF 이벤트フラグ:45:14 == 3
+		PRINTFORML 「능력변동」
+PRINTL [0]공격계 [1]회복계
+PRINTL [2]상태이상계 
+;[3]能力変動系
+PRINTL [4]오리지널 스킬을 사용하지 않는다
+$INPUT_LOOP
+INPUT
+IF RESULT > 4 || RESULT < 0
+	GOTO INPUT_LOOP
+ELSEIF RESULT == 4
+	PRINTFORML 오리지널 스킬을 사용하지 않는 경우에도、설정이 초기화 됩니다
+	PRINTFORML 괜찮습니까？
+	PRINTL [0]네
+	PRINTL [1]아니오
+	$INPUT_LOOP_KAKUNIN
+	INPUT
+	IF RESULT > 1 || RESULT < 0
+		GOTO INPUT_LOOP_KAKUNIN
+	ELSEIF RESULT == 0
+		PRINTFORML 알겠습니다
+		PRINTFORML 사용 불가로 설정하고、스킬 설정을 종료합니다, 이후 표시되지 않습니다
+		이벤트フラグ:45:19 = 0
+		GOTO END
+	ELSEIF RESULT == 1
+		PRINTFORML 그럼、경향 설정으로 돌아갑니다
+		GOTO PATTERN_RETURN
+	ENDIF
+ELSEIF 이벤트フラグ:45:14 != RESULT || 이벤트フラグ:45:19 == 0
+	이벤트フラグ:45:14 = RESULT
+	이벤트フラグ:45:0 = 0
+	IF BASE:MASTER:ＭＰ < 1
+		이벤트フラグ:45:1 = 2
+	ELSE
+		이벤트フラグ:45:1 = 3
+	ENDIF
+	이벤트フラグ:45:2 = 0
+	이벤트フラグ:45:3 = 3
+;能力変化系の時は0にする
+	IF 이벤트フラグ:45:14 == 3
+		이벤트フラグ:45:4 = 0
+	ELSE
+		이벤트フラグ:45:4 = 100
+	ENDIF
+	이벤트フラグ:45:5 = 1
+	이벤트フラグ:45:6 = 1
+	이벤트フラグ:45:16 = 0
+	이벤트フラグ:45:17 = 1
+	이벤트フラグ:45:18 = 1
+	이벤트フラグ:45:7 = 0
+	이벤트フラグ:45:8 = 0
+;회복の時はとりあえず아군대상
+	IF 이벤트フラグ:45:14 == 1
+		이벤트フラグ:45:9 = 2
+	ELSE
+		이벤트フラグ:45:9 = 1
+	ENDIF
+	이벤트フラグ:45:10 = 1
+	이벤트フラグ:45:11 = 0
+	이벤트フラグ:45:12 = 0
+	이벤트フラグ:45:13 = 0
+	이벤트フラグ:45:15 = 2
+	이벤트フラグ:45:19 = 1
+
+ENDIF
+PRINTFORML 방향성을 결정했습니다
+PRINTFORML 다음은、성능을 설정해 주세요
+PRINTFORML 고성능일수록、소비 코스트가 증가합니다
+PRINTFORML 너무 지나치면 발동조차 못하는 상황이 될지도？
+$INPUT_LOOP2
+PRINTFORM 현재 코스트「{이벤트フラグ:45:16}」 현재 방향성
+	SIF 이벤트フラグ:45:14 == 0
+		PRINTFORML 「공격」
+	SIF 이벤트フラグ:45:14 == 1
+		PRINTFORML 「회복」
+	SIF 이벤트フラグ:45:14 == 2
+		PRINTFORML 「상태이상」
+	SIF 이벤트フラグ:45:14 == 3
+		PRINTFORML 「능력변동」
+PRINTFORML [0]스킬명　현재「%CSTR:MASTER:199%」
+PRINTFORM [1]코스트 종류　현재
+SIF 이벤트フラグ:45:1 == 2
+	PRINTFORML 「HP」
+SIF 이벤트フラグ:45:1 == 3
+	PRINTFORML 「MP」
+SIF 이벤트フラグ:45:14 != 2
+	PRINTFORML [2]효과 강도　현재「{이벤트フラグ:45:2}」
+IF 이벤트フラグ:45:14 != 1 
+	PRINTFORM [3]사거리　현재
+	SIF 이벤트フラグ:45:3 == 1
+		PRINTFORML 「S」
+	SIF 이벤트フラグ:45:3 == 2
+		PRINTFORML 「M」
+	SIF 이벤트フラグ:45:3 == 3
+		PRINTFORML 「L」
+ENDIF
+IF 이벤트フラグ:45:14 == 0
+	PRINTFORML [4]명중률　현재「{이벤트フラグ:45:4}％」
+	PRINTFORM [5]연격횟수　현재「{이벤트フラグ:45:6}～{이벤트フラグ:45:5}回」　
+	SIF 이벤트フラグ:45:10 > 5
+		PRINTFORM [6]연격집중률　현재「적 하나에 대한 ＨＩＴ수 {이벤트フラグ:45:18}～{이벤트フラグ:45:17}회」
+	PRINTFORML
+	PRINTFORML [7]치명률　현재「{이벤트フラグ:45:7}％」
+ENDIF
+IF 이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 3
+	PRINTFORM [8]속성　현재「
+IF 이벤트フラグ:45:8 == 0 && 이벤트フラグ:45:14 == 0
+	PRINT 검격
+ELSEIF 이벤트フラグ:45:8 == 1 && 이벤트フラグ:45:14 == 0
+	PRINT 비구
+ELSEIF 이벤트フラグ:45:8 == 2 && 이벤트フラグ:45:14 == 0
+	PRINT 타격
+ELSEIF 이벤트フラグ:45:8 == 3 && 이벤트フラグ:45:14 == 0
+	PRINT 전술
+ELSEIF 이벤트フラグ:45:8 == 4 && 이벤트フラグ:45:14 == 0
+	PRINT 화염
+ELSEIF 이벤트フラグ:45:8 == 5 && 이벤트フラグ:45:14 == 0
+	PRINT 빙결
+ELSEIF 이벤트フラグ:45:8 == 6 && 이벤트フラグ:45:14 == 0
+	PRINT 전격
+ELSEIF 이벤트フラグ:45:8 == 7 && 이벤트フラグ:45:14 == 0
+	PRINT 충격
+ELSEIF 이벤트フラグ:45:8 == 8 && 이벤트フラグ:45:14 == 0
+	PRINT 신경
+ELSEIF 이벤트フラグ:45:8 == 9 && 이벤트フラグ:45:14 == 0
+	PRINT 정신
+ELSEIF 이벤트フラグ:45:8 == 10 && 이벤트フラグ:45:14 == 0
+	PRINT 파마
+ELSEIF 이벤트フラグ:45:8 == 11 && 이벤트フラグ:45:14 == 0
+	PRINT 주살
+ELSEIF 이벤트フラグ:45:8 == 12 && 이벤트フラグ:45:14 == 0
+	PRINT 지변
+ELSEIF 이벤트フラグ:45:8 == 13 && 이벤트フラグ:45:14 == 0
+	PRINT 수격
+ELSEIF 이벤트フラグ:45:8 == 14 && 이벤트フラグ:45:14 == 0
+	PRINT 질풍
+ELSEIF 이벤트フラグ:45:8 == 15 && 이벤트フラグ:45:14 == 0
+	PRINT 중력
+ELSEIF 이벤트フラグ:45:8 == 16 && 이벤트フラグ:45:14 == 0
+	PRINT 핵열
+ELSEIF 이벤트フラグ:45:8 == 17 && 이벤트フラグ:45:14 == 0
+	PRINT 만능
+ENDIF
+SIF 이벤트フラグ:45:4 == 1
+	PRINT 공격
+SIF 이벤트フラグ:45:7 == 1
+	PRINT 방어
+SIF 이벤트フラグ:45:8 == 1
+	PRINT 명중
+SIF 이벤트フラグ:45:11 == 1
+	PRINT 회피
+SIF 이벤트フラグ:45:12 == 1
+	PRINT 마법위력
+SIF 이벤트フラグ:45:12 == 1
+	PRINT 마법효과
+	PRINTFORML 」
+ENDIF
+
+IF 이벤트フラグ:45:14 != 9
+;!= 1
+	PRINTFORM [9]대상　현재
+	SIF 이벤트フラグ:45:9 == 1
+		PRINTFORML 「적」
+	SIF 이벤트フラグ:45:9 == 2
+		PRINTFORML 「아군」
+ENDIF
+
+PRINTFORM [10]범위　현재「
+SIF 이벤트フラグ:45:10 == 1
+	PRINTFORM 1명
+SIF 이벤트フラグ:45:10 == 2
+	PRINTFORM １열 범위
+SIF 이벤트フラグ:45:10 == 3
+	PRINTFORM 전체 범위
+SIF 이벤트フラグ:45:10 == 4
+	PRINTFORM 적 아군 전체
+SIF 이벤트フラグ:45:10 == 5
+	PRINTFORM 확산
+SIF 이벤트フラグ:45:10 == 6
+	PRINTFORM 1명(１열 랜덤)
+SIF 이벤트フラグ:45:10 == 7
+	PRINTFORM 1명(전체 랜덤)
+PRINTFORML 」
+IF 이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 2
+	PRINTFORM [11]발생상태이상　현재「
+IF 이벤트フラグ:45:11 == 1
+	PRINTFORM POISON
+ELSEIF 이벤트フラグ:45:11 == 2
+	PRINTFORM PALYZE
+ELSEIF 이벤트フラグ:45:11 == 3
+	PRINTFORM CHARM
+ELSEIF 이벤트フラグ:45:11 == 4
+	PRINTFORM FREEZE
+ELSEIF 이벤트フラグ:45:11 == 5
+	PRINTFORM SHOCK
+ELSEIF 이벤트フラグ:45:11 == 6
+	PRINTFORM STONE
+ELSEIF 이벤트フラグ:45:11 == 7
+	PRINTFORM DYING
+ELSEIF 이벤트フラグ:45:11 == 8
+	PRINTFORM HAPPY
+ELSE
+	PRINTFORM 없음
+ENDIF
+	PRINTFORM 」　
+	PRINTFORM [12]상태이상속성　현재「
+IF 이벤트フラグ:45:12 == 0 
+	PRINT 검격
+ELSEIF 이벤트フラグ:45:12 == 1 
+	PRINT 비구
+ELSEIF 이벤트フラグ:45:12 == 2 
+	PRINT 타격
+ELSEIF 이벤트フラグ:45:12 == 3 
+	PRINT 전술
+ELSEIF 이벤트フラグ:45:12 == 4 
+	PRINT 화염
+ELSEIF 이벤트フラグ:45:12 == 5 
+	PRINT 빙결
+ELSEIF 이벤트フラグ:45:12 == 6 
+	PRINT 전격
+ELSEIF 이벤트フラグ:45:12 == 7 
+	PRINT 충격
+ELSEIF 이벤트フラグ:45:12 == 8 
+	PRINT 신경
+ELSEIF 이벤트フラグ:45:12 == 9 
+	PRINT 정신
+ELSEIF 이벤트フラグ:45:12 == 10 
+	PRINT 파마
+ELSEIF 이벤트フラグ:45:12 == 11 
+	PRINT 주살
+ELSEIF 이벤트フラグ:45:12 == 12 
+	PRINT 지변
+ELSEIF 이벤트フラグ:45:12 == 13 
+	PRINT 수격
+ELSEIF 이벤트フラグ:45:12 == 14 
+	PRINT 질풍
+ELSEIF 이벤트フラグ:45:12 == 15 
+	PRINT 중력
+ELSEIF 이벤트フラグ:45:12 == 16 
+	PRINT 핵열
+ELSEIF 이벤트フラグ:45:12 == 17 
+	PRINT 만능
+ENDIF
+	PRINTFORM 」　　
+	PRINTFORML [13]상태이상발생률　현재「{이벤트フラグ:45:13}％」
+ENDIF
+PRINTFORM [14]스킬종류　현재
+SIF 이벤트フラグ:45:15 == 1
+	PRINTFORML 「물리」
+SIF 이벤트フラグ:45:15 == 2
+	PRINTFORML 「마법」
+PRINTL [15]방향성을 다시 선택한다
+PRINTL [16]스킬 선택시 문장
+PRINTL [17]스킬 사용시 문장
+PRINTL [18]설정종료
+INPUT
+
+IF RESULT == 0
+	PRINTFORML 「스킬명」
+	PRINTFORML 완전 취미의 영역입니다。원하시는 대로 부디
+	$INPUT_LOOP_NAME
+	PRINTFORML 이름을 입력해 주세요
+	INPUTS
+	CSTR:MASTER:199 = %RESULTS%
+	PRINTFORML %CSTR:MASTER:199% 이걸로 괜찮습니까？
+	PRINTL [0]네
+	PRINTL [1]아니오
+	$INPUT_LOOP_NAME2
+	INPUT
+	IF RESULT == 0
+		GOTO INPUT_LOOP2
+	ELSEIF RESULT == 1
+		PRINTFORML 그럼 다시、마음에 드는 이름을 부디
+		GOTO INPUT_LOOP_NAME
+	ELSE
+		GOTO INPUT_LOOP_NAME2
+	ENDIF
+ELSEIF RESULT == 1
+	PRINTFORML 「코스트의 종류」
+	PRINTFORML HP를 소모할지 MP를 소모할지 선택할 수 있습니다
+	PRINTFORML HP의 소비량은 MP의 2배 입니다
+	PRINTL [2]HP
+	PRINTL [3]MP
+	$INPUT_LOOP_COST
+	INPUT
+	SIF RESULT != 2 && RESULT != 3
+		GOTO INPUT_LOOP_COST
+	이벤트フラグ:45:1 = RESULT
+ELSEIF RESULT == 2 && 이벤트フラグ:45:14 != 2
+	PRINTFORML 「효과 강도」
+	IF 이벤트フラグ:45:14 == 0
+		PRINTFORML 단순 공격력입니다
+		PRINTFORML 일정 이상 늘리면、지수 함수적으로 코스트가 오르기 시작합니다
+		PRINTFORML 마이너스의 값은、반대로 대상을 회복시키지만
+		PRINTFORML 코스트의 계산에는 절대값을 사용하니 주의하세요
+		PRINTFORML 보통 100이면 小、200이면 中、300이면 大데미지로 표기됩니다
+	ELSEIF 이벤트フラグ:45:14 == 1
+		PRINTFORML 단순 회복력입니다
+		PRINTFORML 일정 이상 늘리면、지수 함수적으로 코스트가 오르기 시작합니다
+		PRINTFORML 고레벨은 디아라한의 하위 호환이 됩니다
+		PRINTFORML 마이너스의 값은、반대로 대상에게 데미지를 주지만
+		PRINTFORML 코스트의 계산에는 절대값을 사용하니 주의하세요
+		PRINTFORML 보통 100이면 小、200이면 中、300이면 大회복으로 표기됩니다
+	ELSEIF 이벤트フラグ:45:14 == 3
+		PRINTFORML 단순 효력입니다
+		PRINTFORML 수치「2」에 부착 1단계 만큼 능력이 변동합니다
+		PRINTFORML 절대값에 따라、지수 함수적으로 코스트가 오릅니다
+		PRINTFORML 대상이 적인데 능력을 올리거나、아군인데 내리지 않도록 주의하세요
+	ENDIF
+	CALL INPUT_MANY(-66535,65535)
+	이벤트フラグ:45:2 = RESULT
+ELSEIF RESULT == 3 && 이벤트フラグ:45:14 != 1 
+	PRINTFORML 「사거리」
+	PRINTFORML 공격이 닿는 범위입니다。
+	PRINTFORML 짧을 수록 코스트가 줄어들지만、극적인 변화는 없습니다
+	PRINTFORML 공격 범위가 전체인 경우、사거리에 의한 코스트 감소는 발생하지 않습니다
+	PRINTL [1]S
+	PRINTL [2]M
+	PRINTL [3]L
+	$INPUT_LOOP_RANGE
+	INPUT
+	SIF RESULT < 1  || RESULT > 3
+		GOTO INPUT_LOOP_RANGE
+	이벤트フラグ:45:3 = RESULT
+ELSEIF RESULT == 4 && 이벤트フラグ:45:14 == 0
+	PRINTFORML 「명중률」
+	PRINTFORML 공격의 명중률 입니다。
+	PRINTFORML 명중률과 코스트는 정비례 하기 때문에、코스트에 미치는 영향이 특히 큽니다
+	PRINTFORML 주인공이 필중 상태일 때에 한정하여、명중률의 영향이 반감하니 주의하세요
+	CALL INPUT_MANY(1,100)
+	이벤트フラグ:45:4 = RESULT
+ELSEIF RESULT == 5 && 이벤트フラグ:45:14 == 0
+	PRINTFORML 「연격 횟수」
+	PRINTFORML 얼마나 공격이 연속으로 발동하는지에 대한 값입니다。
+	SIF 이벤트フラグ:45:10 > 5
+		PRINTFORM 집중률에 따라서도 달라지지만、비교적 
+	PRINTFORML 코스트에 큰 영향을 줍니다
+	PRINTFORML 너무 올리면 심해질 수 있으니 주의하세요
+	PRINTFORML 최대 값을 입력하세요
+	CALL INPUT_MANY(1,65535)
+	이벤트フラグ:45:5 = RESULT
+	SIF 이벤트フラグ:45:5 < 이벤트フラグ:45:17
+		이벤트フラグ:45:17 = 이벤트フラグ:45:5
+	SIF 이벤트フラグ:45:5 < 이벤트フラグ:45:18
+		이벤트フラグ:45:18 = 이벤트フラグ:45:5
+	PRINTFORML 최저 값을 입력하세요
+	CALL INPUT_MANY(0,이벤트フラグ:45:5)
+	이벤트フラグ:45:6 = RESULT
+ELSEIF RESULT == 6 && 이벤트フラグ:45:14 == 0 && 이벤트フラグ:45:10 > 5
+	PRINTFORML 「연격 집중률」
+	PRINTFORML 연속 공격이 한명의 적에게 명중할 횟수의、최대값과 최저값입니다
+	PRINTFORML 횟수에 따라서 달라지지만、비교적 코스트에 큰 영향을 줍니다
+	PRINTFORML 최대 값을 입력하세요
+	
+	CALL INPUT_MANY(1,이벤트フラグ:45:5)
+	이벤트フラグ:45:17 = RESULT
+	PRINTFORML 최저 값을 입력하세요
+	CALL INPUT_MANY(1,이벤트フラグ:45:17)
+	이벤트フラグ:45:18 = RESULT
+ELSEIF RESULT == 7 && 이벤트フラグ:45:14 == 0
+	PRINTFORML 「치명률」
+	PRINTFORML 치명타 발생 확률입니다
+	CALL INPUT_MANY(0,100)
+	이벤트フラグ:45:7 = RESULT
+ELSEIF RESULT == 8 && (이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 3)
+	PRINTFORML 「속성」
+	IF 이벤트フラグ:45:14 == 3
+		PRINTFORML 변동시키는 능력입니다
+		PRINTFORML 라스타캔디 비슷한 것도 할 수 있지만、코스트가 늘어납니다
+		PRINTL [0]이제 됐어
+		PRINTL [1]공격
+		PRINTL [2]방어
+		PRINTL [3]명중
+		PRINTL [4]회피
+		PRINTL [5]마법위력
+		PRINTL [6]마법효과
+		PRINTL [7]리셋
+		$INPUT_LOOP_NOURYOKU
+		PRINTFORM 현재 간섭 능력「
+SIF 이벤트フラグ:45:4 == 1
+	PRINT 공격
+SIF 이벤트フラグ:45:7 == 1
+	PRINT 방어
+SIF 이벤트フラグ:45:8 == 1
+	PRINT 명중
+SIF 이벤트フラグ:45:11 == 1
+	PRINT 회피
+SIF 이벤트フラグ:45:12 == 1
+	PRINT 마법위력
+SIF 이벤트フラグ:45:13 == 1
+	PRINT 마법효과
+		PRINTFORML 」
+		INPUT
+		IF RESULT == 0 
+			GOTO NOURYOKU_NO_END
+		ELSEIF RESULT == 1 
+			이벤트フラグ:45:4 = 1
+		ELSEIF RESULT == 2
+			이벤트フラグ:45:7 = 1
+		ELSEIF RESULT == 3
+			이벤트フラグ:45:8 = 1
+		ELSEIF RESULT == 4 
+			이벤트フラグ:45:11 = 1
+		ELSEIF RESULT == 5
+			이벤트フラグ:45:12 = 1
+		ELSEIF RESULT == 6 
+			이벤트フラグ:45:13 = 1
+		ELSEIF RESULT == 7
+			이벤트フラグ:45:4 = 0
+			이벤트フラグ:45:7 = 0
+			이벤트フラグ:45:8 = 0
+			이벤트フラグ:45:11 = 0
+			이벤트フラグ:45:12 = 0
+			이벤트フラグ:45:13 = 0
+		ENDIF
+		GOTO INPUT_LOOP_NOURYOKU
+	ENDIF
+	PRINTFORML 속성입니다
+	PRINTFORML 핵열과 만능에 한정하여、코스트가 조금 무거워집니다
+	PRINTFORML 
+	PRINTL [0]검격
+	PRINTL [2]비구
+	PRINTL [2]타격
+	PRINTL [3]전술
+	PRINTL [4]화염
+	PRINTL [5]빙결
+	PRINTL [6]전격
+	PRINTL [7]충격
+	PRINTL [8]신경
+	PRINTL [9]정신
+	PRINTL [10]파마
+	PRINTL [11]주살
+	PRINTL [12]지변
+	PRINTL [13]수격
+	PRINTL [14]질풍
+	PRINTL [15]중력
+	PRINTL [16]핵열
+	PRINTL [17]만능
+	$INPUT_LOOP_ELEMENT
+	INPUT
+	SIF RESULT < 0  || RESULT > 17
+		GOTO INPUT_LOOP_ELEMENT
+	이벤트フラグ:45:8 = RESULT
+$NOURYOKU_NO_END
+ELSEIF RESULT == 9
+; && 이벤트フラグ:45:14 != 1
+	PRINTFORML 「대상」
+	PRINTFORML 효과를 주는 상대입니다
+	PRINTFORML 실수로 아군을 때리거나 적을 강화시키지 않도록 주의하세요
+	PRINTFORM 현재 대상：
+	SIF 이벤트フラグ:45:9 == 1
+		PRINTFORM 적
+	SIF 이벤트フラグ:45:9 == 2
+		PRINTFORM 아군
+	PRINTFORML 
+	PRINTL [1]적
+	PRINTL [2]아군
+	$INPUT_LOOP_TARGET
+	INPUT
+	SIF RESULT < 1  || RESULT > 2
+		GOTO INPUT_LOOP_TARGET
+	이벤트フラグ:45:9 = RESULT
+ELSEIF RESULT == 10
+	PRINTFORML 「범위」
+	PRINTFORML 효과 범위입니다
+	IF 이벤트フラグ:45:14 == 0
+		PRINTFORML 적 아군 모두에 해당하는 경우、코스트가 감소합니다
+		PRINTFORML 확산은 코스트 상승이 심하니 주의하세요
+		PRINTFORML 랜덤 계통의 선택사항은「그 중에서 랜덤으로 선택해」공격합니다
+		PRINTFORML 코스트 상승은 없고、연속 공격과 섞으면서 진가를 발휘합니다
+	ENDIF
+	PRINTL [1]1명
+	PRINTL [2]１열 범위
+	PRINTL [3]전체 범위
+	IF 이벤트フラグ:45:14 == 0
+		PRINTL [4]적 아군 전체
+		PRINTL [5]확산
+		PRINTL [6]1명(１열 랜덤)
+		PRINTL [7]1명(전체 랜덤)
+	ENDIF
+	$INPUT_LOOP_BOM
+	INPUT
+	SIF RESULT < 1  || RESULT > 7 || ( RESULT > 3 && 이벤트フラグ:45:14 != 0)
+		GOTO INPUT_LOOP_BOM
+	이벤트フラグ:45:10 = RESULT
+ELSEIF RESULT == 11 && (이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 2)
+	PRINTFORML 「발생상태이상」
+	PRINTFORML 상대에게 부여하는 상태 이상입니다
+	PRINTFORML 석화・즉사는 비교적 코스트 비용이 큽니다
+	PRINTL [0]없음
+	PRINTL [1]POISON
+	PRINTL [2]PALYZE
+	PRINTL [3]CHARM
+	PRINTL [4]FREEZE
+	PRINTL [5]SHOCK
+	PRINTL [6]STONE
+	PRINTL [7]DYING
+	PRINTL [8]HAPPY
+	$INPUT_LOOP_ADD
+	INPUT
+	SIF RESULT < 0  || RESULT > 8
+		GOTO INPUT_LOOP_ADD
+	이벤트フラグ:45:11 = RESULT
+ELSEIF RESULT == 12 && (이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 2)
+	PRINTFORML 「상태이상속성」
+	PRINTFORML 상태 이상을 부여하는 속성입니다
+	PRINTFORML 예를 들면、상태 이상 속성이 화염인 스킬로 화염 약점인 적에게 공격하면、상태 이상을 부여하기 쉬워집니다。
+	PRINTFORML 핵열과 만능에 한정하여、코스트가 조금 무거워집니다
+	PRINTL [0]검격
+	PRINTL [1]비구
+	PRINTL [2]타격
+	PRINTL [3]전술
+	PRINTL [4]화염
+	PRINTL [5]빙결
+	PRINTL [6]전격
+	PRINTL [7]충격
+	PRINTL [8]신경
+	PRINTL [9]정신
+	PRINTL [10]파마
+	PRINTL [11]주살
+	PRINTL [12]지변
+	PRINTL [13]수격
+	PRINTL [14]질풍
+	PRINTL [15]중력
+	PRINTL [16]핵열
+	PRINTL [17]만능
+	$INPUT_LOOP_ADDELEMENT
+	INPUT
+	SIF RESULT < 0  || RESULT > 17
+		GOTO INPUT_LOOP_ADDELEMENT
+	이벤트フラグ:45:12 = RESULT
+ELSEIF RESULT == 13 && (이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 2)
+	PRINTFORML 「상태이상발동률」
+	PRINTFORML 상태 이상을 부여하는"기준"의 확률입니다
+	PRINTFORML 대게 동격의 상대에게 부여할 수 있는 확률이며、피래미에겐 확률이 오르지만、반대의 상황도 있습니다
+	PRINTFORML 100％에 매달리면 코스트가 무거워지니 주의하세요
+	CALL INPUT_MANY(0,100)
+	이벤트フラグ:45:13 = RESULT
+ELSEIF RESULT == 14
+	PRINTFORML 「스킬종류」
+	PRINTFORML 기술이 물리 계열인가 마법 계열인가 입니다
+	PRINTFORML 뇌근육인데 마법계 능력에 의존하거나 하지 않도록 주의하세요
+	PRINTL [1]물리
+	PRINTL [2]마법
+	$INPUT_LOOP_DAMAGETYPE
+	INPUT
+	SIF RESULT < 1  || RESULT > 2
+		GOTO INPUT_LOOP_DAMAGETYPE
+	이벤트フラグ:45:15 = RESULT
+ELSEIF RESULT == 15
+	GOTO PATTERN_RETURN
+ELSEIF RESULT == 16
+	PRINTFORML 「스킬 선택시 문장」
+	PRINTFORML 완전히 취미의 영역입니다。원하시는 대로 부디
+	$INPUT_LOOP_NAME3
+	PRINTFORML 문장을 입력하세요
+	INPUTS
+	CSTR:MASTER:197 = %RESULTS%
+	PRINTFORML %CSTR:MASTER:197% 이걸로 괜찮습니까？
+	PRINTL [0]네
+	PRINTL [1]아니오
+	INPUT
+	IF RESULT == 0
+		GOTO INPUT_LOOP2
+	ELSEIF RESULT == 1
+		PRINTFORML 그럼 다시、마음에 드는 이름을 부디
+		GOTO INPUT_LOOP_NAME3
+	ELSE
+		GOTO INPUT_LOOP_NAME3
+	ENDIF
+ELSEIF RESULT == 17
+	PRINTFORML 「스킬 사용시 문장」
+	PRINTFORML 완전히 취미의 영역입니다。원하시는 대로 부디
+	$INPUT_LOOP_NAME4
+	PRINTFORML 문장을 입력하세요
+	INPUTS
+	CSTR:MASTER:198 = %RESULTS%
+	PRINTFORML %CSTR:MASTER:198% 이걸로 괜찮습니까？
+	PRINTL [0]네
+	PRINTL [1]아니오
+	INPUT
+	IF RESULT == 0
+		GOTO INPUT_LOOP2
+	ELSEIF RESULT == 1
+		PRINTFORML 그럼 다시、마음에 드는 이름을 부디
+		GOTO INPUT_LOOP_NAME4
+	ELSE
+		GOTO INPUT_LOOP_NAME4
+	ENDIF
+ELSEIF RESULT == 18
+	PRINTFORM %CSTR:MASTER:199%は
+	IF 이벤트フラグ:45:14 == 2
+		CALL SHOPCOM_EVENT_45_SKILL_MIRUYO2
+	ELSEIF 이벤트フラグ:45:14 == 3
+		CALL SHOPCOM_EVENT_45_SKILL_MIRUYO3
+	ELSE
+		CALL SHOPCOM_EVENT_45_SKILL_MIRUYO
+	ENDIF
+	PRINTFORML 스킬입니다
+	PRINTL [0]이거면 됐어
+	PRINTL [1]이건 아니지
+	$INPUT_LOOP_ENDCHOISE
+	INPUT
+	IF RESULT == 0
+		PRINTFORML 수고하셨습니다
+		GOTO END
+	ELSEIF RESULT == 1
+		PRINTFORML 그럼、마음에 드실 때까지 부디
+	ELSE
+		GOTO INPUT_LOOP_ENDCHOISE
+	ENDIF
+ENDIF
+
+;まず위력分の計算　絶対値を使う　さらにクリティカル率も加算　능력変動は上昇がキツい
+ABS 이벤트フラグ:45:2
+IF 이벤트フラグ:45:14 == 3
+	이벤트フラグ:45:16 = RESULT * RESULT
+ELSE
+	이벤트フラグ:45:16 = (RESULT / 30) + (RESULT * RESULT / 5000)+ 이벤트フラグ:45:7
+ENDIF
+
+;상태이상分の加算
+IF 이벤트フラグ:45:11 > 0 && 이벤트フラグ:45:14 != 3
+	IF 이벤트フラグ:45:11 < 6 || 이벤트フラグ:45:11 == 8
+		이벤트フラグ:45:19 = 10 * 이벤트フラグ:45:13
+	ELSEIF 이벤트フラグ:45:11 == 6
+		이벤트フラグ:45:19 = 15 * 이벤트フラグ:45:13
+	ELSEIF 이벤트フラグ:45:11 == 7
+		이벤트フラグ:45:19 = 20 * 이벤트フラグ:45:13
+	ENDIF
+	이벤트フラグ:45:19 /= 100
+	이벤트フラグ:45:16 += 이벤트フラグ:45:19
+	이벤트フラグ:45:19 = 1
+ENDIF
+
+;変動させる능력によるコスト加算 명중と회피はコスト上昇が少ない
+IF 이벤트フラグ:45:14 == 3
+	SIF 이벤트フラグ:45:4
+		이벤트フラグ:45:19 += 2
+	SIF 이벤트フラグ:45:7
+		이벤트フラグ:45:19 += 2
+	SIF 이벤트フラグ:45:8
+		이벤트フラグ:45:19 ++
+	SIF 이벤트フラグ:45:11
+		이벤트フラグ:45:19 ++
+	SIF 이벤트フラグ:45:12
+		이벤트フラグ:45:19 += 2
+	SIF 이벤트フラグ:45:13
+		이벤트フラグ:45:19 += 2
+	이벤트フラグ:45:16 *= 이벤트フラグ:45:19 - 1
+	이벤트フラグ:45:16 /= 2
+
+	이벤트フラグ:45:19 = 1
+ENDIF
+
+;명중보정
+IF 이벤트フラグ:45:14 == 0
+	이벤트フラグ:45:0 = 이벤트フラグ:45:16
+	이벤트フラグ:45:0 *= (100 + 이벤트フラグ:45:4) / 2
+	이벤트フラグ:45:0 /= 100
+
+	이벤트フラグ:45:16 *= 이벤트フラグ:45:4
+;別々にやらないと四捨五入？が発生して計算が브레이크する
+	이벤트フラグ:45:16 /= 100
+ENDIF
+
+;上の時点でコストを0に出来る問題対策
+SIF 이벤트フラグ:45:16 == 0
+	이벤트フラグ:45:16 ++
+
+;連続공격보정
+IF 이벤트フラグ:45:10 > 5
+	이벤트フラグ:45:16 *= (이벤트フラグ:45:5 + 이벤트フラグ:45:6 + 이벤트フラグ:45:17 + 이벤트フラグ:45:18)
+	이벤트フラグ:45:16 /= 4
+	이벤트フラグ:45:0 *= (이벤트フラグ:45:5 + 이벤트フラグ:45:6 + 이벤트フラグ:45:17 + 이벤트フラグ:45:18)
+	이벤트フラグ:45:0 /= 4
+ELSE
+	이벤트フラグ:45:16 *= (이벤트フラグ:45:5 + 이벤트フラグ:45:6)
+	이벤트フラグ:45:16 /= 2
+	이벤트フラグ:45:0 *= (이벤트フラグ:45:5 + 이벤트フラグ:45:6)
+	이벤트フラグ:45:0 /= 2
+ENDIF
+;공격범위による보정　적아군전체はコスト減少
+IF 이벤트フラグ:45:10 == 2
+	이벤트フラグ:45:16 *= 4
+	이벤트フラグ:45:16 /= 3
+	이벤트フラグ:45:0 *= 4
+	이벤트フラグ:45:0 /= 3
+ELSEIF 이벤트フラグ:45:10 == 3
+	이벤트フラグ:45:16 *= 3
+	이벤트フラグ:45:16 /= 2
+	이벤트フラグ:45:0 *= 3
+	이벤트フラグ:45:0 /= 2
+ELSEIF 이벤트フラグ:45:10 == 4
+	이벤트フラグ:45:16 *= 3
+	이벤트フラグ:45:16 /= 4
+	이벤트フラグ:45:0 *= 3
+	이벤트フラグ:45:0 /= 4
+ELSEIF 이벤트フラグ:45:10 == 5
+	이벤트フラグ:45:16 *= 2
+	이벤트フラグ:45:0 *= 2
+ENDIF
+
+;능력変動系は범위변경のコスト二倍
+SIF 이벤트フラグ:45:10 != 1 && 이벤트フラグ:45:14 == 3
+	이벤트フラグ:45:16 *= 2
+
+;사거리보정　전체공격ではボーナス無し
+IF 이벤트フラグ:45:10 != 3 && 이벤트フラグ:45:10 != 4
+	IF 이벤트フラグ:45:3 == 1
+		이벤트フラグ:45:16 *= 4
+		이벤트フラグ:45:16 /= 5
+		이벤트フラグ:45:0 *= 4
+		이벤트フラグ:45:0 /= 5
+	ELSEIF 이벤트フラグ:45:3 == 2
+		이벤트フラグ:45:16 *= 9
+		이벤트フラグ:45:16 /= 10
+		이벤트フラグ:45:0 *= 9
+		이벤트フラグ:45:0 /= 10
+	ENDIF
+ENDIF
+;HPを支払う場合は二倍
+IF 이벤트フラグ:45:1 == 2
+	이벤트フラグ:45:16 *= 2
+	이벤트フラグ:45:0 *= 2
+ENDIF
+;만능及び핵열속성보정　
+IF 이벤트フラグ:45:8 >= 16
+	이벤트フラグ:45:16 += 10
+	이벤트フラグ:45:0 += 10
+ENDIF
+IF 이벤트フラグ:45:12 >= 16
+	이벤트フラグ:45:16 += 5
+	이벤트フラグ:45:0 += 10
+ENDIF
+GOTO INPUT_LOOP2
+$END
+
+;====================
+;스킬見るよ
+;====================
+@SHOPCOM_EVENT_45_SKILL_MIRUYO
+SIF (이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 2) && 이벤트フラグ:45:3 == 1 && 이벤트フラグ:45:10 != 4 && (이벤트フラグ:45:9 == 3 || 이벤트フラグ:45:9 == 4)
+	PRINTFORM 근거리의 
+SIF (이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 2) && 이벤트フラグ:45:3 == 2 && 이벤트フラグ:45:10 != 4 && (이벤트フラグ:45:9 == 3 || 이벤트フラグ:45:9 == 4)
+	PRINTFORM 중거리의 
+IF 이벤트フラグ:45:10 == 4
+	PRINTFORM 적 아군 전체 
+ELSE
+	IF 이벤트フラグ:45:9 == 1
+		PRINTFORM 적
+	ELSEIF 이벤트フラグ:45:9 == 2
+		PRINTFORM 아군
+	ENDIF
+	IF 이벤트フラグ:45:10 == 1
+		PRINTFORM 1명
+	ELSEIF 이벤트フラグ:45:10 == 2
+		PRINTFORM １열
+	ELSEIF 이벤트フラグ:45:10 == 3
+		PRINTFORM 전체
+	ELSEIF 이벤트フラグ:45:10 == 5
+		PRINTFORM 1명과 그 주위
+	ELSEIF 이벤트フラグ:45:10 == 6
+		PRINTFORM １열에서 랜덤으로 선택한 대상
+	ELSEIF 이벤트フラグ:45:10 == 7
+		PRINTFORM 전체에서 랜덤으로 선택한 대상
+	ENDIF
+	
+ENDIF
+;회복か데미지によって変わる助詞
+PRINTFORM \@ 이벤트フラグ:45:14 == 0 || (이벤트フラグ:45:14 == 1 && 이벤트フラグ:45:1 < 0) ? 에게 # を \@
+IF  이벤트フラグ:45:5 != 1 && 이벤트フラグ:45:6 == 이벤트フラグ:45:5
+	PRINTFORM {이벤트フラグ:45:5}회 
+ELSEIF 이벤트フラグ:45:5 != 1
+	PRINTFORM {이벤트フラグ:45:6}～{이벤트フラグ:45:5}회 
+ENDIF
+;속성표시　회복스킬のときは표시しない
+IF 이벤트フラグ:45:8 == 0 && 이벤트フラグ:45:14 == 0
+	PRINT 검격
+ELSEIF 이벤트フラグ:45:8 == 1 && 이벤트フラグ:45:14 == 0
+	PRINT 비구
+ELSEIF 이벤트フラグ:45:8 == 2 && 이벤트フラグ:45:14 == 0
+	PRINT 타격
+ELSEIF 이벤트フラグ:45:8 == 3 && 이벤트フラグ:45:14 == 0
+	PRINT 전술
+ELSEIF 이벤트フラグ:45:8 == 4 && 이벤트フラグ:45:14 == 0
+	PRINT 화염
+ELSEIF 이벤트フラグ:45:8 == 5 && 이벤트フラグ:45:14 == 0
+	PRINT 빙결
+ELSEIF 이벤트フラグ:45:8 == 6 && 이벤트フラグ:45:14 == 0
+	PRINT 전격
+ELSEIF 이벤트フラグ:45:8 == 7 && 이벤트フラグ:45:14 == 0
+	PRINT 충격
+ELSEIF 이벤트フラグ:45:8 == 8 && 이벤트フラグ:45:14 == 0
+	PRINT 신경
+ELSEIF 이벤트フラグ:45:8 == 9 && 이벤트フラグ:45:14 == 0
+	PRINT 정신
+ELSEIF 이벤트フラグ:45:8 == 10 && 이벤트フラグ:45:14 == 0
+	PRINT 파마
+ELSEIF 이벤트フラグ:45:8 == 11 && 이벤트フラグ:45:14 == 0
+	PRINT 주살
+ELSEIF 이벤트フラグ:45:8 == 12 && 이벤트フラグ:45:14 == 0
+	PRINT 지변
+ELSEIF 이벤트フラグ:45:8 == 13 && 이벤트フラグ:45:14 == 0
+	PRINT 수격
+ELSEIF 이벤트フラグ:45:8 == 14 && 이벤트フラグ:45:14 == 0
+	PRINT 질풍
+ELSEIF 이벤트フラグ:45:8 == 15 && 이벤트フラグ:45:14 == 0
+	PRINT 중력
+ELSEIF 이벤트フラグ:45:8 == 16 && 이벤트フラグ:45:14 == 0
+	PRINT 핵열
+ELSEIF 이벤트フラグ:45:8 == 17 && 이벤트フラグ:45:14 == 0
+	PRINT 만능
+ENDIF
+SIF 이벤트フラグ:45:14 == 0
+	PRINT  相性에 
+
+ABS 이벤트フラグ:45:2
+IF RESULT < 200 
+	PRINTFORM 小
+ELSEIF RESULT < 300
+	PRINTFORM 中
+ELSEIF RESULT < 400
+	PRINTFORM 大
+ELSEIF RESULT >= 400
+	PRINTFORM 특大
+ENDIF
+PRINTFORM \@ 이벤트フラグ:45:14 == 0 || (이벤트フラグ:45:14 == 1 && 이벤트フラグ:45:2 < 0) ?  데미지를 주고 #  회복시키고 \@
+
+IF 이벤트フラグ:45:11 == 1
+	PRINTFORM POISON을 부여
+ELSEIF 이벤트フラグ:45:11 == 2
+	PRINTFORM PALYZE을 부여
+ELSEIF 이벤트フラグ:45:11 == 3
+	PRINTFORM CHARM을 부여
+ELSEIF 이벤트フラグ:45:11 == 4
+	PRINTFORM FREEZE을 부여
+ELSEIF 이벤트フラグ:45:11 == 5
+	PRINTFORM SHOCK을 부여
+ELSEIF 이벤트フラグ:45:11 == 6
+	PRINTFORM STONE을 부여
+ELSEIF 이벤트フラグ:45:11 == 7
+	PRINTFORM DYING을 부여
+ELSEIF 이벤트フラグ:45:11 == 8
+	PRINTFORM HAPPY을 부여
+ENDIF
+PRINTFORM 하고 
+SIF 이벤트フラグ:45:15 == 1
+	PRINTFORM 물리
+SIF 이벤트フラグ:45:15 == 2
+	PRINTFORM 마법
+PRINTFORM \@ 이벤트フラグ:45:14 == 0 || (이벤트フラグ:45:14 == 1 && 이벤트フラグ:45:2 < 0) ? 공격 # 적 치료 \@을 실시한다
+
+;====================
+;스킬見るよ상태이상版
+;====================
+@SHOPCOM_EVENT_45_SKILL_MIRUYO2
+SIF (이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 2) && 이벤트フラグ:45:3 == 1 && 이벤트フラグ:45:10 != 4
+	PRINTFORM 근거리의 
+SIF (이벤트フラグ:45:14 == 0 || 이벤트フラグ:45:14 == 2) && 이벤트フラグ:45:3 == 2 && 이벤트フラグ:45:10 != 4
+	PRINTFORM 중거리의 
+
+IF 이벤트フラグ:45:9 == 1
+	PRINTFORM 적 
+ELSEIF 이벤트フラグ:45:9 == 2
+	PRINTFORM 아군 
+ENDIF
+
+IF 이벤트フラグ:45:10 == 1
+	PRINTFORM 1명
+ELSEIF 이벤트フラグ:45:10 == 2
+	PRINTFORM １열
+ELSEIF 이벤트フラグ:45:10 == 3
+	PRINTFORM 전체
+ENDIF
+	
+PRINTFORM 에게 
+;속성표시
+IF 이벤트フラグ:45:12 == 0 
+	PRINT 검격
+ELSEIF 이벤트フラグ:45:12 == 1 
+	PRINT 비구
+ELSEIF 이벤트フラグ:45:12 == 2 
+	PRINT 타격
+ELSEIF 이벤트フラグ:45:12 == 3 
+	PRINT 전술
+ELSEIF 이벤트フラグ:45:12 == 4 
+	PRINT 화염
+ELSEIF 이벤트フラグ:45:12 == 5 
+	PRINT 빙결
+ELSEIF 이벤트フラグ:45:12 == 6 
+	PRINT 전격
+ELSEIF 이벤트フラグ:45:12 == 7 
+	PRINT 충격
+ELSEIF 이벤트フラグ:45:12 == 8 
+	PRINT 신경
+ELSEIF 이벤트フラグ:45:12 == 9 
+	PRINT 정신
+ELSEIF 이벤트フラグ:45:12 == 10 
+	PRINT 파마
+ELSEIF 이벤트フラグ:45:12 == 11 
+	PRINT 주살
+ELSEIF 이벤트フラグ:45:12 == 12 
+	PRINT 지변
+ELSEIF 이벤트フラグ:45:12 == 13 
+	PRINT 수격
+ELSEIF 이벤트フラグ:45:12 == 14 
+	PRINT 질풍
+ELSEIF 이벤트フラグ:45:12 == 15 
+	PRINT 중력
+ELSEIF 이벤트フラグ:45:12 == 16 
+	PRINT 핵열
+ELSEIF 이벤트フラグ:45:12 == 17 
+	PRINT 만능
+ENDIF
+PRINT 相性으로 
+
+IF 이벤트フラグ:45:11 == 1
+	PRINTFORM POISON을 부여
+ELSEIF 이벤트フラグ:45:11 == 2
+	PRINTFORM PALYZE을 부여
+ELSEIF 이벤트フラグ:45:11 == 3
+	PRINTFORM CHARM을 부여
+ELSEIF 이벤트フラグ:45:11 == 4
+	PRINTFORM FREEZE을 부여
+ELSEIF 이벤트フラグ:45:11 == 5
+	PRINTFORM SHOCK을 부여
+ELSEIF 이벤트フラグ:45:11 == 6
+	PRINTFORM STONE을 부여
+ELSEIF 이벤트フラグ:45:11 == 7
+	PRINTFORM DYING을 부여
+ELSEIF 이벤트フラグ:45:11 == 8
+	PRINTFORM HAPPY을 부여
+ENDIF
+PRINTFORM 하고 
+SIF 이벤트フラグ:45:15 == 1
+	PRINTFORM 물리 
+SIF 이벤트フラグ:45:15 == 2
+	PRINTFORM 마법 
+PRINTFORML 공격을 실시하는 
+;====================
+;스킬見るよ능력변화版
+;====================
+@SHOPCOM_EVENT_45_SKILL_MIRUYO3
+	IF 이벤트フラグ:45:9 == 1
+		PRINTFORM 적 
+	ELSEIF 이벤트フラグ:45:9 == 2
+		PRINTFORM 아군 
+	ENDIF
+	IF 이벤트フラグ:45:10 == 1
+		PRINTFORM 1명
+	ELSEIF 이벤트フラグ:45:10 == 2
+		PRINTFORM １열
+	ELSEIF 이벤트フラグ:45:10 == 3
+		PRINTFORM 전체
+	ENDIF
+	
+PRINTFORM 의 
+IF 이벤트フラグ:45:4 == 1 && 이벤트フラグ:45:7 == 1 && 이벤트フラグ:45:8 == 1 && 이벤트フラグ:45:11 == 1 && 이벤트フラグ:45:12 == 1 && 이벤트フラグ:45:13 == 1 
+	PRINT 모든 능력
+ELSE
+	SIF 이벤트フラグ:45:4 == 1
+		PRINT 공격
+	SIF 이벤트フラグ:45:4 == 1 && (이벤트フラグ:45:7 == 1 || 이벤트フラグ:45:8 == 1 || 이벤트フラグ:45:11 == 1 || 이벤트フラグ:45:12 == 1 || 이벤트フラグ:45:13 == 1) 
+		PRINT 과 
+	SIF 이벤트フラグ:45:7 == 1
+		PRINT 방어 
+	SIF 이벤트フラグ:45:7 == 1 && (이벤트フラグ:45:8 == 1 || 이벤트フラグ:45:11 == 1 || 이벤트フラグ:45:12 == 1 || 이벤트フラグ:45:13 == 1) 
+		PRINT 와 
+	SIF 이벤트フラグ:45:8 == 1
+		PRINT 명중
+	SIF 이벤트フラグ:45:8 == 1 && (이벤트フラグ:45:11 == 1 || 이벤트フラグ:45:12 == 1 || 이벤트フラグ:45:13 == 1) 
+		PRINT 과 
+	SIF 이벤트フラグ:45:11 == 1
+		PRINT 회피
+	SIF 이벤트フラグ:45:11 == 1 && (이벤트フラグ:45:12 == 1 || 이벤트フラグ:45:13 == 1 ) 
+		PRINT 와 
+	SIF 이벤트フラグ:45:12 == 1
+		PRINT 마법위력
+	SIF  이벤트フラグ:45:12 == 1 && 이벤트フラグ:45:13 == 1 
+		PRINT 과 
+	SIF 이벤트フラグ:45:13 == 1
+		PRINT 마법효과
+ENDIF
+
+PRINT 를 
+
+ABS 이벤트フラグ:45:2
+IF RESULT > 3 && RESULT < 6
+	PRINTFORM 크게 
+ELSEIF RESULT > 5
+	PRINTFORM 매우 크게 
+ENDIF
+PRINTFORM \@ 이벤트フラグ:45:2 > 0 ? 올리 # 내리 \@
+
+PRINTFORML 는 

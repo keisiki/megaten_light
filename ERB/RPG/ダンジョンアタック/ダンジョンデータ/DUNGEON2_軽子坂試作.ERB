@@ -1,0 +1,960 @@
+﻿;=======================================================================
+;카루코자카고교
+;ボス 오퀴페테 または 모・쇼보２体
+;던전ナンバー2　ＭＡＰ0~5
+;=======================================================================
+;フラグ
+;던전フラグ:2:0-10 = 宝箱
+;던전フラグ:2:11 = ボス撃破フラグ(1.倒した)
+;던전フラグ:2:12 = 레이코フラグ(1.奴隷にした 2.放っておいた)
+;
+;=======================================================================
+;攻略조건
+;=======================================================================
+@PREREQUISITE_DUNGEON_2
+;REQ2 카루코자카고교체육관(1)をクリアしていなければダメ
+SIF 의뢰フラグ:2:0 == 0
+	RETURN 0
+;REQ3 카루코자카고교체육관(2)をクリアしていなければダメ
+SIF 의뢰フラグ:3:0 == 0
+	RETURN 0
+;D7카루코자카상층をクリアしていない
+SIF 던전フラグ:7:1
+	RETURN 0
+RETURN 1
+
+
+;=======================================================================
+;던전名
+;=======================================================================
+@GET_DUNGEON_NAME_2
+RESULTS = 카루코자카고교
+
+
+;=======================================================================
+;フ로어名표시
+;=======================================================================
+@FLOORNAME_2
+PRINT 카루코자카고교
+SELECTCASE FLAG:現M
+	CASE 0
+		PRINTL   B１Ｆ
+	CASE 1
+		PRINTL   １Ｆ
+	CASE 2
+		PRINTL   ２Ｆ
+	CASE 3
+		PRINTL   ３Ｆ
+	CASE 4
+		PRINTL   ４Ｆ
+	CASE 5
+		PRINTL   ５Ｆ
+	CASEELSE
+		PRINTL
+ENDSELECT
+
+
+;=======================================================================
+;特殊タイル표시
+;=======================================================================
+@TILE_MARK_2_X_X
+RESULTS = 特
+
+
+;=======================================================================
+;スタート地点입력
+;=======================================================================
+@START_DUNGEON_2,ARG
+FLAG:現M = 0
+FLAG:現X = 9
+FLAG:現Y = 2
+;CALL AUTOMAP
+
+
+;=======================================================================
+;指定したマスに進入가능か
+;=======================================================================
+@CAN_ENTER_2,ARG,ARG:1
+CALL CAN_ENTER,ARG,ARG:1
+RETURN RESULT
+
+;=======================================================================
+;フ로어데이터
+;=======================================================================
+@MAKE_FLOOR_2
+SELECTCASE FLAG:現M
+	CASE 0
+	;１階
+		FLAG:최대X = 10
+		FLAG:최대Y = 6
+		CALL MAKE_FLOOR_LINE,0,"0000000000"
+		CALL MAKE_FLOOR_LINE,1,"0121111110"
+		CALL MAKE_FLOOR_LINE,2,"0001001018"
+		CALL MAKE_FLOOR_LINE,3,"0121600010"
+		CALL MAKE_FLOOR_LINE,4,"0000001210"
+		CALL MAKE_FLOOR_LINE,5,"0000000000"
+		CALL MAKE_FLOOR_LINE,6,"0000000000"
+		CALL MAKE_FLOOR_LINE,7,"0000000000"
+		CALL MAKE_FLOOR_LINE,8,"0000000000"
+		CALL MAKE_FLOOR_LINE,9,"0000000000"
+		
+		;宝箱の設置
+		CALL SET_TILE,1,3,던전フラグ:2:0,0,3
+		
+		;이벤트の設置
+		CALL SET_TILE,8,2,던전フラグ:2:12,0,4
+
+	CASE 1
+	;２階
+		FLAG:최대X = 15
+		FLAG:최대Y = 15
+		CALL MAKE_FLOOR_LINE,0,"000000000000000"
+		CALL MAKE_FLOOR_LINE,1,"012111211111210"
+		CALL MAKE_FLOOR_LINE,2,"000002010000000"
+		CALL MAKE_FLOOR_LINE,3,"011111010101000"
+		CALL MAKE_FLOOR_LINE,4,"010001010201000"
+		CALL MAKE_FLOOR_LINE,5,"010601011111210"
+		CALL MAKE_FLOOR_LINE,6,"010201000001000"
+		CALL MAKE_FLOOR_LINE,7,"011111000121000"
+		CALL MAKE_FLOOR_LINE,8,"000000000001000"
+		CALL MAKE_FLOOR_LINE,9,"000000010111210"
+		CALL MAKE_FLOOR_LINE,10,"000000020111000"
+		CALL MAKE_FLOOR_LINE,11,"000000011111110"
+		CALL MAKE_FLOOR_LINE,12,"000000000201000"
+		CALL MAKE_FLOOR_LINE,13,"000000072101210"
+		CALL MAKE_FLOOR_LINE,14,"000000000000000"
+		
+		;宝箱の設置
+		CALL SET_TILE,11,3,던전フラグ:2:1,0,3
+	CASE 2
+	;3階
+		FLAG:최대X = 9
+		FLAG:최대Y = 17
+		CALL MAKE_FLOOR_LINE,0,"000000000"
+		CALL MAKE_FLOOR_LINE,1,"011111000"
+		CALL MAKE_FLOOR_LINE,2,"010002000"
+		CALL MAKE_FLOOR_LINE,3,"010106000"
+		CALL MAKE_FLOOR_LINE,4,"010200000"
+		CALL MAKE_FLOOR_LINE,5,"011111000"
+		CALL MAKE_FLOOR_LINE,6,"020000000"
+		CALL MAKE_FLOOR_LINE,7,"011111010"
+		CALL MAKE_FLOOR_LINE,8,"020002020"
+		CALL MAKE_FLOOR_LINE,9,"010121110"
+		CALL MAKE_FLOOR_LINE,10,"000000010"
+		CALL MAKE_FLOOR_LINE,11,"000111010"
+		CALL MAKE_FLOOR_LINE,12,"000201010"
+		CALL MAKE_FLOOR_LINE,13,"000701210"
+		CALL MAKE_FLOOR_LINE,14,"000001020"
+		CALL MAKE_FLOOR_LINE,15,"000121010"
+		CALL MAKE_FLOOR_LINE,16,"000000000"
+		
+		;宝箱の設置
+		CALL SET_TILE,5,5,던전フラグ:2:2,0,3
+	CASE 3
+	;4階
+		FLAG:최대X = 17
+		FLAG:최대Y = 9
+		CALL MAKE_FLOOR_LINE,0,"00000000000000000"
+		CALL MAKE_FLOOR_LINE,1,"00000001211111210"
+		CALL MAKE_FLOOR_LINE,2,"00000000000100010"
+		CALL MAKE_FLOOR_LINE,3,"01111101112107010"
+		CALL MAKE_FLOOR_LINE,4,"02010200010102010"
+		CALL MAKE_FLOOR_LINE,5,"06010101210001110"
+		CALL MAKE_FLOOR_LINE,6,"00010000010000000"
+		CALL MAKE_FLOOR_LINE,7,"01211111110000000"
+		CALL MAKE_FLOOR_LINE,8,"00000000000000000"
+
+		;宝箱の設置
+		CALL SET_TILE,7,1,던전フラグ:2:3,0,3
+		CALL SET_TILE,7,5,던전フラグ:2:4,0,3
+		CALL SET_TILE,5,5,던전フラグ:2:5,0,3
+		CALL SET_TILE,1,7,던전フラグ:2:6,0,3
+		CALL SET_TILE,7,3,던전フラグ:2:7,0,3
+	CASE 4
+	;5階
+		FLAG:최대X = 9
+		FLAG:최대Y = 17
+		CALL MAKE_FLOOR_LINE,0,"000000000"
+		CALL MAKE_FLOOR_LINE,1,"011111000"
+		CALL MAKE_FLOOR_LINE,2,"010201000"
+		CALL MAKE_FLOOR_LINE,3,"000101000"
+		CALL MAKE_FLOOR_LINE,4,"070101000"
+		CALL MAKE_FLOOR_LINE,5,"020101110"
+		CALL MAKE_FLOOR_LINE,6,"010102020"
+		CALL MAKE_FLOOR_LINE,7,"012101010"
+		CALL MAKE_FLOOR_LINE,8,"000001000"
+		CALL MAKE_FLOOR_LINE,9,"000111110"
+		CALL MAKE_FLOOR_LINE,10,"000100010"
+		CALL MAKE_FLOOR_LINE,11,"000126010"
+		CALL MAKE_FLOOR_LINE,12,"000100010"
+		CALL MAKE_FLOOR_LINE,13,"000111110"
+		CALL MAKE_FLOOR_LINE,14,"000000000"
+		CALL MAKE_FLOOR_LINE,15,"000000000"
+		CALL MAKE_FLOOR_LINE,16,"000000000"
+		
+		;宝箱の設置
+		CALL SET_TILE,1,2,던전フラグ:2:8,0,3
+	CASE 5
+	;6階
+		FLAG:최대X = 17
+		FLAG:최대Y = 9
+		CALL MAKE_FLOOR_LINE,0,"00000000000000000"
+		CALL MAKE_FLOOR_LINE,1,"00000000111211110"
+		CALL MAKE_FLOOR_LINE,2,"00000000100011000"
+		CALL MAKE_FLOOR_LINE,3,"00011112101211210"
+		CALL MAKE_FLOOR_LINE,4,"00000110000011000"
+		CALL MAKE_FLOOR_LINE,5,"00072112101211110"
+		CALL MAKE_FLOOR_LINE,6,"00000110001000000"
+		CALL MAKE_FLOOR_LINE,7,"00011112111000000"
+		CALL MAKE_FLOOR_LINE,8,"00000000000000000"
+
+		;宝箱の設置
+		CALL SET_TILE,15,1,던전フラグ:2:9,0,3
+		CALL SET_TILE,8,5,던전フラグ:2:10,0,3
+		;이벤트の設置
+		CALL SET_TILE,15,3,던전フラグ:2:11,0,4
+
+	CASEELSE
+
+
+
+
+
+ENDSELECT
+
+
+
+;=======================================================================
+;[5]조사　実行時の이벤트
+;=======================================================================
+@EVENT_CHECK_DUNGEON_2
+
+;==========
+;出입の処理
+;==========
+IF DA:(FLAG:現X):(FLAG:現Y) == 8
+	CALL DUNGEON_EXIT
+	RETURN 1
+;========
+;宝の処理
+;========
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 3
+	SELECTCASE FLAG:現M
+		CASE 0
+			IF FLAG:現X == 1 && FLAG:現Y == 3
+				;외상약
+				CALL GET_TREASURE,1001,1,FLAG:現던전,0
+			ENDIF
+		CASE 1
+			IF FLAG:現X == 11 && FLAG:現Y == 3
+				;아이언버니
+				CALL GET_TREASURE,3004,1,FLAG:現던전,1
+			ENDIF
+		CASE 2
+			IF FLAG:現X == 5 && FLAG:現Y == 5
+				;하이레그아머
+				CALL GET_TREASURE,3501,1,FLAG:現던전,2
+			ENDIF
+		CASE 3
+			IF FLAG:現X == 7 && FLAG:現Y == 1
+				;운의향
+				CALL GET_TREASURE,1015,1,FLAG:現던전,3
+			ELSEIF FLAG:現X == 7 && FLAG:現Y == 5
+				;400MAG
+				CALL GET_TREASURE_MAG, 0,400,FLAG:現던전,4
+			ELSEIF FLAG:現X == 5 && FLAG:現Y == 5
+				;슬라이서
+				CALL GET_TREASURE,2006,1,FLAG:現던전,5
+			ELSEIF FLAG:現X == 1 && FLAG:現Y == 7
+				;지혜의향
+				CALL GET_TREASURE,1011,1,FLAG:現던전,6
+			ELSEIF FLAG:現X == 7 && FLAG:現Y == 3
+				;암브릿지
+				CALL GET_TREASURE,4004,1,FLAG:現던전,7
+			ENDIF
+		CASE 4
+			IF FLAG:現X == 1 && FLAG:現Y == 2
+				;댄싱힐
+				CALL GET_TREASURE,4504,1,FLAG:現던전,8
+			ENDIF
+		CASE 5
+			IF FLAG:現X == 15 && FLAG:現Y == 1
+				;コルセっく
+				CALL GET_TREASURE,2008,1,FLAG:現던전,9
+			ELSEIF FLAG:現X == 8 && FLAG:現Y == 5
+				;힘의향
+				CALL GET_TREASURE,1010,1,FLAG:現던전,10
+			ENDIF
+	ENDSELECT
+	RETURN 1
+;=======
+;階段
+;=======
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 6
+	SELECTCASE FLAG:現M
+		CASE 0
+			SIF FLAG:現X == 4 && FLAG:現Y == 3
+				CALL DUNGEON_UPSTAIRS,1,7,13
+		CASE 1
+			SIF FLAG:現X == 3 && FLAG:現Y == 5
+				CALL DUNGEON_UPSTAIRS,2,3,13
+		CASE 2
+			SIF FLAG:現X == 5 && FLAG:現Y == 3
+				CALL DUNGEON_UPSTAIRS,3,13,3
+		CASE 3
+			SIF FLAG:現X == 1 && FLAG:現Y == 5
+				CALL DUNGEON_UPSTAIRS,4,1,4
+		CASE 4
+			SIF FLAG:現X == 5 && FLAG:現Y == 11
+				CALL DUNGEON_UPSTAIRS,5,3,5
+
+		CASEELSE
+	ENDSELECT
+	RETURN 1
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 7
+	SELECTCASE FLAG:現M
+		CASE 1
+			SIF FLAG:現X == 7 && FLAG:現Y == 13
+				CALL DUNGEON_DOWNSTAIRS,0,4,3
+		CASE 2
+			SIF FLAG:現X == 3 && FLAG:現Y == 13
+				CALL DUNGEON_DOWNSTAIRS,1,3,5
+		CASE 3
+			SIF FLAG:現X == 13 && FLAG:現Y == 3
+				CALL DUNGEON_DOWNSTAIRS,2,5,3
+		CASE 4
+			SIF FLAG:現X == 1 && FLAG:現Y == 4
+				CALL DUNGEON_DOWNSTAIRS,3,1,5
+		CASE 5
+			SIF FLAG:現X == 3 && FLAG:現Y == 5
+				CALL DUNGEON_DOWNSTAIRS,4,5,11
+		CASEELSE
+	ENDSELECT
+	RETURN 1
+ELSE
+	CALL MESSAGE_WINDOW_D, "", "＞아무 것도 없는 것같다"
+	RETURN 0
+ENDIF
+
+;=======================================================================
+;タイル進入時の이벤트
+;=======================================================================
+@EVENT_ENTER_DUNGEON_2,ARG
+;ARG = 進入時の向き　0の場合ワープなど
+;==========
+;出입の処理
+;==========
+IF DA:(FLAG:現X):(FLAG:現Y) == 8
+	CALL DUNGEON_EXIT
+	RETURN 1
+;========
+;宝の処理
+;========
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 3
+	SELECTCASE FLAG:現M
+		CASE 0
+			IF FLAG:現X == 1 && FLAG:現Y == 3
+				;외상약
+				CALL GET_TREASURE,1001,1,FLAG:現던전,0
+			ENDIF
+		CASE 1
+			IF FLAG:現X == 11 && FLAG:現Y == 3
+				;아이언버니
+				CALL GET_TREASURE,3004,1,FLAG:現던전,1
+			ENDIF
+		CASE 2
+			IF FLAG:現X == 5 && FLAG:現Y == 5
+				;하이레그아머
+				CALL GET_TREASURE,3501,1,FLAG:現던전,2
+			ENDIF
+		CASE 3
+			IF FLAG:現X == 7 && FLAG:現Y == 1
+				;운의향
+				CALL GET_TREASURE,1015,1,FLAG:現던전,3
+			ELSEIF FLAG:現X == 7 && FLAG:現Y == 5
+				;400MAG
+				CALL GET_TREASURE_MAG, ,400, FLAG:現던전,4
+			ELSEIF FLAG:現X == 5 && FLAG:現Y == 5
+				;슬라이서
+				CALL GET_TREASURE,2006,1,FLAG:現던전,5
+			ELSEIF FLAG:現X == 1 && FLAG:現Y == 7
+				;지혜의향
+				CALL GET_TREASURE,1011,1,FLAG:現던전,6
+			ELSEIF FLAG:現X == 7 && FLAG:現Y == 3
+				;암브릿지
+				CALL GET_TREASURE,4004,1,FLAG:現던전,7
+			ENDIF
+		CASE 4
+			IF FLAG:現X == 1 && FLAG:現Y == 2
+				;댄싱힐
+				CALL GET_TREASURE,4504,1,FLAG:現던전,8
+			ENDIF
+
+		CASE 5
+			IF FLAG:現X == 15 && FLAG:現Y == 1
+				;코르세크
+				CALL GET_TREASURE,2008,1,FLAG:現던전,9
+			ELSEIF FLAG:現X == 8 && FLAG:現Y == 5
+				;힘의향り
+				CALL GET_TREASURE,1010,1,FLAG:現던전,10
+			ENDIF
+	ENDSELECT
+	RETURN 1
+;=======
+;階段
+;=======
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 6
+SELECTCASE FLAG:現M
+	CASE 0
+		SIF FLAG:現X == 4 && FLAG:現Y == 3
+			CALL DUNGEON_UPSTAIRS,1,7,13
+	CASE 1
+		SIF FLAG:現X == 3 && FLAG:現Y == 5
+			CALL DUNGEON_UPSTAIRS,2,3,13
+	CASE 2
+		SIF FLAG:現X == 5 && FLAG:現Y == 3
+			CALL DUNGEON_UPSTAIRS,3,13,3
+	CASE 3
+		SIF FLAG:現X == 1 && FLAG:現Y == 5
+			CALL DUNGEON_UPSTAIRS,4,1,4
+	CASE 4
+		SIF FLAG:現X == 5 && FLAG:現Y == 11
+			CALL DUNGEON_UPSTAIRS,5,3,5
+
+	CASEELSE
+ENDSELECT
+
+RETURN 1
+
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 7
+SELECTCASE FLAG:現M
+	CASE 1
+		SIF FLAG:現X == 7 && FLAG:現Y == 13
+			CALL DUNGEON_DOWNSTAIRS,0,4,3
+	CASE 2
+		SIF FLAG:現X == 3 && FLAG:現Y == 13
+			CALL DUNGEON_DOWNSTAIRS,1,3,5
+	CASE 3
+		SIF FLAG:現X == 13 && FLAG:現Y == 3
+			CALL DUNGEON_DOWNSTAIRS,2,5,3
+	CASE 4
+		SIF FLAG:現X == 1 && FLAG:現Y == 4
+			CALL DUNGEON_DOWNSTAIRS,3,1,5
+	CASE 5
+		SIF FLAG:現X == 3 && FLAG:現Y == 5
+			CALL DUNGEON_DOWNSTAIRS,4,5,11
+
+	CASEELSE
+ENDSELECT
+RETURN 1
+;==========
+;扉の処理
+;==========
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 2
+	CALL DUNGEON_DOOR,ARG
+	RETURN 1
+
+;========================
+;이벤트
+;========================
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
+	IF FLAG:現M == 5
+		IF RAND:2 == 0
+			CALL MESSAGE_WINDOW_D, "", "＞여기가 카루코자카 고등학교에 만들어진 마계의 오의같다……/＞손을 맞잡은 2기의 모·쇼보가 여기를 보면서/＞빙글빙글 공중에서 회전하고 있다"
+			CALL MESSAGE_WINDOW_D, "모・쇼보", "어라라ー이런곳에 인간이 있어요ー？"
+			CALL MESSAGE_WINDOW_D, "또 하나의 모・쇼보", "저희들과 놀아 주는 것일까―？"
+			CALL MESSAGE_WINDOW_D, "모・쇼보", @"마신오빠-님은요-학교를 마계로 했어요―/%\@IS_LOOKSLIKE_MALE(MASTER) ? 오-빠 # 언-니 \@%같이 헤맨 인간은 죽여도 좋아라고 말을 들었어요"
+			CALL MESSAGE_WINDOW_D, "또 하나의 모・쇼보", "우린 무서운 악마야"
+			CALL MESSAGE_WINDOW_D, "모・쇼보", "수다는 여기까지-고/내장 털어 놓아 죽어 버려요☆"
+			CALL MESSAGE_WINDOW_D, "", "＞흉조 모·쇼보가 2체 나왔다!"
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,902,18,0,1
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):ＨＰ보정 = 300
+			CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
+			;잔마
+			ABL:(CHARANUM-1):스킬1 = 1002
+			;마하・잔
+			ABL:(CHARANUM-1):스킬2 = 1005
+			;도루미나
+			ABL:(CHARANUM-1):스킬3 = 1222
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+
+			CALL SET_ENEMY,9,902,18,0,1
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):ＨＰ보정 = 300
+			CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
+			;몽견침
+			ABL:(CHARANUM-1):스킬1 = 105
+			;날개짓
+			ABL:(CHARANUM-1):스킬2 = 311
+			;기합
+			ABL:(CHARANUM-1):스킬3 = 511
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+
+			CALL BATTLE_START
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			CALL SHOW_PICTURE, "D"
+			CALL MESSAGE_WINDOW_D, "모・쇼보", "아파ー아、여자 아이를 그렇게 때리다니―"
+			CALL MESSAGE_WINDOW_D, "또 하나의 모・쇼보", "우에에、마신오빠-님한테 일러 준다―"
+			CALL MESSAGE_WINDOW_D, "", "＞모·쇼보는 날아가 버렸다……"
+		ELSE
+			CALL MESSAGE_WINDOW_D, "", "＞여기가 카루코자카고교에 만들어진 마계의 극치같다……"
+			CALL MESSAGE_WINDOW_D, "요조 오퀴페테", "여기에 오는 것은 탈출을 원하는 학생뿐이라고 생각했지만……/……뭐、누구라도 상관 없지/대죄의 마계를 통괄하는 마신황님의 의사에 들어맞지 않는 사람은 살아있어서는 안 되니까！"
+			CALL MESSAGE_WINDOW_D, "", "＞요조 오키페테가 １체 나타났다！"
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,9,903,19,0,1
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			;☆ボスの癖に도우만よりもHPも공격も全て弱すぎるので보정をいれさせてもらう
+			;CSVの스킬2が날개짓と書いて독할퀴기の件…
+			CFLAG:(CHARANUM-1):ＨＰ보정 = 700
+			CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
+			CFLAG:(CHARANUM-1):속도보정 = 10
+			;마비할퀴기
+			ABL:(CHARANUM-1):스킬1 = 303
+			;날개짓
+			ABL:(CHARANUM-1):스킬2 = 311
+			;肉彦
+			ABL:(CHARANUM-1):스킬3 = 506
+			;마하・갈
+			ABL:(CHARANUM-1):스킬4 = 1704
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			CALL BATTLE_START
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			CALL SHOW_PICTURE, "D"
+			CALL MESSAGE_WINDOW_D, "", "＞요조 오키페테는 힘이 다했다……"
+		ENDIF
+		CALL MESSAGE_WINDOW_D, "", "＞대죄의 마계의 일부를 돌파한 일에 의해、외부와의 교류가 다소 편해졌다。/＞학생의 일부가 탈출한 것 같아서、/＞탈출한 학생의 부모로부터 사례금￥50000이 입금되었다。/＞‥‥하지만、이것으로 자칭 「마신황」과는 완전히 적대시 되었을 것이다‥‥"
+		MONEY += 50000
+		DA:(FLAG:現X):(FLAG:現Y) = 1
+		던전フラグ:2:11 = 1
+		FLAG:탈출 = 1
+	ELSE
+		CALL MESSAGE_WINDOW_D, "", "＞카루코자카 고등학교에 만들어진 마계로의 다리를 건너고 있‥‥/＞었지만、곧바로 누군가에게 뒤에서 불러세워졌다。/＞뒤돌아 보면、거기에 서있는 것은、/＞안경을 쓰고 카루코자카의 교복을 입은 여학생이었다。"
+		CALL MESSAGE_WINDOW_D, "여학생", "당신은 누구죠？/우리 학생으로는 보이지 않습니다만……"
+		CALL MESSAGE_WINDOW_D, "", "＞조금 이야기를 해 보니、그녀의 이름은 아카네자와 레이코라고 하며、/＞이 사태를 어떻게든 하려고 하고 있는 학생중 한명인듯 하다。/＞‥‥하지만、이 소녀。무언가 이 건에 대해 짐작가는게 있는 듯 싶다。/＞하지만 이것을 캐물으면 침묵해 버린다……"
+		CALL INPUT_YN_D("묻는 것은 그만두자", "신병을 구속해 비밀을 묻기 시작한다。")
+		IF RESULT == 0
+			CALL MESSAGE_WINDOW_D, "", @"＞%조사처리(CALLNAME:MASTER,"는")% 일일이 관련되어도 끝이 없다고 생각해、/＞내버려두고 앞으로 나아가기로 했다"
+			DA:(FLAG:現X):(FLAG:現Y) = 1
+			던전フラグ:2:12 = 2
+		ELSE
+			CALL MESSAGE_WINDOW_D, "레이코", "……무, 무엇을 할 생각인가요！？/시, 싫어！！"
+			CALL MESSAGE_WINDOW_D, "", "＞아카네자와 레이코를 손에 넣었다"
+			CALL ADD_NEW_COMPANION,4508,500,1
+			DA:(FLAG:現X):(FLAG:現Y) = 1
+			던전フラグ:2:12 = 1
+		ENDIF
+	ENDIF
+	RETURN 1
+ENDIF
+RETURN 0
+
+;=======================================================================
+;エンカウント率
+;=======================================================================
+@ENCOUNT_RATE_2
+FLAG:エンカウント率 = FLAG:未遭遇歩数*3
+SIF FLAG:未遭遇歩数 < 8
+	FLAG:エンカウント率 = 0
+
+
+;=======================================================================
+;필요레벨눈安
+;권장LV 雑물고기최저LV 雑물고기最高LV ボスLV 
+;=======================================================================
+@GET_DUNGEON_LV_2
+RETURN 6, 3, 17, 19
+
+
+;=======================================================================
+;エンカウント処理
+;=======================================================================
+@CHECK_ENCOUNT_2
+IF RAND:100 < FLAG:エンカウント率
+	CALL ENEMY_TABLE
+	RETURN 1
+ELSE
+	FLAG:未遭遇歩数 += 1
+	RETURN 0
+ENDIF
+
+
+;=======================================================================
+;적の종족の종류数
+;=======================================================================
+@CLASS_NUM_2
+RETURN CLASS_NUM_COMMON("初級")
+
+
+;=======================================================================
+;적の総数
+;ARGは出現する적の종류です
+;RAND(X, Y)はX～Y-1のうち중 하나になるRANDです
+;なお、ここで帰った数字は下限を종족数、上限を10として自動的に調整されます
+;
+;카루코자카고교も초기の던전なので数は抑え눈
+;=======================================================================
+@ENEMY_NUM_2, ARG
+RETURN ENEMY_NUM_COMMON("初級", ARG)
+
+
+;=======================================================================
+;적の종류
+;=======================================================================
+@ENEMY_2, ARG
+SELECTCASE FLAG:現M
+	;１Ｆでの遭遇
+	CASE 0
+		SELECTCASE RAND:100
+			CASE IS < 30
+				;30%で픽시
+				RETURN 501, 3
+			CASE IS < 50
+				;20%で좀비쨩
+				RETURN 1001, 4
+			CASE IS < 70
+				;20%で아프사라스
+				RETURN 401, 5
+			CASE IS < 90
+				;10%で좀비독
+				RETURN 1083, 1
+			CASE IS < 90
+				;10%で춍춍
+				RETURN 951, 4
+			CASE IS < 100
+				;10%で코볼트
+				RETURN 651, 5
+		ENDSELECT
+	;2Ｆでの遭遇
+	CASE 1
+		SELECTCASE RAND:100
+			CASE IS < 20
+				;20%で좀비쨩 1
+				RETURN 1001, 7
+			CASE IS < 40
+				;20%で화백
+				RETURN 601, 7
+			CASE IS < 60
+				;20%で좀비너스
+				RETURN 1002, 9
+			CASE IS < 80
+				;20%で안드라스
+				RETURN [[キャラ:안드라스]], 8
+			CASE IS < 100
+				;20%で고블린
+				RETURN 552, 7
+		ENDSELECT
+	;2Ｆでの遭遇
+	CASE 2
+		SELECTCASE RAND:100
+			CASE IS < 20
+				;20%で좀비너스 1
+				RETURN 1002, 11
+			CASE IS < 40
+				;20%で요모츠시코메
+				RETURN 602, 14
+			CASE IS < 60
+				;20%で하나코さん
+				RETURN 1003, 13
+			CASE IS < 80
+				;20%でブラウに-
+				RETURN 553, 11
+			CASE IS < 100
+				;20%で이누가미
+				RETURN 853, 12
+		ENDSELECT
+	;2Ｆでの遭遇
+	CASE 3
+		SELECTCASE RAND:100
+			CASE IS < 20
+				;20%で리림 
+				RETURN 402, 12
+			CASE IS < 40
+				;40%で요모츠시코메
+				RETURN 602, 14
+			CASE IS < 60
+				;40%で하나코さん
+				RETURN 1003, 13
+			CASE IS < 80
+				;40%でJフロスト
+				RETURN 512, 15
+			CASE IS < 100
+				;40%で네코마타
+				RETURN 801, 12
+		ENDSELECT
+	;4Ｆでの遭遇
+	CASE 4
+		SELECTCASE RAND:100
+			CASE IS < 20
+				;20%で하나코さん 1
+				RETURN 1003, 16
+			CASE IS < 40
+				;40%で드라이어드
+				RETURN 502, 15
+			CASE IS < 55
+				;40%で라미아
+				RETURN 702, 10
+			CASE IS < 70
+				;40%で파리카
+				RETURN 411, 14
+			CASE IS < 85
+				;잇폰다타라
+				RETURN 664, 13
+			CASE IS < 100
+				;40%でJ	フロスト
+				RETURN 512, 15
+		ENDSELECT
+	;5Ｆでの遭遇
+	CASE 5
+		SELECTCASE RAND:100
+			CASE IS < 20
+				;20%で카시마레이코
+				RETURN 1004, 17
+			CASE IS < 60
+				;40%で드라이어드 1
+				RETURN 502, 15
+			CASE IS < 80
+				;잇폰다타라
+				RETURN 664, 16
+			CASE IS < 100
+				;40%でモーショボー
+				RETURN 902, 15
+		ENDSELECT
+	ENDSELECT
+;=======================================================================
+;エンカウント処理
+;=======================================================================
+;@CHECK_ENCOUNT_2
+;IF RAND:100 < FLAG:エンカウント率
+;	$LOOP_ENCOUNT
+;	SELECTCASE FLAG:現M
+;		
+;		CASE 0
+;		;１Ｆでの遭遇
+;			LOCAL:2 = 0
+;			FOR LOCAL,7,17,1
+;				;１枠あたり10％の확률로出現
+;				IF RAND:100 < 10
+;					SELECTCASE RAND:100
+;						CASE IS < 30
+;							;50%で픽시
+;							CALL SET_ENEMY,LOCAL,501,3,0
+;							
+;						CASE IS < 50
+;							;30%で좀비쨩
+;							CALL SET_ENEMY,LOCAL,1001,4,0
+;						CASE IS < 70
+;							;20%で아프사라스
+;							CALL SET_ENEMY,LOCAL,401,5,0
+;						CASE IS < 90
+;							;20%で춍춍
+;							CALL SET_ENEMY,LOCAL,951,4,0
+;						CASE IS < 100
+;							;10%で코볼트
+;							CALL SET_ENEMY,LOCAL,651,5,0
+;					ENDSELECT
+;					LOCAL:2 += 1
+;				ENDIF
+;			NEXT
+;			SIF LOCAL:2 == 0
+;				GOTO LOOP_ENCOUNT
+;			
+;		CASE 1
+;		;2Ｆでの遭遇
+;			LOCAL:2 = 0
+;			FOR LOCAL,7,17,1
+;				;１枠あたり10％の확률로出現
+;				IF RAND:100 < 10
+;					SELECTCASE RAND:100
+;						CASE IS < 20
+;							;20%で좀비쨩 1
+;							CALL SET_ENEMY,LOCAL,1001,7,0
+;							
+;						CASE IS < 40
+;							;20%で화백
+;							CALL SET_ENEMY,LOCAL,601,7,0
+;						CASE IS < 60
+;							;20%で좀비너스
+;							CALL SET_ENEMY,LOCAL,1002,9,0
+;						CASE IS < 80
+;							;20%で안드라스
+;							CALL SET_ENEMY,LOCAL,[[キャラ:안드라스]],8,0
+;						CASE IS < 100
+;							;20%で고블린
+;							CALL SET_ENEMY,LOCAL,552,7,0
+;					ENDSELECT
+;					LOCAL:2 += 1
+;				ENDIF
+;			NEXT
+;			SIF LOCAL:2 == 0
+;				GOTO LOOP_ENCOUNT
+;			
+;		CASE 2
+;		;2Ｆでの遭遇
+;			LOCAL:2 = 0
+;			FOR LOCAL,7,17,1
+;				;１枠あたり10％の확률로出現
+;				IF RAND:100 < 10
+;					SELECTCASE RAND:100
+;						CASE IS < 20
+;							;20%で좀비너스 1
+;							CALL SET_ENEMY,LOCAL,1002,11,0
+;							
+;						CASE IS < 40
+;							;20%で요모츠시코메
+;							CALL SET_ENEMY,LOCAL,602,14,0
+;						CASE IS < 60
+;							;40%で하나코さん
+;							CALL SET_ENEMY,LOCAL,1003,13,0
+;						CASE IS < 80
+;							;40%でブラウに-
+;							CALL SET_ENEMY,LOCAL,553,11,0
+;						CASE IS < 100
+;							;20%で이누가미
+;							CALL SET_ENEMY,LOCAL,853,12,0
+;					ENDSELECT
+;					LOCAL:2 += 1
+;				ENDIF
+;			NEXT
+;			SIF LOCAL:2 == 0
+;				GOTO LOOP_ENCOUNT
+;		CASE 3
+;		;2Ｆでの遭遇
+;			LOCAL:2 = 0
+;			FOR LOCAL,7,17,1
+;				;１枠あたり10％の확률로出現
+;				IF RAND:100 < 10
+;					SELECTCASE RAND:100
+;						CASE IS < 20
+;							;20%で리림 1
+;							CALL SET_ENEMY,LOCAL,402,12,0
+;						CASE IS < 40
+;							;40%で요모츠시코메
+;							CALL SET_ENEMY,LOCAL,602,14,0
+;						CASE IS < 60
+;							;40%で하나코さん
+;							CALL SET_ENEMY,LOCAL,1003,13,0
+;						CASE IS < 80
+;							;40%でJフロスト
+;							CALL SET_ENEMY,LOCAL,512,15,0
+;						CASE IS < 100
+;							;40%で네코마타
+;							CALL SET_ENEMY,LOCAL,801,12,0
+;					ENDSELECT
+;					LOCAL:2 += 1
+;				ENDIF
+;			NEXT
+;			SIF LOCAL:2 == 0
+;				GOTO LOOP_ENCOUNT
+;		CASE 4
+;		;4Ｆでの遭遇
+;			LOCAL:2 = 0
+;			FOR LOCAL,7,17,1
+;				;１枠あたり10％の확률로出現
+;				IF RAND:100 < 10
+;					SELECTCASE RAND:100
+;						CASE IS < 20
+;							;20%で하나코さん 1
+;							CALL SET_ENEMY,LOCAL,1003,16,0
+;							
+;						CASE IS < 40
+;							;40%で드라이어드
+;							CALL SET_ENEMY,LOCAL,502,15,0
+;						CASE IS < 60
+;							;40%で라미아
+;							CALL SET_ENEMY,LOCAL,702,10,0
+;						CASE IS < 80
+;							;40%で파리카
+;							CALL SET_ENEMY,LOCAL,411,14,0
+;						CASE IS < 100
+;							;40%でJ	フロスト
+;							CALL SET_ENEMY,LOCAL,512,15,0
+;					ENDSELECT
+;					LOCAL:2 += 1
+;				ENDIF
+;			NEXT
+;			SIF LOCAL:2 == 0
+;				GOTO LOOP_ENCOUNT
+;		CASE 5
+;		;5Ｆでの遭遇
+;			LOCAL:2 = 0
+;			FOR LOCAL,7,17,1
+;				;１枠あたり10％の확률로出現
+;				IF RAND:100 < 10
+;					SELECTCASE RAND:100
+;						CASE IS < 20
+;							;20%で카시마레이코
+;							CALL SET_ENEMY,LOCAL,1004,17,0
+;						CASE IS < 60
+;							;40%で드라이어드 1
+;							CALL SET_ENEMY,LOCAL,502,15,0
+;						CASE IS < 100
+;							;40%でモーショボー
+;							CALL SET_ENEMY,LOCAL,902,15,0
+;					ENDSELECT
+;					LOCAL:2 += 1
+;				ENDIF
+;			NEXT
+;			SIF LOCAL:2 == 0
+;				GOTO LOOP_ENCOUNT
+;			
+;	ENDSELECT
+;	RETURN 1
+;ELSE
+;	FLAG:未遭遇歩数 += 1
+;	RETURN 0
+;ENDIF
+
+;=======================================================================
+;윤간참가악마
+;=======================================================================
+@DUNGEON_RAPE_DEVIL_2
+;랜덤にどの악마が出るか決定
+;RETURN CSV번호 , 人数 , 레벨
+SELECTCASE RAND:4
+	CASE 0
+		RETURN [[キャラ:잇폰다타라]] , 3 + RAND:10 , CSVBASE([[キャラ:잇폰다타라]] , GETNUM(BASE , "LV") , 0) + RAND:3
+	CASE 1
+		RETURN [[キャラ:코볼트]] , 3 + RAND:10 , CSVBASE([[キャラ:코볼트]] , GETNUM(BASE , "LV") , 0) + RAND:3
+	CASE 2
+		RETURN [[キャラ:안드라스]] , 3 + RAND:10 , CSVBASE([[キャラ:안드라스]] , GETNUM(BASE , "LV") , 0) + RAND:3
+	CASE 3
+		RETURN [[キャラ:브라우니]] , 3 + RAND:10 , CSVBASE([[キャラ:브라우니]] , GETNUM(BASE , "LV") , 0) + RAND:3
+ENDSELECT
+
+
+
+
+
+
+
+
+
+
+

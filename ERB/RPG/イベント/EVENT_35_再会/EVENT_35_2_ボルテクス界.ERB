@@ -1,0 +1,413 @@
+﻿;ライセンスフリー
+;1話の続き
+;2020/03/07　作成者：92473/나나미の人
+;====================
+;内容
+;====================
+@EVENT_35_2
+LOCAL = CHARANUM
+
+;導入開始
+CUSTOMDRAWLINE =
+PRINTFORML ＴＲＰＧリプ레이 再会 第２話
+PRINTFORML 
+PRINTFORMW ＞先日の騒動の説明と報酬を受け取る為に사교의관へやってきた。
+PRINTFORML  （ 注意：この이벤트を進めると時間が経過します）
+PRINTFORML 
+CALL INPUT_YN("픽시に会いに行く", "また今度")
+IF RESULT == 0
+	PRINTFORML 
+	PRINTFORML ＞どんな報酬が貰えるだろうか。
+	PRINTFORMW 
+ELSE
+	PRINTFORMW ＞準備を整えたら、またここへ来よう。
+	PRINTFORMW ………
+	PRINTFORMW ……
+	PRINTFORMW …
+	RETURN
+ENDIF
+PRINTFORML 
+PRINTFORMW 　　＞＞사교의관＜＜
+PRINTFORML 
+PRINTFORMW ＞사교의관の主は%CALLNAME:MASTER%の姿を見るなり픽시と交代して出てこなくなったがまぁ良いだろう。
+PRINTFORML ＞まずは픽시から受けた説明について。
+PRINTFORML ＞前提조건として사교의관は所属を問わず악마と関わる者に強いパイプを持つ為、業界の소문が多量に入ってくる。
+PRINTFORML ＞勿論、所詮は소문であるので신뢰性も低ければそもそも重要度も低い話がほとんどである。
+PRINTFORMW ＞だが先日得た情報は看過出来るものではなかった。
+PRINTFORML ＞가이아교도が聖典である『ミロク経典』に記された内容に従い、세계を破壊しようとしているというからだ。
+PRINTFORML ＞기본的には中立を謳う사교의관の主も세계を破壊されれば共に滅びるは必定。
+PRINTFORMW ＞なんとか阻止するためにも나나미を呼び戻そうとした所、そのまま巻き込まれてしまい…後は騒動の顛末の通りというわけだ。
+PRINTFORML 픽시：
+PRINTFORML 「ま、状況説明としてはそれくらいかな？　あとは…あの反転した세계、ボルテクス界と呼ぼうか」
+PRINTFORMW 「あの세계は無くなっちゃいないよ、ヒトは大半死んでると思うけど…そのまま無くなったりはしない」
+PRINTFORMW 「세계はね、生まれ変わるんだ」
+PRINTFORMW 「誰か 強い意志で願うものが 『こうあれかし』 と望むことで 姿を変えて、ね」
+PRINTFORML 「さて、そこでお願いがあるんだけど…先にこないだの報酬を渡さないとね！」
+PRINTFORML 「とはいえ現状でそう大したものを渡せるわけではないんだ」
+PRINTFORML 「だからまずは、나나미ちゃんがそちらの所属になることを사교의관としても追認します」
+PRINTFORMW 「%CALLNAME:MASTER%にとってみれば今更の話だろうけどね、他勢힘と接触するときに中途半端な所属じゃ困ることもあるからね」
+PRINTFORML 「それからはっきり눈に見える報酬としてはこれ、お金だね。額は大したことないけど今回はそれで我慢してほしいな」
+PRINTFORML 
+PRINTFORMW 報酬10000円を得た。
+MONEY += 10000
+PRINTFORML 
+PRINTFORMW 「それで次の頼みを聞いてくれたらお金以外にもちょっと色を付けて支払うよ」
+PRINTFORML 픽시が頼みとはこうだ。세계をやり直したいなら勝손にやればいい、しかしこちらを巻き込むのは勘弁ならん。
+PRINTFORML 故にあちら、ボルテクス界に出向き「こちらの세계」を巻き込むような意志を持って세계の再誕を願うような者を間引いて欲しい。
+PRINTFORMW 当然、힘及ぶ相손ばかりでもないだろうから지원はするし倒せない場合は報告だけでも良い。
+PRINTFORMW 言葉にすれば簡가운だが、実行するとなればそう簡가운に行くとも思えないが…。
+PRINTFORML 나나미：
+PRINTFORML 「서머너さん、なんとかなりませんか？　わたし、先輩には恩があるんです」
+PRINTFORMW 「せめて消息だけでも確認したいのですが…」
+CALL INPUT_YN("報酬も出るようだしやってやろう", "さすがに荷が重い")
+IF RESULT == 0
+	PRINTFORMW ＞当然、出来ないことはやらないが。
+	;こっそり나나미ちゃんの의존도、충성도を上限付きでアップ
+	LOCAL = GETCHARA([[キャラ:나나미]])
+	SIF	CFLAG:LOCAL:의존도 <= 500
+		CFLAG:LOCAL:의존도 = CFLAG:LOCAL:의존도 + 100
+	SIF	BASE:LOCAL:충성도 <= 5000
+		BASE:LOCAL:충성도 = BASE:LOCAL:충성도 + 1000
+ELSE
+	PRINTFORML 나나미：
+	PRINTFORML 「そうですか……わたしが一人で出来るような事でもありませんし、諦めます」
+	PRINTFORMW ＞나나미はしょんぼりしながらそれだけ言うと黙り込んでしまった。
+	PRINTFORMW ………
+	PRINTFORMW ……
+	PRINTFORMW …
+	RETURN
+ENDIF
+PRINTFORML 나나미：
+PRINTFORML 「ありがとうございます！わたしも出来るだけのことをしますから！」
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+;導入終了
+;Aパート開始
+SETCOLOR COLOR("PASTEL-GREEN")
+PRINTFORML 
+PRINTFORML TRPGリプ레이 再会 第２話 ボルテクス界 〜 Rhapsody in Vortex 〜
+PRINTFORMW 
+RESETCOLOR
+SETCOLOR COLOR("PASTEL-RED")
+PRINTFORMW 
+PRINTFORMW ――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+PRINTFORMW 
+RESETCOLOR
+PRINTFORML 
+PRINTFORMW 　　＞＞ボルテクス界＜＜
+PRINTFORML 
+PRINTFORML ＞代々木公園からボルテクス界に渡ってきた。
+PRINTFORML ＞전회と同じ場所に出たのか廃墟が並んでいるのが見える。
+PRINTFORML ＞廃墟の周りには人影が見える、픽시の話ではヒトの大半は死んでいるという事だったのだが…？
+PRINTFORML ＞ともあれ情報収集が필요とヒト？に近づいていくと、何かを掘り出しているようだ。
+PRINTFORML ＞作業しているヒト？達は一様に表情が無く、みすぼらしい格好をしている。
+PRINTFORMW ＞掘り出されたのもまた人の形をしているようだ……何か見깨달음えがあるような？
+PRINTFORML 나나미：
+PRINTFORMW 「せんぱい！？　ど、どうしたんですかその문신！」
+PRINTFORML 鶴来：
+PRINTFORMW 「え？나나미ちゃん、無事だったんだね。　문신って？そんなもの入れた깨달음えは……なんっだこれぇ！」
+PRINTFORML ＞見깨달음えがあるはずだった。鶴来に野分、それに小枝もいるようだ。
+PRINTFORML ＞掘り出されたと思しき鶴来と野分には、先日にはなかったはずの문신が顔も含めて全身に入っているようだ。
+PRINTFORMW ＞本人も驚いているようだがいつの間に入れたのだろうか…。
+PRINTFORML ＞ともあれ彼らが落ち着くまではと、掘り出していた側のヒト？に話を聞いてみる。
+PRINTFORML ＞すると彼らはヒトではなくマネカタという存在ということだ。
+PRINTFORML ＞マネカタはボルテクス界のアサクサにある彼らの聖地、ミフナシロの泥から生まれた泥人形で希薄な自我しか持たない。
+PRINTFORML ＞악마達にマガツヒを搾り取られ、労働힘や餌として扱われている事がわかった。
+PRINTFORMW ＞악마に対して強い무서움を抱いている為、코다마である小枝に対しても遠巻きにしている。
+PRINTFORML 野分：
+PRINTFORML 「……まさか、『東京수태』が本当に起きたのか？」
+PRINTFORML 「長谷部という男が言っていたんだ。ガイア教団は『東京수태』と呼ばれる大破壊を起こして、세계を創り直すと」
+PRINTFORML 「空に太陽には見えない輝きがあるのもそのためだろう」
+PRINTFORML 「一度死んで生まれ直すための準備段階とかよくわからないことを言っていたよ」
+PRINTFORMW （僕と鶴来に浮かぶ線…これが勾玉の影響なのか……？）
+PRINTFORML 鶴来：
+PRINTFORMW 「わけわかんねーことはどうでもいい、沙耶はどこだ？」
+PRINTFORML 野分：
+PRINTFORMW 「세계は滅んだんだぞ？　アレもヒトではないそうだ」
+PRINTFORML 鶴来：
+PRINTFORMW 「東京수태とやらが起きた……俺にとって重要なことはなんだ？沙耶を捜すことだ。よし！」
+PRINTFORML ＞意志の強い소년だ、自分で道を選び、切り開こうとしている。
+PRINTFORML ＞その時、少し離れた丘の上に3体の何かが現れる。
+PRINTFORMW ＞2本の角が生えた馬に細長い体の犬が2体だ。
+PRINTFORML 不確定名犬：
+PRINTFORMW 「くんくん、マネカタの匂いがするぞ」
+PRINTFORMW ＞マネカタ達は一눈散に逃げだした。
+;나나미ちゃんの看破！しかしシステムには影響出来ないぞ！
+PRINTFORML 나나미：
+PRINTFORMW 「あれは마수：이누가미です！炎を吐きますよ、同時に炎は効きませんよ！」
+PRINTFORMW 「馬は마수：バイコーンです。弱点らしい弱点がありませんし스킬も幅広いので臨機応変に戦うしかありません」
+PRINTFORMW 「이벤트전투でも必ずしも회화불가능と決まっているわけではありません、戦힘に不安があるなら試してみてもいいかもしれませんね」
+PRINTFORML 이누가미：
+PRINTFORML 「こんなところにマネカタがいやがるとは」
+PRINTFORMW 「俺たちも小腹が空いたし、ここは一丁、飯にありつきやすか」
+PRINTFORML 
+PRINTFORML ＞마수の群れが現れた
+PRINTFORML 
+	FLAG:도주불가フラグ = 1
+	FLAG:선제기습취소 = 1
+	CUSTOMDRAWLINE =
+	WAIT
+	CALL SET_ENEMY, 8, 853, 23, 0, 0
+	CALL SET_ENEMY, 9, 850, 23, 0, 0
+	CALL SET_ENEMY, 10, 853, 23, 0, 0
+	CALL BATTLE_START
+	FLAG:도주불가フラグ = 0
+	FLAG:선제기습취소 = 0
+	WAIT
+PRINTFORML 
+PRINTFORML ＞마수の群れを倒した
+PRINTFORML 
+PRINTFORMW ＞마수たちを処理するとマネカタ達が遠巻きにして何事か話している。
+PRINTFORML マネカタ：
+PRINTFORML 「ねえねえ。君たちに頼みたいことがあるんだけど」
+PRINTFORMW 「引き受けてくれたら僕たちが集めた大切なものを上げるよ」
+PRINTFORML 나나미：
+PRINTFORMW 「聞きましょう」
+PRINTFORML ＞話を聞くとマネカタ達は악마に盗まれた宝：ヒモロギを取り返して欲しいそうだ。
+PRINTFORML ＞野分はヒモロギを知っており、メシア教会で探したことがあるという。
+PRINTFORMW ＞メシア教会が探すものを악마に持たせておくのもどうかという話になり引き受けることになった。
+PRINTFORML マネカタ：
+PRINTFORML 「よかった。それじゃあ先に아이템をあげるよ。僕たちには役に立たないけど、君たちなら使えるんじゃないかなぁ」
+PRINTFORMW 「레어ものなんだよ」
+;3028_소마의물방울*1 3022_이와쿠라의물*5とする。
+PRINTFORMW 소마의물방울を1個と이와쿠라의물を5個손に入れた。
+CALL GET_ITEMS("소마의물방울", 1)
+CALL GET_ITEMS("이와쿠라의물", 5)
+PRINTFORML 나나미：
+PRINTFORMW 「それで、盗んだ악마はどんなので何処に行ったの？」
+PRINTFORML マネカタ：
+PRINTFORMW 「シブヤの方に走っていったよ。인간型だけど両팔が無かった」
+PRINTFORML 나나미：
+PRINTFORML 「知ってる知ってる、귀신：타케미나카타ですよ。충격、지변相性が弱点で전격相性を반사してきます」
+PRINTFORMW 「질풍相性も通じにくいので공격の際には注意してください」
+PRINTFORML 鶴来：
+PRINTFORMW 「そうだマネカタたち、塚森沙耶という女の子を見かけたら知らせてくれないか」
+IF FINDCHARA_B([[キャラ:나나미]])== 2 && 함락(RESULT:1)
+	PRINTFORML 나나미：
+	PRINTFORMW 「そうですね、また戻ってくるのでその時までに見かけるようならお願いします」
+ELSE
+	PRINTFORML ＞나나미がマネカタに向かって、ダメダメ、というふうに身振り손振りする。
+	PRINTFORMW ＞鶴来が振り返ると素知らぬ顔でとぼけている。
+ENDIF
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+;Aパート終了
+;こっから本来はあっちこっちで聞き込み。
+;…なんだけどこれってeraMegatenなので冗長なのはカットカットカットォ
+;Bパート開始
+PRINTFORML ＞シブヤのハチ公前で星形악마の데카라비아やガイア教団の무녀である泉の聖女から情報を입수した。
+PRINTFORML ＞타케미나카타が『만트라軍』と『ニヒロ機構』という二つの勢힘に追われている事。
+PRINTFORML ＞타케미나카타はそれらから逃れるためにヨヨギ方面へ逃亡している事がわかった。
+PRINTFORMW ＞ヨヨギ方面には日本の神が集う場所がある為、そこにいるのではないかという事でヨヨギへ向かう一行。
+;地方出身者なので東京の地理とかさっぱりです…これ移動にどんだけ時間かかるのやら？
+;細かい전투も飛ばしたいけど만트라軍の戦힘紹介は필요？いらないかもだけど経験値にはなるかも…
+PRINTFORMW ＞進むうちに空を飛ぶ3体の影が見えた。
+PRINTFORML 나나미：
+PRINTFORML 「あれは코파텐구と엔젤ですよ、こっちに向かってきますね」
+PRINTFORML 「空を飛ぶ相손には飛び道具、비구相性が弱点のものが多いです」
+PRINTFORML 「そして천사は주살が弱点であることも多いです、例外はありますけど割と기본なので깨달음えておく方が良いと思います」
+PRINTFORMW 「あれが話に聞いた『만트라軍』なんでしょうか、ヤル気みたいですね」
+PRINTFORML 
+PRINTFORML ＞요마の群れが現れた
+PRINTFORML 
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	CUSTOMDRAWLINE =
+	WAIT
+	CALL SET_ENEMY, 8, 301, 23, 0, 0
+	CALL SET_ENEMY, 9, 451, 27, 0, 0
+	CALL SET_ENEMY, 10, 301, 23, 0, 0
+	CALL BATTLE_START
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 0
+	WAIT
+PRINTFORML 
+PRINTFORML ＞요마の群れを倒した
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORMW 「話が通じない相손は苦손ですよ……」
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 　　＞＞ヨヨギ・ビル街跡＜＜
+PRINTFORML 
+PRINTFORMW ＞しばらく進むと大きな建物が崩れた跡の傍で나나미が발を止めた。
+PRINTFORML 나나미：
+PRINTFORMW 「나나미サバイバル術四十八箇条の三十二によるとここかな〜」
+PRINTFORMW ＞崩れそうな建物の中を進んでいくと声が聞こえた。
+PRINTFORML 男の声：
+PRINTFORML 「誰だ貴様ら、追っ손か？　しかし만트라の악마ではないな、ニヒロ機構でもないようだ」
+PRINTFORMW 「我は귀신타케미나카타。今はこのような姿だがかつては云々……」
+PRINTFORML 나나미：
+PRINTFORMW 「長い長い長い、さくっと切りましょう」
+PRINTFORML 타케미나카타：
+PRINTFORMW 「なんと失礼な。ところでお前たち、見慣れぬ악마だな」
+PRINTFORML 鶴来：
+PRINTFORMW 「俺は鶴来賢治。人でもなく、악마でもない。마인――鶴来賢治だ」
+PRINTFORML 타케미나카타：
+PRINTFORMW 「……良い눈だ。このヒモロギが欲しくば奪い取ってみよ。敗者はただ地面に横たわるのみだ！」
+PRINTFORMW 
+CALL INPUT_YN("ここは任せてもらおう", "こちらを忘れてもらっては困る")
+PRINTFORML 
+IF RESULT == 0
+	PRINTFORML 타케미나카타：
+	PRINTFORML 「ほう、ならばそちらの소년達の相손はこやつらだ」
+	PRINTFORMW 鎧武者姿の악마が鶴来達へと向かっていった。
+	PRINTFORML 나나미：
+	PRINTFORML 「憶えていますか？귀신：타케미나카타です。충격、지변相性が弱点で전격相性を반사してきます」
+	PRINTFORMW 「질풍相性も通じにくいので공격の際には注意してください」
+	PRINTFORML 
+	PRINTFORML ＞타케미나카타が現れた
+	PRINTFORML 
+		FLAG:도주불가フラグ = 1
+		FLAG:회화불능フラグ = 1
+		FLAG:선제기습취소 = 1
+		CUSTOMDRAWLINE =
+		WAIT
+		CALL SET_ENEMY, 9, 1407, 30, 0, 1
+		;타케미나카타のHP,MP보정をしたつもりが나나미のHP,MPブーストになっている？
+		;以下二行をコメントアウトすると이상が無くなる。よくわからないのでオミット。
+		;CFLAG:LOCAL:ＨＰ보정 = 1500
+		;CFLAG:LOCAL:ＭＰ보정 = 1500
+		BASE:LOCAL:주살 = 0
+		CALL SYNC_STATUS,LOCAL
+		CALL HEALTH_CHARA,LOCAL
+		CFLAG:LOCAL:行動횟수 = 2
+		CALL BATTLE_START
+		FLAG:도주불가フラグ = 0
+		FLAG:회화불능フラグ = 0
+		FLAG:선제기습취소 = 0
+		WAIT
+	PRINTFORML 
+	PRINTFORML ＞타케미나카타を倒した
+	PRINTFORML 
+ELSE
+	PRINTFORML 타케미나카타：
+	PRINTFORML 「ふん、貴様達の相손はこやつらよ」
+	PRINTFORMW 鎧武者姿の악마達がこちらに向かってきた。
+	PRINTFORML 나나미：
+	PRINTFORML 「あれは요귀：모무노후です。物理相性に強い내성があるので魔法공격が望ましいです」
+	PRINTFORMW 「特に전격相性に弱いので使えるならオススメです。…전격に弱いから타케미나카타に従ってるんでしょうか？」
+	PRINTFORML 
+	PRINTFORML ＞모무노후達が現れた
+	PRINTFORML 
+		FLAG:도주불가フラグ = 1
+		FLAG:회화불능フラグ = 1
+		FLAG:선제기습취소 = 1
+		CUSTOMDRAWLINE =
+		WAIT
+		CALL SET_ENEMY, 8, 657, 28, 0, 1
+		CALL SET_ENEMY, 9, 657, 28, 0, 1
+		CALL SET_ENEMY, 10, 657, 28, 0, 1
+		CALL BATTLE_START
+		FLAG:도주불가フラグ = 0
+		FLAG:회화불능フラグ = 0
+		FLAG:선제기습취소 = 0
+		WAIT
+	PRINTFORML 
+	PRINTFORML ＞모무노후達を倒した
+	PRINTFORML 
+ENDIF
+PRINTFORML 타케미나카타；
+PRINTFORML 「見事だ……お主らならコトワリを啓くこと叶うやもしれん」
+PRINTFORML 「コトワリとは新たな세계を律する法だ」
+PRINTFORML 「このボルテクス界は、新たな세계を創世するための卵なのだ」
+PRINTFORML 「ヤヒロノヒモロギにマガツヒを貯め、コトワリを啓いて異세계の神の召喚に성공すれば、カグツチ塔への道が開かれる」
+PRINTFORML 「すなわち、己が理想とする세계を創造する権利が손に入るのだ」
+PRINTFORML 「行け。そして立ちはだかる者はすべて踏みつぶせ」
+PRINTFORMW 「我はここで朽ち果てながら、次の세계を待つとしよう……」
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 　　＞＞エビス＜＜
+PRINTFORML 
+PRINTFORML ＞타케미나카타を退けヒモロギを손にした一行は、エビスに帰還した。
+PRINTFORML ＞マネカタ達はヒモロギを返してもらうと、また襲われる可能性がある事に気付き%CALLNAME:MASTER%達に譲ると言い出した。
+PRINTFORML ＞野分はこれからの탐색の손掛かりになると考え、預かる事を受け入れた。
+PRINTFORMW ＞そしてマネカタは迷惑料としてかき集めた10000円を%CALLNAME:MASTER%に渡した。
+MONEY += 10000
+PRINTFORMW 
+;帰還
+PRINTFORML ＞%CALLNAME:MASTER%としては鶴来達の安否を確認し、픽시に의뢰された危険な악마の間引きもしたので一定の成果を得たと言える。
+PRINTFORMW ＞ここらで一旦引き上げと行きたいところだが…。
+PRINTFORML 鶴来：
+PRINTFORML 「나나미ちゃんが一度帰ってるんだ、大丈남편だとは思うんだけど……」
+PRINTFORMW 「沙耶を見つけ出さないうちに元の세계に戻って、次またボルテクス界に来れなかったら死ぬほど後悔する」
+PRINTFORML 野分：
+PRINTFORMW 「僕も長谷部を見つけ出さない事には帰ることは出来ないね」
+PRINTFORML 小枝：
+PRINTFORMW 「ボクは一度帰りますよ〜」
+PRINTFORML 決まりだ、また合流することになるだろうが一度二손に分かれるとしよう。
+PRINTFORML どこからでも세계を越えることが出来れば簡가운で良いんだが。
+PRINTFORMW そんな都合よくはいくまい、よしんば出来たとしても何処に出ることやら……。
+SETCOLOR COLOR("PASTEL-RED")
+PRINTFORMW 
+PRINTFORMW ――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+PRINTFORMW 
+RESETCOLOR
+PRINTFORML ＞結局入ったところから無事、元の세계へ帰還することが出来た。
+PRINTFORML ＞次行くときはターミナルを見つけないと탐색範囲を広げるのは難しいかもしれない。
+PRINTFORMW ＞ともあれ사교의관にいる픽시に報告に行こう。
+PRINTFORML 
+PRINTFORMW 　　＞＞사교의관＜＜
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORMW 「斯々然々というわけなんですよ」
+PRINTFORMW 픽시：
+PRINTFORMW 「なるほど、そんなことに…やっぱり放置しておいては面倒な事になりかねないねぇ」
+PRINTFORML 「出来る範囲で良いのでこのまま続けて貰えると助かるよ」
+PRINTFORMW 「とりあえずここまでの報酬を支払っておくね！まずはお金と…」
+PRINTFORMW 報酬10000円を得た。
+MONEY += 10000
+PRINTFORMW 「戦힘강화に정령を一体、こちらは종류を選んで貰おうかな？
+PRINTL [0] 실프
+PRINTL [1] 운디네
+PRINTL [2] 놈
+PRINTL [3] 살라만더
+CALL INPUTINT,0,1,2,3
+IF RESULT == 0
+	PRINTFORMW ＞정령 실프が仲魔になった。
+CALL ADD_NEW_COMPANION,1201,2000
+ELSEIF RESULT == 1
+	PRINTFORMW ＞정령 운디네が仲魔になった。
+CALL ADD_NEW_COMPANION,1202,2000
+ELSEIF RESULT == 2
+	PRINTFORMW ＞정령 놈が仲魔になった。
+CALL ADD_NEW_COMPANION,1203,2000
+ELSE
+	PRINTFORMW ＞정령 살라만더が仲魔になった。
+CALL ADD_NEW_COMPANION,1204,2000
+ENDIF
+;나나미ちゃんの해설！정령合体…もう知ってるよね？
+PRINTFORMW 
+PRINTFORML 나나미：
+PRINTFORML 「今更かもしれませんが一応説明しますね」
+PRINTFORML 「정령は特定の종족の악마と合体することで、종족を変えずに랭크を上げたり下げたり出来るんですよ」
+PRINTFORMW 「악마全書を埋めるにも戦힘を강화するにも使い勝손抜群ですね！」
+PRINTFORMW 픽시：
+PRINTFORMW 「今回はこんなもんかな、また成果が上がったら来てよ。相応の報酬は用意するからさ！」
+PRINTFORMW 次の準備の為にも一先ず帰って休むことにしよう。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+;Bパート終了
+;エン디무ング
+PRINTFORML ＞ボルテクス界を탐색する%CALLNAME:MASTER%たちはギンザで『무녀』と呼ばれる存在がいることを知る。
+PRINTFORML ＞アマラ車からアマラ経路を経由しギンザに飛ぶ%CALLNAME:MASTER%たち。
+PRINTFORMW ＞『무녀』は一体、何者なのか……。
+PRINTFORML 
+PRINTFORML 次回 第３話 人形の夢 〜 Dolly's Dreaming 〜
+PRINTFORMW 
+PRINTFORML 鶴来：
+PRINTFORMW 「君は、沙耶なのか……？」
+PRINTFORML 
+;まだ作ってねーです 作成後フラグを35:0 == 3に변경する。
+이벤트フラグ:35:0 = 3
+CUSTOMDRAWLINE =
+;- 1ターン経過
+FLAG:휴식フラグ = 1
+BEGIN TURNEND
+RETURN
+

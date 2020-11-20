@@ -1,0 +1,1141 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:SHOP.ERB
+;	Facility	:SHOP화면の処理など
+;
+;	Licence		:。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX			N새					新規作成
+;	002		2011/01/15			P					던전内조교においてASSIを排除する조건を추가
+;	003		2011/01/15			P					트리슈のフラグ操作のタイミングを던전탈출から日付변경に
+;	004		2011/01/15			Ｎ鳥				DEBUG用SHOPコマンドを通常時非표시にしておくための処理を추가
+;	005		2011/02/14			P					던전이벤트などが出現時に告知するように
+;	006		2011/04/25			P					控えの표시形式を변경しつつ、色々변경
+;	007		2011/04/27			Ｎ鳥				던전内세이브로드後の탐색終了時に衣装を保存するようにに
+;	006		2011/05/09			P					TARGETの위험일표시が間違っていたのを修正
+;	008		2013/11/30			ひみつ				위험일/발정중표시のコード圧縮。ハートマークで표시がずれるのを기합で修正
+;	009		2019/02/05			(ﾟдﾟ)				화상표시を카야ちゃんズに対応してしまった
+;	010		2019/07/06			名無し				納金の눈標金額が常時更新されるように
+;	011		2019/07/06			名無し				SHOPコマンドが종류ごとに分けるように
+;	012		2019/08/03			ypa 				画像表示関連の仕様変更
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+
+
+
+@EVENTSHOP
+#PRI
+;FOR LOCAL,0,CHARANUM
+;	CALL SYNC_STATUS,LOCAL
+;NEXT
+FLAG:ウィンドウ메시지スキップ = 0
+
+IF FLAG:SHOPコマンド == 101
+	;フ로어데이터を作り直す
+	CALL MAKE_FLOOR, FLAG:現던전
+	CALL DUNGEON_ATTACK
+	;---- EDIT 015 ADD START -------------------------
+	;탐색に참가可能なキャラの衣装を保存
+	FOR LOCAL , 0 , CHARANUM
+		SIF CFLAG:LOCAL:전투참가불가능 == 1
+			CONTINUE
+		SIF (ABL:LOCAL:종족 == 0 || CFLAG:LOCAL:소환불가 || CFLAG:LOCAL:所属ＣＯＭＰ == -1) && CFLAG:LOCAL:PTフラグ == 1
+			CONTINUE
+		CALL CLOTHES_TRAIN,LOCAL,1
+	NEXT
+	;---- EDIT 015 ADD END   -------------------------
+	;---- EDIT 002 ADD START -------------------------
+	;ここに来れないASSI及び健在でないASSIを排除する
+	IF FLAG:던전内조교 == 1
+		FLAG:던전内조교조수退避 = ASSI
+		SIF ASSI >= 0 && ABL:ASSI:종족 == 0 && CFLAG:ASSI:PTフラグ == 1
+			ASSI = -1
+		SIF ASSI >= 0 && GET_STATE(CFLAG:ASSI:ステート) != "GOOD"
+			ASSI = -1
+		BEGIN TRAIN
+	ENDIF
+	;---- EDIT 002 ADD END   -------------------------
+	;---- EDIT 003 ADD START -------------------------
+	SIF FLAG:던전内조교 == 1
+		BEGIN TRAIN
+	FLAG:탈출 = 0
+;	SIF FLAG:트리슈の泉이용횟수
+;		FLAG:트리슈の泉이용횟수 = 1
+;	SIF FLAG:트리슈조교 >= 0
+;		FLAG:트리슈조교 = 0
+;	SIF FLAG:트리슈조교 == -1
+;		FLAG:트리슈조교 = -2
+	;---- EDIT 003 ADD END   -------------------------
+	FLAG:SHOPコマンド = 0
+	FLAG:소마ギフト = 0
+	FLAG:보옥륜ギフト = 0
+	FOR LOCAL,0,CHARANUM
+		SIF CFLAG:LOCAL:악마변신 == 1
+			CALL ACTION_2310 , LOCAL , 0
+	NEXT
+	BEGIN TURNEND
+ENDIF
+
+FOR LOCAL,0,CHARANUM
+	SIF CFLAG:LOCAL:악마변신 == 1
+		CALL ACTION_2310 , LOCAL , 0
+NEXT
+FLAG:SHOPコマンド = 0
+
+;-------------------------------------------------
+;売り物やSHOPコマンド표시
+;EVENTSHOPの実行終了後や로드やSHOPへRETURNしてくると実行される
+;∴세이브데이터互換などはここで行うと良い
+;訂正：@EVENTLOADの方が利便性が高い
+;-------------------------------------------------
+
+@SHOW_SHOP
+#DIM コマンドストック,8,100
+#DIMS コマンドストック名,8,100
+#DIM コマンド可能,8,100
+
+;---- EDIT 005 ADD START -------------------------
+SELECTCASE FLAG:組織貢献LV
+	CASE 0
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 10000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 1
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 60000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 2
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 210000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 3
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 460000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 4
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 860000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 5
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 1460000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 6
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 2260000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 7
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 2500000
+			PRINTFORMW %플레이어를()% 조직의 간부로 추천하는 여론이 있는 것 같습니다…
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 8
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 3110000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 9
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 3500000
+			PRINTFORMW %플레이어를()% 조직의 간부로 추천하려는 움직임이 있는 것 같습니다
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 10
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 4000000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 11
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 >= 5000000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASE 12
+		IF FLAG:組織貢献度 + FLAG:名声 * 100 + LOCAL >= 6500000
+			PRINTW 새로운 장비품의 구입이 허가되었습니다. 정크숍에 진열되었습니다.
+			PRINTW 장비품의 구입 제한이 완전히 해제되었습니다.
+			FLAG:組織貢献LV ++
+		ENDIF
+	CASEELSE
+ENDSELECT
+SELECTCASE FLAG:組織貢献度 + FLAG:名声 * 100
+	CASE IS < 10000
+		MONEY:2 = 10000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 60000
+		MONEY:2 = 60000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 210000
+		MONEY:2 = 210000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 460000
+		MONEY:2 = 460000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 860000
+		MONEY:2 = 860000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 1460000
+		MONEY:2 = 1460000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 2260000
+		MONEY:2 = 2260000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 2500000
+		MONEY:2 = 2500000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 3110000
+		MONEY:2 = 3110000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 3500000
+		MONEY:2 = 3500000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 4000000
+		MONEY:2 = 4000000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 5000000
+		MONEY:2 = 5000000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASE IS < 6500000
+		MONEY:2 = 6500000 - (FLAG:組織貢献度 + FLAG:名声 * 100)
+	CASEELSE
+		MONEY:2 = 0
+ENDSELECT
+FOR LOCAL, 1, 100
+	TRYCCALLFORM PREREQUISITE_DUNGEON_{LOCAL}
+		IF RESULT
+			CALLFORM GET_DUNGEON_NAME_{LOCAL}
+			IF LOCAL <= 63
+				SIF GETBIT(FLAG:던전出現1,LOCAL)
+					CONTINUE
+				SETBIT FLAG:던전出現1,LOCAL
+			ELSE
+				SIF GETBIT(FLAG:던전出現2,LOCAL - 64)
+					CONTINUE
+				SETBIT FLAG:던전出現2,LOCAL - 64
+			ENDIF
+			RESULTS = 던전 【%RESULTS%】%조사만처리(RESULTS,"가")% 출현！
+			CALL MESSAGE_B(1, RESULTS)
+		ENDIF
+	CATCH
+	ENDCATCH
+NEXT
+FOR LOCAL, 1, 100
+	TRYCCALLFORM PLAYABLE_COLOSSEUM_{LOCAL}
+		IF RESULT
+			IF LOCAL <= 63
+				SIF GETBIT(FLAG:闘技場出現1,LOCAL)
+					CONTINUE
+				SETBIT FLAG:闘技場出現1,LOCAL
+			ELSE
+				SIF GETBIT(FLAG:闘技場出現2,LOCAL - 64)
+					CONTINUE
+				SETBIT FLAG:闘技場出現2,LOCAL - 64
+			ENDIF
+			RESULTS = 투기장 【%RESULTS%】%조사만처리(RESULTS,"가")% 출현！
+			CALL MESSAGE_B(1, RESULTS)
+		ENDIF
+	CATCH
+		
+	ENDCATCH
+NEXT
+FOR LOCAL, 1, 100
+	TRYCCALLFORM PLAYABLE_EVENT_{LOCAL}
+		IF RESULT
+			IF LOCAL <= 63
+				SIF GETBIT(FLAG:이벤트出現1,LOCAL)
+					CONTINUE
+				SETBIT FLAG:이벤트出現1,LOCAL
+			ELSE
+				SIF GETBIT(FLAG:이벤트出現2,LOCAL - 64)
+					CONTINUE
+				SETBIT FLAG:이벤트出現2,LOCAL - 64
+			ENDIF
+			RESULTS = 이벤트 【%RESULTS%】%조사만처리(RESULTS,"가")% 출현！
+			CALL MESSAGE_B(1, RESULTS)
+		ENDIF
+	CATCH
+	ENDCATCH
+NEXT
+FOR LOCAL, 1, 100
+	TRYCCALLFORM PLAYABLE_REQUEST_{LOCAL}
+		IF RESULT
+			IF LOCAL <= 63
+				SIF GETBIT(FLAG:의뢰出現1,LOCAL)
+					CONTINUE
+				SETBIT FLAG:의뢰出現1,LOCAL
+			ELSE
+				SIF GETBIT(FLAG:의뢰出現2,LOCAL - 64)
+					CONTINUE
+				SETBIT FLAG:의뢰出現2,LOCAL - 64
+			ENDIF
+			RESULTS = 의뢰 【%RESULTS%】%조사만처리(RESULTS,"가")% 출현！
+			CALL MESSAGE_B(1, RESULTS)
+		ENDIF
+	CATCH
+		
+	ENDCATCH
+NEXT
+;---- EDIT 005 ADD END   -------------------------
+CUSTOMDRAWLINE =
+LOCAL:1 = 0
+LOCAL:2 = 0
+LOCAL:3 = 0
+LOCAL:4 = 0
+LOCAL:5 = 0
+LOCAL:6 = 0
+LOCAL:7 = 0
+LOCAL:8 = 0
+VARSET コマンドストック , 0
+VARSET コマンド可能 , 0
+VARSET TFLAG, 0, 100, 1000
+SIF FLAG:控え표시位置 == 0 && FLAG:控え이용설정 < 2
+	CALL SHOW_SUB_TARGET
+;SHOP화면の描写
+CALL SHOW_SHOP_INFO
+
+CALL ENTRY_EQUIPMENT_COMPENDIUM
+FOR LOCAL, 100, 1000
+	RESULTS = 
+	RESULT:1 = 0
+	TRYCCALLFORM SHOPCOMABLE_{LOCAL}
+		IF RESULT > -1
+			IF RESULTS != ""
+				IF RESULT:1 < 1
+					SIF LOCAL < 180
+						RESULT:1 = 5
+					SIF LOCAL >= 180 && 200 > LOCAL
+						RESULT:1 = 6
+					SIF LOCAL >= 200
+						RESULT:1 = 7
+				ENDIF
+				IF RESULT > 0
+					TFLAG:LOCAL = 1
+				ENDIF
+				コマンドストック:(RESULT:1):(LOCAL:(RESULT:1)) = LOCAL
+				コマンドストック名:(RESULT:1):(LOCAL:(RESULT:1)) = %RESULTS%
+				LOCAL:(RESULT:1) ++
+			ENDIF
+		ENDIF
+	CATCH
+		
+	ENDCATCH
+NEXT
+LOCAL:2 = 0
+FOR LOCAL, 1, 8
+	SIF コマンドストック:LOCAL:0 == 0
+		CONTINUE
+	IF LOCAL == 1
+		SETCOLOR 0xff00ff
+		PRINTFORML 【조교사관련】
+	ELSEIF LOCAL == 2
+		SETCOLOR 0xffaa11
+		PRINTFORML 【RPG・진행관련】
+	ELSEIF LOCAL == 3
+		SETCOLOR 0x66cc99
+		PRINTFORML 【아이템・장비관련】
+	ELSEIF LOCAL == 4
+		SETCOLOR 0x0099cc
+		PRINTFORML 【캐릭터・강화관련】
+	ELSEIF LOCAL == 5
+		SETCOLOR 0x999999
+		PRINTFORML 【그 외】
+	ELSEIF LOCAL == 6
+		SETCOLOR 0xff6400
+		PRINTFORML 【디버그】
+	ELSEIF LOCAL == 7
+		SETCOLOR 0xffde86
+		PRINTFORML 【시스템】
+	ENDIF
+	RESETCOLOR
+	FOR LOCAL:1, 0, 100
+		IF コマンドストック:(LOCAL):(LOCAL:1) == 0
+			IF LOCAL:2 % SHOPPRINTCPL() > 0
+				LOCAL:2 = 0
+				PRINTL
+			ENDIF
+			CONTINUE
+		ENDIF
+		IF TFLAG:(コマンドストック:(LOCAL):(LOCAL:1)) > 0
+			IF コマンドストック名:(LOCAL):(LOCAL:1) != ""
+					PRINTFORMLC [{コマンドストック:(LOCAL):(LOCAL:1)}] - %コマンドストック名:(LOCAL):(LOCAL:1)%
+			ENDIF
+		ELSE
+			SETCOLOR 0x404040
+			IF コマンドストック:(LOCAL):(LOCAL:1) == 777 && FLAG:周回횟수 == 0
+				PRINTFORMLC [???] - ？？？？？
+			ELSEIF コマンドストック:(LOCAL):(LOCAL:1) == 555 && FLAG:5 == 9
+				PRINTFORMLC [---] - ＥＭＰＴＹ
+			ELSE
+				PRINTFORMLC [{コマンドストック:(LOCAL):(LOCAL:1)}] - %コマンドストック名:(LOCAL):(LOCAL:1)%
+			ENDIF
+			RESETCOLOR
+		ENDIF
+			LOCAL:2 += 1
+			SIF LOCAL:2 % SHOPPRINTCPL() == 0
+				PRINTL 
+	NEXT
+NEXT
+
+;FOR LOCAL, 100, 1000
+;	RESULTS = 
+;	TRYCCALLFORM SHOPCOMABLE_{LOCAL}
+;		IF RESULT > 0
+;			TFLAG:LOCAL = 1
+;			IF RESULTS != ""
+;					PRINTFORMLC [{LOCAL}] - %RESULTS%
+;			ENDIF
+;		ELSEIF RESULT == -1
+;			LOCAL:1 -= 1
+;		ELSE
+;			SETCOLOR 0x404040
+;			IF LOCAL == 777 && FLAG:周回횟수 == 0
+;				PRINTFORMLC [???] - ？？？？？
+;			ELSEIF LOCAL == 555 && FLAG:5 == 9
+;				PRINTFORMLC [---] - ＥＭＰＴＹ
+;			ELSE
+;				PRINTFORMLC [{LOCAL}] - %RESULTS%
+;			ENDIF
+;			RESETCOLOR
+;		ENDIF
+;		IF RESULT >= 0
+;			LOCAL:1 += 1
+;			SIF LOCAL:1 % SHOPPRINTCPL() == 0
+;				PRINTL 
+;		ENDIF
+;	CATCH
+;		
+;	ENDCATCH
+;	IF LOCAL == 199 || LOCAL == 400
+;		IF LOCAL:1 % SHOPPRINTCPL() > 0
+;			LOCAL:1 = 0
+;			PRINTL
+;		ENDIF
+;	ENDIF
+;NEXT
+IF FLAG:控え표시位置 == 2 && FLAG:控え이용설정 < 2
+	SIF !LINEISEMPTY()
+		PRINTL
+	DRAWLINE
+	CALL SHOW_SUB_TARGET
+ENDIF
+;-------------------------------------------------
+;SHOPコマンド実行
+;-------------------------------------------------
+@USERSHOP
+;デバッグモードON/OFF
+IF RESULT == 121162
+	IF FLAG:DEBUG == 0
+		PRINTFORML 디버그 모드를 ON했습니다
+		FLAG:DEBUG = 1
+	ELSEIF FLAG:DEBUG == 1
+		PRINTFORML 디버그 모드를 OFF했습니다
+		FLAG:DEBUG = 0
+	ENDIF
+ELSEIF RESULT >= 1000 || RESULT < 0
+	RETURN 0
+ELSEIF TFLAG:RESULT
+	FLAG:SHOPコマンド = RESULT
+	TRYCALLFORM SHOP_COM_{RESULT}
+	FLAG:SHOPコマンド = 0
+ELSE
+	RETURN 0
+ENDIF
+
+FOR LOCAL,0,CHARANUM
+	CALL SYNC_STATUS,LOCAL
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+
+
+;-------------------------------------------------
+;SHOP화면の描写
+;-------------------------------------------------
+@SHOW_SHOP_INFO
+
+IF 항목名反映 == 1
+	PRINTFORM %항목名_SHOP화면 + "　"%
+ENDIF
+LOCALS = {DAY}일째\(%AUTO_SPLIT("아침,낮,저녁,밤",",",TIME)%)　%WEEKDAY(DAY%7)%요일
+PRINTFORM %LOCALS,26,LEFT%
+
+IF FLAG:月齢 != 0 && FLAG:月齢 != 8
+	LOCALS = {FLAG:月齢}/8 \@ FLAG:月齢ベクトル == 0 ? ＹＯＵＮＧ # ＯＬＤ \@ ＭＯＯＮ
+ELSE
+	LOCALS = \@ FLAG:月齢 == 8 ? ＦＵＬＬ ＭＯＯＮ # ＮＥＷ ＭＯＯＮ\@
+ENDIF
+PRINTFORM %LOCALS,26,LEFT%
+
+;SIF FLAG:5 == 0 && FLAG:조교난이도 > 1
+	PRINTFORML 목표 금액：￥%TOSTR(MONEY:2, "#,###")%
+DRAWLINE
+SIF FLAG:カスタムゲーム화면
+	PRINT  
+IF TARGET >= 0
+	LOCALS = \@ CFLAG:TARGET:전투참가불가능 == -1 ? 조교대상 # 파트너\@：%NAME:TARGET%
+	IF FLAG:カスタムゲーム화면
+		PRINTFORM %LOCALS,45,LEFT%
+	ELSE
+		PRINTFORM %LOCALS,41,LEFT%
+	ENDIF
+	CALL SHOP_위험일표시(TARGET)
+	PRINT  
+	PRINTBUTTON "[108] 변경", 108
+
+	;화상표시
+	IF Flag:화상표시설정_SHOP화면 > 0
+;---- EDIT 010 MOD START -------------------------
+		; CALL SHOW_IMG_S, 1
+		CALL SHOW_IMG, 1, 0, Flag:화상표시설정_SHOP화면
+;---- EDIT 010 MOD END -------------------------	
+	ELSE
+		PRINTL
+	ENDIF
+	
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　
+	PRINT 체력
+	CALL PRINT_COLORBAR, BASE:TARGET:체력, MAXBASE:TARGET:체력, 33, UNICODE(0x2585), UNICODE(0x2585), BARCOLORSET("붉은색"), RESULT:1
+	PRINTFORM  ({BASE:TARGET:체력, 5}/{MAXBASE:0, 5})
+
+	;화상표시
+	IF Flag:화상표시설정_SHOP화면 > 0
+;---- EDIT 010 MOD START -------------------------
+		; CALL SHOW_IMG_S, 2
+		CALL SHOW_IMG, 2, 0, Flag:화상표시설정_SHOP화면
+;---- EDIT 010 MOD END -------------------------	
+	ELSE
+		PRINTL
+	ENDIF
+ELSE
+	SETCOLOR COLOR("light-gray")
+	PRINTFORM 파트너：%"ＥＭＰＴＹ",40,LEFT%
+	PRINTBUTTON "[108] 변경", 108
+
+	;화상표시
+	IF Flag:화상표시설정_SHOP화면 > 0
+;---- EDIT 010 MOD START -------------------------
+		; CALL SHOW_IMG_S, 1
+		CALL SHOW_IMG, 1, 0, Flag:화상표시설정_SHOP화면
+;---- EDIT 010 MOD END -------------------------
+	ELSE
+		PRINTL
+	ENDIF
+	
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　
+	PRINT 체력
+	CALL PRINT_COLORBAR, 0, 1, 33, UNICODE(0x2585), UNICODE(0x2585), BARCOLORSET("붉은색"), RESULT:1
+	PRINTFORM  ({0, 5}/{0, 5})
+	RESETCOLOR
+	
+	;화상표시
+	IF Flag:화상표시설정_SHOP화면 > 0
+;---- EDIT 010 MOD START -------------------------
+		; CALL SHOW_IMG_S, 2
+		CALL SHOW_IMG, 2, 0, Flag:화상표시설정_SHOP화면
+;---- EDIT 010 MOD END -------------------------		
+	ELSE
+		PRINTL
+	ENDIF
+ENDIF
+FOR LOCAL, 0, CHARANUM
+	SIF !ASSI_ABLE(LOCAL)
+		CONTINUE
+	SIF CFLAG:LOCAL:필터링フラグ
+		CONTINUE
+	TFLAG:109 = 1
+	BREAK
+NEXT
+SIF FLAG:カスタムゲーム화면
+	PRINT  
+IF ASSI > 0
+	IF FLAG:カスタムゲーム화면
+		PRINTFORM 조수：%NAME:ASSI,39,LEFT%
+	ELSE
+		PRINTFORM 조수：%NAME:ASSI,35,LEFT%
+	ENDIF
+	CALL SHOP_위험일표시(ASSI)
+	PRINT  
+	SIF !TFLAG:109
+		SETCOLOR COLOR("light-gray")
+	PRINTBUTTON "[109] 변경", 109
+	RESETCOLOR
+
+	;화상표시
+	IF Flag:화상표시설정_SHOP화면 > 0
+;---- EDIT 010 MOD START -------------------------
+		; CALL SHOW_IMG_S, 3
+		CALL SHOW_IMG, 3, 0, Flag:화상표시설정_SHOP화면
+;---- EDIT 010 MOD END -------------------------
+	ELSE
+		PRINTL
+	ENDIF
+
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　
+	PRINT 체력
+	CALL PRINT_COLORBAR, BASE:ASSI:체력, MAXBASE:ASSI:체력, 33, UNICODE(0x2585), UNICODE(0x2585), BARCOLORSET("붉은색"), RESULT:1
+	PRINTFORM  ({BASE:ASSI:체력, 5}/{MAXBASE:ASSI:0, 5})
+
+	;화상표시
+	IF Flag:화상표시설정_SHOP화면 > 0
+;---- EDIT 010 MOD START -------------------------
+		; CALL SHOW_IMG_S, 4
+		CALL SHOW_IMG, 4, 0, Flag:화상표시설정_SHOP화면
+;---- EDIT 010 MOD END -------------------------
+	ELSE
+		PRINTL
+	ENDIF
+ELSE
+	SETCOLOR COLOR("light-gray")
+	PRINTFORM 조수：%"ＥＭＰＴＹ",46,LEFT%
+	SIF TFLAG:109
+		RESETCOLOR
+	PRINTBUTTON "[109] 변경", 109
+	SETCOLOR COLOR("light-gray")
+
+	;화상표시
+	IF Flag:화상표시설정_SHOP화면 > 0
+;---- EDIT 010 MOD START -------------------------
+		; CALL SHOW_IMG_S, 3
+		CALL SHOW_IMG, 3, 0, Flag:화상표시설정_SHOP화면
+;---- EDIT 010 MOD END -------------------------
+	ELSE
+		PRINTL
+	ENDIF
+
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　
+	PRINT 체력
+	CALL PRINT_COLORBAR, 0, 1, 33, UNICODE(0x2585), UNICODE(0x2585), BARCOLORSET("붉은색"), RESULT:1
+	PRINTFORM  ({0, 5}/{0, 5})
+	RESETCOLOR
+
+	;화상표시
+	IF Flag:화상표시설정_SHOP화면 > 0
+;---- EDIT 010 MOD START -------------------------
+		; CALL SHOW_IMG_S, 4
+		CALL SHOW_IMG, 4, 0, Flag:화상표시설정_SHOP화면
+;---- EDIT 010 MOD END -------------------------
+	ELSE
+		PRINTL
+	ENDIF
+ENDIF
+
+DRAWLINE
+SIF FLAG:控え표시位置 == 1 && FLAG:控え이용설정 < 2
+	CALL SHOW_SUB_TARGET
+;SIF MASTER >= 0
+;	PRINTFORML %CALLNAME:MASTER%:LV{BASE:MASTER:30,3,LEFT}　　MAG:{BASE:MASTER:8,8}/{MAXBASE:MASTER:8,8}
+;FOR LOCAL, 0, 4
+;	IF TARGET:LOCAL >= 0
+;		IF LOCAL == 0
+;			SIF TARGET == -1
+;				CONTINUE
+;			PRINTFORM 파트너：%NAME:TARGET%
+;		ELSE
+;			SIF FINDCHARA_ID(TARGET:LOCAL) == -1
+;				CONTINUE
+;			PRINTFORM 予備파트너{LOCAL}：%NAME:FINDCHARA_ID(TARGET:LOCAL)%
+;		ENDIF
+;		LOCAL:1 = LOCAL? FINDCHARA_ID(TARGET:LOCAL) # TARGET
+;		SELECTCASE 위험일(LOCAL:1)
+;			CASE 1
+;				SETCOLOR 0xCC33FF
+;					CALL HEARTB
+;				PRINTFORM 위험일
+;					CALL HEARTB
+;				RESETCOLOR
+;			CASE 2
+;				SETCOLOR 0xCC33FF
+;					CALL HEARTB
+;				PRINTFORM 발정중
+;					CALL HEARTB
+;				RESETCOLOR
+;			CASE 3,-2
+;				SETCOLOR 0xCC33FF
+;					CALL HEARTB
+;				PRINTFORM 발정중
+;					CALL HEARTB
+;				RESETCOLOR
+;		ENDSELECT
+;		PRINTL
+;		CALL LIFE_BAR, LOCAL
+;	ENDIF
+;NEXT
+;SIF ASSI >= 0
+;	PRINTFORM （조수：%NAME:ASSI%）
+;
+;PRINTL
+
+LOCALS = 『%CSTR:MASTER:종족명%』 %NAME:MASTER%
+PRINTFORM %LOCALS,41,LEFT%
+CALL SHOP_위험일표시(MASTER)
+PRINTL
+IF MASTER >= 0
+	SIF FLAG:カスタムゲーム화면
+		PRINT 　
+	PRINT ＭＡＧ 
+	CALL PRINT_COLORBAR, BASE:MASTER:ＭＡＧ, MAXBASE:MASTER:ＭＡＧ, 44, UNICODE(0x2585), UNICODE(0x2585), BARCOLORSET("유카리"), RESULT:1
+	IF FLAG:カスタムゲーム화면
+		PRINTFORML  (%TOSTR(BASE:MASTER:ＭＡＧ, "#,##0")%/%TOSTR(MAXBASE:MASTER:ＭＡＧ, "#,###")%)
+	ELSE
+		PRINTFORML  (%TOSTR(BASE:MASTER:ＭＡＧ, "#,##0"),10%/%TOSTR(MAXBASE:MASTER:ＭＡＧ, "#,###"),10%)
+	ENDIF
+ENDIF
+
+;ＣＯＭＰ 
+LOCAL:0 = 68
+LOCAL:1 = NUM_NAKAMA()
+LOCAL:2 = ソフト용량()
+LOCAL:3 = FLAG:ＣＯＭＰ용량 - LOCAL:1 - LOCAL:2
+LOCAL:5 = LOCAL:1 + LOCAL:2 + ABS(LOCAL:3)
+LOCAL:4 = LOCAL:0 - LOCAL:5 
+IF LOCAL:5 > LOCAL:0
+	LOCAL:1 = LOCAL:1 ? MAX(1, LOCAL:1 * (LOCAL:0 + 1) / LOCAL:5) # 0
+	LOCAL:2 = LOCAL:2 ? MAX(1, LOCAL:2 * (LOCAL:0 + 1) / LOCAL:5) # 0
+	LOCAL:3 = LOCAL:3 > 0 ? MAX(1, LOCAL:3 * (LOCAL:0 + 1) / LOCAL:5) # LOCAL:3
+	LOCAL:3 = LOCAL:3 < 0 ? MIN(-1, LOCAL:3 * (LOCAL:0 + 1) / LOCAL:5) # LOCAL:3
+	LOCAL:4 = 0
+	$MIJIKASHI
+	IF LOCAL:1 + LOCAL:2 + ABS(LOCAL:3) < LOCAL:0
+		LOCAL:(FINDELEMENT(LOCAL, MAXARRAY(LOCAL, 1, 4), 1, 4)) ++
+		GOTO MIJIKASHI
+	ENDIF
+	$NAGASHI
+	IF LOCAL:1 + LOCAL:2 + ABS(LOCAL:3) > LOCAL:0
+		LOCAL:(FINDELEMENT(LOCAL, MAXARRAY(LOCAL, 1, 4), 1, 4)) --
+		GOTO NAGASHI
+	ENDIF
+ENDIF
+SIF FLAG:カスタムゲーム화면
+	PRINT  
+PRINTFORM ＣＯＭＰ 
+SIF LOCAL:1 + LOCAL:2
+	CALL PRINT_COLORBAR, LOCAL:1, LOCAL:1 + LOCAL:2, LOCAL:1 + LOCAL:2, UNICODE(0x258B), UNICODE(0x258B), 0x502020, 0x205020
+SIF LOCAL:3 >= 0 && LOCAL:3 + LOCAL:4
+	CALL PRINT_COLORBAR, LOCAL:3, LOCAL:3 + LOCAL:4, LOCAL:3 + LOCAL:4, UNICODE(0x258B), UNICODE(0x258B), 0x7070C0, GETBGCOLOR()
+SIF LOCAL:3 < 0 && -LOCAL:3 + LOCAL:4
+	CALL PRINT_COLORBAR, - LOCAL:3, - LOCAL:3 + LOCAL:4, - LOCAL:3 + LOCAL:4, UNICODE(0x258B), UNICODE(0x258B), COLOR("gray"), GETBGCOLOR()
+PRINTL
+SIF FLAG:カスタムゲーム화면
+	PRINT 　
+LOCALS = 　 중마：{NUM_NAKAMA()}　소프트：{ソフト용량()}　ＣＯＭＰ용량：{FLAG:ＣＯＭＰ용량}　//
+PRINTFORM %LOCALS,52,LEFT%
+PRINTFORM 소지금：￥%TOSTR(MONEY, "#,##0")% / %TOSTR(MONEY:1, "#,##0")%마카
+PRINTL
+
+CUSTOMDRAWLINE =
+@SHOW_SUB_TARGET
+#DIM CHARA, 1
+PRINTBUTTON @"[{500}] 대기표시전환 ", 500
+IF !FLAG:控え격납
+	PRINTBUTTON @"[{501}] 1열 표시 ", 501
+	PRINTBUTTON @"[{502}] 2열 표시 ", 502
+	PRINTBUTTON @"[{503}] 3열 표시 ", 503
+	PRINTBUTTON @"[{504}] 위치변경 ", 504
+ENDIF
+	PRINTPLAIN 　현재의 월령：
+IF FLAG:月齢 != 0 && FLAG:月齢 != 8
+	PRINTFORML {FLAG:月齢}/8 \@ FLAG:月齢ベクトル == 0 ? ＹＯＵＮＧ # ＯＬＤ \@ ＭＯＯＮ
+ELSE
+	PRINTFORML \@ FLAG:月齢 == 8 ? ＦＵＬＬ ＭＯＯＮ # ＮＥＷ ＭＯＯＮ\@
+ENDIF
+;PRINTL 
+DRAWLINE
+TFLAG:500 = 1
+TFLAG:501 = 1
+TFLAG:502 = 1
+TFLAG:503 = 1
+TFLAG:504 = 1
+SKIPDISP FLAG:控え격납
+IF FLAG:カスタムゲーム화면
+	FOR LOCAL:1, 0, 3
+		FOR LOCAL, LOCAL:1*3+1, LOCAL:1*3+4
+			CHARA = FINDCHARA_ID(TARGET:LOCAL)
+			;マスターと失踪者とIDがないキャラはここで外す
+			IF CHARA < 0 || CFLAG:CHARA:この場に居ないフラグ || CHARA == MASTER
+			;IF CHARA < 0 || CFLAG:CHARA:この場に居ないフラグ
+				TARGET:LOCAL = -1
+				SETCOLOR COLOR("light-gray")
+				PRINTFORM %@"{LOCAL}.ＥＭＰＴＹ",42,LEFT%
+				RESETCOLOR
+			ELSE
+				IF Flag:控え스트레스치표시설정 == 0
+					PRINTFORM %@"{LOCAL}."+NAME:CHARA,36,LEFT%
+				ElSE
+					PRINTFORM %@"{LOCAL}."+NAME:CHARA+"("+TOSTR(CFLAG:CHARA:스트레스치)+")",36,LEFT%
+				ENDIF
+				CALL SHOP_위험일표시(CHARA)
+			ENDIF
+			PRINTS \@ LOCAL % 3 ? │ # \@
+		NEXT
+		PRINTL 
+		FOR LOCAL, LOCAL:1*3+1, LOCAL:1*3+4
+			CHARA = FINDCHARA_ID(TARGET:LOCAL)
+			IF CHARA >= 0
+				PRINT  　　 
+				CALL PRINT_COLORBAR, BASE:CHARA:체력, MAXBASE:CHARA:체력, 21, UNICODE(0x2584), UNICODE(0x2584), BARCOLORSET("붉은색"), RESULT:1
+				PRINTFORM  ({BASE:CHARA:체력,5}/{MAXBASE:CHARA:체력,5}) 
+			ELSE
+				SETCOLOR COLOR("light-gray")
+				PRINT  　　 
+				CALL PRINT_COLORBAR, 0, 1, 21, UNICODE(0x2584), UNICODE(0x2584), BARCOLORSET("붉은색"), RESULT:1
+				PRINTFORM  (    0/    0) 
+				RESETCOLOR
+			ENDIF
+			SIF LOCAL % 3 > 0
+				PRINT │
+		NEXT
+		PRINTL 
+		FOR LOCAL, LOCAL:1*3+1, LOCAL:1*3+4
+			CHARA = FINDCHARA_ID(TARGET:LOCAL)
+			IF CHARA < 0 || TARGET == CHARA || !PARTNER_ABLE(CHARA)
+				SETCOLOR COLOR("light-gray")
+			ELSE
+				TFLAG:(510+LOCAL) = 1
+			ENDIF
+			PRINTBUTTON @" 　　　　[{510+LOCAL}] 조교 ", 510+LOCAL
+			RESETCOLOR
+			IF CHARA <= 0 || ASSI == CHARA || !ASSI_ABLE(CHARA)
+				SETCOLOR COLOR("light-gray")
+			ELSE
+				TFLAG:(520+LOCAL) = 1
+			ENDIF
+			PRINTBUTTON @"[{520+LOCAL}] 조수 ", 520+LOCAL
+			RESETCOLOR
+			PRINTBUTTON @"[{530+LOCAL}] 변경 ", 530+LOCAL
+			TFLAG:(530+LOCAL) = 1
+			SIF LOCAL % 3 > 0
+				PRINT │
+		NEXT
+		PRINTL 
+		IF LOCAL:1 == 2
+			DRAWLINE
+		ELSE
+			DRAWLINE
+			;PRINTFORML %"─"*17 + "┼" + "─"*17 +"┼" + "─"*17%
+		ENDIF
+		SIF LOCAL:1 == FLAG:控え표시人数
+			BREAK
+	NEXT
+ELSE
+	FOR LOCAL:1, 0, 3
+		FOR LOCAL, LOCAL:1*3+1, LOCAL:1*3+4
+			CHARA = FINDCHARA_ID(TARGET:LOCAL)
+			;マスターと失踪者とIDがないキャラはここで外す
+			IF CHARA < 0 || CFLAG:CHARA:この場に居ないフラグ || CHARA == MASTER
+			;IF CHARA < 0 || CFLAG:CHARA:この場に居ないフラグ
+				TARGET:LOCAL = -1
+				SETCOLOR COLOR("light-gray")
+				PRINTFORM %@"예비{LOCAL}:ＥＭＰＴＹ",34,LEFT%
+				RESETCOLOR
+			ELSE
+				IF Flag:控え스트레스치표시설정 == 0
+					PRINTFORM %@"{LOCAL}."+NAME:CHARA,24,LEFT%
+				ElSE
+					PRINTFORM %@"{LOCAL}."+NAME:CHARA+"("+TOSTR(CFLAG:CHARA:스트레스치)+")",24,LEFT%
+				ENDIF
+				CALL SHOP_위험일표시(CHARA)
+			ENDIF
+			PRINTS \@ LOCAL % 3 ? │ # \@
+		NEXT
+		PRINTL 
+		FOR LOCAL, LOCAL:1*3+1, LOCAL:1*3+4
+			CHARA = FINDCHARA_ID(TARGET:LOCAL)
+			IF CHARA >= 0
+				PRINT 체력 
+				CALL PRINT_COLORBAR, BASE:CHARA:체력, MAXBASE:CHARA:체력, 14, UNICODE(0x2584), UNICODE(0x2584), BARCOLORSET("붉은색"), RESULT:1
+				PRINTFORM  ({BASE:CHARA:체력,5}/{MAXBASE:CHARA:체력,5}) 
+			ELSE
+				SETCOLOR COLOR("light-gray")
+				PRINT 체력 
+				CALL PRINT_COLORBAR, 0, 1, 14, UNICODE(0x2584), UNICODE(0x2584), BARCOLORSET("붉은색"), RESULT:1
+				PRINTFORM  (    0/    0) 
+				RESETCOLOR
+			ENDIF
+			SIF LOCAL % 3 > 0
+				PRINT │
+		NEXT
+		PRINTL 
+		FOR LOCAL, LOCAL:1*3+1, LOCAL:1*3+4
+			CHARA = FINDCHARA_ID(TARGET:LOCAL)
+			IF CHARA < 0 || TARGET == CHARA || !PARTNER_ABLE(CHARA)
+				SETCOLOR COLOR("light-gray")
+			ELSE
+				TFLAG:(510+LOCAL) = 1
+			ENDIF
+			PRINTBUTTON @" [{510+LOCAL}] 조교 ", 510+LOCAL
+			RESETCOLOR
+			IF CHARA <= 0 || ASSI == CHARA || !ASSI_ABLE(CHARA)
+				SETCOLOR COLOR("light-gray")
+			ELSE
+				TFLAG:(520+LOCAL) = 1
+			ENDIF
+			PRINTBUTTON @"[{520+LOCAL}] 조수 ", 520+LOCAL
+			RESETCOLOR
+			PRINTBUTTON @"[{530+LOCAL}] 변경 ", 530+LOCAL
+			TFLAG:(530+LOCAL) = 1
+			SIF LOCAL % 3 > 0
+				PRINT │
+		NEXT
+		PRINTL 
+		IF LOCAL:1 == 2
+			DRAWLINE
+		ELSE
+			DRAWLINE
+			;PRINTFORML %"─"*17 + "┼" + "─"*17 +"┼" + "─"*17%
+		ENDIF
+		SIF LOCAL:1 == FLAG:控え표시人数
+			BREAK
+	NEXT
+ENDIF
+SKIPDISP 0
+
+@SHOP_COM_500
+INVERTBIT FLAG:控え격납, 0
+@SHOP_COM_501
+FLAG:控え표시人数 = 0
+@SHOP_COM_502
+FLAG:控え표시人数 = 1
+@SHOP_COM_503
+FLAG:控え표시人数 = 2
+@SHOP_COM_504
+SIF FLAG:控え표시位置++ == 2
+	FLAG:控え표시位置 = 0
+
+@SHOP_위험일표시(ARG)
+IF FLAG:カスタムゲーム화면
+	IF ARG != MASTER && CHECK_CHILD_CARE(ARG) && FLAG:출산기능ONOFF
+		SETCOLOR 0xCC33FF
+		PRINT 육아실
+		RESETCOLOR
+	ELSEIF ARG == MASTER && CHECK_CHILD_CARE(ARG) && FLAG:출산기능ONOFF && !GROUPMATCH(위험일(ARG), -2, 2, 3)
+		SETCOLOR 0xCC33FF
+		PRINT 육아실
+		RESETCOLOR
+	ELSEIF GROUPMATCH(위험일(ARG), -2, 1, 2, 3)
+		IF TALENT:ARG:임신 && 위험일(ARG) == 1
+			SETCOLOR 0xCC33FF
+			PRINT 임신중
+			RESETCOLOR
+		ELSE
+			SETCOLOR 0xCC33FF
+			IF 위험일(ARG) == 1
+				PRINT 위험일
+			ELSE
+				PRINT 발정중
+			ENDIF
+			RESETCOLOR
+		ENDIF
+	ELSEIF TALENT:ARG:임신
+		SETCOLOR 0xCC33FF
+		PRINT 임신中
+		RESETCOLOR
+	ELSE
+		PRINT 　　　
+	ENDIF
+ELSE
+	IF ARG != MASTER && CHECK_CHILD_CARE(ARG) && FLAG:출산기능ONOFF
+		PRINT ［육아실］
+	ELSEIF ARG == MASTER && CHECK_CHILD_CARE(ARG) && FLAG:출산기능ONOFF && !GROUPMATCH(위험일(ARG), -2, 2, 3)
+		PRINT ［육아실］
+	ELSEIF GROUPMATCH(위험일(ARG), -2, 1, 2, 3)
+		IF TALENT:ARG:임신 && 위험일(ARG) == 1
+			PRINT （임신중）
+		ELSE
+			IF CHKFONT("MS UI Gothic")
+				LOCALS '= GETFONT()
+				SETFONT "MS UI Gothic"
+				PRINTFORM %UNICODE(0x2004) * 2%%UNICODE(0x200A) * 2%
+				SETFONT LOCALS
+			ENDIF
+			SETCOLOR 0xCC33FF
+			CALL HEARTB
+			IF 위험일(ARG) == 1
+				PRINT 위험일
+			ELSE
+				PRINT 발정중
+			ENDIF
+			CALL HEARTB
+			RESETCOLOR
+		ENDIF
+	ELSEIF TALENT:ARG:임신
+		PRINT （임신중）
+	ELSE
+		PRINT 　　　　　
+	ENDIF
+ENDIF
+
+;=================================================
+;세이브
+;=================================================
+@SHOPCOMABLE_200
+RESULTS = 세이브
+RETURN 1
+
+@SHOP_COM_200
+CALL TITLE_SAVEGAME
+
+
+
+;=================================================
+;로드
+;=================================================
+@SHOPCOMABLE_300
+RESULTS = 로드
+RETURN 1
+
+@SHOP_COM_300
+CALL TITLE_LOADGAME
+
+
+;---- EDIT 010 DEL START -------------------------
+;WRITE_IMG.ERBに移行・統合
+; ;=================================================
+; ;画像表示
+; ;=================================================
+; @SHOW_IMG_S, ARG
+
+; ;表示位置調整用
+; SELECTCASE ARG
+; 	CASE 1, 3
+; 		IF TARGET >= 0 && ASSI > 0
+; 			LOCALS:1 = %"　　"%
+; 			LOCALS:2 = %" "%
+; 		ELSEIF TARGET >= 0 && 0 > ASSI
+; 			LOCALS:1 = %"　　"%
+; 		ELSEIF 0 >= TARGET && ASSI > 0
+; 			LOCALS:2 = %" 　　　　　　"%
+; 		ENDIF
+; 	CASE 2, 4
+; 		IF TARGET >= 0 && ASSI > 0
+; 			LOCALS:1 = %" "%
+; 			LOCALS:2 = %" "%
+; 		ELSEIF TARGET >= 0 && 0 > ASSI
+; 			LOCALS:1 = %" "%
+; 		ELSEIF 0 >= TARGET && ASSI > 0
+; 			LOCALS:2 = %"　　　　　"%
+; 		ENDIF
+; ENDSELECT
+
+; ;画像表示
+; IF Flag:画像表示設定_ショップ画面 == 1
+; 	IF TARGET >= 0 && ASSI > 0
+; 		IF EXIST_PICTURE(NO:TARGET)
+; 			PRINTFORM %LOCALS:1%
+; 			CALL WRITE_IMG_1,NO:TARGET,ARG
+; 		ELSE
+; 			PRINTFORM %LOCALS:1%
+; 			CALL RACE_ICON,NO:TARGET,ARG,TARGET,0
+; 		ENDIF
+; 		IF EXIST_PICTURE(NO:ASSI)
+; 			PRINTFORM %LOCALS:2%
+; 			CALL WRITE_IMG_1,NO:ASSI,ARG
+; 		ELSE
+; 			PRINTFORM %LOCALS:2%
+; 			CALL RACE_ICON,NO:ASSI,ARG,ASSI,0
+; 		ENDIF
+; 	ELSEIF TARGET >= 0 && 0 > ASSI
+; 		IF EXIST_PICTURE(NO:TARGET)
+; 			PRINTFORM %LOCALS:1%
+; 			CALL WRITE_IMG_1,NO:TARGET,ARG
+; 		ELSE
+; 			PRINTFORM %LOCALS:1%
+; 			CALL RACE_ICON,NO:TARGET,ARG,TARGET,0
+; 		ENDIF
+; 	ELSEIF 0 >= TARGET && ASSI > 0
+; 		IF EXIST_PICTURE(NO:ASSI)
+; 			PRINTFORM %LOCALS:2%
+; 			CALL WRITE_IMG_1,NO:ASSI,ARG
+; 		ELSE
+; 			PRINTFORM %LOCALS:2%
+; 			CALL RACE_ICON,NO:ASSI,ARG,ASSI,0
+; 		ENDIF
+; 	ENDIF
+; ELSEIF Flag:画像表示設定_ショップ画面 == 2
+; 	IF TARGET >= 0 && ASSI > 0
+; 		IF EXIST_PICTURE(NO:TARGET)
+; 			PRINTFORM %LOCALS:1%
+; 			CALL WRITE_IMG_1,NO:TARGET,ARG
+; 		ELSE
+; 			PRINTFORM %LOCALS:1%
+; 			CALL ONI_MARK,TARGET,ARG,0
+; 		ENDIF
+; 		IF EXIST_PICTURE(NO:ASSI)
+; 			PRINTFORM %LOCALS:2%
+; 			CALL WRITE_IMG_1,NO:ASSI,ARG
+; 		ELSE
+; 			PRINTFORM %LOCALS:2%
+; 			CALL ONI_MARK,ASSI,ARG,0
+; 		ENDIF
+; 	ELSEIF TARGET >= 0 && 0 > ASSI
+; 		IF EXIST_PICTURE(NO:TARGET)
+; 			PRINTFORM %LOCALS:1%
+; 			CALL WRITE_IMG_1,NO:TARGET,ARG
+; 		ELSE
+; 			PRINTFORM %LOCALS:1%
+; 			CALL ONI_MARK,TARGET,ARG,0
+; 		ENDIF
+; 	ELSEIF 0 >= TARGET && ASSI > 0
+; 		IF EXIST_PICTURE(NO:ASSI)
+; 			PRINTFORM %LOCALS:2%
+; 			CALL WRITE_IMG_1,NO:ASSI,ARG
+; 		ELSE
+; 			PRINTFORM %LOCALS:2%
+; 			CALL ONI_MARK,ASSI,ARG,0
+; 		ENDIF
+; 	ENDIF
+; ELSEIF Flag:画像表示設定_ショップ画面 == 3
+; 	IF TARGET >= 0 && ASSI > 0
+; 		PRINTFORM %LOCALS:1%
+; 		CALL ONI_MARK,TARGET,ARG,0
+; 		PRINTFORM %LOCALS:2%
+; 		CALL ONI_MARK,ASSI,ARG,0
+; 	ELSEIF TARGET >= 0 && 0 > ASSI
+; 		PRINTFORM %LOCALS:1%
+; 		CALL ONI_MARK,TARGET,ARG,0
+; 	ELSEIF 0 >= TARGET && ASSI > 0
+; 		PRINTFORM %LOCALS:2%
+; 		CALL ONI_MARK,ASSI,ARG,0
+; 	ENDIF
+; ENDIF
+; PRINTL
+
+; @WRITE_IMG_1, ARG:1, ARG:2
+; #DIMS GAZOU_REIGAI
+
+; IF EXIST_PICTURE(ARG:1)
+; 	;対象が石嶺伽耶で、かつ伽耶が人間をやめている
+; 	IF (ARG:1 == 4629) && ((ABL:TARGET:種族 != 0 && NO:TARGET == ARG:1) || (ABL:ASSI:種族 != 0 && NO:ASSI == ARG:1))
+; 		IF NO:TARGET == ARG:1
+; 			IF CSTR:TARGET:種族名 == "機械の乙女"
+; 				GAZOU_REIGAI = _ゴーレム
+; 			ELSEIF CSTR:TARGET:種族名 == "凶鳥"
+; 				GAZOU_REIGAI = _ショボー
+; 			ELSEIF CSTR:TARGET:種族名 == "地霊"
+; 				GAZOU_REIGAI = _ノッカー
+; 			ELSEIF CSTR:TARGET:種族名 == "夜魔"
+; 				GAZOU_REIGAI = _サキュバス
+; 			ENDIF
+; 		ELSE
+; 			IF CSTR:ASSI:種族名 == "機械の乙女"
+; 				GAZOU_REIGAI = _ゴーレム
+; 			ELSEIF CSTR:ASSI:種族名 == "凶鳥"
+; 				GAZOU_REIGAI = _ショボー
+; 			ELSEIF CSTR:ASSI:種族名 == "地霊"
+; 				GAZOU_REIGAI = _ノッカー
+; 			ELSEIF CSTR:ASSI:種族名 == "夜魔"
+; 				GAZOU_REIGAI = _サキュバス
+; 			ENDIF
+; 		ENDIF
+; 		FOR COUNT, 0, 4
+; 			PRINT_IMG @"%TOSTR(ARG:1)%%GAZOU_REIGAI%_%TOSTR(ARG:2)%_%TOSTR(COUNT + 1)%"
+; 		NEXT
+; 	ELSE
+; 		FOR COUNT, 0, 4
+; 			PRINT_IMG @"%TOSTR(ARG:1)%_%TOSTR(ARG:2)%_%TOSTR(COUNT + 1)%"
+; 		NEXT
+; 	ENDIF
+; ENDIF
+;---- EDIT 010 DEL END -------------------------

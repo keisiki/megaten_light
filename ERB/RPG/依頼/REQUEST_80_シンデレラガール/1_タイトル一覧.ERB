@@ -1,0 +1,23 @@
+﻿
+;의뢰フラグ:80:0 を参照する部分
+;32個(CASE 31)まで作成可能
+@REQUEST_80_TITLELIST_0(ARG)
+SELECTCASE ARG
+CASE 0
+	RESULTS = 맹목적인소녀
+CASE 1
+	RESULTS = 수상한전화
+CASEELSE
+	RETURN 0
+ENDSELECT
+RETURN 1
+
+
+;의뢰フラグ:80:1を参照する部分(現在は未사용なのでコメントアウト)
+;以降は末꼬리の数字を増やしていく事で対応可能
+;@REQUEST_80_TITLELIST_1(ARG)
+;SELECTCASE ARG
+;CASEELSE
+;	RETURN 0
+;ENDSELECT
+;RETURN 1

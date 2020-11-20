@@ -1,0 +1,419 @@
+﻿@EVENT_93_7
+#DIMS わたしたちは舞台소녀
+わたしたちは舞台소녀 = %EVENT93_出席確認()%
+
+;FOR LOCAL, 0, CHARANUM
+;	SIF GROUPMATCH(NO:LOCAL, [[キャラ:카렌（무대소녀）]], [[キャラ:히카리]], [[キャラ:마히루]], [[キャラ:쥰나]], [[キャラ:후타바（무대소녀）]], [[キャラ:카오루코]], [[キャラ:나나]], [[キャラ:마야（무대소녀）]], [[キャラ:클로딘]]) && CFLAG:LOCAL:전투참가불가능 < 1 && TALENT:LOCAL:비전투원 < 1
+;		わたしたちは舞台소녀 += @"%CSVCALLNAME(NO:LOCAL)%_"
+;NEXT
+
+
+CUSTOMDRAWLINE =
+
+	PRINTL
+	PRINTW ――波打つ金の長머리카락、燃えるような瞳。実直なロング・ソード。
+	PRINTL
+SETCOLOR 0xff8e48
+	PRINTW 「輝くチャンスは誰もが平等。
+	PRINTW 　だから愛のダンスで誰より熱く、自由の翼で誰より高く！
+	PRINTW 　９９期生次席、西條클로딘。
+	PRINTW 　C'est moi, la star！《スタァになるのは、この私！》」
+RESETCOLOR
+	PRINTL
+	PRINTW ――濡れ날개の黒머리카락、孤高の瞳。白새を模った白銀の레이피어。
+	PRINTL
+SETCOLOR 0xffffff
+	PRINTW 「月の輝き、星の愛。
+	PRINTW 　数多の光を集めて今、당신の心に届けましょう。
+	PRINTW 　９９期生首席、天堂真矢。
+	PRINTW 　今宵、キラめきを당신に」
+RESETCOLOR
+	PRINTL
+	PRINTW 名乗りを上げる二人の視線は、
+	PRINTW とてもハッキリと、당신を見下ろしていた。
+	PRINTL
+	PRINTW 「気付いてる？　天堂真矢」
+	PRINTW 「ええ。客席の空気、舞台の気配、舞台装置のささやき。
+	PRINTW 　どれも、奇妙なまでに、曇っている。
+	PRINTW 　何より、自分自身の存在を、酷く希薄に感じている――」
+	PRINTW 「違うそうじゃなくてあそこのアイツ！」
+	PRINTW 「ええ。あの方が現れた瞬間、세계が変わった」
+	PRINTW 「……발場も錆びてツタまみれだし、空調も止まってるし」
+	PRINTW 「華やかなりしレビューとしては」
+	PRINTW 「いささか、검呑すぎるわね」
+	PRINTW 「あと私たち、身体が토오루けています」
+	PRINTW 「は！？　う、うそっ」
+	PRINTW 「ふふ、これでは存在が薄く感じるのも道理というもの……！」
+	PRINTW 「い、言ってる場合！？　기린！　説明なさいキリン！」
+	PRINTL
+	PRINTW ……彼女たちは状況を正確に認識しているようだ。
+	PRINTW それぞれ混乱している様子はあるが、
+	PRINTW 무기を置いて声をかけると、こちらからの説明も、普通に耳を傾けてくれた。
+	PRINTL
+	PRINTW 激怒したのは西條클로딘である。
+	PRINTL
+	PRINTW 「Ne plaisante pas.《冗談を言わないで》
+	PRINTW 　私が幻？　세계は악마だらけ？
+	PRINTW 　私は、ついさっき、ほんの数瞬前まで、大事な戦いの場に居たの。
+	PRINTW 　光り輝く星を눈指す、誇りと決意の、운命のレヴューに！
+	PRINTW 　愛城華恋はどこ？　神楽ひかりはどこ？
+	PRINTW 　私たちは決着を付けるべきなのよ！？」
+	PRINTL
+	;華恋ちゃん
+	IF STRCOUNT(わたしたちは舞台소녀, "카렌（무대소녀）")
+		PRINTW 「あ、え？　呼んだ？」
+		PRINTW 「なんで居るのよ！？　しかもそっちに！」
+		;ひかりちゃん
+		IF STRCOUNT(わたしたちは舞台소녀, "히카리")
+			PRINTW 「私も……」
+			PRINTW 「〜〜〜〜〜〜〜ッ！
+			PRINTW 　もういい、ややこしくなるから座ってて」
+		ENDIF
+		PRINTL
+	;ひかりちゃんのみ
+	ELSEIF STRCOUNT(わたしたちは舞台소녀, "히카리")
+		PRINTW 「……呼ばれた気がする」
+		PRINTW 「なんで居るのよ！？　しかもそっちに！」
+		PRINTL
+	ENDIF
+	PRINTW 一方、天堂真矢は真顔である。
+	PRINTL
+	PRINTW 「당신は、私たちを打ち負かすことで계약し、
+	PRINTW 　キラめきの残り香でしかない私たちを受肉させると。
+	PRINTW 　それが눈的であると、そう仰るのですね」
+	PRINTL
+	PRINTW ――とても、ティーンとは思えない、じろりとした視線。
+	PRINTL
+	PRINTW 「そのうえ、この身体には、時間制限が付いている。
+	PRINTW 　당신と계약しなくては、キラめきはほころび、蒸発し、
+	PRINTW 　我々は、跡形もなく消滅すると。
+	PRINTW 　随分と……당신に都合のいい台本ですね」
+	PRINTL
+	PRINTW 天堂真矢は당신の눈を見た。
+	PRINTW 彼女の瞳は、磨かれた鋼のようだった。
+	PRINTW 真矢の言葉を受け、클로딘がギッと奥歯を鳴らした。
+	PRINTL
+	PRINTW 「脅されてるようなものよ！
+	PRINTW 　こんな奴の言いなりになるくらいなら、
+	PRINTW 　私は自分で死んでやる！」
+	PRINTL
+	PRINTW 클로딘は嘆き、再び抜刀した。
+	PRINTW その言葉に偽りは無いようで、
+	PRINTW 刃は上掛けのボタン――무대소녀、キラめきを繋ぎとめるもの――に添えられた。
+	PRINTL
+	PRINTW 天堂真矢もまた抜刀した。
+	PRINTW 流れる所作で、白銀の레이피어を天へと掲げると、
+	PRINTW ――舞台装置が轟音を上げてせり上がった。
+	PRINTL
+	PRINTW 「え、ちょ……アンタ？」
+	PRINTL
+	PRINTW 照明が照らす。
+	PRINTW 美しき乙女の、白刃を。
+	PRINTL
+	SETCOLOR 0xffffff
+	PRINTW 「――魑魅魍魎が地に満ちようと、星は変わらず天にあり。
+	PRINTW 　９９期生主席、天堂真矢！
+	PRINTW 　당신が夜を焼く朝焼けであると言うのなら、
+	PRINTW 　そのキラめきで、私を染めてみてください」
+	RESETCOLOR
+	PRINTL
+	PRINTW 「待って待ってなんでやる気なの！？　アンタ負けたらコイツの……あ、照明。
+	SETCOLOR 0xff8e48
+	PRINTW 　９９期生次席！　西條클로딘！
+	PRINTW 　なんか巻き添えを喰らった感はあるけれど……やるって言うなら、命を懸ける。
+	PRINTW 　アンタなんかに、私たちの舞台は、渡さない！」
+	RESETCOLOR
+	PRINTL
+	PRINTW ２人はやる気だ。
+	PRINTW 당신は무기を構えた。
+	PRINTL
+	PRINTL 무대소녀 天堂真矢 が現れた！
+	PRINTW 무대소녀 西條클로딘 が現れた！
+	PRINTL
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	
+	;검격・질풍・지변＋화염・전격・전술
+	;속성の幅が広く、対応しづらい感じに。
+	;特に最終戦は倒し方を工남편しないと死ぬ
+	;天堂真矢から倒す　⇒天堂真矢HP全쾌2回行動・クロちゃん爆死・검격即死を撒く
+	;クロちゃんから倒す⇒天堂真矢HP회복なし5回行動・전체화염추가
+	;6戦눈　★★★★★
+	IF 이벤트フラグ:93:0 > 6
+		LOCAL:99 = 3
+	;5戦눈　★★★★☆
+	ELSEIF 이벤트フラグ:93:0 > 5
+		LOCAL:99 = 3
+	;4戦눈　★★★★☆
+	ELSEIF 이벤트フラグ:93:0 > 4
+		LOCAL:99 = 2
+	;3戦눈　★★★★☆
+	ELSEIF 이벤트フラグ:93:0 > 3
+		LOCAL:99 = 2
+	;2戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 2
+		LOCAL:99 = 1
+	;1戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 1
+		LOCAL:99 = 1
+	ENDIF
+	
+	;레벨は自軍최대値（최저値10）
+	LOCAL:1 = 0
+	FOR LOCAL , 0 , CHARANUM
+		SIF CFLAG:LOCAL:PTフラグ == 0 || TALENT:LOCAL:비전투원
+			CONTINUE
+		LOCAL:98 = MAX(LOCAL:98 , BASE:LOCAL:LV)
+	NEXT
+	SIF LOCAL:98 < 10
+		LOCAL:98 = 10
+	
+	;- SET:마야（무대소녀）
+		CALL SET_ENEMY,8,[[キャラ:마야（무대소녀）]],LOCAL:98,1,(LOCAL:99)
+		CFLAG:(CHARANUM-1):行動횟수 = 2
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*3
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 9000
+		ABL:(CHARANUM-1):공격상성 = 0
+		ABL:(CHARANUM-1):스킬1 = [[스킬:간파]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:하이퍼카운터]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:히트웨이브]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:가이아브레이크]]
+		ABL:(CHARANUM-1):스킬5 = [[스킬:데・카쟈]]
+		ABL:(CHARANUM-1):스킬6 = [[스킬:번개찌르기]]
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		;초인扱いに
+		ABL:(CHARANUM-1):종족 = 43
+		CSTR:(CHARANUM-1):종족명 = 무대소녀
+		LOCAL = CHARANUM-1
+
+	;- SET:클로딘
+		CALL SET_ENEMY,10,[[キャラ:클로딘]],LOCAL:98,1,(LOCAL:99)
+		CFLAG:(CHARANUM-1):行動횟수 = 2
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*3
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		;전술で殴ってもらおう。ステゴロじゃ
+		ABL:(CHARANUM-1):공격상성 = 3
+		ABL:(CHARANUM-1):스킬1 = [[스킬:아기라오]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:지온가]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:마하・지오]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:컨센트레이트]]
+		ABL:(CHARANUM-1):스킬5 = [[스킬:猛突進]]
+		ABL:(CHARANUM-1):스킬6 = [[스킬:포효]]
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		;초인扱いに
+		ABL:(CHARANUM-1):종족 = 43
+		CSTR:(CHARANUM-1):종족명 = 무대소녀
+		LOCAL = CHARANUM-1
+
+
+		;6戦눈　★★★★★★
+		IF LOCAL:99 > 5
+			;ギミックで対応
+			;どっちを先に倒そうがクロちゃんが爆散し天堂真矢が爆上げされる
+		;5戦눈　★★★★☆
+		ELSEIF LOCAL:99 > 4
+			;하이퍼카운터削除
+			ABL:(CHARANUM-2):스킬2 = [[스킬:양팔찍기]]
+
+			;컨센트레이트・포효削除
+			ABL:(CHARANUM-1):스킬4 = [[스킬:猛突進]]
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+		;4戦눈　★★★★☆
+		ELSEIF LOCAL:99 > 3
+			;하이퍼카운터削除
+			ABL:(CHARANUM-2):스킬2 = [[스킬:양팔찍기]]
+
+			;컨센트레이트・포효削除
+			ABL:(CHARANUM-1):스킬4 = [[스킬:猛突進]]
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+		;3戦눈　★★★★☆
+		ELSEIF LOCAL:99 > 2
+			;行動횟수2　하이퍼카운터削除
+			ABL:(CHARANUM-2):스킬2 = [[스킬:양팔찍기]]
+			ABL:(CHARANUM-2):스킬4 = [[스킬:산바람]]
+			
+			;컨센트레이트・포효削除
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+		;2戦눈　★★★☆☆
+		ELSEIF LOCAL:99 > 1
+			;行動횟수1　하이퍼카운터・가이아브레이크削除
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			ABL:(CHARANUM-2):스킬2 = [[스킬:양팔찍기]]
+			ABL:(CHARANUM-2):스킬4 = [[스킬:산바람]]
+			
+			;컨센트레이트・マハ지오・포효・猛突進削除
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			ABL:(CHARANUM-1):스킬3 = [[스킬:몸통박치기]]
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			
+		;1戦눈　★★★☆☆
+		ELSEIF LOCAL:99 > 0
+			;行動횟수1　하이퍼카운터・가이아브레이크削除
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			ABL:(CHARANUM-2):스킬2 = [[스킬:양팔찍기]]
+			ABL:(CHARANUM-2):스킬4 = [[스킬:산바람]]
+			
+			;컨센트레이트・マハ지오・포효・猛突進削除
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			ABL:(CHARANUM-1):스킬3 = [[스킬:몸통박치기]]
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+		ENDIF
+		
+		CALL SYNC_STATUS,(CHARANUM-2)
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-2)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+
+		CALL INCREASE_ANALYZE([[キャラ:마야（무대소녀）]],1000)
+		CALL INCREASE_ANALYZE([[キャラ:클로딘]],1000)
+
+	;天堂真矢復活フラグ
+	SETBIT 이벤트フラグ:93:18, 1
+	CALL BATTLE_START
+	CLEARBIT 이벤트フラグ:93:18, 1
+	
+
+	CUSTOMDRAWLINE =
+
+	PRINTL
+	PRINTW 「C'est pas vrai！？　なんてこと……」
+	PRINTW 「なるほど、힘が全く入りませんね。体幹もブレてしまう。
+	PRINTW 　信じたくありませんが――今の私は、やはり、紛い物なのでしょう。
+	PRINTW 　西條さん、私のワガママに付き合わせてしまって、済みませんでした」
+	PRINTW 「聞きたくなかった、アンタのそんな声」
+	PRINTL
+	PRINTW これで“힘が入らない”とは、一体どういう了見か。
+	PRINTW 당신は、膝をついた天堂真矢、仰向けにひっくり返った西條클로딘に、それぞれ계약処理を施した。
+	PRINTL
+	PRINTW マグネタイトが循環し、二人の아이まいだった肉体が、確固たるものへと再構築されていく。
+	PRINTL 
+	PRINTW 「うう、감각がハッキリしてくるのが恨めしい……」
+	PRINTW 「曖昧なままよりはずっと良いでしょう。
+	PRINTW 　どんな苦難があろうとも、芸の肥やしになると思えば、
+	PRINTW 　むしろ得したとさえ思えます」
+	PRINTW 「アンタなんでそんなタフなのよ！？」
+	PRINTW 「では、これからよろしくお願いします、コーチ」
+	PRINTW 「コーチ！？」
+	PRINTL
+	PRINTW 무대소녀　天堂真矢が仲間になった。
+	PRINTW 무대소녀　西條클로딘が仲間になった。
+	PRINTL
+	PRINTW 「たとえ贋作であろうと、真に迫ることなら可能です。
+	PRINTW 　如何なる地獄に落ちようと、私は舞台소녀であることを諦めません。
+	PRINTW 　……それに、もしかしたら、
+	PRINTW 　ここにいる私の知見が、
+	PRINTW “本物の私”に、何か影響を与えるかもしれない。
+	PRINTW 　손を抜くことなどどうして出来ましょうか？」
+	PRINTW 「アンタ、ホント、タフね……」
+	PRINTW 「タフすぎて損はありません。
+	PRINTW 　ではコーチ、さっそく私たちにご指導をお願いします。
+	PRINTW 　まずは스킬카드とやらで私にも魔法を……！」
+	PRINTW 「なんで顔がニヤケてるの天堂真矢ァ！？」
+	PRINTL
+	PRINTW 당신は賑やかな女子二人を連れて事務所に戻った。
+	PRINTW なお、天堂真矢は『달인』の스킬を持っていたせいで스킬카드が使えなかった。
+	PRINTL
+	
+	CALL ADD_NEW_COMPANION,5320,200
+	LOCAL = GETCHARA(5320)
+	CSTR:LOCAL:二人称 = コーチ
+	CFLAG:LOCAL:전투참가불가능 = -1
+
+	CALL ADD_NEW_COMPANION,5321,200
+	LOCAL = GETCHARA(5321)
+	CSTR:LOCAL:二人称 = コーチ
+	CFLAG:LOCAL:전투참가불가능 = -1
+
+	이벤트フラグ:93:0 += 1
+	SIF 이벤트フラグ:93:8 == 0
+		SETBIT 이벤트フラグ:93:8, 1
+	SIF 이벤트フラグ:93:9 == 0
+		SETBIT 이벤트フラグ:93:9, 1
+	CALL EVENT_93_TURN_END
+
+@EVENT_BATTLE_ACTEND_EVENT_93_7
+;最終戦かつ天堂真矢が先に死んだ
+;클로딘のキラめきを吸って天堂真矢復活、行動횟수据え置き
+IF 이벤트フラグ:93:0 > 6 && BASE:(CHARANUM-2):ＨＰ < 1 && 이벤트フラグ:93:8 == 0
+	PRINTFORML 
+SETCOLOR 0xff8e48
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃立ちなさい、天堂真矢！　　　　　　　　　　　┃
+	PRINTFORML ┃アンタを倒すのはこの私、西條클로딘！　┃
+	PRINTFORML ┃アンタの居ない舞台なんて――認めないッ！　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞클로딘のキラめきが、天堂真矢へと注がれる！
+	PRINTFORMW ＞真矢のHP＆MPが完全회복した！
+SETCOLOR 0xffffff
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃西條さん、身体が……！？　　　　　　　　　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+SETCOLOR 0xcd5c16
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORMW ┃フッ、당신もそんな顔、出来るのね？　　　　┃
+SETCOLOR 0x8c280a
+	PRINTFORMW ┃じゃ……私が消える前に決着をなさいな。　　　┃
+SETCOLOR 0x5a1405
+	PRINTFORML ┃勝利を見せつけて。私の迷宮……天堂真矢。　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	ABL:(CHARANUM-2):스킬5 = [[스킬:히트라이저]]
+	CALL HEALTH_CHARA,(CHARANUM-2)
+
+	;クロちゃんダウン
+	CFLAG:(CHARANUM-1):行動횟수 = 1
+	MAXBASE:(CHARANUM-1):ＨＰ = 1
+	BASE:(CHARANUM-1):ＨＰ = 1
+	MAXBASE:(CHARANUM-1):ＭＰ = 1
+	BASE:(CHARANUM-1):ＭＰ = 1
+	
+	SETBIT 이벤트フラグ:93:8, 1
+	SETBIT 이벤트フラグ:93:9, 1
+	
+;最終戦かつクロちゃんが先に死んだ
+;HPの회복はしない。ただし行動횟수3、大火힘검격스킬추가
+ELSEIF 이벤트フラグ:93:0 > 6 && BASE:(CHARANUM-1):ＨＰ < 1 && 이벤트フラグ:93:9 == 0
+	PRINTFORML 
+SETCOLOR 0xff8e48
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃勝ちなさい、天堂真矢！　　　　　　　　　　　┃
+	PRINTFORML ┃アンタを倒すのはこの私、西條클로딘！　　　　┃
+	PRINTFORML ┃無様な姿を見せるなんて――承知しないッ！　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞클로딘のキラめきが、天堂真矢へと注がれる！
+SETCOLOR 0xffffff
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃西條さん、身体が……！？　　　　　　　　　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+SETCOLOR 0xcd5c16
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORMW ┃フッ、당신もそんな顔、出来るのね？　　　　┃
+SETCOLOR 0x8c280a
+	PRINTFORMW ┃じゃ……私が消える前に決着をなさいな。　　　┃
+SETCOLOR 0x5a1405
+	PRINTFORML ┃勝利を見せつけて。私の迷宮……天堂真矢。　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	ABL:(CHARANUM-2):스킬5 = [[스킬:히트라이저]]
+	ABL:(CHARANUM-2):스킬7 = [[스킬:브레이브재퍼]]
+	CFLAG:(CHARANUM-2):行動횟수 = 3
+	
+	SETBIT 이벤트フラグ:93:8, 1
+	SETBIT 이벤트フラグ:93:9, 1
+	
+ENDIF

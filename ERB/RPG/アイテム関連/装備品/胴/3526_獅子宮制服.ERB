@@ -1,0 +1,67 @@
+﻿
+;======================================================
+;장비品の데이터
+;사자궁교복
+;======================================================
+
+@기본능력수정_3526,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3526,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "공격"
+		RETURN 5
+	CASE "방어"
+		RETURN 12
+	CASE "회피"
+		RETURN 10
+	CASE "마법효과"
+		RETURN 6
+ENDSELECT
+RETURN 0
+
+;소문によって変動する
+@방어상성_3526,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "화염"
+		SIF STRFLAG_NUM_EV("가면당은 유행에 민감 소문", TOSTR(0), [[이벤트:소문]]) == 2
+			RETURN -50
+		SIF STRFLAG_NUM_EV("가면당은 전통의 향기 소문", , , , [[이벤트:소문]]) == 2
+			RETURN 50
+	CASE "빙결"
+		SIF STRFLAG_NUM_EV("가면당은 유행에 민감 소문", TOSTR(0), [[이벤트:소문]]) == 2
+			RETURN 125
+	CASE "수격"
+		SIF STRFLAG_NUM_EV("가면당은 유행에 민감 소문", TOSTR(0), [[이벤트:소문]]) == 2
+			RETURN 200
+		SIF STRFLAG_NUM_EV("가면당은 전통의 향기 소문", , , , [[이벤트:소문]]) == 2
+			RETURN 125
+ENDSELECT
+RETURN 100
+
+@장비箇所_3526
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3526
+RETURN 18
+
+@장비조건_3526,ARG
+SIF BASE:ARG:LV < 18
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3526
+PRINTL 장비조건：LV18～
+
+@장비해설_3526
+PRINTFORML 사자가면이 몸에 걸친 붉은 색의 로브
+PRINTFORML 몸에 걸친 자에게 사자자리의 수호를 내려주는 힘을 가지고 있다
+
+
+@구입조건_3526
+RETURN 0
+
+@引継ぎ可不可_3526
+RETURN 0

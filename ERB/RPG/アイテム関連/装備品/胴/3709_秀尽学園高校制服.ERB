@@ -1,0 +1,75 @@
+﻿
+;======================================================
+;장비品の데이터
+;슈진학원교복
+;======================================================
+
+@기본능력수정_3709,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3709,ARG,ARG:1 = -1
+SELECTCASE ARG
+	;방어
+	CASE 2
+		RETURN 3
+	;회피
+	CASE 3
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@방어상성_3709,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "검격", "타격"
+		RETURN 99
+	CASE "화염"
+		RETURN 101
+ENDSELECT
+RETURN 100
+
+@공격상성_3709, ARG = -1
+RETURN 2
+
+@최저공격횟수_3709, ARG = -1
+RETURN 1
+
+@최대공격횟수_3709, ARG = -1
+RETURN 1
+
+@사거리_3709, ARG = -1
+RETURN 1
+
+@공격범위_3709, ARG = -1
+RETURN 1
+
+@장비箇所_3709
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3709
+RETURN 1
+
+@장비조건_3709,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3709
+PRINTL 장비조건：♂
+
+@장비해설_3709
+PRINTL 東京某所にある私立秀尽学園高校の男子用교복、겉옷が黒、パンツが黒白赤の체크柄、赤いボタンがアクセント。
+PRINTL 서스펜더とハイネックニットセーターも忘れずに。ほんの少しだけ검격と타격を和らげてくれる、燃えやすい。
+
+;非売品なら0
+@구입조건_3709
+RETURN 1
+
+;마카교환能なら0
+@EQUIP_EXCHANGE_3709
+RETURN 0
+
+;可：0
+@引継ぎ可不可_3709
+RETURN 0

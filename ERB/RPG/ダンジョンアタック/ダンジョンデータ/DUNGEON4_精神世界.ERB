@@ -1,0 +1,1872 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:DUNGEON_4.ERB
+;	Facility	:던전정신세계 아마네・イザベル・레미엘を획득가능
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX								新規作成
+;	002		20XX/XX/XX			P					デビサバルートにおける던전として이벤트再構築
+;	003		2011/01/11			P					레미엘が仲魔になるように改訂・적配置を변경
+;	004		2011/01/15			P					直哉ルート版を作成
+;	005		2011/01/16			P					バグ수정
+;	006		2011/01/28			P					バグ수정
+;	007		2011/02/02			P					バグ수정及び一部仕様변경
+;	008		2011/02/04			P					バグ수정及び一部仕様변경
+;	009		2011/02/06			P					上記の수정の수정
+;	010		2011/02/08			P					一部選択肢に속성の変動を추가
+;	011		2011/05/03			P					적テーブルを변경
+;	012		2013/01/06			TR					아마네の조교を1箇所1回から횟수制に변경
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;=======================================================================
+;정신세계
+;던전ナンバー4
+;=======================================================================
+;1 이벤트1
+;2 이벤트2
+;3 이벤트3
+;4 이벤트クリア数
+;5 레이프フラグ
+;6 레미엘레벨
+;7 クリア方法の分岐취득
+;8 아마네조교횟수
+
+;=======================================================================
+;攻略조건
+;=======================================================================
+@PREREQUISITE_DUNGEON_4
+;---- EDIT 004 ADD START -------------------------
+;直哉ルートを조건に추가
+;백합의꽃・直哉ルート5
+IF FLAG:백합의꽃ルート == 5 || FLAG:直哉ルート == 5
+	RETURN 1
+ELSE
+	RETURN 0
+ENDIF
+;---- EDIT 004 ADD END ---------------------------
+;=======================================================================
+;던전名
+;=======================================================================
+@GET_DUNGEON_NAME_4
+RESULTS = 정신세계
+
+
+;=======================================================================
+;フ로어名표시
+;=======================================================================
+@FLOORNAME_4
+SELECTCASE FLAG:現M
+	CASE 4
+		PRINT 정신세계 가장 깊은 곳
+	CASE 6
+		PRINTFORM \@FLAG:백합의꽃ルート ? 사이코 다이버의 사무소 # 나오야의 방\@
+	CASEELSE
+		PRINT 정신세계
+ENDSELECT
+;---- EDIT 004 ADD START -------------------------
+;레이프이벤트用に조건を변경
+@TILE_MARK_ID_4_1_4
+IF 던전フラグ:(FLAG:現던전):1 == 1
+	RESULTS = Ｔ
+ELSE
+	RESULTS = ！
+ENDIF
+@TILE_MARK_ID_4_2_4
+IF 던전フラグ:(FLAG:現던전):2 == 1
+	RESULTS = Ｔ
+ELSE
+	RESULTS = ！
+ENDIF
+@TILE_MARK_ID_4_3_4
+IF 던전フラグ:(FLAG:現던전):3 == 1
+	RESULTS = Ｔ
+ELSE
+	RESULTS = ！
+ENDIF
+;---- EDIT 004 ADD END ---------------------------
+
+;=======================================================================
+;スタート地点입력
+;=======================================================================
+@START_DUNGEON_4,ARG
+FLAG:現M = 6
+FLAG:現X = 2
+FLAG:現Y = 3
+
+@EVENT_DUNGEON_START_4
+;---- EDIT 004 ADD START -------------------------
+;新規作成
+;直哉ルートの레이프이벤트の実行済みフラグを소거
+던전フラグ:(FLAG:現던전):1 = 던전フラグ:(FLAG:現던전):1 == -2 ? -1 # 던전フラグ:(FLAG:現던전):1
+던전フラグ:(FLAG:現던전):2 = 던전フラグ:(FLAG:現던전):2 == -2 ? -1 # 던전フラグ:(FLAG:現던전):2
+던전フラグ:(FLAG:現던전):3 = 던전フラグ:(FLAG:現던전):3 == -2 ? -1 # 던전フラグ:(FLAG:現던전):3
+;---- EDIT 012 ADD START -------------------------
+던전フラグ:(FLAG:現던전):8 = 0
+;---- EDIT 012 ADD END   -------------------------
+
+;---- EDIT 004 ADD END ---------------------------
+;---- EDIT 004 ADD START -------------------------
+;最初の部屋のアナライズをとっておく
+CALL FLOOR_ANALYZE
+;直哉ルートテ키스ト추가
+IF 던전フラグ:4:0 == 1
+	CALL SHOW_FLOOR
+	CALL SHOW_NOW_FORMATION_P,0,2,,2
+	FLAG:コマンド표시行数 = LINECOUNT
+	IF FLAG:백합의꽃ルート
+		CALL MESSAGE_WINDOW_D, "레미엘", "아마네의 마음은 제가 지키고 있습니다/그러나 언제까지 버틸 수 있을지는 모르겠습니다/서둘러 이자벨을 토벌해, 아마네를 구해주세요"
+	ELSE
+		CALL MESSAGE_WINDOW_D, "이자・벨", "왔군요/역시 아직 레미엘에게 이 몸을 빼앗기지는 않았지만/지루하기 그지 없네요/어서, 레미엘을 쓰러뜨리고 오세요"
+	ENDIF
+ELSE
+	CALL SHOW_FLOOR
+	CALL SHOW_NOW_FORMATION_P,0,2,,2
+	FLAG:コマンド표시行数 = LINECOUNT
+	IF FLAG:백합의꽃ルート
+		CALL MESSAGE_WINDOW_D, "SYSTTEM", @"＞레미엘과 함께 사이코 다이버의 본거지를 방문했다/＞사이코 다이브의 준비가 갖추어지자、/＞레미엘이 %CALLNAME:MASTER%의 눈을 바라본다"
+		CALL MESSAGE_WINDOW_D, "레미엘", "…자신을 단단히 하십시오。/악마에게 삼켜지지 않도록…/그러면 현실 세계와 하나도 다르지 않을 겁니다"
+		CALL MESSAGE_WINDOW_D, "레미엘", "하지만 아마네의 마음은 벌써 이자·벨에게 지배당하고 있습니다/그녀의 마음이 당신의 적이 되어 나타날 가능성도 있을 겁니다。/충분히 주의하세요"
+		CALL MESSAGE_WINDOW_D, "레미엘", "이자·벨은 그녀의 마음 속 가장 깊은 곳에 깃들어 있습니다/싸움을 걸기 전에, 아마네의 자아를 되찾는다면、/그녀가 깨어날 것입니다/그러면, 그녀 자신의 의지로 당신을 도와주겠지요"
+		CALL MESSAGE_WINDOW_D, "레미엘", "이자·벨은 강대한 악마입니다만, 어디까지나 싸우는 것은 아마네의 마음 속입니다/그녀의 도움이 있으면, 이자·벨도 힘을 충분히 발휘하지 못할 것이고/제거하는 일도 가능하겠지요"
+		CALL MESSAGE_WINDOW_D, "레미엘", "악마에게 삼켜져 마음이 죽어 버린다면, 두 번 다시 현실세계에 돌아올 수 없습니다/저도 도와드리긴 하겠지만 충분히 주의해야 합니다。/자, 가세요。/당신에게 신의 가호가 있기를…!"
+	ELSE
+		CALL MESSAGE_WINDOW_D, "", "＞나오야의 본거지를 방문하였다/＞아마네가 자고 있는 곁에 나오야와 낯선 남자가 있다/＞이 남자가 나오야가 준비한 사이코 다이버라고 하는 것이다"
+		CALL MESSAGE_WINDOW_D, "나오야", "정신세계에서는 자신을 단단히 다 잡는 것이다/그러면 현실세계와 아무것도 변하지 않을거야"
+		CALL MESSAGE_WINDOW_D, "나오야", "하지만, 아마네의 마음은, 이미 이자·벨의 지배로부터 벗어나고 있어/아마네의 마음이 너의 적이 되어 나타날 것이다/레미엘은 아마네의 마음의 가장 안쪽에 깃들어 있을 거야/싸움을 걸기 전에, 아마네의 마음을 범해, 굴복 시켜버려"
+		CALL MESSAGE_WINDOW_D, "나오야", "아마네의 마음을 꺾으면 그 만큼, 이자·벨의 힘이 늘어난다/레미엘은 강력한 힘의 천사지만、어디까지나 싸우는 것은 아마네의 마음 속이다/아마네의 마음을 꺾어, 너의 아군으로 만든다면、/레미엘이 충분히 힘을 발휘할 수 없을 거야"
+		CALL MESSAGE_WINDOW_D, "나오야", "놈들에게 패해 마음이 죽어 버리면, 두 번 다시 현실 세계에 돌아올 수 없다/안에서는 이자·벨이 너희를 도와줄 거야/자、가봐라。/신의 끄나풀들을 없애버려"
+	ENDIF
+	던전フラグ:4:0 = 1
+ENDIF
+CALL MESSAGE_WINDOW_D, "", "＞아마네의 정신 세계로 사이코 다이브 했다……"
+CALL MESSAGE_WINDOW_D, "", "………/……/…"
+CALL DUNGEON_WORP_ID, 0, 8, 1
+;---- EDIT 004 ADD END ---------------------------
+;CALL AUTOMAP
+FLAG:MAG소비율 = 75
+
+
+;=======================================================================
+;指定したマスに進入가능か
+;=======================================================================
+;---- EDIT 004 ADD START -------------------------
+;直哉ルートのテ키스ト추가
+@CAN_ENTER_4,ARG,ARG:1
+#LOCALSSIZE 1
+IF FLAG:現M == 0 && ARG == 12 && ARG:1 == 12
+	IF FLAG:백합의꽃ルート
+		CALL MESSAGE_WINDOW_D, "", "＞레미엘의 목소리가 들려온다"
+		LOCALS = 이 문 너머가 아마네의 정신의 가장 안쪽입니다/
+		IF 던전フラグ:(FLAG:現던전):4 < 3
+			LOCALS += "아마네의 정신은 해방되지 않았습니다/험난한 싸움이 되겠지만, 그런데도 진행하겠습니까？"
+		ELSE
+			LOCALS +=  "이자·벨은 강력한 악마…, 험난한 싸움이 되겠지요/준비되셨습니까？"
+		ENDIF
+		CALL MESSAGE_WINDOW_D, "레미엘", LOCALS
+		CALL INPUT_YN_D
+		IF RESULT == 0
+			CALL MESSAGE_WINDOW_D, "레미엘", "당신에게 신의 가호가 있기를…!"
+			RETURN 1
+		ELSE
+			CALL MESSAGE_WINDOW_D, "레미엘", "그러면 준비를 하십시오"
+			RETURN 0
+		ENDIF
+	ELSE
+		CALL MESSAGE_WINDOW_D, "", "이자·벨의 목소리가 들린다"
+		LOCALS = 이 문 너머가 아마네의 정신의 가장 안쪽입니다/
+		IF 던전フラグ:(FLAG:現던전):4 < 3
+			LOCALS += "아직, 아마네의 마음은 기운이 넘치네요/이러면 귀찮은 일이 될테지만, 그런데도 진행할건가요?"
+		ELSE
+			LOCALS += "레미엘은 강해요。/험난한 싸움이 될 거에요/준비는 되었나요?"
+		ENDIF
+		CALL MESSAGE_WINDOW_D, "이자·벨", LOCALS
+		CALL INPUT_YN_D
+		IF RESULT == 0
+			CALL MESSAGE_WINDOW_D, "이자·벨", "그러면 열심히 해보세요"
+			RETURN 1
+		ELSE
+			CALL MESSAGE_WINDOW_D, "이자·벨", "그럼、서둘러 준비를 마치세요"
+			RETURN 0
+		ENDIF
+	ENDIF
+ENDIF
+;---- EDIT 004 ADD END ---------------------------
+CALL CAN_ENTER,ARG,ARG:1
+RETURN RESULT
+;=======================================================================
+;フ로어데이터
+;=======================================================================
+@MAKE_FLOOR_4
+SELECTCASE FLAG:現M
+	CASE 0
+	;北東
+		FLAG:최대X = 30
+		FLAG:최대Y = 30
+		;						 000000000011111111112222222222
+		;						 012345678901234567890123456789
+		CALL MAKE_FLOOR_LINE, 0,"                              "
+		CALL MAKE_FLOOR_LINE, 1," 112A 1112121 1111111111 B211 "
+		CALL MAKE_FLOOR_LINE, 2," 11   1     1    2     1   11 "
+		CALL MAKE_FLOOR_LINE, 3," 11 111 1111111  12111 111 11 "
+		CALL MAKE_FLOOR_LINE, 4," 11 1   2     2      1   1 2  "
+		CALL MAKE_FLOOR_LINE, 5," 1111 1111121 1111 12121 111  "
+		CALL MAKE_FLOOR_LINE, 6,"  1   1          1     1   1  "
+		CALL MAKE_FLOOR_LINE, 7," 11 111 1 11111  11121 111 118"
+		CALL MAKE_FLOOR_LINE, 8," 11 1   2 1   1    1 1   1 1  "
+		CALL MAKE_FLOOR_LINE, 9," 11 12111 1   1  1 1 11121 11 "
+		CALL MAKE_FLOOR_LINE,10," 1  1     1   1  2          1 "
+		CALL MAKE_FLOOR_LINE,11," 1  111 1 1 4 11111111 1111 1 "
+		CALL MAKE_FLOOR_LINE,12," 1  1   1 1 2 1        1 2  1 "
+		CALL MAKE_FLOOR_LINE,13," 1  11111 111 112C 1 1 1 D  1 "
+		CALL MAKE_FLOOR_LINE,14," 1  1   1          1 1 1    1 "
+		CALL MAKE_FLOOR_LINE,15," 1  1   1          1 1 1    1 "
+		CALL MAKE_FLOOR_LINE,16," 1  12D 1 C2111  111 1 1 11 1 "
+		CALL MAKE_FLOOR_LINE,17," 1      1     1  1   1 1 1  1 "
+		CALL MAKE_FLOOR_LINE,18," 1 1111211111 1111 1 111 1  1 "
+		CALL MAKE_FLOOR_LINE,19," 1        1   1    1 1   1  1 "
+		CALL MAKE_FLOOR_LINE,20," 1  1112E 1 111  111 111111 1 "
+		CALL MAKE_FLOOR_LINE,21," 1    1     1    1   1   1  1 "
+		CALL MAKE_FLOOR_LINE,22," 1 11 111 111 1111 E2121 1  1 "
+		CALL MAKE_FLOOR_LINE,23," 1  1 1   1      2   1   1  1 "
+		CALL MAKE_FLOOR_LINE,24," 11 121 111 121121 1 1 111  1 "
+		CALL MAKE_FLOOR_LINE,25," 1    1 1   1      1   1 2  1 "
+		CALL MAKE_FLOOR_LINE,26," 1 11 121 111111111111 1 F  1 "
+		CALL MAKE_FLOOR_LINE,27," 1  1                       1 "
+		CALL MAKE_FLOOR_LINE,28," 1111111111111111111111111111 "
+		CALL MAKE_FLOOR_LINE,29,"                               "
+		;A
+		DA:4:1 = 6
+		;B
+		DA:25:1 = 16
+		;C
+		DA:17:13 = 26
+		DA:10:16 = 27
+		;D
+		DA:25:13 = 36
+		DA:6:16 = 37
+		;E
+		DA:8:20 = 46
+		DA:19:22 = 47
+		;F
+		DA:25:26 = 56
+	CASE 1
+		FLAG:최대X = 16 
+		FLAG:최대Y = 17 
+		;						 0123456789012345
+		CALL MAKE_FLOOR_LINE, 0,"                "
+		CALL MAKE_FLOOR_LINE, 1," 11111111111111 "
+		CALL MAKE_FLOOR_LINE, 2," 1    1 1   1 1 "
+		CALL MAKE_FLOOR_LINE, 3," 111  1 1 1 1 1 "
+		CALL MAKE_FLOOR_LINE, 4,"   1  1 1 1   1 "
+		CALL MAKE_FLOOR_LINE, 5," 111 11 1 11111 "
+		CALL MAKE_FLOOR_LINE, 6," 1      1     1 "
+		CALL MAKE_FLOOR_LINE, 7," 111  11111 1 1 "
+		CALL MAKE_FLOOR_LINE, 8,"      1   1 1 1 "
+		CALL MAKE_FLOOR_LINE, 9," 1111 1 111 1 1 "
+		CALL MAKE_FLOOR_LINE,10," 1  111 2   1 1 "
+		CALL MAKE_FLOOR_LINE,11," 1      4   111 "
+		CALL MAKE_FLOOR_LINE,12,"   1          1 "
+		CALL MAKE_FLOOR_LINE,13,"   111111111111 "
+		CALL MAKE_FLOOR_LINE,14,"              2 "
+		CALL MAKE_FLOOR_LINE,15,"              A "
+		CALL MAKE_FLOOR_LINE,16,"                "
+		;A
+		DA:14:15 = 7
+	CASE 2
+		FLAG:최대X = 19 
+		FLAG:최대Y = 19 
+		;						 0123456789012345678
+		CALL MAKE_FLOOR_LINE, 0,"                   "
+		CALL MAKE_FLOOR_LINE, 1," 1111111   1111111 "
+		CALL MAKE_FLOOR_LINE, 2," 1  1  1   1  1  1 "
+		CALL MAKE_FLOOR_LINE, 3," 1  2  1   1  2  1 "
+		CALL MAKE_FLOOR_LINE, 4," 1124211   1121211 "
+		CALL MAKE_FLOOR_LINE, 5," 1  2  1   1  2  1 "
+		CALL MAKE_FLOOR_LINE, 6," 1  1  1   1  1  1 "
+		CALL MAKE_FLOOR_LINE, 7," 11111111111111111 "
+		CALL MAKE_FLOOR_LINE, 8,"       1 2 1       "
+		CALL MAKE_FLOOR_LINE, 9,"       12B21       "
+		CALL MAKE_FLOOR_LINE,10,"       1 2 1       "
+		CALL MAKE_FLOOR_LINE,11," 11111111111111111 "
+		CALL MAKE_FLOOR_LINE,12," 1  1  1   1  1  1 "
+		CALL MAKE_FLOOR_LINE,13," 1  2  1   1  2  1 "
+		CALL MAKE_FLOOR_LINE,14," 1121211   1121211 "
+		CALL MAKE_FLOOR_LINE,15," 1  2  1   1  2  1 "
+		CALL MAKE_FLOOR_LINE,16," 1  1  1   1  1  1 "
+		CALL MAKE_FLOOR_LINE,17," 1111111   1111111 "
+		CALL MAKE_FLOOR_LINE,18,"                   "
+		;B
+		DA:9:9 = 17
+	CASE 3
+		FLAG:최대X = 17 
+		FLAG:최대Y = 18
+		;						 01234567890123456
+		CALL MAKE_FLOOR_LINE, 0,"                 "
+		CALL MAKE_FLOOR_LINE, 1,"                 "
+		CALL MAKE_FLOOR_LINE, 2," 111111111111111 "
+		CALL MAKE_FLOOR_LINE, 3," 1 1           1 "
+		CALL MAKE_FLOOR_LINE, 4," 1 1 111111111 1 "
+		CALL MAKE_FLOOR_LINE, 5," 1 1 1       1 1 "
+		CALL MAKE_FLOOR_LINE, 6," 1 1 1 11111 1 1 "
+		CALL MAKE_FLOOR_LINE, 7," 1 1 1 1   1 1 1 "
+		CALL MAKE_FLOOR_LINE, 8," 1 1 1 141 1 1 1 "
+		CALL MAKE_FLOOR_LINE, 9," 1 1 1   1 1 1 1 "
+		CALL MAKE_FLOOR_LINE,10," 1 1 11111 1 1 1 "
+		CALL MAKE_FLOOR_LINE,11," 1 1       1 1 1 "
+		CALL MAKE_FLOOR_LINE,12," 1 111111111 1 1 "
+		CALL MAKE_FLOOR_LINE,13," 1           1 1 "
+		CALL MAKE_FLOOR_LINE,14," 111111111111111 "
+		CALL MAKE_FLOOR_LINE,15," 2               "
+		CALL MAKE_FLOOR_LINE,16," 4               "
+		CALL MAKE_FLOOR_LINE,17,"                 "
+		DA:1:16 = 57
+	CASE 4
+		FLAG:최대X = 9 
+		FLAG:최대Y = 9
+		;						 012345678
+		CALL MAKE_FLOOR_LINE, 0,"         "
+		CALL MAKE_FLOOR_LINE, 1," 1111111 "
+		CALL MAKE_FLOOR_LINE, 2," 1111111 "
+		CALL MAKE_FLOOR_LINE, 3," 1114111 "
+		CALL MAKE_FLOOR_LINE, 4," 1111111 "
+		CALL MAKE_FLOOR_LINE, 5," 1111111 "
+		CALL MAKE_FLOOR_LINE, 6," 1111111 "
+		CALL MAKE_FLOOR_LINE, 7," 1111111 "
+		CALL MAKE_FLOOR_LINE, 8,"         "
+		DA:4:5 = 11
+	CASE 6
+		FLAG:최대X = 5
+		FLAG:최대Y = 5
+		;						 012345
+		CALL MAKE_FLOOR_LINE, 0,"     "
+		CALL MAKE_FLOOR_LINE, 1," 111 "
+		CALL MAKE_FLOOR_LINE, 2," 141 "
+		CALL MAKE_FLOOR_LINE, 3," 111 "
+		CALL MAKE_FLOOR_LINE, 4,"  2  "
+		DA:2:3 = 11
+	CASEELSE
+ENDSELECT
+;=======================================================================
+;[5]조사　実行時の이벤트
+;=======================================================================
+@EVENT_CHECK_DUNGEON_4
+;==========
+;出입の処理
+;==========
+IF DA:(FLAG:現X):(FLAG:現Y) == 8
+	CALL DUNGEON_EXIT
+	RETURN 1
+;==========
+;이벤트の処理
+;==========
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
+	CALL EVENT_4
+	RETURN 1
+ELSE
+	CALL MESSAGE_WINDOW_D, "SYSTTEM", "아무 것도 없는 것 같다"
+	RETURN 0
+ENDIF
+
+;=======================================================================
+;タイル進入時の이벤트
+;=======================================================================
+@EVENT_ENTER_DUNGEON_4,ARG
+#LOCALSIZE 10
+;ARG = 進入時の向き　0の場合ワープなど
+;==========
+;出입の処理
+;==========
+IF DA:(FLAG:現X):(FLAG:現Y) == 8
+	CALL DUNGEON_EXIT
+	RETURN 1
+;========
+;이벤트の処理
+;========
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
+	CALL EVENT_4
+	RETURN 1
+;========
+;ワープの処理
+;========
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 6 || DA:(FLAG:現X):(FLAG:現Y) % 10 == 7
+	CALL WARP_4
+	RETURN 1
+;==========
+;扉の処理
+;==========
+ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 2
+	CALL DUNGEON_DOOR,ARG
+	RETURN 1
+ENDIF
+RETURN 0
+@EVENT_4
+SELECTCASE FLAG:現M
+	CASE 0
+		;ボス部屋にワープ
+		CALL DUNGEON_WORP_ID, 4, 11, 1
+		;部屋をアナライズし표시更新
+		CALL FLOOR_ANALYZE
+		CALL SHOW_FLOOR
+		CALL SHOW_NOW_FORMATION_P,0,2,,2
+		FLAG:コマンド표시行数 = LINECOUNT
+		IF FLAG:백합의꽃ルート
+			CALL MESSAGE_WINDOW_D, "", "＞문 안으로 발을 내딛자 돌연 주위 일대가 꽃밭이 되었다…/＞그리고, 아마네가 혼자 멍하니 서 있는 것을 발견했다…"
+			CALL MESSAGE_WINDOW_D, "목소리", "…누구야?/…사람의 마음에 흙발로 발을 디디는 녀석은…"
+			CALL MESSAGE_WINDOW_D, "", "＞일대의 꽃밭이 돌연 용암이 흐르는 황야로 변모했다/＞그리고 거대한 악마…이자·벨이 모습을 나타냈다"
+			CALL MESSAGE_WINDOW_D, "이자·벨", "무례한 놈들이네 …。그렇지、아마네？/이런건 빨리 죽여 주지 않으면 안되는 거야"
+			CALL MESSAGE_WINDOW_D, "", @"＞%조사처리(CALLNAME:MASTER,"는")% 아마네에게 말을 걸었다"
+			PRINTFORML 
+			;3곳의 해방으로 아마네는 적이 되지 않는다
+			IF 던전フラグ:(FLAG:現던전):4 == 3
+				CALL MESSAGE_WINDOW_D, "아마네", "…어、어랏！？/나…는…?/이자·벨…?/이것은…도대체…"
+				CALL MESSAGE_WINDOW_D, "아마네", "그런가, 나는 이자·벨에…!/당신이 도와 주셨군요/이제、이제 나를 붙잡아 둘 수는 없어…！/이자·벨…, 당신이 하라는 대로는 되지 않아요…. 이곳은, 나의 마음…!"
+				LOCAL = GETCHARA([[キャラ:아마네]])
+				CALL ADD_GUEST_COMPANION([[キャラ:아마네]], 500, 1)
+				IF RESULT && LOCAL == -1
+					LOCAL = GETCHARA([[キャラ:아마네]])
+					PRINTL 
+					CALL MESSAGE_WINDOW_D, "", @"＞의식을 되찾은 아마네가, %CALLNAME:MASTER%의 파티에 참가했다"
+					BASE:LOCAL:LV = 30
+					BASE:LOCAL:힘 = 4
+					BASE:LOCAL:지혜 = 17
+					BASE:LOCAL:마력 = 16
+					BASE:LOCAL:인내력 = 8
+					BASE:LOCAL:속도 = 8
+					BASE:LOCAL:운 = 10
+					BASE:LOCAL:ＥＸＰ = 5*(29)*(30)*(31)/3
+					;---- EDIT 007 MOD START -------------------------
+					;핵열250%なグ로브ありだと、さすがにここでどうにもならないので
+					EQUIP:LOCAL:검 = [[아이템:슬라이서]]
+					EQUIP:LOCAL:머리 = [[아이템:날개장식]]
+					EQUIP:LOCAL:몸통 = [[아이템:수성의날개옷]]
+					EQUIP:LOCAL:팔 = [[아이템:가드엔젤]]
+					EQUIP:LOCAL:발 = [[아이템:세이프티부츠]]
+					;---- EDIT 007 MOD END   -------------------------
+					ABL:LOCAL:스킬3 = [[스킬:데・카쟈]]
+					ABL:LOCAL:스킬4 = [[스킬:한마]]
+					ABL:LOCAL:스킬5 = [[스킬:펨파트라]]
+					ABL:LOCAL:스킬6 = [[스킬:마하・잔마]]
+					ABL:LOCAL:스킬7 = [[스킬:리캄]]
+					ABL:LOCAL:스킬8 = [[스킬:메・디아라마]]
+					;隠し보정をつけておく
+					CFLAG:LOCAL:마법被데미지보정 = -70
+					CALL SYNC_STATUS,(LOCAL)
+					CALL HEALTH_CHARA,(LOCAL)
+				ENDIF
+				CALL MESSAGE_WINDOW_D, "이자·벨", "어떻게 이런 일이…!/아마네의 자아가 …!/…그래!/그렇다면 한번 더, 너의 마음을 손에 넣어 주마!"
+			ELSE
+				CALL MESSAGE_WINDOW_D, "이자·벨", "어머나… 헛수고, 소용 없었네?/아마네의 마음에는 나의 뿌리가, 제대로 뻗어 있다고…/자아、너희들도 나와서 놈들을 죽여 없애버리자꾸나"
+				CALL MESSAGE_WINDOW_D, "", "＞사악한 미소를 짓는 아마네들이 차례차례로 나타난다…"
+				CALL SET_ENEMY,14,4513,35,1,1
+				ABL:(CHARANUM-1):스킬1 = 1005
+				ABL:(CHARANUM-1):스킬2 = 402
+				ABL:(CHARANUM-1):스킬3 = 418
+				ABL:(CHARANUM-1):스킬4 = 0
+				ABL:(CHARANUM-1):스킬5 = 0
+				ABL:(CHARANUM-1):스킬6 = 0
+				ABL:(CHARANUM-1):스킬7 = 0
+				ABL:(CHARANUM-1):스킬8 = 0
+				ABL:(CHARANUM-1):스킬9 = 0
+				CFLAG:(CHARANUM-1):ＨＰ보정 += 500
+				CFLAG:(CHARANUM-1):ＭＰ보정 += 500
+				CSTR:(CHARANUM-1):사고패턴 = 4513
+				BASE:(CHARANUM-1):속도 = 21
+				CFLAG:LOCAL:COOP被데미지보정 = -50
+				CALL SYNC_STATUS,(CHARANUM-1)
+				CALL HEALTH_CHARA,(CHARANUM-1)
+				CALL SET_ENEMY,8,3263,28,1,1
+				CSTR:(CHARANUM-1):사고패턴 = 3263
+				CALL SET_ENEMY,9,3263,28,1,1
+				CSTR:(CHARANUM-1):사고패턴 = 3263
+				CALL SET_ENEMY,10,3263,28,1,1
+				CSTR:(CHARANUM-1):사고패턴 = 3263
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "", "＞마왕 이자･벨이 나타났다！"
+			CALL SET_ENEMY,13,207,48 - 던전フラグ:(FLAG:現던전):4 * 5, 1, 1
+			CFLAG:(CHARANUM-1):ＨＰ보정 += 2500
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 1000
+			ABL:(CHARANUM-1):스킬6 = 0
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			BASE:(CHARANUM-1):속도 = 20
+			BASE:(CHARANUM-1):검격 = 112
+			BASE:(CHARANUM-1):전술 = 100
+			BASE:(CHARANUM-1):타격 = 112
+			BASE:(CHARANUM-1):비구 = 100
+			MAXBASE:(CHARANUM-1):검격 = 112
+			MAXBASE:(CHARANUM-1):전술 = 100
+			MAXBASE:(CHARANUM-1):타격 = 112
+			MAXBASE:(CHARANUM-1):비구 = 100
+			BASE:(CHARANUM-1):CLOSE = 200
+			BASE:(CHARANUM-1):CHARM = -100
+			BASE:(CHARANUM-1):FREEZE = -100
+			BASE:(CHARANUM-1):SHOCK = -100
+			BASE:(CHARANUM-1):BIND = -100
+			BASE:(CHARANUM-1):PANIC = -100
+			MAXBASE:(CHARANUM-1):CLOSE = 200
+			MAXBASE:(CHARANUM-1):CHARM = -100
+			MAXBASE:(CHARANUM-1):FREEZE = -100
+			MAXBASE:(CHARANUM-1):SHOCK = -100
+			MAXBASE:(CHARANUM-1):BIND = -100
+			MAXBASE:(CHARANUM-1):PANIC = -100
+			CSTR:(CHARANUM-1):사고패턴 = イザベル
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL BATTLE_START
+			CALL SHOW_FLOOR
+			CALL SHOW_NOW_FORMATION_P,0,2,,2
+			FLAG:コマンド표시行数 = LINECOUNT
+			CALL MESSAGE_WINDOW_D, "이자·벨", "어, 어떻게 이런 일이…!/너는 설마 구세주인가…!/너에게 당할 줄이야…!/…꺄아아아아아아아앗!"
+			CALL MESSAGE_WINDOW_D, "", "＞이자·벨은 힘이 다했다…"
+			CALL MESSAGE_WINDOW_D, "아마네", "……감사합니다/당신 덕분에 살아났습니다。/그 상태로 있었으면…나의 마음은 사라져、/완전하게 이자·벨에 빼앗겨 버렸겠지요。"
+			CALL MESSAGE_WINDOW_D, "아마네", "자아…나의 힘을 빌려줄테니/현실의 세계로 돌아가세요…"
+			CALL MESSAGE_WINDOW_D, "", "의식이 멀어져 간다……"
+			CALL MESSAGE_WINDOW_D, "", "………/………/…"
+			;直哉部屋にワープ
+			CALL DUNGEON_WORP_ID, 6, 11, 1
+			CALL SHOW_FLOOR
+			CALL SHOW_NOW_FORMATION_P,0,2,,2
+			FLAG:コマンド표시行数 = LINECOUNT
+			CALL MESSAGE_WINDOW_D, "", @"정신이 들자 %조사처리(CALLNAME:MASTER,"는")% 현실세계로 돌아와 있었다…"
+			;---- EDIT 003 ADD START -------------------------
+			;레미엘の加入処理及び메시지の추가
+			CALL LIFTING_A_BAN([[キャラ:레미엘]])
+			;FLAG:(10000+[[キャラ:레미엘]]) = 1
+			LOCAL = GETCHARA([[キャラ:아마네]])
+			;보정を消す
+			SIF LOCAL >= 0
+				CFLAG:LOCAL:마법被데미지보정 = 0
+			;---- EDIT 006 ADD START -------------------------
+			;조건文の中身を入れ替え
+			IF ABL:MASTER:속성LD == 1 && ABL:MASTER:속성LC == 1
+				CALL MESSAGE_WINDOW_D, "", "＞눈 앞에는 아마네와 천사가 있었다"
+				CALL MESSAGE_WINDOW_D, "아마네", "…무사하게 돌아올 수 있었던 것 같네요. 감사합니다"
+				CALL MESSAGE_WINDOW_D, "천사", "잘 해주셨습니다。/이것으로 나쁜 마왕 이자·벨의 위협으로부터 벗어났습니다"
+				CALL INPUT_YN_D("아마네？", "레미엘？")
+				IF RESULT == 0
+					CALL MESSAGE_WINDOW_D, "아마네", "네, 저는 아마네입니다/그리고 그녀는 레미엘입니다"
+					LOCALS = 레미엘
+				ELSE
+					LOCALS =  천사
+				ENDIF
+				CALL MESSAGE_WINDOW_D, LOCALS, "이 모습으로 만나는 것은 처음이군요/당신이 이자·벨을 쓰러뜨린 일로, 저도 임무를 끝마쳐서、/아마네의 안에 있을 필요가 없어졌습니다"
+				CALL MESSAGE_WINDOW_D, LOCALS, "지금부터는 우리들 본래의 역할로 돌아가, 정식으로 인간을 돕겠습니다/그러니 지금부터는 동료마로서 당신에게 도움이 되겠습니다/제 힘을 사용해、세계를 구하는 겁니다"
+				CALL MESSAGE_WINDOW_D, "", "＞대천사 레미엘이 동료마가 되었다"
+				SIF FLAG:20307 < 100
+					FLAG:20307 = 100
+				CALL ADD_NEW_COMPANION, [[キャラ:레미엘]], 500, 1
+				IF RESULT
+					CFLAG:(RESULT:1):이벤트加入 = 1
+					BASE:(RESULT:1):LV = 35
+					BASE:(RESULT:1):힘 = 8
+					BASE:(RESULT:1):지혜 = 18
+					BASE:(RESULT:1):마력 = 12
+					BASE:(RESULT:1):인내력 = 8
+					BASE:(RESULT:1):속도 = 13
+					BASE:(RESULT:1):운 = 11
+					ABL:(RESULT:1):습득LV1 -= 28
+					ABL:(RESULT:1):습득LV2 -= 28
+					ABL:(RESULT:1):습득LV3 -= 28
+					ABL:(RESULT:1):습득LV4 -= 28
+					ABL:(RESULT:1):습득LV5 -= 28
+					ABL:(RESULT:1):습득LV6 -= 28
+					ABL:(RESULT:1):수태아이템 = [[아이템:스킬카드【천사의혈배】]]
+					BASE:(RESULT:1):ＥＸＰ = 5*(34)*(35)*(36)/3
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+				ENDIF
+			ELSE
+				CALL MESSAGE_WINDOW_D, "", "＞눈 앞에는 아마네가 있었다"
+				CALL MESSAGE_WINDOW_D, "아마네", "……무사하게 돌아올 수 있었던 것 같네요。/감사합니다"
+				CALL INPUT_YN_D("아마네？", "레미엘？")
+				IF RESULT == 0
+					CALL MESSAGE_WINDOW_D, "아마네", "네、저는 아마네에요"
+				ELSE
+					CALL MESSAGE_WINDOW_D, "아마네", "킥킥…/아시잖아요？/저는 아마네에요。"
+				ENDIF
+				CALL MESSAGE_WINDOW_D, "아마네", "당신이 이자·벨을 쓰러뜨린 덕분에, 그 역할을 끝냈겠지요/레미엘은 이제 제 안에 없답니다/레미엘은 떠날 때 당신에게 힘을 빌려주겠다고 했어요/그에 적합한 수순을 밟으면 호출할 수가 있을 겁니다"
+			ENDIF
+			;---- EDIT 006 ADD  END -------------------------
+			CALL MESSAGE_WINDOW_D, "아마네", "레미엘만이 아닙니다/저도 당신의 일을 돕겠습니다"
+			CALL MESSAGE_WINDOW_D, "아마네", "아시는 대로, 제 안에는 이자·벨이 있었습니다/그것은, 제 아버지, 쿠즈류가 이자·벨을 소환해,/제 안에 심었기 때문입니다/아버지는 이자·벨의 힘이 있으면, 신의 시련을 넘을 수 있다고 생각했습니다"
+			CALL MESSAGE_WINDOW_D, "아마네", "메시아 교회의 목적은 사람이 단결해, 신의 시련을 넘는 일…/그것은 신의 가르침을 지켜, 질서의 세계를 쌓아 올리는 일로도 이룰수 있는 일인 것입니다"
+			CALL MESSAGE_WINDOW_D, "아마네", "저는 자신의 본연의 자세를 두고 헤매고 있었습니다/과연, 신의 시련을 넘기 위해, 악마의 힘을 빌려 、/결과적으로 사람들을 괴롭히는 일이 올바른 것인지를"
+ 			CALL MESSAGE_WINDOW_D, "아마네", "저는, 제 마음에 따르겠습니다./비록 그것이, 아버지와 생각을 달리해 서로 싸우는 결과가 된다 해도/아버지나 메시아교의 폭주를 멈추고 싶습니다"
+ 			CALL MESSAGE_WINDOW_D, "아마네", "당신은 사람들을 이끌고, 단결시켜、/이 시련을 넘는 길을 보여주는……/구세주인 것입니다"
+ 			CALL MESSAGE_WINDOW_D, "아마네", "당신을 돕는 것으로、제 목적도 또한 달성되겠지요/그러니, 제가 당신을 도울 수 있도록 해 주지 않겠습니까?"
+ 			;---- EDIT 003 ADD START -------------------------
+ 			CALL INPUT_YN_D
+ 			IF RESULT == 0
+ 				CALL MESSAGE_WINDOW_D, "아마네", "감사합니다/지금부터 힘을  합쳐, 사람들을 도와 나갑시다"
+ 				CALL MESSAGE_WINDOW_D, "", "＞아마네가 동료에 참가했다"
+				CALL ADD_NEW_COMPANION,4513,500
+				;전투참가가능で加入するが、조교で전투참가불가능になる
+				CFLAG:GETCHARA([[キャラ:아마네]]):전투참가불가능 = -1
+				CFLAG:GETCHARA([[キャラ:아마네]]):마법被데미지보정 = 0
+			ELSE
+				CALL MESSAGE_WINDOW_D, "아마네", "하고자 하는 일을 이루는데 있어, 다른 사람에게 의지해서는 안 된다 라는 것이군요. 알겠습니다…/그럼, 저는 제 나름대로, 사람들을 위해 일하도록 하겠습니다"
+				LOCAL = GETCHARA([[キャラ:아마네]])
+				IF LOCAL >= 0
+					IF CFLAG:LOCAL:引継ぎ횟수
+						CFLAG:LOCAL:この場に居ないフラグ = 1
+					ELSE
+						CALL キャラ삭제(LOCAL)
+					ENDIF
+				ENDIF
+			ENDIF
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			CALL MESSAGE_WINDOW_D, "", "＞메시아 교회에서 계좌에 사례금 ￥100000을 입금하였다。/＞아마도 레미엘의 의사일 것이다"
+			MONEY += 100000
+			DA:(FLAG:現X):(FLAG:現Y) = 1
+			FLAG:백합의꽃ルート = 6
+			FLAG:탈출 = 1
+		ELSE
+			;---- EDIT 005 ADD START -------------------------
+			;ネストが崩れていたのを수정
+			;---- EDIT 004 ADD START -------------------------
+			;直哉ルート추가
+			LOCAL:2 = GETCHARA([[キャラ:마인드아마네]])
+			LOCAL:3 = LOCAL:2 >= 0 ? MARK:(LOCAL:2):굴복각인 * 2 - MARK:(LOCAL:2):반발각인 # 0
+			;적레벨基準値
+			던전フラグ:(FLAG:現던전):6 = 던전フラグ:(FLAG:現던전):5 ? 52 - LOCAL:3 * 2 # 49 - 던전フラグ:(FLAG:	現던전):4 * 3
+			IF 던전フラグ:(FLAG:現던전):4 == 3 && 던전フラグ:(FLAG:現던전):5 == 0
+				CALL MESSAGE_WINDOW_D, "", "＞방 안으로 발을 내딛자 주위에 시들어버린 꽃밭이 펼쳐져 있다……/＞그리고, 눈 앞에 아마네가 혼자 울고 있는 것을 발견했다……"
+				CALL MESSAGE_WINDOW_D, "목소리", "…당신이군요/아마네의 정신을 망치며 돌아다닌 사람이？/…사람의 마음에 이런 짓을 하다니…"
+				CALL MESSAGE_WINDOW_D, "", "＞대천사 레미엘이 아마네를 지키기 위해서 나타났다…"
+				CALL MESSAGE_WINDOW_D, "레미엘", "지금 여기서 제가 당신을 물리치지 않으면、/아마네의 마음은 완전히 죽어버리겠지요/사람의 아이여。악마에게 힘을 빌려줬을 뿐만 아니라、/그 포악한 행위를 한 것에 대한 심판을 받을지어다！"
+				;이벤트内容の分岐　아마네붕괴
+				던전フラグ:(FLAG:現던전):7 = 2
+			ELSE
+				CALL MESSAGE_WINDOW_D, "", "＞문 안에 발을 디디자 주위가 갑자기 일대 꽃밭으로 변했다……/＞그리고, 아마네가 혼자 멍하니 서 있는 것을 찾아냈다"
+				CALL MESSAGE_WINDOW_D, "목소리", "…누구십니까？/…사람의 마음에、흙발로 발을 디디다니…"
+				CALL MESSAGE_WINDOW_D, "", "＞아마네의 곁에 대천사 레미엘이 모습을 드러냈다"
+				CALL MESSAGE_WINDOW_D, "레미엘", "자아、마음을 굳건히 하세요/우리들은 어떤 경우에도 그 같이 나쁜 것에/질 수 없습니다"
+				IF LOCAL:3 >= 6 && 던전フラグ:(FLAG:現던전):5
+					;이벤트内容の分岐　아마네裏切り
+					던전フラグ:(FLAG:現던전):7 = 3
+					CALL MESSAGE_WINDOW_D, "아마네", "……"
+					CALL MESSAGE_WINDOW_D, "레미엘", "……어떻게 된 겁니까？"
+					CALL MESSAGE_WINDOW_D, "아마네", "죄송합니다/그렇지만, 저는 신보다 더 훌륭한 것을 알아 버렸습니다"
+					CALL MESSAGE_WINDOW_D, "", @"＞아마네는 레미엘을 남겨두고、%CALLNAME:MASTER%의 옆으로 왔다…"
+					CALL MESSAGE_WINDOW_D, "아마네", "저는 당신의 것 입니다/무엇이든 명령해 주십시오"
+					IF GETCHARA([[キャラ:아마네]]) == -1
+						CALL MESSAGE_WINDOW_D, "", @"＞아마네가 %CALLNAME:MASTER%의 파티에 참가했다"
+	;					SIF RESULT:1 >= 0
+	;						PRINTFORMDW %조사처리(CALLNAME:(RESULT:1), "를")% COMP에 되돌렸으므로 주의해 주세요
+						NO:(LOCAL:2) = [[キャラ:아마네]]
+						CFLAG:(LOCAL:2):この場に居ないフラグ = 0
+						CFLAG:(LOCAL:2):전투참가불가능 = 0
+						CFLAG:(LOCAL:2):善悪치 = 0
+						CFLAG:(LOCAL:2):秩混치 = 0
+						TALENT:(LOCAL:2):모유체질 = 0
+						TALENT:(LOCAL:2):처녀 = 1
+						;隠し보정をつけておく
+						CFLAG:(LOCAL:2):마법被데미지보정 = -50
+						CALL SYNC_STATUS, LOCAL:2
+						CALL HEALTH_CHARA, LOCAL:2
+						LOCAL:1 = -1
+						LOCAL:2 = -1
+						FOR LOCAL, 6, 0, -1
+							LOCALS = 포지션{LOCAL} 
+							IF FLAG:LOCALS < 0
+								LOCAL:1 = LOCAL
+								BREAK
+							ENDIF
+						NEXT
+						IF LOCAL:1 == -1
+							FOR LOCAL, 6, 0, -1
+								LOCALS = 포지션{LOCAL} 
+								IF ABL:(FLAG:LOCALS):종족 || NO:(FLAG:LOCALS) == [[キャラ:메어리]]
+									LOCAL:1 = LOCAL
+									;LOCAL:2にどかすキャラを入れる
+									LOCAL:2 = POS(LOCAL)
+									;포지션から外す
+									CALL REMOVE_POSITION(LOCAL)
+									BREAK
+								ENDIF
+							NEXT
+						ENDIF
+						;---- EDIT 007 MOD START -------------------------
+						IF LOCAL:1 > 0
+							CALL INSERT_POSITION, LOCAL:1, GETCHARA([[キャラ:아마네]])
+						ELSE
+							CALL MESSAGE_WINDOW_D, "", "＞멤버 자리에 빈 곳이 없었기 때문에, 아마네가 전투에 참가하지 않습니다"
+						ENDIF
+						;---- EDIT 007 MOD END   -------------------------
+					ELSE
+						CALL キャラ삭제, LOCAL:2
+					ENDIF
+					CALL MESSAGE_WINDOW_D, "레미엘", "이럴수가…/그렇다면 나는 무엇 때문에…"
+					CALL MESSAGE_WINDOW_D, "이자·벨", "이런、도망치게 내버려 둘 수는 없지/너는 여기서 인간들에게 살해당하는 거야"
+					CALL MESSAGE_WINDOW_D, "레미엘", "크윽…/이자·벨!"
+					CALL MESSAGE_WINDOW_D, "이자·벨", "어째서、그런 얼굴을 하고 있는거야？/아마네는 행복한 것 같은데/천사답게 축복이라도 해주는게 어떨까"
+					CALL MESSAGE_WINDOW_D, "레미엘", "……신이여/제게 악에게 지지 않을 힘을!"
+				ELSE
+				;이벤트内容の分岐　통상
+					던전フラグ:(FLAG:現던전):7 = 1
+					CALL MESSAGE_WINDOW_D, "아마네", "네…/저는 다시 이자·벨에게 넘어갈 수는 없습니다/부디, 제게 힘을 빌려 주세요"
+					CALL MESSAGE_WINDOW_D, "레미엘", "잘, 말해줬습니다/그럼、갑시다！"
+					CALL SET_ENEMY,13,4513,던전フラグ:(FLAG:現던전):6-3,1,1
+					ABL:(CHARANUM-1):스킬1 = 1005
+					ABL:(CHARANUM-1):스킬2 = 402
+					ABL:(CHARANUM-1):스킬3 = 418
+					ABL:(CHARANUM-1):스킬4 = 0
+					ABL:(CHARANUM-1):스킬5 = 0
+					ABL:(CHARANUM-1):스킬6 = 0
+					ABL:(CHARANUM-1):스킬7 = 0
+					ABL:(CHARANUM-1):스킬8 = 0
+					ABL:(CHARANUM-1):스킬9 = 0
+					LOCAL:1 = FLAG:전투난이도 - 3 > 0 ? 120 + (FLAG:전투난이도 - 3) * 20 # 100
+					CALL SET_BATTLE_STATUS(CHARANUM-1, 20 * LOCAL:1, "ＨＰ")
+					CALL SET_BATTLE_STATUS(CHARANUM-1, 20 * LOCAL:1, "ＭＰ")
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+					CSTR:(CHARANUM-1):사고패턴 = 레미엘아마네
+					BASE:(CHARANUM-1):속도 = 25
+				ENDIF
+			ENDIF
+			CALL SET_ENEMY, 14, [[キャラ:레미엘]], 던전フラグ:(FLAG:現던전):6, 1, 1
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):단독링케이지 = 1
+			BASE:(CHARANUM-1):속도 = 30
+			BASE:(CHARANUM-1):충격 = 25
+			BASE:(CHARANUM-1):질풍 = 150
+			BASE:(CHARANUM-1):중력= 25
+			BASE:(CHARANUM-1):빙결= 25
+			BASE:(CHARANUM-1):전격= -50
+			MAXBASE:(CHARANUM-1):충격 = 25
+			MAXBASE:(CHARANUM-1):질풍 = 150
+			MAXBASE:(CHARANUM-1):중력= 25
+			MAXBASE:(CHARANUM-1):빙결= 25
+			MAXBASE:(CHARANUM-1):전격= -50
+			CSTR:(CHARANUM-1):사고패턴 = 레미엘
+			CSTR:(CHARANUM-1):増援패턴 = 레미엘
+			LOCAL:1 = FLAG:전투난이도 - 3 > 0 ? 120 + (FLAG:전투난이도 - 3) * 20 # 100
+			CALL SET_BATTLE_STATUS(CHARANUM-1, 50 * LOCAL:1, "ＨＰ")
+			CALL SET_BATTLE_STATUS(CHARANUM-1, 20 * LOCAL:1, "ＭＰ")
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			CALL SET_ENEMY, 8, [[キャラ:하우르바타트]], 던전フラグ:(FLAG:現던전):6-5
+			CALL SET_ENEMY_D4_ST, (CHARANUM-1)
+			CALL SET_ENEMY, 9, [[キャラ:아무르타트]], 던전フラグ:(FLAG:現던전):6-5
+			CALL SET_ENEMY_D4_ST, (CHARANUM-1)
+			CALL SET_ENEMY, 10, [[キャラ:라이라]], 던전フラグ:(FLAG:現던전):6-5
+			CALL SET_ENEMY_D4_ST, (CHARANUM-1)
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			;---- EDIT 005 ADD START -------------------------
+			;메시지の位置を전투前に수정し、フラグ리셋処理を추가
+			CALL MESSAGE_WINDOW_D, "", "＞대천사 레미엘이 나타났다！"
+			CALL BATTLE_START
+			CALL SHOW_FLOOR
+			CALL SHOW_NOW_FORMATION_P,0,2,,2
+			FLAG:コマンド표시行数 = LINECOUNT
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			;---- EDIT 005 ADD END   -------------------------
+			CALL LIFTING_A_BAN([[キャラ:이자･벨]])
+			;FLAG:(10000+[[キャラ:이자･벨]]) = 1
+			LOCAL = GETCHARA([[キャラ:아마네]])
+			;보정を消す
+			SIF LOCAL >= 0
+				CFLAG:LOCAL:마법被데미지보정 = 0
+			CALL MESSAGE_WINDOW_D, "레미엘", "어, 어째서입니까…/이 제가 악을 행하는 자에게 패배…할 줄은…/아아…신이여…부디 용서해 주십시오…"
+			CALL MESSAGE_WINDOW_D, "SYSYTEM", "＞레미엘은 힘이 다했다"
+			IF 던전フラグ:(FLAG:現던전):7 == 3
+				CALL MESSAGE_WINDOW_D, "아마네", "……미안해요"
+				CALL MESSAGE_WINDOW_D, "", "＞사라져가는 레미엘을 보면서、아마네가 불쑥 중얼거렸다"
+			ENDIF
+			;ログ残し
+			CALL MESSAGE_WINDOW_D, "", "＞의식이 멀어져 간다…"
+			CALL MESSAGE_WINDOW_D, "", "………/……/…"
+			;直哉部屋にワープ
+			CALL DUNGEON_WORP_ID, 6, 11, 1
+			CALL SHOW_FLOOR
+			CALL SHOW_NOW_FORMATION_P,0,2,,2
+			FLAG:コマンド표시行数 = LINECOUNT
+			CALL MESSAGE_WINDOW_D, "", "＞정신이 들자, 그곳은 사이코 다이브 하기 전에 있었던 방이었다…/＞눈 앞에는 사악한 미소를 짓고 있는 아마네와 능글맞게 웃고 있는 나오야가 있다…"
+			CALL MESSAGE_WINDOW_D, "나오야", "그 모습을 보니 잘된 것 같은데?"
+			CALL MESSAGE_WINDOW_D, "아마네", "아, 후련했어/하지만 인간 따위가 정말로 그 레미엘을 쓰러뜨리다니"
+			CALL MESSAGE_WINDOW_D, "나오야", "내가 믿은 인간이라고。그 정도는 당연하지/이것으로 너도 안심하고, 뒤를 맡길 수 있겠지?"
+			CALL MESSAGE_WINDOW_D, "아마네", "아아、그래。벨의 힘을 받아주면 좋겠어"
+			CALL MESSAGE_WINDOW_D, "", @"＞아마네에게서 검은 안개 같은 것이 흘러나와、/＞%CALLNAME:MASTER%의 COMP로 빨려 들어갔다"
+			CALL MESSAGE_WINDOW_D, "", @"＞안개가 사라지자, 아마네가 쓰러졌다…/＞%CALLNAME:MASTER%가 달려가려고 하는데 머릿속에 목소리가 들려왔다"
+			IF ABL:MASTER:속성LD == 3 &&  ABL:MASTER:속성LC == 3
+				CALL MESSAGE_WINDOW_D, "목소리", "그래, 레미엘로부터 많은 힘을 빼앗았기 때문에/실체화해서 싸우는 것도 충분히 가능해/그런고로, 앞으로 너한테 힘을 빌려 줄께/고맙게 생각하라고"
+				CALL MESSAGE_WINDOW_D, "", "＞마왕 이자·벨이 동료마가 되었다"
+				SIF FLAG:20207 < 100
+					FLAG:20207 = 100
+				CALL ADD_NEW_COMPANION, [[キャラ:이자･벨]], 500, 1
+				IF RESULT
+					CFLAG:(RESULT:1):이벤트加入 = 1
+					BASE:(RESULT:1):LV = 35
+					BASE:(RESULT:1):힘 = 4
+					BASE:(RESULT:1):지혜 = 18
+					BASE:(RESULT:1):마력 = 21
+					BASE:(RESULT:1):인내력 = 9
+					BASE:(RESULT:1):속도 = 12
+					BASE:(RESULT:1):운 = 6
+					ABL:(RESULT:1):습득LV1 -= 18
+					ABL:(RESULT:1):습득LV2 -= 18
+					ABL:(RESULT:1):습득LV3 -= 18
+					ABL:(RESULT:1):습득LV4 -= 18
+					ABL:(RESULT:1):습득LV5 -= 18
+					BASE:(RESULT:1):ＥＸＰ = 5*(34)*(35)*(36)/3
+					ABL:(RESULT:1):수태아이템 = [[아이템:스킬카드【작열의꽃】]]
+				ENDIF
+			ELSE
+				CALL MESSAGE_WINDOW_D, "목소리", "그래, 앞으로 기본적으로는 여기서 응원해 주는 것이지만/적절한 절차를 밟으면、실체화 해 싸우는 것도/못하는건 아니니까 잘 기억해 둬"
+			ENDIF
+			IF 던전フラグ:(FLAG:現던전):7 == 2
+				CALL MESSAGE_WINDOW_D, "나오야", "그런데……그건 그렇고……/이거 안되겠네/망가져 버렸다"
+				CALL MESSAGE_WINDOW_D, "", "＞아마네의 상태를 보고 있던 나오야가 그렇게 말했다"
+				CALL MESSAGE_WINDOW_D, "나오야", "이 녀석 정도의 힘이면、/뭔가 쓸모 있을 것이라고 기대하고 있었는데…/그레. 노예로는 어떨까?/그렇게라도 쓸거야?"
+				CALL INPUT_YN_D("네", "아니요")
+				IF RESULT == 0
+					CALL MESSAGE_WINDOW_D, "나오야", "그런가/그렇다면, 가져가도 좋아"
+					CALL MESSAGE_WINDOW_D, "", "＞쿠즈류 아마네를 손에 넣었다"
+					CALL ADD_NEW_COMPANION, [[キャラ:아마네]], 200
+					IF RESULT
+						TALENT:(RESULT:1):붕괴 = 1
+						TALENT:(RESULT:1):비전투원 = 1
+						CFLAG:(RESULT:1):이벤트加入 = 3
+					ENDIF
+				ELSE
+					CALL MESSAGE_WINDOW_D, "나오야", "그런가/그렇다면、이쪽에서 적당하게 처분해 줄께"
+				ENDIF
+			ELSE
+				CALL MESSAGE_WINDOW_D, "아마네", "우……/여기는……"
+				CALL MESSAGE_WINDOW_D, "", "＞아마네의 눈이 떠지고、신음하면서 일어섰다"
+				CALL MESSAGE_WINDOW_D, "나오야", "눈을 떴나"
+				CALL MESSAGE_WINDOW_D, "아마네", "저는 레미엘과…"
+				CALL MESSAGE_WINDOW_D, "나오야", "그렇게、레미엘과 함께 패배한 거야/나쁜 말은 하지 않겠다/우리에게 힘을 빌려줘、함께 신을 쓰러뜨리자"
+				IF 던전フラグ:(FLAG:現던전):7 == 3
+					CALL MESSAGE_WINDOW_D, "아마네", "……말할 필요도 없습니다/저는 벌써 신을 버리고 이 분을 선택했습니다"
+					CALL MESSAGE_WINDOW_D, "나오야", "호오, 벌써 함락한 건가/꽤 하잖아/신의 소유물인 무녀를 강탈하다니"
+				ELSE
+					CALL MESSAGE_WINDOW_D, "아마네", "무슨 바보같은 일을!/지금은 저와 레미엘이 패했디지만, 마지막에는 절대로…！"
+					CALL MESSAGE_WINDOW_D, "나오야", "아무튼 좋아/네가 순조롭게 우리편이 된다고는 생각하지 않았으니/다만, 이 녀석은 노예 상인이니까…/어떻게 될지는 너도 대충 상상이 가지 않아?"
+					CALL MESSAGE_WINDOW_D, "아마네", "뭐라고요…！？"
+					CALL MESSAGE_WINDOW_D, "나오야", "신의 무녀가 어떻게 다루어질지, 기다려지는군/크크크"
+					CALL MESSAGE_WINDOW_D, "", "＞쿠즈류 아마네를 손에 넣었다"
+					IF 던전フラグ:(FLAG:現던전):5
+						LOCAL:2 = GETCHARA([[キャラ:마인드아마네]])
+						IF GETCHARA([[キャラ:아마네]]) == -1
+							NO:(LOCAL:2) = [[キャラ:아마네]]
+							CFLAG:(LOCAL:2):이벤트加入 = 2
+							CFLAG:(LOCAL:2):この場に居ないフラグ = 0
+							CFLAG:(LOCAL:2):전투참가불가능 = 1
+							BASE:(LOCAL:2):LV = CSVBASE(NO:(LOCAL:2), 30, 0)
+							BASE:(LOCAL:2):힘 = CSVBASE(NO:(LOCAL:2), 31, 0)
+							BASE:(LOCAL:2):지혜 = CSVBASE(NO:(LOCAL:2), 32, 0)
+							BASE:(LOCAL:2):마력 = CSVBASE(NO:(LOCAL:2), 33, 0)
+							BASE:(LOCAL:2):인내력 = CSVBASE(NO:(LOCAL:2), 34, 0)
+							BASE:(LOCAL:2):속도 = CSVBASE(NO:(LOCAL:2), 35, 0)
+							BASE:(LOCAL:2):운 = CSVBASE(NO:(LOCAL:2), 36, 0)
+							BASE:(LOCAL:2):ＥＸＰ = CSVBASE(NO:(LOCAL:2), 7, 0)
+							EQUIP:(LOCAL:2):검 = CSVEQUIP(NO:(LOCAL:2), 10, 0)
+							EQUIP:(LOCAL:2):머리 = CSVEQUIP(NO:(LOCAL:2), 12, 0)
+							EQUIP:(LOCAL:2):몸통 = CSVEQUIP(NO:(LOCAL:2), 13, 0)
+							EQUIP:(LOCAL:2):팔 = CSVEQUIP(NO:(LOCAL:2), 14, 0)
+							EQUIP:(LOCAL:2):발 = CSVEQUIP(NO:(LOCAL:2), 15, 0)
+							TALENT:(LOCAL:2):모유체질 = 0
+							TALENT:(LOCAL:2):처녀 = 1
+							FOR LOCAL,1, FLAG:스킬数+1
+								ABL:(LOCAL:2):("스킬"+TOSTR(LOCAL)) = CSVABL(NO:(LOCAL:2), GETNUM(ABL, ("스킬"+TOSTR(LOCAL))), 0)
+							NEXT
+							FOR LOCAL,1, 21
+								ABL:(LOCAL:2):("습득스킬"+TOSTR(LOCAL)) = CSVABL(NO:(LOCAL:2), GETNUM(ABL, ("습득스킬"+TOSTR(LOCAL))), 0)
+								ABL:(LOCAL:2):("습득LV"+TOSTR(LOCAL)) = CSVABL(NO:(LOCAL:2), GETNUM(ABL, ("습득LV"+TOSTR(LOCAL))), 0)
+							NEXT
+						ELSE
+							CALL キャラ삭제, LOCAL:2
+						ENDIF
+					ELSE
+						CALL ADD_NEW_COMPANION, [[キャラ:아마네]], 200
+						IF RESULT
+							CFLAG:(RESULT:1):이벤트加入 = 2
+						ENDIF
+					ENDIF
+				ENDIF
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "나오야", "그런데, 이번에는 이 정도라지만/그러나 다음 벨신은 한층 더 만만치 않을 거야/또 나타날 때까지 단련을 게을리하지마/일단 이것을 사용해"
+			CALL MESSAGE_WINDOW_D, "", "＞나오야에게서 ￥100000을 건네 받았다"
+			MONEY += 100000
+			FLAG:벨신撃破 |= 2
+			FLAG:直哉ルート = 6
+			FLAG:탈출 = 1
+			;---- EDIT 004 ADD END ---------------------------
+			;---- EDIT 005 ADD END ---------------------------
+		ENDIF
+	CASE 1
+		IF FLAG:백합의꽃ルート
+			IF !던전フラグ:(FLAG:現던전):1
+				CALL MESSAGE_WINDOW_D, "악마", "이런 곳에까지 나타나다니, 당신 정말로 인간인가요?/아무튼 좋아요/……당신이 무엇이든, 이 아가씨는 풀어줄 수 없으니/당신도 죽일 수 밖에요"
+				CALL MESSAGE_WINDOW_D, "", "＞마수 알케니가１체 나타났다！"
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				CALL SET_ENEMY,9,805,32,0,1
+				CFLAG:(CHARANUM-1):行動횟수 = 2
+				CALL BATTLE_START
+				CALL SHOW_FLOOR
+				CALL SHOW_NOW_FORMATION_P,0,2,,2
+				FLAG:コマンド표시行数 = LINECOUNT
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				CALL MESSAGE_WINDOW_D, "", "＞레미엘의 목소리가 들려온다"
+				CALL MESSAGE_WINDOW_D, "레미엘", "잘하셨습니다/지금의 악마는 아마네의 마음을 단단히 묶고 있던 자입니다"
+				CALL INCREASE_LD, 3
+				CALL INCREASE_LC, 3
+				던전フラグ:(FLAG:現던전):1 = 1
+				던전フラグ:(FLAG:現던전):4 += 1
+				IF 던전フラグ:(FLAG:現던전):4 == 1
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 조금 해방되었습니다/그리고 그 덕분에 저한테도 도움이 되었습니다/당신의 힘이 될만한 것을 여기에 만들어 보겠습니다"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSEIF 던전フラグ:(FLAG:現던전):4 == 2
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 한층 더 해방되었습니다/완전하게 해방할 때까지 나머지 한 걸음입니다/당신에게 힘이 될만한 것을 여기에도 만들어 드릴테니 사용해 주세요"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSE
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 완전히 해방되었습니다/자아, 지금이야말로 정신세계의 가장 깊은 곳으로 나아가, 이자·벨을 토벌합시다"
+				ENDIF
+			ELSE
+				CALL DUNGEON_TERMINAL
+				RETURN 1
+			ENDIF
+		ELSE
+			;---- EDIT 004 ADD START -------------------------
+			;新規作成
+			IF !던전フラグ:(FLAG:現던전):1
+				CALL MESSAGE_WINDOW_D, "천사", "사람의 아이가, 이러한 곳까지 올 줄은…/그대가 이 딸을 해꼬지하려고 한다면, 나는 그대를 공격하겠다"
+				CALL MESSAGE_WINDOW_D, "", "＞천사 아무르타트가 １체 나타났다！"
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				CALL SET_ENEMY,9,[[キャラ:아무르타트]],36,0,1
+				CALL SET_ENEMY_D4_ST, (CHARANUM-1)
+				CFLAG:(CHARANUM-1):行動횟수 = 2
+				CALL BATTLE_START
+				CALL SHOW_FLOOR
+				CALL SHOW_NOW_FORMATION_P,0,2,,2
+				FLAG:コマンド표시行数 = LINECOUNT
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				CALL MESSAGE_WINDOW_D, "", "＞이자・벨의 목소리가 들려온다"
+				CALL MESSAGE_WINDOW_D, "이자・벨", "잘 해줬어/아마네를 지키는 녀석을 마저 없애버리면…/잠깐만 기다려봐…"
+				CALL MESSAGE_WINDOW_D, "", "＞잠시 후 눈 앞에 아마네가 나타났다…"
+				CALL RAPE, 1
+				SIF FLAG:던전内조교 == 1
+					RETURN 1
+				IF 던전フラグ:(FLAG:現던전):4 == 1
+					CALL MESSAGE_WINDOW_D, "이자・벨", "지금 행동으로 아마네에 대한 지배력이 강해졌어/덕분에, 너를 도울 수 있게 된 거야/자아、이런건 어때？"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+					PRINTW 
+				ELSEIF 던전フラグ:(FLAG:現던전):4 == 2
+					CALL MESSAGE_WINDOW_D, "이자・벨", "아마네를 완전하게 지배할 때까지 나머지 한 걸음/도와줄테니까, 최선을 다해줘"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSE
+					CALL MESSAGE_WINDOW_D, "이자・벨", "이제、아마네는 거의 완전하게 지배하게 되었어 그럼、정신세계의 가장 깊숙한 곳에 가서、레미엘을 죽여버려"
+				ENDIF
+			ELSEIF 던전フラグ:(FLAG:現던전):1 == -1
+				CALL AMANE_TRAIN
+				RETURN RESULT
+			ELSE
+				CALL DUNGEON_TERMINAL
+				RETURN 1
+			ENDIF
+			;---- EDIT 004 ADD END ---------------------------
+		ENDIF
+	CASE 2
+		IF FLAG:백합의꽃ルート
+			IF !던전フラグ:(FLAG:現던전):2
+				CALL MESSAGE_WINDOW_D, "악마", "뭐야。너는？/나는 이 여자를 타락시키지 않으면 안된단 말이야/방해 한다면, 죽여줄께!"
+				CALL MESSAGE_WINDOW_D, "SYSTTEM", "요마 인큐버스가 １체 나타났다！"
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				CALL SET_ENEMY,9, [[キャラ:인큐버스]],32,0,1
+				CFLAG:(CHARANUM-1):行動횟수 = 2
+				CALL BATTLE_START
+				CALL SHOW_FLOOR
+				CALL SHOW_NOW_FORMATION_P,0,2,,2
+				FLAG:コマンド표시行数 = LINECOUNT
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				CALL MESSAGE_WINDOW_D, "", "＞레미엘의 목소리가 들려온다"
+				CALL MESSAGE_WINDOW_D, "레미엘", "잘하셨습니다/지금의 악마는 아마네의 마음을 타락시키려던 자입니다"
+				CALL INCREASE_LD, 3
+				CALL INCREASE_LC, 3
+				던전フラグ:(FLAG:現던전):2 = 1
+				던전フラグ:(FLAG:現던전):4 += 1
+				IF 던전フラグ:(FLAG:現던전):4 == 1
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 조금 해방되었습니다/그리고 그 덕분에 저한테도 도움이 되었습니다/당신의 힘이 될만한 것을 여기에 만들어 보겠습니다"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSEIF 던전フラグ:(FLAG:現던전):4 == 2
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 한층 더 해방되었습니다/완전하게 해방할 때까지 나머지 한 걸음입니다/당신에게 힘이 될만한 것을 여기에도 만들어 드릴테니 사용해 주세요"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSE
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 완전히 해방되었습니다/자아, 지금이야말로 정신세계의 가장 깊은 곳으로 나아가, 이자·벨을 토벌합시다"
+				ENDIF
+			ELSE
+				CALL DUNGEON_TERMINAL
+				RETURN 1
+			ENDIF
+		ELSE
+			;---- EDIT 004 ADD START -------------------------
+			;新規作成
+			IF !던전フラグ:(FLAG:現던전):2
+				CALL MESSAGE_WINDOW_D, "천사", "악한 자여…/정의로운 자에게 해를 끼치지 말지어다！"
+				CALL MESSAGE_WINDOW_D, "", "＞천사 라이라가 １체 나타났다！"
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				CALL SET_ENEMY,9,[[キャラ:라이라]],36,0,1
+				CALL SET_ENEMY_D4_ST, (CHARANUM-1)
+				CFLAG:(CHARANUM-1):行動횟수 = 2
+				CALL BATTLE_START
+				CALL SHOW_FLOOR
+				CALL SHOW_NOW_FORMATION_P,0,2,,2
+				FLAG:コマンド표시行数 = LINECOUNT
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				CALL MESSAGE_WINDOW_D, "", "＞이자・벨의 목소리가 들려온다"
+				CALL MESSAGE_WINDOW_D, "이자・벨", "잘 해줬어/아마네를 지키는 녀석을 마저 없애버리면…/잠시만 기다려봐…"
+				CALL MESSAGE_WINDOW_D, "", "＞잠시후 눈 앞에 아마네가 나타났다…"
+				CALL RAPE, 2
+				SIF FLAG:던전内조교 == 1
+					RETURN 1
+				IF 던전フラグ:(FLAG:現던전):4 == 1
+					CALL MESSAGE_WINDOW_D, "이자・벨", "지금 행동으로 아마네에 대한 지배력이 강해졌어/덕분에, 너를 도울 수 있게 된 거야/자아、이런건 어때？"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+					PRINTW 
+				ELSEIF 던전フラグ:(FLAG:現던전):4 == 2
+					CALL MESSAGE_WINDOW_D, "이자・벨", "아마네를 완전하게 지배할 때까지 나머지 한 걸음/도와줄테니까, 최선을 다해줘"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSE
+					CALL MESSAGE_WINDOW_D, "이자・벨", "이제、아마네는 거의 완전하게 지배하게 되었어 그럼、정신세계의 가장 깊숙한 곳에 가서、레미엘을 죽여버려"
+				ENDIF
+			ELSEIF 던전フラグ:(FLAG:現던전):2 == -1
+				CALL AMANE_TRAIN
+				RETURN RESULT
+			ELSE
+				CALL DUNGEON_TERMINAL
+				RETURN 1
+			ENDIF
+			;---- EDIT 004 ADD END ---------------------------
+		ENDIF
+	CASE 3
+		IF FLAG:백합의꽃ルート
+			IF !던전フラグ:(FLAG:現던전):3
+				CALL MESSAGE_WINDOW_D, "", "＞아마네가 있는…/그런데 그 표정이 사악해, 도저히 아마네로는 안보인다"
+				CALL MESSAGE_WINDOW_D, "아마네？", "………"
+				CALL MESSAGE_WINDOW_D, "", "마인드아마네가 １체 나타났다！"
+				CALL INCREASE_LD, 3
+				CALL INCREASE_LC, 3
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				CALL SET_ENEMY,9, [[キャラ:마인드아마네]],32,0,1
+				CFLAG:(CHARANUM-1):行動횟수 = 2
+				CALL BATTLE_START
+				CALL SHOW_FLOOR
+				CALL SHOW_NOW_FORMATION_P,0,2,,2
+				FLAG:コマンド표시行数 = LINECOUNT
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				CALL MESSAGE_WINDOW_D, "", "＞레미엘의 목소리가 들려온다"
+				CALL MESSAGE_WINDOW_D, "레미엘", "잘하셨습니다/지금의 것은 이자·벨이 지배하던 아마네의 마음입니다"
+				던전フラグ:(FLAG:現던전):3 = 1
+				던전フラグ:(FLAG:現던전):4 += 1
+				IF 던전フラグ:(FLAG:現던전):4 == 1
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 조금 해방되었습니다/그리고 그 덕분에 저한테도 도움이 되었습니다/당신의 힘이 될만한 것을 여기에 만들어 보겠습니다"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSEIF 던전フラグ:(FLAG:現던전):4 == 2
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 한층 더 해방되었습니다/완전하게 해방할 때까지 나머지 한 걸음입니다/당신에게 힘이 될만한 것을 여기에도 만들어 드릴테니 사용해 주세요"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSE
+					CALL MESSAGE_WINDOW_D, "레미엘", "이제, 아마네는 이자·벨의 지배로부터 완전히 해방되었습니다/자아, 지금이야말로 정신세계의 가장 깊은 곳으로 나아가, 이자·벨을 토벌합시다"
+				ENDIF
+			ELSE
+				CALL DUNGEON_TERMINAL
+				RETURN 1
+			ENDIF
+		ELSE
+			;---- EDIT 004 ADD START -------------------------
+			;新規作成
+			IF !던전フラグ:(FLAG:現던전):3
+				CALL MESSAGE_WINDOW_D, "천사", "주여…/저에게 악마를 물리칠 수 있는 힘을…！"
+				CALL MESSAGE_WINDOW_D, "", "＞천사 하우르바타트가 １체 나타났다！"
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				CALL SET_ENEMY,9,[[キャラ:하우르바타트]],36,0,1
+				CALL SET_ENEMY_D4_ST, (CHARANUM-1)
+				CFLAG:(CHARANUM-1):行動횟수 = 2
+				CALL BATTLE_START
+				CALL SHOW_FLOOR
+				CALL SHOW_NOW_FORMATION_P,0,2,,2
+				FLAG:コマンド표시行数 = LINECOUNT
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				CALL MESSAGE_WINDOW_D, "", "＞이자・벨의 목소리가 들려온다"
+				CALL MESSAGE_WINDOW_D, "이자・벨", "잘 해줬어/아마네를 지키는 녀석을 마저 없애버리면…/잠시만 기다려봐…"
+				CALL MESSAGE_WINDOW_D, "", "＞잠시후 눈 앞에 아마네가 나타났다…"
+				CALL RAPE, 3
+				SIF FLAG:던전内조교 == 1
+					RETURN 1
+				IF 던전フラグ:(FLAG:現던전):4 == 1
+					CALL MESSAGE_WINDOW_D, "이자・벨", "지금 행동으로 아마네에 대한 지배력이 강해졌어/덕분에, 너를 도울 수 있게 된 거야/자아、이런건 어때？"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+					PRINTW 
+				ELSEIF 던전フラグ:(FLAG:現던전):4 == 2
+					CALL MESSAGE_WINDOW_D, "이자・벨", "아마네를 완전하게 지배할 때까지 나머지 한 걸음/도와줄테니까, 최선을 다해줘"
+					CALL MESSAGE_WINDOW_D, "", "＞터미널이 나타났다"
+				ELSE
+					CALL MESSAGE_WINDOW_D, "이자・벨", "이제、아마네는 거의 완전하게 지배하게 되었어 그럼、정신세계의 가장 깊숙한 곳에 가서、레미엘을 죽여버려"
+				ENDIF
+			ELSEIF 던전フラグ:(FLAG:現던전):3 == -1
+				CALL AMANE_TRAIN
+				RETURN RESULT
+			ELSE
+				CALL DUNGEON_TERMINAL
+				RETURN 1
+			ENDIF
+			;---- EDIT 004 ADD END ---------------------------
+		ENDIF
+ENDSELECT
+
+CALL MAKE_FLOOR, FLAG:現던전
+CALL AUTOMAP
+RETURN 1
+;=======================================================================
+;ワープゾーン
+;=======================================================================
+;ワープゾーンのタイル調整
+@TILE_MARK_COMMON_4_6, ARG, ARG:1, ARG:2
+RESULTS = ！
+@TILE_MARK_COMMON_4_7, ARG, ARG:1, ARG:2
+RESULTS = ！
+@WARP_4
+SELECTCASE DA:(FLAG:現X):(FLAG:現Y)
+	;A
+	CASE 6
+		CALL DUNGEON_WORP_ID, 1, 7, 1
+	;A
+	CASE 7
+		CALL DUNGEON_WORP_ID, 0, 6, 1
+	;B
+	CASE 16
+		CALL DUNGEON_WORP_ID, 2, 17, 1
+	;B
+	CASE 17
+		CALL DUNGEON_WORP_ID, 0, 16, 1
+	;C
+	CASE 26
+		CALL DUNGEON_WORP_ID, 0, 27, 1
+	;C
+	CASE 27
+		CALL DUNGEON_WORP_ID, 0, 26, 1
+	;D
+	CASE 36
+		CALL DUNGEON_WORP_ID, 0, 37, 1
+	;D
+	CASE 37
+		CALL DUNGEON_WORP_ID, 0, 36, 1
+	;E
+	CASE 46
+		CALL DUNGEON_WORP_ID, 0, 47, 1
+	;E
+	CASE 47
+		CALL DUNGEON_WORP_ID, 0, 46, 1
+	;F
+	CASE 56
+		CALL DUNGEON_WORP_ID, 3, 57, 1
+	;F
+	CASE 57
+		CALL DUNGEON_WORP_ID, 0, 56, 1
+ENDSELECT
+;=======================================================================
+;필요레벨눈安
+;권장LV 雑물고기최저LV 雑물고기最高LV ボスLV 
+;=======================================================================
+@GET_DUNGEON_LV_4
+IF FLAG:백합의꽃ルート
+	RETURN 24, 27, 29, 35
+ELSE
+	RETURN 29, 32, 34, 45
+ENDIF
+
+;=======================================================================
+;エンカウント率
+;=======================================================================
+@ENCOUNT_RATE_4
+FLAG:エンカウント率 = FLAG:未遭遇歩数*3
+SIF FLAG:未遭遇歩数 < 6
+	FLAG:エンカウント率 = 0
+;---- EDIT 011 MOD START -------------------------
+;エンカウントを전체的に改訂
+;=======================================================================
+;エンカウント処理
+;=======================================================================
+@CHECK_ENCOUNT_4
+IF RAND:100 < FLAG:エンカウント率
+	CALL ENEMY_TABLE
+	RETURN 1
+ELSE
+	FLAG:未遭遇歩数 += 1
+	RETURN 0
+ENDIF
+;=======================================================================
+;적の종족の종류数
+;=======================================================================
+@CLASS_NUM_4
+RETURN CLASS_NUM_COMMON("上級")
+;=======================================================================
+;적の総数
+;=======================================================================
+@ENEMY_NUM_4, ARG
+RETURN ENEMY_NUM_COMMON("上級", ARG)
+;=======================================================================
+;적の종류
+;=======================================================================
+@ENEMY_4, ARG
+IF FLAG:백합의꽃ルート
+	SELECTCASE RAND:100
+		CASE IS < 20
+			RETURN [[キャラ:맨이터]], 27
+		CASE IS < 40
+			RETURN [[キャラ:밴시]], 27
+		CASE IS < 60
+			RETURN [[キャラ:고르곤]], 29
+		CASE IS < 80
+			RETURN [[キャラ:나가]], 28
+		CASE IS < 100
+			RETURN [[キャラ:피닉스]], 28
+	ENDSELECT
+ELSE
+	SELECTCASE RAND:100
+		CASE IS < 30
+			RETURN [[キャラ:엔젤]], 32
+		CASE IS < 60
+			RETURN [[キャラ:니케]], 33
+		CASE IS < 80
+			RETURN [[キャラ:아크엔젤]], 33
+		CASE IS < 100
+			RETURN [[キャラ:프린시펄리티]], 34
+	ENDSELECT
+ENDIF
+;=======================================================================
+;特殊調整
+;=======================================================================
+@SET_ENEMY_STATUS_4, ARG
+;정신세계の천사はTALKできない
+SIF !FLAG:백합의꽃ルート
+	ABL:ARG:회화타입 = 331
+;@CHECK_ENCOUNT_4
+;IF RAND:100 < FLAG:エンカウント率
+;	$LOOP_ENCOUNT
+;	SELECTCASE FLAG:現M
+;		CASEELSE
+;		;１Ｆでの遭遇
+;			LOCAL:2 = 0
+;			;---- EDIT 003 ADD START -------------------------
+;			;적配置변경　28레벨付近に
+;			;---- EDIT 004 ADD START -------------------------
+;			;直哉ルートの적配置を설정
+;			FOR LOCAL,7,17,1
+;				;１枠あたり10％の확률로出現
+;				IF RAND:100 < 10
+;					IF FLAG:백합의꽃ルート
+;						SELECTCASE RAND:100
+;							CASE IS < 20
+;								CALL SET_ENEMY,LOCAL,[[キャラ:맨이터]],27,0
+;							CASE IS < 40
+;								CALL SET_ENEMY,LOCAL,[[キャラ:밴시]],27,0
+;							CASE IS < 60
+;								CALL SET_ENEMY,LOCAL,[[キャラ:고르곤]],29,0
+;							CASE IS < 80
+;								CALL SET_ENEMY,LOCAL,[[キャラ:나가]],28,0
+;							CASE IS < 100
+;								CALL SET_ENEMY,LOCAL,[[キャラ:피닉스]],28,0
+;						ENDSELECT
+;					ELSE
+;						SELECTCASE RAND:100
+;							CASE IS < 30
+;								CALL SET_ENEMY,LOCAL,[[キャラ:엔젤]],32,0
+;							CASE IS < 60
+;								CALL SET_ENEMY,LOCAL,[[キャラ:니케]],33,0
+;							CASE IS < 80
+;								CALL SET_ENEMY,LOCAL,[[キャラ:아크엔젤]],33,0
+;							CASE IS < 100
+;								CALL SET_ENEMY,LOCAL,[[キャラ:프린시펄리티]],34,0
+;						ENDSELECT
+;						;정신세계の천사はTALKできない
+;						ABL:(CHARANUM-1):회화타입 = 331
+;					ENDIF
+;					LOCAL:2 += 1
+;				ENDIF
+;			NEXT
+;			;---- EDIT 003 ADD END ---------------------------
+;			;---- EDIT 004 ADD END ---------------------------
+;			SIF LOCAL:2 == 0
+;				GOTO LOOP_ENCOUNT
+;		
+;	ENDSELECT
+;	RETURN 1
+;ELSE
+;	FLAG:未遭遇歩数 += 1
+;	RETURN 0
+;ENDIF
+;;---- EDIT 011 MOD END   -------------------------
+;=================================
+;사고패턴
+;=================================
+;아마네クローンの사고패턴
+@SET_ACTION_3263,ARG
+;後衛に居るなら前衛に出る
+IF CPOS(ARG) > 11
+	CFLAG:ARG:입력行動 = 2301
+	CFLAG:ARG:입력行動 = CPOS(ARG)-5
+ENDIF
+
+;---- EDIT 003 ADD START -------------------------
+;イザ・ベルの작열의꽃にあわせて마카라칸をはるルーチンを추가
+;아마네の사고패턴
+@SET_ACTION_4513,ARG
+;포지션8.9.10.が死んでたら리캄
+;それ以外に死んでるキャラが居たら리캄
+IF TFLAG:435 == 1 && CFLAG:ARG:行動した횟수 == 0
+	CFLAG:ARG:입력行動 = [[스킬:마카라칸]]
+	CFLAG:ARG:ターゲット = 22
+	RETURN 1
+;---- EDIT 003 ADD END ---------------------------
+ELSEIF CFLAG:POS(8):ステート == GET_STATE_NUM("DYING")
+	CALL CHECK_ACTIONABLE,ARG,418
+	SIF RESULT == 0
+		GOTO DECIDE_ACTION
+	CFLAG:ARG:입력行動 = 418
+	CFLAG:ARG:ターゲット = POS(8)
+	RETURN 1
+ELSEIF CFLAG:POS(9):ステート == GET_STATE_NUM("DYING")
+	CALL CHECK_ACTIONABLE,ARG,418
+	SIF RESULT == 0
+		GOTO DECIDE_ACTION
+	CFLAG:ARG:입력行動 = 418
+	CFLAG:ARG:ターゲット = POS(9)
+	RETURN 1
+ELSEIF CFLAG:POS(10):ステート == GET_STATE_NUM("DYING")
+	CALL CHECK_ACTIONABLE,ARG,418
+	SIF RESULT == 0
+		GOTO DECIDE_ACTION
+	CFLAG:ARG:입력行動 = 418
+	CFLAG:ARG:ターゲット = POS(10)
+	RETURN 1
+;前衛に居るならスウェイバック
+ELSEIF CPOS(ARG) == 9
+	CFLAG:ARG:입력行動 = 2301
+	CFLAG:ARG:ターゲット = 14
+	RETURN 1
+ELSE
+	$DECIDE_ACTION
+	CALL SEARCH_ACT,ARG
+	IF RESULT == 0
+		CFLAG:ARG:입력行動 = -1
+		CFLAG:ARG:방어フラグ = 1
+		RETURN 0
+	ENDIF
+	PRINTFORML [{CFLAG:ARG:5}]の스킬数 {RESULT}
+	LOCAL = RAND:RESULT
+	;스킬번호決定
+	LOCAL:1 = S:(10+LOCAL)
+	PRINTFORML [{CFLAG:ARG:5}]の스킬 {LOCAL:1}
+	$TARGET_LOOP
+	
+	CALL RANDOM_TARGET,ARG,LOCAL:1
+	CALLFORM SKILL_TARGET_{LOCAL:1}
+	;ここで스킬번호を行動内容に代入
+	SIF CFLAG:ARG:ターゲット == -1
+		GOTO DECIDE_ACTION
+	CFLAG:ARG:입력行動 = LOCAL:1
+ENDIF
+
+;---- EDIT 003 ADD START -------------------------
+;新規作成
+;イザ・ベルの사고패턴
+@SET_ACTION_イザベル, ARG
+CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:ターゲット = -1
+;아마네との連携用
+TFLAG:435 = CFLAG:ARG:集中フラグ ? 1 # 0
+TFLAG:436 = 1
+IF CFLAG:ARG:行動した횟수 == 0
+	SIF CFLAG:ARG:集中フラグ
+		CFLAG:ARG:입력行動 = [[스킬:작열의꽃]]
+ELSEIF CFLAG:ARG:１moreフラグ == 0
+	SELECTCASE RAND:100
+		CASE IS < 20
+			CFLAG:ARG:입력行動 = [[스킬:컨센트레이트]]
+			TFLAG:435 = 1
+		CASE IS < 40
+			CFLAG:ARG:입력行動 = [[스킬:프레이라]]
+		CASE IS < 60
+			CFLAG:ARG:입력行動 = [[스킬:마하・라기온]]
+		CASE IS < 70
+			CFLAG:ARG:입력行動 = 現HP割合(ARG) < 25 ? [[스킬:만마의난무]] # [[스킬:메기도]]
+	ENDSELECT
+ENDIF
+
+IF CFLAG:ARG:입력行動 == -1
+	SELECTCASE RAND:100
+		CASE IS < 15
+			CFLAG:ARG:입력行動 = [[스킬:마카・카쟈]]
+		CASE IS < 45
+			CFLAG:ARG:입력行動 = [[스킬:방전]]
+		CASE IS < 75
+			CFLAG:ARG:입력行動 = [[스킬:마하무도온]]
+		CASEELSE
+			CFLAG:ARG:입력行動 = 0
+	ENDSELECT
+ENDIF
+;アクション実行不能
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+SIF RESULT == 0
+	CFLAG:ARG:입력行動 = 0
+;ここまでターゲットが決まってなかったら、랜덤ターゲットをよんで決定
+SIF CFLAG:ARG:ターゲット == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+RETURN 1
+;---- EDIT 003 ADD END ---------------------------
+;---- EDIT 003 ADD START -------------------------
+;新規作成　아마네とイザベルの連携用のフラグたて
+;---- EDIT 004 ADD START -------------------------
+;레미엘の링케이지用の処理を추가
+@EVENT_BATTLE_ACTEND_DUNGEON4
+IF FINDCHARA_ENEMY([[キャラ:레미엘]])
+	LOCAL = RESULT:1
+	IF CFLAG:LOCAL:입력行動 == [[스킬:아이스브레이크]]
+		LOCAL:1 = [[キャラ:하우르바타트]]
+		LOCAL:2 = [[스킬:부후다인]]
+	ELSEIF CFLAG:LOCAL:입력行動 == [[스킬:그래비티브레이크]]
+		LOCAL:1 = [[キャラ:아무르타트]]
+		LOCAL:2 = [[스킬:그라다인]]
+	ELSEIF CFLAG:LOCAL:입력行動 == [[스킬:소닉브레이크]]
+		LOCAL:1 = [[キャラ:라이라]]
+		LOCAL:2 = [[스킬:잔다인]]
+	ELSE
+		RETURN 0
+	ENDIF
+	IF TFLAG:410 >= CHARANUM
+		CFLAG:LOCAL:입력行動 = 0
+		RETURN 0
+	ENDIF
+	CALL ACTIONABLE_CHARA, TFLAG:410
+	IF RESULT == 0
+		CFLAG:LOCAL:입력行動 = 0
+		RETURN 0
+	ENDIF
+	IF NO:(TFLAG:410) != LOCAL:1
+		CFLAG:LOCAL:입력行動 = 0
+		RETURN 0
+	ENDIF
+	CALL CHECK_ACTIONABLE, TFLAG:410, LOCAL:2
+	IF RESULT == 0
+		CFLAG:LOCAL:입력行動 = 0
+		RETURN 0
+	ENDIF
+	IF TFLAG:411 >= CHARANUM
+		CFLAG:LOCAL:입력行動 = 0
+		RETURN 0
+	ENDIF
+	IF NO:(TFLAG:411) != LOCAL:1
+		CFLAG:LOCAL:입력行動 = 0
+		RETURN 0
+	ENDIF
+	CALL ACTIONABLE_CHARA, TFLAG:411
+	IF RESULT == 0
+		CFLAG:LOCAL:입력行動 = 0
+		RETURN 0
+	ENDIF
+	CALL CHECK_ACTIONABLE, TFLAG:411, LOCAL:2
+	IF RESULT == 0
+		CFLAG:LOCAL:입력行動 = 0
+		RETURN 0
+	ENDIF
+ENDIF
+SIF !TFLAG:436
+	RETURN 0
+IF FINDCHARA_ENEMY([[キャラ:이자･벨]]) && CFLAG:(RESULT:1):마법반사フラグ && CFLAG:(RESULT:1):集中フラグ
+	TFLAG:400 = 1
+	CFLAG:(RESULT:1):마법반사フラグ = 0
+ENDIF
+IF TFLAG:400 && FINDCHARA_ENEMY([[キャラ:이자･벨]]) && !CFLAG:(RESULT:1):集中フラグ
+	TFLAG:400 = 0
+	CFLAG:(RESULT:1):마법반사フラグ = 1
+ENDIF
+;---- EDIT 003 ADD END ---------------------------
+;---- EDIT 004 ADD END ---------------------------
+;---- EDIT 004 ADD START -------------------------
+;新規作成
+@RAPE, ARG
+IF 던전フラグ:(FLAG:現던전):4 == 0
+	CALL MESSAGE_WINDOW_D, "아마네", "아…/이것은…대체…/더구나 당신은?"
+	CALL MESSAGE_WINDOW_D, "이자·벨", "오래간만이네。아마네"
+	CALL MESSAGE_WINDOW_D, "아마네", "그 목소리는 이자·벨/대체 어디에서!？"
+	CALL MESSAGE_WINDOW_D, "이자·벨", "지금은 조금 여러가지 일이 있어서/네 앞에 얼굴을 내밀 수가 없어/아무튼 그 대신, 거기의 인간이 상대 해 줄테니까, 참아줬으면 해"
+	CALL MESSAGE_WINDOW_D, "아마네", "이자・벨…！"
+	CALL MESSAGE_WINDOW_D, "이자·벨", "인간、조금 전 이야기한 대로야/레미엘을 쓰러뜨리기 위해서는 아마네의 마음을 공격하지 않으면 안되니까/빠른 길은, 여기서 이 아마네를 죽이는 거야/분명히 아마네의 마음을 죽여 나가면, 레미엘을 만날 쯤에는 폐인 직전일 테니까"
+	CALL MESSAGE_WINDOW_D, "이자·벨", "부숴 버리는 것이 싫으면, 범해 주어도 괜찮아/들은 적이 있어. 네 본직은 조교사라며?/아마네가 부숴지는 것과 타락하는 것, 어느 쪽이든 즐거운 일이니까/어떻게 할지는 너에게 맡기겠어"
+	CALL INPUT_YN_D("죽인다", "범한다")
+	IF RESULT == 0
+		CALL MESSAGE_WINDOW_D, "아마네", "그만둬 주세요…/악마 따위를, 따라서는 안됩니다/아직 시간이 있습니다/함께 이자·벨을 쓰러뜨립시다"
+		CALL INCREASE_LD, -8
+		CALL INCREASE_LC, -8
+		CALL MESSAGE_WINDOW_D, "아마네", "안 돼, 그만둬…꺄아아아아"
+		CALL MESSAGE_WINDOW_D, "", "＞아마네의 그림자를 살해했다"
+		CALL INCREASE_LD, -8
+		CALL INCREASE_LC, -8
+		던전フラグ:(FLAG:現던전):ARG = 1
+	ELSE
+		CALL MESSAGE_WINDOW_D, "아마네", "시、싫어…가까이 오지 말아줘요…!"
+		;引継ぎなんかの問題が絡んでくるので마인드아마네としてキャラを作ったあとに上書きしていく
+		CALL ADD_NEW_COMPANION, [[キャラ:마인드아마네]], 100
+		LOCAL = RESULT:1
+		CFLAG:LOCAL:이벤트加入 = 1
+		NAME:LOCAL = 쿠즈류 아마네
+		CALLNAME:LOCAL = 아마네
+		TALENT:LOCAL:비관적 = 0
+		TALENT:LOCAL:무관심 = 0
+		TALENT:LOCAL:아픔에강함 = 0
+		TALENT:LOCAL:부끄럼없음 = 0
+		TALENT:LOCAL:혀놀림 = 0
+		TALENT:LOCAL:젖기쉬움 = 0
+		TALENT:LOCAL:정조관결여 = 0
+		TALENT:LOCAL:우둔 = 0
+		;EDIT 007 MOD START --------------
+		;相性と호칭の調整を추가、속성の수정
+		;종족を인간に
+		TALENT:LOCAL:서머너 = 1
+		TALENT:LOCAL:이능자 = 1
+		TALENT:LOCAL:꿋꿋함 = 1
+		TALENT:LOCAL:솔직함 = 1
+		TALENT:LOCAL:무관심 = 1
+		TALENT:LOCAL:보수적 = 1
+		TALENT:LOCAL:거유 = 1
+		TALENT:LOCAL:억압 = 1
+		TALENT:LOCAL:인기 = 1
+		ABL:LOCAL:종족 = 0
+		ABL:LOCAL:봉사정신 = 1
+		BASE:LOCAL:LV = 30
+		BASE:LOCAL:힘 = 4
+		BASE:LOCAL:지혜 = 17
+		BASE:LOCAL:마력 = 16
+		BASE:LOCAL:인내력 = 8
+		BASE:LOCAL:속도 = 8
+		BASE:LOCAL:운 = 10
+		BASE:LOCAL:ＥＸＰ = 5*(29)*(30)*(31)/3
+		BASE:LOCAL:CP = 0
+		EQUIP:LOCAL:검 = [[아이템:슬라이서]]
+		EQUIP:LOCAL:머리 = [[아이템:날개장식]]
+		EQUIP:LOCAL:몸통 = [[아이템:가라시지의법의]]
+		EQUIP:LOCAL:팔 = [[아이템:스타글러브]]
+		EQUIP:LOCAL:발 = [[아이템:세이프티부츠]]
+		FOR LOCAL:1, 1, 21
+			ABL:LOCAL:("습득스킬"+TOSTR(LOCAL:1)) = CSVABL([[キャラ:아마네]], GETNUM(ABL, ("습득스킬"+TOSTR(LOCAL:1))), 0)
+			ABL:LOCAL:("습득LV"+TOSTR(LOCAL:1)) = CSVABL([[キャラ:아마네]], GETNUM(ABL, ("습득LV"+TOSTR(LOCAL:1))), 0)
+		NEXT
+		ABL:LOCAL:스킬1 = [[스킬:잔마]]
+		ABL:LOCAL:스킬2 = [[스킬:디아라마]]
+		ABL:LOCAL:스킬3 = [[스킬:데・카쟈]]
+		ABL:LOCAL:스킬4 = [[스킬:한마]]
+		ABL:LOCAL:스킬5 = [[스킬:펨파트라]]
+		ABL:LOCAL:스킬6 = [[스킬:마하・잔마]]
+		ABL:LOCAL:스킬7 = [[스킬:리캄]]
+		ABL:LOCAL:스킬8 = [[스킬:메・디아라마]]
+		CFLAG:LOCAL:善悪치 = 128
+		CFLAG:LOCAL:秩混치 = 255
+		ABL:LOCAL:회화타입 = 0
+		CSTR:LOCAL:一人称 = 私
+		CSTR:LOCAL:二人称 = 당신
+		FOR LOCAL:1, 0, FLAG:相性数
+			BASE:LOCAL:GET_TYPE(LOCAL:1) = 100
+			MAXBASE:LOCAL:GET_TYPE(LOCAL:1) = 100
+		NEXT
+		BASE:LOCAL:파마 = 0
+		MAXBASE:LOCAL:파마 = 0
+		;EDIT 007 MOD END---------------
+		TARGET = GETCHARA([[キャラ:마인드아마네]])
+		던전フラグ:(FLAG:現던전):5 = 1
+		FLAG:던전内조교 = 1
+		던전フラグ:(FLAG:現던전):ARG = -2
+	ENDIF
+ELSE
+	IF 던전フラグ:(FLAG:現던전):5
+		CALL MESSAGE_WINDOW_D, "이자·벨", "그럼, 확실하게 귀여워해 줘/너무 심하게 하면 안돼/ 랄까나, 우후후"
+		TARGET = GETCHARA([[キャラ:마인드아마네]])
+		CFLAG:자궁내피임결계 = 1
+		던전フラグ:(FLAG:現던전):5 = 1
+		FLAG:던전内조교 = 1
+		던전フラグ:(FLAG:現던전):ARG = -2
+	ELSE
+		CALL MESSAGE_WINDOW_D, "이자·벨", "그럼、빨리 해치워/너무 애태우면 불쌍하니까 말이야, 우후후"
+		CALL MESSAGE_WINDOW_D, "아마네", "당신도 사실은 알고 있을 것입니다…/이러한 일을 해도 좋을 리가 없다/라는 것을…/꺄아아악!"
+		CALL MESSAGE_WINDOW_D, "", "＞아마네의 그림자를 살해했다"
+		CALL INCREASE_LD, -8
+		CALL INCREASE_LC, -8
+		던전フラグ:(FLAG:現던전):ARG = 1
+	ENDIF
+ENDIF
+던전フラグ:(FLAG:現던전):4 += 1
+
+@TRAIN_DUNGEON_4
+IF 던전フラグ:(FLAG:現던전):4 == 1
+	CALL MESSAGE_WINDOW_D, "이자·벨", "즐기던 건 벌써 끝이야?/일단 말해두지만 , 너무 하면 망가져버리니까 주의해줘/아무튼, 다른 마음의 그림자를 찾아보자"
+	CALL MESSAGE_WINDOW_D, "이자·벨", "나중에 한 번 돌아오는 것도 괜찮아/시간이 지나면, 이 그림자를 또 범할 수 있으니까"
+ELSEIF 던전フラグ:(FLAG:現던전):8 - AMANE_TRAINCOUNT() <= 0  
+	CALL MESSAGE_WINDOW_D, "이자·벨", "그 정도로 해두라구、조금 쉬게 해주지 않으면 망가져 버릴거야"
+ELSE
+	CALL MESSAGE_WINDOW_D, "이자·벨", "즐기던 것은 벌써 끝이야?/그러면, 계속해서 노력해줘"
+ENDIF
+PRINTL 
+CALL INCREASE_LD, -4
+CALL INCREASE_LC, -4
+BASE:체력 = MAXBASE:체력
+BASE:기력 = MAXBASE:기력
+CFLAG:스트레스치 = 0
+CFLAG:자궁내피임결계 = 0
+CFLAG:この場に居ないフラグ = 1
+CALL SHOW_FLOOR
+CALL SHOW_NOW_FORMATION_P,0,2,,2
+FLAG:コマンド표시行数 = LINECOUNT
+IF 던전フラグ:(FLAG:現던전):8 - AMANE_TRAINCOUNT() <= 0  
+	CALL MESSAGE_WINDOW_D, "", @"＞녹초가 된 아마네의 마음의 그림자를 방치하고, %조사처리(CALLNAME:MASTER,"는")% 탐색을 재개했다"
+ELSE
+	CALL MESSAGE_WINDOW_D, "", @"＞아마네의 마음의 그림자는 거칠게 숨을 몰아쉬고 있지만/＞아직은 조교를 견뎌낼 수 있을 것 같다…"
+ENDIF
+PRINTFORMW 
+TARGET = -1
+
+@増援패턴_레미엘, ARG, ARG:1, ARG:2
+IF RAND:3 == 0
+	CALL SET_ENEMY, ARG:1, [[キャラ:하우르바타트]], 던전フラグ:(FLAG:現던전):6 - 5
+ELSEIF RAND:2
+	CALL SET_ENEMY, ARG:1, [[キャラ:아무르타트]], 던전フラグ:(FLAG:現던전):6 - 5
+ELSE
+	CALL SET_ENEMY, ARG:1, [[キャラ:라이라]], 던전フラグ:(FLAG:現던전):6 - 5
+ENDIF
+CALL SET_ENEMY_D4_ST, CHARANUM - 1
+SIF ARG:2 < 2
+	RETURN 0
+RETURN 1
+@SET_ENEMY_D4_ST, ARG
+SELECTCASE NO:ARG
+	CASE [[キャラ:하우르바타트]]
+		CSTR:ARG:사고패턴 = 레미엘取り巻き
+		ABL:ARG:스킬1 = [[스킬:라쿠・카쟈]] 
+		ABL:ARG:스킬2 = [[스킬:부후다인]]
+		ABL:ARG:스킬3 = [[스킬:빛의심판]]
+		ABL:ARG:스킬4 = [[스킬:엔젤애로]]
+		CFLAG:ARG:ＨＰ보정 = 250
+		CFLAG:ARG:ＭＰ보정 = 250
+	CASE [[キャラ:아무르타트]]
+		CSTR:ARG:사고패턴 = 레미엘取り巻き
+		ABL:ARG:스킬1 = [[스킬:마카・카쟈]] 
+		ABL:ARG:스킬2 = [[스킬:그라다인]]
+		ABL:ARG:스킬3 = [[스킬:빛의심판]]
+		ABL:ARG:스킬4 = [[스킬:엔젤애로]]
+		CFLAG:ARG:ＨＰ보정 = 250
+		CFLAG:ARG:ＭＰ보정 = 250
+	CASE [[キャラ:라이라]]
+		CSTR:ARG:사고패턴 = 레미엘取り巻き
+		ABL:ARG:스킬1 = [[스킬:스쿠・카쟈]] 
+		ABL:ARG:스킬2 = [[스킬:잔다인]]
+		ABL:ARG:스킬3 = [[스킬:빛의심판]]
+		ABL:ARG:스킬4 = [[스킬:엔젤애로]]
+		CFLAG:ARG:ＨＰ보정 = 250
+		CFLAG:ARG:ＭＰ보정 = 250
+ENDSELECT
+BASE:ARG:전술 = 100
+BASE:ARG:비구 = 100
+MAXBASE:ARG:전술 = 100
+MAXBASE:ARG:비구 = 100
+CALL SYNC_STATUS, ARG
+CALL HEALTH_CHARA, ARG
+@SET_ACTION_레미엘, ARG
+CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:ターゲット = -1
+IF CFLAG:ARG:行動した횟수 == 0 && CFLAG:ARG:１moreフラグ == 0
+	FOR LOCAL:1, 7, 17
+		LOCAL = POS(LOCAL:1)
+		SIF LOCAL == -1
+			CONTINUE
+		IF NO:LOCAL == [[キャラ:하우르바타트]]
+			CALL CHECK_ACTIONABLE, LOCAL, [[스킬:부후다인]]
+			IF RESULT == 1
+				IF !TFLAG:401
+					TFLAG:401 = LOCAL
+				ELSE
+					TFLAG:402 = LOCAL
+				ENDIF
+			ENDIF
+		ENDIF
+		IF NO:LOCAL == [[キャラ:아무르타트]]
+			CALL CHECK_ACTIONABLE, LOCAL, [[스킬:그라다인]]
+			IF RESULT == 1
+				IF !TFLAG:404
+					TFLAG:404 = LOCAL
+				ELSE
+					TFLAG:405 = LOCAL
+				ENDIF
+			ENDIF
+		ENDIF
+		IF NO:LOCAL == [[キャラ:라이라]]
+			CALL CHECK_ACTIONABLE, LOCAL, [[스킬:잔다인]]
+			IF RESULT == 1
+				IF !TFLAG:407
+					TFLAG:407 = LOCAL
+				ELSE
+					TFLAG:408 = LOCAL
+				ENDIF
+			ENDIF
+		ENDIF
+	NEXT
+	LOCAL = 1
+	LOCAL:1 = 0
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	IF TFLAG:401 && TFLAG:402
+		LOCAL:LOCAL = 1
+		LOCAL++
+	ENDIF
+	IF TFLAG:404 && TFLAG:405
+		LOCAL:LOCAL = 2
+		LOCAL++
+	ENDIF
+	IF TFLAG:407 && TFLAG:408
+		LOCAL:LOCAL = 3
+	ENDIF
+	IF LOCAL:(RAND:LOCAL+1) == 1
+		CFLAG:ARG:입력行動 = [[스킬:아이스브레이크]]
+		TFLAG:410 = TFLAG:401
+		TFLAG:411 = TFLAG:402
+	ELSEIF LOCAL:(RAND:LOCAL) == 2
+		CFLAG:ARG:입력行動 = [[스킬:그래비티브레이크]]
+		TFLAG:410 = TFLAG:404
+		TFLAG:411 = TFLAG:405
+	ELSEIF LOCAL:(RAND:LOCAL) == 3
+		CFLAG:ARG:입력行動 = [[스킬:소닉브레이크]]
+		TFLAG:410 = TFLAG:407
+		TFLAG:411 = TFLAG:408
+	ELSE
+		CFLAG:ARG:입력行動 = [[스킬:소환]]
+	ENDIF
+ELSE
+	SELECTCASE RAND:100
+		CASE IS < 25
+			CFLAG:ARG:입력行動 = [[스킬:지오다인]]
+		CASE IS < 50
+			CFLAG:ARG:입력行動 = [[스킬:마하・지오다인]]
+		CASE IS < 75
+			CFLAG:ARG:입력行動 = [[스킬:마한마온]]
+		CASEELSE
+			CFLAG:ARG:입력行動 = 0
+	ENDSELECT
+ENDIF
+;アクション実行不能
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+IF RESULT == 0
+	CFLAG:ARG:입력行動 = -1
+	CFLAG:ARG:방어フラグ = 1
+	RETURN 0
+ENDIF
+;ここまでターゲットが決まってなかったら、랜덤ターゲットをよんで決定
+SIF CFLAG:ARG:ターゲット == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+RETURN 1
+@SET_ACTION_레미엘取り巻き, ARG
+CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:ターゲット = -1
+SIF TFLAG:410 == ARG || TFLAG:411 == ARG
+	RETURN 0
+SELECTCASE RAND:100
+	CASE IS < 25
+		CFLAG:ARG:입력行動 = ABL:ARG:스킬1
+	CASE IS < 50
+		CFLAG:ARG:입력行動 = ABL:ARG:스킬2
+	CASE IS < 75
+		CFLAG:ARG:입력行動 = ABL:ARG:스킬3
+	CASEELSE
+		CFLAG:ARG:입력行動 = ABL:ARG:스킬4
+ENDSELECT
+;アクション実行不能
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+IF RESULT == 0
+	CFLAG:ARG:입력行動 = -1
+	CFLAG:ARG:방어フラグ = 1
+	RETURN 0
+ENDIF
+;ここまでターゲットが決まってなかったら、랜덤ターゲットをよんで決定
+SIF CFLAG:ARG:ターゲット == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+RETURN 1
+
+@SET_ACTION_레미엘아마네, ARG
+CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:ターゲット = -1
+SELECTCASE RAND:100
+	CASE IS < 25
+		CFLAG:ARG:입력行動 = [[스킬:중력의벽]]
+	CASE IS < 50
+		CFLAG:ARG:입력行動 = [[스킬:테트라쟈]]
+	CASE IS < 75
+		CFLAG:ARG:입력行動 = [[스킬:메・디아라마]]
+	CASEELSE
+		CFLAG:ARG:입력行動 = [[스킬:메기도]]
+ENDSELECT
+;アクション実行不能
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+IF RESULT == 0
+	CFLAG:ARG:입력行動 = -1
+	CFLAG:ARG:방어フラグ = 1
+ENDIF
+;ここまでターゲットが決まってなかったら、랜덤ターゲットをよんで決定
+SIF CFLAG:ARG:ターゲット == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+RETURN 1
+;---- EDIT 004 ADD END ---------------------------
+
+;---- EDIT 012 ADD START -------------------------
+@AMANE_TRAINCOUNT
+#FUNCTION
+RETURNF GROUPMATCH(-1,던전フラグ:(FLAG:現던전):1,던전フラグ:(FLAG:現던전):2,던전フラグ:(FLAG:現던전):3)
+	
+@AMANE_TRAIN
+IF 던전フラグ:(FLAG:現던전):8 >= AMANE_TRAINCOUNT()
+	CALL MESSAGE_WINDOW_D, "", "＞아마네의 그림자가 있다…"
+	CALL MESSAGE_WINDOW_D, "이자・벨", "더 이상은 하지 않는 편이 좋아/아무튼 시간을 주고 조금 쉬게 해 주자/또 즐길 수 있을테니 일단 참아"
+ELSE
+	CALL MESSAGE_WINDOW_D, "", "＞아마네의 그림자가 있다…/＞범합니까？"
+	CALL INPUT_YN_D
+	IF RESULT == 0
+		TARGET = GETCHARA([[キャラ:마인드아마네]])
+		FLAG:던전内조교 = 1
+		던전フラグ:(FLAG:現던전):8++
+		RETURN 1
+	ENDIF
+ENDIF
+RETURN 0
+
+;---- EDIT 012 ADD END   -------------------------

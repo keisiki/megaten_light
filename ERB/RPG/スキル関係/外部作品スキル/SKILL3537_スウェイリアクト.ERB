@@ -1,0 +1,155 @@
+﻿;스킬名
+@SKILL_NAME_3537,ARG
+RESULTS = 스웨이리액트
+
+;　명중
+@SKILL_HITRATE_3537, ARG
+RETURN 500
+
+;　威힘
+@SKILL_POWER_3537, ARG
+RETURN 0
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_3537,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_3537,ARG
+RETURN 1
+
+;　ＨＰ2を支払うかＭＰ3を支払うか
+@SKILL_COSTTYPE_3537, ARG
+RETURN 3
+;소비なし＝1
+
+;　コストの量
+@SKILL_COST_3537,ARG
+RETURN 60
+
+;　相性
+@SKILL_TYPE_3537,ARG
+RETURN 17
+;만능
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_3537
+RETURN 1
+;魔法
+
+;　1物理ダメージで計算するか2魔法ダメージで計算するか
+@SKILL_DAMAGETYPE_3537
+RETURN 0
+
+
+;　대상が1적か2아군か3場전체か4特殊か
+@SKILL_TARGET_3537
+RETURN 2
+
+;　사거리
+@SKILL_RANGE_3537,ARG
+RETURN 3
+
+;　範囲　11체　21열　3전체　4　적아군전체
+@SKILL_SPHERE_3537,ARG
+RETURN 1
+
+;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+@SKILL_EFECT_3537
+RETURN 1
+
+;　 特殊処理の有無、及び処理内容
+@SKILL_SPECIALEFECT_3537,ARG
+;ARG = 1だった場合は処理の有無を返します
+SIF ARG == 1
+	RETURN 0
+;以下に特殊な処理を記述します
+
+;계승타입　주살
+@SKILL_SUCCESSION_TYPE_3537
+RETURN 14
+;不可
+
+;속도보정
+@SKILL_SPEED_3537, ARG = -1
+RETURN 0
+
+;　구상の표시とその타입
+@SKILL_MESSAGE_3537,ARG
+
+
+;전투時以外に사용できるか
+@SKILL_ACTIONABLE_FIELD_3537
+RETURN 0
+
+;스킬変化？用랭크
+@SKILL_RANK_3537
+RETURN 16
+;変化不能
+
+@継承不能_3537
+RETURN 1
+
+;テンプレート用、추가효과シリーズ
+;추가효과스테이터스
+@SKILL_ADDTIONAL_STATE_3537,ARG
+RETURN 0
+
+;추가효과상성
+@SKILL_ADDTIONAL_TYPE_3537,ARG
+RETURN 0
+
+;추가효과기본부여확률
+@SKILL_ADDTIONAL_BASE_RATE_3537,ARG
+RETURN 0
+
+;추가효과부여확률上限
+@SKILL_ADDTIONAL_MAX_RATE_3537,ARG
+RETURN 0
+;====================================================
+;스킬及び行動の実行
+;====================================================
+@ACTION_3537,ARG,ARG:1
+TFLAG:스웨이리액트 = MAX(1, TFLAG:스웨이리액트)
+PRINTFORMW %CALLNAME:ARG%は공격회피에 성공했을 때、추가행동을 하게 되었다！
+
+@SPECIAL_ACTION_3537,ARG,ARG:1
+;ARG:0 사용者
+;ARG:1 대상
+LOCAL = POS(ARG:1)
+SIF ARG == ARG:1
+	GOTO OWARI
+;CALL MESSAGE_B(1, "엑스트라데드")
+SETCOLOR 0xff0033
+PRINTFORML ┏>CHARA━━━━━━━━━━┓　┏>ACT━━━━━━━━━━━━━━━━━━┓
+PRINTFORM ┃[{ARG,2}] %CALLNAME:POS(ARG),21,LEFT%┃　┃
+PRINTFORML %"엑스트라데드",40,LEFT%┃
+PRINTFORMW ┗━━━━━━━━━━━━━┛　┗━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+
+PRINTFORM 　　TARGET:[{ARG:1,2}] %CALLNAME:LOCAL,20,LEFT%　>>>>>>　
+IF CFLAG:LOCAL:방어フラグ
+	PRINTW GUARD
+ELSE
+	PRINTFORMW DYING
+	CALL DEAD_CHARA, LOCAL
+ENDIF
+$OWARI
+
+;====================================================
+;実行内容ここまで
+;====================================================
+
+;　 説明文の표시
+@SKILL_EXPLAIN_3537
+PRINTL [특수] 공격 회피시 적을 빈사상태로 만든다.
+
+;継承に필요な部位
+@継承部位_3537,ARG
+RETURN 1
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_3537,ARG
+RETURN 1
+;とくにない
+

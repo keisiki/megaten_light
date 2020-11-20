@@ -1,0 +1,82 @@
+﻿
+;======================================================
+;장비品の데이터
+;무가의투구
+;======================================================
+
+@기본능력수정_3015,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 2
+	CASE "지혜"
+		RETURN 5
+	CASE "마력"
+		RETURN 4
+	CASE "인내력"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3015,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 50
+	CASE "회피"
+		RETURN 25
+	CASE "마법효과"
+		RETURN 30
+	CASE "명중"
+		RETURN 5
+ENDSELECT
+RETURN 0
+
+@방어상성_3015,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "정신"
+		RETURN 0
+	CASE "검격","충격","지변"
+		RETURN 50
+	CASE "파마"
+		RETURN 110
+ENDSELECT
+RETURN 100
+
+@バステ내성_3015,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "SHOCK","FREEZE","PALYZE"
+		RETURN -50
+	CASE "POISON","BIND"
+		RETURN -100
+	CASE "HAPPY","STONE"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@장비箇所_3015
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3015
+RETURN 100
+
+@장비조건_3015,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF ABL:ARG:속성LC != 2
+	RETURN 0
+SIF BASE:ARG:LV < 100
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3015
+PRINTL 장비조건：♂　＆　속성Neutral LV100～
+
+@장비해설_3015
+PRINTL 日ノ本の守護神であり祟り神でもある平将門公の투구。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3015
+RETURN 0
+
+@引継ぎ可不可_3015
+RETURN 0

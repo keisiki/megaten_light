@@ -1,0 +1,876 @@
+﻿;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_07
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 「긴급소집」이라는 제목으로 보아、제룡에 관계되는 일이라고 봐도 무방할 것이다。
+PRINTFORML 
+PRINTFORML 장비를 제대로 갖추고 나서 、수령해야할 지도 모른다……。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥48000
+;====================
+;内容
+;====================
+@REQUEST_99_07
+IF 의뢰フラグ:99:1 == 1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+ELSE
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+ENDIF
+PRINTFORMW 東京 ― 신주쿠・東京도청　７Ｆ　会議室
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW ――本日早朝。東京中を大きな震動が襲った。それと同時に一時的電波障害が発生。
+PRINTFORMW 今回の緊急招集はそれと無関係ではないだろう。
+PRINTFORML ナツメ：
+PRINTFORMW 「…全員揃ったわね。それでは、緊急会議を始めます。キリノ、状況の説明を」
+PRINTFORML キリノ：
+PRINTFORMW 「はい。まず、今朝の大きな揺れですが…かなり、危険なものです」
+PRINTFORMW 「分析では、あの揺れは強힘な電磁レーザーによる爆発である、と判明しました」
+PRINTFORMW 「威힘は、ＴＮＴ換算で８０メガトン。あの爆発で、高田馬場付近は消滅――巨大なクレーターと化しました」
+PRINTFORMW 「レーザーの発射元は、豊島区――이케부쿠로上空５００ｍ」
+PRINTFORMW アナウンサーのように告げられていく報告を前にして、会議室中がざわめき出す。
+PRINTFORMW 帝竜もとい、ドラゴンが荒唐無稽な存在だというのは嫌というほど思い知らされたが、予想の更に上を行く전개だ。
+;ここで초전하포の処理を地味に見せておく。いわゆる伏線である
+PRINTFORMW これほどの威힘ならば、例え전격속성に내성を持とうと……いや、반사・흡수すら出来るか怪しい。
+PRINTFORML リン：
+PRINTFORMW 「街１つ消滅…？　そんな、馬鹿な……」
+PRINTFORML キリノ：
+PRINTFORML 「まだ、正確なところは分かりませんが…恐らく、電磁힘を用いた帝竜の공격。
+PRINTFORMW 　공격눈標は曖昧で…至近の都市部を、랜덤に공격するものである――」
+PRINTFORMW 「…というのが、我々の推測です」
+PRINTFORMW 「近くにある街を、適当に焼き払っていく…というのが、正しい言い方かもしれません」
+PRINTFORML ナツメ：
+PRINTFORMW 「…笑えない適当さだわ」
+PRINTFORMW 「この도청が標的になるのは、明日かもしれない、来年かもしれない…という訳ね」
+PRINTFORMW 「いずれにせよ帝竜である以上、これを放置しておく訳にはいかないわ…キリノ、一刻も早く討伐作戦を」
+PRINTFORML キリノ：
+PRINTFORMW 「望遠카메라の映像によると、帝竜は都市部の線路をカゴ状に絡ませた巨大던전――その中心に、いるようです」
+PRINTFORMW 「また、その던전のあちこちに、対侵入者用と思しき砲台が多数設置されているのを確認しました」
+PRINTFORML 「更に、ヤタガラスの協힘の元、飛行可能な악마を用いて帝竜の元へと直行する試みが行われましたが…
+PRINTFORMW 　そのうち大半がドラゴンによって迎撃、残ったものも砲台によって撃ち落され全滅しました」
+PRINTFORMW 「これは、巨大な던전に対しての…極めて多面的かつ、大규모な作戦が필요です」
+PRINTFORMW 「ムラクモ전투班、及び自衛隊の連携による攻略作戦を提言します」
+PRINTFORMW ヤタガラスにも協힘を求めるほど事態はひっ迫しているのか。
+;Ｑ.なんでナナドラ의뢰中に악마が出ないのか？　Ａ.ヤタガラスとかが頑張ってます
+PRINTFORMW 本来ならば彼らもドラゴンの混乱下で出現する악마の対処にかかりっきりのはず。
+PRINTFORMW 同じ国防が任務でも安易に손を貸せない組織間の仲介――余程の苦労を強いられたに違いない。
+PRINTFORML ナツメ：
+PRINTFORMW 「――承認します。各部隊、필요な準備を整え、直ちに作戦を開始するように」
+PRINTFORMW 「１３班は、３Ｆの自衛隊駐屯区で作戦の詳細を連携してもらってちょうだい」
+PRINTFORML キリノ：
+PRINTFORMW 「それでは、各自作戦任務の準備を――解散！」
+PRINTFORMW ……大変な事態になった。これを放置しては%CALLNAME:MASTER%の拠点も無事では済まなくなるかもしれない。
+PRINTFORMW とにかく、自衛隊から話を聞きに行こう。
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠・東京도청　３Ｆ　自衛隊作戦会議室
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML リン：
+PRINTFORMW 「…来たか、１３班。先に説明しておくが、この이케부쿠로作戦は、自衛隊が主体となって作戦を전개することになった」
+PRINTFORMW 「お前たちも、我々の指揮に従ってもらうぞ。既にナツメも了承済みだ」
+PRINTFORMW この物言いには思うところがあったのか、他の自衛隊員から異論が出た。
+PRINTFORMW 一部の隊員からすれば、ムラクモは命の恩人であり、粗雑な扱いには我慢がならなかったのだろう。
+PRINTFORMW ……この雰囲気は良くない。作戦開始前に部隊内で軋轢が生まれるのは拙い。
+PRINTFORMW 助け舟を出そうとした時――警報が鳴った。
+PRINTFORML 미이나：
+PRINTFORMW 『コール、観測班から緊急連絡！』
+PRINTFORMW 『たった今、이케부쿠로上空にて巨大な電磁エネルギーの収束を確認！』
+PRINTFORMW 『各自、충격に備えてください！　도청への명중확률……３２．７％！』
+PRINTFORML リン：
+PRINTFORMW 「３２％って、おいっ…！　各員！！　耐ショック準備！！」
+PRINTFORMW とっさに伏せる、あるいは隠れる隊員たち。だが１／３を引けばどう발掻こうと欠片も残らない。
+PRINTFORMW さて、神か악마かにでも祈ろうか……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 永遠とも思える一瞬の後、地震と勘違いするほどの震動が도청を襲う。辛うじて２／３を引けたという訳か。
+PRINTFORML 미이나：
+PRINTFORMW 『…レーザー、도청を逸れました。被弾したのは、市ヶ谷周辺の模様です』
+PRINTFORMW 『司令部より伝達。ムラクモ１３班、及び自衛隊の各員、速やかな作戦開始を求む』
+PRINTFORML リン：
+PRINTFORMW 「…はいはい、分かってますよ」
+PRINTFORMW 「アタシたちは이케부쿠로に先行し、던전内で作戦を전개しておく」
+PRINTFORMW 「お前たちは３０分遅れでついてこい。던전内の砲台は、アタシたちがやる」
+PRINTFORMW 「お前たちは、ドラゴンと…帝竜を倒す。役割分担ってヤツさ」
+PRINTFORMW 「お互い、やれることをやるだけだ。…分かりやすいだろ？」
+PRINTFORMW 「よし、出動するぞ！　急げ！」
+PRINTFORMW リンの号令の元、도청内の自衛隊員が出動した。
+PRINTFORMW こちらも準備を進めてから이케부쿠로へ向かうとしよう……。
+
+CALL REQUEST_TITLE_99("2")
+
+PRINTFORMW 東京 ― 이케부쿠로・山손線天球儀　山손線이케부쿠로駅
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW １０班と共に作戦領域の이케부쿠로駅へと辿り着く。
+PRINTFORMW 本来あるべき路盤は断崖と化しており、線路だけが昔読んだ童話のように空へと向かっている。
+PRINTFORMW そしてソレは恐らく山손線中の線路をかき集めて構築された、球状の空中要塞へと繋がっている……。
+PRINTFORML ガトウ：
+PRINTFORMW 「うげっ！？　なんだよ、この巨大な毛糸玉みてーのは…」
+PRINTFORML 아오이：
+PRINTFORMW 「中心に、磁場があるみたいですね。線路がひしゃげるほど、強い磁힘を操る帝竜…」
+PRINTFORML ガトウ：
+PRINTFORMW 「用心してかからねーと俺らもああなる、って訳だ」
+PRINTFORML 미이나：
+PRINTFORMW 『――自衛隊より入電』
+PRINTFORMW 『『地上７００ｍ地点に、帝竜の姿を確認。速やかに進軍されたし』とのこと…急ぎましょう！』
+PRINTFORMW 自衛隊が先に전개し、砲台を破壊しているというが、ドラゴンの存在もあって容易に事は운ばないだろう。
+PRINTFORMW 万が一踏み外して落ちることがないように、慎重に線路の上を歩き出した……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 이케부쿠로・山손線天球儀　高度２００ｍ
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 自衛隊が既に制圧した高度１００ｍ地点を越え、次の作戦領域まで辿り着いた。
+PRINTFORMW ここに来るまでに、砲台のレーザーで焼き焦がされた死体が幾つも転がっていた。
+PRINTFORMW そのせいか、%CALLNAME:LOCAL%も아오이も顔色が悪い。調子が優れないようだ。
+PRINTFORMW 考えてみれば、今までに見た遺体は精々ドラゴンに噛みつかれて死んだもので、人の原型を保っていた。
+PRINTFORMW しかしここまで損壊したものは、普通の人生を送ってきた인간が見る機会などおおよそない……。
+PRINTFORML 
+PRINTFORML 아오이：
+PRINTFORMW 「センパイ、見てください！　アレ！」
+PRINTFORMW 아오이が指差す先には、砲台のレーザーを、盾で真正面から受け止める自衛隊員の姿がある。
+PRINTFORMW 今にも崩れ去りそうな盾を必死に構えながら、他の隊員へと砲台の공격を乞うている……。
+PRINTFORMW どうやら自衛隊の作戦とは、盾役が砲台を引きつけている間に他メンバーが破壊に向かう、というもののようだ。
+PRINTFORMW しかし周囲に「動く」隊員はいない。
+PRINTFORMW ――咄嗟に%CALLNAME:LOCAL%が動き出していた。%CALLNAME:MASTER%もそれに続く。
+PRINTFORMW 自衛隊側の損害が少なければ、その分こちらも楽になる。
+PRINTFORML 
+PRINTFORMW 電磁砲が現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	CALL SET_ENEMY,9, [[キャラ:라비]], 45, 0
+	NAME:(CHARANUM-1) = 電磁砲
+	CALLNAME:(CHARANUM-1) = 電磁砲
+	ABL:(CHARANUM-1):스킬1 = [[스킬:지오다인]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:전격가드킬]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	;本体と同じく빙결弱点にする
+	MAXBASE:(CHARANUM-1):빙결 = 150
+	BASE:(CHARANUM-1):빙결 = 150
+	;머신だからって전격をあげると회복するぞ
+	MAXBASE:(CHARANUM-1):전격 = -100
+	BASE:(CHARANUM-1):전격 = -100
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):30 = 이케부쿠로・山손線天球儀に設置された砲台。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 侵入者を迎撃するために置かれており、一定の距離まで近づいた者に
+	CSTR:(CHARANUM-1):33 = 電磁レーザーの洗礼を浴びせる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML 아오이：
+PRINTFORMW 「センパイ！　あの自衛隊員さんが…！」
+PRINTFORMW レーザーを盾で受け止めていた自衛隊員は既に事切れていた。
+PRINTFORMW 間に合わなかったか……。
+PRINTFORML ガトウ：
+PRINTFORMW 「…生身の인간と강화세라ミックの盾じゃこうなるのは当然だ」
+PRINTFORMW 「…ちっ、任務外だが、このまま放っておく訳にもいかねェ」
+PRINTFORMW 「１３班、一時的に自衛隊をバックアップ。先にこのフ로어の砲台を破壊するぞ」
+PRINTFORMW %CALLNAME:MASTER%としても異論はない。アレは上部へと繋がる唯一の道を塞ぐように設置されているのだ。
+PRINTFORMW このフ로어で稼働している砲台は残り一つ。正に今レーザーが盾を構えた自衛隊員に照射されているところだった。
+PRINTFORMW 付近にドラゴンが待機しているが――関係ない。纏めて破壊するまでだ。
+PRINTFORML 
+PRINTFORMW 電磁砲が現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	CALL SET_ENEMY,9, [[キャラ:라비]], 45, 0
+	NAME:(CHARANUM-1) = 電磁砲
+	CALLNAME:(CHARANUM-1) = 電磁砲
+	ABL:(CHARANUM-1):스킬1 = [[스킬:지오다인]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:전격가드킬]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):빙결 = 150
+	BASE:(CHARANUM-1):빙결 = 150
+	MAXBASE:(CHARANUM-1):전격 = -100
+	BASE:(CHARANUM-1):전격 = -100
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):30 = 이케부쿠로・山손線天球儀に設置された砲台。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 侵入者を迎撃するために置かれており、一定の距離まで近づいた者に
+	CSTR:(CHARANUM-1):33 = 電磁レーザーの洗礼を浴びせる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+
+	CALL SET_ENEMY,14, [[キャラ:썬더버드]], 46, 0
+	NAME:(CHARANUM-1) = ホバードラグ
+	CALLNAME:(CHARANUM-1) = ホバードラグ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:아이스브레스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:빙결가드브레이크]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:아이온의비]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):빙결 = -50
+	BASE:(CHARANUM-1):빙결 = -50
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 0
+	BASE:(CHARANUM-1):지변 = 0
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 東洋の龍のように、長い몸통と短い손발を持つ。
+	CSTR:(CHARANUM-1):33 = また、虫のような翼で飛行するため陸地の少ない山손線天球儀では
+	CSTR:(CHARANUM-1):34 = 空から侵入者へと奇襲を掛けてくる。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には山손線天球儀に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW 今回は辛うじて間に合ったようだ。これ以上の作戦続行は불가능だろうが、生きている。
+PRINTFORMW ――誰の命令でこんな危険な作戦を？
+PRINTFORMW %CALLNAME:LOCAL%は怒りを滲ませて問いかけた。
+PRINTFORMW 己のために他者の命が犠牲になっているという事実が許せないのだろう。
+PRINTFORML 自衛隊員：
+PRINTFORMW 「お前たち、ボスから聞いてないのか？　ははっ…そうか…知らないか…」
+PRINTFORML 아오이：
+PRINTFORMW 「ボスって…もしかして、ナツメさんのことですか！？」
+PRINTFORML 自衛隊員：
+PRINTFORMW 「ああ…そうだ。俺たちはあの女から直々に、栄誉ある先発隊を…의뢰されたんだ」
+PRINTFORMW 「俺たちに出来るのは…体を張ることくらいだってことさ」
+PRINTFORMW ……薄々は、そんな気がしていた。こんな特攻じみた無謀な作戦を、リン自ら考案するとは思えない。
+PRINTFORMW それに、ナツメは以前から「才能」を全ての基準に置いていると感じていた。
+PRINTFORMW %CALLNAME:LOCAL%やガトウ、아오이……Ｓ級の才能の保持者の喪失だけは絶対に避けるようにと。
+PRINTFORMW その分「それ以外」の인간は軽んじていると。
+PRINTFORMW 大を救うために小を殺すように、優先順位というものは命にも存在する。しかし――
+PRINTFORML 아오이：
+PRINTFORMW 「そんな…だから下であんなにたくさんの人が亡くなってたってこと…！？」
+PRINTFORMW 「ひどい…ひどすぎます、そんなの！」
+PRINTFORML ガトウ：
+PRINTFORMW 「…それが戦争ってヤツだ」
+PRINTFORMW 「それに付け加えるなら、アホな命令に従って死ぬのも…兵隊の仕事のうちってことだ」
+PRINTFORML 아오이：
+PRINTFORMW 「…知ってたんですか？」
+PRINTFORML ガトウ：
+PRINTFORMW 「…………納得できない気持ちが分かるぜ。だが今は、눈的の遂行だけを考えろ」
+PRINTFORMW しかし――%CALLNAME:LOCAL%は否と吼える인간だった。
+PRINTFORML ガトウ：
+PRINTFORMW 「…ま、お前らしいと言やお前らしい答えだが――ッ！？」
+PRINTFORMW 呆れ混じりに返答するガトウが、言葉に詰まった。
+PRINTFORMW 悲鳴と共に、数人の自衛隊員が上から墜ちていくのが見えたからだ。
+PRINTFORMW 自分たちの乗っているレールの、すぐ傍を。공포と絶望に歪む顔が見えた。눈が合った。
+PRINTFORML 아오이：
+PRINTFORMW 「……こんなの…おかしいよ…」
+PRINTFORMW 俯いて、ただ呟く아오이。そこにはかつてあった、쾌活な소녀の面影はない。
+PRINTFORMW ……とにかく、今は進むべきだ。既に出た犠牲を無駄にしないためにも。
+PRINTFORMW %CALLNAME:MASTER%の意見に、皆が黙って頷いた。
+PRINTFORML 
+PRINTFORMW 東京 ― 이케부쿠로・山손線天球儀　中枢ポイント
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 要塞攻略も予定の半分を消化した。
+PRINTFORMW 理論上、ここまで出た犠牲の同数がこの後も出る訳で――いや、考えるのは止そう。
+PRINTFORMW 前方の開けた場所では、リンと幾人かの部下が何やら準備を行っている。
+PRINTFORML 
+PRINTFORML リン：
+PRINTFORMW 「…来たか、１３班」
+PRINTFORMW リンの表情は、この凄惨な戦場にあって妙に穏やかだ……。
+PRINTFORML リン：
+PRINTFORMW 「…みんな、済まない。さっき話した、作戦の通りだ」
+PRINTFORMW リンの言葉に、部下の隊員たちは涙を堪えながら了解する。
+PRINTFORMW ……確認するまでもない。またナツメからの作戦を忠実に実施するつもりなのだろう。
+PRINTFORML リン：
+PRINTFORMW 「おい、１３班…あの초전하포は、一発撃つと次弾が装填されるまで１８０秒かかる」
+PRINTFORMW 「アタシたちがしくじったら…後は、任せる」
+PRINTFORMW リンが向ける視線の先には、先に破壊した砲台よりも一回り大きいサイズの砲台が設置されている……。
+PRINTFORML リン：
+PRINTFORMW 「じゃあな！」
+PRINTFORML 아오이：
+PRINTFORMW 「ダメっ…！　ダメだよそんなの…！！」
+PRINTFORMW リンと部下が走っていくのを、아오이が追いかけていく。
+PRINTFORMW しかし초전하포は既に稼働を開始した。加えてあの砲台の位置は、ここから砲台へ向かう唯一の経路を狙えるように設置されている。
+PRINTFORMW %CALLNAME:MASTER%が今から急いで向かったところで、もう発射は止められない……。
+PRINTFORMW 電磁エネルギー充填を終え、해방する세츠나――
+PRINTFORML ガトウ：
+PRINTFORMW 「うおおおォォッ！！」
+PRINTFORMW 真正面に位置するリンと아오이を押しのけて、ガトウが砲身へと躍り出て――
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 眩い閃光と충격が収まり、%CALLNAME:MASTER%の視界が捉えたのは、
+PRINTFORMW 초전하포に吹き飛ばされたガトウの姿だった。
+PRINTFORML ガトウ：
+PRINTFORMW 「１３班……！　ぼさっと、すんなッ……！」
+PRINTFORMW 次弾装填までの時間稼ぎは、本来の形ではないが遂行された。
+PRINTFORMW 立ち尽くすリンら自衛隊を通り過ぎて、%CALLNAME:MASTER%は초전하포へと切り込む――！
+PRINTFORML 
+PRINTFORMW 초전하포が現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	;原作じゃほぼ이벤트戦だったけどね
+	CALL SET_ENEMY,9, [[キャラ:라비]], 48, 0
+	NAME:(CHARANUM-1) = 초전하포
+	CALLNAME:(CHARANUM-1) = 초전하포
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:지오다인]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:전격가드브레이크]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:마하・지오다인]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:산탄사격]]
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):빙결 = 150
+	BASE:(CHARANUM-1):빙결 = 150
+	MAXBASE:(CHARANUM-1):전격 = -100
+	BASE:(CHARANUM-1):전격 = -100
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):30 = 이케부쿠로・山손線天球儀の中枢ポイントに設置された巨大砲台。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 電磁砲と比べて一回り大きく、放たれるエネルギーもその分強大。
+	CSTR:(CHARANUM-1):33 = ガトウの特攻によって破損した後、１３班によって破壊された。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML ガトウ：
+PRINTFORMW 「…やった、か……」
+PRINTFORMW ガトウは全身が焼け爛れ、最早即死していないことが奇跡のような상태だ。
+PRINTFORMW 失われていく精気。こうなってしまっては、반혼향さえ……。
+PRINTFORML リン：
+PRINTFORMW 「おい、しっかりしろ！」
+PRINTFORML 아오이：
+PRINTFORMW 「や…やだ…起きてくださいよ！　私のこと、叱ってくださいよ！！」
+PRINTFORML ガトウ：
+PRINTFORMW 「へ…へへ…この胃袋娘が！　なんつって…ザマぁねえな…」
+PRINTFORMW 「さんざ戦争だなんだ…カッコつけといて…一時の感情に流されて死ぬなんてよ……」
+PRINTFORMW 「…だけどな、１３班……俺は後悔してねぇ…俺の意思で戦って、死ぬんだ…」
+PRINTFORMW 「お前たちも…後悔のねェ生き方を…しろよな……」
+PRINTFORMW 「もうちょい…손伝って…たかったが……悪いな、先に――」
+PRINTFORMW ――奇跡は終わった。老いた전사に最後まで話すことを許さなかった。
+PRINTFORMW ムラクモとして、数十年に渡り影から人世を守り続けた男は旅立った。
+PRINTFORML 미이나：
+PRINTFORMW 『ガ、ガトウ……？』
+PRINTFORML ナツメ：
+PRINTFORMW 『…な、なんてこと……！』
+PRINTFORMW 『一度体制を立て直します……！　すぐに戻りなさい！』
+PRINTFORMW 事前に立てた作戦の流れなど、始まりから既に일탈していた。
+PRINTFORMW しかしガトウという戦힘の喪失は決定的なほつれである。
+PRINTFORMW これ以上の作戦遂行は困難――ナツメの判断は間違っていない。
+PRINTFORML 
+PRINTFORMW ふと気づくと、%CALLNAME:LOCAL%が少し外れた場所で何かを探している。
+PRINTFORMW 撤退命令が聞こえなかったのか、と近寄ると、彼女は線路に引っかかった紫苑の반다나を拾っていたようだった。
+PRINTFORMW これは……間違いない。ガトウが身に着けていたものの、切れ端だろう……。
+PRINTFORMW %CALLNAME:LOCAL%の回収を待ってから、撤退した……。
+PRINTFORML 
+PRINTFORMW 입座に報酬￥48000が支払われ、名声30を得た。
+MONEY += 48000
+FLAG:名声 += 30
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 7
+RESULTS = 의뢰【(세븐스 드래곤 MOD)하늘의 초전하포 -The Jigowatt-(2)】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_08
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 제 1차 공략작전 실패에 따른 작전회의다。
+PRINTFORML 
+PRINTFORML 우선 회의실로 향하자。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥50000
+PRINTFORML （ 주의：이 의뢰를 받으면、하루가 종료됩니다 ）
+;====================
+;内容
+;====================
+@REQUEST_99_08
+IF 의뢰フラグ:99:1 == 1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+ELSE
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+ENDIF
+PRINTFORMW 東京 ― 신주쿠・東京도청　７Ｆ　会議室
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML ナツメ：
+PRINTFORMW 「失態だわ、私の作戦ミスね」
+PRINTFORMW ……会議が始まるなり、ナツメは切り出した。
+PRINTFORML 아오이：
+PRINTFORMW 「…あんなの…作戦じゃない……！」
+PRINTFORML リン：
+PRINTFORMW 「ガトウは…アタシたちの代わりに…本当に済まない……」
+PRINTFORML ナツメ：
+PRINTFORMW 「アナタたちのせいじゃないわ…もっと、徹底すべきだった」
+PRINTFORMW 「伝えるべきだった、犠牲を伴う作戦だと。自衛隊は、捨て駒だと……！」
+PRINTFORMW 「ドラゴンに立ち向かうには才能が필요なのよ…Ｓ級の非凡さがね」
+PRINTFORMW 「彼らには…힘ある者には…凡人百人以上の価値がある」
+PRINTFORML リン：
+PRINTFORMW 「価値がなくて、悪かったな！！」
+PRINTFORMW 「でも…アイツらだって…死んでいった、アイツらだって……！！」
+PRINTFORMW 「みんな家族のために、人類のために命を張ってたんだ！　無価値なんかじゃない！！」
+PRINTFORMW 部下が静止に入るが、止まらない。
+PRINTFORMW 一度封をした感情を解き放ってしまえば、後は出し切るしかない。
+PRINTFORML リン：
+PRINTFORMW 「인간の価値は…힘だけなのかよっ！」
+PRINTFORMW ……だがこれは非常に拙い雰囲気だ。
+PRINTFORMW ナツメはＳ級以外を切り捨てることに一切の躊躇いがなく。
+PRINTFORMW %CALLNAME:LOCAL%も아오이もその考えに반감を抱いている。
+PRINTFORMW 地雷原で踊っているようなものだというのに、ナツメは悪気もないから抑えない。
+PRINTFORMW ふと、隣に立つ아오이を見ると、もう我慢の限界に到達しつつあるようだ。
+PRINTFORMW これを放置しては、彼女たちの間に회복不能な軋轢を生むという確信を%CALLNAME:MASTER%は깨달음えた。
+PRINTFORMW %CALLNAME:MASTER%は――
+PRINTFORML 
+PRINTFORML [0] 『彼女たちがどうなろうと自分には関係ない。気の済むまでやればいい』と思った
+PRINTFORML [1] 『悪化する인간関係に付き合わされるなんて冗談じゃない。止めるべきだ』と思った
+PRINTFORML 
+$AOICHAN_LOOP
+INPUT
+IF RESULT == 0
+	PRINTFORMW ――そうだ。彼女たちの仲がどこまでこじれようと、自分には関係ない。
+	PRINTFORMW 아오이を視界から外し、再びリンとナツメの입論を見守ることにした。
+	PRINTFORML ナツメ：
+	PRINTFORMW 「…アナタ、参謀候補って聞いてたけど、そんな가운純計算もできな――」
+	PRINTFORMW その言葉は遮られた。
+	PRINTFORMW 아오이が、ナツメを平손打ちしたのだ。
+	PRINTFORML ナツメ：
+	PRINTFORMW 「痛ッ…！！」
+	PRINTFORML キリノ：
+	PRINTFORMW 「ア、아오이君…！？」
+	PRINTFORML 아오이：
+	PRINTFORMW 「…恥ずかしい女」
+	PRINTFORMW ナツメ自身が価値を認めるＳ級の才能保持者に、軽蔑の視線と共に侮辱される――
+	PRINTFORMW これ程ナツメにとって屈辱感を煽る行為が、果たしてあるだろうか？
+	PRINTFORML ナツメ：
+	PRINTFORMW 「くっ……！」
+	;恥ずかしい女フラグON
+	의뢰フラグ:99:0 = 1
+ELSEIF RESULT == 1
+	PRINTFORMW ――そうだ。彼女たちとは、帝竜を討伐し終えるまで続く付き合いなのだ。
+	PRINTFORMW こんな所で余計なトラブルを抱えては将来的に自分さえ厄介事に巻き込まれかねない。
+	PRINTFORMW 아오이が何をしても反応できるように、視界の端に捉え続けることにした。
+	PRINTFORML ナツメ：
+	PRINTFORMW 「…アナタ、参謀候補って聞いてたけど、そんな가운純計算もできな――」
+	PRINTFORMW その言葉は遮られた。
+	PRINTFORMW %CALLNAME:MASTER%が、아오이の팔を掴んだのだ。
+	PRINTFORML 아오이：
+	PRINTFORMW 「痛ッ…！！」
+	PRINTFORMW 「センパイ……離してください」
+	PRINTFORMW 離せば、お前は何をするつもりだ？　その손で、何をするつもりだった？
+	PRINTFORMW 感情は込めず、눈を見つめて言い放つ。
+	PRINTFORMW 아오이は何も言い返さない。言い返せない。どうせ、積もりに積もった鬱憤があの一瞬で爆発したのだろう。
+	PRINTFORMW ――人の価値はが힘だけなら…ガトウさんの意思も、無駄なんですか？
+	PRINTFORMW 아오이が입をつぐんで静寂に包まれた会議室に、%CALLNAME:LOCAL%の呟きが響く。
+	;恥ずかしい女フラグOFF やったね！아오이ちゃん
+	의뢰フラグ:99:0 = 0
+ELSE
+	GOTO AOICHAN_LOOP
+ENDIF
+PRINTFORML キリノ：
+PRINTFORMW 「……総長。作戦を、提案します」
+PRINTFORMW 「帝竜워크라이の生体샘플を使わせてください」
+PRINTFORMW 「帝竜から得た素材を加工し、自衛隊の兵装を강화しましょう」
+PRINTFORMW 「それであのレーザーにも多少は、耐えられるはずです」
+PRINTFORML ナツメ：
+PRINTFORMW 「――却下します」
+PRINTFORMW 「あれは、ムラクモの切り札よ。…ガトウに…与えるはずだった」
+PRINTFORMW だが当のガトウはもういない。
+PRINTFORMW それに、さっき作戦を伝えるべきだったと言っていたが……それでもガトウは動いたのではないか？
+PRINTFORMW 問いかけにナツメは何も答えない。
+PRINTFORML キリノ：
+PRINTFORMW 「ナツメさん…住んでくれる人がいないんじゃ、東京を取り戻したって、悲しいですよ…」
+PRINTFORMW 「死ぬために戦ってるんじゃあない。눈の前の犠牲に눈をつぶって…我々は、何のために戦っているんですか」
+PRINTFORMW 「キミたちはどうです、１３班？」
+PRINTFORMW ――当然、悲しい。
+PRINTFORMW まあ、%CALLNAME:LOCAL%ならそう答えるだろうと思った。
+PRINTFORMW %CALLNAME:MASTER%としても、ドラゴンを討伐し終えて残るのが無人の街では意味がないとは思う。
+PRINTFORML キリノ：
+PRINTFORMW 「そうでしょう？　僕たちは…皆で生き残るために戦っているんだ」
+PRINTFORMW 「ガトウさんは言った。『後悔のないように生きろ』と……」
+PRINTFORMW 「だから僕は、僕のやれることをやりたい。僕の科学者としての才能をより多くの命を生かすために使いたい！」
+PRINTFORMW 「受け入れてもらえないかもしれない。でも、それが僕の意思です」
+PRINTFORML ナツメ：
+PRINTFORMW 「分かりました――承認します」
+PRINTFORMW 「…私が、間違っていたのかもしれません。今回の作戦、私は外れます」
+PRINTFORMW 「キリノ…あとはお願い」
+PRINTFORMW そう言い残して、会議室から出ていった。
+PRINTFORMW ナツメはこの時、初めて己の立ち位置を思い知ったのだろう。
+PRINTFORMW ただ失策をしでかしただけでなく、多くの部下と距離が生まれつつあることを。
+PRINTFORML キリノ：
+PRINTFORMW 「と、ともかく…作戦は承認されました。自衛隊兵装の강화開発も含め、半日で結果を出します」
+PRINTFORMW 「…みなさん、どうかお待ちください！」
+PRINTFORMW 随分と強気で言い切った。せめて一日ぐらい時間を取ればいいものを。
+PRINTFORMW だがこれこそ科学者としてのプライドというならば、自分から言うことは何もない。
+PRINTFORMW 時間まで도청で時間を潰していよう……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW することがないため、エントランスで時間を潰す。
+PRINTFORMW 도청を帝竜から奪い返したばかりの時と比べて、行き交う人の数は増えていた。
+PRINTFORMW 도청に住まう人々を眺めていると、横から声がかかった。
+;なんか職務質問っぽいなこれ
+PRINTFORML 아오이：
+PRINTFORMW 「……ちょっとだけ、お時間よろしいですか？」
+PRINTFORML 
+IF 의뢰フラグ:99:0 == 0;恥ず女キャンセル
+	PRINTFORML 아오이：
+	PRINTFORMW 「あの、さっきはすみませんでした。熱くなりすぎて、ついカッとなって……」
+	PRINTFORMW さっきの会議のことか。別に気にしていない。
+	PRINTFORMW 結局は何も起きていないのだから。
+	PRINTFORMW ナツメだって、ガトウを失って余裕が無くなっていたのだろう。
+	PRINTFORML 아오이：
+	PRINTFORMW 「…私は…作戦という一言で、散る命を見過ごせるほど、兵士にはなれません…」
+	PRINTFORMW 「でも…私の甘さが、ガトウさんを殺したんです…それも、分かってるから…」
+	PRINTFORMW なら、誰も殺させないで済むほどに強くなればいい。
+	PRINTFORMW 아오이にはそのための힘が――才能がある。%CALLNAME:LOCAL%と同じ、Ｓ級の才能が。
+	PRINTFORML 아오이：
+	PRINTFORMW 「それは……そうですね、確かに」
+	PRINTFORMW 「私、もっと頑張ります。눈の前で、誰も死なせないように――見ててくださいね、センパイ！」
+	PRINTFORMW ……ずっと言おうと思っていたのだが、自分はムラクモの所属ではない。
+	PRINTFORMW %CALLNAME:LOCAL%ならそれでいいだろうが、自分に『センパイ』という呼称は正しくない。
+	PRINTFORML 아오이：
+	PRINTFORMW 「えっ、そうだったんですか！？　う〜ん、じゃあ……%CALLNAME:MASTER%、さん？」
+	PRINTFORMW まあ、それが無難なところだろう。
+	PRINTFORML 아오이：
+	PRINTFORMW 「それでは%CALLNAME:MASTER%さん、お近づきの印に、これをどうぞ！」
+	PRINTFORMW 「本当はもっと早くに渡そうと思ったんですが、なかなかタイミングがなくって…」
+	PRINTFORMW これは…チョコバーか。そういえば最近%CALLNAME:LOCAL%もよく食べているが、아오이から貰っていたのか。
+	PRINTFORMW 二人でチョコバーを食べながら談笑し、時間を潰した……。
+ELSE
+	PRINTFORML 아오이：
+	PRINTFORMW 「…私は…作戦という一言で、散る命を見過ごせるほど、兵士にはなれません…」
+	PRINTFORMW 「ナツメさんを叩いたことも、間違ってないと思ってます」
+	PRINTFORMW 「でも…私の甘さが、ガトウさんを殺したんです…それも、分かってるから…」
+	PRINTFORMW なら、すぐ傍の誰かを守れるくらいに強くなればいい。
+	PRINTFORMW 아오이にはそのための힘が――才能がある。%CALLNAME:LOCAL%と同じ、Ｓ級の才能が。
+	PRINTFORML 아오이：
+	PRINTFORMW 「それは……そうですね、確かに」
+	PRINTFORMW 「私、もっと頑張ります。눈の前で、もう誰も死なせないように」
+	PRINTFORMW 笑みを浮かべる아오이。どうやら多少は元気が出たようだった。
+	PRINTFORMW 自室へと戻る아오이を見送り、再びエントランスで時間を潰した……。
+ENDIF
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 「お待たせしました、みなさん！」
+PRINTFORMW 「あれから、開発班の皆さんに協힘してもらい、自衛隊の兵装を강화することに성공しました」
+PRINTFORMW 「워크라이の外翼部を削りだし、耐レーザー用の皮膜を形成しています」
+PRINTFORMW 「非常に薄く軽い코트ですが、レーザーに対しては、飛躍的に방어性能が向上しています」
+PRINTFORML リン：
+PRINTFORMW 「…それで、アタシたちはまたオトリをやればいいんだろ」
+PRINTFORML 「いや、いいんだ。お前の言った言葉、嬉しかった」
+PRINTFORMW 「アタシたちには、特別な才能はない。だから、ドラゴンを倒す刃になるのは無理だ。それは１３班に任せるよ」
+PRINTFORMW 「…でも、盾にはなれる。人を一人でも多く守るための盾だ」
+PRINTFORMW 「死ぬためにやるなんて、馬鹿げてた…お前のこの武装、신뢰していいんだろ？」
+PRINTFORMW 自衛隊員らの顔に悲壮感はない。
+PRINTFORMW 戦場に向かうのであって、死にに行くのではないからだ。
+PRINTFORMW リンの顔に焦りはない。
+PRINTFORMW ムラクモも自衛隊も、求めるものは同じと分かったからだ。
+PRINTFORMW 事ここに至って初めて、両者は歩み寄ることができた。
+PRINTFORML キリノ：
+PRINTFORMW 「ええ、もちろん！」
+PRINTFORML リン：
+PRINTFORMW 「やろう、一人でも多く生き残るために！　これはアタシたちの意思だ！」
+PRINTFORML キリノ：
+PRINTFORMW 「それでは、出撃開始！　総員、이케부쿠로に向かってください！」
+PRINTFORMW キリノの号令の下、第二次攻略作戦が始まった。
+PRINTFORMW 帝竜からの次の공격まで、どれだけ時間の猶予があるかも分からない。急がなければ……。
+PRINTFORML 
+PRINTFORMW 東京 ― 이케부쿠로・山손線天球儀　高度４００ｍ
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。任務を再確認します』
+PRINTFORMW 『눈的地は要塞頂上部。自衛隊と協힘し、進軍』
+PRINTFORMW 『そして、最終눈標である帝竜を討伐する…いいですね？』
+PRINTFORMW 『…みんなで、生き残りましょう！オーヴァ！』
+PRINTFORML 아오이：
+PRINTFORMW 『今回、私は待機処分になりました。だから応援しかできません――頑張ってください！』
+PRINTFORML 
+PRINTFORMW 耳をすませば、周囲から砲台が破壊される音が聞こえてくる。
+PRINTFORMW 던전内の砲台は自衛隊が破壊する――当初の計画は、現実のものになっていた。
+PRINTFORMW 自衛隊は砲台からの공격を受けているが、何事もなく耐えきれている。
+PRINTFORMW キリノの開発した코트は期待通りの成果を残しているようだ。
+PRINTFORMW ならば、次は%CALLNAME:MASTER%が役割を果たす番だ。
+PRINTFORML 
+PRINTFORMW ドラゴンの群れが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	CALL SET_ENEMY,7, [[キャラ:카토블레파스]], 48, 0
+	NAME:(CHARANUM-1) = タワードラグ
+	CALLNAME:(CHARANUM-1) = タワードラグ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:독가스브레스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:혼탁의장기]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:포이즈다인]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 極端に細長い손발を持つドラゴン。
+	CSTR:(CHARANUM-1):33 = 翼を持たないが、高い跳躍힘によって적の공격圏外から毒を吐きかける。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 第一次東京侵蝕時には山손線天球儀に出現が確認されている。
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+
+	CALL SET_ENEMY,9, [[キャラ:타라스크]], 49, 0
+	NAME:(CHARANUM-1) = サンダードラゴン
+	CALLNAME:(CHARANUM-1) = サンダードラゴン
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:지오다인]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:전격가드브레이크]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:우뢰의세례]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:동충파]]
+	ABL:(CHARANUM-1):스킬5 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬6 = 0
+	ABL:(CHARANUM-1):스킬7 = 0
+	MAXBASE:(CHARANUM-1):화염 = 100
+	BASE:(CHARANUM-1):화염 = 100
+	MAXBASE:(CHARANUM-1):빙결 = 150
+	BASE:(CHARANUM-1):빙결 = 150
+	MAXBASE:(CHARANUM-1):전격 = -150
+	BASE:(CHARANUM-1):전격 = -150
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = フロワロによる壁を形成し、進行ルートを制限する門番役。
+	CSTR:(CHARANUM-1):33 = この場合、他に道はないため討伐を余儀なくされる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 名前の通り전격を공격に사용するが、それ以外に翼をはためかせ
+	CSTR:(CHARANUM-1):36 = 충격波をぶつけるなど意外と기교派である。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 第一次東京侵蝕時には山손線天球儀に出現が確認されている。
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+
+	CALL SET_ENEMY,11, [[キャラ:카토블레파스]], 48, 0
+	NAME:(CHARANUM-1) = タワードラグ
+	CALLNAME:(CHARANUM-1) = タワードラグ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:독가스브레스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:혼탁의장기]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:포이즈다인]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 極端に細長い손발を持つドラゴン。
+	CSTR:(CHARANUM-1):33 = 翼を持たないが、高い跳躍힘によって적の공격圏外から毒を吐きかける。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 第一次東京侵蝕時には山손線天球儀に出現が確認されている。
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW 付近のドラゴンはこれで全部のようだ。
+PRINTFORMW 侵入者がここまで来ていることは、帝竜も察知しているだろう。
+PRINTFORMW 砲台の破壊とエリアの制圧は自衛隊に任せ、%CALLNAME:MASTER%は頂上部へと向かう。
+PRINTFORML 
+PRINTFORMW 東京 ― 이케부쿠로・山손線天球儀　頂上部
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML リン：
+PRINTFORMW 「この先が、帝竜のいるフ로어だ」
+PRINTFORMW 「１３班に――敬礼ッ！」
+PRINTFORMW この場に立つ自衛隊員は数えるほどしかいない。
+PRINTFORMW 作戦に참가した전체の、何分の一になるのだろうか。
+PRINTFORMW どれだけの隊員が、この場に立ちたかったのだろうか。
+PRINTFORMW 彼らの期待を背負って、螺旋状に捻じれる線路を駆け抜けた――！
+PRINTFORML 
+PRINTFORMW 東京 ― 이케부쿠로・山손線天球儀　帝竜決戦地点
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 東京上空、７００ｍ地点。
+PRINTFORMW フロワロによって赤く染まった東京を俯瞰するように、ソレはいた。
+PRINTFORMW 全身に重火器を備え、背中に一層長大な砲台を背負う、워크라이と同程度のサイズのドラゴン。
+PRINTFORMW 間違いない、アイツこそが이케부쿠로の帝竜だ。
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班』
+PRINTFORMW 『『ボサっとすンじゃねえッ…！　しくじったら、承知しねえぞ！』…えへへ』
+PRINTFORMW 『きっと見てますよ…１３班のこと！』
+PRINTFORMW 正直、あまり似ていないが……悪くない。
+PRINTFORMW この勝利をガトウと散っていった隊員たちに捧げる――というのも、たまにはいいだろう。
+PRINTFORMW %CALLNAME:MASTER%は、帝竜との전투を開始した。
+PRINTFORML 
+PRINTFORMW 지고와트が現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	;- 악마解析度増加処理(1000でMAX)
+	CALL INCREASE_ANALYZE([[キャラ:지고와트]],1000)
+	
+	CALL SET_ENEMY,9, [[キャラ:지고와트]], 50, 0,1
+	MAXBASE:(CHARANUM-1):ＭＰ = 99999
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	CSTR:(CHARANUM-1):사고패턴 = 5425
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW 帝竜지고와트を討伐した！
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。帝竜の活動停止を確認しました』
+PRINTFORMW 『では、샘플を採取したら도청に帰還しましょう。…みんな、生きてますよ』
+PRINTFORMW %CALLNAME:LOCAL%は率先して지고와트に近付き、샘플を採取していく。
+PRINTFORMW …そして、戻ってくるところで지고와트の体内から異音が発せられた。
+PRINTFORML 미이나：
+PRINTFORMW 『電磁波……！？　危ない、爆発します！！』
+PRINTFORMW 街一つを消滅させるエネルギー量を、たった一度の전투で소비し切れる訳がない。
+PRINTFORMW であれば、行き場の失ったエネルギーは外界への해방を求めるはずであり――
+PRINTFORMW かつて下界を焼き払った힘によって、지고와트は完全に消滅したのだった。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 帝竜の撃破には성공したが、あの後も山손線は元の姿へ戻ることはなかった。
+PRINTFORMW 던전の규모、あるいは던전化してからの時期、도청の場合との様々な差異は見つかるものの、
+PRINTFORMW 結局のところ推論の域を出ない。
+PRINTFORMW もっとも、考える仕事はキリノらの領分である。%CALLNAME:MASTER%はその結果を受け取り、場合によってはファントムに回すだけだ。
+PRINTFORMW 事後処理については%CALLNAME:LOCAL%に任せ、%CALLNAME:MASTER%は拠点へ帰還した……。
+PRINTFORML 
+PRINTFORMW 입座に報酬￥50000が支払われ、名声60を得た。
+MONEY += 50000
+FLAG:名声 += 60
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 8
+RESULTS = 의뢰【(세븐스 드래곤 MOD)끝나지 않는 월야 -The Lore-A-Lua-】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+CALL REQUEST_99_DAY_END
+

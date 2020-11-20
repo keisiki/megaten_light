@@ -1,0 +1,53 @@
+﻿
+;======================================================
+;장비品の데이터
+;백칠겁팔식철귀
+;======================================================
+
+@기본능력수정_3059,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "운"
+		RETURN 4
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3059,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 28
+	CASE "회피"
+		RETURN 28
+	CASE "마법효과"
+		RETURN 28
+ENDSELECT
+RETURN 0
+
+@방어상성_3059,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_3059
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3059
+RETURN 78
+
+@장비조건_3059,ARG
+SIF BASE:ARG:LV < 78
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3059
+PRINTL 장비조건：LV78～
+
+@장비해설_3059
+PRINTL 겉은 토끼 귀와 꼬리가 달린 금속 투구。
+PRINTL 　　　　　　　　행복과 운을 가져오는 진수 이나바 흰토끼의 마정품。
+
+
+@구입조건_3059
+RETURN 0
+
+@引継ぎ可不可_3059
+RETURN 1

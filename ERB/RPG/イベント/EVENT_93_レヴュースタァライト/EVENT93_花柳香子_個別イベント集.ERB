@@ -1,0 +1,2434 @@
+﻿;이벤트フラグ:93:6（BIT制御）
+;　2　3　이벤트通過済みか否か
+;　20　　やけくそになった
+;　21　　こころが折れた
+;　22　　香子怒りの独白
+
+;　23　　ぶぶ漬けセルフスタァライト済み
+;　24　　ぶぶ漬け奴隷전사行き
+;　25　　香子を寝取った
+;　26　　ぶぶ漬け、アマノウズメに塩対応される
+
+;============================
+;双葉はんのほうのフラグ
+;이벤트フラグ:93:5（BIT制御）
+;　2　3　이벤트通過済みか否か
+;　20　やばいもん見ちゃった双葉はん
+;　21　軽い性体験コース
+;　22　アブノーマル조교コース（未사용）
+
+;　23　ぶぶ漬けと先に話したルート
+
+;　24　당신も舞台に立ちたい？
+;　25　双葉を寝取った
+
+;　26　双葉はんセルフスタァライト済み
+
+;============================
+
+;　舞台소녀共通：なにかフラグが立つ選択肢は色付け
+
+;00や01が無いのは仕様です
+@EVENT_93_花柳香子_02
+
+CUSTOMDRAWLINE =
+
+;双葉はんと先に話をした
+IF GETBIT(이벤트フラグ:93:5,2)
+	PRINTL
+	PRINTW 당신は彼女らを連れ帰ったあとのこと、
+	PRINTW つまり、石動双葉と話したしばらく後のことを思い出した……
+	PRINTL
+	
+	LOCAL:0 = GETCHARA([[キャラ:후타바（무대소녀）]])
+	;軽い性体験コース、または既に双葉はん함락済み
+	IF GETBIT(이벤트フラグ:93:5,21) || (LOCAL:0 > 0 && (TALENT:(LOCAL:0):연모 || TALENT:(LOCAL:0):친애 || TALENT:(LOCAL:0):음란 || TALENT:(LOCAL:0):창부 || TALENT:(LOCAL:0):복종 || TALENT:(LOCAL:0):예속))
+		PRINTL
+		PRINTW 「あんさん、双葉はんと仲ええんやねぇ。
+		PRINTW 　イヤやわぁ、焼けてしまいそうどす……直視でけへんくらいに」
+		PRINTL
+		PRINTW 不意に香子に声を掛けられた。
+		PRINTW 彼女は扇子で입元を隠し、壁に背を預けて、立っていた。
+		PRINTL
+		PRINTW はて、何のことか。
+		PRINTW 당신がとぼけると、香子はパチンと扇を閉じた。
+		PRINTL
+		PRINTW 「손ェ出したやろ、うちの双葉に。
+		PRINTW 　あの子からあんたの臭いがした、あんたからあの子の匂いがした。あの日から部屋に籠もりっきりどす。
+		PRINTW 　……部屋で何をしておるかは知らんけど、
+		PRINTW 　あんたが、なんか、変なことしたに決まってます」
+		PRINTL
+		PRINTW 香子の입元はへの字に曲がっていた。
+		PRINTW 眉間にしわを寄せ、細めた視線で、당신の顔を睨み付けた。
+		PRINTL
+		PRINTW 「불결どす、あんたも、双葉はんも」
+		PRINTL
+		PRINTW その声には嫌悪と憎しみと、
+		PRINTW 隠しきれない寂しさが、滲んでいた。
+		PRINTL
+		PRINTW 「불결どす！」
+		PRINTL
+		PRINTW 香子はもう一度叫ぶと、逃げるようにその場から走り去っていった……。
+		PRINTL
+		
+		LOCAL = GETCHARA([[キャラ:카오루코]])
+		;すでに함락してる場合、変化なし
+		IF (TALENT:(LOCAL:0):연모 || TALENT:(LOCAL:0):친애 || TALENT:(LOCAL:0):음란 || TALENT:(LOCAL:0):창부)
+			PRINTL
+			PRINTW まあ、その数日後、
+			SIF TALENT:(LOCAL:0):연모 || TALENT:(LOCAL:0):친애
+				PRINTW 彼女は당신に心を奪われてしまうのだが、この時点ではあずかり知らぬことであった……。
+			SIF TALENT:(LOCAL:0):음란 || TALENT:(LOCAL:0):창부
+				PRINTW 彼女は불결どころではない음란雌豚と化すのだが、この時点では誰も知らないことである……。
+			PRINTL
+		;それ以外
+		;마이ナス素質祭り、難度は上がるが매각益も上がるゾ
+		ELSE
+			TALENT:LOCAL:억압 = 1
+			TALENT:LOCAL:저항 = 1
+			TALENT:LOCAL:자제심 = 1
+			
+			PRINTL ＞香子は억압を得た
+			PRINTL ＞香子は저항を得た
+			PRINTL ＞香子は자제심を得た
+			PRINTL
+			WAIT
+		ENDIF
+		
+		;軽い性体験コース通過とみなす
+		SETBIT 이벤트フラグ:93:5,21
+	
+	;それ以外
+	ELSE
+		PRINTL
+		PRINTW 「か、匿っておくれやす！」
+		PRINTL
+		PRINTW 倉庫の整理をしていると、前触れもなく香子が飛び込んできた。
+		PRINTL
+		PRINTW 「はあ、はあ、ここまでくれば安心やろ。
+		PRINTW 　あ、うちにはお構いなく〜♪
+		PRINTW 　ちょーっと隅っこの方に置いとっておくれやすぅ」
+		PRINTL
+		PRINTW いやいや、おくれやすゥじゃないよ、一体何を怒らせたの。당신は挙動不審な京都人に詰め寄る。
+		PRINTL
+		PRINTW 「は？　た、大したことやおまへん！
+		PRINTW 　ちゅうか、そんな大きな声出さんといてもらえます！？　もしも見つかってしもたら……」
+		PRINTW 「見つかったらどうなるんだ、香子ォ？」
+		PRINTL
+		PRINTW ぴきぴきと、怒りの滲んだハスキー・ボイス。
+		PRINTW 振り向くと、小さな体躯、引きつった笑顔。
+		PRINTL
+		PRINTW 「ぎょえええ！？　ふ、双葉はぁん」
+		PRINTW 「눈ぇ離した隙に逃げやがって、何回言ったら分かるんだ、なあ！？」
+		PRINTL
+		PRINTW 木刀を持った石動双葉が、すごい威圧感で、立っていた。
+		PRINTL
+		PRINTW 「あは、あは、そのぉ、お花摘みに……」
+		PRINTW 「ここトイレじゃねえだろ」
+		PRINTW 「道に迷いまして……」
+		PRINTW 「一本道だぞ」
+		PRINTW 「うっさいわ！！！　なんやねん、双葉はんのくせに！！！」
+		PRINTW 「うるせえ！　黙ってあたしの言うことを聞いてればいいんだよ！」
+		PRINTL
+		PRINTW あーもー邪魔くさいぞこいつら。
+		PRINTW 痴話喧嘩なら他所でやって。そんなことを言って割って入ると、
+		PRINTL
+		PRINTW 「痴話喧嘩ちゃうわ！」「痴話喧嘩じゃありません！」
+		PRINTL
+		PRINTW きれいにハモった。
+		PRINTL
+		PRINTL
+		PRINTL
+		PRINTW 話を聴くと、どうやら双葉が朝も昼も夜も、暇さえあれば香子に“殺陣”の稽古をしているらしい。
+		PRINTW まあ、殺陣、と表現しているだけで、
+		PRINTW 実際は殺し合いの練習をお互いの身でしている様子であるが。
+		PRINTL
+		PRINTW 「うちがイヤや言うてるのに、この子が요바이に来るんどす！」
+		PRINTW 「요바이とか言うんじゃねえ気色悪ィ！」
+		PRINTW 「ううっ、双葉はんのイケズっ、嫌がるうちを、無理矢理硬い棒で……んぎゃ！？」
+		PRINTL
+		PRINTW 타격音。
+		PRINTW 泣き真似をしていた香子が絶句して머리を押さえた。
+		PRINTL
+		PRINTW 「どうせ魔法で治る、たとえ死んでもな！」
+		PRINTL
+		PRINTW そう言って双葉は、朦朧としている香子の襟首をつかんで引きずっていった。
+		
+		LOCAL:0 = GETCHARA([[キャラ:카오루코]])
+		;双葉はんがヤバいものを見てる場合、さらに過激に
+		IF GETBIT(이벤트フラグ:93:5,20)
+			PRINTL
+			PRINTW 「……こいつに恨まれたって構わない、
+			PRINTW 　あたしを憎むことで、あたしに、依存しないで済むのなら。
+			PRINTW 　きっと使い物にしてみせます、
+			PRINTW 　きっと一人でやれるように仕上げます、
+			PRINTW 　だから、こいつのこと、見捨てないであげてください、お願いします」
+			PRINTL
+			PRINTW 去り際にそんな言葉を残して……。
+			PRINTL
+			;운以外アップ
+			BASE:(LOCAL:0):힘 += 2
+			BASE:(LOCAL:0):지혜 += 2
+			BASE:(LOCAL:0):마력 += 2
+			BASE:(LOCAL:0):인내력 += 2
+			BASE:(LOCAL:0):속도 += 2
+			
+			PRINTL ＞香子の힘が2上がった
+			PRINTL ＞香子の지혜が2上がった
+			PRINTL ＞香子の마력が2上がった
+			PRINTL ＞香子の인내력が2上がった
+			PRINTL ＞香子の속도が2上がった
+			WAIT
+		ELSE
+			PRINTL
+			PRINTW 「……必ず、コイツを使い物にします。
+			PRINTW 　もう少し、時間をください」
+			PRINTL
+			PRINTW 去り際にそんな言葉を残して……。
+			PRINTL
+			;운以外アップ
+			BASE:(LOCAL:0):힘 += 1
+			BASE:(LOCAL:0):지혜 += 1
+			BASE:(LOCAL:0):마력 += 1
+			BASE:(LOCAL:0):인내력 += 1
+			BASE:(LOCAL:0):속도 += 1
+			
+			PRINTL ＞香子の힘が1上がった
+			PRINTL ＞香子の지혜が1上がった
+			PRINTL ＞香子の마력が1上がった
+			PRINTL ＞香子の인내력が1上がった
+			PRINTL ＞香子の속도が1上がった
+			WAIT
+		ENDIF
+		
+	ENDIF
+	
+	;ぶぶ漬けがわの個別イベ03のフラグをここで立て、双葉03と二重で立ち上がらないようにする
+	SETBIT 이벤트フラグ:93:6, 3
+	
+;双葉はんとまだ話をしてない
+ELSE
+	PRINTL
+	PRINTW 당신は彼女を連れ帰った直後のことを思い出した……
+	PRINTL
+	PRINTW 「すっきりしてはりますなあ」
+	PRINTL
+	PRINTW 花柳香子は、与えられた個室を見回すなり、微笑みながら言う。
+	PRINTW 顔は笑っていたが、言葉尻にはやや棘があった。
+	PRINTL
+	PRINTW 「ま、話は聞かせてもらいましたさかい、
+	PRINTW 　この花柳香子、逃げも隠れも致しません、
+	PRINTW 　この世に蔓延る악마とやらを、うちがばったばったと薙ぎ倒して見せたら……よろしおすな？」
+	PRINTL
+	PRINTW 彼女が不적に笑うと、
+	PRINTW 身を包んでいた복장が、じりじりと音を立てて、再び豪奢なレヴュー옷へと変わっていった。
+	PRINTW そして――
+	PRINTL
+	PRINTL
+	PRINTL
+	PRINTW 「ぎょええええええええええええ！？」
+	PRINTL
+	PRINTW 廃ビルに木霊する、悲鳴にも似た소녀の絶叫。
+	PRINTW どったんばったん逃げ回る香子の後ろから、あふれんばかりの좀비の群れが、ところてんみたいな密度と速度で迫ってくる。
+	PRINTL
+	PRINTW 「ぬええええ！？　ちょっ……まあああああああああああ！」
+	PRINTL
+	PRINTW 奇声とともにぶるんぶるんと薙刀が閃くたび、さくさくと腐肉が切り刻まれていくのだが、
+	PRINTW ぴしゃーと噴き出す腐った血や、
+	PRINTW ぶーっと切断面から漏れるガス、
+	PRINTW それらの圧でクラッカーみたいに飛び出す内臓を前に、
+	PRINTW 花柳香子は半泣きで逃げ惑っていた。
+	PRINTL
+	PRINTW 「思うてたんと、違う！！！！！
+	PRINTW 　あかんあかんあかん、ホンマあかん、本場の좀비はんマジであかん！
+	PRINTW 　ぎえええ！？　物陰から飛び出すなアホ―！！！」
+	PRINTL
+	PRINTW ずしゃー、ぐしゃー。
+	PRINTW 文句を言いながらもちゃんと戦えてるのは褒めても良いが、
+	PRINTW いかんせんうるさい。そして危なっかしい。
+	PRINTL
+	PRINTW きりが無いので、당신は香子を引っ張ってビルを탈출した。
+	PRINTL
+	PRINTW 「はあ、はあ、あかん、あかんて、なんやあれ、グロすぎやん、
+	PRINTW 　うがっ、臭ァっ！？　なんやこれ、うぷ、
+	PRINTW 　……オエ゛ッ、えれれれれれれれれれ」
+	PRINTL
+	PRINTW あー、吐いたか、臭いもんね、좀비。
+	PRINTL
+	PRINTW 「うう……次行きましょ、次！　うぉえっぷ」
+	PRINTL
+	PRINTW 言いぐさが酔っ払いみたいだな。
+	PRINTW ……逃げる途中で발も挫いたか、彼女は발を引きずっていた。
+	PRINTL
+	PRINTW 「……なんどす、どないしましたん。
+	PRINTW 　うちの顔がかいらしいからって、じっと見つめられたら照れてしまいます。
+	PRINTW 　そないな눈ぇ、せんといておくれやす」
+	PRINTL
+	PRINTW まあ、だいたい分かった。
+	PRINTW 彼女自身は強がっているが……
+	PRINTW 花柳香子、どう見ても明らかに、殺し合いに向いていない。
+	PRINTL
+	PRINTW 악마との戦いは“仕事”であり、“日常”だ。
+	PRINTW 日常生活でいちいち기합を入れたり좀비でゲロったりなどするか？　いいえしませんとも。
+	PRINTW これが初陣であることを差し引いても、彼女の姿はあまりにも頼りなかった。
+	PRINTL
+	PRINTW こちらの内心に気づいたか、香子は입を尖らせて下を向いた。
+	PRINTW 声をかけるべきだと思うが、さて、どのように切り込むか。
+	PRINTL
+	PRINTL [0]　何をそんなに焦ってるの？（※優しく問う）
+	PRINTL [1]　ずいぶんお上손どすなあ？（※まず逆なでする）
+	LOCAL:0 = GETCHARA([[キャラ:카오루코]])
+	;整合性を保つため、過激な選択肢は함락後には出ないようにする
+	IF TALENT:(LOCAL:0):연모 == 0 || TALENT:(LOCAL:0):친애 == 0 || TALENT:(LOCAL:0):음란 == 0 || TALENT:(LOCAL:0):창부 == 0
+		PRINTL [2]　春を売れ、顔に傷を作る前に（※ストレートにキレる）
+	ENDIF
+	PRINTL
+	
+	$KAORUKO_02_SELECT
+	INPUT
+	IF RESULT == 0
+		CFLAG:MASTER:善悪치 += 16
+		
+		PRINTL
+		PRINTW 당신が、なるべく平易に問いかけると、香子は「焦ってなんかおまへん！」と声を荒げた。
+		PRINTW 図星じゃん……？　どう見ても図星じゃん……？
+		PRINTW 平静を欠いた인간と話すのは、악마との交渉と同質だ。
+		PRINTW 彼女のメンツを潰さないように心がけながら、静かに慎重に言葉を続け、彼女の動機を掘り下げていく。
+		PRINTL
+		PRINTW 「……おせっかいすぎるんや、どいつも、こいつも」
+		PRINTL
+		PRINTW 唇を噛みながら言ったその言葉がキーワードに思えた。
+		PRINTW 당신が促すと、香子は堰を切ったように言葉を吐きだした。
+		PRINTL
+		PRINTW 「どこまでもうちにくっついてきて！　京都帰るって言うてるのに引き止めて！
+		PRINTW 　誰のせいやと思うとんねん、うちがこんなことするはめになったんは！
+		PRINTW 　余計なことして、勝손に責任感じてっ！
+		PRINTW 　アホちゃうか！？
+		PRINTW 　うちなんか、うちのことなんか、放っておいたら宜しいのにっ……！」
+		PRINTL
+		PRINTW 虚空に向かって叫ぶ彼女は、
+		PRINTW 最後に小さくその名を呼んだ。
+		PRINTL
+		PRINTW 「双葉はん」
+		PRINTL
+		PRINTW そして涙を一滴零したあと、振り払うように、당신へ向き直った。
+		PRINTL
+		PRINTW 「うちは双葉はんとは違います、状況をきちんと理解してるつもりどす。
+		PRINTW 　うちの身体が、なんか違うてしもうとるのも、
+		PRINTW 　……あんさんが、まともな稼業の인간と、違いますやろなってのも」
+		PRINTL
+		PRINTW 存外に、芯の通った態度であった。
+		PRINTW 香子は、적意の混じった視線で당신を見ながら、しかし小刻みに体を震わせた。
+		PRINTL
+		PRINTW 「うちは一人でもやれる、うちかて、千華流の血を引いとんのや。
+		PRINTW 　次に連れて行っておくれやす、いっとう怖い악마さんに、うちを会わせておくれやす。
+		PRINTW 　……どこぞのお節介さんが、うちに同情せんで済むように」
+		PRINTL
+		PRINTW 言いながら、香子の奥歯は、かちかちと小刻みに鳴っていた。
+		PRINTW 怖いのか、怖いのだろう、人外魔境の輩《ともがら》が。
+		PRINTL
+		PRINTW 「あんなぼんくら、今日限りで、絶交や。
+		PRINTW 　二度と会いません、二度と、言葉なんか交わしません。
+		PRINTW 　……そしたら、あの子も、うちに、同情せんで済むんどす」
+		PRINTL
+		PRINTW 花柳香子、その意気や良し。
+		PRINTW 당신は思いつめた表情の彼女を連れて、
+		PRINTW できる限りグロく、そして見た눈ほどは危険ではない악마の出現スポットへ向かった。
+		PRINTL
+		PRINTW 「ぎょええええええええ！？」
+		PRINTL
+		PRINTW 彼女が、악마独特の前衛的な造形に慣れるまで、今少々の時間が要るようだった……
+		PRINTL
+		
+		LOCAL:0 = GETCHARA([[キャラ:카오루코]])
+		;인내력アップ
+		BASE:(LOCAL:0):인내력 += 1
+		PRINTL ＞香子の인내력が1上がった
+		WAIT
+		
+	ELSEIF RESULT == 1
+		CFLAG:MASTER:善悪치 -= 16
+		
+		PRINTL
+		PRINTW あえて、彼女の真似して、京言葉で煽ってみた。
+		PRINTW 青い顔していた香子が、見る間に顔を真っ赤にして怒鳴った。
+		PRINTL
+		PRINTW 「やめてくれはりますそういうの！？」
+		PRINTL
+		PRINTW さて、感情に火を点けたら、まずは大きく風を起こして炎を広げるべきである。
+		PRINTL
+		PRINTW ――下손くそ、やめちまえ。
+		PRINTW ――발손まといはすっこんでろ。
+		PRINTW ――おまえの代わりなんか、いくらでも居るんだよ。
+		PRINTL
+		PRINTW 당신が真顔でそういうと、香子はギャーギャーと勢いよく、しかし中身のない罵声をまき散らした。
+		PRINTL
+		PRINTW 「うちがどんな思いでやっとるか知らんくせに！
+		PRINTW 　こんなわけのわからん세계に連れてきてっ、
+		PRINTW 　ほんまは全部あんたが仕組んだんちゃうんか、なあ！？」
+		PRINTL
+		PRINTW へえ、そうなんだ、すごいね、それで？
+		PRINTW 怒りの感情というのは、なかなかに維持をするのが難しい。
+		PRINTW 特に、こういう、突発的に沸いたものは猶更だ。
+		PRINTL
+		PRINTW ……3分ぐらいで話題がループして、
+		PRINTW 10分もしないうちに、입数が少なくなっていく。
+		PRINTW 相손の怒りを利用するのは素人相손にはよく効く交渉術である。
+		PRINTL
+		PRINTW タイミングを見計らって、『焦っているように見えるけど、何か理由が？』と切り出した。
+		PRINTL
+		PRINTW 香子は、冷え始めた頬をわずかに引きつらせながら、
+		PRINTW 言いづらそうに、もごもごと입を動かした。
+		PRINTL
+		PRINTW 「うちと一緒に居ったコ、石動双葉。
+		PRINTW 　責任感じてはるんどす、勝손に、一人で。
+		PRINTW 　……あの時引き止めんかったら、うちが、この세계に来ないで済んだいうて」
+		PRINTL
+		PRINTL
+		PRINTL
+		PRINTW ――香子は本来、京都に帰るはずだった。
+		PRINTW ――学校をやめて、日本舞踊・千華流を継ぐはずだった。
+		PRINTW ――それを双葉が引き止めた。新幹線のプラットホームまで追ってきて。
+		;	   ※ぶぶ漬けの自己申告なのでそこに至るまでの経緯は巧妙に美化されている。
+		PRINTL
+		PRINTL
+		PRINTL
+		PRINTW 「そんなん言うまでもありまへん、双葉はんが、余計なことをしはったんが悪いんどす。
+		PRINTW 　一눈瞭然や、双葉はんが全部悪いんや。
+		PRINTW 　双葉はんが全ての元凶、双葉はんが諸悪の根源、何もかんも、愚かで軽率な、双葉はんのせい。
+		PRINTW 　……それで、終わりで、ええやないの。
+		PRINTW 　……開き直ってしまえばええやないのっ。
+		PRINTW 　こっちきてからずっと下向いて！　アホちゃうの！？　そんなんでうちの気ぃは晴れへんわっ！」
+		PRINTL
+		PRINTW 薙刀の石突が、がんっ、と強くアスファルトを叩いた。
+		PRINTW 香子は狂ったように喚きながら、何度も何度も、アスファルトを叩いた。
+		PRINTL
+		PRINTW 「絶交や！　あんなやつ、今日限りで絶交や！
+		PRINTW 　顔も見ん、입も利かんっ、そしたら、そしたら……！」
+		PRINTL
+		PRINTW はあはあと、荒い息をついて、己の무기にもたれかかる。
+		PRINTW その表情は垂れた黒머리카락で読めない。
+		PRINTW 香子は、小さく、聞き取れないような声で、つぶやいた。
+		PRINTL
+		PRINTW 「そしたら、あの子が苦しまんで、済む」
+		PRINTL
+		PRINTL
+		PRINTL
+		PRINTW 당신は、唇を噛んだままの香子を連れて、次の狩場へと발を운んだ。
+		PRINTW 彼女はひどく危なっかしく、そして頻繁に悲鳴を上げて腰を抜かしたが、
+		PRINTW 弱音だけは、吐かなかった……。
+		PRINTL
+		
+		LOCAL = GETCHARA([[キャラ:카오루코]])
+		TALENT:LOCAL:꿋꿋함 = 1
+		PRINTL ＞香子は꿋꿋함を得た
+		WAIT
+		
+		;香子怒りの独白フラグ
+		SETBIT 이벤트フラグ:93:6,22
+		
+	ELSEIF RESULT == 2 && TALENT:(LOCAL:0):연모 == 0 && TALENT:(LOCAL:0):친애 == 0 && TALENT:(LOCAL:0):음란 == 0 && TALENT:(LOCAL:0):창부 == 0
+		PRINTL
+		PRINTW 당신は大きい声で怒鳴った。
+		PRINTL
+		PRINTW 同時に、彼女の가슴ぐらをつかみ、ぎりぎりと締め上げる。
+		PRINTW ――馬鹿かお前は、邪魔するな、遊びじゃないんだ、
+		PRINTW ――무기を捨てろ、前に出るな、何もできないなら春を売れ。
+		PRINTW あらん限りの声量で、浴びせるように畳みかけると、香子は呆然と눈を丸くした。
+		PRINTL
+		PRINTW 「はる……？」
+		PRINTL
+		PRINTW そして、言葉の意味が脳に到達するや、
+		PRINTW 悔しそうに顔をゆがめて、눈じりに涙を浮かばせた。
+		PRINTL
+		PRINTW 「そない、あけすけに言わんでも、ええんと違いますの……！？
+		PRINTW 　う、うちかて、出来てないのはわこてますっ、
+		PRINTW 　でもいきなり身体を売れだなんて……イづっ！？」
+		PRINTL
+		PRINTW 유방を、힘任せに握る。
+		PRINTL
+		PRINTW 「やめっ……！　ひぎっ！」
+		PRINTL
+		PRINTW ふっくらとしたシルエットに見合った豊かで柔らかな果実が、指の中でめきめきと潰れた。
+		PRINTL
+		PRINTW 「あああ痛い！？　痛い、痛いいいっ！」
+		PRINTL
+		PRINTW これだけ立派なものを付けているのだ、
+		PRINTW 戦えないのなら、身体を売ったらいいではないか。
+		PRINTW 당신は悲鳴を上げて体をよじる香子を、乱暴に地面へ突き飛ばした。
+		PRINTL
+		PRINTW 「うぐうっ……痛いい……ううう……！」
+		PRINTL
+		PRINTW 香子は、握られた가슴を押さえたまま、アスファルトの上にへたり込んでいる。
+		PRINTW 당신はそんな彼女に近寄ると、ふっくらとした頬を、左右から指で挟むようにぐにっと摘まみ上げた。
+		PRINTL
+		PRINTW 「むぶっ！？」
+		PRINTL
+		PRINTW 今の彼女には、無様で情けない顔がよく似合う。
+		PRINTW 香子は、罵られたショックと、유방を握られた아픔で、머리が真っ白になっているようだ。
+		PRINTL
+		PRINTW そんな彼女に対して、당신は？
+		PRINTL
+		PRINTL [0]　そろそろ냉정にさせようか
+		SETCOLOR 0xff0033
+		PRINTL [1]　見捨てる
+		RESETCOLOR
+		PRINTL
+		
+		$KAORUKO_02_SELECT_2
+		INPUT
+		IF RESULT == 0
+			PRINTL
+			PRINTW 당신が腰を下ろし、눈の高さを合わせると、香子は小さく悲鳴を上げて後ずさった。
+			PRINTL
+			PRINTW 「やっ……！？　なにしはりますの……！」
+			PRINTL
+			PRINTW まるで아이のようにイヤイヤする香子。
+			PRINTW よほど怖かったのか、間抜けにも鼻水が一本垂れている。
+			PRINTW 당신はそんな彼女に次のように述べた。
+			PRINTL
+			PRINTW ――焦っても良いことなんかない。
+			PRINTW ――何を考えているのか教えてほしい。
+			PRINTL
+			PRINTW 香子は、何を言われたのか分からない顔をしていた。
+			PRINTW もう一回、ゆっくりと、説明すると、
+			PRINTW ひどく歪んだ顔で、당신のことを睨み付けた。
+			PRINTL
+			PRINTW 「焦ってなんかおまへん、これは慣らし운転どす！
+			PRINTW 　うちは、うちは情けを掛けられるほど落ちぶれてへん！
+			PRINTW 　あんたにも！　……双葉はんにも」
+			PRINTL
+			PRINTW 香子は、ふっくらとした唇をきつく結ぶと、
+			PRINTW 손放してしまっていた己の무기――水仙花という名の薙刀――へ寄り掛かり、よろよろと立ち上がった。
+			PRINTW 顎はぷるぷる震え、공포の鼻水は未だに顔を汚しているが、
+			PRINTW その눈だけは、まだ輝きを失っていなかった。
+			PRINTL
+			PRINTW 「悪鬼羅刹、百鬼夜行、そんなもん朝飯前に平らげます、
+			PRINTW 　怖いもんなんかあらへん、次に連れて行っておくれやす！
+			PRINTW 　うちは器量だけやないっ、愛嬌だけでもないっ、京女のド根性、東京もんに見せたるわ！」
+			PRINTL
+			PRINTL
+			PRINTL
+			PRINTW ……それから、香子は悲鳴を上げなくなった。
+			PRINTW その代わり、酷く無鉄砲になって、
+			PRINTW その日だけで３回ほど死んだ。
+			PRINTL
+			PRINTW 「うちは、一人で、生きてくんや、
+			PRINTW 　双葉はんには頼らへん、あんな根性なし、こっちから絶交や、
+			PRINTW 　絶交したら……もう、あの子が、責任感じる事なんてあらへんのや」
+			PRINTL
+			PRINTW 香子の눈はずっとギ라기ラしていたが、
+			PRINTW 무기を持つ손は、ずっと、小刻みに、震え続けていた……。
+			PRINTL
+			
+			;마이ナス素質祭り、難度は上がるが매각益も上がるゾ
+			LOCAL = GETCHARA([[キャラ:카오루코]])
+			TALENT:LOCAL:꿋꿋함 = 1
+			TALENT:LOCAL:억압 = 1
+			TALENT:LOCAL:저항 = 1
+			TALENT:LOCAL:자제심 = 1
+			TALENT:LOCAL:비관적 = 1
+			
+			;조교難度を上げるためにセキュリティホールを塞ぐ
+			;尻穴のことセキュリティホールって言うのやめない？
+			TALENT:LOCAL:Ａ민감 = 0
+			
+			PRINTL ＞香子は꿋꿋함を得た
+			PRINTL ＞香子は억압を得た
+			PRINTL ＞香子は저항を得た
+			PRINTL ＞香子は자제심を得た
+			PRINTL ＞香子は비관적を得た
+			PRINTL
+			PRINTL ＞香子はＡ민감を失った
+			PRINTL
+			
+			;인내력アップ
+			BASE:(LOCAL:0):인내력 += 3
+			PRINTL ＞香子の인내력が3上がった
+			PRINTL
+			
+			;アライメントをD寄りへ
+			CFLAG:(LOCAL:0):善悪치 += -64
+			PRINTL ＞香子のアライメントが少し変動した
+			PRINTL
+			WAIT
+			;やけくそフラグON
+			SETBIT 이벤트フラグ:93:6, 20
+			
+		ELSEIF RESULT == 1
+			CFLAG:MASTER:善悪치 -= 32
+		
+			PRINTL
+			PRINTW 香子は、取り落とした薙刀に、손を伸ばした。
+			PRINTW 당신はそれを발で払う。
+			PRINTW 가슴ぐらを掴んで引き摺り起こすと、香子のレヴュー옷の縫い눈が、ぶつぶつと音を立てて弾けた。
+			PRINTL
+			PRINTW 「触らん、といて……っ！」
+			PRINTL
+			PRINTW 꿋꿋함にも喚く花柳香子だったが、
+			PRINTW 膝が笑っていた。呼吸が不自然に早くなっていた。
+			PRINTW それでも당신を振り払おうともがき、必死に、自らの무기へ손を伸ばそうとする。
+			PRINTL
+			PRINTW 「う、うちはっ、うちは매춘婦と違うっ、そんなもんと違うっ、
+			PRINTW 　うちは、うちは……
+			PRINTW 　うちは……？
+			PRINTW 　うち……何のために、舞台に……？　あっ」
+			PRINTL
+			PRINTW 薙刀が赤く錆びていく。
+			PRINTW ぱきぱきと音を立てて、崩れていく。
+			PRINTL
+			PRINTW 「まっ……！？　あかん、やめて！
+			PRINTW 　消えんといて！　いやっ、いやっ、いやああああああああああ！」
+			PRINTL
+			PRINTW 風が一陣翔けた。そこには何も残っていなかった。
+			PRINTW 香子の복장もただの学生옷に変わっていた。
+			PRINTL
+			PRINTW 「あ、あ……」
+			PRINTL
+			PRINTW 彼女の表情から、感情が、抜け落ちた。
+			PRINTL
+			PRINTW ……よく分からないが、何かがダメになったのは理解できた。
+			PRINTW 실패したかもしれない。
+			PRINTW 香子は、気の抜けた顔で、己の무기があったところを見つめたまま、動かなくなってしまった。
+			PRINTL
+			PRINTW 「あはは、ははは……せやった、当たり前や、
+			PRINTW 　うちは舞台から逃げ出した。学校、辞めて、京都に帰るつもりやった。
+			PRINTW 　そんなうちが、舞台소녀の무기を振るう？
+			PRINTW 　出来っこない、許されへん、そんなの、あたりまえのことやないの……」
+			PRINTL
+			PRINTW 香子は遠い星を見上げるような顔で、祈るように、呟いた。
+			PRINTL
+			PRINTW 「堪忍な」
+			PRINTL
+			PRINTW 香子の瞳からキラめきが消えた。
+			PRINTL
+			
+			;キラめき消滅、전투能力削除、素質변경
+			LOCAL = GETCHARA([[キャラ:카오루코]])
+			CALL EVENT93_KIRAMEKI_LOST,LOCAL
+			
+			;ただのマグロに
+			IF ABL:LOCAL:순종 < 4
+				ABL:LOCAL:순종 = 4
+				PRINTL ＞香子の순종が4になった
+			ENDIF
+		
+			;마이ナス素質いっきにカット
+			;そのかわり매력もカット
+			TALENT:LOCAL:반항적 = 0
+			TALENT:LOCAL:프라이드높음 = 0
+			TALENT:LOCAL:건방짐 = 0
+			TALENT:LOCAL:눈에띄고싶어함 = 0
+			TALENT:LOCAL:매력 = 0
+			
+			TALENT:LOCAL:감정결핍 = 1
+			
+			PRINTL ＞香子は반항적を失った
+			PRINTL ＞香子は프라이드높음を失った
+			PRINTL ＞香子は건방짐を失った
+			PRINTL ＞香子は눈에띄고싶어함を失った
+			PRINTL ＞香子は매력を失った
+			PRINTL
+			PRINTL ＞香子は감정결핍を得た
+			PRINTL
+			
+			IF MARK:LOCAL:굴복각인 < 3
+				MARK:LOCAL:굴복각인 = 3
+				PRINTL ＞香子は굴복각인LV3を得た
+				PRINTL
+			ENDIF
+			
+			
+			;アライメントをDへ
+			CFLAG:(LOCAL:0):善悪치 = -256
+			PRINTL ＞香子のアライメントが変動した
+			PRINTL
+			
+			PRINTL ＞香子は전투能力を失い、비전투원になった
+			WAIT
+			
+			SETBIT 이벤트フラグ:93:6, 21
+			
+		ELSE
+			GOTO KAORUKO_02_SELECT_2
+		ENDIF
+		
+	ELSE
+		GOTO KAORUKO_02_SELECT
+	ENDIF
+ENDIF
+
+SETBIT 이벤트フラグ:93:6, 2
+CALL EVENT_93_TURN_END
+
+
+
+@EVENT_93_花柳香子_03
+#DIMS わたしたちは舞台소녀
+
+わたしたちは舞台소녀 = %EVENT93_出席確認()%
+
+;FOR LOCAL, 0, CHARANUM
+;	SIF GROUPMATCH(NO:LOCAL, [[キャラ:카렌（무대소녀）]], [[キャラ:히카리]], [[キャラ:마히루]], [[キャラ:쥰나]], [[キャラ:후타바（무대소녀）]], [[キャラ:카오루코]], [[キャラ:나나]], [[キャラ:마야（무대소녀）]], [[キャラ:클로딘]]) && CFLAG:LOCAL:전투참가불가능 < 1 && TALENT:LOCAL:비전투원 < 1
+;		わたしたちは舞台소녀 += @"%CSVCALLNAME(NO:LOCAL)%_"
+;NEXT
+
+CUSTOMDRAWLINE =
+
+PRINTL
+;やけくそフラグ
+IF GETBIT(이벤트フラグ:93:6, 20)
+	;1番눈か2番눈に古参の픽시がいるときだけ
+	IF NAME:1 == "픽시" || NAME:1 == "하이픽시" || NAME:2 == "픽시" || NAME:2 == "하이픽시"
+		PRINTW 連中の監視に付けていた픽시が、血相を変えて飛び込んできた。
+		PRINTL
+		PRINTW 「か、カオルコちゃんが、一人でコロシアムに行っちゃったの！
+		PRINTW 　やめてって言ったのに！　どうしよう、絶対負けちゃうよ、戦利品にされちゃうよ！」
+		PRINTL
+		PRINTW ど　う　し　て　。
+		PRINTW たしかに香子は生き急いでいた。しかし、よりによってコロシアムに一人で乗り込むとは……。
+		PRINTW 당신は止められなかった픽시を叱りつつ、完全武装で香子の後を追った。
+	ELSE
+		PRINTW 連中の監視に付けていた요정たちが、げらげら笑いながら당신の元へ来た。
+		PRINTL
+		PRINTW ――カオルコのやつ、コロシアムで팔試しするってよ！
+		PRINTW ――どうせ死んでも蘇生したらいいって思ってるんだぜアイツ！
+		PRINTW ――コロシアムで負けたらどうなるか知らないみたいですなあヒャッハー！
+		PRINTL
+		PRINTW 笑ってる場合かこのおバカッ。
+		PRINTW たしかに最近の香子は生き急いでいた。しかしよりによってコロシアムに一人で乗り込むとは……。
+		PRINTW 당신は香子を止めなかった요정にゲンコツをお見舞いしつつ、完全武装で彼女の後を追った。
+	ENDIF
+	PRINTL
+	PRINTL
+	PRINTL
+	PRINTW 『謎の京都人、３連勝ッ！　まずまずの勝ちっぷりですなあ！
+	PRINTW 　どう思います、해설の웜さん！』
+
+	FLAG:現던전 = [[던전:콜로세움던전]]
+	FLAG:現M = 1
+	FLAG:現X = 4
+	FLAG:現Y = 6
+	CALL MAKE_FLOOR, FLAG:現던전
+	DA:4:4 = 4
+	CALL FLOOR_ANALYZE
+	CALL SHOW_FLOOR
+	CALL SHOW_NOW_FORMATION_P,0,2,,2
+
+	CALL MESSAGE_WINDOW_D, "", @"平安期の아이だに繁栄を極めたこの古都は" , , , , , , "FADE" , , , "CENTER"
+	CALL MESSAGE_WINDOW_D, "", @"ありとあらゆる人々にとって羨望の的だった。" , , "再利用する" , , , , "FADE" , , , "CENTER"
+	CALL MESSAGE_WINDOW_D, "", @"その戦略的価値と上洛ブームが呼び起こした災いは数知れない――― " , , "再利用する" , , , , "FADE" , , , "CENTER"
+	CALL MESSAGE_WINDOW_D, "", @"ソレはまさに、時代の災禍の象徴だった。" , , "再利用する" , , , , "FADE" , , , "CENTER"
+
+	PRINTL 「平安期の아이だに繁栄を極めたこの古都は
+	PRINTL 　ありとあらゆる人々にとって羨望の的だった
+	PRINTL 　その戦略的価値と上洛ブームが呼び起こした災いは数知れない―――
+	PRINTL 　ソレはまさに、時代の災禍の象徴だった」
+	
+	PRINTW 『分かりません！　ありがとうございます！』
+	PRINTL
+	PRINTW 押っ取り刀で駆けつけた당신であったが、なんと香子は連勝していた。
+	PRINTL
+	PRINTW 「はあ、はあ、ど、どんなもんどす！　こんな雑물고기、相손になりまへんえ！
+	PRINTW 　でもリングネームは『京美人』で登録したはずどす！　なんや謎の京都人って！？」
+	PRINTL
+	PRINTW 최저랭크から始まったとはいえ、たった一人で勝てるとは興味深い。
+	PRINTW 당신はとりあえず気持ちを整え、リングの上の様子を眺めた。
+	PRINTL
+	PRINTW 「카오루코、なんでおまえ、こんなところに居るんだよ……」
+	PRINTL
+	PRINTW なお、당신の隣には、泣き出しそうな顔の石動双葉が立っている。
+	PRINTW 騒ぎを聴きつけ途中で合流したのだ。顔色は青を通り越して土気色になっていた。
+	PRINTL
+	PRINTW 『さて、さて、さて。ここまで着実に勝ち進んだ謎の京都人……
+	PRINTW 　しかし、彼女の쾌進撃もここまででしょう。
+	PRINTW 　さあ、みなさん、お待ちかね！　ニューフェイスを阻む壁、“ＢＩＧ・Ｏ”の登場です』
+	PRINTL
+	PRINTW なんかロボットみたいな名前ね。
+	PRINTW どこから来るのかと観客席からリングを眺めていると、のしん、のしん、と、地面を揺らす발音が聞こえてきた。
+	PRINTL
+	PRINTW ――それには二つの머리があった。
+	PRINTW ――바늘金のような毛並みはニスを塗ったみたいに脂ぎっていた。
+	PRINTW ――吐息には、これまで食いちぎってきた血肉のニオイが、べっとりとまとわりついていた。
+	PRINTL
+	PRINTW 「オォォォォーン！」
+	PRINTL
+	PRINTW あれは오르트로스か。しかしサイズが平均よりずっと大きい。
+	PRINTW 巨大오르트로스はべろりと舌なめずりを見せたあと、ゴングを待たずに香子へと襲い掛かった。
+	PRINTL
+	PRINTW 「んな……！？　なんや、このばけもん！」
+	PRINTL
+	PRINTW なるほど、組織の後ろ盾なしだと、こういう“結果の分かり切った”見世物にされるのか。
+	PRINTW 動転しリングに乱入しようとした双葉の襟首を掴み、様子を見る。
+	PRINTW 香子は戦う気だ。しかしその表情は필요以上にギ라기ラしていて、가운に공포がマヒしているだけにも感じた。
+	PRINTL
+	PRINTW 「おらぁー！」
+	PRINTL
+	PRINTW 刃が走るたびに、鋼をひっかくような音が響く。
+	PRINTW ギラつく無数の体毛が、鎧のように공격をはじき返している。
+	PRINTW 並大抵の火힘では傷をつけることも難しいだろう。ニューフェイスを阻む壁は伊達では無いようだ。
+	PRINTL
+	PRINTW 「카오루코！　くそっ、このままじゃ……！
+	PRINTW 　なんで見ているだけなんですか！？　あんた何しにここまで来たんですか！？」
+	PRINTL
+	PRINTW 焦る双葉はこちらに詰め寄ってきた。
+	PRINTW 刻一刻と追い詰められていく愛しの相方を前に、はやる気持ちを抑えられなくなっているようだ。
+	PRINTW そんな彼女に、당신は――
+	PRINTL
+	SETCOLOR 0xff0033
+	PRINTL [0]香子を今すぐ助けなくては！
+	RESETCOLOR
+	SETCOLOR 0x33ffcc
+	PRINTL [1]タイミングを見て飛び込むぞ
+	
+	LOCAL:0 = GETCHARA([[キャラ:후타바（무대소녀）]])
+	LOCAL:1 = GETCHARA([[キャラ:카오루코]])
+	;二人の합계레벨が20以上なら分岐、結末が真逆に
+	IF (BASE:(LOCAL:0):LV + (BASE:(LOCAL:1):LV)) > 19
+		SETCOLOR 0x33ffcc
+	ELSE
+		SETCOLOR 0xff0033
+	ENDIF
+	PRINTL [2]双葉をけしかけ高みの見物だ
+	RESETCOLOR
+
+
+	$KAORUKO_03_SELECT_1
+	INPUT
+	IF RESULT == 0
+		PRINTL
+		PRINTW 당신は双葉の焦りに押されるように、コロシアムへと乱入した。
+		PRINTW ここに来るまでに事情を説明し根回しは済ませていたが、ブーイングは避けられない。
+		PRINTW 実況席からも「殺せ！　殺せ！」とコールが響いた。
+		PRINTL
+		PRINTW 「후타바、はん」
+		PRINTW 「카오루코！　大丈남편か！　ここからはあたしが……」
+		PRINTW 「来んといて！　あんたとは입も利きたくないっ、顔も見とうないっ！」
+		PRINTL
+		PRINTW 双葉の顔が硬直する。激昂した香子は返事も聞かずに오르트로스へ돌격する。
+		PRINTL
+		PRINTW 「よせっ、카오루코、おまえじゃ無理だ！」
+		PRINTW 「あんたなんか필요ないっ、うちは、うちは一人でもやれるんや！
+		PRINTW 　こんな犬ころ一匹、うちが一発で、一発でえぇぇーっ！」
+		PRINTL
+		PRINTW 怒りに任せ、突っ込んできた오르트로스の입腔内へ、そのまま薙刀を刺突する。
+		PRINTW さすがの마수と言えど입の中に剛毛は無い。見事입蓋へ突き刺さった白刃は、相손の운動エネルギーに導かれるままに뼈格を砕き脳髄を貫いた。
+		PRINTW やった――香子の表情が明るくなる。しかし。
+		PRINTL
+		PRINTW 「ぃぎゃああぁァァァーっ！？」
+		PRINTL
+		PRINTW 香子の身体の右半分に、大きな顎が食らいついた。
+		PRINTL
+		PRINTW 「香子ぉーっ！」
+		PRINTL
+		PRINTW 오르트로스の머리は二つあるのだ。衣옷ごと食い込んだ激痛に、소녀は무기を離してしまった。
+		PRINTL
+		PRINTW 「いだいっ、いだいいだいいだいいいいいっ！」
+		PRINTW 「やめて、やめてくれえっ！　香子は、香子だけはあっ！」
+		PRINTW 「放せッ、食うなアアアアア！　ぐぎっ！？　ひっい、いい……ごえっ」
+		PRINTL
+		PRINTW ぱきっ、ごきっ。뼈の砕ける音が巨짐승の입腔内で反響する。
+		PRINTW 肺が潰れたか、香子の입から、粘度の高い赤黒い血液が、ポンプで押されたみたいにボブっと出た。
+		PRINTL
+		PRINTW 「あ」
+		PRINTL
+		PRINTW 双葉が、間抜けな声を漏らした、次の瞬間。
+		PRINTW 오르트로스は、器用に前발を使って、ぷちぷちぷちと소녀の身体を食いちぎった。
+		PRINTL
+		PRINTW 「ああああああああああああああああ！？」
+		PRINTL
+		PRINTW 双葉の絶叫、呆然としている香子の顔、짐승の歯の間からぴんと繋がっている幾つもの筋繊維と腸管は良く伸びるチーズみたいに見えた。
+		PRINTW 遅れて鮮血がシャーッと噴き出す。
+		PRINTW ざまあみろ、ざまあみろ、興奮した観客の歓声が당신たちを包み込んだ。
+		PRINTL
+		PRINTW 「香子ぉぉ！　香子ーっ！」
+		PRINTW 「だいじょ、ぶ。どうせ、しんでも、いきかえ、れ」
+		LOCAL:1 = GETCHARA([[キャラ:카오루코]])
+		DELCHARA LOCAL:1
+		PRINTL
+		PRINTW その言葉を最後に、가슴から上がパクっと食われた。
+		PRINTW もご、もご、かきんっ。
+		PRINTW 存外に軽い音がしたあと、背뼈の断面から신경の束を見せながら、残った身体が힘なく倒れた。
+		PRINTW 血だまりが広がる。大きな前발が残りの肉の所有権を主張する。
+		PRINTW 오르트로스はプっと何かを吐いた。それは毛まみれで食べづらそうな머리蓋の一部だった。
+		PRINTL
+		PRINTW 「助けなきゃ、助けなきゃああ！」
+		PRINTL
+		PRINTW 狂ったように叫ぶ双葉を、당신は힘づくで押さえつけた。
+		PRINTW ……もう無理だ、蘇生できない。
+		PRINTW 神仏でもないただの인간では、今頃、악마の強힘な胃液で魂まで消化されてしまったはずだ。
+		PRINTL
+		PRINTW 당신たちは、香子の身体が貪り食われる姿を、黙って見つめるしかなかった……。
+		PRINTL
+		PRINTW ＞香子は蘇生不能となり死亡した
+		PRINTL
+		PRINTL
+		PRINTL
+		PRINTW 判断ミスだった、あのタイミングで飛び込んだのは。
+		PRINTW 惜しいことをした。帰路、당신は双葉に謝罪した。
+		PRINTL
+		PRINTW 「違います、悪いのは、あたしです。
+		PRINTW 　あたしが、考えなしに付いてきたばっかりに、香子に警戒させて、それで……」
+		PRINTL
+		PRINTW 彼女の손の中には、どす黒く染まった汚い布片が握りしめられている。
+		PRINTW これは香子が身に着けていた옷の断片だ。
+		PRINTW 遺品など、これくらいしか残らなかった。
+		PRINTL
+		PRINTW 「あたしのせいだ、あたしが悪いんだ、、
+		PRINTW 　あたしがいたばっかりに、아이つの、一生を、だっ、台無しにぃ……」
+		PRINTL
+		PRINTW 双葉は号泣した。
+		PRINTW 頬を痙攣させながら、酷い臭いが染みついた布片を、きつく가슴に抱きしめた。
+		PRINTL
+		PRINTW 「すみません、あたし、もう、
+		PRINTW 　何のために生きてるのか、分からなくて、
+		PRINTW 　すみません、もう、
+		PRINTW 　あたし、
+		PRINTW 　もう」
+		PRINTL
+		PRINTW 双葉は立ち止まってしまった。
+		PRINTW ぼたぼたと涙をこぼしながら、その歩みを止めてしまった。
+		PRINTL
+		PRINTW 「카오루코」
+		PRINTL 
+		PRINTW 双葉の瞳からキラめきが消えた。
+		PRINTL 
+		
+		;キラめき消滅、전투能力削除、素質변경
+		LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+		CALL EVENT93_KIRAMEKI_LOST,LOCAL
+		
+		;アライメントをDへ
+		CFLAG:(LOCAL:0):善悪치 = -256
+		PRINTL ＞双葉のアライメントが変動した
+		PRINTL
+		
+		PRINTL ＞双葉は전투能力を失い、비전투원になった
+		WAIT
+		
+	ELSEIF RESULT == 1
+		PRINTL
+		PRINTW 당신は焦る双葉を손で制す。
+		PRINTW タイミングが悪い。今飛び出せば、集中している香子の気を削ぐことになる。
+		PRINTL
+		PRINTW 「でもっ、あんなの、아이つには無理だ！
+		PRINTW 　ドンくさい香子が、あんな、でかい化け物に……！」
+		PRINTL
+		PRINTW 本当にそうかな？
+		PRINTW 双葉は香子と長い付き合いだと聞いている、
+		PRINTW ぽっと出の당신より、ずっと彼女のことを知っているだろう。
+		PRINTL
+		PRINTW ……だが、良くも悪くも、彼女たちはキラめきの残り香が作り上げた贋作なのだ。
+		PRINTL
+		PRINTW 「せぇぇーッ！」
+		PRINTL
+		PRINTW 소녀が跳ぶ、５メートルは優に跳ぶ。
+		PRINTW その位置エネルギー、そして、身体をひねることによって生み出した遠心힘。
+		PRINTW 香子の무기――水仙花がうなりを上げた。
+		PRINTL
+		PRINTW 「ギャオオン！？」
+		PRINTL
+		PRINTW 짐승の悲鳴、そして鮮血。
+		PRINTW 香子はハハハと笑いながら犬の背中に着地すると薙刀を突き立てたまま꼬리まで走り抜け犬の背から赤い噴水をシャーッと撒いた。
+		PRINTL
+		PRINTW 「どないや、野良犬め！」
+		PRINTL
+		PRINTW ぼたぼたと、粘つく血液をこぼしながら、오르트로스は、
+		PRINTW ……キレていた。
+		PRINTL
+		PRINTW 「オマエ、マルヤキ」
+		PRINTL
+		PRINTW 마수が腹を膨らませた――次の瞬間。
+		PRINTW どぼうっ！　土石流かと見紛うような、燃え盛る吐息が景色を灼熱に染め上げた。
+		PRINTL
+		PRINTW 「ひ……ッッッあああ！？」
+		PRINTL
+		PRINTW あの화염はナパームと同じだ、粘つく燃料が소녀を火だるまにした。
+		PRINTW 飛び込むなら今かな。당신は仲魔を伴いリングへと乱入した。
+		PRINTL
+		CUSTOMDRAWLINE =
+		PRINTL
+		
+		FLAG:도주불가フラグ = 1
+		FLAG:회화불능フラグ = 1
+		FLAG:선제기습취소 = 1
+			
+		;신경・충격弱点
+		CALL SET_ENEMY,8, [[キャラ:오르트로스]],30, 2
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 500
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 500
+		CFLAG:(CHARANUM-1):속도보정 = 5
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		NAME:(CHARANUM-1) = BIG・O（右머리）
+		CALLNAME:(CHARANUM-1) = BIG・O（右머리）
+		MAXBASE:(CHARANUM-1):검격 = 50
+		BASE:(CHARANUM-1):검격 = 50
+		MAXBASE:(CHARANUM-1):타격 = 30
+		BASE:(CHARANUM-1):타격 = 30
+		MAXBASE:(CHARANUM-1):전술 = 999
+		BASE:(CHARANUM-1):전술 = 999
+		MAXBASE:(CHARANUM-1):화염 = 100
+		BASE:(CHARANUM-1):화염 = 100
+		MAXBASE:(CHARANUM-1):빙결 = 100
+		BASE:(CHARANUM-1):빙결 = 100
+		MAXBASE:(CHARANUM-1):지변 = 100
+		BASE:(CHARANUM-1):지변 = 100
+		MAXBASE:(CHARANUM-1):수격 = 100
+		BASE:(CHARANUM-1):수격 = 100
+		MAXBASE:(CHARANUM-1):신경 = 150
+		BASE:(CHARANUM-1):신경 = 150
+		;파이어브레스、버닝링、포효、물어뜯기
+		ABL:(CHARANUM-1):스킬1 = 708
+		ABL:(CHARANUM-1):스킬2 = 726
+		ABL:(CHARANUM-1):스킬3 = 514
+		ABL:(CHARANUM-1):스킬4 = 321
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		;정신・질풍弱点
+		CALL SET_ENEMY,10, [[キャラ:오르트로스]],30, 2
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 500
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 500
+		CFLAG:(CHARANUM-1):속도보정 = 5
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		NAME:(CHARANUM-1) = BIG・O（左머리）
+		CALLNAME:(CHARANUM-1) = BIG・O（左머리）
+		MAXBASE:(CHARANUM-1):검격 = 50
+		BASE:(CHARANUM-1):검격 = 50
+		MAXBASE:(CHARANUM-1):타격 = 30
+		BASE:(CHARANUM-1):타격 = 30
+		MAXBASE:(CHARANUM-1):전술 = 999
+		BASE:(CHARANUM-1):전술 = 999
+		MAXBASE:(CHARANUM-1):화염 = 100
+		BASE:(CHARANUM-1):화염 = 100
+		MAXBASE:(CHARANUM-1):빙결 = 100
+		BASE:(CHARANUM-1):빙결 = 100
+		MAXBASE:(CHARANUM-1):충격 = 100
+		BASE:(CHARANUM-1):충격 = 100
+		MAXBASE:(CHARANUM-1):지변 = 100
+		BASE:(CHARANUM-1):지변 = 100
+		MAXBASE:(CHARANUM-1):수격 = 100
+		BASE:(CHARANUM-1):수격 = 100
+		MAXBASE:(CHARANUM-1):질풍 = 125
+		BASE:(CHARANUM-1):질풍 = 125
+		MAXBASE:(CHARANUM-1):정신 = 150
+		BASE:(CHARANUM-1):정신 = 150
+		;파이어브레스、버닝링、포효、물어뜯기
+		ABL:(CHARANUM-1):스킬1 = 708
+		ABL:(CHARANUM-1):스킬2 = 726
+		ABL:(CHARANUM-1):스킬3 = 514
+		ABL:(CHARANUM-1):스킬4 = 321
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		;지변・전술弱点
+		CALL SET_ENEMY,14, [[キャラ:오르트로스]],30, 2
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 750
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 500
+		CFLAG:(CHARANUM-1):속도보정 = 5
+		CFLAG:(CHARANUM-1):行動횟수 = 2
+		NAME:(CHARANUM-1) = BIG・O（몸통体）
+		CALLNAME:(CHARANUM-1) = BIG・O（몸통体）
+		MAXBASE:(CHARANUM-1):검격 = 50
+		BASE:(CHARANUM-1):검격 = 50
+		MAXBASE:(CHARANUM-1):타격 = 30
+		BASE:(CHARANUM-1):타격 = 30
+		MAXBASE:(CHARANUM-1):전술 = 125
+		BASE:(CHARANUM-1):전술 = 125
+		MAXBASE:(CHARANUM-1):화염 = 100
+		BASE:(CHARANUM-1):화염 = 100
+		MAXBASE:(CHARANUM-1):빙결 = 100
+		BASE:(CHARANUM-1):빙결 = 100
+		MAXBASE:(CHARANUM-1):충격 = 100
+		BASE:(CHARANUM-1):충격 = 100
+		MAXBASE:(CHARANUM-1):지변 = 125
+		BASE:(CHARANUM-1):지변 = 125
+		MAXBASE:(CHARANUM-1):수격 = 100
+		BASE:(CHARANUM-1):수격 = 100
+		MAXBASE:(CHARANUM-1):신경 = 0
+		BASE:(CHARANUM-1):신경 = 0
+		MAXBASE:(CHARANUM-1):정신 = 0
+		BASE:(CHARANUM-1):정신 = 0
+		;メガクロ―、흑점격、눌러으깨기、治癒促進・大
+		ABL:(CHARANUM-1):스킬1 = 304
+		ABL:(CHARANUM-1):스킬2 = 316
+		ABL:(CHARANUM-1):스킬3 = 236
+		ABL:(CHARANUM-1):스킬4 = 2410
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		CALL BATTLE_START
+		
+		PRINTL
+		PRINTW 舞台に乱入した당신は、双葉と協힘し、오르트로스を叩き伏せた。
+		PRINTW さらにそのあと、怒って乗り込んできた観客を数人ほど혈제にあげ、힘づくでその場を탈출すると、
+		PRINTW まだ息のある香子を、予備の마석で治癒してやった。
+		PRINTW ……なお、コロシアムの운営には事前に話を通してる。通してあるが、観客に理屈は通じないのである。
+		PRINTL
+		PRINTW 「げほっ、げほっ！」
+		PRINTL
+		PRINTW 香子の焼け爛れた肌が剥がれ落ち、急速に新陳代謝が進んでいく。
+		PRINTW 大きくせき込み、何度か黒い痰を吐き出すと、
+		PRINTW 香子はふらふらと立ち上がり、再び、己の무기を召喚した。
+		PRINTL
+		PRINTW 「ああ、また、死んでしもたみたいやなあ。
+		PRINTW 　ほな、第二ラウンドどす……どっからでも掛かってきたらええわ……」
+		PRINTL
+		PRINTW 言って、夢遊病みたいに歩き出す。まるで、눈の前に、巨大な마수が居るかのように。
+		PRINTW 香子の眼はまだ見えていないようだった。마석一つでは完治しなかったのか、その眼球は煮물고기みたいに白濁していた。
+		PRINTL
+		PRINTW 「馬鹿ッ！」
+		PRINTL
+		PRINTW 双葉が팔を握って止めた。
+		PRINTW 香子は前を向いたまま、濁った眼玉をぎょろりと動かした。
+		PRINTL
+		PRINTW 「何しに、来はったん。
+		PRINTW 　うちは呼んでまへん、あんたのことなんか、求めてまへん」
+		PRINTW 「どうしてこんなところに一人で来たんだ！　こんな危ないこと、する필요ないだろ！？」
+		PRINTW 「あんたには関係あらしまへん、
+		PRINTW 　どうせ、死んだって、すぐ生き返えられるさかい、
+		PRINTW 　うちのことなんか、放っておいたらよろしお――」
+		PRINTL
+		PRINTW ばちん。전격みたいな平손打ち。
+		PRINTW 香子はぶっ倒れた。双葉は襟首をつかんで引きずり起こした。
+		PRINTL
+		PRINTW 「おまえ、おまえなあ！　放っておけるわけないだろうが！？」
+		PRINTW 「……こんなもん、痛くも痒くもあらしまへんわ、
+		PRINTW 　うちは一人でやっていける、うちは強うなったんや」
+		PRINTW 「ッッッ、バカヤロー！　強いやつがそんな顔するかよぉっ！」
+		PRINTL
+		PRINTW ふっくらとした頬がこわばっていた。
+		PRINTW 品のいい小鼻がひくひくと動いていた。
+		PRINTW 香子は、白濁したままの눈をぎゅっと瞑ると、옷の소매でごまかすように強くこすった。
+		PRINTL
+		PRINTW 「もうイヤなんだよ、これ以上後悔したくないんだよ」
+		PRINTW 「つば、飛ばさんといて。汚いわ」
+		PRINTW 「いなくならないでくれよ、お前と一緒にいたいんだよ」
+		PRINTW 「なんですのん、怒ったり泣いたり、せわしないわ」
+		PRINTL
+		PRINTW 双葉はしがみつくようにして가슴に顔をうずめている。
+		PRINTW 香子は見えていない눈を天井に向け、されるがままになっている。
+		PRINTL
+		PRINTW 「……なあ、なんでなん？
+		PRINTW 　なんであんたは、うちのこと、追いかけて来てくれはったん」
+		PRINTL
+		PRINTW 遠く、遠く、いつかの記憶を探るように、香子は言う。
+		PRINTW 双葉は香子の손を取り、真っ白に濁った눈を見つめながら、応える。
+		PRINTL
+		PRINTW 「見たいんだ、
+		PRINTW 　いつか、세계でいちばんキラめく、お前の姿を、
+		PRINTW 　一番近い場所で……お前といっしょに、肩を並べて」
+		PRINTL
+		PRINTW 香子は笑った。
+		PRINTL
+		PRINTW 「あかんわ」
+		PRINTW 「ッ、そう、か」
+		PRINTW 「あんたがそんな顔してる限り、ぜっっったい、うちには追い付けまへん」
+		PRINTL
+		PRINTW 香子の細い팔がにゅっと伸びて、당신から마석を奪い取った。
+		PRINTW 白濁していた眼球に色が射し、不적な表情が戻ってくる。
+		PRINTL
+		PRINTW 「카오루코……？」
+		PRINTW 「あーあ、ほんま辛気臭いお人どす、見ててイヤになりますわ。
+		PRINTW 　うちの知ってる双葉はんは、もっともっと……ハンサムさんどしたえ」
+		PRINTL
+		PRINTW 香子は微笑みながら双葉の額を指ではじいた。
+		PRINTL
+		PRINTW 「いだっ！？」
+		PRINTL
+		PRINTW そして立ち上がり、くるりと背中を向ける。
+		PRINTL
+		PRINTW 「見とき、うちはもっと強うなる。
+		PRINTW 　こんな세계に負けまへん、うちはどんな舞台でもキラめいてみせます。だから……
+		PRINTW 　お願いどす。あんたは、自由に、生きておくれやす。
+		PRINTW 　あんたには、あんたの道が、真っすぐ伸びてはるさかい」
+		PRINTL
+		PRINTW 双葉は、しばらくキョトンとしていたが、震える香子の握り拳に気付くと、そっと背中に손を当てて、笑った。
+		PRINTL
+		PRINTW 「じゃ、勝손にするよ」
+		PRINTW 「勝손にしよし」
+		PRINTW 「ああ、勝손にする、勝손におまえに期待する。勝손におまえに、追いついてやる。
+		PRINTW 　だから、お願いだ。
+		PRINTW 　誰よりもキラめいていてくれ。
+		PRINTW 　ここがどこで、あたしたちが何者だとしても、
+		PRINTW 　おまえは、あたしの、……憧れなんだからさ」
+		PRINTL
+		PRINTW 香子は振り向かなかった。少し笑って、天を見上げた。
+		PRINTW 双葉は俯いた。顔は耳まで赤かったが、입元は微笑んでいた。
+		PRINTL
+		PRINTW 「さすが双葉はん、ええ趣味してはるわ」
+		PRINTW 「当り前さ、おまえと一緒に、育ったんだから」
+		PRINTL
+		PRINTW 二人はくすくす笑った。声はだんだん大きくなり、最後は馬鹿みたいにお互いの身体を叩きながら大笑いした。
+		PRINTW 恥ずかしい連中だこと。
+		PRINTW だけど、仲直りしたようで何よりだ。
+		PRINTW 何よりだが……こちらは一方的に損しているだけのような気がするぞ？　デビル・서머너は暇じゃないんだが？？？
+		PRINTL
+		PRINTW 「ほな帰りますえー、一仕事したらお腹空きましたわぁ」
+		PRINTW 「何が一仕事だよ、ただ心配かけただけのくせに」
+		PRINTW 「はぁー！？　何言うてはりますのん！　……せや。서머너はん、손ェ出しておくれやす！」
+		PRINTL
+		PRINTW ＞당신は50,000円を손に入れた
+		MONEY += 50000
+		PRINTW うわ、何だこの現金。
+		PRINTW 당신が香子の顔を見ると、彼女はふふんと反り返った。
+		PRINTL
+		PRINTW 「ファイトマネーどすえ！　うち、出来る女やさかい」
+		PRINTW 「た、たかが五万で命を懸けるな！」
+		PRINTW 「たかが！？　ピーピー泣いてただけのあんたに言われたないわ！」
+		PRINTW 「香子てめえ！」
+		PRINTL
+		PRINTW ……なるほど、謎の京都人も、気遣い程度はできるらしい。
+		PRINTW またしてもぎゃあぎゃあとケンカを始めた二人を見ながら、당신は現金をポケットにしまい込むのであった……。
+		PRINTL
+		LOCAL = GETCHARA([[キャラ:카오루코]])
+		;アライメントを善に（セルフスタァライトしちゃったので）
+		CFLAG:LOCAL:善悪치 = 256
+		PRINTL ＞香子のアライメントが変動した
+		
+		
+		LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+		;アライメントを善に（セルフスタァライトしちゃったので）
+		CFLAG:LOCAL:善悪치 = 256
+		PRINTL ＞双葉のアライメントが変動した
+		
+		WAIT
+		
+		;双葉はんセルフスタァライト
+		SETBIT 이벤트フラグ:93:5,23
+		;ぶぶ漬けセルフスタァライト
+		SETBIT 이벤트フラグ:93:6,23
+		
+	;레벨が발りてる場合
+	ELSEIF  RESULT == 2 && (BASE:(LOCAL:0):LV + (BASE:(LOCAL:1):LV)) > 19
+		PRINTL
+		PRINTW 당신は双葉をあざ笑った。
+		PRINTW そして言う。“やるべきことも分からないの？”と。
+		PRINTL
+		PRINTW 「どういう、意味ですか？」
+		PRINTL
+		PRINTW 簡가운なことだ、당신には전개が読めていた。
+		PRINTW 당신が座席に座って입笛を吹くと、双葉は幻滅したように顔をゆがめた。
+		PRINTL
+		PRINTW 「くそっ、もういいです、あたしは勝손にやりますから！」
+		PRINTL
+		PRINTW 双葉の복장がレヴュー옷へと変ずる。
+		PRINTW 光り輝く己の무기、하루バード“Determinator”を握りしめた彼女は、警備員の制止を振り切ってコロシアムの舞台へと飛び出した。
+
+		;Determinator　솔직함に翻訳すると裁定者とか決定者とかになるらしいけど
+		;ここはDe-terminator……すなわち、“終わらせないもの”の説を唱えようと思う。
+
+		PRINTL
+		PRINTL
+		PRINTL
+		PRINTW 「香子ーっ！」
+		PRINTL
+		PRINTW どおん。高く飛び上がった双葉の一撃が、오르트로스の背中を打った。
+		PRINTW 突然の乱入者に、さしもの巨짐승もたたらを踏み、警戒したように距離を取って睨む。
+		PRINTL
+		PRINTW 「っ、何であんたが、ここに」
+		PRINTW 「카오루코！　大丈남편か！　あたしが必ず守るから……」
+		PRINTW 「馬鹿にしてッ！」
+		PRINTL
+		PRINTW 巨짐승のマズルに赤い光が灯る。香子はバネのように横っ飛びした。
+		PRINTW 次の瞬間、마그마みたいなファイア・ブレスが迸り、舞台を炎のリングへと変えた。
+		PRINTL
+		PRINTW 「守るってなんや、うちがあんたより劣ってるからか！？
+		PRINTW 　あんたよりひ弱で、あんたより鈍くて、
+		PRINTW 　あんたに、あのとき、聖翔祭のメインキャスト取られたからか！？」
+		PRINTW 「っ、今関係ないだろ、それ！」
+		PRINTL
+		PRINTW 双葉の斬撃が、오르트로스の後ろ다리を襲う。
+		PRINTW しかし巨짐승ものろまではない。탄환のようなキックが、飛んできた刃を斜め下から打ち払った。
+		PRINTL
+		PRINTW 「うわっ！？」
+		PRINTW 「関係あるわっ、寝言抜かすな！
+		PRINTW 　ここはうちの“舞台”。うちが主役、うちがスタァ！
+		PRINTW 　あんたはまた、うちから主役を、奪い取るつもりなんか！？」
+		PRINTW 「違う！　何でそんなこと言うんだよ！？　どうしてあたしの言葉を聞いてくれないんだよ！？
+		PRINTW 　あとおまえ主役じゃなかっただろ」
+		PRINTW 「やかましいわっ！」
+		PRINTL
+		PRINTW 香子の身体が마력で輝く。
+		PRINTW 己の무기――薙刀・水仙花を掲げると、질풍の속성相性と共に오르트로스の股下に滑り込んだ。
+		PRINTW ギャオオン！　悲鳴の後、巨짐승の全身に裂傷が走る。
+		PRINTW さらに香子は毛の禿げた皮膚に刃を突き立てると、ズムっと縦に大きく切り開いた。
+		PRINTL
+		PRINTW 「うちは変わったんや。
+		PRINTW 　この세계に来て、ようさん、生き血を吸うて。
+		PRINTW 　うちは強くなった。こんな犬ッころに、負けへんくらいに！」
+		PRINTL
+		PRINTW 鮮血。そして巨짐승の悲鳴。
+		PRINTW 香子は油断ない表情で오르트로스から距離を取った。
+		PRINTL
+		PRINTW 「主役はうちどす、これがうちの、운命の舞台なんどす。
+		PRINTW 　もう、構わんといて。
+		PRINTW 　うちは一人で、やっていけますさかい、
+		PRINTW 　双葉はん……あんたはあんたの、進む道を見つけなはれ」
+		PRINTL
+		PRINTW そうして香子は、一気に적の懐へと、飛び込んだ。
+		PRINTW 切る、切る、殴る。
+		PRINTW 切る、切る、殴られる。
+		PRINTW 噛まれた、切った、先ほどまでいたところに再び炎のペーストが走った。
+		PRINTL
+		PRINTW お互いがお互いの血で真っ赤に染まっていく수라場。
+		PRINTW 血反吐好きな観客どもまで真검な面持ちで推移を見守っている。
+		PRINTL
+		PRINTW ……오르트로스の입腔内が再び灼熱を溜め始めた。
+		PRINTW 香子は――決して勇ましくはなく、むしろ泣きそうな顔になりながら――奴との距離を一気に詰めた。
+		PRINTW なるほど、ブレスを封じるつもりか。
+		PRINTW あれは飛び道具だ。至近距離なら当たらないし、無理に放てば자폭の危険もある。
+		PRINTW 香子の判断は正しい。通常ならば。
+		PRINTL
+		PRINTW 오르트로스は、自分の真下へ向けて、捨て身のブレスを撃ち放った。
+		PRINTL
+		PRINTW 「ひっ……！？」
+		PRINTL
+		PRINTW 大小２つの影が炎に呑まれる。
+		PRINTW 先に탈출したのは오르트로스だ。吐きつけたブレスの反動で、燃え上がりながらも화염の中から転がり出てきた。
+		PRINTW 次に香子が飛び出した。地面を転がって消火を試みるが、ナパームのように粘つく화염はそうそう消えたりなんかしない。
+		PRINTW おしまいか――観客が落胆の吐息を漏らした次の瞬間、火だるまの香子に双葉が飛びついた。
+		PRINTL
+		PRINTW 「ぐっ……あかんっ、何してはるっ！」
+		PRINTW 「んぎいい……！　があああああああッ！　ああああああああああああああ！」
+		PRINTL
+		PRINTW どじゅっ！　水分が一瞬で揮発する音。아픔を殺した双葉の咆哮。
+		PRINTW 心中か？　一瞬訝しんだが、どうやらそれは違うらしい。
+		PRINTW 双葉は自分の身体を押し付け、飛び散った燃料の一つ一つを、힘づくで消火しているようだった。
+		PRINTL
+		PRINTW 「はあっ、はあっ！　くうう」
+		PRINTW 「あほっ！　何やっとんねん双葉っ！
+		PRINTW 　どうせ死んでも生き返れるんや！　あんたがわざわざ痛い思いする필요は……」
+		PRINTW 「うるせえ！　ぐちゃぐちゃ女々しく喚きやがって！
+		PRINTW 　助けは要らない？　進む道を見つけろ？
+		PRINTW 　悲劇のヒロインぶりやがって、こンの……
+		PRINTW 　性格ブスっ！！！」
+		PRINTW 「――は？
+		PRINTW 　はあああああああああああああああああ！？」
+		PRINTL
+		PRINTW 場にそぐわない、素っ頓狂な声。
+		PRINTL
+		PRINTW 「ふっ、双葉ァァァ！　言うてエエこととアカンこともわこてへんのかぁっ！」
+		PRINTW 「何回でも言ってやるっ、性格ブス！　このカッコつけの自惚れ屋っ！
+		PRINTW 　なんで一人でやろうとするんだよ！　なんであたしを置いていくんだよ！
+		PRINTW 　あ、あたしのこと、嫌いになっちゃったのかよ……！」
+		PRINTW 「んな……」
+		PRINTL
+		PRINTW 炎は収まった。代償として、二人はひどいやけどを負った。
+		PRINTW あの程度、아이템や魔法なら회복は容易だが……状況がそれを許さない。
+		PRINTW 同じく炎上し、のたうち回っていた오르트로스は、炎を消すことをあきらめたのか、ごうごうと火柱を上げながら２人を睨んだ。
+		PRINTL
+		PRINTW 「あたしは悔しいんだよ、こんな세계にお前を連れて来ちゃったのが」
+		PRINTW 「せやからそれは」
+		PRINTW 「見たいんだよ！　おまえの一番、キラめく姿を！　あたしは！」
+		PRINTL
+		PRINTW 双葉が香子を突き飛ばす。하루バードを地面に斜めに突き立てて、突進してきた오르트로스を押し留める。
+		PRINTW 충격で、彼女の焼け焦げた肌が張り裂け、黒ずんだ血があたりに飛び散った。
+		PRINTL
+		PRINTW 「いぎっ……！」
+		PRINTW 「双葉はんっ！？」
+		PRINTW 「見たいんだ、お前が舞台に立つ姿を、
+		PRINTW 　見たいんだ、お前が一番キラめく瞬間を、
+		PRINTW 　見たいんだ！　세계で一番近くで……おまえの隣に、肩を並べて！」
+		PRINTL
+		PRINTW 双葉の돌려차기が左の머리を蹴り倒す。短く持った하루バードで右の머리の眼を突いた。
+		PRINTW しかし발りない、火힘が발りない。巨짐승は激怒し、双葉を激しく攻め立てる。
+		PRINTL
+		PRINTW 「あたしが支えるよ、あたしが守るよ、だから불결役なんかやめてくれ！
+		PRINTW 　ここはお前の舞台じゃないッ、お前の舞台は拍손と喝采の中なんだッ！
+		PRINTW 　おまえが居なくなったら、あたしはどこに向かって走ればいいんだ！？
+		PRINTW 　何を눈標に生きればいいんだ！？
+		PRINTW 　おまえが舞台に帰れる日まで、あたしが絶対守ってやる、だから、だから！」
+		PRINTL
+		PRINTW 香子は立ち上がった。
+		PRINTL
+		PRINTW 「あほくさ」
+		PRINTW 「え……？」
+		PRINTW 「ほんま、あほくさいわ。
+		PRINTW 　うちが불결役とか、ありえまへんわ。
+		PRINTW 　双葉はん、こっち来てから、눈ぇ腐ったんと違いますぅ？」
+		PRINTL
+		PRINTW 焼けただれていた옷が、キラめきと共に修復されていく。
+		PRINTW 煤けていた顔が、一陣の風の後、紅色のチークに彩られる。
+		PRINTW 双葉は見上げた、소녀の姿を。
+		PRINTW 소녀は笑った。己の顔が、いちばん愛らしく見える角度を作って――
+		PRINTW 観客に向けて、抜群に愛らしい笑みを、振りまいた。
+		PRINTL
+		SETCOLOR 0xdc7b8c
+		PRINTW 「立てば芍薬、座れば牡丹、踊る姿は月下美人」
+		RESETCOLOR
+		PRINTL
+		PRINTW ――歌声。
+		PRINTW 화염を切り裂き、埃と血臭を吹き飛ばしながら、
+		PRINTW 香子が高らかに歌い始めた。
+		PRINTL
+		SETCOLOR 0xdc7b8c
+		PRINTW 「桜ぁ、並木を、しゃなりとくぐり」
+		RESETCOLOR
+		PRINTL
+		PRINTW 場違いな演舞、しかし、誰も止めない、止められない。
+		PRINTW ――スポットライトが稼働する。音響が勝손に音楽を響かせる。
+		PRINTL
+		PRINTW 운営スタッフが慌てて機材を制御しようと試みるが、止まらない、止められない。
+		PRINTW ――どこからともなく花弁が舞った。
+		PRINTW ――ボンッと間仕切りが生えてきて오르트로스と双葉を分断した。
+		PRINTL
+		PRINTW キラめく세계に、踊り狂う美소녀に、観客は呆然と눈を奪われる。
+		PRINTW ――リングが地響きと共にせり上がり、変形し、
+		PRINTW ――背景が、小物が、大道具が、
+		PRINTW ――何もない虚空からどんどん生えてくる！
+		PRINTL
+		PRINTW 香子は自分が起こしている現象に気付き一瞬ビクッとしたものの、
+		PRINTW ――気を取り直し、当然と言わんばかりに唇を歪めると、ぶるんぶるんと己の무기振り回し、眩い照明へと突き付けた。
+		PRINTL
+		SETCOLOR 0xdc7b8c
+		PRINTW 「세계、눈ぇ指して……舞いましょかぁ！」
+		RESETCOLOR
+		PRINTL
+		PRINTW ――ふと気づくと、당신の傍らに、キリン柄のマルチコプターが飛んでいた。
+		PRINTW ――底面には『라이브ビューイングは良い技術！』と書いてあった。
+		PRINTW キリンの仕業か？　そう思って睨んだが、マルチコプターは『フフフまさか』という仕草のあと上空へと飛び去った。
+		PRINTL
+		PRINTW 「카오루코、おまえ」
+		PRINTW 「まったく、双葉はんは、おかしなことばっかり言わはります。
+		PRINTW 　うちはヨゴレちゃう。その通りどすえ……。
+		PRINTW 　仕事はきちんと選びなはれって、お母はんにも、言われましたわ」
+		PRINTL
+		PRINTW どぉん！
+		PRINTL
+		PRINTW 土煙を噴き上げて、そこに現れたのは檜造りの能舞台。
+		PRINTW 困惑する오르트로스。派손な演出に歓声を上げる観客。そして有り得ない現象に絶句する운営スタッフ。
+		PRINTW 全ての視線を掌握し、舞台소녀は、一歩、前方へと歩み出た。
+		PRINTL
+		SETCOLOR 0xdc7b8c
+		PRINTW 「歌に踊りに往き還る、歩み進んだ、二人道」
+		RESETCOLOR
+		PRINTL
+		PRINTW 香子は双葉を見た。
+		PRINTW スポットライトが、もう１つ灯って、
+		PRINTW 双葉の머리上に、大きな大きな、星の明かりが花開いた。
+		PRINTL
+		SETCOLOR 0x815ca1
+		PRINTW 「――そうだ、あたしも見つけちまった。
+		PRINTW 　夜空にそびえる……一本道！」
+		RESETCOLOR
+		PRINTL
+		PRINTW 視線が交差する。どちらからともなくニヤリと笑い、輝く무기を머리上に掲げる。
+		PRINTW カンカンカンカン！
+		PRINTW シーリン그라이トがうなりを上げて面を上げた。いくつもの光の柱が闇を切り裂き天を叩いた。
+		PRINTL
+		SETCOLOR 0xdc7b8c
+		PRINTW 「９９期生、花柳香子！　最後までつきおうて貰うで？」
+		SETCOLOR 0x815ca1
+		PRINTW 「９９期生、石動双葉！　離すもんかよ、もう二度と！」
+		RESETCOLOR
+		PRINTL
+		PRINTW 포효。炎上したままの오르트로스が間仕切りを踏み倒し怒りのブレスを投射する。
+		PRINTW だが二人はもう무서움ない、소녀たちは燃え盛る炎を笑みを浮かべて潜り抜ける。
+		PRINTL
+		PRINTW 「当たりまへんえー」
+		PRINTL
+		PRINTW 香子は踊るように巨짐승の발元を掠めていった。
+		PRINTW ぶしゅーと血が噴き上がった。片方の前발が半ばほどまで断ち切られた。
+		PRINTL
+		PRINTW 「くらえーっ！」
+		PRINTL
+		PRINTW 飛び上がった双葉が오르트로스の머리めがけて무기を振り下ろす。
+		PRINTW ずどん！　避けようとした巨짐승はスパンと肩肉を切り飛ばされた挙句バランスを崩してひっくり返った。
+		PRINTL
+		PRINTW 「카오루코！」「任せとき！」
+		PRINTL
+		PRINTW 香子が마력を集中する。あの気配は……마하・갈か！
+		PRINTW 질풍が渦を巻く。降り注いでいた花弁が分厚い桃色の壁となり、오르트로스の視界を遮った。
+		PRINTW 更に、巻き起こった突風で거체を苛む炎はますます勢いを増し……巨짐승は完全に、炎と花に封じ込められた。
+		PRINTL
+		PRINTW 「いきますえ！」「よっしゃああ！」
+		PRINTL
+		PRINTW スポットライトが道を照らす。
+		PRINTW ２人の소녀は笑みを交換した。
+		PRINTW 大きな瞳を輝かせて、힘いっぱい、舞台の床を踏みしめて。
+		PRINTL
+		PRINTW 「せええええええ！」「おりゃあああああああっ！」
+		PRINTL
+		PRINTW 카즈토。
+		PRINTW 二人の渾身の一撃は、巨大마수の머리から꼬리までを、一息で一直線にぶち抜いた。
+		PRINTW 거체がぶるんと震え、めきめきと生木が割れるような音を立て、肉体が三枚に下ろされたあと、
+		PRINTW 爆発。
+		PRINTW マグネタイトの爆炎を背に受けて、舞台소녀は、舞台の中央で己の刃を高々と掲げた。
+		PRINTL
+		SETCOLOR 0xdc7b8c
+		PRINT 「포지션・ゼロ！」
+		SETCOLOR 0x815ca1
+		PRINTW 「포지션・ゼロ！」
+		RESETCOLOR
+		PRINTL
+		PRINTW 観客は立ち上がった。歓声を上げて팔を突き上げた。
+		PRINTW とてつもない熱狂がコロシアムの中を駆け巡り、おひねりがジャラジャラと飛び交った。
+		PRINTW 実況席も興奮している。何かすごい勢いで捲し立てているが、それすらも歓声の中に飲み込まれていく。
+		PRINTL
+		PRINTW 「……はは、なんかすごいことになっちゃったな」
+		PRINTW 「双葉はん、今まで、堪忍な」
+		PRINTW 「え？　なんか言った？　もう一回……」「あ、あんたが性格ブスて言わはったの一生忘れへんでって言うたんや！」
+		PRINTL
+		PRINTW 拍손と、歓声と、あれは言葉のアヤだってばあー！　という悲鳴が混ざり合う。
+		PRINTW ここは수라の巷《ちまた》だ。そのはずだった。당신が知る限り、こんな空気は初めてだ。
+		PRINTL
+		PRINTW まさかこんなことになろうとは……당신があっけにとられていると、ポケットの中で電話が鳴った。
+		PRINTL
+		PRINTW 『演者があり、観客がいる……それは即ち“舞台”です。
+		PRINTW 　魅せられたのです、당신も、私も、観客たちも。そして、舞台装置も。
+		PRINTW 　分かりますね？　心優しき、デビル・서머너』
+		PRINTL
+		PRINTW わかんねえよ。
+		PRINTW 당신は電話を一方的に切る『あっちょっ、どうしてェ？』と、
+		PRINTW 苦い顔をして近づいてくるコロシアムの管理者に、なんと言い訳しようかと考え始めた……。
+		PRINTL
+		
+		LOCAL = GETCHARA([[キャラ:카오루코]])
+		;アライメントを善に（セルフスタァライトしちゃったので）
+		CFLAG:LOCAL:善悪치 = 256
+		
+		PRINTL ＞香子のアライメントが変動した
+		PRINTL ＞香子のすべての스테이터스が2上がった
+		BASE:(LOCAL:0):힘 += 2
+		BASE:(LOCAL:0):지혜 += 2
+		BASE:(LOCAL:0):마력 += 2
+		BASE:(LOCAL:0):인내력 += 2
+		BASE:(LOCAL:0):속도 += 2
+		BASE:(LOCAL:0):운 += 2
+		
+		
+		LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+		;アライメントを善に（セルフスタァライトしちゃったので）
+		CFLAG:LOCAL:善悪치 = 256
+		
+		PRINTL ＞双葉のアライメントが変動した
+		PRINTL ＞双葉のすべての스테이터스が2上がった
+		BASE:(LOCAL:0):힘 += 2
+		BASE:(LOCAL:0):지혜 += 2
+		BASE:(LOCAL:0):마력 += 2
+		BASE:(LOCAL:0):인내력 += 2
+		BASE:(LOCAL:0):속도 += 2
+		BASE:(LOCAL:0):운 += 2
+		
+		WAIT
+		
+		
+		;双葉はんセルフスタァライト
+		SETBIT 이벤트フラグ:93:5,23
+		;ぶぶ漬けセルフスタァライト
+		SETBIT 이벤트フラグ:93:6,23
+		
+	;발りてない場合
+	ELSEIF  RESULT == 2 && (BASE:(LOCAL:0):LV + (BASE:(LOCAL:1):LV)) < 20
+		PRINTL
+		PRINTW 당신は손をこまねいて椅子に座った。
+		PRINTW そして言う。“お好きにどうぞ”と。
+		PRINTL
+		PRINTW 「な――」
+		PRINTL
+		PRINTW 双葉は一瞬、幻滅したように顔を歪めたが、
+		PRINTW すぐにその姿をレヴュー옷へと変ずると、警備員の制止を振り切ってコロシアムへと乱入した。
+		PRINTL
+		PRINTW 「香子ーっ！」
+		PRINTL
+		PRINTW どおん。双葉の무기である하루バードが오르트로스の背中を打つ。
+		PRINTW 突然の乱入者に、さしもの巨짐승もたたらを踏み、警戒したように距離を取って睨む。
+		PRINTL
+		PRINTW 「っ、何であんたが、ここに」
+		PRINTW 「카오루코！　大丈남편か！　ここからはあたしが……」
+		PRINTW 「来んといて！　あんたとは입も利きたくないっ、顔も見とうないっ！」
+		PRINTL
+		PRINTW 双葉の顔が硬直する。激昂した香子は無謀にも오르트로스へ돌격する。
+		PRINTL
+		PRINTW 「よせっ、카오루코、一人じゃ無理だ！」
+		PRINTW 「あんたなんか필요ないっ、うちは、うちは一人でもやれるんや！」
+		PRINTW 「くそっ……何で言うこと聞いてくれないんだよぉっ！」
+		PRINTL
+		PRINTW ……あーあ、なんて噛み合わない連携か。
+		PRINTW 無謀な돌격をする香子と、必死になってその尻拭いをする双葉。
+		PRINTW ２人の無様な戦いぶりは、やられ役の奴隷검사そのもの。つまり観客にとってはいい見世物だ。
+		PRINTL
+		PRINTW ――いいぞ、いいぞ、ブッ殺せ！
+		PRINTW ――情けねえ顔！　そのまま食われちまえ！
+		PRINTW ――死ね！　死ね！　死ね！
+		PRINTL
+		PRINTW 저항적わず、みるみる손傷を負い、血みどろになっていく二人に、観客のボルテージは最高潮。
+		PRINTW 実況席も興奮し、해설の웜さんが新鮮な生肉を……あ、違う、司会が齧られてる。いいのかあれ。
+		PRINTW そんなよそ見をしていたら、来賓席から役職者が손もみしながらやって来た。
+		PRINTW 당신は起立して挨拶した。
+		PRINTL
+		PRINTW 「はは、いえいえ、お座りください！
+		PRINTW 　思ったよりも面白い内容になりそうですねェ！　ソフト化が楽しみです！
+		PRINTW 　見눈麗しい美소녀二人が、저항虚しく嬲られ犬のエサになる……需要有りますねえ！」
+		PRINTL
+		PRINTW 役職者は上機嫌に笑っている。
+		PRINTW ここに来る途中で根回しをしておいたのだ、
+		PRINTW 『生け贄を一人、いいタイミングで投入するよ』と。
+		PRINTL
+		PRINTW 「しかし、良いのですか、ファントムの서머너さん。
+		PRINTW 　見たところ、あれはとても“いい子”ですが。
+		PRINTW 　そちらで出荷したほうが利益になるのでは？」
+		PRINTL
+		PRINTW ニコニコと役職者が問いかける。裏でもあるのかと探っているのだろう。
+		PRINTW 奴隷をどう使おうがこちらの勝손だろうに。
+		PRINTW 당신が『邪魔になったから』と適当な返事をすると、役職者はハハハと笑った。
+		PRINTL
+		PRINTW 「編集が終わったら一番に샘플を届けさせましょう。
+		PRINTW 　さあ、そろそろ、彼女たちの見せ場です、ここからは静かに見守りましょう」
+		PRINTL
+		PRINTW ……リングの上は地獄と化していた。
+		PRINTL
+		PRINTW 「ぎゃあああああ！」
+		PRINTL
+		PRINTW ひねりもない汚い悲鳴。
+		PRINTW ちょうど、香子の右발が千切れて宙を舞ったところだった。
+		PRINTL
+		PRINTW 「かお、るこ」
+		PRINTL
+		PRINTW 双葉は既に背뼈ごと腹を裂かれて動けなくなっていた。
+		PRINTW 香子は残った손발を使い必死に逃げようとするが……
+		PRINTW 오르트로스は、まるでおもちゃで遊び始めた犬のように、香子の身体を前발でころころと転がした。
+		PRINTL
+		PRINTW 「い、いやや、来んといて、ひいっ！？」
+		PRINTL
+		PRINTW そして、青ざめる乙女に覆いかぶさる。
+		PRINTL
+		PRINTW 「な、なんやそれっ、ひいっ、ひいいっ、
+		PRINTW 　そんなもん顔に近付けんといて！　いやっ、臭ぁっ、もごっ！？　んごおおおお！」
+		PRINTL
+		PRINTW みきみきと音がして、何をしているのかと思ったら、
+		PRINTW 오르트로스は、팔みたいに太い페니스を、乙女の小さな입の中へ、힘任せに捻じ込んでいた。
+		PRINTL
+		PRINTW 「ぶも……おおおお……おげえええ」
+		PRINTW 「やめろ、やめろ、やめてくれ、香子を、汚さな、い、で」
+		PRINTL
+		PRINTW 오르트로스の二つある머리のうち、一つは、股下で蠢く哀れな소녀を見て가학的な笑みを浮かべている。
+		PRINTW もう一つは、双葉の腹に鼻先を突っ込んで、はふはふと内臓にかぶり付いていた。
+		PRINTL
+		PRINTW 「ああ、감각がねえよ、あたし、食われてるよ」
+		PRINTL
+		PRINTW まるで悪趣味なドッグボウルだ。
+		PRINTW 前발で抑え、皮を噛んでぴーっと引っ張ると、
+		PRINTW 薄く皮下に付いた脂肪が、ぷりぷりと音を立てて、双葉の身体から剥がれていった。
+		PRINTL
+		PRINTW 「かお、る、こ」
+		PRINTL
+		PRINTW 오르트로스が床オナみたいな動きをした。
+		PRINTW 香子の姿は巨짐승の身体に押しつぶされて見えなくなってしまった。
+		PRINTW ただ、パキパキ、プチプチと、いろいろ裂けたり砕けたりする音だけが、腹の下から響いていた。
+		PRINTL
+		PRINTW しばらく置いて、오르트로스が사정をした。
+		PRINTW うめき声すら聞こえなかった。ただ、血交じりの白濁が、じわじわと床に広がっていった。
+		PRINTL
+		PRINTW 「あ……」
+		PRINTL
+		PRINTW 巨짐승が立つ。
+		PRINTW 双葉の顔から、表情が抜け落ちた。
+		PRINTW 오르트로스の性器には、潰れて、引き裂かれて、原型を失った何かが、사용済み콘돔みたいに垂れ下がっていた。
+		PRINTL
+		PRINTW 「やだ、やだよ、こんなのやだ」
+		PRINTL
+		PRINTW べちょんと落ちる。짐승臭が広がった。
+		PRINTW 눈玉ごと砕けた眼窩から涙のように정액が零れた。
+		PRINTW 双葉は、傷だらけの팔を、香子だったモノへと伸ばした。
+		PRINTL
+		PRINTW 「카오루코、카오루코、かお――」
+		PRINTL
+		PRINTW その指が、愛する相方に届くその前に。
+		PRINTW 赤い噴水。
+		PRINTW 歓声が上がる。拍손が会場を埋め尽くす。
+		PRINTW 双葉も心臓を噛み千切られて絶命した。見開かれたままの눈が輝きを失い、傷だらけの팔がぱたりと床に落ちた。
+		PRINTL
+		PRINTW 「おおっと、完食される前に止めなくては……。
+		PRINTW 　確かな손ごたえを感じます。これは良い映像が取れました。
+		PRINTW 　당신が要らないというのなら、彼女たちはこちらで蘇生し、奴隷전사として조교しておきますよ。
+		PRINTW 　きっと看板女優になりますよ！　당신もどこかで눈にするかもしれませんね。ご期待くださいませ！」
+		PRINTL
+		LOCAL:0 = GETCHARA([[キャラ:후타바（무대소녀）]])
+		DELCHARA LOCAL:0
+		LOCAL:1 = GETCHARA([[キャラ:카오루코]])
+		DELCHARA LOCAL:1
+		PRINTW ＞双葉の登録を抹消した
+		PRINTW ＞香子の登録を抹消した
+		PRINTW ＞당신は権利譲渡金として300마카を손に入れた。
+		MONEY:1 += 300
+		PRINTL
+		PRINTW 連中も“舞台”に立てて幸せだろう。
+		PRINTW 당신は受け取った小銭を握りしめ、熱狂するコロシアムを後にした……。
+		PRINTL
+		
+		;奴隷전사行きフラグ（気が向いたらなんか番外이벤트作る）
+		SETBIT 이벤트フラグ:93:6, 24
+		
+	ELSE
+		GOTO KAORUKO_03_SELECT_1
+	ENDIF
+	
+;やけくそではない
+ELSE
+	PRINTW 당신の姿を認めるや、双葉がすごい勢いで突っ込んできた。
+	PRINTL
+	PRINTW 「いったい香子のやつに何を吹き込んだんです！？」
+	PRINTL
+	PRINTW その顔は非常に険しい。溢れ出しそうな적意を意思で抑え込んでる表情だ。
+	PRINTL
+	PRINTW 「아이つに戦いなんて無理です！
+	PRINTW 　아이つ、様子がおかしいと思ったら、ずっと殺し合いの練習ばかりして……
+	PRINTW 　今すぐ止めさせてください、あたしが아이つの分まで戦います、아이つは戦いに出さないでください！」
+	PRINTL
+	PRINTW ずいぶん必死だこと……。
+	LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+	IF TALENT:LOCAL:연모 || TALENT:LOCAL:친애
+		PRINTW とっくに心をつかんだはずの双葉が、まるで出逢った頃のように切날개詰まった顔で당신に訴えている。
+	ELSEIF TALENT:LOCAL:음란 || TALENT:LOCAL:창부
+		PRINTW 股は緩くなっても相方への思いは顕在か。双葉は久しく見なかった切날개詰まった顔で당신に訴えた。
+	ENDIF
+	PRINTL
+	PRINTW 聴いてやる理由はないが、さて。
+	PRINTL
+	PRINTL [0]知らんがな
+	SETCOLOR 0x33ffcc
+	PRINTL [1]まじめに三者面談でもするか……
+	
+	IF STRCOUNT(わたしたちは舞台소녀, "카렌（무대소녀）")
+		SETCOLOR 0x33ffcc
+		PRINTL [2]えーい面倒くさい！　他の舞台소녀に助けを求める！
+		RESETCOLOR
+	ENDIF
+	
+	$KAORUKO_03_SELECT_2
+	INPUT
+	IF RESULT == 0
+		PRINTL
+		PRINTW 知らんがな。
+		PRINTW 당신が冷たく切り捨てると、双葉は必死にしがみついた。
+		PRINTL
+		PRINTW 「あたしはどうなってもいいんです！　でも아이つだけは、
+		PRINTW 　아이つだけは、こんな危険なことさせたくないっ、
+		PRINTW 　아이つだけは、自由に、今まで通りに……！」
+		PRINTW 「何してはるん、双葉はん」
+		PRINTL
+		PRINTW 冷たい声。香子が閉じた扇を손でぺちぺちしながら歩いてくる。
+		PRINTL
+		PRINTW 「か、카오루코！　お前、こんな荒っぽいの、嫌いだっただろ？
+		PRINTW 　あたしが代わってやるからさ、だからお前は部屋でゆっくり」
+		PRINTW 「ほっといてって言うてるやろ！？」
+		PRINTW 「ほっとけるかよ！？　そんな引きつった顔、香子には似合わねえよ！」
+		PRINTW 「うるさい！　うちの何知っとんねん、アホ！」
+		PRINTW 「そんな言い方あるかよ！」
+		PRINTW 「うちにかまわんといて！　あんたはあんたで、あんじょうしてはったらよろしおす！」
+		PRINTL
+		PRINTW 二人は怒鳴りあったあと、お互いに눈をそらした。
+		PRINTW なんて面倒な……。
+		PRINTW 香子の内心は知っているが、こんなところに首を突っ込みたくない。
+		PRINTL
+		PRINTW 「双葉はん」
+		PRINTW 「なんだよ」
+		PRINTW 「うちのこと、忘れておくれやす」
+		PRINTW 「いやだね、絶対に嫌だ」
+		PRINTL
+		PRINTW そして、どちらからともなく、背を向けた。
+		PRINTW 双葉は唇を噛んだまま突っ立っている。
+		PRINTW 香子も同じ表情だ。しかし彼女は無言のまま、私室の方へと歩いて行った。
+		PRINTL
+		PRINTW 「……あたしは、ただ、お前を、お前だけでも、
+		PRINTW 　キラめく舞台へ返してやりたいだけなんだよ」
+		PRINTL
+		PRINTW 言えなかった言葉が宙を叩き、双葉はごしごしと、潤んだ눈をこすった……。
+		PRINTL
+	
+	ELSEIF RESULT == 1
+		PRINTL
+		PRINTW 인간関係のごたごたは早いうちに潰すに限る。
+		PRINTW どうせ香子の考えていることは分かっているのだ、二人で心行くまで話し合ってくれれば解決するはずだ。
+		PRINTW 당신は双葉を伴い香子の私室（すごく汚い）へと발を운んだ。
+		PRINTL
+		PRINTW 「카오루코、おまえにはこんなの、向いてないよ。
+		PRINTW 　あたしが全部引き受ける。だから香子は……」
+		PRINTW 「ほっといてって言うてるやろ！？」
+		PRINTL
+		PRINTW どうしてそんな初손からトップスピードなの！？
+		PRINTW こちらの戸惑いをよそに、二人の입喧嘩は、加速度的に히트アップしていく。
+		PRINTL
+		PRINTW 「ほっとけるかよ！？　そんな引きつった顔、香子には似合わねえよ！」
+		PRINTW 「うるさい！　双葉はんのくせに、うちの何知っとんねんアホ！」
+		PRINTW 「そんな言い方あるかよ！？　あ、あたしがどんな気持ちでおまえを……」
+		PRINTW 「かまわんといてって言うてますやろ！　あんたはあんたで、あんじょうしてはったらええやないの！」
+		PRINTL
+		PRINTW 二人は怒鳴りあったあと、お互いに気まずそうに눈をそらした。
+		PRINTW まって？　意地っ張り過ぎない？
+		PRINTW 京都人どもはぷるぷると震えたまま一言もしゃべらない。面倒くさい。
+		PRINTL
+		PRINTW 出入り입には당신が立っているので、しびれを切らして逃げ出すと言うことはないのだが……
+		PRINTW いい加減、何かを喋ってくれないだろうか。당신は香子のふくれっ面を見た。
+		PRINTL
+		PRINTW 「……は？　なんどす。
+		PRINTW 　うち、何も悪いことしてまへん。
+		PRINTW 　このお節介が勝손に突っかかって来はるだけどす」
+		PRINTL
+		PRINTW 仕方ない。
+		PRINTW らちが明かないので、당신は端末を操作し、とある録音데이터をポチッとな。
+		PRINTL
+		;香子怒りの独白フラグ
+		IF GETBIT(이벤트フラグ:93:6,22)
+			PRINTW 『そんなん言うまでもありまへん、双葉はんが、余計なことをしたのが悪いんどす』
+			PRINTW 「は！？」「え？」
+			PRINTW 『一눈瞭然や、双葉はんが全部悪いんや。
+			PRINTW 　双葉はんが全ての元凶、双葉はんが諸悪の根源、何もかんも、愚かで軽率な、双葉はんのせい。
+			PRINTW 　……それで、終わりで、ええやないの。
+			PRINTW 　……開き直ってしまえばええやないのっ。
+			PRINTW 　こっちきてからずっと下向いて！　アホちゃうの！？　そんなんでうちの気ぃは晴れへんわっ！』
+			PRINTL
+			PRINTW スピーカーから聴こえる、熱を感じるほど生々しい、感情の籠った香子の叫び。
+			PRINTW 双葉は絶句した。香子も（あかんあかん何晒してはるんという顔で）絶句した。
+			PRINTL
+			PRINTW 『絶交や！　あんなやつ、今日限りで絶交や！
+			PRINTW 　顔も見ん、입も利かんっ、そしたら、そしたら……！
+			PRINTW 　そしたら、あの子が苦しまんで、済む』
+			PRINTL
+			PRINTW 音声が終わると、双葉は눈を潤ませて香子を見た。
+			PRINTW 香子は顔を真っ赤にして酸素の발りない金물고기みたいな顔をしていたが、
+			PRINTW 双葉の視線に気づくと「ああ、まあ、そういうことどす」と誤魔化すように言った。
+		ELSE
+			PRINTW 『うちは一人でもやれる、うちかて、千華流の血を引いとんのや。
+			PRINTW 　次に連れて行っておくれやす、いっとう怖い악마さんに、うちを会わせておくれやす。
+			PRINTW 　……どこぞのお節介さんが、うちに同情せんで済むように』
+			PRINTW 「ちょっ！？」
+			PRINTL
+			PRINTW 慌てた香子が당신の前で謎のパント마이ムを始めた。
+			PRINTW 双葉は입をもごもごしながら팔を組んで눈を閉じている。
+			PRINTL
+			PRINTW 『あんなぼんくら、今日限りで、絶交や。
+			PRINTW 　二度と会いません、二度と、言葉なんか交わしません。
+			PRINTW 　……そしたら、あの子も、うちに、同情せんで済むんどす』
+			PRINTL
+			PRINTW 「ぎょええええええええ！」
+			PRINTL
+			PRINTW そして머리を抱えて妙ちくりんなポーズで蹲る香子。
+			PRINTW なんかエジプトの壁画みたいだな。
+			PRINTW 双葉もむず痒そうな顔を両손で隠し耳まで真っ赤にして小さくなっている。
+			PRINTW 相方の애정がきちんと伝わったようで何よりです。という訳で早く話を終わらせろ。당신は双葉の肩を小突いて待った。
+		ENDIF
+		PRINTL
+		PRINTW 「……카오루코、気付けなくて、ごめん」
+		PRINTW 「な、何のことかさっぱり分からしまへんわ」
+		PRINTW 「確かに、あたし、後ろ向きになり過ぎてた、反省する」
+		PRINTL
+		PRINTW しゅんとした表情で머리を下げる双葉。
+		PRINTW 香子は戸惑いながらも、ハン、と鼻で笑って見せた。
+		PRINTL
+		PRINTW 「な、なんや双葉はん、うちに絶交されてまうのが、えらいしんどいみたいやねえ？
+		PRINTW 　まあ、双葉はんは？　うちがおらんとなぁんもでけへんし？　しゃあないから……」
+		PRINTW 「ああ、しんどいよ、辛いよっ！」
+		PRINTL
+		PRINTW 双葉の顎が震えていた。香子はギョッとして눈を丸くした。
+		PRINTW 双葉は、입を真一文字に結び、かちかちと奥歯を鳴らしながら、涙を必死にこらえていた。
+		PRINTL
+		PRINTW 「ごめん、ごめんよ、辛いのはあたしの方だったんだよ。
+		PRINTW 　こんな、知らない세계に飛ばされて、家族ともお師匠さんとも会えないって思ったら……
+		PRINTW 　もうあたしにはお前しかいないんだよ、お前を無くしたらもう何にもないんだよ。
+		PRINTW 　そう思ったら、お前をこの손で、守ってあげたく、なっちゃってさ」
+		PRINTL
+		PRINTW 唇が白くなっている。白い歯が噛みしめていた。
+		PRINTL
+		PRINTW 「双葉はん、あんたそないに……」
+		PRINTW 「絶交だけはいやだよ、あたし一人になっちゃうよ、お願いだ、一緒に居てくれよ、
+		PRINTW 　何でもするよ、お前のためなら何でもする、だから」
+		PRINTL
+		PRINTW 一瞬間を置いて、香子は大げさな仕草でため息を吐いた。
+		PRINTL
+		PRINTW 「はー、そういうところどすえ？　双葉はん」
+		PRINTL
+		PRINTW 香子が팔を伸ばす。双葉の小柄な体が、細い二つの팔の中にすっぽりと収まった。
+		PRINTL
+		PRINTW 「何でもするとか、言うたらアカン。
+		PRINTW 　うちにはうちの、あんたにはあんたの道がある。
+		PRINTW 　いつかの미라이で、頑張った先で出会うならよろしおすが、そないに急に、無理くり손繰り寄せられても迷惑や」
+		PRINTW 「카오루코……？」
+		PRINTW 「うちはうちで、しっかりやります。
+		PRINTW 　あんたはあんたで、あんじょう気張りぃ。
+		PRINTW 　あんたは、うちの……あー、まあ、かわいい妹分やさかい」
+		PRINTL
+		PRINTW 頬を赤くしてそう呟く香子に、双葉はふふっと噴き出した。
+		PRINTL
+		PRINTW 「何だよ、それ。妹分はおまえの方だっての」
+		PRINTW 「はあー！？　何言うてはりますの、あんたのほうが背ぇもお가슴もこじんまりしてはりますやろ！？」
+		PRINTW 「はいはい、取り急ぎ部屋の掃除からするぞ。
+		PRINTW 　ったく、あたしが面倒見ておかないと、自分の머리카락の毛すらろくに손入れできないんだからさ」
+		PRINTW 「できてます！　今朝も머리카락の毛ぇ、ちゃんと梳かしましたし！」
+		PRINTW 「できてない。おまえ、後ろもちゃんと見てるか？　寝ぐせ付いたままになってるぞ」
+		PRINTW 「う……。知らんわアホっ！　勝손にしよし！」
+		PRINTL
+		PRINTW ぷいっとそっぽを向いた香子は、幸せそうに、はにかんでいた。
+		PRINTW 双葉も潤んだ눈を瞬かせながらニコニコと笑っていた。
+		PRINTW 人が見てる前でイチャ付かないでくれますやろか？？？　당신はさっさと部屋を出た。
+		PRINTL
+		PRINTW 「おおきに、ね」
+		PRINTL
+		PRINTW 去り際、小さく聞こえた香子の声は、何だかこちらに向けられているようにも聞こえた……。
+			
+			
+		LOCAL = GETCHARA([[キャラ:카오루코]])
+		;アライメントを善に（セルフスタァライトしちゃったので）
+		CFLAG:LOCAL:善悪치 = 256
+		
+		PRINTL ＞香子のアライメントが変動した
+		
+		
+		LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+		;アライメントを善に（セルフスタァライトしちゃったので）
+		CFLAG:LOCAL:善悪치 = 256
+		
+		PRINTL ＞双葉のアライメントが変動した
+		
+		WAIT
+		
+		;双葉はんセルフスタァライト
+		SETBIT 이벤트フラグ:93:5,23
+		;ぶぶ漬けセルフスタァライト
+		SETBIT 이벤트フラグ:93:6,23
+		
+	ELSEIF RESULT == 2 && STRCOUNT(わたしたちは舞台소녀, "카렌（무대소녀）")
+		PRINTL
+		PRINTW 「ぐっどぐっどだよ！　香子ちゃん、すごーい！」
+		PRINTW 「あ、あたりまえどすやろ」
+		PRINTL
+		PRINTW そう言って笑って見せる香子だが、膝はガクガク、汗はだらだら。
+		PRINTW 平たく言うと死にそうな顔をしていた。
+		PRINTW その原因は、눈の前で浮遊する半裸の여신……。
+		PRINTL
+		PRINTW 「ホホホ……成程成程、これが現代の“日本舞踊”ですのね」
+		PRINTL
+		PRINTW 日本における舞踊の始祖、여신：아메노우즈메であった。
+		PRINTL
+		PRINTL
+		PRINTL
+		PRINTW 数十分前、愛城華恋の私室にて。
+		PRINTL
+		PRINTW 「第一回！　香子ちゃんに元気を出してもらおう会議を始めます！」
+		PRINTL
+		PRINTW しゃかしゃかとタンバリンを鳴らしながら、いえーい、と声を上げた愛城華恋。
+		SIF STRCOUNT(わたしたちは舞台소녀, "히카리") || STRCOUNT(わたしたちは舞台소녀, "쥰나") || STRCOUNT(わたしたちは舞台소녀, "마히루") || STRCOUNT(わたしたちは舞台소녀, "나나") || STRCOUNT(わたしたちは舞台소녀, "클로딘") || STRCOUNT(わたしたちは舞台소녀, "마야（무대소녀）")
+			PRINTW 集められた舞台소녀たちは、うーん、と声を揃えて唸った。
+		PRINTL
+		PRINTW 「まじめに考えてくれるんだよな……？」
+		PRINTL
+		PRINTW 双葉は訝しげに당신と華恋を交互に見た。
+		PRINTL
+		PRINTW 「もちろんだよ！？
+		PRINTW 　私も、いつものかわいい香子ちゃんに戻ってほしいもん」
+		IF STRCOUNT(わたしたちは舞台소녀, "히카리")
+			PRINTW 「……私も。もっとはんなりしててほしい、今の彼女に、ぶぶ漬けは似合わないと思う」
+			PRINTL
+			PRINTW 華恋の横で、ひかりは真검な顔をして頷いた。
+			PRINTW 双葉は何か言いたそうな顔をしていたが、大きめの溜息と共に言葉を飲み込んだようだ。
+		ELSE
+			PRINTL
+			PRINTW 華恋は真검だ。むしろ怒ったように頬を膨らませている。
+			PRINTW 双葉は何か言いたそうな顔をしていたが、大きめの溜息と共に言葉を飲み込んだようだ。
+		ENDIF
+		PRINTL
+		IF STRCOUNT(わたしたちは舞台소녀, "마야（무대소녀）")
+			PRINTW 「発言、宜しいですか？」
+			PRINTW 「ハイどうぞ！　天堂真矢さんっ！」
+			PRINTW 「一応の確認ではありますが、花柳さんは自主練に励んでいるのですね？
+			PRINTW 　それを邪魔する根拠はございますか？」
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "쥰나")
+			PRINTW 「発言、良いかしら？」
+			PRINTW 「ハイどうぞ！　星見純那委員長っ！」
+			PRINTW 「まず、確認なんだけど、『花柳さんが真검に訓練している』のは好ましい状況じゃないの？
+			PRINTW 　ここは聖翔じゃない、それどころか倫理観の欠片もない末法世。
+			PRINTW 　自分の身を守るに越したことはないんじゃないのかしら」
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "마히루")
+			PRINTW 「あの……」
+			PRINTW 「ハイどうぞ！　露崎まひるちゃんっ！」
+			PRINTW 「香子ちゃん、まじめに練習してるんだよね？
+			PRINTW 　頑張っているなら、私たちが水を差すのは良くないんじゃないかなって、思ったんだけど」
+		ENDIF
+		PRINTL
+		PRINTW その疑問はごもっとも。
+		PRINTW 당신は、この세계に来てからの花柳香子の前のめりっぷりを説明し、
+		PRINTW このままでは、遠くない미라이、取り返しのつかないことになると思うよ……と語った。
+		PRINTL
+		IF STRCOUNT(わたしたちは舞台소녀, "마야（무대소녀）")
+			IF STRCOUNT(わたしたちは舞台소녀, "클로딘")
+				PRINTW 「天堂真矢、당신、分かってて訊いたでしょう？」
+				PRINTW 「ふっ、邪推しないでください、西條클로딘……。
+				PRINTW 　思い込みほど怖いものはありません、報告・連絡・相談、現場で大事なことでしょう？」
+			ELSE
+				PRINTW 「確かに、最近の彼女の行動は、눈に余るものがありましたね。
+				PRINTW 　角を矯めて牛を殺す……という言葉もあります。
+				PRINTW 　技を磨くにしても、その個人にあった練習法を選ぶべきでしょう」
+			ENDIF
+			PRINTL
+			PRINTW 天堂真矢はニコリと笑うと、ティーカップに입を付け、話は終わったとばかりに눈を閉じた。
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "쥰나")
+			;星見이벤트3通過済み
+			IF GETBIT(이벤트フラグ:93:3,3)
+				PRINTW 「……そうね、環境に適応しようとして本来の自分を殺すのは本末転倒。
+				PRINTW 　花柳さんがそれほどまでに追い詰められているのなら、誰かが止めてあげるべき、ね」
+				PRINTL
+				PRINTW おっ、心当たりがあるな、호시미？　당신が意味深な顔をしてみせると純那は忌々しげに睨んだ。
+			ELSE
+				PRINTW 「……私は反対よ、大反対、戦えなければ価値なんてない、少なくとも私はそう教わったわ」
+				PRINTW 「あのさあ星見、それはお前が強いから」
+				PRINTW 「石動さん、それ以上言うなら、당신ともう입を利かない。
+				PRINTW 　ともかく、花柳さんだけ特別扱いするのは好ましいとは言えません。
+				PRINTW 　判断は、서머너さんに、任せますけど」
+				PRINTL
+				PRINTW 星見は不機嫌そうな顔で당신を睨んだ。
+				PRINTW 私怨が入っているな？　당신は彼女を無視して話を先に進めた。
+			ENDIF
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "마히루")
+			PRINTW 「そんなことになってたんだ……、そうですね、それなら誰かが助けてあげなきゃ、ですね」
+			PRINTL
+			PRINTW まひるは真검な顔で頷いた。
+			PRINTW 당신は舞台소녀の反応を見ながら話の先を促していく……。
+		ENDIF
+		PRINTL
+		IF STRCOUNT(わたしたちは舞台소녀, "나나")
+			PRINTW 「提案でーす♪」
+			PRINTW 「はいっ、なんでしょうっ、大場ななさんっ！」
+			PRINTL
+			PRINTW ななは立ち上がり、高い背でぐるりと周りを見渡しながら、確認するように입を開く。
+			PRINTL
+			PRINTW 「香子ちゃんって、すっごく負けず嫌いじゃない？
+			PRINTW 　だから、私、考えたの。
+			PRINTW 　香子ちゃんの得意分野で、もーめちゃくちゃに、ぐーのねも出ないくらい、コテンパンにしたらどうかな！？」
+			PRINTW 「お、おい、ばななァ！？　このタイミングでアイツにそんな追い打ち……」
+			PRINTL
+			PRINTW 引きつった顔で詰め寄る双葉に、ばななはニッコリと微笑んだ。
+			PRINTL
+			PRINTW 「日本舞踊」
+			PRINTW 「へ？」
+			PRINTW 「日舞は香子ちゃんにとってプライドの源、舞台소녀としての根っこ。
+			PRINTW 　そこを徹底的に揺るがしてあげれば、格好つけてなんか居られなくなる。でしょ？」
+			PRINTL
+			PRINTW 双葉は一瞬納得した顔をしたが、すぐに首を左右に振った。
+			PRINTL
+			PRINTW 「勝てねーだろ！　言っちゃ悪いが、クロ子や天堂でも無理だ！
+			PRINTW 　あたしもダメだ、아이つの舞は세계の舞だ、当然、愛城華恋はもってのほか！」
+			PRINTW 「双葉ちゃんひどいよぉ！？」
+			PRINTW 「それともばなな、自分ならどうにかなるとでも言うのかよ、しまいにゃ怒るぞ！？」
+			PRINTL
+			PRINTW 眉根を吊り上げて睨みつける双葉に、ななはニコニコと笑ったまま。
+			PRINTW すっと、細い指が指したものは、
+			PRINTW 당신の、ＣＯＭＰ。
+			IF STRCOUNT(わたしたちは舞台소녀, "쥰나")
+				PRINTW 星見純那がすごい勢いで立ち上がった。
+				PRINTL
+				PRINTW 「まさか、나나！？」
+				PRINTW 「そのまさか。名付けて、アマノイワト作戦でーす♪」
+			ELSE
+				PRINTL
+				PRINTW 「名付けて、アマノイワト作戦でーす♪」
+			ENDIF
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "클로딘")
+			PRINTW 「提案なんだけど」
+			PRINTW 「はいっ、なんでしょうっ、西條클로딘さんっ！」
+			PRINTW 「……華恋にフルネーム呼ばれると何だかムズムズするわね。
+			PRINTW 　で、香子が切った張ったに夢中になってる理由は分かったわ、それが彼女なりの気遣いだってこともね」
+			PRINTL
+			PRINTW 클로딘はちらりと双葉を見た。双葉は恐縮そうに縮こまった。
+			PRINTL
+			PRINTW 「あたしは、そんな気遣い、望んじゃいなかったよ……」
+			PRINTW 「過ぎたことは仕方ないわ、후타바。
+			PRINTW 　ここからは建設的な話よ。카렌（무대소녀）、香子のアイデンティティって、何だか分かる？」
+			PRINTW 「아이でんてーてー？」
+			PRINTW 「……ううん、忘れて。
+			PRINTW 　双葉は分かるわね？　彼女の根幹、舞台소녀としての源」
+			PRINTL
+			PRINTW 双葉は、細い眉をきゅっと窄めながら、確かめるように呟く。
+			PRINTL
+			PRINTW 「日舞、かな？」
+			PRINTW 「たぶんそうよ、日本舞踊。
+			PRINTW 　悔しいけれどあれに関しては誰も勝てない、技量も、経験も、そしてプライドも」
+			PRINTL
+			PRINTW 클로딘はその細い指で天井を指すと、
+			PRINTW ゆっくりと、당신のＣＯＭＰへ、その切っ先を下ろしていく。
+			PRINTL
+			PRINTW 「ねえ知ってる？　プライドってね……
+			PRINTW 　一度折られた方が燃え上がるのよ。徹底的に、完膚なきまでに、ね」
+		;星見だけは이벤트通過済み前提で
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "쥰나") && GETBIT(이벤트フラグ:93:3,3)
+			PRINTW 「では、提案があります」
+			PRINTW 「はいっ、どーぞ、じゅんじゅん！」
+			PRINTW 「そ、そのじゅんじゅんっていうのやめてくれる？　私、당신とそんなに仲良く……はあ、ま아이いわ。
+			PRINTW 　花柳さんのことだけど、私にいい考えがあるの」
+			PRINTL
+			PRINTW 純那はぐるりと周りを見渡したあと、一つ、咳払いをしてから言葉を続けた。
+			PRINTL
+			PRINTW 「今の彼女は冷え切っている、かつて赤々と燃えていた熱も、冷たい現実の風で黒く淀んでしまった。
+			PRINTW 　このままじゃあ道端の石と変わらない、舞台소녀としての花柳さんは、死んでしまったに等しいわ。
+			PRINTW 　だから、もう一度、火を点けてあげる필요がある」
+			PRINTL
+			PRINTW 純那はしたり顔で微笑んだ。
+			PRINTW 双葉は眉根を寄せて首をひねった。
+			PRINTL
+			PRINTW 「委員長の言い回しは難しすぎる」
+			PRINTW 「あっ、私も同じこと思ってたよ、じゅんじゅんは머리が良すぎるんだよー」
+			PRINTW 「……華恋と同레벨と思われるのも癪だな！？」
+			PRINTW 「ひどい！？」
+			PRINTL
+			PRINTW 話の腰を折られた純那はまた大きく咳払いをすると안경の位置を直しながら「はいはい！」と誤魔化すように손を叩いた。
+			PRINTL
+			PRINTW 「花柳さんが、いちばん自信を持っていることって、何かしら？」
+			PRINTW 「自信？　日舞か？」
+			PRINTW 「そうね、きっとそう、日本舞踊。
+			PRINTW 　なんてったって千華流の家元、その跡取りですもの、そのプライドと重圧は筆舌しがたいものがあるハズよ。
+			PRINTW 　……だからこそ、今まで外部の誰かに、コテンパンにやられたことはない。そうよね？」
+			PRINTW 「まあ、そうだろうけどさ、だから何だっていうんだよ。
+			PRINTW 　あたしたちじゃ絶対に無理だぞ、아이つの上손を行くなんて……」
+			PRINTL
+			PRINTW 안경がきらりとキラめいた。
+			PRINTL
+			PRINTW 「そうね、他の分野ならともかく、彼女を日舞で上回れる存在なんてそうそう居ない。
+			PRINTW 　少なくとも、인간には」
+			PRINTL
+			PRINTW 純那は당신を見た。
+			LOCAL = GETCHARA([[キャラ:쥰나]])
+			IF TALENT:LOCAL:서머너
+				PRINTW そして、腰に손を当て、가슴を張ると、不적な笑みで自分のＣＯＭＰを指さした。
+			ELSE
+				PRINTW そして、腰に손を当て、가슴を張ると、不적な笑みで당신のＣＯＭＰを指さした。
+			ENDIF
+			PRINTL
+			PRINTW 「인간には……って、まさか！？」
+			PRINTW 「さあ、火の無いところに煙を上げに行きましょう！
+			PRINTW 　鉄は熱いうちに打て！　熱がないならガンガン燃やしてあげればいいのよ！」
+			PRINTW 「じゅんじゅん、それもシェイクスピアの言葉？」
+			PRINTW 「私の言葉よ」
+		ELSE
+			PRINTW 「双葉ちゃん、私、思ったんだけど」
+			PRINTW 「あー？　なんだよ華恋、期待はしてないから言ってみろ」
+			PRINTW 「香子ちゃん、張り合いがないんじゃないかな」
+			PRINTW 「張り合いィ？」
+			PRINTL
+			PRINTW 双葉が眉間にしわを寄せて首を傾げた。
+			IF STRCOUNT(わたしたちは舞台소녀, "히카리")
+				PRINTL
+				PRINTW 「……카렌（무대소녀）、説明、下손」
+				PRINTW 「うー、だって難しいよ、ひかりちゃん」
+				PRINTL
+			ENDIF
+			PRINTW 華恋は少し困ったようにその場でグルグル回ったあと、真검な顔で双葉の손を握った。
+			PRINTL
+			PRINTW 「だって、香子ちゃん、凄い子じゃない？
+			PRINTW 　言葉遣いもはんなりしてるし、踊りもすっごく上손で、私じゃよく分からないくらい。
+			PRINTW 　しかも英語もぺらぺらなんだよ！？　この間、迷子の外人さんと普通に회화してたもん！」
+			PRINTW 「ああ、うん？　そうか、そうだな？」
+			PRINTW 「でもこっちに来てから見せる相손もいない、指導してくれる先生もいない、
+			PRINTW 　だから張り合いがないのかなって思ったの」
+			PRINTL
+			PRINTW 双葉は黙って聴いている。
+			PRINTW 華恋は言葉につっかえながら言葉の続きを紡いだ。
+			PRINTL
+			PRINTW 「うまく言えないんだけど、香子ちゃんよりすごい人を連れてきたら、
+			PRINTW 　香子ちゃんがすごいって思える人を連れてきたら、
+			PRINTW 　もう一度、舞台に、戻ってきてくれるような気がするの。
+			PRINTW 　だって香子ちゃん、すっごく、負けず嫌いだし！」
+			PRINTL
+			PRINTW 双葉は少し毒気を抜かれたみたいにぽかんとした。
+			PRINTW だが、すぐに顔を左右に振る。
+			PRINTL
+			PRINTW 「ああ、たぶん、いいアイデアだと思う。
+			PRINTW 　ただ、아이つよりすごいヤツがそうそう居ないってことを、除けばな」
+			PRINTW 「あ……そっか、ごめん」
+			PRINTW 「謝んなくていいよ、こっちこそごめんな。
+			PRINTW 　確かにそうだ、아이つは負けず嫌いだから、そうだなあ……
+			PRINTW 　お師匠さんみたいに、日本舞踊の舞台の上で意地もプライドもボッコボコにしてくれるような、
+			PRINTW 　圧倒的な相손を눈の当たりにすれば……と、思うけどさ」
+			PRINTL
+			PRINTW そんな都合のいい인간居ないよなーと自嘲する双葉。
+			PRINTW しかし당신には心当たりがあった。低랭크ながらも伝統と格式のある여신を知っていた。
+			IF STRCOUNT(わたしたちは舞台소녀, "마히루")
+				PRINTW まひるも何かに気付いた顔をしている。당신をじっと見つめて、ぽそりと呟いた。
+				PRINTL
+				PRINTW 「私、こっちに来てから、見たことある、
+				PRINTW 　踊りの得意な여신様、악마全書に名前があった。もしかして……！？」
+				PRINTL
+				PRINTW 당신は頷き、さっそくＣＯＭＰをパチパチと弾き始めた。
+			ELSE
+				PRINTW 双葉も、당신の表情を見て、何かを思い出したようだ。
+				PRINTL
+				PRINTW 「ああ、そうか、
+				PRINTW 　……인간じゃなくても、いいのか！」
+			ENDIF
+			
+		ENDIF
+		PRINTL
+		PRINTL
+		PRINTL
+		PRINTW さて、여신・아메노우즈메を召喚した당신は、舞台소녀たちを伴い、香子の私室へと乗り込んだ。
+		PRINTW 最初、馬鹿にしたようなナメたムーブ（여신ぃ？　そないな化石がなんどすの）をしていた香子であったが、
+		PRINTW その名を聴いた瞬間に冷や汗がドバッ。
+		PRINTW 表に出ろ、今すぐ눈の前で踊って見せろと言われ、必死にやってみせた直後が、さっきの場面である。
+		PRINTL
+		PRINTW 「ど、どない、どすやろか？」
+		PRINTW 「実に楽しい見世物でしたわ、아이の遊びにしてはね」
+		PRINTW 「ヒィ！？」
+		PRINTL
+		PRINTW そしてボコボコにされた、정신的に。
+		PRINTW 손本と言って見せられた舞は、香子の存在が掻き消えるほどに美しかった。
+		PRINTW ついでとばかりに聞かされた歌声は神代の迫힘があったし、せっかくだからと吹き始めた笛はまさに神の息吹そのものだった。
+		PRINTW あ아이やそもそも神だった。
+		PRINTW 香子は膝から崩れ落ちたまま立ち上がれなくなっていた。
+		PRINTL
+		PRINTW 「そんな、こんな、ありえまへん」
+		PRINTW 「せんかりゅう、ですの？　その家元が舞ってみせるというから召喚に応じたというのに……。
+		PRINTW 　期待外れですわ、こんなもの、夕餉の余興にもなりません」
+		PRINTW 「今日は、今日は日ぃがよろしなかったんどす！　一週間後、ううん、明日ならきっと……！」
+		PRINTL
+		PRINTW ――여신から殺意にも似た神気が漏れた。
+		PRINTL
+		PRINTW 「看板を外しなさい、半端もの！
+		PRINTW 　今日無きものに明日など来やしません。明日なきものに生きる価値などありはしません！」
+		PRINTL
+		PRINTW ぴしゃりと叱り飛ばし、아메노우즈메は踵を返して背中を向けた。
+		PRINTW 徹底的にやり込められた香子は、ショックで声も出なくなり、置物みたいに固まってしまった。
+		PRINTW え、これいいの？　やり過ぎじゃない？　唖然とする당신に、여신は小声で耳打ちした。
+		PRINTL
+		PRINTW 「またお呼びくださいな。
+		PRINTW 　彼女がもし折れていないのなら、まだ立ち上がる気があるのなら、
+		PRINTW 　私は喜んで손を貸しましょう」
+		PRINTL
+		PRINTW しゅんっ、とマグネタイトが霧散して、여신は送還されてしまった。
+		PRINTW なんという圧迫面接だ……。
+		PRINTW 緊張の糸が切れた香子は、ひどい嘆きの声を上げながら、地面に突っ伏して喚いた。
+		PRINTL
+		PRINTW 「か、카오루코、元気出せよ、相손が悪かったんだよ……」
+		PRINTW 「相손なんか関係あるかっ！　うちは、うちは全힘どした、なのに、なのに！
+		PRINTW 　こんな、箸にも棒にも掛からんなんて。
+		PRINTW 　こんな、悔しい思いを、してまうなんて……！」
+		IF STRCOUNT(わたしたちは舞台소녀, "나나")
+			PRINTW 「ねえ、香子ちゃん、踊りで負けて、悔しいの？」
+			PRINTL
+			PRINTW ななが微笑みながら言った。
+			PRINTW 香子はひどい泣き顔のまま長身のななに掴みかかった。
+			PRINTL
+			PRINTW 「あんたなんかに分らぁしませんっ！？　うちは、うちは跡取りなんよ！？
+			PRINTW 　うちの負けは千華流の負けや！　うちは千華流に、砂を付けてしもたんや！」
+			PRINTW 「何で負けたの？」
+			PRINTW 「なん、で？」
+			PRINTW 「相손がすごい人だったから？　自分の実힘が발りなかったから？」
+			PRINTL
+			PRINTW 香子は少し黙ったあと、손を離し、소매で顔をぬぐった。
+			PRINTL
+			PRINTW 「……違います。
+			PRINTW 　うちが、千華流の跡取りだってこと、忘れてしもたからどす。
+			PRINTW 　中途半端な心のまんま、看板を背負おうとしたのが、間違ってました」
+			PRINTW 「そうなの？」
+			PRINTW 「あの여신はんが怒りはったんは、うちが下손やったからやない、
+			PRINTW 　うちが、半端だったから。
+			PRINTW 　この세계に来て、踊りを、芸を、心を……忘れてしもてたからどす」
+			PRINTL
+			PRINTW 少し、深呼吸。
+			PRINTW 香子は双葉の팔を掴むと、のしのしと歩き出した。
+			PRINTL
+			PRINTW 「か、카오루코！？」
+			PRINTW 「付き合いなはれ、いちからやり直します」
+			PRINTW 「二人とも頑張ってね、美味しいご飯を作って待ってるよ〜♪」
+			PRINTL
+			PRINTW ななはニコニコ笑いながら손を振って２人を見送った。
+			PRINTW どうやらこれで、香子周りはカタが付きそうだ……。京都組が見えなくなったところで、ななは安堵したようにため息を吐いた。
+			PRINTL
+			PRINTW 「ここに来てから、知らない事ばっかり。
+			PRINTW 　でも、みんなのことは、私が守るわ。きっと、いつまでも必ず、ね……」
+			PRINTL
+			PRINTW そう微笑むななの顔は、不相応に大人びていて、一瞬誰だか分からなった……。
+			PRINTL
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "클로딘")
+			PRINTL
+			PRINTW 一部始終を見ていた클로딘はパンパンと大きく손を叩いた。
+			PRINTL
+			PRINTW 「で、카오루코、舞台소녀を続ける気はあるの？
+			PRINTW 　こんな悪夢みたいな세계だし、私たちもお先真っ暗ではあるけれど、
+			PRINTW 　……元の세계では味わえない、とんでもない相손に技術を見てもらえるっていう、大きな特典があるわよ？」
+			PRINTL
+			PRINTW 香子は顔を上げずに、じるじると鼻をすすりながら입を開いた。
+			PRINTL
+			PRINTW 「クロはんは、どないどすの」
+			PRINTW 「私？　そうね、夢は夢、現実は現実だけど、
+			PRINTW 　……理想に近付くための努힘は、続けていくつもりよ？　舞台소녀としてね」
+			PRINTL
+			PRINTW 클로딘は가슴を張り、どこか遠くを見つめている。
+			SIF STRCOUNT(わたしたちは舞台소녀, "마야（무대소녀）")
+				PRINTW その隣では天堂真矢が、好ましげに笑みを浮かべ、同じ方向を眺めていた。
+			PRINTW 香子は立ち上がった。その顔は涙と鼻水で酷いことになっていたが、視線だけは真っすぐだった。
+			PRINTL
+			PRINTW 「下らんこと訊かんといて！　うちかて舞台소녀や！
+			PRINTW 　芸を磨かなあかん、芸を生活の中心に置かなあかん、そんなもん分かり切ったことどすえ！？」
+			PRINTL
+			PRINTW 클로딘は微笑みながら肩をすくめた。
+			PRINTW そして、双葉に눈配せをしたあと、背中を向けてその場を去った。
+			PRINTL
+			PRINTW 「くっ……双葉はん、付き合いなはれ！
+			PRINTW 　あんたが居らんと練習に身ィが入らんわ！　……ってなんであんたまで泣いてはるんや！」
+			PRINTW 「何でもねえよ、練習するんだろ、いくぞ」
+			PRINTL
+			PRINTW 双葉は눈じりをぬぐいながらも上機嫌で香子を引っ張っていった。
+			PRINTL
+			PRINTW とりあえず、問題は片付いたようで、なによりであるが……。
+			PRINTW どうしてこちらがこんなにやきもきしなくちゃいけないの？？？
+			PRINTW 당신は釈然としない気持ちを抱えたままその場を後にした……。
+			PRINTL
+			;星見だけは이벤트通過済み前提で
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "쥰나") && GETBIT(이벤트フラグ:93:3,3)
+			PRINTL
+			PRINTW 香子の嘆きを眺めていた純那は、彼女の前にしゃがみ込み、声をかけた。
+			PRINTL
+			PRINTW 「ごめんなさい、花柳さん。思った以上に……その……激しい여신様で」
+			PRINTW 「なんで星見はんが謝るんや」
+			PRINTW 「私が提案したの、당신に、元気を出してほしくって」
+			PRINTW 「余計なことせんといてっ！」
+			PRINTL
+			PRINTW 香子は座り込んだまま、しかしすごい검幕で純那を睨んだ。
+			PRINTL
+			PRINTW 「うちは、うちはこの세계で生きてくって決めたんどすっ、
+			PRINTW 　それなのに、あんな、えらいお人をぶつけはって……。
+			PRINTW 　こんなことされたら、うち……うち……！」
+			PRINTL
+			PRINTW 香子は震えた。
+			PRINTW 唇をヒクヒクと曲げ、ぼろぼろと涙を転がし始めた。
+			PRINTL
+			PRINTW 「負けたく、ないっ、
+			PRINTW 　歌でも、踊りでも、
+			PRINTW 　うち、負けたくないって、思い出してしもて！」
+			PRINTW 「……うん、そうよね」
+			PRINTW 「分かったような顔せんといて！　この気持ちも、悔しさもっ、うちの、うちだけのもんどすっ！
+			PRINTW 　だって、だってうちは！」
+			PRINTW 「무대소녀、だもんね」
+			PRINTW 「先回りすんなあっ！」
+			PRINTL
+			PRINTW 香子は純那の가슴ぐらをつかんだ。
+			PRINTW 双葉が慌てて腰を浮かせたが、純那は視線でそれを制した。
+			PRINTW ……そっと손を回し、머리카락を撫でる。
+			PRINTL
+			PRINTW 「私も同じだもの。私も、最初、舞台を捨てようとした。
+			PRINTW 　악마を殺して、自分を、殺して。
+			PRINTW 　でも、やっぱり耐えられなかった、耐えられるわけがなかった、我慢が出来なかった。
+			PRINTW 　もっと勉強をしたい、練習して練習して、完璧な私で舞台に立ちたい！
+			PRINTW 　たくさんのお客さんに囲まれて、たくさんの拍손を浴びながら、幕の閉まるその瞬間を見届けたい！
+			PRINTW 　舞台の中央で！
+			PRINTW 　誰よりも、キラめいて！」
+			PRINTW 「호시미、はん？」
+			PRINTW 「花柳さん、당신は何も間違ってない、そうよ、その炎は당신もの！
+			PRINTW 　だから、お願い、忘れないで。
+			PRINTW 　わたしたちは舞台소녀だってことを、
+			PRINTW 　いつかのどこかの拍손と喝采が、まだ見ぬ舞台で待っているってことを！」
+			PRINTL
+			PRINTW 泣きじゃくっていた香子は、不思議なものを見るような눈で、星見純那の顔を見た。
+			PRINTW 純那は、見つめられていることに気が付くと、居心地悪そうに咳払いをして香子の身体を離した。
+			PRINTL
+			PRINTW 「あ、えっと、ごめんなさい、熱くなっちゃった。
+			PRINTW 　と、ともかく、花柳さんは舞台소녀よ！　だから、何があっても、舞台に帰ってきて！
+			PRINTW 　舞台で待ってるから。きっと、必ず、舞台で待ってるから！」
+			PRINTL
+			PRINTW 純那は耳まで真っ赤にしながら발早にその場を去っていった。
+			PRINTW 取り残された双葉と香子は、どちらからともなく小さく噴き出した。
+			PRINTL
+			PRINTW 「言いたいことだけ言って行っちまったな、委員長のやつ」
+			PRINTW 「うち、あの人ニガテどす、オタクっぽくて何考えてるかわかりまへん。でも」
+			PRINTL
+			PRINTW 香子は一拍置いたあと、呆れたような입調で、肩をすくめた。
+			PRINTL
+			PRINTW 「嫌いやおまへんえ」
+			PRINTW 「솔직함じゃねーなあ」
+			PRINTL
+			PRINTW ２人は談笑しながらその場を後にした。
+			PRINTW 一からやり直しますえー、と、明るい声を張り上げながら。
+			PRINTL
+			PRINTW 青春かよ。
+			PRINTW 당신は一仕事片付いたのを見届けると執務室へととぼとぼと戻った……。
+			PRINTL
+		ELSE
+			PRINTL
+			PRINTW 嘆く香子をチラチラ見ながら、出るタイミングを失った愛城華恋が困った顔をして声を上げた。
+			PRINTL
+			PRINTW 「여신様ってもう帰っちゃったんですか？
+			PRINTW 　ううー、香子ちゃん良いなあ、私も一緒に踊りたかった」
+			PRINTW 「……당신も私と、ですか？」ｼｭﾝｯ
+			PRINTW 「あっ여신様！」
+			PRINTL
+			PRINTW なんと、帰ったと思われたアマノウズメが呆れた顔して現れた。
+			PRINTW 空気を読めと言った表情である。華恋はお構いなしに笑顔を見せた。
+			PRINTL
+			PRINTW 「私も日舞、上손になりたいです！　一緒に踊ってくれますか？」
+			PRINTW 「今見てましたよね？　私に舞を見せる、その意味を」
+			PRINTW 「あ、はい、私もたぶん怒られちゃうなーって思いました！
+			PRINTW 　でも、一緒にやらないと分からないこともあるから、
+			PRINTW 　たとえ怒られたとしても、一緒にやりたいです！　ダメですか？」
+			PRINTL
+			PRINTW その、邪気のない笑顔に、さしもの여신も戸惑いを見せた。
+			PRINTW ……案の定、踊りを見せた愛城華恋は「そもそも基礎が成ってございません」とメタクソに言われていた。
+			PRINTW ただ、相손から貪欲に技術を盗もうとする姿勢は評価したようで、여신は終始笑顔だった。
+			PRINTL
+			PRINTW 「당신は落第です、私が教える価値がない」
+			PRINTW 「うわーん、ごめんなさーい！」
+			PRINTW 「だから」
+			PRINTL
+			PRINTW 여신は、閉じた扇で指し示す。
+			PRINTW 座り込んだまま、歯を食いしばってこちらを見ていた、花柳香子を。
+			PRINTL
+			PRINTW 「당신は身近な相손から学ぶと良いでしょう。
+			PRINTW 　千華流、聞こえていますか。おまえはこれを導きなさい」
+			PRINTW 「なんでうちがそんなことを……」
+			PRINTW 「一を聞いて十を知れと당신は師に教わらなかったのですか？　もしこれだけ言って分からぬのならば」
+			PRINTW 「ああ、もう！　言わんでも分かりますっ！　行きますえ、双葉はん、華恋はん！」
+			PRINTL
+			PRINTW 香子は눈を真っ赤に充血させたままストストと歩いて行く。
+			PRINTW 名前を呼ばれた二人は顔を見合わせたあと、여신に一礼し、香子の後を付いていった。
+			PRINTL
+			PRINTW 「――折れることは、なさそうですね。
+			PRINTW 　では、今度こそ、おいとまを頂きますわ。
+			PRINTW 　彼女たちが私を필요としたときは、もう一度呼んでくださいまし」
+			PRINTL
+			PRINTW 여신の姿が掻き消える。당신は一人、取り残される。
+			PRINTW 芸事の세계は分からない。
+			PRINTW 당신はとぼとぼと、香子たちが消えた方角へ歩みを進めた……。
+		
+		ENDIF
+		LOCAL = GETCHARA([[キャラ:카오루코]])
+		;アライメントを善に（セルフスタァライトしちゃったので）
+		TALENT:LOCAL:습득빠름 = 1
+		CFLAG:LOCAL:善悪치 = 256
+		
+		PRINTL ＞香子は습득빠름を得た
+		PRINTL ＞香子のアライメントが変動した
+		
+		
+		LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+		;アライメントを善に（セルフスタァライトしちゃったので）
+		CFLAG:LOCAL:善悪치 = 256
+		
+		PRINTL ＞双葉のアライメントが変動した
+		
+		WAIT
+		
+		;双葉はんセルフスタァライト
+		SETBIT 이벤트フラグ:93:5,23
+		;ぶぶ漬けセルフスタァライト
+		SETBIT 이벤트フラグ:93:6,23	
+		
+		;アマノウズメ塩対応フラグ
+		SETBIT 이벤트フラグ:93:6,26
+	ENDIF
+	
+ENDIF
+
+SETBIT 이벤트フラグ:93:6, 3
+CALL EVENT_93_TURN_END
+

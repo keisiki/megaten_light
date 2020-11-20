@@ -1,0 +1,162 @@
+﻿;스킬名
+@SKILL_NAME_49,ARG
+;天堂真矢が사용する場合Odette the Marvericksに
+;IF ARG > 0 && NO:ARG == [[キャラ:마야（무대소녀）]]
+IF SKILL_CHANGE_CHECK(ARG, [[キャラ:마야（무대소녀）]]) == 1
+	RESULTS = O.t.Marvericks
+;ELSEIF ARG > 0 && NO:ARG == 5423
+ELSEIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
+	RESULTS = 影舞・酬
+ELSE
+	RESULTS = 밤벚꽃의춤
+ENDIF
+
+;　명중
+@SKILL_HITRATE_49, ARG
+RETURN 100
+
+;　威힘
+@SKILL_POWER_49, ARG
+;SIF ARG > 0 && NO:ARG == 5423
+SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
+	RETURN 85
+RETURN 200
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_49,ARG
+;SIF ARG > 0 && NO:ARG == 5423
+SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
+	RETURN 2
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_49,ARG
+;SIF ARG > 0 && NO:ARG == 5423
+SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
+	RETURN 3
+RETURN 1
+
+;　ＨＰ2を支払うかＭＰ3を支払うか
+@SKILL_COSTTYPE_49, ARG
+RETURN 3
+;소비なし＝1
+
+;　コストの量
+@SKILL_COST_49,ARG
+RETURN 20
+
+;　相性
+@SKILL_TYPE_49,ARG
+RETURN 0
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_49
+RETURN 1
+;特技
+
+;　1物理ダメージで計算するか2魔法ダメージで計算するか
+@SKILL_DAMAGETYPE_49
+RETURN 1
+
+
+;　대상が1적か2아군か3場전체か4特殊か
+@SKILL_TARGET_49
+RETURN 1
+
+;　사거리
+@SKILL_RANGE_49,ARG
+;天堂真矢が사용する場合は사거리S
+;IF ARG > 0 && NO:ARG == [[キャラ:마야（무대소녀）]]
+SIF SKILL_CHANGE_CHECK(ARG, [[キャラ:마야（무대소녀）]]) == 1
+	RETURN 1
+RETURN 3
+
+;　範囲　11체　49列　3전체　4　적아군전체
+@SKILL_SPHERE_49,ARG
+RETURN 3
+
+;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+@SKILL_EFECT_49
+RETURN 1
+
+;　 特殊処理の有無、及び処理内容
+@SKILL_SPECIALEFECT_49,ARG
+;ARG = 1だった場合は処理の有無を返します
+SIF ARG == 1
+	RETURN 0
+;以下に特殊な処理を記述します
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_49
+RETURN 0
+
+;속도보정
+@SKILL_SPEED_49, ARG = -1
+RETURN 0
+
+;　구상の표시とその타입
+@SKILL_MESSAGE_49,ARG
+
+;전투時以外に사용できるか
+@SKILL_ACTIONABLE_FIELD_49
+RETURN 0
+
+;스킬変化？用랭크
+@SKILL_RANK_49
+RETURN 12
+
+@SKILL_RANKUP_49
+RETURN 0
+
+;テンプレート用、추가효과シリーズ
+;추가효과스테이터스
+@SKILL_ADDTIONAL_STATE_49,ARG
+RETURN GET_STATE_NUM("CHARM")
+
+
+;추가효과상성
+@SKILL_ADDTIONAL_TYPE_49,ARG
+RETURN GET_TYPE_NUM("정신")
+
+;추가효과기본부여확률
+@SKILL_ADDTIONAL_BASE_RATE_49,ARG
+RETURN 20
+
+;추가효과부여확률上限
+@SKILL_ADDTIONAL_MAX_RATE_49,ARG
+RETURN 80
+;====================================================
+;스킬及び行動の実行
+;====================================================
+@ACTION_49,ARG,ARG:1
+CALL ATTACK_FIELD,ARG,ARG:1,49
+
+
+
+
+
+
+;====================================================
+;実行内容ここまで
+;====================================================
+
+;　 説明文の표시
+@SKILL_EXPLAIN_49
+IF U > 0 && U < CHARANUM && NO:U == [[キャラ:마야（무대소녀）]]
+	PRINTL Odette the Marvericks。舞台소녀のキラめきより鍛造されし白銀の레이피어。
+	PRINTL 天堂真矢を見上げる全ての적に中ダメージ＋魅了。사거리S
+ELSEIF U > 0 && U < CHARANUM && NO:U == 5423
+	PRINTL [후열] 적 전체에 2~3회 검격속성 소 물리데미지. (낮은 확률로 CHARM)
+ELSE
+	PRINTL 舞い散る桜のごとき검舞で적전체に中ダメージ＋魅了。後列사용可。
+ENDIF
+
+;継承に필요な部位
+@継承部位_49,ARG
+RETURN 1
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_49,ARG
+RETURN 1
+;とくにない
+

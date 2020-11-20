@@ -1,0 +1,99 @@
+﻿
+;======================================================
+;장비品の데이터
+;ドミドミドミドミ
+;======================================================
+
+@기본능력수정_2503,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@전투능력수정_2503,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_2503,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2503, ARG = -1
+RETURN GET_TYPE_NUM("비구")
+
+@최저공격횟수_2503, ARG = -1
+RETURN 1
+
+@최대공격횟수_2503, ARG = -1
+RETURN 1
+
+@사거리_2503, ARG = -1
+RETURN 2
+
+@공격범위_2503, ARG = -1
+RETURN 1
+
+@장비箇所_2503
+RETURN GET_EQUIPNUM("총")
+
+@총공격_2503, ARG = -1
+RETURN 75
+
+@총명중_2503, ARG = -1
+RETURN 36
+
+@특수탄창_2503, ARG = -1
+RETURN 1
+
+@총타입_2503
+;1,핸드건
+RETURN 1
+
+@속도보정_2503
+RETURN 6
+
+@장비추가스킬_2503,ARG,ARG:1 = -1
+SELECTCASE ARG
+	CASE 0
+		;논 리셀 패럴라이저
+		RETURN 2125
+	CASE 1
+		;리셀 엘리미네이터
+		RETURN 2126
+	CASE 2
+		;디스트로이 디컴포저
+		RETURN 2127
+ENDSELECT
+RETURN 0
+
+;-----------------------------
+;- 조건・설명処理
+;-----------------------------
+@필요레벨_2503
+RETURN 15
+
+@장비조건_2503,ARG
+SIF BASE:ARG:LV < 15
+	RETURN 0
+RETURN 1
+
+@장비조건설명_2503
+PRINTL 장비조건： LV15～
+
+@장비해설_2503
+PRINTL 라이플탄을 볼트 액션식으로 발사하는 10 인치 이상인 롱 배럴 장총.
+SETCOLOR 0x990033
+PRINTL 입수하면 무서운 일이 일어날지도 모른다
+RESETCOLOR
+
+;-----------------------------
+;- 구입・引き継ぎ
+;-----------------------------
+@구입조건_2503
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 10000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_2503
+RETURN 0

@@ -1,0 +1,72 @@
+﻿
+;======================================================
+;장비品の데이터
+;큐키의투구
+;======================================================
+
+@기본능력수정_3017,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 3
+	CASE "마력"
+		RETURN 5
+	CASE "운"
+		RETURN -6
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3017,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 40
+	CASE "회피"
+		RETURN 5
+	CASE "마법효과"
+		RETURN 35
+ENDSELECT
+RETURN 0
+
+@방어상성_3017,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "정신"
+		RETURN 999
+	CASE "화염"
+		RETURN 150
+	CASE  "검격"
+		RETURN 250
+ENDSELECT
+RETURN 100
+
+@バステ내성_3017,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "POISON"
+		RETURN -50
+	CASE "HAPPY","CURSE"
+		RETURN -100
+ENDSELECT
+RETURN 0
+
+@장비箇所_3017
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3017
+RETURN 63
+
+@장비조건_3017,ARG
+SIF BASE:ARG:LV < 63
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3017
+PRINTL 장비조건：LV63～
+
+@장비해설_3017
+PRINTL 빈곤신の힘が宿る。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3017
+RETURN 0
+
+@引継ぎ可不可_3017
+RETURN 0

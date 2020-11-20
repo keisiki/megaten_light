@@ -1,0 +1,60 @@
+﻿
+;======================================================
+;장비品の데이터
+;암브릿지
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4004,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4004,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 8
+	CASE "회피"
+		RETURN 4
+	CASE "마법효과"
+		RETURN 6
+ENDSELECT
+RETURN 0
+
+@방어상성_4004,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "타격","전술"
+		RETURN 85
+ENDSELECT
+RETURN 100
+
+@장비箇所_4004
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4004
+RETURN 13
+
+@장비조건_4004,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 13
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4004
+PRINTL 장비조건：♀ LV13～
+
+@장비해설_4004
+PRINTL 装着すると架けられた橋のように見えるので、こう呼ばれる팔部防具。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4004
+SIF 던전フラグ:1:1 == 1
+	RETURN 1
+RETURN 0
+
+@引継ぎ可不可_4004
+RETURN 0

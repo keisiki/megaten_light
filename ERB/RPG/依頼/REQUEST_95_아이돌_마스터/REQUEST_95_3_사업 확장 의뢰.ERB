@@ -1,0 +1,93 @@
+﻿;====================
+;설명
+;====================
+@EXPLAIN_REQUEST_95_3
+	PRINTL
+	PRINTFORML 오자와로부터
+	PRINTFORML 프로덕션 전개와 관련하여 부탁이 있다고 한다。
+	PRINTL
+;====================
+;内容
+;====================
+@REQUEST_95_3
+#LOCALSIZE 1
+#LOCALSSIZE 1
+PRINTFORML 오자와의 요청으로 프로덕션으로 찾아갔다.
+PRINTL 처음보는듯한 초록머리 여직원의 안내로 사무실로 들어가자
+PRINTL 오자와가 커다란 의자에 앉아 당신을 맞았다.
+PRINTL
+PRINTFORML  오자와:
+PRINTFORMW 「 오우 투자자 양반. 」
+PRINTFORML
+PRINTFORML 여전히 여유 있는 태도다. 
+PRINTFORMW 당신은 용건을 물었다.
+PRINTFORML 
+PRINTFORML 오자와:
+PRINTFORML 「별건 아니지만 귀찮은 문제라」
+PRINTFORML 「전에 이야기 했었지? 961프로...」
+PRINTFORML 「전부터 있던 우리 뒷사회 동업자 말이야」
+PRINTFORML 「거길 처리하고 싶어」
+PRINTFORMW
+PRINTFORML 「얼마전 765인가 하는델 먹었는데 거길 먹으려 하고 있었나 보더라고」
+PRINTFORML 「잔재를 건드리다가 슬슬 우리쪽 꼬리를 건드리더라고」
+PRINTFORML 「슬슬 짜증나기 시작했어」
+PRINTFORMW 
+PRINTFORML 「우리쪽에 대한 견제가 심해지는 데다가 기본적으로 경쟁자야」
+PRINTFORML 「개인적으로 신주쿠 사무소에 있었을 때도 거슬렸고」
+PRINTFORML 「저놈들은 뒤에 야쿠자들이 있어」
+PRINTFORML 「하지만 우리들은 뒤에 악마가 있지」
+PRINTFORMW
+PRINTFORML 「우리들이 프로덕션 사업에 은근슬쩍 악마를 끼워 넣는 허가를 좀 받아줘」
+PRINTFORML 「악마들이 은근슬쩍 돌아다니는 동안 악마를 풀꺼야」
+PRINTFORML 「그리곤 항쟁으로 꾸며서 쿠로이 사장놈의 머리를 쳐버리는 거지」
+PRINTFORMW 「물론 공짜로 해달라는 건 아냐. 적당한 선물을 준비하지」
+
+IF GETCHARA(5712) >= 0 || FLAG:35712 == 1
+ELSE
+	PRINTFORML 
+	PRINTFORML 「아 참」
+	PRINTFORML 「아까 말한 프로덕션 먹으면서 튀려던 년을 하나 잡았는데 말야」
+	PRINTFORML 「필요하면 사가겠나?」
+	PRINTFORMW 「악마놈들 장난감으로 던져주기 보단 푼돈이라도 버는게 좋겠지」
+	PRINTFORML 
+	PRINTFORML 보통 직원이었지만 안좋은 분위기를 읽고 도망치려다 잡혀온 모양이다
+	PRINTFORML 확실히 자금 흐름등을 담당하던 직원이었던것 같으니 어쩔 수 없겠지
+	PRINTL ＞가격은 5만엔 정도면 될 듯 하다.
+	PRINTL ＞어떻게 하겠습니까?
+		PRINTL
+		CALL INPUT_YN, "사간다", "무시한다"
+			IF RESULT == 0
+			PRINTL 
+			PRINTL <당신은 오토나시 코토리를 손에 넣었다>
+			PRINTW 
+				CALL ADD_NEW_COMPANION,5712,0
+				LOCAL = RESULT:1
+					CSTR:LOCAL:47 = 765 프로덕션이 의문의 경위로 오자와에게 넘어간 후
+					CSTR:LOCAL:48 = 프로듀서의 사망등에 의문과 위화감을 느끼고 도망 치려는 걸 오자와에게 눈치채였다.
+					CSTR:LOCAL:49 = 만약 당신이 사지 않았다만 악마들의 장난감으로 인생을 마감하였을 것이다
+			MONEY -= 50000
+				PRINTFORML 오자와:
+				PRINTFORML 「뭐, 이걸론 맛있는 거나 먹으러 가야겠군」
+				PRINTFORML 「요 밖 비서실에 초록머리 년이야」
+				PRINTFORML 「일단 명목상 프로듀서인 댁을 따라가라 해 뒀으니 나가면서 데려가게」
+				PRINTFORMW 「아까 부탁한건 시간이 걸리더라도 괜찮으니깐 잘 좀 부탁하지」
+			ELSE
+PRINTFORML 
+PRINTFORML 오자와:
+PRINTFORMW 「뭐 필요없으면 됐어」
+PRINTFORML 
+PRINTFORML 오자와가 인터폰으로 명령하자, 옆쪽 비서실에서 약간의 소란이 들려오다 사라진다
+PRINTFORML 들어오면서 본 초록머리 여직원이 뒤쪽 복도를 통해 악마들에게 잡혀간 것 같다.
+PRINTFORMW 악마들의 장난감이 되겠지만 신경쓸 일은 아니겠지....
+PRINTFORML 
+PRINTFORML 오자와:
+PRINTFORMW 「아까 부탁한건 시간이 걸리더라도 괜찮으니깐 잘 좀 부탁하지」
+			ENDIF
+ENDIF
+
+PRINTFORML 
+PRINTFORMW 당신은 생각해 보겠다고 말하며 사무실을 떠났다.... 
+
+
+PRINTFORMW (제작자 주: 이제 노역에서 베개영업을 진행해 영업허가를 받아주세요)
+	의뢰フラグ:95:0 = 4

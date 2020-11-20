@@ -1,0 +1,66 @@
+﻿
+;======================================================
+;장비品の데이터
+;아이언버니
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_3004,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "속도"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3004,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 2
+	CASE "회피"
+		RETURN 8
+	CASE "마법위력"
+		RETURN 2
+	CASE "마법효과"
+		RETURN 8
+ENDSELECT
+RETURN 0
+
+@방어상성_3004,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "빙결","정신"
+		RETURN 50
+	CASE "수격","질풍"
+		RETURN 85
+	CASE "화염"
+		RETURN 125
+	CASE "핵열"
+		RETURN 115
+ENDSELECT
+RETURN 100
+
+@장비箇所_3004
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3004
+RETURN 15
+
+@장비조건_3004,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 15
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3004
+PRINTL 장비조건：♀ LV15～
+
+@장비해설_3004
+PRINTL ウサギの耳を模した鉄製の耳
+PRINTL 　　　　　　　　머리の카츄샤部分が防具として기능し、着用者が致命傷を受けるのを避けてくれる
+
+
+@구입조건_3004
+RETURN 1
+
+@引継ぎ可不可_3004
+RETURN 0

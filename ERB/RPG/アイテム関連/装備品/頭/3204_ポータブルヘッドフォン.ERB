@@ -1,0 +1,92 @@
+﻿
+;======================================================
+;장비品の데이터
+;휴대용헤드폰
+;======================================================
+
+@기본능력수정_3204,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3204,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		SIF ARG:1 == -1
+			RETURN 2
+		IF TALENT:(ARG:1):페르소나구사자
+			IF TALENT:(ARG:1):빈유 || TALENT:(ARG:1):절벽
+				LOCAL = BASE:(ARG:1):LV / 4
+			ELSE
+				LOCAL = BASE:(ARG:1):LV / 6
+			ENDIF
+			RETURN LOCAL
+		ELSE
+			RETURN 2
+		ENDIF
+	CASE "회피"
+		SIF ARG:1 == -1
+			RETURN 2
+		IF TALENT:(ARG:1):페르소나구사자
+			IF TALENT:(ARG:1):빈유 || TALENT:(ARG:1):절벽
+				LOCAL = BASE:(ARG:1):LV / 4
+			ELSE
+				LOCAL = BASE:(ARG:1):LV / 6
+			ENDIF
+			RETURN LOCAL
+		ELSE
+			RETURN 2
+		ENDIF
+	CASE "마법위력"
+		SIF ARG:1 == -1
+			RETURN 5
+		IF TALENT:(ARG:1):페르소나구사자
+			IF TALENT:(ARG:1):빈유 || TALENT:(ARG:1):절벽
+				LOCAL = BASE:(ARG:1):LV / 6
+			ELSE
+				LOCAL = BASE:(ARG:1):LV / 3
+			ENDIF
+			RETURN LOCAL
+		ELSE
+			RETURN 5
+		ENDIF
+	CASE "마법효과"
+		SIF ARG:1 == -1
+			RETURN 5
+		IF TALENT:(ARG:1):페르소나구사자
+			IF TALENT:(ARG:1):빈유 || TALENT:(ARG:1):절벽
+				LOCAL = BASE:(ARG:1):LV / 6
+			ELSE
+				LOCAL = BASE:(ARG:1):LV / 3
+			ENDIF
+			RETURN LOCAL
+		ELSE
+			RETURN 5
+		ENDIF
+ENDSELECT
+RETURN 0
+
+@방어상성_3204,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_3204
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3204
+RETURN 1
+
+@장비조건_3204,ARG
+RETURN 1
+
+@장비해설_3204
+PRINTL 음질・持ち운びやすさ・디자인、어딜 봐도 우수한 무선 헤드폰
+PRINTL 　　　　　　　　페르소나 구사자의 실력을 끌어낸다
+
+
+@구입조건_3204
+RETURN 0
+
+@引継ぎ可不可_3204
+RETURN 1

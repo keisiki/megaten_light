@@ -1,0 +1,1899 @@
+﻿;=======================================================================
+;指定したマスに進入可能か
+;=======================================================================
+@tikagai_ENTER,ARG,ARG:1
+;DA:ARG:(ARG:1)
+;ARG、ARG:1はそれぞれ대상のマスのX、Y座標を表しています。
+;この던전ではエレベーターの扉が一度右側から開けておかないと左側からは開けられない、という処理に사용しています。
+SELECTCASE FLAG:現M
+	CASE 3
+		IF 던전フラグ:13:25 && 던전フラグ:13:2 < 6
+			IF ARG:1 < 13 || ARG:1 > 25
+				CALL MESSAGE_WINDOW_D, "", "＞彼女を探さなくては…"
+				RETURN 0
+			ENDIF
+			
+		ENDIF
+ENDSELECT
+RETURN 1
+;=======================================================================
+;地下街タイル
+;=======================================================================
+;이벤트タイル特殊표시4
+@tikagai_TILE, ARG
+SELECTCASE ARG / 10
+	CASE 100
+		SETCOLOR 0x00ff00
+		RESULTS = サ
+	CASE 204
+		IF 던전フラグ:13:2 > 0
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 203
+		IF 던전フラグ:13:2 > 1
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 202
+		IF 던전フラグ:13:2 > 2
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 201
+		IF 던전フラグ:13:2 > 3
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 200
+		SETCOLOR 0x00ff00
+		RESULTS = ｍ
+	;서프
+	CASE 300
+		IF 던전フラグ:13:2 > 5
+			SETCOLOR 0x00ff00
+			RESULTS = サ
+		ELSE
+			RESULTS = □
+		ENDIF
+	;알지라
+	CASE 301
+		IF 던전フラグ:13:2 > 5
+			SETCOLOR 0x00ff00
+			RESULTS = ア
+		ELSE
+			RESULTS = □
+		ENDIF
+	;フレッド
+	CASE 302
+		IF 던전フラグ:13:2 > 5
+			SETCOLOR 0x00ff00
+			RESULTS = フ
+		ELSE
+			RESULTS = □
+		ENDIF
+	;하얀피부
+	CASE 304
+		IF 던전フラグ:13:2 > 5
+			SETCOLOR 0x00ff00
+			RESULTS = ｍ
+		ELSE
+			RESULTS = □
+		ENDIF
+	;안
+	CASE 305
+		IF 던전フラグ:13:2 > 5
+			SETCOLOR 0x00ff00
+			RESULTS = 杏
+		ELSE
+			RESULTS = □
+		ENDIF
+	;류지
+	CASE 306
+		IF 던전フラグ:13:2 > 5
+			SETCOLOR 0x00ff00
+			RESULTS = 竜
+		ELSE
+			RESULTS = □
+		ENDIF
+	;게일
+	CASE 307
+		IF 던전フラグ:13:2 > 5
+			SETCOLOR 0x00ff00
+			RESULTS = ゲ
+		ELSE
+			RESULTS = □
+		ENDIF
+	;마코토
+	CASE 309
+		IF 던전フラグ:13:2 > 5
+			SETCOLOR 0x00ff00
+			RESULTS = 真
+		ELSE
+			RESULTS = □
+		ENDIF
+	CASE 308
+		IF 던전フラグ:13:2 > 5
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 405
+		IF 던전フラグ:13:2 > 6
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 404
+		IF 던전フラグ:13:2 > 7
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 403
+		SETCOLOR 0x00ff00
+		RESULTS = ｍ
+	CASE 402
+		IF 던전フラグ:13:2 > 8
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 401
+		IF 던전フラグ:13:2 > 8
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 400
+		IF 던전フラグ:13:2 > 9
+			RESULTS = □
+		ELSE
+			RESULTS = ！
+		ENDIF
+	CASE 500
+		IF 던전フラグ:13:3 > 0
+			RESULTS = □
+		ELSE
+			SETCOLOR 0x00ff00
+			RESULTS = Ｈ
+		ENDIF
+	CASE 501
+		SETCOLOR 0x00ff00
+		RESULTS = ア
+	CASEELSE
+		RESULTS = ！
+ENDSELECT
+
+;이벤트タイル特殊표시9
+@tikagai_TILE2, ARG
+SELECTCASE ARG / 10
+	CASE 100, 200, 300
+		RESULTS = ↑
+	CASE 201, 316, 411
+		RESULTS = ↓
+	CASE 410
+		RESULTS = ←
+	CASE 500
+		RESULTS = →
+	CASE IS < 400
+		RESULTS = □
+ENDSELECT
+
+;=======================================================================
+;地下街調べ이벤트(4)
+;=======================================================================
+@tikagai_event_sw
+
+SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
+	CASE 100
+		CALL MESSAGE_WINDOW_D, "서프", "준비는 게을리하지 말아야겠지… "
+		CALL MESSAGE_WINDOW_D, "서프", "나에게 무슨 용무인가？ "
+		CALL INPUT_SELECT_D, "[1]동료를 교체한다/[0]아무것도 아니다 "
+		SIF RESULT == 1
+			CALL RECONSTRUCTION
+	CASE 200
+		CALL MESSAGE_WINDOW_D, "주민 여자", "고마워… 나머지는 알아서 어떻게든 빠져나갈게 "
+	;서프
+	CASE 300
+		CALL MESSAGE_WINDOW_D, "서프", "몸에서 악마를 꺼낸 건가？ "
+		CALL MESSAGE_WINDOW_D, "서프", "그녀들은 우리와는 다른 능력인 것 같군 "
+		CALL MESSAGE_WINDOW_D, "서프", "여기에 터미널이 있다/한 번 더 준비를 하자 "
+		CALL INPUT_SELECT_D, "[1]동료를 교체한다/[0]아무것도 아니다 "
+		SIF RESULT == 1
+			CALL RECONSTRUCTION
+	;알지라
+	CASE 301
+		CALL MESSAGE_WINDOW_D, "알지라", "방금 막 태양을 보고 왔어 "
+		CALL MESSAGE_WINDOW_D, "알지라", "검고 꽤 컸어/정말 눈부셨어 "
+		CALL MESSAGE_WINDOW_D, "알지라", "프레드 애들은/그 태양 때문에 밖에서 살 수 없는 거잖아 "
+		CALL MESSAGE_WINDOW_D, "알지라", "이래서는 비만 내리는 정크야드가 더 나아 "
+	;フレッド
+	CASE 302
+		CALL MESSAGE_WINDOW_D, "프레드", "서프하고 게일은/대낮에 위쪽에서 이 거리로 왔지？ "
+		CALL MESSAGE_WINDOW_D, "프레드", "악마의 몸은/태양 빛에 닿아도 괜찮구나 "
+		CALL MESSAGE_WINDOW_D, "프레드", "좀 부러워 "
+		CALL MESSAGE_WINDOW_D, "프레드", "류지네도 괜찮아보였는데/무슨 원리인 걸까 "
+		CALL MESSAGE_WINDOW_D, "프레드", "몸에 악마가 들어가서 그런가？ "
+	;外
+	CASE 303
+		IF TALENT:MASTER:데빌시프터 || TALENT:MASTER:페르소나구사자 || TALENT:MASTER:식노 || TALENT:MASTER:악마빙의자 || ABL:MASTER:종족 > 0
+			CALL MESSAGE_WINDOW_D, "", "밖에 나가보았다 "
+			CALL MESSAGE_WINDOW_D, "", "상공의 태양이 몹시 검다 "
+			CALL MESSAGE_WINDOW_D, "", "근처에 있는 조각상은 전부 인간이었을 것이다 "
+			CALL MESSAGE_WINDOW_D, "", "하나같이 고통스러운 표정을 짓고 있다… "
+		ELSE
+			CALL MESSAGE_WINDOW_D, "", "밖에 나가는 것은 그만두는 것이 좋을 것이다 "
+		ENDIF
+	;하얀피부
+	CASE 304
+		CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "이 문으로 지상으로 나갈 수 있어 "
+		CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "그렇지만 태양이 이상해지고 나서/우리들이 밖에 나가면 퀴비에 증후군에 걸려버려 "
+		CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "몸이 돌처럼 딱딱해지는 거야/그렇게 되고 살아있을지 어떨지는 몰라 "
+		CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "살아있으면 좋겠어…/내 아빠도 밖에서 딱딱해졌거든 "
+	;안
+	CASE 305
+		CALL MESSAGE_WINDOW_D, "타카마키 안", "밖에 있는 석상은 모두 인간인 거지… "
+		CALL MESSAGE_WINDOW_D, "타카마키 안", "여기는 인지의 세계나 꿈이 아니구나 "
+	;류지
+	CASE 306
+		CALL MESSAGE_WINDOW_D, "사카모토　류지", "처음에는 메멘토스나 팰리스인 줄 알았는데/다르구나… "
+		CALL MESSAGE_WINDOW_D, "사카모토　류지", "게다가 이상한 걸 뒤집어쓴 병대에 쫓기기도 하고 "
+		CALL MESSAGE_WINDOW_D, "사카모토　류지", "뭐, 우린 그런 경험/몇 번이나 해왔지만 말이야 "
+	;게일
+	CASE 307
+		CALL MESSAGE_WINDOW_D, "게일", "나도 서프도/따로 따로 이 거리에 도착했으니까 말이지 "
+		CALL MESSAGE_WINDOW_D, "게일", "우리가 밖에서 무사히 있을 수 있는 것도/아트마 때문일까… "
+		CALL MESSAGE_WINDOW_D, "게일", "왜 그런지는 이해불능이군 "
+		IF TALENT:MASTER:데빌시프터 || TALENT:MASTER:페르소나구사자 || TALENT:MASTER:식노 || TALENT:MASTER:악마빙의자 || ABL:MASTER:종족 > 0
+			CALL MESSAGE_WINDOW_D, "게일", "너도 검은 태양을 봐둘 건가？ "
+		ELSE
+			CALL MESSAGE_WINDOW_D, "게일", "너는 함부로 밖에 나가지 않는 것이 좋겠군 "
+		ENDIF
+	;마코토
+	CASE 309
+		CALL MESSAGE_WINDOW_D, "니지마 마코토", "우리는 그 태양 괜찮거든요/페르소나 능력 때문일까… "
+		CALL MESSAGE_WINDOW_D, "니지마 마코토", "그 꿈을 꾸고 우리는 현실에서/이 능력을 쓸 수 있게 되었어요 "
+		CALL MESSAGE_WINDOW_D, "니지마 마코토", "다른 세 사람도 쓸 수 있게 되었으면 좋겠는데… "
+		CALL MESSAGE_WINDOW_D, "니지마 마코토", "키타가와 군하고 하루쨩、후타바쨩/무사할까… "
+	CASE 403
+		CALL MESSAGE_WINDOW_D, "", "이미 숨을 거뒀다 "
+		CALL MESSAGE_WINDOW_D, "사카모토 류지", "어이、방금 전까지 살아있지 않았어？/이러면 결국 죽인 거잖아… "
+		CALL MESSAGE_WINDOW_D, "게일", "악마의 힘으로 던져졌으니 그렇겠지 "
+	CASE 500
+			PRINTL 힐 스폿이 있다。
+			CALL INPUT_YN,"사용한다（한 번 사용하면 사라집니다）","사용하지 않는다"
+			IF RESULT == 0
+				PRINTFORMW %CALLNAME:MASTER% 일행은 회복했다
+				FOR LOCAL, 1, 7
+					SIF POS(LOCAL) > -1
+						CALL HEALTH_CHARA, POS(LOCAL)
+				NEXT
+				DA:(FLAG:現X):(FLAG:現Y) = 1
+				던전フラグ:13:3 = 1
+			ENDIF
+	;알지라
+	CASE 501
+		CALL MESSAGE_WINDOW_D, "알지라", "문 너머에서 굉장한 소리가 나고 있네 "
+		CALL MESSAGE_WINDOW_D, "알지라", "분명 강한 적이 있다고 생각해/들어가기 전에 준비를 해놓자 "
+		CALL INPUT_SELECT_D, "[1]동료를 교체한다/[0]아무것도 아니다 "
+		SIF RESULT == 1
+			CALL RECONSTRUCTION
+ENDSELECT
+
+
+;=======================================================================
+;地下街侵入이벤트(4)
+;=======================================================================
+@tikagai_event
+
+SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
+	CASE 204
+		IF 던전フラグ:13:2 < 1
+			CALL MESSAGE_WINDOW_D, "목소리", "움직이지 마！ "
+			CALL MESSAGE_WINDOW_D, "", "뒤에서 목소리가 들렸다/카르마병이다。두 명 있다"
+			CALL MESSAGE_WINDOW_D, "카르마병Ａ", "튜닝하면 꼬마들을 죽인다 "
+			CALL MESSAGE_WINDOW_D, "알지라", "튜닝？ "
+			CALL MESSAGE_WINDOW_D, "카르마병Ｂ", "마음대로 하게 해줘 "
+			CALL MESSAGE_WINDOW_D, "카르마병Ｂ", "소속 불명인지 뭔지 모르겠지만/우리들 이외의 튜너가 어느 정도인지/시험해줘야 하지 않겠어 "
+			CALL MESSAGE_WINDOW_D, "게일", "호오、그 숫자로 엠브리온에 도전하는 건가 "
+			CALL MESSAGE_WINDOW_D, "게일", "공교롭게도 우리는 정크야드의 방식밖에 모른다 "
+			CALL MESSAGE_WINDOW_D, "서프", "살아가기 위해 때리고、부수고、먹어왔다/죽을 생각이 없다면 그만둬 "
+			CALL MESSAGE_WINDOW_D, "카르마병Ａ", "얕보기는！ "
+			CALL MESSAGE_WINDOW_D, "", "＞카르마병은 오니와 세에레로 변신했다！"
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,1711,18,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,654,18,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			
+			CALL MESSAGE_WINDOW_D, "게일", "먹든지 먹히든지/어쨌든 전투는 피할 수 없는 몸이다 "
+			CALL MESSAGE_WINDOW_D, "게일", "너희도 우리가 어떤 존재인지/그 눈에 새겨둬라 "
+			CALL MESSAGE_WINDOW_D, "프레드", "아、알았어… "
+			던전フラグ:13:2 = 1
+		ENDIF
+	CASE 203
+		IF 던전フラグ:13:2 < 2
+			CALL MESSAGE_WINDOW_D, "카르마병Ａ", "여기는 하운드１２/여우 １마리 포획했습니다 "
+			CALL MESSAGE_WINDOW_D, "무선의 목소리", "알았다/수송차로 보내라 "
+			CALL MESSAGE_WINDOW_D, "카르마병Ｂ", "이봐、아직 보고하지 마/재미 보는 중인데… "
+			CALL MESSAGE_WINDOW_D, "", "남자 한 명은 여자를 범하고 있다 "
+			CALL MESSAGE_WINDOW_D, "카르마병Ｂ", "그나저나 여우가 여자라서 다행이군/저쪽 녀석들은 보기(Bogy)를 찾아다니고 있다고 "
+			CALL MESSAGE_WINDOW_D, "게일", "여우는 이곳 주민이고/우리는 유령인가 "
+			CALL MESSAGE_WINDOW_D, "서프", "조금 전의 놈들도 그렇고/협회 사람이라고 해서/우리를 알고 있는 것은 아닌 모양이군 "
+			CALL MESSAGE_WINDOW_D, "카르마병Ａ", "뭐야…/보기냐！？ "
+			CALL MESSAGE_WINDOW_D, "", "＞카르마병은 야토노카미와 세에레로 변신했다！"
+			
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,1711,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:야토노카미]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			
+			CALL MESSAGE_WINDOW_D, "주민 여자", "히이이…　괴물！　머、먹지 말아줘！ "
+			CALL MESSAGE_WINDOW_D, "", "여자는 전력으로 달아났다 "
+			CALL MESSAGE_WINDOW_D, "프레드", "이봐、서프 녀석들은 다르다고！ "
+			CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "아ー아、도망쳤다/뭐、무리도 아니지… "
+			CALL MESSAGE_WINDOW_D, "프레드", "신경 쓰지 말라고/나중에 모두한테 사정을 말해줄 거니까 "
+			CALL MESSAGE_WINDOW_D, "프레드", "우리가 사는 곳은/여기서 쭉 북쪽으로 나아가서 있어 "
+			CALL MESSAGE_WINDOW_D, "프레드", "로알드도 거기 있어/내 뒤를 따라와줘 "
+			
+			던전フラグ:13:2 = 2
+		ENDIF
+	CASE 202
+		IF 던전フラグ:13:2 < 3
+			CALL MESSAGE_WINDOW_D, "카르마병Ａ", "있다！ "
+			CALL MESSAGE_WINDOW_D, "카르마병Ｂ", "하운드12와의 교신이 단절된 지점에서/보기와 아이 여우 발견… "
+			CALL MESSAGE_WINDOW_D, "카르마병Ｂ", "네、그 소속 불명 튜너 같습니다 "
+			CALL MESSAGE_WINDOW_D, "알지라", "보기인지 버기인지 모르겠는데/아까부터 짜증나, 너희들 "
+			CALL MESSAGE_WINDOW_D, "알지라", "우리 트라이브는/엠브리온이라는 이름이 있어 "
+			CALL MESSAGE_WINDOW_D, "카르마병Ａ", "엠브리온이라고…？/바보 같은 소리 작작 해라！ "
+			CALL MESSAGE_WINDOW_D, "", "＞카르마병은 키마리스와 잔트만으로 변신했다！"
+			
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,1758,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,478,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			
+			CALL MESSAGE_WINDOW_D, "서프", "아무래도 이쪽 위치를/파악당한 것 같다 "
+			CALL MESSAGE_WINDOW_D, "서프", "프레드、최단 루트로 목적지로 향해주지 않겠어？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "맡겨둬 "
+			
+			던전フラグ:13:2 = 3
+		ENDIF
+	CASE 201
+		IF 던전フラグ:13:2 < 4
+			CALL MESSAGE_WINDOW_D, "카르마병", "놈들이다！ "
+			CALL MESSAGE_WINDOW_D, "알지라", "한도 끝도 없이… "
+			CALL MESSAGE_WINDOW_D, "알지라", "안 나오면 죽을 일도 없는데/왜 모르는 거야！ "
+			CALL MESSAGE_WINDOW_D, "카르마병", "정보대로 북상중인 듯/땅굴로 향하는 것으로 생각됩니다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "포획을 시도하겠습니다！ "
+			CALL MESSAGE_WINDOW_D, "", "＞카르마병은 세탄타로 변신했다！"
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,9,[[キャラ:세탄타]],23,0,0
+			CFLAG:(CHARANUM-1):ＨＰ보정 = 25
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			던전フラグ:13:2 = 4
+		ENDIF
+	CASE 200
+		IF 던전フラグ:13:2 < 5
+			CALL MESSAGE_WINDOW_D, "", "쓰러진 여성이 있다… "
+			CALL MESSAGE_WINDOW_D, "프레드", "괜찮아？/지금 도와줄게… "
+			CALL MESSAGE_WINDOW_D, "카르마병", "걸렸다！ "
+			CALL MESSAGE_WINDOW_D, "", "＞카르마병은 가름과 잔트마로 변신했다！"
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:不意打ちフラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,478,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:가름]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			CALL MESSAGE_WINDOW_D, "주민 여자", "악마인데도…나를 구해주는 거야？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "헤헤、서프 녀석들은 특별하니까/우리랑 같이 싸워주고 있어 "
+			CALL MESSAGE_WINDOW_D, "주민 여자", "고마워… 나머지는 알아서 어떻게든 빠져나갈게 "
+			던전フラグ:13:2 = 5
+		ENDIF
+	CASE 308
+		IF 던전フラグ:13:2 < 6
+			CALL MESSAGE_WINDOW_D, "흑발의 소녀", "모두！ 빨리 이쪽으로！ "
+			CALL MESSAGE_WINDOW_D, "", "왼쪽 문에서 젊은이 세 명이 나왔다/겉모습은 전원 16～18세 정도로 보인다 "
+			CALL MESSAGE_WINDOW_D, "금발의 소녀", "고마워！/정말 뭐야 저 녀석들！ "
+			CALL MESSAGE_WINDOW_D, "금발의 소년", "갑자기 덤벼들고 난리야！/뭐가 뭔지 모르겠다고 "
+			CALL MESSAGE_WINDOW_D, "카르마병Ａ", "바보 같으니！ 꼴 좋게 유도당했군！ "
+			CALL MESSAGE_WINDOW_D, "", "안쪽 문에서 카르마병이 나왔다 "
+			CALL MESSAGE_WINDOW_D, "흑발의 소녀", "사、사이에 꼈어！？ "
+			CALL MESSAGE_WINDOW_D, "", "이어서 왼쪽 문、이쪽의 문에서도 카르마병이 나온다 "
+			CALL MESSAGE_WINDOW_D, "카르마병Ｂ", "보고！ 여기는 하운드７ "
+			CALL MESSAGE_WINDOW_D, "카르마병Ｂ", "８、９과 함께 이레귤러、보기를 포위/지금부터 포획합니다！ "
+			CALL MESSAGE_WINDOW_D, "금발의 소녀", "진짜！？　거짓말이지？ "
+			CALL MESSAGE_WINDOW_D, "", "게일과 서프가 소녀들에게 말을 건넨다 "
+			CALL MESSAGE_WINDOW_D, "게일", "들어라！　우리는 너희의 아군이다！/하지만 이 숫자로는 너희를 감싸줄 정도의 여유는 없다！ "
+			CALL MESSAGE_WINDOW_D, "서프", "잠시 스스로 몸을 지켜줘！/이쪽을 정리하고 나서 그쪽으로 가세할게！ "
+			CALL MESSAGE_WINDOW_D, "금발의 소년", "안 그래도 그러려고 했어！/페르소나아！ "
+			CALL MESSAGE_WINDOW_D, "", "세 사람은 머리 위에서 악마로 보이는 것을 꺼냈다 "
+			CALL MESSAGE_WINDOW_D, "", "＞카르마병이 여럿 나타났다！"
+			
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,7,1711,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,8,1711,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,9,[[キャラ:세탄타]],20,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,1711,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,11,1711,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			던전フラグ:13:2 = 6
+			
+			CALL MESSAGE_WINDOW_D, "금발의 소녀", "휴우、어떻게든 됐네… "
+			CALL MESSAGE_WINDOW_D, "흑발의 소녀", "감사합니다/우리라도 그 숫자를 대처할 수 있었을지…"
+			CALL MESSAGE_WINDOW_D, "흑발의 소녀", "당신들도 그 병대에 쫓기고 있군요 "
+			CALL MESSAGE_WINDOW_D, "서프", "그래/그런데 놀랍군。프레드의 동료 중에도 악마와 싸울 수 있는/능력자가 있을 줄이야… "
+			CALL MESSAGE_WINDOW_D, "금발의 소년", "프레드？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "미안한데 우린 거기 누나들은 모른다구 "
+			CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "누나들 누구야？ "
+			CALL MESSAGE_WINDOW_D, "흑발의 소녀", "우리는… "
+			CALL MESSAGE_WINDOW_D, "", "흑발의 소녀는 자신들에 대한 것과/이곳에 있는 사정을 말했다 "
+			CALL MESSAGE_WINDOW_D, "", "그녀들의 이름은/소년의 이름은 사카모토 류지/금발의 소녀는 타카마키 안/흑발의 소녀는 니지마 마코토라고 한다 "
+			CALL MESSAGE_WINDOW_D, "", "그녀의 이야기에 따르면/갑자기 이 세계로 와서 다른 동료들과/뿔뿔이 흩어졌다고 한다 "
+			CALL MESSAGE_WINDOW_D, "프레드", "서프 녀석들하고 똑같네 "
+			CALL MESSAGE_WINDOW_D, "알지라", "그런데 우리와는 다르게 트라이브 항쟁을 이겨나가고 온 건 아니구나/트라이브수트도 안 입었고 "
+			CALL MESSAGE_WINDOW_D, "게일", "동료를 배웅한 다음 돌아가던 도중에 무언가에 삼켜져/어느새 이곳에 있었다는 건가… "
+			CALL MESSAGE_WINDOW_D, "사카모토　류지", "응、어느샌가 세계가 멸망한 것 같은 곳에 와가지고 "
+			CALL MESSAGE_WINDOW_D, "니지마 마코토", "그리고 이상한 병대에 쫓겨서 여기까지 왔어요 "
+			CALL MESSAGE_WINDOW_D, "타카마키 안", "모처럼 사건 해결하고 푹 쉴 수 있을 줄 알았는데… "
+			CALL MESSAGE_WINDOW_D, "프레드", "그러고 보니 누나들/밖에서 나온 것 같은데 태양 빛은 괜찮았어？ "
+			CALL MESSAGE_WINDOW_D, "사카모토 류지", "엥？/그냥 괜찮았는데… "
+			CALL MESSAGE_WINDOW_D, "타카마키 안", "무、무슨 뜻이니？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "몰라？/돌이 된 인간은 많이 봤지？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "그거、태양 빛을 쬐버려서 다들 돌이 된 거야 "
+			CALL MESSAGE_WINDOW_D, "타카마키 안", "농담이지？ "
+			CALL MESSAGE_WINDOW_D, "니지마 마코토", "그럼 그 상공에 있던 검은 물체가 태양이야？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "아무래도 너희도 아무것도 모르는 모양이네 "
+			CALL MESSAGE_WINDOW_D, "서프", "우리처럼 이곳에 갑자기 날려진 거야/아무것도 모르는 쪽이 납득이 간다 "
+			CALL MESSAGE_WINDOW_D, "서프", "너희도 그밖에 동료가 있는 건가？ "
+			CALL MESSAGE_WINDOW_D, "니지마 마코토", "네、우리 말고도 3명 정도 있을 텐데요 "
+			CALL MESSAGE_WINDOW_D, "사카모토 류지", "그 녀석들도 무사히 있었으면 좋겠구만… "
+			CALL MESSAGE_WINDOW_D, "타카마키 안", "그도 말려들지 않았으면 좋겠는데… "
+			CALL MESSAGE_WINDOW_D, "니지마 마코토", "서프 씨네도 카르마 시티가 목적이군요 "
+			CALL MESSAGE_WINDOW_D, "니지마 마코토", "같이 따라가도 괜찮을까요？/우리 동료가 붙잡혀 있을지도 몰라요 "
+			CALL MESSAGE_WINDOW_D, "서프", "좋아、지금은 조금이라도 전력이 필요하니까/서로 협력하자 "
+			CALL MESSAGE_WINDOW_D, "니지마 마코토", "감사합니다 "
+			CALL MESSAGE_WINDOW_D, "게일", "일단은 로알드를 만나야겠지…/프레드、부탁한다 "
+			CALL MESSAGE_WINDOW_D, "프레드", "응、따라와 "
+			CALL MESSAGE_WINDOW_D, "", "사카모토 류지、타카마키 안、니지마 마코토가 동료가 되었다 "
+			
+				CALL ADD_NEW_COMPANION,4657,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 19
+					BASE:(RESULT:1):힘 = 11
+					BASE:(RESULT:1):지혜 = 5
+					BASE:(RESULT:1):마력 = 5
+					BASE:(RESULT:1):인내력 = 12
+					BASE:(RESULT:1):속도 = 7
+					BASE:(RESULT:1):운 = 6
+					;BASE:(RESULT:1):ＥＸＰ = 5*19*20*21/3
+					EQUIP:(RESULT:1):검 = 2326
+					EQUIP:(RESULT:1):머리 = 3046
+					EQUIP:(RESULT:1):몸통 = 3503
+					EQUIP:(RESULT:1):팔 = 4029
+					EQUIP:(RESULT:1):발 = 4503
+					;新페르소나処理
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 19
+						DITEMTYPE:LOCAL:페르소나("힘") = 11
+						DITEMTYPE:LOCAL:페르소나("지혜") = 5
+						DITEMTYPE:LOCAL:페르소나("마력") = 5
+						DITEMTYPE:LOCAL:페르소나("인내력") = 12
+						DITEMTYPE:LOCAL:페르소나("속도") = 7
+						DITEMTYPE:LOCAL:페르소나("운") = 6
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 250;지옥찌르기
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 203;마구날뛰기
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 904;마하・지오
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 304;메가클로
+					ENDIF
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					;CALL CHECK_LEVEL_UP, (RESULT:1)
+				ENDIF
+				CALL ADD_NEW_COMPANION,4658,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 19
+					BASE:(RESULT:1):힘 = 5
+					BASE:(RESULT:1):지혜 = 12
+					BASE:(RESULT:1):마력 = 11
+					BASE:(RESULT:1):인내력 = 5
+					BASE:(RESULT:1):속도 = 6
+					BASE:(RESULT:1):운 = 7
+					;BASE:(RESULT:1):ＥＸＰ = 5*19*20*21/3
+					EQUIP:(RESULT:1):검 = 2022
+					EQUIP:(RESULT:1):머리 = 3044
+					EQUIP:(RESULT:1):몸통 = 3503
+					EQUIP:(RESULT:1):팔 = 4029
+					EQUIP:(RESULT:1):발 = 4503
+					;新페르소나処理
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 19
+						DITEMTYPE:LOCAL:페르소나("힘") = 5
+						DITEMTYPE:LOCAL:페르소나("지혜") = 12
+						DITEMTYPE:LOCAL:페르소나("마력") = 11
+						DITEMTYPE:LOCAL:페르소나("인내력") = 5
+						DITEMTYPE:LOCAL:페르소나("속도") = 6
+						DITEMTYPE:LOCAL:페르소나("운") = 4
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 556;마칸・다
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 704;마하・라기
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 20;사랑의채찍
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 702;아기라오
+					ENDIF
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					;CALL CHECK_LEVEL_UP, (RESULT:1)
+				ENDIF
+				CALL ADD_NEW_COMPANION,4659,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 19
+					BASE:(RESULT:1):힘 = 7
+					BASE:(RESULT:1):지혜 = 8
+					BASE:(RESULT:1):마력 = 8
+					BASE:(RESULT:1):인내력 = 9
+					BASE:(RESULT:1):속도 = 10
+					BASE:(RESULT:1):운 = 4
+					;BASE:(RESULT:1):ＥＸＰ = 5*19*20*21/3
+					EQUIP:(RESULT:1):검 = 2316
+					EQUIP:(RESULT:1):머리 = 3044
+					EQUIP:(RESULT:1):몸통 = 3503
+					EQUIP:(RESULT:1):팔 = 4029
+					EQUIP:(RESULT:1):발 = 4503
+					;新페르소나処理
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 19
+						DITEMTYPE:LOCAL:페르소나("힘") = 7
+						DITEMTYPE:LOCAL:페르소나("지혜") = 8
+						DITEMTYPE:LOCAL:페르소나("마력") = 8
+						DITEMTYPE:LOCAL:페르소나("인내력") = 9
+						DITEMTYPE:LOCAL:페르소나("속도") = 10
+						DITEMTYPE:LOCAL:페르소나("운") = 4
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 431;바이스디
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 1909;마하기가
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 558;사마・카쟈
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 404;메・디아
+						DITEMTYPE:LOCAL:페르소나("스킬8") = 432;마하바이스디
+					ENDIF
+					;TALENT:(RESULT:1):연모 = 1
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					;TALENT:(RESULT:1):연모 = 0
+					;CALL CHECK_LEVEL_UP, (RESULT:1)
+				ENDIF
+		ENDIF
+	CASE 405
+		IF 던전フラグ:13:2 < 7
+			CALL MESSAGE_WINDOW_D, "", "어디선가 외치는 소리가 들려온다 "
+			CALL MESSAGE_WINDOW_D, "카르마병의 목소리", "소속 불명 튜너에게 고한다 "
+			CALL MESSAGE_WINDOW_D, "카르마병의 목소리", "이 부근에 잠복중인 것은/알고 있다 "
+			CALL MESSAGE_WINDOW_D, "카르마병의 목소리", "튜닝을 해제하고 투항하라 "
+			CALL MESSAGE_WINDOW_D, "카르마병의 목소리", "그렇지 않으면 포로를 처형한다！ "
+			CALL MESSAGE_WINDOW_D, "프레드", "저 녀석들、인간 같은 건/안중에도 없어！ "
+			CALL MESSAGE_WINDOW_D, "프레드", "구출하지 않으면/정말로 살해당할 거야… "
+			CALL MESSAGE_WINDOW_D, "프레드", "부탁해！/구해줘… "
+			;この命令で이벤트は破壊され、ただの床になる
+			DA:(FLAG:現X):(FLAG:現Y) = 1
+			던전フラグ:13:2 = 7
+		ENDIF
+	CASE 404
+		IF 던전フラグ:13:2 < 8
+			CALL MESSAGE_WINDOW_D, "", "옆 방에 변신해서 포로를 붙잡고 있는 카르마병이 보인다 "
+			CALL MESSAGE_WINDOW_D, "카르마병의 목소리", "소속 불명 아바탈 튜너에게 고한다 "
+			CALL MESSAGE_WINDOW_D, "카르마병의 목소리", "투항하라！/이 근방에 잠복중인 것은/알고 있다！ "
+			CALL MESSAGE_WINDOW_D, "카르마병의 목소리", "투항하라！/그렇지 않으면 포로를 처형한다！ "
+			;この命令で이벤트は破壊され、ただの床になる
+			DA:(FLAG:現X):(FLAG:現Y) = 1
+			던전フラグ:13:2 = 8
+		ENDIF
+	CASE 402
+		IF 던전フラグ:13:2 < 9
+			CALL MESSAGE_WINDOW_D, "", "변신해서 포로를 붙잡고 있는 카르마병이 있다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "흥、다리는 달려있는 모양이군 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "이레귤러인 애들도 같이 있나 "
+			CALL MESSAGE_WINDOW_D, "", "카르마병은 포로를 내던졌다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "유령인지 소속 불명인지 이상자인지 모르겠다만 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "어떻게 튜너가 되었는지/그 이상한 능력을 어디서 얻었는지/실컷 심문해주마！ "
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,[[キャラ:아리안로드]],21,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,9,[[キャラ:세탄타]],21,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:스세리비메]],21,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			;この命令で이벤트は破壊され、ただの床になる
+			DA:(FLAG:現X):(FLAG:現Y) = 1
+			DA:(FLAG:現X):(FLAG:現Y-4) = 1
+			던전フラグ:13:2 = 9
+		ENDIF
+	CASE 401
+		IF 던전フラグ:13:2 < 9
+			IF RAND:6 == 0
+					CALL MESSAGE_WINDOW_D, "알지라", "포로를 죽게 놔둘 거야？/나는 싫어/아직 안 늦었을지도 몰라。돌아가자 "
+			ELSEIF RAND:5 == 0
+					CALL MESSAGE_WINDOW_D, "게일", "뭘 하고 있나/서두르는 마음도 이해하지만/지금은 프레드의 동료를 구출하자 "
+			ELSEIF RAND:4 == 0
+					CALL MESSAGE_WINDOW_D, "서프", "왜 그래？/이 건너편에는 없을 거야 "
+			ELSEIF RAND:3 == 0
+					CALL MESSAGE_WINDOW_D, "사카모토 류지", "뭐 하는 거야！/빨리 구하러 안 가면 늦는다고！ "
+			ELSEIF RAND:2 == 0
+					CALL MESSAGE_WINDOW_D, "니지마 마코토", "기다려주세요！/포로를 죽게 놔둘 건가요？ "
+			ELSE
+					CALL MESSAGE_WINDOW_D, "타카마키 안", "잠깐！/방은 그쪽이 아니지！/빨리 구하지 않으면 늦어버려… "
+			ENDIF
+			CALL DUNGEON_WORP,4,(FLAG:現X),(FLAG:現Y)+1
+		ENDIF
+	CASE 400
+		IF 던전フラグ:13:2 < 10
+			CALL MESSAGE_WINDOW_D, "카르마병", "여기는 하운즈11/그 튜너가 격벽 앞으로 들이닥치고 있습니다！ "
+			CALL MESSAGE_WINDOW_D, "카르마병", "시급히 증원 바랍니다！ "
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,[[キャラ:랴난시]],22,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,9,[[キャラ:야토노카미]],22,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:스세리비메]],22,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			PRINTL 증원이 나타났다！
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,13,[[キャラ:랴난시]],22,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,8,[[キャラ:세탄타]],22,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:아리안로드]],22,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,15,[[キャラ:스세리비메]],22,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			;この命令で이벤트は破壊され、ただの床になる
+			DA:(FLAG:現X):(FLAG:現Y) = 1
+			던전フラグ:13:2 = 10
+		ENDIF
+	CASE 500
+			PRINTL 힐 스폿이 있다。
+			CALL INPUT_YN,"사용한다（한 번 사용하면 사라집니다）","사용하지 않는다"
+			IF RESULT == 0
+				PRINTFORMW %CALLNAME:MASTER% 일행은 회복했다
+				FOR LOCAL, 1, 7
+					SIF POS(LOCAL) > -1
+						CALL HEALTH_CHARA, POS(LOCAL)
+				NEXT
+				DA:(FLAG:現X):(FLAG:現Y) = 1
+				던전フラグ:13:3 = 1
+			ENDIF
+	CASE 502
+			CALL MESSAGE_WINDOW_D, "", "문 너머에서 굉장한 돌격음이 난다 "
+			CALL INPUT_SELECT_D, "[0]건너편으로 간다/[1]가지 않는다 "
+			IF RESULT == 1
+				CALL DUNGEON_WORP,5,(FLAG:現X)-1,(FLAG:現Y)
+			ELSEIF RESULT == 0
+				;この命令で이벤트は破壊され、ただの床になる
+				DA:(FLAG:現X):(FLAG:現Y) = 1
+				CALL DUNGEON_WORP,5,(FLAG:現X)+2,(FLAG:現Y)
+				CALL MESSAGE_WINDOW_D, "", "거대한 코끼리 머리의 악마가 거대한 철문에/몸통박치기를 하고 있다 "
+				CALL MESSAGE_WINDOW_D, "", "프레드와 동료 소년이 앞으로 나가서/그 적을 향해 외쳤다 "
+				CALL MESSAGE_WINDOW_D, "프레드", "임마！/언제까지고/제멋대로 굴지 말라고ー！ "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "말라고ー！ "
+				CALL MESSAGE_WINDOW_D, "", "코끼리 머리의 악마와 그 주위에 있던 병대는/이쪽을 주목한다 "
+				CALL MESSAGE_WINDOW_D, "카르마병", "그 꼬마들이다。잡아라！ "
+				CALL MESSAGE_WINDOW_D, "", "카르마병은 악마로 변신했다 "
+				CALL MESSAGE_WINDOW_D, "", "프레드와 동료 소년은 도망치듯이 당신의 뒤로 숨었다 "
+				CALL MESSAGE_WINDOW_D, "프레드", "서、선생、 자、어서ー "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "자、어서ー "
+				CALL MESSAGE_WINDOW_D, "알지라", "이 애、넉살이 좋네/시에로 같아 "
+				CALL MESSAGE_WINDOW_D, "", "서프 일행은 변신했다 "
+				CALL MESSAGE_WINDOW_D, "", "＞유귀 베탈라가 1체 나타났다！"
+			
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				
+				CALL SET_ENEMY,8,[[キャラ:아리안로드]],25,0,1
+				CFLAG:(CHARANUM-1):ＨＰ보정 = -200
+				ABL:(CHARANUM-1):스킬4 = 1033
+				ABL:(CHARANUM-1):스킬5 = 0
+				BASE:(CHARANUM-1):61 -= 100
+				BASE:(CHARANUM-1):62 -= 100
+				BASE:(CHARANUM-1):63 -= 100
+				BASE:(CHARANUM-1):64 -= 100
+				BASE:(CHARANUM-1):65 -= 100
+				BASE:(CHARANUM-1):66 -= 100
+				BASE:(CHARANUM-1):67 -= 100
+				BASE:(CHARANUM-1):68 -= 100
+				BASE:(CHARANUM-1):69 -= 100
+				BASE:(CHARANUM-1):70 -= 100
+				BASE:(CHARANUM-1):71 -= 100
+				BASE:(CHARANUM-1):72 -= 100
+				BASE:(CHARANUM-1):73 -= 100
+				BASE:(CHARANUM-1):74 -= 100
+				BASE:(CHARANUM-1):75 -= 100
+				BASE:(CHARANUM-1):76 -= 100
+				BASE:(CHARANUM-1):77 -= 100
+				CALL SYNC_STATUS,(CHARANUM-1)
+				CALL HEALTH_CHARA,(CHARANUM-1)
+				
+				CALL SET_ENEMY,10,[[キャラ:세탄타]],25,0,1
+				CFLAG:(CHARANUM-1):ＨＰ보정 = -200
+				ABL:(CHARANUM-1):스킬4 = 1033
+				ABL:(CHARANUM-1):스킬5 = 0
+				BASE:(CHARANUM-1):61 -= 100
+				BASE:(CHARANUM-1):62 -= 100
+				BASE:(CHARANUM-1):63 -= 100
+				BASE:(CHARANUM-1):64 -= 100
+				BASE:(CHARANUM-1):65 -= 100
+				BASE:(CHARANUM-1):66 -= 100
+				BASE:(CHARANUM-1):67 -= 100
+				BASE:(CHARANUM-1):68 -= 100
+				BASE:(CHARANUM-1):69 -= 100
+				BASE:(CHARANUM-1):70 -= 100
+				BASE:(CHARANUM-1):71 -= 100
+				BASE:(CHARANUM-1):72 -= 100
+				BASE:(CHARANUM-1):73 -= 100
+				BASE:(CHARANUM-1):74 -= 100
+				BASE:(CHARANUM-1):75 -= 100
+				BASE:(CHARANUM-1):76 -= 100
+				BASE:(CHARANUM-1):77 -= 100
+				CALL SYNC_STATUS,(CHARANUM-1)
+				CALL HEALTH_CHARA,(CHARANUM-1)
+				
+				CALL SET_ENEMY,9,[[キャラ:베탈라]],28,0,1
+				CFLAG:(CHARANUM-1):ＨＰ보정 = 500
+				CFLAG:(CHARANUM-1):ＭＰ보정 = 4000
+				CFLAG:(CHARANUM-1):ＥＸＰ보정 = 12
+				CFLAG:(CHARANUM-1):ＭＡＧ보정 = 26
+				CSTR:(CHARANUM-1):사고패턴 = tikagai_boss
+				ABL:(CHARANUM-1):스킬1 = 210
+				ABL:(CHARANUM-1):스킬2 = 204
+				ABL:(CHARANUM-1):스킬3 = 0
+				ABL:(CHARANUM-1):스킬4 = 1502
+				ABL:(CHARANUM-1):스킬5 = 1505
+				CFLAG:(CHARANUM-1):800 = 0
+				BASE:(CHARANUM-1):화염 = 100
+				BASE:(CHARANUM-1):충격 = 200
+				BASE:(CHARANUM-1):지변 = -50
+				BASE:(CHARANUM-1):핵열 = 100
+				BASE:(CHARANUM-1):파마 = 100
+				BASE:(CHARANUM-1):61 -= 100
+				BASE:(CHARANUM-1):62 -= 100
+				BASE:(CHARANUM-1):63 -= 100
+				BASE:(CHARANUM-1):64 -= 100
+				BASE:(CHARANUM-1):65 -= 100
+				BASE:(CHARANUM-1):66 -= 100
+				BASE:(CHARANUM-1):67 -= 100
+				BASE:(CHARANUM-1):68 -= 100
+				BASE:(CHARANUM-1):69 -= 100
+				BASE:(CHARANUM-1):70 -= 100
+				BASE:(CHARANUM-1):71 -= 100
+				BASE:(CHARANUM-1):72 -= 100
+				BASE:(CHARANUM-1):73 -= 100
+				BASE:(CHARANUM-1):74 -= 100
+				BASE:(CHARANUM-1):75 -= 100
+				BASE:(CHARANUM-1):76 -= 100
+				BASE:(CHARANUM-1):77 -= 100
+				MAXBASE:(CHARANUM-1):사이코 = 100
+				CALL SYNC_STATUS,(CHARANUM-1)
+				CALL HEALTH_CHARA,(CHARANUM-1)
+				CALL BATTLE_START
+			
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				FLAG:エンカウント率 = 0
+				FLAG:未遭遇歩数 = 0
+				
+				CALL MESSAGE_WINDOW_D, "프레드", "이 문 너머가/우리들의 은신처야 "
+				CALL MESSAGE_WINDOW_D, "타카마키 안", "다행이다～/겨우 쉴 수 있겠네… "
+				CALL MESSAGE_WINDOW_D, "게일", "쉽게 쉴 수 있을 것 같지는 않다/저쪽은 우리의 얼굴을 모르니까 "
+				CALL MESSAGE_WINDOW_D, "타카마키 안", "그、그렇겠네～… "
+				CALL MESSAGE_WINDOW_D, "서프", "이 문은 이쪽에서는 열 수 없는 것 같다 "
+				CALL MESSAGE_WINDOW_D, "서프", "프레드/어떻게든 열 수 없겠어？ "
+				CALL MESSAGE_WINDOW_D, "프레드", "맡겨둬 "
+				CALL MESSAGE_WINDOW_D, "", "프레드는 문을 리듬 좋게 두드렸다 "
+				CALL MESSAGE_WINDOW_D, "사카모토 류지", "그런다고 들리겠어？/괜찮은 거냐 "
+				CALL MESSAGE_WINDOW_D, "프레드", "보고 있으라고 "
+				CALL MESSAGE_WINDOW_D, "", "잠시 두드리고 있자 건너편에서/똑같이 두드리는 소리가 들렸다 "
+				CALL MESSAGE_WINDOW_D, "프레드", "왔다 왔어 "
+				CALL MESSAGE_WINDOW_D, "", "1분 정도 지나자 문이 열렸다 "
+				CALL MESSAGE_WINDOW_D, "", "프레드와 동료 소년이 먼저 문을 통과하여/선두에 나서서 우쭐거리며 말했다 "
+				CALL MESSAGE_WINDOW_D, "프레드", "로카파라가 못 미더우니까/우리가 쫓아내줬다구 "
+				CALL MESSAGE_WINDOW_D, "사카모토 류지", "니들 아무것도 안 했잖냐！ "
+				CALL MESSAGE_WINDOW_D, "프레드", "시끄럽네！/길 안내 해줬잖아！ "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "맞아ー 맞아ー！ "
+				CALL MESSAGE_WINDOW_D, "", "프레드와 동료 소년에 이어 문을 통과하자/무장한 사람들과 한 명의 소녀 "
+				CALL MESSAGE_WINDOW_D, "", "그 중에는 로알드와 아딜이 있다 "
+				CALL MESSAGE_WINDOW_D, "", "아딜은 서프 일행을 보더니/로알드에게 귓속말을 했다 "
+				CALL MESSAGE_WINDOW_D, "", "로알드는 서프 일행에게로 걸어갔다 "
+				CALL MESSAGE_WINDOW_D, "로알드", "실례지만/시에로 군의 동료인가 "
+				CALL MESSAGE_WINDOW_D, "알지라", "시에로를 알아？ "
+				CALL MESSAGE_WINDOW_D, "로알드", "나는 로카파라의 로알드/시에로 군은 우리가 보호하고 있다/환영하지 "
+				CALL MESSAGE_WINDOW_D, "아딜", "잠깐、거기 있는 녀석들은 누구냐？/복장이 다른 것 같은데 "
+				CALL MESSAGE_WINDOW_D, "", "아딜은 마코토 일행을 가리키며 말했다 "
+				CALL MESSAGE_WINDOW_D, "니지마 마코토", "그게…/우리는 카르마병에게 쫓기고 있습니다 "
+				CALL MESSAGE_WINDOW_D, "니지마 마코토", "숨겨주실 수 없을까요？ "
+				CALL MESSAGE_WINDOW_D, "프레드", "정말로 쫓기고 있어/마코토 녀석들은 나쁜 놈들이 아니야 "
+				CALL MESSAGE_WINDOW_D, "프레드", "부탁해、로알드 "
+				CALL MESSAGE_WINDOW_D, "로알드", "좋다/너희도 따라오도록 "
+				던전フラグ:13:1 = 1
+				CALL DUNGEON_WORP,0,1,18
+			ENDIF
+ENDSELECT
+;=======================================================================
+;地下街侵入이벤트（9）
+;=======================================================================
+@tikagai_event2
+SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
+	CASE 100
+		CALL DUNGEON_WORP,2,3,22
+	CASE 201
+		CALL DUNGEON_WORP,1,3,1
+	CASE 200
+		CALL DUNGEON_WORP,3,16,40
+	CASE 316
+		CALL DUNGEON_WORP,2,3,1
+	CASE 300
+		CALL DUNGEON_WORP,4,3,27
+	CASE 310
+		CALL MESSAGE_WINDOW_D, "", "モニタールームだ "
+	CASE 411
+		CALL DUNGEON_WORP,3,8,1
+	CASE 410
+		CALL DUNGEON_WORP,5,5,9
+	CASE 500
+		CALL DUNGEON_WORP,4,1,4
+ENDSELECT
+
+;추가이벤트
+IF 던전フラグ:13:2 < 6
+	
+SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
+	CASE 315
+		IF 던전フラグ:13:24 < 1
+			CALL MESSAGE_WINDOW_D, "", "分かれ道がある "
+			CALL MESSAGE_WINDOW_D, "フレッド", "ここから北に進むと近道だ/でも　西はダメだぜ　かなり遠回りなる "
+			CALL MESSAGE_WINDOW_D, "", "と　言っているが/近道の方からはかなり발音が聞こえる "
+			CALL MESSAGE_WINDOW_D, "서프", "近道の方には적がたくさんいるみたいだ/安全に行くなら遠回りするべきかもしれないな "
+			던전フラグ:13:24 = 1
+		ENDIF
+	CASE 311
+		IF 던전フラグ:13:24 < 2
+			CALL MESSAGE_WINDOW_D, "", "扉の向こうから気配がする "
+			CALL INPUT_SELECT_D, "[0]向こうへ行く/[1]行かない "
+			IF RESULT == 1
+				CALL DUNGEON_WORP,3,(FLAG:現X),(FLAG:現Y)+1
+			ELSEIF RESULT == 0
+				CALL DUNGEON_WORP,3,(FLAG:現X),(FLAG:現Y)-2
+				
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "この集団には勝てまい！/大人しく　捕まれ！ "
+			
+				
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,7,[[キャラ:스세리비메]],18,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,8,[[キャラ:스세리비메]],18,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,9,[[キャラ:세탄타]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:스세리비메]],18,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,11,[[キャラ:스세리비메]],18,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,13,[[キャラ:랴난시]],18,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,15,[[キャラ:랴난시]],18,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+				던전フラグ:13:24 = 2
+			ENDIF
+		ENDIF
+	CASE 303
+		IF 던전フラグ:13:25 < 10
+			CALL MESSAGE_WINDOW_D, "", "ここには3人のカルマ兵の姿があった "
+			CALL MESSAGE_WINDOW_D, "", "動きからしてモニターで見た奴らだ "
+			CALL MESSAGE_WINDOW_D, "서프", "奴らは夢中でこちらに気づいていないな/게일 "
+			CALL MESSAGE_WINDOW_D, "", "そういって서프と게일の二人はカルマ兵３人を一気に即死させた "
+			CALL MESSAGE_WINDOW_D, "서프", "大丈남편か？ "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "あ…당신は…？ "
+				CALL MESSAGE_WINDOW_D, "안", "良かった…　無事だった… "
+				CALL MESSAGE_WINDOW_D, "마코토", "안…助けにけてくれたんだ… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "あ…ありがと/えーっと… "
+				CALL MESSAGE_WINDOW_D, "마코토", "大丈남편　この人たちは아군だから "
+				CALL MESSAGE_WINDOW_D, "안", "마코토　良かったぁ… "
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "알지라", "ほら！男はここから出てって！/옷はそこまでひどく破れてないようね… "
+			CALL MESSAGE_WINDOW_D, "", "女性陣でカルマ兵に襲われた彼女の介抱をした "
+		ELSE
+			CALL MESSAGE_WINDOW_D, "", "악마はカルマ兵を犬のように喰っている "
+			CALL MESSAGE_WINDOW_D, "류지", "お前！　そこをどきやがれ！ "
+			CALL MESSAGE_WINDOW_D, "서프", "危険だ！　奴は完全に暴走している！ "
+			CALL MESSAGE_WINDOW_D, "악마", "ニク…うがあああ！ "
+			CALL MESSAGE_WINDOW_D, "", "악마はこちらに襲い掛かってきた "
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			
+			CALL SET_ENEMY,9,472,19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			CALL MESSAGE_WINDOW_D, "", "전투が終わりカルマ兵の死体をどかす "
+			CALL MESSAGE_WINDOW_D, "", "そこには顔面蒼白の彼女の姿があった "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "あ…당신は…？ "
+				CALL MESSAGE_WINDOW_D, "안", "良かった…　無事だった… "
+				CALL MESSAGE_WINDOW_D, "마코토", "안…助けにけてくれたんだ… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "あ…ありがと/えーっと… "
+				CALL MESSAGE_WINDOW_D, "마코토", "大丈남편　この人たちは아군だから "
+				CALL MESSAGE_WINDOW_D, "안", "마코토　良かったぁ… "
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "류지", "ま…マジで無事でよかった… "
+			CALL MESSAGE_WINDOW_D, "서프", "助けに来るのが遅くて済まなかった/怖い思いをさせてしまったな "
+			CALL MESSAGE_WINDOW_D, "서프", "알지라　彼女の介抱をしてやってくれ "
+			CALL MESSAGE_WINDOW_D, "알지라", "わかったわ "
+			
+			
+		ENDIF
+			CALL MESSAGE_WINDOW_D, "", "しばらくたって…/彼女たちがどうやってここに来たのか聞くことにした "
+			CALL MESSAGE_WINDOW_D, "", "彼女の話によると/突然この세계に来て他の仲間達と/バラバラになったらしい "
+			CALL MESSAGE_WINDOW_D, "フレッド", "서프達と同じだな "
+			CALL MESSAGE_WINDOW_D, "알지라", "でも、私たちと違ってト라이브抗争に勝ち抜いて来たわけじゃないのね/트라이브수트も着てないし "
+			CALL MESSAGE_WINDOW_D, "게일", "仲間を送った後の帰り道の途中で何かに飲み込まれて/いつの間にかここに来てたと… "
+			CALL MESSAGE_WINDOW_D, "坂本　류지", "ああ、いつの間にか세계が滅亡したみてーなことにきて "
+			CALL MESSAGE_WINDOW_D, "新島　마코토", "そして、変な兵隊に追われてここまで来たんです "
+			CALL MESSAGE_WINDOW_D, "高巻　안", "せっかく、事件解決してゆっくりできると思ったのに… "
+			CALL MESSAGE_WINDOW_D, "フレッド", "そういえば　姉ちゃんたち/外から出たみたいだけど　太陽の光は大丈남편だったのか？ "
+			CALL MESSAGE_WINDOW_D, "坂本　류지", "へ？/フツーに大丈남편だけど… "
+			CALL MESSAGE_WINDOW_D, "高巻　안", "ど、どういう意味なの？ "
+			CALL MESSAGE_WINDOW_D, "フレッド", "わからないのか？/石になった인간はたくさん見てきただろ？ "
+			CALL MESSAGE_WINDOW_D, "フレッド", "あれ、太陽の光を浴びちまってみんな石になったんだ "
+			CALL MESSAGE_WINDOW_D, "高巻　안", "嘘でしょ？ "
+			CALL MESSAGE_WINDOW_D, "新島　마코토", "じゃあ、あの上空にあった黒い物体が太陽なの？ "
+			CALL MESSAGE_WINDOW_D, "フレッド", "どうやら　お前らも何も知らねーみてーだな "
+			CALL MESSAGE_WINDOW_D, "서프", "俺たちみたいにここにいきなり飛ばされたんだ/何も知らないほうが納得できる "
+			CALL MESSAGE_WINDOW_D, "서프", "君たちもほかに仲間がいるのか？ "
+			CALL MESSAGE_WINDOW_D, "新島　마코토", "ええ　他に3人ほどいるはずなんですけど "
+			CALL MESSAGE_WINDOW_D, "坂本　류지", "아이つらも無事であってほしいよな… "
+			CALL MESSAGE_WINDOW_D, "高巻　안", "彼も巻き込まれてなければいいけど… "
+			CALL MESSAGE_WINDOW_D, "新島　마코토", "서프さん達はカルマシティを눈指しているのですよね "
+			CALL MESSAGE_WINDOW_D, "新島　마코토", "一緒について行ってもいいですか？/私たちの仲間が捕らわれているかもしれないんです "
+			CALL MESSAGE_WINDOW_D, "서프", "いいだろう　今は少しでも戦힘が欲しいからな/協힘し合おう "
+			CALL MESSAGE_WINDOW_D, "新島　마코토", "ありがとうございます "
+			CALL MESSAGE_WINDOW_D, "게일", "だが、まずは로알드に会わなくてはな…/フレッド　頼む "
+			CALL MESSAGE_WINDOW_D, "フレッド", "ああ　ついてきな "
+			IF 던전フラグ:13:24 == 3
+				CALL ADD_NEW_COMPANION,4659,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 19
+					BASE:(RESULT:1):힘 = 7
+					BASE:(RESULT:1):지혜 = 8
+					BASE:(RESULT:1):마력 = 8
+					BASE:(RESULT:1):인내력 = 9
+					BASE:(RESULT:1):속도 = 10
+					BASE:(RESULT:1):운 = 4
+					;BASE:(RESULT:1):ＥＸＰ = 5*19*20*21/3
+					EQUIP:(RESULT:1):검 = 2316
+					EQUIP:(RESULT:1):머리 = 3044
+					EQUIP:(RESULT:1):몸통 = 3503
+					EQUIP:(RESULT:1):팔 = 4029
+					EQUIP:(RESULT:1):발 = 4503
+					;新페르소나処理
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 19
+						DITEMTYPE:LOCAL:페르소나("힘") = 7
+						DITEMTYPE:LOCAL:페르소나("지혜") = 8
+						DITEMTYPE:LOCAL:페르소나("마력") = 8
+						DITEMTYPE:LOCAL:페르소나("인내력") = 9
+						DITEMTYPE:LOCAL:페르소나("속도") = 10
+						DITEMTYPE:LOCAL:페르소나("운") = 4
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 431;바이스디
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 1909;마하기가
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 558;사마・카쟈
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 404;메・디아
+						DITEMTYPE:LOCAL:페르소나("스킬8") = 432;마하바이스디
+					ENDIF
+					;TALENT:(RESULT:1):연모 = 1
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					IF 던전フラグ:13:25 > 1
+						EXP:(RESULT:1):윤간경험 += 1
+						IF 던전フラグ:13:25 > 2
+							EXP:(RESULT:1):키스경험 += 1
+							IF 던전フラグ:13:25 > 6
+								TALENT:(RESULT:1):처녀 = 0
+								EXP:(RESULT:1):질사경험 += 1
+								EXP:(RESULT:1):정액경험 += 3
+								EXP:(RESULT:1):Ｖ경험 += 1
+								EXP:(RESULT:1):성교경험 += 1
+								CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+								IF 던전フラグ:13:25 > 7
+									EXP:(RESULT:1):질사경험 += 1
+									EXP:(RESULT:1):정액경험 += 3
+									EXP:(RESULT:1):Ｖ경험 += 1
+									EXP:(RESULT:1):성교경험 += 1
+								ENDIF
+							ENDIF
+						ENDIF
+					ENDIF
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					;TALENT:(RESULT:1):연모 = 0
+					;CALL CHECK_LEVEL_UP, (RESULT:1)
+				ENDIF
+			ELSE
+				CALL ADD_NEW_COMPANION,4658,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 19
+					BASE:(RESULT:1):힘 = 5
+					BASE:(RESULT:1):지혜 = 12
+					BASE:(RESULT:1):마력 = 11
+					BASE:(RESULT:1):인내력 = 5
+					BASE:(RESULT:1):속도 = 6
+					BASE:(RESULT:1):운 = 7
+					;BASE:(RESULT:1):ＥＸＰ = 5*19*20*21/3
+					EQUIP:(RESULT:1):검 = 2022
+					EQUIP:(RESULT:1):머리 = 3044
+					EQUIP:(RESULT:1):몸통 = 3503
+					EQUIP:(RESULT:1):팔 = 4029
+					EQUIP:(RESULT:1):발 = 4503
+					;新페르소나処理
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 19
+						DITEMTYPE:LOCAL:페르소나("힘") = 5
+						DITEMTYPE:LOCAL:페르소나("지혜") = 12
+						DITEMTYPE:LOCAL:페르소나("마력") = 11
+						DITEMTYPE:LOCAL:페르소나("인내력") = 5
+						DITEMTYPE:LOCAL:페르소나("속도") = 6
+						DITEMTYPE:LOCAL:페르소나("운") = 4
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 556;마칸・다
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 704;마하・라기
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 20;사랑의채찍
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 702;아기라오
+					ENDIF
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					IF 던전フラグ:13:25 > 1
+						EXP:(RESULT:1):윤간경험 += 1
+						IF 던전フラグ:13:25 > 2
+							EXP:(RESULT:1):키스경험 += 1
+							IF 던전フラグ:13:25 > 6
+								TALENT:(RESULT:1):처녀 = 0
+								EXP:(RESULT:1):질사경험 += 1
+								EXP:(RESULT:1):정액경험 += 3
+								EXP:(RESULT:1):Ｖ경험 += 1
+								EXP:(RESULT:1):성교경험 += 1
+								CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+								IF 던전フラグ:13:25 > 7
+									EXP:(RESULT:1):질사경험 += 1
+									EXP:(RESULT:1):정액경험 += 3
+									EXP:(RESULT:1):Ｖ경험 += 1
+									EXP:(RESULT:1):성교경험 += 1
+								ENDIF
+							ENDIF
+						ENDIF
+					ENDIF
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					;CALL CHECK_LEVEL_UP, (RESULT:1)
+				ENDIF
+			ENDIF
+			던전フラグ:13:2 = 6
+	CASE 301,302,303,304,305,306,307,308,309
+		CALL MESSAGE_WINDOW_D, "", "この部屋にはいない "
+		던전フラグ:13:25++
+	CASE 310
+		IF 던전フラグ:13:25 < 1
+				
+			CALL MESSAGE_WINDOW_D, "서프", "ふむ…　まだモニターは使えそうだな "
+			CALL MESSAGE_WINDOW_D, "", "서프がモニターの電源を点けると/いろいろな部屋の中が見える "
+			CALL MESSAGE_WINDOW_D, "", "その中には소녀が映ってるが　その소녀は満身創痍で倒れており/数人のカルマ兵の姿も見える "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "안", "마코토！？ "
+				CALL MESSAGE_WINDOW_D, "마코토", "もう…動けない… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "마코토", "안！？ "
+				CALL MESSAGE_WINDOW_D, "안", "もう…ダメ… "
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "こうして見るとなかなか可愛いねえ "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "へへ…　体も結構いい形してるじゃねえか "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "これは連れて行く前に楽しませてもらうかな "
+			CALL MESSAGE_WINDOW_D, "류지", "や　やべえよ… "
+			CALL MESSAGE_WINDOW_D, "게일", "서프　部屋の場所はわかるか？ "
+			CALL MESSAGE_WINDOW_D, "서프", "この近くの部屋ということはわかるが…/地図に部屋の番号が書いていない "
+			CALL MESSAGE_WINDOW_D, "서프", "これは　総当たりしていくしかないな… "
+			CALL MESSAGE_WINDOW_D, "알지라", "とにかく　フレッドたちはここに隠れてて/決して出てはだめよ "
+			CALL MESSAGE_WINDOW_D, "フレッド", "お…おう "
+			던전フラグ:13:25 = 1
+		ENDIF
+		IF 던전フラグ:13:25 == 1
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "", "襲われそうな真がいる "
+				CALL MESSAGE_WINDOW_D, "마코토", "こ…来ないで… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "", "襲われそうな杏がいる "
+				CALL MESSAGE_WINDOW_D, "안", "ち…近寄らないで… "
+			ENDIF
+		ENDIF
+		IF 던전フラグ:13:25 == 2
+			CALL MESSAGE_WINDOW_D, "", "カルマ兵は乱暴に옷を脱がせ始める "
+			CALL MESSAGE_WINDOW_D, "", "疲労困憊の彼女にはそれに抗う힘もなく/なすがままに脱がされていた "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "や…やめて… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "ちょ…やめてよ "
+			ENDIF
+		ENDIF
+		IF 던전フラグ:13:25 == 3
+			CALL MESSAGE_WINDOW_D, "", "彼女は키스をされながらあらわになった/가슴や尻、恥部などを触られている "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "ひ…そ…そこ触んないでよ "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "変なとこ…触るな… "
+			ENDIF
+		ENDIF
+		IF 던전フラグ:13:25 == 4
+			CALL MESSAGE_WINDOW_D, "", "彼女はパンツを脱がされて一人の男に恥部をなめられている "
+			CALL MESSAGE_WINDOW_D, "", "ほかの二人は바지をいじり下半身を出す準備をしている "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "ずいぶん綺麗だねえ/こりゃ처녀だな "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "や　やめてよ…… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "く…최저… "
+			ENDIF
+		ENDIF
+		IF 던전フラグ:13:25 == 5
+			CALL MESSAGE_WINDOW_D, "", "一人の男が彼女に挿入しようとする "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "この野郎！ "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "いい加減にしろ！ "
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "", "彼女は男を突き飛ばした "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "くぅ～　いってぇ "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "お前らなんて　死んでしまえ！ "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "こんなところでやられてなるもんか！ "
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "ちっ　しぶとい奴だぜ "
+			CALL MESSAGE_WINDOW_D, "", "そう言って男は악마に변신し/彼女に粉をかける "
+			CALL MESSAGE_WINDOW_D, "", "すると彼女の顔が紅潮していった "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "な…なにこれ…体が…熱い？ "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "う…あ…熱い… "
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "へっ　驚いたかい？/俺のこの힘は인간を脱힘させる힘がある "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "今度は動かねえようにきっちりとやんねえとな "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "い…いや… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "や…やだ… "
+			ENDIF
+		ENDIF
+		IF 던전フラグ:13:25 == 6
+			CALL MESSAGE_WINDOW_D, "", "彼女は尻を突き出した상태で/柱に팔を括りつけられている "
+			CALL MESSAGE_WINDOW_D, "", "部屋の男たちは準備万端だ "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "さて　楽しませてもらおうかな "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "くう… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "う… "
+			ENDIF
+		ENDIF
+		IF 던전フラグ:13:25 == 7
+			CALL MESSAGE_WINDOW_D, "", "すでに一人の男が彼女の後ろで腰を振っている "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "さすが　처녀だぜ…/も…もう出そうだ！ "
+			CALL MESSAGE_WINDOW_D, "", "男が硬直した後　彼女の恥部に刺さっていた突起したものを引き抜くと/彼女の恥部から赤と白の混濁した액체が流れ出てきた "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "よし　次は俺だぜ "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "本当…やめてよ "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "う…うう… "
+			ENDIF
+		ENDIF
+		IF 던전フラグ:13:25 == 8
+			CALL MESSAGE_WINDOW_D, "", "二人눈が終わっていたみたいで/彼女の恥部からは白濁の액체がいつもより流れていた "
+			CALL MESSAGE_WINDOW_D, "", "その時　彼女の발は生まれたての小鹿のように/とても　がくがく震えていた "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "はあ…はあ… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "あ…あああ… "
+			ENDIF
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "まあ　これぐらいになりゃこれは필요ないな "
+			CALL MESSAGE_WINDOW_D, "", "밧줄をほどかれて/彼女は仰向けで地面に寝かせられる "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "次は俺の番だな "
+			IF 던전フラグ:13:24 == 3
+				CALL MESSAGE_WINDOW_D, "마코토", "じ…地獄に落ちろ… "
+			ELSE
+				CALL MESSAGE_WINDOW_D, "안", "う… "
+				CALL MESSAGE_WINDOW_D, "", "杏は彼らの顔を見ないようにしている "
+			ENDIF
+		ENDIF
+		IF 던전フラグ:13:25 == 9
+			CALL MESSAGE_WINDOW_D, "", "カルマ兵は彼女を取り囲むように犯しているため/彼女の様子が見えない "
+			CALL MESSAGE_WINDOW_D, "", "次の瞬間　隣の壁から大きい악마が突き破ってきた "
+			CALL MESSAGE_WINDOW_D, "악마", "グおおお　ニク…ニクううう "
+			CALL MESSAGE_WINDOW_D, "", "壁の破片がカルマ兵に刺さり　倒れた/当たり所が悪かったせいかそのまま動いていない "
+			CALL MESSAGE_WINDOW_D, "", "彼女に覆いかぶさるように三人とも倒れたため/彼女の安否がわからない "
+			CALL MESSAGE_WINDOW_D, "악마", "…ニクううう "
+			CALL MESSAGE_WINDOW_D, "", "악마はカルマ兵を犬のように喰い始めた "
+			던전フラグ:13:25 = 10
+		ENDIF
+		IF 던전フラグ:13:25 > 9
+			CALL MESSAGE_WINDOW_D, "", "악마はカルマ兵を犬のように喰っている "
+		ENDIF
+	CASE 312
+		IF 던전フラグ:13:24 < 3
+				
+			CALL MESSAGE_WINDOW_D, "", "黒머리카락の소녀が体から악마を召喚しながら/カルマ兵と戦っている "
+			CALL MESSAGE_WINDOW_D, "黒머리카락の소녀", "ハァ…ハァ…/しぶとい… "
+			CALL MESSAGE_WINDOW_D, "류지", "助けに来たぜ！　新島先輩！ "
+			CALL MESSAGE_WINDOW_D, "黒머리카락の소녀", "竜司君！ "
+			CALL MESSAGE_WINDOW_D, "게일", "竜司の仲間だな？　今助ける "
+			
+				
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,[[キャラ:랴난시]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:세에레]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			CALL MESSAGE_WINDOW_D, "서프", "おい　大丈남편か？ "
+			CALL MESSAGE_WINDOW_D, "마코토", "ありがとうございます…/私は　新島　真といいます "
+			CALL MESSAGE_WINDOW_D, "마코토", "竜司君　杏は？ "
+			CALL MESSAGE_WINDOW_D, "류지", "いや　今はまだ見つからねえ "
+			CALL MESSAGE_WINDOW_D, "게일", "後の仲間はそのアンとやらで最後か？ "
+			CALL MESSAGE_WINDOW_D, "류지", "ああ　ここに来たときは三人だったからな "
+			CALL MESSAGE_WINDOW_D, "서프", "わかった　大事になる前に急ごう "
+			CALL MESSAGE_WINDOW_D, "", "新島　真が仲間になった "
+			
+				CALL ADD_NEW_COMPANION,4659,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 19
+					BASE:(RESULT:1):힘 = 7
+					BASE:(RESULT:1):지혜 = 8
+					BASE:(RESULT:1):마력 = 8
+					BASE:(RESULT:1):인내력 = 9
+					BASE:(RESULT:1):속도 = 10
+					BASE:(RESULT:1):운 = 4
+					;BASE:(RESULT:1):ＥＸＰ = 5*19*20*21/3
+					EQUIP:(RESULT:1):검 = 2316
+					EQUIP:(RESULT:1):머리 = 3044
+					EQUIP:(RESULT:1):몸통 = 3503
+					EQUIP:(RESULT:1):팔 = 4029
+					EQUIP:(RESULT:1):발 = 4503
+					;新페르소나処理
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 19
+						DITEMTYPE:LOCAL:페르소나("힘") = 7
+						DITEMTYPE:LOCAL:페르소나("지혜") = 8
+						DITEMTYPE:LOCAL:페르소나("마력") = 8
+						DITEMTYPE:LOCAL:페르소나("인내력") = 9
+						DITEMTYPE:LOCAL:페르소나("속도") = 10
+						DITEMTYPE:LOCAL:페르소나("운") = 4
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 431;바이스디
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 1909;마하기가
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 558;사마・카쟈
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 404;메・디아
+						DITEMTYPE:LOCAL:페르소나("스킬8") = 432;마하바이스디
+					ENDIF
+					;TALENT:(RESULT:1):연모 = 1
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					;TALENT:(RESULT:1):연모 = 0
+					;CALL CHECK_LEVEL_UP, (RESULT:1)
+				ENDIF
+				
+			던전フラグ:13:24 = 4
+		ENDIF
+	CASE 313
+		IF 던전フラグ:13:24 < 3
+				
+			CALL MESSAGE_WINDOW_D, "", "金머리카락の소녀が体から악마を召喚しながら/カルマ兵と戦っている "
+			CALL MESSAGE_WINDOW_D, "金머리카락の소녀", "ハァ…ハァ…/もう！しつこい… "
+			CALL MESSAGE_WINDOW_D, "류지", "助けに来たぜ！　안！ "
+			CALL MESSAGE_WINDOW_D, "金머리카락の소녀", "류지！ "
+			CALL MESSAGE_WINDOW_D, "알지라", "今助けるわ！ "
+			
+				
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,[[キャラ:랴난시]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:세에레]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			CALL MESSAGE_WINDOW_D, "서프", "おい　大丈남편か？ "
+			CALL MESSAGE_WINDOW_D, "안", "ありがとう…/私は　高巻　안…　真は？ "
+			CALL MESSAGE_WINDOW_D, "류지", "いや　今いやまだ見つからねえ "
+			CALL MESSAGE_WINDOW_D, "알지라", "마코토のほかに仲間はいるの？ "
+			CALL MESSAGE_WINDOW_D, "류지", "いや　ここに来たときは三人だったからな "
+			CALL MESSAGE_WINDOW_D, "서프", "わかった　大事になる前に急ごう "
+			CALL MESSAGE_WINDOW_D, "", "高巻　杏が仲間になった "
+			
+				CALL ADD_NEW_COMPANION,4658,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 19
+					BASE:(RESULT:1):힘 = 5
+					BASE:(RESULT:1):지혜 = 12
+					BASE:(RESULT:1):마력 = 11
+					BASE:(RESULT:1):인내력 = 5
+					BASE:(RESULT:1):속도 = 6
+					BASE:(RESULT:1):운 = 7
+					;BASE:(RESULT:1):ＥＸＰ = 5*19*20*21/3
+					EQUIP:(RESULT:1):검 = 2022
+					EQUIP:(RESULT:1):머리 = 3044
+					EQUIP:(RESULT:1):몸통 = 3503
+					EQUIP:(RESULT:1):팔 = 4029
+					EQUIP:(RESULT:1):발 = 4503
+					;新페르소나処理
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 19
+						DITEMTYPE:LOCAL:페르소나("힘") = 5
+						DITEMTYPE:LOCAL:페르소나("지혜") = 12
+						DITEMTYPE:LOCAL:페르소나("마력") = 11
+						DITEMTYPE:LOCAL:페르소나("인내력") = 5
+						DITEMTYPE:LOCAL:페르소나("속도") = 6
+						DITEMTYPE:LOCAL:페르소나("운") = 4
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 556;마칸・다
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 704;마하・라기
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 20;사랑의채찍
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 702;아기라오
+					ENDIF
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					;CALL CHECK_LEVEL_UP, (RESULT:1)
+				ENDIF
+				
+			던전フラグ:13:24 = 3
+		ENDIF
+	CASE 314
+		IF 던전フラグ:13:24 < 2
+				
+			CALL MESSAGE_WINDOW_D, "", "金머리카락の소년が体から악마を召喚しながら/カルマ兵と戦っている "
+			CALL MESSAGE_WINDOW_D, "", "金머리카락の소년はかなり弱っている "
+			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "ハァ…ハァ… "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "くらえっ "
+			CALL MESSAGE_WINDOW_D, "", "金머리카락の소년はこちらに吹き飛ばされた "
+			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "く…くそっ "
+			CALL MESSAGE_WINDOW_D, "서프", "あとは任せておけ "
+			CALL MESSAGE_WINDOW_D, "", "서프たちは소년の前に出た "
+			CALL MESSAGE_WINDOW_D, "カルマ兵", "ボギーか！　貴様らも生け捕りにしてやる！ "
+			
+				
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,8,[[キャラ:스세리비메]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,[[キャラ:세탄타]],19,0,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "た…助かった…/誰だか　わからないけどありがとな… "
+			CALL MESSAGE_WINDOW_D, "서프", "ああ/しかし驚いたな、フレッド達の仲間にも악마と戦える/能力者がいるとはな… "
+			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "フレッド？ "
+			CALL MESSAGE_WINDOW_D, "フレッド", "すまないけど、そこの兄ちゃんは俺たち知らないぜ "
+			CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "兄ちゃん　誰だ？ "
+			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "俺は　坂本竜司っていうんだけど… "
+			CALL MESSAGE_WINDOW_D, "류지", "それどころじゃねえ！/仲間とはぐれちまった！ "
+			CALL MESSAGE_WINDOW_D, "류지", "すぐ探しに行かないと！ "
+			CALL MESSAGE_WINDOW_D, "서프", "待て　その상태で行く気か？ "
+			CALL MESSAGE_WINDOW_D, "알지라", "そうよ　死ぬかもしれないわよ "
+			CALL MESSAGE_WINDOW_D, "류지", "いや　でもこれは… "
+			CALL MESSAGE_WINDOW_D, "알지라", "でも　ほかの仲間も死ぬかもしれないわ "
+			CALL MESSAGE_WINDOW_D, "게일", "その通りだ　また奴らに見つかるとやられるし/仲間も助けられんだろう "
+			CALL MESSAGE_WINDOW_D, "서프", "お前も奴らにと戦える힘を持っているのだろう？/共にここから出られるよう協힘し合おうじゃないか "
+			CALL MESSAGE_WINDOW_D, "서프", "いいよな　フレッド "
+			CALL MESSAGE_WINDOW_D, "フレッド", "一度　乗っかった船だ/協힘してやるぜ "
+			CALL MESSAGE_WINDOW_D, "류지", "あ　ありがとな… "
+			CALL MESSAGE_WINDOW_D, "", "坂本　竜司が仲間になった "
+			
+				CALL ADD_NEW_COMPANION,4657,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 19
+					BASE:(RESULT:1):힘 = 11
+					BASE:(RESULT:1):지혜 = 5
+					BASE:(RESULT:1):마력 = 5
+					BASE:(RESULT:1):인내력 = 12
+					BASE:(RESULT:1):속도 = 7
+					BASE:(RESULT:1):운 = 6
+					;BASE:(RESULT:1):ＥＸＰ = 5*19*20*21/3
+					EQUIP:(RESULT:1):검 = 2326
+					EQUIP:(RESULT:1):머리 = 3046
+					EQUIP:(RESULT:1):몸통 = 3503
+					EQUIP:(RESULT:1):팔 = 4029
+					EQUIP:(RESULT:1):발 = 4503
+					;新페르소나処理
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 19
+						DITEMTYPE:LOCAL:페르소나("힘") = 11
+						DITEMTYPE:LOCAL:페르소나("지혜") = 5
+						DITEMTYPE:LOCAL:페르소나("마력") = 5
+						DITEMTYPE:LOCAL:페르소나("인내력") = 12
+						DITEMTYPE:LOCAL:페르소나("속도") = 7
+						DITEMTYPE:LOCAL:페르소나("운") = 6
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 250;지옥찌르기
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 203;마구날뛰기
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 904;마하・지오
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 304;메가클로
+					ENDIF
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					;CALL CHECK_LEVEL_UP, (RESULT:1)
+				ENDIF
+				
+			던전フラグ:13:24 = 2
+		ENDIF
+
+
+ENDSELECT
+	
+ENDIF
+
+
+;=======================================================================
+;地下街宝箱
+;=======================================================================
+@tikagai_takara
+#LOCALSIZE 3
+;宝箱のフラグ管理用変数の番号
+LOCAL = FLAG:現M / 5 + 80
+;そのマップの何番눈の宝箱か
+LOCAL:1 = (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100
+LOCAL:1 += FLAG:現M % 5 * 10
+
+SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
+	CASE 100
+		CALL GET_TREASURE, [[아이템:챠크라드롭]] , 3 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 201
+		CALL GET_TREASURE, [[아이템:도반옥]] , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 200
+		CALL GET_TREASURE, [[아이템:야마타노드링크]] , 2 , FLAG:現던전, LOCAL , LOCAL:1
+	;マップ番号*100+そのマップで何番눈の宝箱かを示す数値でどの宝箱かを判別します。
+	;例えば0の場合、0版のマップの0番눈の宝箱であることを表しています。
+	
+	CASE 400
+			IF 던전フラグ:13:2 < 11
+				PRINTL 상자가 놓여있다。 
+				CALL INPUT_YN,"연다","열지 않는다"
+				IF RESULT == 0
+					PRINTW 적이 나타났다！
+					FLAG:도주불가フラグ = 1
+					FLAG:회화불능フラグ = 1
+					FLAG:선제기습취소 = 1
+					
+					CALL SET_ENEMY,8,[[キャラ:세탄타]],25,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+				
+					CALL SET_ENEMY,9,[[キャラ:야토노카미]],25,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+				
+					CALL SET_ENEMY,10,[[キャラ:아리안로드]],25,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+					
+					CALL SET_ENEMY,13,[[キャラ:오키쿠무시]],25,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+				
+					CALL SET_ENEMY,14,[[キャラ:마카브르]],25,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+						
+					CALL SET_ENEMY,15,[[キャラ:추렐]],25,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+					
+					CALL BATTLE_START
+				
+					FLAG:도주불가フラグ = 0
+					FLAG:회화불능フラグ = 0
+					FLAG:선제기습취소 = 0
+					FLAG:エンカウント率 = 0
+					FLAG:未遭遇歩数 = 0
+					
+					CALL CHECK_ITEMMAX, [[아이템:학습장치]]
+					IF RESULT == 0
+						PRINTFORMW 학습장치를 1개 입수했다
+						CALL GET_ITEM, [[아이템:학습장치]], 1
+						DA:(FLAG:現X):(FLAG:現Y) = 1
+						IF LOCAL:1 >= 0
+							SETBIT 던전フラグ:(FLAG:現던전):(LOCAL), LOCAL:1
+						ELSE
+							던전フラグ:(FLAG:現던전):(LOCAL) = 1
+						ENDIF
+						RETURN 1
+					ELSE
+						PRINTFORMW 학습장치를 1개 발견했지만 가져갈 수 없었다
+						RETURN 0
+					ENDIF
+					던전フラグ:13:2 = 11
+				ELSEIF RESULT == 1
+					RETURN 0
+				ENDIF
+			ELSE
+				CALL GET_TREASURE, [[아이템:학습장치]] , 1 , FLAG:現던전, LOCAL , LOCAL:1
+			ENDIF
+	CASE 401
+		CALL GET_TREASURE, [[아이템:도반옥]] , 3 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 402
+		CALL GET_TREASURE, [[아이템:스킬카드【기가온】]] , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 403
+		CALL GET_TREASURE, [[아이템:스킬카드【사마・카쟈】]] , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 500
+		CALL GET_TREASURE, [[아이템:야마타노드링크]] , 2 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 501
+		CALL GET_TREASURE, [[아이템:스킬카드【마칸・다】]] , 1 , FLAG:現던전, LOCAL , LOCAL:1
+ENDSELECT
+RETURN 1
+;=======================================================================
+;地下街적
+;=======================================================================
+@tikagai_enemy
+SELECTCASE FLAG:現M
+	CASE IS < 4
+		IF RAND:8 == 0
+			RETURN [[キャラ:오키쿠무시]], 18 + RAND:2
+		ELSEIF RAND:7 == 0
+			RETURN [[キャラ:랴난시]], 18 + RAND:2
+		ELSEIF RAND:6 == 0
+			RETURN [[キャラ:루살카]], 18 + RAND:2
+		ELSEIF RAND:5 == 0
+			RETURN [[キャラ:오퀴페테]], 18 + RAND:2
+		ELSEIF RAND:4 == 0
+			RETURN [[キャラ:잔트만]], 18 + RAND:2
+		ELSEIF RAND:3 == 0
+			RETURN [[キャラ:세에레]], 18 + RAND:2
+		ELSEIF RAND:2 == 0
+			RETURN [[キャラ:키마리스]], 18 + RAND:2
+		ELSE
+			RETURN [[キャラ:야마치치]], 18 + RAND:2
+		ENDIF
+	CASE IS < 6
+		IF RAND:11 == 0
+			RETURN [[キャラ:굴라]], 20 + RAND:4
+		ELSEIF RAND:10 == 0
+			RETURN [[キャラ:추렐]], 20
+		ELSEIF RAND:9 == 0
+			RETURN [[キャラ:스세리비메]], 20 + RAND:4
+		ELSEIF RAND:8 == 0
+			RETURN [[キャラ:아리안로드]], 20 + RAND:4
+		ELSEIF RAND:7 == 0
+			RETURN [[キャラ:야토노카미]], 20 + RAND:4
+		ELSEIF RAND:6 == 0
+			RETURN [[キャラ:포르네우스]], 20 + RAND:4
+		ELSEIF RAND:5 == 0
+			RETURN [[キャラ:가름]], 20 + RAND:4
+		ELSEIF RAND:4 == 0
+			RETURN [[キャラ:잭랜턴]], 20 + RAND:4
+		ELSEIF RAND:3 == 0
+			RETURN [[キャラ:오니]], 20 + RAND:4
+		ELSEIF RAND:2 == 0
+			RETURN [[キャラ:유키죠로]], 20 + RAND:4
+		ELSE
+			RETURN [[キャラ:세탄타]], 20 + RAND:4
+		ENDIF
+ENDSELECT
+
+
+@SET_ACTION_tikagai_boss,ARG
+IF CFLAG:ARG:800 == 0
+	PRINTFORML ┏＞베탈라━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃%"물러！　무르다！！",72,LEFT%┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛	
+	PRINTFORML ┏＞베탈라━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃%"네놈！　팔에 있는 칼날은 고물이냐！",72,LEFT%┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛	
+	PRINTFORML ┏＞베탈라━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃%"그 정도로 나의 청동의 근육",72,LEFT%┃
+	PRINTFORML ┃%"꿰뚫을 생각이냐！！",72,LEFT%┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛	
+	CFLAG:ARG:800 = 1
+ENDIF
+IF 現HP割合(ARG) <= 30 && CFLAG:ARG:800 == 1
+	PRINTFORML ┏＞베탈라━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃%"성이 안 차！　성이 안 찬다고오！！",72,LEFT%┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛	
+	PRINTFORML ┏＞베탈라━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃%"나의 강철의 근육도 웃고 있다！！",72,LEFT%┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛	
+	CFLAG:ARG:800 = 2
+ENDIF
+IF CFLAG:ARG:集中フラグ == 1
+	IF MAXBASE:ARG:사이코 == 100
+		PRINTFORML ┏＞베탈라━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+		PRINTFORML ┃%"들어라！　나의 근육의 외침！！",72,LEFT%┃
+		PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛	
+		MAXBASE:ARG:사이코 = 99
+	ENDIF
+	CFLAG:ARG:입력行動 = 1509
+	CALL RANDOM_TARGET,ARG,1509
+	RETURN 1
+ELSEIF 現HP割合(ARG) <= 70 && (MAXBASE:ARG:사이코 == 100 || RAND:4 == 0)
+	IF MAXBASE:ARG:사이코 == 100
+		PRINTFORML ┏＞베탈라━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+		PRINTFORML ┃%"다음이다！",72,LEFT%┃
+		PRINTFORML ┃%"다음에 바닥째로 분쇄해주마！！",72,LEFT%┃
+		PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛	
+	ENDIF
+	CFLAG:ARG:입력行動 = 512
+	CALL RANDOM_TARGET,ARG,512
+	RETURN 1
+;それ以外は통상
+ELSE
+		$DECIDE_ACTION
+		CALL SEARCH_ACT,ARG
+		IF RESULT == 0
+			CFLAG:ARG:입력行動 = -1
+			CFLAG:ARG:방어フラグ = 1
+			RETURN 0
+		ENDIF
+;		PRINTFORML [{CFLAG:ARG:5}]の스킬数 {RESULT}
+		LOCAL = RAND:RESULT
+		;스킬번호決定
+		LOCAL:1 = S:(10+LOCAL)
+;		PRINTFORML [{CFLAG:ARG:5}]の스킬 {LOCAL:1}
+		$TARGET_LOOP
+		
+		CALL RANDOM_TARGET,ARG,LOCAL:1
+		CALLFORM SKILL_TARGET_{LOCAL:1}
+		;ここで스킬번호を行動内容に代入
+		SIF CFLAG:ARG:ターゲット == -1
+			GOTO DECIDE_ACTION
+		CFLAG:ARG:입력行動 = LOCAL:1
+ENDIF

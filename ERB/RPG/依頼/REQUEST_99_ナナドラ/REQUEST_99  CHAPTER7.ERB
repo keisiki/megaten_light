@@ -1,0 +1,424 @@
+﻿;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_14
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 다이바의 제룡 토벌작전을 개시한다。
+PRINTFORML 이번에는 현지 집합이다。도쿄만의 오다이바로 향하자。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥75000
+PRINTFORML （ 주의：이 의뢰를 받으면、하루가 종료됩니다 ）
+;====================
+;内容
+;====================
+@REQUEST_99_14
+IF 의뢰フラグ:99:1 == 1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+ELSE
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+ENDIF
+PRINTFORML 
+PRINTFORMW お台場――東京湾の埋め立て地。
+PRINTFORMW 黒船来航に端を発して築かれた海上砲台を起源とするその地は
+PRINTFORMW かつて臨海副都心として多様な施設の並ぶ摩天楼だった。
+PRINTFORMW しかし、今は――
+PRINTFORMW その栄華も時が止まったように凍り付いている。
+
+CALL REQUEST_TITLE_99("7")
+
+PRINTFORMW 東京 ― 台場・拾参号氷海　入입広場
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『ここは、ショッピングモールでしょうか…完全に浸水していますね』
+PRINTFORMW 『帝竜反応は…あれ？　２つ…？　何かありそうです、注意して進みましょう』
+PRINTFORMW 凍て付いた観覧車の根元から侵入した던전は、かつてショッピングモールだった場所のようだ。
+PRINTFORMW 人が行き交う商業施設も、ドラゴンの손に墜ちればこの通り無惨な姿となる。
+PRINTFORMW インテリアに상품、あるいは점포丸ごと凍結した入り입を抜けて内部へと踏み込んだ。
+PRINTFORML 
+PRINTFORMW 東京 ― 台場・拾参号氷海　中央広場
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『誰か――いる！？　まさか…』
+PRINTFORMW ２つ눈の帝竜反応――その正体など考えるまでもない。
+PRINTFORMW この東京に、それだけの힘を持った存在は２匹しか残っていないからだ。
+PRINTFORML ナツメ：
+PRINTFORMW 「…久しぶりね、みんな。…どうしたの？　そんな怖い顔をして」
+IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルート
+	PRINTFORML 아오이：
+	PRINTFORMW 「…미즈치…どうして、ここに…！」
+	PRINTFORML ナツメ：
+ENDIF
+PRINTFORMW 「大丈남편よ、殺したりしないわ。そんな、つまらないコトのために来たんじゃないもの…」
+PRINTFORMW その顔は인간であった時と変わらず――しかし、常に浮かべていた笑みはない。
+PRINTFORMW 笑顔を「取り繕う」필요がないのだろう。
+PRINTFORMW 彼女は最早何にも所属しない、しがらみのない存在だから。
+PRINTFORMW 文字通りたった独りで세계へ挑み得る存在だから。
+PRINTFORML ナツメ：
+PRINTFORMW 「%CALLNAME:LOCAL%、アナタは『狩る者』として産まれた…それはそれは、素晴らしい才能を持ってね」
+PRINTFORMW 「でも、それは星がアナタに架した使命…ただそれだけの、つまらない힘」
+PRINTFORMW 「戦って戦って、消えていくだけの存在よ。結局、それは인간の業を…세계を変えるほどのものではない」
+PRINTFORMW 「それはあまりに、つまらないと思わない？　窮屈過ぎると思わない？」
+PRINTFORMW 「素晴らしい才能は、もっともっと、無限の可能性に満ち溢れているはずだわ」
+PRINTFORMW 「その可能性への鍵は、すぐそこよ……！　さあ、いらっしゃい…」
+PRINTFORMW そう言い残すと、ナツメは姿を消した。
+PRINTFORMW 눈の前には巨大な氷塊が転がっている。
+PRINTFORMW 奥から吹き付ける冷気で守られており、화염魔法で공격しても融け切るには数時間は필요そうなサイズだ。
+PRINTFORMW 恐らく、この先に台場の帝竜が待ち受けているのだろう。
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班…東西からそれぞれ、強い冷気の反応があります。まずはこちらを見てみませんか？』
+PRINTFORMW 帝竜の居場所へ通じる道が塞がっている以上、他に選択肢はない。
+PRINTFORMW まずはここから近い、東側へと向かった……。
+PRINTFORML 
+PRINTFORMW 東京 ― 台場・拾参号氷海　東ストリート
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 東側のエリアへと入ると、より強い寒気が%CALLNAME:MASTER%を襲った。
+PRINTFORMW ここで長時間活動するのは、命の危機に瀕しかねない……。
+IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルート
+	PRINTFORML 아오이：
+	PRINTFORMW 「…さ、寒っ！　元々寒い場所ですけど、ここはより一層寒いですね……！」
+	PRINTFORMW 「は、早く、調査を終わらせて戻りましょう……！」
+	PRINTFORMW ガタガタ歯を震わせていて、声もたどたどしい。
+	PRINTFORMW 東京で暮らす分にはこんな気温に遭遇する機会などなかっただろう。
+ENDIF
+PRINTFORMW ……ふと%CALLNAME:LOCAL%を見ると、平然としている。これが狩る者の素養なのだろうか？
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班…！　この一角、かなり気温が低いです…』
+PRINTFORMW 『…摂氏마이ナス１８度。これは、何か原因となるものがいます…気を付けてください』
+PRINTFORMW −１８度となると、大体冷凍庫の中と同じくらいの温度だ。
+PRINTFORMW 寒気はこの通路の先から来ている。%CALLNAME:MASTER%は奥へと向かった。
+PRINTFORML 
+PRINTFORMW 奥には、一匹のドラゴンが見える。
+PRINTFORMW その時、%CALLNAME:MASTER%の鼓膜を震わせることなくナツメの声が響いた。
+PRINTFORMW ……念話か。ドラゴンになったのだ、これくらい出来てもおかしくはない。
+PRINTFORMW 奴が人類へ宣戦布告した時にも、同じ손で도청住民にも伝えたのだと、後から聞いた。
+PRINTFORML ナツメ：
+PRINTFORMW 『私たち日暈の一族は…ムラクモの長として、千年以上힘ある者だけを束ねてきた』
+PRINTFORMW 『そして、세계の真理を見せつけられた』
+PRINTFORMW 『如何に힘ある者がこの世を欲しいままに変えているか…』
+PRINTFORMW 『如何に힘ある者が全てを손に入れる権利を有しているか…』
+PRINTFORMW 『でもね…ある時気付いたの。それは所詮、人の힘』
+PRINTFORMW 『余りにちっぽけで、虚しい。自分の生き死にすら自由にならない、悲しいほどの哀れな힘…』
+PRINTFORMW こちらの反応を待たず、念話を終えた。
+PRINTFORMW 一方的なコミュ니케ションなのは、そもそも同じ土台に立っていないという認識なのだろう。
+PRINTFORMW 힘という真理――要するにガイア教の謳い文句だ――など、興味を引くほど珍しい話でもない。
+PRINTFORML 미이나：
+PRINTFORMW 『何を、言ってるの…』
+PRINTFORMW アレは何かを伝えたいのではない。ただ思ったことを입にしているだけだ。気にする필요はない。
+PRINTFORMW それよりも気にするべきは――ナツメが念話を終えた途端にこちらへと牙を向けるドラゴンの方だ。
+PRINTFORML 
+PRINTFORMW フリーズドラゴンが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	CALL SET_ENEMY,9, [[キャラ:우로보로스]], 72, 0
+	NAME:(CHARANUM-1) = フリーズドラゴン
+	CALLNAME:(CHARANUM-1) = フリーズドラゴン
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:절대영도]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:대냉계]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:트리플바이스]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:데스허리케인]]
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):비구 = 100
+	BASE:(CHARANUM-1):비구 = 100
+	MAXBASE:(CHARANUM-1):타격 = 100
+	BASE:(CHARANUM-1):타격 = 100
+	MAXBASE:(CHARANUM-1):전술 = 100
+	BASE:(CHARANUM-1):전술 = 100
+	MAXBASE:(CHARANUM-1):빙결 = -100
+	BASE:(CHARANUM-1):빙결 = -100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	MAXBASE:(CHARANUM-1):수격 = -100
+	BASE:(CHARANUM-1):수격 = -100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 拾参号氷海の気温を下げる役割を務めていたドラゴン。
+	CSTR:(CHARANUM-1):33 = 名前の通り冷気のブレスが主な必殺技。
+	CSTR:(CHARANUM-1):34 = ただし날개짓による충격波にも注意が필요。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には拾参号氷海に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML 미이나：
+PRINTFORMW 『あれ…？　ちょっと暖かくなったみたいです。寒さの正体は、このドラゴンだったんですね…』
+PRINTFORMW そう言われてみると、少し暖かくなったような気がする…。
+PRINTFORMW この調子で던전전체が温まれば、帝竜の道を塞ぐ氷塊も融けるかもしれない。
+PRINTFORMW 来た道を引き返し、西のドラゴンへと向かった。
+PRINTFORML 
+PRINTFORMW 東京 ― 台場・拾参号氷海　西ストリート
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。この一角も寒いです…肺をやられないよう、気を付けてください』
+IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルート
+	PRINTFORML 아오이：
+	PRINTFORMW 「%CALLNAME:MASTER%さん、か、風邪引きそうです……！」
+	PRINTFORMW 物凄い形相でこちらを見てくる。さっさと倒せということだろうか。
+ENDIF
+PRINTFORMW 東側と同じように、こちらにも同種のドラゴンが配置されていると見て間違いない。
+PRINTFORMW 冷気を吐き出す元へと向かう……。
+PRINTFORML 
+PRINTFORML ナツメ：
+PRINTFORMW 『…私、ずっと不思議に思っていたの』
+PRINTFORMW 『この星のヒ엘라ルキーの頂点に立っているはずのニンゲンがどうしてこんなにも脆弱なのか…って』
+PRINTFORMW 『弱く、愚かで、醜い生き物…自分がソレであることが、私は許せなかった』
+PRINTFORMW 『だけど、竜という存在を知ってその研究に没머리するうち、答えを得たのよ』
+PRINTFORMW 『とっても가운純なことなのね。ニンゲンは最上位の存在じゃない。その上には神がいるの。竜の姿をした、創造主が……！』
+PRINTFORMW 『そして私は竜になり、その最高の힘を得たのよ』
+PRINTFORMW 神など%CALLNAME:MASTER%にとって屠るモノか下すモノでしかない。
+PRINTFORMW そもそも、힘に溺れるだけのただの인간の妄言に、いつまでも付き合ってやるつもりはないのだ。
+PRINTFORMW こちらには、帝竜を討伐する任務があるのだから。
+PRINTFORML 
+PRINTFORMW フリーズドラゴンが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	CALL SET_ENEMY,9, [[キャラ:우로보로스]], 72, 0
+	NAME:(CHARANUM-1) = フリーズドラゴン
+	CALLNAME:(CHARANUM-1) = フリーズドラゴン
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:절대영도]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:대냉계]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:트리플바이스]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:데스허리케인]]
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):비구 = 100
+	BASE:(CHARANUM-1):비구 = 100
+	MAXBASE:(CHARANUM-1):타격 = 100
+	BASE:(CHARANUM-1):타격 = 100
+	MAXBASE:(CHARANUM-1):전술 = 100
+	BASE:(CHARANUM-1):전술 = 100
+	MAXBASE:(CHARANUM-1):빙결 = -100
+	BASE:(CHARANUM-1):빙결 = -100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	MAXBASE:(CHARANUM-1):수격 = -100
+	BASE:(CHARANUM-1):수격 = -100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 拾参号氷海の気温を下げる役割を務めていたドラゴン。
+	CSTR:(CHARANUM-1):33 = 名前の通り冷気のブレスが主な必殺技。
+	CSTR:(CHARANUM-1):34 = ただし날개짓による충격波にも注意が필요。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には拾参号氷海に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW ――どうして、そんなに힘が欲しいの？　%CALLNAME:LOCAL%はナツメの言葉を理解できない。
+PRINTFORMW 힘のみを価値とする者と、それ以外の価値を知る者。両者の価値基準が異なるのだから、噛み合うはずがない。
+PRINTFORML ナツメ：
+PRINTFORMW 『愚問ね…힘は可能性よ、全てを成す可能性』
+PRINTFORMW 『誰も、私を侵すことは出来ない。私の可能性を汚すことは出来ない』
+PRINTFORMW 『宇宙で唯一の、絶対的なモノ…』
+PRINTFORMW 『それを求めることの意味が分からないのであれば…アナタは、本当の愚か者だわ…』
+PRINTFORMW 『がっかりさせないでちょうだい。私はアナタに、少し期待しているのだから…』
+IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルート
+	PRINTFORML 아오이：
+	PRINTFORMW 「…だったらその힘で、당신は何をしたいの？　可能性って何……？」
+	PRINTFORMW 아오이の呟きにナツメは応えない。聞こえていないのか、聞く気もないのか。
+ENDIF
+PRINTFORMW 倒れ伏したフリーズドラゴンがやがて消滅し、던전の気温が再び上昇する。
+PRINTFORMW 見れば周囲の氷も融け始めていた。
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。中央広場の氷塊が融解、消滅しました。先に進みましょう』
+PRINTFORMW これで帝竜への道は開かれた。던전攻略も大詰めを迎えつつある……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 台場・拾参号氷海　中央広場
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 미이나の言う通り、巨大な氷塊は初めからなかったように消え去っていた。
+PRINTFORMW しかし依然として、この奥から吹き付ける冷気の勢いは変わらない。
+PRINTFORML 미이나：
+PRINTFORMW 『コール…１３班…あの…さっき総長の言ったこと…どう思いましたか？』
+PRINTFORMW 『私、総長の話聞いてたら…なんか凄く腹が立ってきたのと、あと、ちょっと悲しくなったんです』
+PRINTFORMW 『総長は、なんであんなコト考えるようになったんだろうって…』
+PRINTFORMW 『どんなに強い힘を持っても、それだけじゃ、悲しいし、寂しいです…』
+PRINTFORMW 『総長はああやって、神になるって…宇宙に独りきりでいるつもりなのかな。なんだかそれが…ちょっと…』
+PRINTFORML キリノ：
+PRINTFORMW 『ふー、疲れた！　脳を使うと、糖質が발りなくなるねえ！　미이나、キミのチョコを貰っていいかな？』
+PRINTFORMW 通信越しに聞こえてくる、大きすぎるドアの開閉音と同時に現れるキリノの声。
+PRINTFORMW 今まで미이나が築いた、しんみりとした空気を数秒でぶち壊してきた。
+PRINTFORML 미이나：
+PRINTFORMW 『キリノ！？　い、今はダメです！　こっち来ないで！』
+PRINTFORML キリノ：
+PRINTFORMW 『ん？　１３班のミッション中か。よし、僕からも一言――』
+PRINTFORML 미이나：
+PRINTFORMW 『ダメったらダメーっ！　チョコならあげます！　あっち行けっ！』
+PRINTFORML キリノ：
+PRINTFORMW 『え、ええっ…！？　なにそれ…』
+IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルート
+	PRINTFORML 아오이：
+	PRINTFORMW 「キリノさん、何やってるんですか……」
+ENDIF
+PRINTFORMW ……相変わらず間の悪い男だ。いや、これ以上重い雰囲気になるのを회피できた分、いい仕事をしたとも言えるのだが。
+PRINTFORML 
+PRINTFORMW 東京 ― 台場・拾参号氷海　噴水広場
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORM このエリアに入った時、%CALLNAME:LOCAL%
+SIF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルート
+	PRINTFORM と아오이
+PRINTFORMW が息を呑んだ。
+PRINTFORMW 乱立する大小様々な氷の柱――その中には、人型のシルエットが토오루けて見えたからだ。
+PRINTFORMW 台場が던전と化した際に巻き込まれた犠牲者たち。운が良ければ仮死상태だろうか。
+PRINTFORML ナツメ：
+PRINTFORMW 『よく、ここまで来たわね。流石は１３班…いえ、狩る者かしら』
+PRINTFORMW 『…この先に、最後の帝竜がいるわ。절대영도の힘を持つ、氷の王』
+PRINTFORMW 『それを打ち倒せば、アナタたちは私と同じ――最後のキーを손に入れる』
+PRINTFORML 미이나：
+PRINTFORMW 『ドラゴン…クロニクル…』
+PRINTFORML ナツメ：
+PRINTFORMW 『もうそこまで辿り着いていたの。キリノも思ったよりバカじゃないみたいね…』
+PRINTFORMW 『さあ、竜の힘は눈の前よ。アナタたちは、何を望み…何を選ぶのかしら』
+PRINTFORMW 『答えを…楽しみにしているわ』
+PRINTFORMW 何とも余裕なことだ。もし仮に、狩る者である%CALLNAME:LOCAL%が人竜と化せば、万事Ａ級止まりよりも強くなるとは思わないのだろうか？
+PRINTFORMW そういう余裕ほどぶち壊してやりたいものはない。
+PRINTFORMW だがまずは、この東京最後の帝竜討伐を済ませよう。
+PRINTFORMW 逸る気持ちを抑えて、%CALLNAME:MASTER%は最深部へと발を운んだ。
+PRINTFORML 
+PRINTFORMW 東京 ― 台場・拾参号氷海　最深部氷塊
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『東京湾を凍らせた、氷の王…でもアレは당신たちより格下です。それが、私の分析結果』
+PRINTFORMW 『――さあ、最後の帝竜討伐…始めましょう！』
+PRINTFORMW 台場氷海――この静かなる海の支配者が、こちらを認識する。
+PRINTFORMW 次いで体をよじらせ――呼応するように風雪が吹き荒れる。
+PRINTFORMW 大寒波の中で劣らぬ咆吼が、台場中に響き渡った。
+PRINTFORML 
+PRINTFORMW 제로＝블루が現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	;- 악마解析度増加処理(1000でMAX)
+	CALL INCREASE_ANALYZE([[キャラ:제로＝블루]],1000)
+	
+	CALL SET_ENEMY,9, [[キャラ:제로＝블루]], 75, 0,1
+	MAXBASE:(CHARANUM-1):ＭＰ = 99999
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	CSTR:(CHARANUM-1):사고패턴 = 5432
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW 帝竜제로＝블루を討伐した！
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。討伐…完了です』
+PRINTFORMW 『これで全ての帝竜を倒したことになります。皆さんは…凄いですね』
+PRINTFORMW 『でも狩る者とか、そういうことじゃなくて…自分の意思で戦ってるから凄いんです』
+PRINTFORMW 『ガトウも아오이も、リンさんも…みんな、凄いよ…』
+PRINTFORMW 『…お疲れ様、１３班。最後の샘플を回収して、帰りましょう』
+PRINTFORMW ……%CALLNAME:LOCAL%が샘플採取を終える。この作業もこれで最後だ。
+PRINTFORMW こんなところに長居しては本当に風邪を引きかねない。さっさと도청へ戻ろう……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠・東京도청　도청前広場
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 도청へ帰還すると、도청の住民らが入り입で待ち構えていた。
+PRINTFORMW 입々に賛辞を浴びせてくる。任務の内容がどこかで漏れていたのだろうか？
+PRINTFORML キリノ：
+PRINTFORMW 「任務、ご苦労様。ナビたちと廊下で盛り上がってたら、周りの人にも聞かれちゃってね」
+PRINTFORMW 「みんな、我も我もと…ゾロゾロ出迎えに来たって訳さ。賑やかすぎて迷惑したかい？」
+PRINTFORMW ……相変わらず抜けている。せめて盛り上がるにしても司令室で抑えておくべきだろう……。
+PRINTFORMW まあ、東京中から帝竜が消え去ったのだから、つい浮かれるのも頷ける話ではあるが。
+IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルート
+	PRINTFORML 아오이：
+	PRINTFORMW 「いえ、全然！　ですよね、センパイ！」
+ENDIF
+PRINTFORMW %CALLNAME:LOCAL%は心なしかくすぐったそうな表情を浮かべている。
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 「これが最後の샘플か。確かに受け取った」
+PRINTFORMW 「ここから先は…僕の仕事だ、命に代えても解析を完了してみせるよ。それまでの間、ゆっくり休んでくれ」
+PRINTFORMW 「…ありがとう、１３班」
+PRINTFORMW %CALLNAME:LOCAL%から帝竜の検体を受け取ると、キリノは一발先に도청へと入っていった。
+PRINTFORMW 次に呼ばれることがあれば、それは미즈치との決戦の日だ。
+PRINTFORMW それまでに可能な限り準備をしておこう。
+PRINTFORMW %CALLNAME:LOCAL%たちと別れ、拠点へ帰還した……。
+PRINTFORML 
+PRINTFORMW 입座に報酬￥75000が支払われ、名声100を得た。
+MONEY += 75000
+FLAG:名声 += 100
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 14
+RESULTS = 의뢰【(세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(1)】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+CALL REQUEST_99_DAY_END
+

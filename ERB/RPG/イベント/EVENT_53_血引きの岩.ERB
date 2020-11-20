@@ -1,0 +1,501 @@
+﻿;야마타이카 계통 추정, 한다면 야마타이카 계통 한 후 진행
+
+;====================
+;조건
+;====================
+@PLAYABLE_EVENT_53
+
+;
+IF GETBIT(FLAG:発見ED, 59) && 이벤트フラグ:53:0 == 0 && FINDCHARA_B([[キャラ:키쿠에]]) > 0 && 의뢰フラグ:13:0 > 14
+	RESULTS = 血引きの岩
+	RETURN 1
+ELSEIF GETBIT(FLAG:発見ED, 59) && 이벤트フラグ:53:0 == 1 && FINDCHARA_B([[キャラ:키쿠에]]) > 0 && 의뢰フラグ:13:0 > 15
+	RESULTS = 生と死の여신
+	RETURN 1
+ENDIF
+RETURN 0
+
+
+;====================
+;内容
+;====================
+@SHOPCOM_EVENT_53
+CUSTOMDRAWLINE =
+
+IF 이벤트フラグ:53:0 == 0
+	LOCAL = GETCHARA([[キャラ:키쿠에]])
+	CALL MESSAGE_WINDOW, "", "＞고사기・황천국（よみのくに）", , , , , 4
+	CALL MESSAGE_WINDOW, "고사기・황천국", "＞…여기에 커다란 바위로 그 요미히라사카를 틀어막고/＞그 돌을 사이에 둔 채 서로 말하길、이자나기 미코토 왈/＞「사랑하는 나의 낭군께서 목숨을 아끼신다면 그 나라의 백성을、하루에 천명씩 죽이겠소」……", , , , , 4
+	CALL MESSAGE_WINDOW, "", "＞키쿠에와 함께 야마타이카의 축제를 일으킬 수 있도록/＞각지의 화산을 분화시킨 「당신」이지만", , , , , 4
+	CALL MESSAGE_WINDOW, "", "＞그 기세는 격렬함을 더하여、마침내 세토내해에 새로운 화산섬을 창출하기에 이르렀다。", , , , , 4
+	CALL MESSAGE_WINDOW, "", "＞하지만、키쿠에의 표정이 어둡다…", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , @"%ANATANAME("貴方様" , "様")%、함께 아와지 섬에 와주십시요…/화산이…、새로운 화산이 아와지섬에 너무 가까울지도 모르겠습니다。/", , , , , 4
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "하지만、아와지섬입니까…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "探偵さん知ってますか？/아와지섬と琵琶湖は形が似ているんですよ。/長さも広さもほぼ対称形…/아와지섬を裏返してみると琵琶湖にそっくりです。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "普通だったら、ただ似ているだけ/遠く離れた湖と島が関係あるはずない…/そう思うでしょ。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "だけど、아와지섬は「国生みの島」/イザナキ・이자나미が最初に産んだ島/そして、이자나미は最後に産んだ火の神のために焼け死んでしまった…", , , , , 4
+		CALL MESSAGE_WINDOW, "키쿠에" , "そうです。その後、イザナキは死んだ아내を追って/死者の세계「황천」へ赴きました", , , , , 4
+		CALL MESSAGE_WINDOW, "키쿠에" , "하지만、穢れた姿を見られた이자나미は怒り狂い/「황천醜女」たちに남편を追わせた…", , , , , 4
+		CALL MESSAGE_WINDOW, "키쿠에" , "そこでイザナキは황천の入り입である「황천比良坂」を/「千引の石」という巨石で塞ぎ、現世との行き来を断ち切りました。/", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞その結果、만물の母이자나미が死の여신に変わった/＞日本神話では有名な話だ。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "でもその話には続きがありますよね/イザナキはこれで神話から隠退しますけど/고사기ではイザナキの隠退先を「淡海（あうみ）の多賀」と伝えてます。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "淡海（あうみ）とは近江/つまり滋賀の琵琶湖のこと…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "けど、同時に日本書紀では「幽宮（かくれみや）を淡路の洲（くに）に…」/という異伝がある！", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "２通りの場所を伝える神話、そしてその両方に多賀という地名と/イザナキ・이자나미を祭る神社が存在する。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "勾玉のような形にも見える琵琶湖と아와지섬/陰と陽、ネガとポジ、湖と島…/", , , , , 4
+		CALL MESSAGE_WINDOW, "키쿠에" , "………/勾玉の形は「胎児の姿」と「死者の霊魂」の形を現すとも言います。/すなわち…「生」と「死」です。", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "키쿠에" , "琵琶湖は死者の세계である「황천」への入り입で/それを塞ぐ「千引の石」が아와지섬なのです。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "もしも아와지섬に大きな亀裂が入ったとしたら/それは「千引の石」にも同じことが起きたことになります。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "かつて大きな地震で아와지섬に大きな亀裂が入った際は/多くの方が亡くなりました。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "さらに、その後も淡路と琵琶湖を繋ぐ曲線の上で/아이がなくなる事件が相次ぎました。", , , , , 4	
+	CALL MESSAGE_WINDOW, "키쿠에" , "今また、아와지섬に大きな亀裂が入ったとしたら/「死」が現世に溢れ出てくることになります。", , , , , 4
+	CALL MESSAGE_WINDOW,"" , "………………/…………/……/", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "明石大橋", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞本州と아와지섬を継ぐ세계최대の吊り橋は/＞火山噴火から逃げようとする人々で埋め尽くされている。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞今のところ大きなパニックなどは発生しておらず/＞人々は警察の交通規制に従って非難している。", , , , , 4
+	CALL MESSAGE_WINDOW, "警察" , "慌てずに、落ち着いて避難してください！", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞新火山であるオノゴロ島は噴煙を絶えず噴出しており/＞橋の真ん中あたりは火山灰の煙幕に包まれている。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞아와지섬に向かおうとする我々を警官が制止してきたが/＞ヒルコが用意した地質研究機関の身分証明書を見せることで解決した。", , , , , 4
+	CALL MESSAGE_WINDOW, "警察" , "研究機関の方々でしたか、それではお通りください。/ただ、この火山灰で視界が非常に悪いので、注意してください。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞橋の半ばまで来ると、火山灰の煙幕に覆われた/＞視界が非常に狭くなり、避難する人の影も見えないほどだ。/", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞…………/", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞嫌な予感がする…/", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞「「きゃ～～！？」「「うわぁ～～～」」", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞突然、周囲から悲鳴が聞こえてきた。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞音しか聞こえないが、どうやら今まで整然としていた車の列が突然暴走し/＞事故が多発しているようだ。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "聞いたことがあります…/現世に現れた황천醜女は人に憑いて事故を起こし/人々を황천に連れてゆくのだと…", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞我々の方にも/耐え難い腐臭と魂を凍らせる寒気が/＞「何か」がこちらに近づいてくるの知らせている/", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "来ますッ！/황천醜女です！。", , , , , 4
+	
+		FLAG:도주불가フラグ = 1
+		FLAG:회화불능フラグ = 1
+		FLAG:선제기습취소 = 1
+		
+		
+		CALL SET_ENEMY,7,236,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,8,235,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+
+		CALL SET_ENEMY,9,278,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,10,234,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,11,1608,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		ABL:(CHARANUM-1):스킬3 = 503
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,12,251,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 1500
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,13,1754,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,14,1727,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,15,1751,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,16,3111,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL BATTLE_START
+		PRINTFORML 
+		PRINTFORML 
+		CUSTOMDRAWLINE =
+		FLAG:도주불가フラグ = 0
+		FLAG:회화불능フラグ = 0
+		FLAG:선제기습취소 = 0
+	
+	CALL MESSAGE_WINDOW, "" , "＞황천醜女を打ち破った。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "やはり、「千引の石」に亀裂が入り/生と死の境界を封じる힘が弱まっています。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "伊弉諾神宮に急ぎましょう/あそこならイザナキの힘を借りることができます。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞아와지섬・伊弉諾神宮/", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞日本書紀にもその存在が比定される古い神社で/＞現在はイザナキ・이자나미の両者を祭っているが/＞古来はイザナキのみを祭る社だったといわれている。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞常日頃は大勢の参拝客で賑っている場所だが/＞新火山島の騒ぎで、今は一人も姿が見えない。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞火山灰が雪のように降り積もり/＞晴天にもかかわらず太陽の位置は靄ではっきりとしない。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞しかも周辺のMAG濃度はかなり高い/＞今にも異界化しそうな程だ。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞키쿠에に従い神宮の奥へ進むと/＞大地に裂け눈が走っている場所を見つけた。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "っツ！무서움ていたことが！/", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞裂け눈からは黒い霧のようなものが噴出している/＞しかもそれは一箇所に集まり女の姿形を作り出した", , , , , 4
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "황천の女王、이자나미！/「千引の石」である아와지섬に亀裂が入り、「死」が溢れ出てきた!?", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "" , "＞이자나미がその閉じた眼を開けると/＞その눈から赤黒い血の涙が止まることなく流れ始めた。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞하지만、이자나미はこちらを睨むだけで/＞動こうとしない。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "まだ完全に亀裂から抜け出せていないようです/今のうちに이자나미の힘を削げば、千引の石の封印を施せます", , , , , 4
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "" , "＞하지만、이자나미が出てきた裂け눈から/＞황천醜女が次々と這い上がってきた。", , , , , 4
+		CALL MESSAGE_WINDOW, "" , "＞황천醜女はこちらを見て嗤っている。/＞その顔からは生理的な嫌悪感以上に/＞何よりも「死」の감각が伝わってくる。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "う、うわぁぁ…", , , , , 4
+		CALL MESSAGE_WINDOW, "" , "＞이자나미と황천醜女の放つ「死」の감각に코시로は立ちすくんでいる/＞당신は코시로を護るように이자나미の前に進んだ。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "探偵さん！？　危ないですよ！？", , , , , 4
+		CALL MESSAGE_WINDOW, "" , "＞こちらを睨む이자나미から猛烈な死の気配を感じる/＞하지만", , , , , 4
+		CALL MESSAGE_WINDOW, "" , "＞生きている限り/＞人はいつか「死」と立ち向かわねばならない。", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "" , "＞こちらの意図を察したのか/＞이자나미と황천醜女が襲い掛かってきた！", , , , , 4
+	
+		FLAG:도주불가フラグ = 1
+		FLAG:회화불능フラグ = 1
+		FLAG:선제기습취소 = 1
+		
+		;皇居の이자나미を拝借
+		CALL SET_ENEMY,14,7,80,1,1
+		NAME:(CHARANUM-1) = 伊耶那美
+		CALLNAME:(CHARANUM-1) = 伊耶那美
+		CFLAG:(CHARANUM-1):ＨＰ보정 = 4000
+		CFLAG:(CHARANUM-1):ＭＰ보정 = 4000
+		CFLAG:(CHARANUM-1):속도보정 = 15
+		CSTR:(CHARANUM-1):사고패턴 = 7
+		CFLAG:(CHARANUM-1):行動횟수 = 5
+		ABL:(CHARANUM-1):스킬3 = 2001
+		ABL:(CHARANUM-1):스킬4 = 1223
+		ABL:(CHARANUM-1):스킬5 = 1225
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,7,236,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,8,1034,70,1,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
+		CSTR:(CHARANUM-1):사고패턴 = 1091
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,9,1034,70,1,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
+		CSTR:(CHARANUM-1):사고패턴 = 1091
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,10,1034,70,1,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
+		CSTR:(CHARANUM-1):사고패턴 = 1091
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,11,236,70,1,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
+		CSTR:(CHARANUM-1):사고패턴 = 1091
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,12,251,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 1500
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,13,1045,70,1,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
+		CSTR:(CHARANUM-1):사고패턴 = 1092
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		ABL:(CHARANUM-1):스킬3 = 0
+		
+		CALL SET_ENEMY,15,1045,70,1,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
+		ABL:(CHARANUM-1):스킬3 = 0
+		CSTR:(CHARANUM-1):사고패턴 = 1092
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,16,3111,70,0,1
+		NAME:(CHARANUM-1) = 황천醜女
+		CALLNAME:(CHARANUM-1) = 황천醜女
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+			
+		CALL BATTLE_START
+		PRINTFORML 
+		PRINTFORML 
+		CUSTOMDRAWLINE =
+		FLAG:도주불가フラグ = 0
+		FLAG:회화불능フラグ = 0
+		FLAG:선제기습취소 = 0
+		
+	CALL MESSAGE_WINDOW, "" , "＞이자나미の힘を削いだ。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞이자나미は一瞬こちらを驚愕の表情で見つめた後/＞その姿を腐り果てた形に変え/＞消えていった。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "よかった…/이자나미が황천に還ったことで/現世と황천の境界が再び封じられました。", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞大地の亀裂が塞がり/＞周囲のMAG濃度も低下している。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞空を覆っていた噴煙は風で流され/＞先ほどまで見えなかった太陽から/＞明るい陽射しが差し込んでいた。", , , , , 4
+	이벤트フラグ:53:0 = 1
+	
+	
+ELSEIF 이벤트フラグ:53:0 == 1
+	CALL MESSAGE_WINDOW, "ニュース" , "瀬戸内海に現れた新しい火山島は小康상태を保っておりますが/気象庁の発表によると今後も噴火の무서움があり…", , , , , 4
+	CALL MESSAGE_WINDOW, "ニュース" , "また、以前より火山性震動が観測されていた/長野県の八ヶ岳でも付近の住民に避難警告が出され…", , , , , 4
+	CALL MESSAGE_WINDOW, "ニュース" , "信州大学　理学部の高原教授によると/「八ヶ岳は有史以来の噴火活動は記録されていないが/888年(仁和4年）に大崩落が起きた記録があり/注意が필요とのこと…", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞各地で火山噴火が起き/＞日本中で밧줄文時代の「火の民」の血が눈깨달음め始めている。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞하지만、同時にそれを阻止しようとする政府やメシア教との戦いも/＞今後、激しさを増すことが予想される。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , @"%ANATANAME("貴方様" , "様")%、私と共に八ヶ岳にお越しください。/そこでこの身に宿る「힘」を取り戻したく思います。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞長野県・八ヵ岳", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞緩やかな北八ヶ岳と峻厳な南八ヶ岳/＞風化した山脈と荒々しい火입跡。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞東日本と西日本の境をなすフォッサ마그나の断層上にそびえる八ヶ岳連峰は/＞異なる二つの面を併せ持つ山と言われる。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞そのためか昔から登山家に親しまれているが/＞広大な山麓には数千年前の集落遺跡を擁し/＞「밧줄文の八ヶ岳」とも呼ばれる。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞いつもは多くの登山者で賑うこの山も、最近の火山性地震のため/＞인기の無い無人地오비となっている。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞키쿠에に導かれ山を登っていくと/＞岩壁の前に立つヒルコの姿が見えた。", , , , , 4
+	CALL MESSAGE_WINDOW, "ヒルコ" , "お待ちしておりました。/こちらです", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "ありがとうございます/ここから先は私ひとりで…", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞ヒルコが示す岩壁に向かって키쿠에が進むと/＞岩を토오루過し中へと進んでいった。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞どうやら、洞窟の入り입を、岩壁の幻影でカムフラージュしているらしい。", , , , , 4
+	CALL MESSAGE_WINDOW, "ヒルコ" , "ここは菊理姫の힘を宿す무녀の수련場だ/我ら神宮の森が白山の白山比咩神社から借り受けている。", , , , , 4
+	CALL MESSAGE_WINDOW, "ヒルコ" , "ここから先は무녀しか入れないのだが/八ヶ岳が噴火しそうな今/あの御方を一人にするわけにはいかん/", , , , , 4
+	CALL MESSAGE_WINDOW, "ヒルコ" , "頼む서머너/姫宮様を守ってくれ", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞洞窟の中は暖かい空気で満ちている。/＞八ヶ岳の地熱で温められているようだ。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞발元には道のような細い線が奥へと続いている/＞大昔から多くの人がこの奥へと歩いた様だ。", , , , , 4
+	CALL MESSAGE_WINDOW,"" , "………………/…………/……/", , , , , 4
+	CALL MESSAGE_WINDOW,"" , "＞奥へと続く道の周りには/＞ところどころに土器らしき物が落ちている。", , , , , 4
+	CALL MESSAGE_WINDOW,"" , "＞밧줄がうねる様な文様/＞どうやら밧줄文時代の土器のようだ。", , , , , 4
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "この八ヶ岳周辺は밧줄文時代中期/4000～5000年前、日本최대の人입密集地で/日本一の文化地오비だったと考えられています。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "実際、付近の集落遺跡からは/豪壮で多彩な밧줄文土器が出土しています。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "見てください/これは「여신像土器」…/밧줄文時代中期の人面装飾付深鉢の一つです", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "この土器は여신の「출산」を表していると考えられています/縁についているのが여신の顔で/その下は子宮から生まれ出る瞬間の嬰児の顔だと…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "生命の여신/코시로から崇められてきたあらゆるものを産み出す/豊穣の大지모신…", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "" , "＞さらに奥へと進むと、身の丈ほどもある大きな土器の前で/＞키쿠에に合流することができた", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , @"%ANATANAME("貴方様" , "様")%、一緒に来ていただけるのですか？/ありがとうございます…、本当は一人で奥に進むのが心細かったのです。/", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , @"この土器の先が菊理姫の무녀の수련場と伝えられています。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞土器は内部を包み込むような天井を備え、その上には顔のような造型が付いている/＞そして、その中では火が燃え、周囲を照らしていた。", , , , , 4
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "「香炉型土器」ですね…先ほどの「여신像土器」よりも後の時代/밧줄文時代終期のものです。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "それにしても大きい…/こうした土器は元々、「吊손土器」と呼ばれ、天井から紐で吊って/火を灯すランプのような土器だったと考えられています。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "土器の上についているのは여신の顔ですね…/先ほどの여신像土器についていたものと同じ顔です", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "それに見てください/穴の周りには線で模様が付けてあります/この丸い線刻は여신の両발が大きく開いていることを表していると考えられます", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "とすれば、この開입部は女陰…/この中で火を燃やすといういことは…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "만물を産んだ最後に火の神を産み/女陰を灼かれて死ぬ生命の여신 이자나미", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "" , "＞土器は通路を塞ぐように設置されているので/＞側面を回り込み、奥へ進むと/＞土器の裏面が視界に入ってきた。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞まるで骸뼈のような大きな顔の造詣が/＞巨大な土器の裏一面を使って表現されている。", , , , , 4
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "正面側と全然異なる奇妙な二面性/これが밧줄文時代後期の香炉型土器の特徴です。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "今から4000年前…/八ヶ岳山麓に栄えた밧줄文中期文化は急速に衰退していったと考えられています", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "その変化の最中/それまで掌に乗るサイズのランプとして使われていた「香炉型土器」は大型化し/形も奇怪なものに変貌していきました", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "仮面…あるいは髑髏のような虚ろな眼下の人面/「여신髑髏」「사신死神型ランプ」などとも呼ばれます…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "この土器の造型…/背뼈と肩甲뼈から十本の肋뼈が生えているようにも見えるし/十匹の蛇が纏わりついた恐ろしい形相とも見えます…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "蛇らしき生物が数匹/まとわりつくような「사신死神型ランプ」の例もあります…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "生命の여신だったものが一転/八뇌신を纏わりつかせ/死の여신に変わる…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "そう考えると、この土器の置き方は/황천比良坂の千引の石を思わせますね…", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "키쿠에" , "この土器を見ていると、공포と同時に体の奥底から힘を感じます…/코시로から菊理姫の무녀たちが伝えてきた힘を…", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞さらに洞窟の中を奥へと進むと/＞途中で広い空間に出た。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞발元はおびただしい数の뼈で埋まっている…/＞しかも인간の뼈だ…", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞かなり古い…/＞数百…数千年は経過したとみられるモノも存在する。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞しかも、多くの屍は손발を曲げた상태で葬られている。", , , , , 4
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "屈葬ですね…、밧줄文時代を通じて/最も普通に見られる葬法です。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "過去の発見例では、가슴の上に石まで載せる念入りなものもありますが/それだけ死者が迷い出てくることを昔の人は무서움たんでしょうね。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "あれ？", , , , , 4
+		CALL MESSAGE_WINDOW, "" , "＞코시로が何かに気付いたようだ。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "どの亡骸も体に「繊維状のもの」がこびり付いていますね…/衣옷の一部かな…？", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "" , "＞ガラッ", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞洞窟の奥の暗い方から何か音がした…/＞奥からだけではない…四方から「何か」がこちらに迫っている！", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에" , "御気付けください！ここがククリヒメの무녀の수련場なのです！", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞多数の亡者が四方から襲ってきた！", , , , , 4
+	
+		CALL SET_ENEMY,7,236,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,8,235,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+
+		CALL SET_ENEMY,9,278,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,10,234,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,11,1608,70,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		ABL:(CHARANUM-1):스킬3 = 503
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		
+		CALL SET_ENEMY,12,251,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 1500
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,13,1754,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,14,1727,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,15,1751,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL SET_ENEMY,16,3111,65,0,1
+		NAME:(CHARANUM-1) = 亡者
+		CALLNAME:(CHARANUM-1) = 亡者
+		CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		CALL BATTLE_START
+		PRINTFORML 
+		PRINTFORML 
+		CUSTOMDRAWLINE =
+		FLAG:도주불가フラグ = 0
+		FLAG:회화불능フラグ = 0
+		FLAG:선제기습취소 = 0
+	
+	CALL MESSAGE_WINDOW, "" , "＞遅い来る亡者を撃退した。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞하지만、迫りくる音は止まず/＞次から次へと亡者が迫ってくる。/＞すでに、入ってきた入り입は亡者の山で見えなくなってしまった。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞これが野外なら問答無用で一気に消滅させることもできるが/＞洞窟内では天井が崩落する危険性がある。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞亡者を撃退しつつ後ろに下がり/＞壁を背にするも、背にした壁からも亡者が出てくる。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞危険な状況だが키쿠에は落ち着いている。/＞またフィミカと共鳴しているのだろうか？/＞何か様子がおかしい。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에？" , "ククリヒメがどのような神か知っていますか？", , , , , 4	
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "菊理媛（ククリヒメ）は久久理比売とも表記しますが/確かに奇妙な여신です。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "日本書紀の황천국神話に出てくるだけなのに/白山の白山比咩神社を総本社として/全国に二千以上の神社が存在します。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "なのにセリフすらありません。/이자나기に告げたはずの言葉も/かき消されたように残っていません…。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "腐乱した아내や恐ろしい亡者たちから逃れた이자나기に/語りかけて悦ばせたという「言葉」…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "황천比良坂…生と死の境界に現れたククリヒメ…/太古には日本中に広まっていたが/「입にするのがはばかられた言葉」を持つ神ですね…", , , , , 4
+	ENDIF
+	;스킬카드　「菊理紐」
+	CALL MESSAGE_WINDOW, "키쿠에？" , "古の昔から人々は死者を敬いながらも、무서움/その원령におののいていました。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에？" , "そのために、「私たち」が필요とされたのです。/", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞いつの間にか키쿠에の손には綺麗な「組紐」が握られている。", , , , , 4
+	CALL MESSAGE_WINDOW, "키쿠에？" , "死に穢れたる者、恨み持つ屍が/生ける世に迷い出ぬように…", , , , , 4	
+	CALL MESSAGE_WINDOW, "키쿠에？" , "「括（くく）りまする！！」", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞키쿠에の손から放たれた組紐が亡者の体を縛り上げる/＞全身を縛られた亡者は動かなくなり/＞再び物言わぬ屍へと還った。", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞また、키쿠에も正気に戻ったようだ。", , , , , 4	
+	CALL MESSAGE_WINDOW, "키쿠에" , "今、確かに感じます/菊理姫の힘…、코시로から死者を封じてきた힘を…", , , , , 4	
+	LOCAL = GETCHARA([[キャラ:키쿠에]])
+	CALL GET_ITEMS,"쿠쿠리히메의매듭끈",1
+	CALL 장비변경, LOCAL, GET_EQUIPNUM("악세사리"), GETNUM(ITEM, "쿠쿠리히메의매듭끈")
+	CALL MESSAGE_WINDOW, "" , "＞どうやら키쿠에の수련は성공したようだ。", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞入입へ戻ろうとすると、突如、轟音と共に大地が揺れた。", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞ゴゴゴゴッ　ドドドドドッ", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞どうやら火山性地震のようだ/＞幸い天井が落ちてくることはなかったが/＞入입へ通じる道は崩落によって塞がれてしまった。", , , , , 4	
+	CALL MESSAGE_WINDOW, "키쿠에" , "奥へ進みましょう/洞窟の奥から空気の流れを感じます。", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞키쿠에の言葉に従い洞窟の奥へと進むと/＞周辺の壁や地面から熱気を感じるようになった。", , , , , 4	
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "火입が近いのかもしれません。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "この八ヶ岳の権現岳の桧峰神社は/死んだ이자나미に纏いついた八뇌신を祀っています。/も하지만たら、코시로では八ヶ岳そのものが/이자나미または황천と考えられていたのかもしれません。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "「뇌신」は蛇や龍のイメージにも通じますが、/火山噴火の時にもイメージを見て取ることができます", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "「火山雷」…水蒸気や火山灰が噴き上がる際の摩擦で生じる雷ですが/巨大な蛇が群がるようにも見えます", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "また、八ヶ岳にはある伝説があり/大昔は富士山よりも高い山だったが、富士の怒りを買い/頂上を打ち砕かれてしまったという…", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "実際に八ヶ岳は富士山以上の4000m級を誇る/「古阿弥陀岳」時代があったと考えられています。/20万年前の大噴火で吹き飛んだようですが。", , , , , 4
+		CALL MESSAGE_WINDOW, "코시로" , "だとすれば、4000年前の밧줄文時代にも噴火が起きたかもしれません/中期밧줄文の文化育んだ「지모신」八ヶ岳が/大噴火で「사신死神」に変わる…/そして、その古い記憶が「황천국神話」へと…", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "" , "＞奥へ進むほど熱気は強くなり/＞赤い光が視界に入るようになった", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞ゴゴゴゴッ", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞今、눈の前には巨大な穴と、その底で轟く마그마が行く손を塞いでいる。", , , , , 4	
+	IF FINDCHARA_B([[キャラ:코시로]]) > 0
+		CALL MESSAGE_WINDOW, "코시로" , "4000年前に밧줄文文化を壊滅させた火입…/밧줄文火입？それとも「이자나미」火입とでも呼ぶべきでしょうか…", , , , , 4
+	ENDIF
+	CALL MESSAGE_WINDOW, "키쿠에" , "空気の流れは火입の奥から感じます/火입の縁をつたって向こう側に出れば/どこか外へ通じる開입部があるはずです。", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞慎重に火입の縁を歩き、無事、火입の向こう側に到達したが/＞その時、火입底が轟音を立て始めた！", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞ドゴゴゴゴッ！", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞키쿠에を抱え、崩落の始まった洞窟を全힘で駆け抜ける。/＞後ろからは恐ろしいほどの熱気が伝わってきた。", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞外の光が見えた瞬間/＞後ろから激しい爆音と열풍が襲いかかった。", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞ドドドオオォオォ！", , , , , 4	
+	CALL MESSAGE_WINDOW,"" , "………………/…………/……/", , , , , 4
+	CALL MESSAGE_WINDOW, "" , "＞噴火の爆風に飛ばされたが、落ちた先が残雪の上だったため/＞키쿠에に怪我はなかった。", , , , , 4	
+	CALL MESSAGE_WINDOW, "" , "＞八ヶ岳の噴火はその後も続き/＞数千年を経てなお続いている生と死のせめぎ合いを/＞人々に思い出させている。", , , , , 4	
+	
+	이벤트フラグ:53:0 = 2
+ENDIF

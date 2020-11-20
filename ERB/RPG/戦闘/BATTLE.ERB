@@ -1,0 +1,3929 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:BATTLE.ERB
+;	Facility	:전투におけるメイン화면および各種処理群
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX		----					新規作成
+;	002		2011/02/13		黒天					GO(전투開始)に対応するキーの추가(SPACEキーでも전투開始)
+;	003		2011/02/16		Ｎ鳥					特定の조건下で、パーティに居ないキャラも経験値を取得できるように변경、악마ストレージ기능に対応
+;	004		2011/02/16		Ｎ鳥					仲魔でないキャラも레벨アップ판정を行っていたのを修正
+;	005		2011/02/27		P						적なしでの전투は頻出엘라ーなので、메시지つきで회피させるように
+;	006		2011/03/04		P						전투終了時にジャックポットを추가するように
+;	007		2011/03/10		P						전투終了時に페르소나の변이処理を呼びにいくように변경。링케이지を使った場合、페르소나の成長がはやまるように
+;	008		2011/03/28		P						영매체질でMAGの加算が増えるように
+;	009		2011/06/24		P						勝ちオタを추가しつつ、페르소나の勝利時체크の処理を軽くする
+;	010		2012/12/9		GATA					잠재능력추가
+;	011		2013/03/12		ネトリス				命乞い処理を추가
+;	012		2013/04/28		Ｊ( 'ー`)し				잠재능력処理を除外
+;	013		2013/11/24		Ｊ( 'ー`)し				なんやかんや作業
+;	014		2013/11/24		ひみつ					カジャオート系が장비스킬からでも発動するように修正、WAIT횟수をまとめて1回に변경
+;	015		2015/04/15		暇人					自動発動系스킬を誤って選択しても엘라ー落ちしないよう修正。
+;	016		2015/12/11		JK好き					이능자用の스킬処理を추가
+;	017		2016/12/11		Jガン					1moreフラグを少し변경
+;	018		2017/09/27		Jガン					混乱、魅了を改良
+;	019		2017/10/1		Jガン					混乱、魅了회복時の行動を改善
+;	020		2018/06/21		JK好き					인수라스킬枠増加処理　ついでに気付いた範囲で아이템番号にRenameを使うように변경
+;	021		2019/01/26		JK好き					混乱中の行動に空欄の스킬を使わない様にたぶん修正
+;	022		2019/01/27		JK好き					素質による스킬소비軽減適用時にMPが발りるかの計算に軽減適用後の数字を사용していなかった問題修正 CALL COST_CUT
+;	023		2019/03/17		名無					마인드시커추가に伴う경험치処理改造、엑스링케이지云々
+;	024		2019/03/29		TR(SAYA)				HP소비스킬の소비量を修正
+;	025		2019/08/29		空気					ＲＥＳＵＬＴの합계충성도が전투前の値を표시していたのを修正
+;	026		2019/10/26		ナナドラMOD				特定스킬사용時に自動회복処理を추가
+;	027		2019/10/31		ナナドラMOD				特定스킬사용時に自動회복処理を추가
+;	028		2019/11/01		絹延					PANICを受けた際の입력行動に-1が入った場合、엘라ー落ちする問題の修正
+;	029		2019/11/01		ナナドラMOD				特定스킬사용時に自動공격処理を추가
+;	030		2019/11/02		ナナドラMOD				特定스킬사용時に自動회복処理を추가
+;	031		2019/11/03		名無					고유게이지処理を추가
+;	032		2019/11/??		名無					熱り弱点処理を추가
+;	033		2019/12/30		Jガン					カウンター処理を추가
+;	034		2019/01/31		Jガン					勝利時、레벨アップ時、도주성공時、도주실패時、전투開始時、구상を出せる処理を추가
+;	035		2020/02/30		Jガン					FLY회복時、스테이터스を更新するように
+;	036		2020/03/XX		Jガン					총공격中を示すフラグ추가、무기素質仕様の변경、추가
+;	037		2020/04/18		木綿豆腐 				전투勝利구상の呼び出し先を랜덤/最終行動者に변경できるように
+;	038		2020/04/21		木綿豆腐 				不意打ち・バックアタック時のヘッドセット口上不具合修正
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;==================================================================
+;전투でのメイン화면の処理と전투時の各種処理を行います
+;==================================================================
+
+;===================================================================
+;전투開始処理
+;===================================================================
+@BATTLE_START
+IF MATCH(FLAG, -1, GETNUM(FLAG, "포지션7"), GETNUM(FLAG, "포지션16")+1) == 10
+	PRINTW 적이 배치되지 않은 상태로 전투가 개시되었습니다
+	PRINTW 에러를 회피하기 위해 전투 처리를 중단하고 종료합니다
+	PRINTW 이 에러가 발생한 이벤트 혹은 던전과 계층의 보고를 부탁합니다
+	RETURN 0
+ENDIF
+CALL REFRESH_FORMATION
+CALL REFRESH_BATTLE
+
+;ウィンドウ型메시지のスキップフラグ折り
+FLAG:ウィンドウ메시지スキップ = 0
+
+CALLFORM EVENT_BATTLE_START
+SIF FLAG:선제기습취소 == 0
+	CALL CHECK_SURPRISEATTACK
+CALL BATTLE_MAIN
+
+
+;===================================================================
+;先制不意打ち背後공격판정
+;===================================================================
+@CHECK_SURPRISEATTACK
+#LOCALSIZE 4
+LOCAL:1 = 0
+;プ레이ヤー側の판정値
+LOCAL:3 = 0
+;人数
+LOCAL:2 = 0
+;적側の판정値
+FOR LOCAL,1,7
+	LOCALS = 포지션{LOCAL}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	LOCAL:1 += (BASE:(FLAG:LOCALS):(GET_BASESTATUS(5)) + BASE:(FLAG:LOCALS):(GET_BASESTATUS(6)))
+	LOCAL:3 += 1
+NEXT
+LOCAL:1 /= LOCAL:3
+LOCAL:3 = 0
+FOR LOCAL,7,17
+	LOCALS = 포지션{LOCAL}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	LOCAL:2 += (BASE:(FLAG:LOCALS):(GET_BASESTATUS(5)))
+	LOCAL:3 += 1
+NEXT
+LOCAL:2 /= LOCAL:3
+
+IF RAND:100 + LOCAL:1 + (EQUIP:MASTER:("Mr.서프라이즈") && NUM_SUMMONER()) * 20 > RAND:100 + LOCAL:2
+	SIF RAND:100 < MAX(5,10 + LOCAL:1 - LOCAL:2) + (EQUIP:MASTER:("Mr.서프라이즈") && NUM_SUMMONER()) * 20
+		FLAG:先制공격フラグ = 1
+ELSE
+	SELECTCASE RAND:100
+		CASE IS < MAX(5,8 + LOCAL:2 -LOCAL:1) + (FLAG:月齢 == 0 || FLAG:月齢 == 8 ? 15 # 0) + (DA:(FLAG:現X):(FLAG:現Y) % 10 == -1) * 10
+			FLAG:バックアタックフラグ = 1
+			FLAG:不意打ちフラグ = 1
+			IF EQUIP:MASTER:하쿠타로우 == 0 || NUM_SUMMONER() == 0
+				FOR LOCAL,1,7
+					LOCALS = 포지션{LOCAL}保存
+					LOCALS:1 = 포지션{LOCAL}
+					FLAG:LOCALS = FLAG:(LOCALS:1)
+				NEXT
+				CALL CHANGE_POS,1,6
+				CALL CHANGE_POS,2,5
+				CALL CHANGE_POS,3,4
+			ENDIF
+		CASE IS < MAX(5,25 + LOCAL:2 -LOCAL:1) + (FLAG:月齢 == 0 || FLAG:月齢 == 8 ? 30 # 0) + (DA:(FLAG:現X):(FLAG:現Y) % 10 == -1) * 20
+			FLAG:不意打ちフラグ = 1
+	ENDSELECT
+ENDIF
+SIF ASSI > 0 && (FLAG:先制공격フラグ + FLAG:不意打ちフラグ < 1)
+	CALL SUPORT(1, 0)
+
+;===================================
+;전투時メイン메뉴표시
+;===================================
+@BATTLE_MAIN
+#LOCALSIZE 8
+
+;勝敗を체크
+CALL FIGHT_IT_OUT
+
+;敗北フラグ立ってたらゲームオーバー呼び出し
+SIF FLAG:敗北フラグ == 1
+	CALL BATTLE_LOSE
+
+IF FLAG:勝利フラグ
+	CALL BATTLE_END
+	RETURN 1
+ENDIF
+IF FLAG:先制공격フラグ
+	SETCOLOR 0x33ffcc
+	PRINTL 　┏━━━━━━━━━━━━━┓
+	PRINTL 　┃ PARTY SURPRISE ATTACK !! ┃
+	PRINTW 　┗━━━━━━━━━━━━━┛
+	RESETCOLOR
+	SIF ASSI > 0
+		CALL SUPORT(1, 1)
+ELSEIF FLAG:バックアタックフラグ && FLAG:不意打ちフラグ
+	SETCOLOR 0xff0033
+	PRINTL 　┏━━━━━━━━━━━━━┓
+	PRINTL 　┃  ENEMY  BACK  ATTACK !!! ┃
+	PRINTW 　┗━━━━━━━━━━━━━┛
+	RESETCOLOR
+	IF EQUIP:MASTER:하쿠타로우 && NUM_SUMMONER()
+		CLEARLINE 3
+		SETCOLOR 0x33ffcc
+		PRINTL 　┏━━━━━━━━━━━━━┓
+		PRINTL 　┃"HYAKU-TARO" SAVED YOU !! ┃
+		PRINTW 　┗━━━━━━━━━━━━━┛
+		RESETCOLOR
+		FLAG:バックアタックフラグ = 0
+		SIF ASSI > 0
+			CALL SUPORT(1, 3)
+		GOTO BREAK_ENEMYATTACK
+	ENDIF
+	SIF ASSI > 0
+		CALL SUPORT(1, 2)
+	;---- EDIT 034 MOD START -------------------------
+	LOCAL:7 = 0
+	FOR LOCAL,1,7
+		LOCALS = 포지션{LOCAL}
+		SIF FLAG:LOCALS < 0
+			CONTINUE
+		SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+			CONTINUE
+		LOCAL:(LOCAL:7 + 1) = FLAG:LOCALS
+		LOCAL:7 ++
+	NEXT
+	IF LOCAL:7 > 0
+		SETCOLOR 0x33ffcc
+		LOCAL = LOCAL:(RAND:(LOCAL:7) + 1)
+		TFLAG:전투이벤트 = 95
+		SWAP LOCAL,TARGET
+		CALL BATTLE_EVENT,TARGET
+		SWAP LOCAL,TARGET
+		RESETCOLOR
+	ENDIF
+	;---- EDIT 034 MOD END ---------------------------
+	FOR LOCAL,0,6
+		LOCALS = 포지션{LOCAL+1}
+		IF FLAG:LOCALS > -1
+			CFLAG:(FLAG:LOCALS):방어フラグ = 0
+			CFLAG:(FLAG:LOCALS):입력行動 = -1
+		ENDIF
+	NEXT
+	FOR LOCAL,0,10
+		LOCALS = 포지션{LOCAL+7}
+		IF FLAG:LOCALS > -1
+			CALL ACTIONABLE_CHARA,FLAG:LOCALS
+			IF RESULT == 1
+				CALL SET_ACTION_ENEMY,FLAG:LOCALS
+			ELSE
+				CFLAG:(FLAG:LOCALS):입력行動 = -1
+			ENDIF
+		ENDIF
+	NEXT
+	
+	CALL BATTLE_DECIDE_INITIATIVE
+	;디버그용
+	;CALL SHOW_INITIATIVE
+	CALL BATTLE_TURNSTART
+	IF FLAG:勝利フラグ
+		CALL BATTLE_END
+		RETURN 1
+	ENDIF
+	CALL BATTLE_TURNEND
+ELSEIF FLAG:不意打ちフラグ
+	SETCOLOR 0x990066
+	PRINTL 　┏━━━━━━━━━━━━━┓
+	PRINTL 　┃ ENEMY SURPRISE ATTACK !! ┃
+	PRINTW 　┗━━━━━━━━━━━━━┛
+	RESETCOLOR
+	IF EQUIP:MASTER:하쿠타로우 && NUM_SUMMONER()
+		CLEARLINE 3
+		SETCOLOR 0x33ffcc
+		PRINTL 　┏━━━━━━━━━━━━━┓
+		PRINTL 　┃"HYAKU-TARO" SAVED YOU !! ┃
+		PRINTW 　┗━━━━━━━━━━━━━┛
+		RESETCOLOR
+		SIF ASSI > 0
+			CALL SUPORT(1, 4)
+		GOTO BREAK_ENEMYATTACK
+	ENDIF
+	SIF ASSI > 0
+		CALL SUPORT(1, 5)
+	;---- EDIT 034 MOD START -------------------------
+	LOCAL:7 = 0
+	FOR LOCAL,1,7
+		LOCALS = 포지션{LOCAL}
+		SIF FLAG:LOCALS < 0
+			CONTINUE
+		SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+			CONTINUE
+		LOCAL:(LOCAL:7 + 1) = FLAG:LOCALS
+		LOCAL:7 ++
+	NEXT
+	IF LOCAL:7 > 0
+		SETCOLOR 0x33ffcc
+		LOCAL = LOCAL:(RAND:(LOCAL:7) + 1)
+		TFLAG:전투이벤트 = 96
+		SWAP LOCAL,TARGET
+		CALL BATTLE_EVENT,TARGET
+		SWAP LOCAL,TARGET
+		RESETCOLOR
+	ENDIF
+	;---- EDIT 034 MOD END ---------------------------
+	FOR LOCAL,0,6
+		LOCALS = 포지션{LOCAL+1}
+		IF FLAG:LOCALS > -1
+			CFLAG:(FLAG:LOCALS):입력行動 = -1
+			CFLAG:(FLAG:LOCALS):방어フラグ = 0
+		ENDIF
+	NEXT
+	FOR LOCAL,0,10
+		LOCALS = 포지션{LOCAL+7}
+		IF FLAG:LOCALS > -1
+			CALL ACTIONABLE_CHARA,FLAG:LOCALS
+			IF RESULT == 1
+				CALL SET_ACTION_ENEMY,FLAG:LOCALS
+			ELSE
+				CFLAG:(FLAG:LOCALS):입력行動 = -1
+			ENDIF
+		ENDIF
+	NEXT
+	
+	CALL BATTLE_DECIDE_INITIATIVE
+	;디버그용
+	;CALL SHOW_INITIATIVE
+	CALL BATTLE_TURNSTART
+	IF FLAG:勝利フラグ
+		CALL BATTLE_END
+		RETURN 1
+	ENDIF
+	CALL BATTLE_TURNEND
+ENDIF
+$BREAK_ENEMYATTACK
+;---- EDIT 034 MOD START -------------------------
+IF FLAG:経過ターン数 < 1
+	LOCAL:7 = 0
+	FOR LOCAL,1,7
+		LOCALS = 포지션{LOCAL}
+		SIF FLAG:LOCALS < 0
+			CONTINUE
+		SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+			CONTINUE
+		LOCAL:(LOCAL:7 + 1) = FLAG:LOCALS
+		LOCAL:7 ++
+	NEXT
+	IF LOCAL:7 > 0
+		SETCOLOR 0x33ffcc
+		LOCAL = LOCAL:(RAND:(LOCAL:7) + 1)
+		TFLAG:전투이벤트 = 94
+		SWAP LOCAL,TARGET
+		CALL BATTLE_EVENT,TARGET
+		SWAP LOCAL,TARGET
+		RESETCOLOR
+	ENDIF
+ENDIF
+;---- EDIT 034 MOD END ---------------------------
+CALL REFRESH_FORMATION
+
+;勝敗を체크
+CALL FIGHT_IT_OUT
+;敗北フラグ立ってたらゲームオーバー呼び出し
+SIF FLAG:敗北フラグ == 1
+	CALL BATTLE_LOSE
+IF FLAG:勝利フラグ || FLAG:도주フラグ
+	CALL BATTLE_END
+	RETURN 1
+ENDIF
+;전투中アナウンス
+SIF ASSI > 0
+	CALL SUPORT(3, 1)
+
+;命乞い판정
+SIF FLAG:도주불가フラグ == 0 && FLAG:회화불능フラグ == 0
+	CALL 命乞い
+IF GETBIT(FLAG:命乞いフラグ, 1) || GETBIT(FLAG:命乞いフラグ, 2)
+	LOCALS = %RESULTS%
+	GOTO 命乞い회화
+ENDIF
+
+LOCAL = 0
+CALL SHOW_NOW_FORMATION_E,0,2, -1
+DRAWLINE
+CALL SHOW_NOW_FORMATION_P,0,2, 7
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD START ----
+IF FLAG:던전내조작설정 == 1
+	PRINTBUTTON "[ ] FIGHT"," "
+	PRINTL
+	PRINTBUTTON "[w] TALK","w"
+ELSE
+	PRINTBUTTON "[0] FIGHT","0"
+	PRINTL
+	PRINTBUTTON "[1] TALK","1"
+ENDIF
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD END ------
+PRINTL
+PRINTBUTTON "[2] ANALYZE","2"
+PRINTL
+SIF FLAG:도주불가フラグ == 1
+	SETCOLOR 0x404040
+PRINTBUTTON "[3] ESCAPE","3"
+RESETCOLOR
+PRINTL
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD START ----
+IF FLAG:던전내조작설정 == 1
+	PRINTBUTTON "[a] AUTO","a"
+	PRINT   
+	PRINTBUTTON "[s] GUN AUTO","s"
+	PRINT   
+	PRINTBUTTON "[d] REPEAT AUTO　","d"
+ELSE
+	PRINTBUTTON "[4] AUTO","4"
+	PRINT   
+	PRINTBUTTON "[5] GUN AUTO","5"
+	PRINT   
+	PRINTBUTTON "[6] REPEAT AUTO　","6"
+ENDIF
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD END ------
+
+SELECTCASE FLAG:相性等표시ON
+	CASE 0
+		LOCALS = OFF
+	CASE 1
+		LOCALS = 相性
+	CASE 2
+		LOCALS = 강화
+ENDSELECT
+PRINTBUTTON @"[9] 표시전환[%LOCALS%]", "9"
+
+$INPUT_LOOP
+ONEINPUTS
+
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD START ----
+IF RESULTS == "0" || RESULTS == " "
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD END ------
+	CALL INPUT_COMMAND
+	SIF RESULT == 0
+		GOTO BREAK_ENEMYATTACK
+	
+	;操作不能の아군のコマンド입력
+	FOR LOCAL,1,7
+		LOCALS = 포지션{LOCAL}
+		IF FLAG:LOCALS > -1 && CFLAG:(FLAG:LOCALS):操作不能フラグ
+			CALL ACTIONABLE_CHARA,FLAG:LOCALS
+			IF RESULT == 1
+				CALL SET_ACTION_ENEMY,FLAG:LOCALS
+			ELSE
+				CFLAG:(FLAG:LOCALS):입력行動 = -1
+			ENDIF
+		ENDIF
+		;魅了されたキャラは専用処理
+		IF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "CHARM"
+			CFLAG:(FLAG:LOCALS):입력行動 = 0
+			CALL SET_TARGET_CHARM,FLAG:LOCALS
+		ENDIF
+		;混乱中キャラは専用処理
+		IF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "PANIC"
+			CALL SET_ACT_PANIC,FLAG:LOCALS
+		ENDIF
+		;オルギ아키ャラは専用処理
+		IF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "ORGY"
+			CALL SET_ACT_ORGY,FLAG:LOCALS
+		ENDIF
+	NEXT
+	
+	
+	IF FLAG:先制공격フラグ == 0
+		FOR LOCAL,0,10
+			LOCALS = 포지션{LOCAL+7}
+			IF FLAG:LOCALS > -1
+				CALL ACTIONABLE_CHARA,FLAG:LOCALS
+				IF RESULT == 1
+					CALL SET_ACTION_ENEMY,FLAG:LOCALS
+				ELSE
+					CFLAG:(FLAG:LOCALS):입력行動 = -1
+				ENDIF
+			ENDIF
+		NEXT
+	ENDIF
+	PRINTL
+	PRINTL
+	CALL BATTLE_DECIDE_INITIATIVE
+	;디버그용
+	;CALL SHOW_INITIATIVE
+	CALL BATTLE_TURNSTART
+	IF FLAG:勝利フラグ || FLAG:도주フラグ
+		CALL BATTLE_END
+		RETURN 1
+	ENDIF
+	CALL BATTLE_TURNEND
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD START ----
+ELSEIF RESULTS == "1" || RESULTS == "w"
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD END ------
+	IF INPUTABLEF_CHARA(MASTER) == 0
+		PRINTFORMW %플레이어는()% 이야기할 수 있는 상태가 아니다
+		GOTO INPUT_LOOP
+	ENDIF
+
+	IF FLAG:회화불능フラグ
+		PRINTW 전투 상태라 그럴 경황이 아니다
+		GOTO INPUT_LOOP
+	ENDIF
+	CALL SHOW_NOW_FORMATION_E,0,2, -2
+	PRINTL 누구와 이야기하겠습니까?
+	PRINTL [100] 관둔다
+	$INPUT_LOOP2
+	INPUT
+	LOCALS = 포지션{RESULT}
+	IF RESULT == 100
+		GOTO BREAK_ENEMYATTACK
+	ELSEIF RESULT < 7 || RESULT > 16
+		GOTO INPUT_LOOP2
+	ELSEIF FLAG:LOCALS > -1 && CFLAG:(FLAG:LOCALS):PTフラグ == 0
+		$命乞い회화
+		CALL TALK,FLAG:LOCALS
+		IF RESULT == 1
+			FLAG:勝利フラグ = 1
+		ELSEIF RESULT == 2
+			
+			FOR LOCAL,0,6
+				LOCALS = 포지션{LOCAL+1}
+				IF FLAG:LOCALS > -1
+					CFLAG:(FLAG:LOCALS):입력行動 = -1
+				ENDIF
+			NEXT
+			FOR LOCAL,0,10
+				LOCALS = 포지션{LOCAL+7}
+				IF FLAG:LOCALS > -1
+					CALL ACTIONABLE_CHARA,FLAG:LOCALS
+					IF RESULT == 1
+						CALL SET_ACTION_ENEMY,FLAG:LOCALS
+					ELSE
+						CFLAG:(FLAG:LOCALS):방어フラグ = 1
+						CFLAG:(FLAG:LOCALS):입력行動 = -1
+					ENDIF
+				ENDIF
+			NEXT
+			
+			CALL BATTLE_DECIDE_INITIATIVE
+			;디버그용
+			;CALL SHOW_INITIATIVE
+			CALL BATTLE_TURNSTART
+			IF FLAG:勝利フラグ || FLAG:도주フラグ
+				CALL BATTLE_END
+				RETURN 1
+			ENDIF
+			CALL BATTLE_TURNEND
+		ENDIF
+		
+		GOTO BREAK_ENEMYATTACK
+	ELSE
+		GOTO INPUT_LOOP2
+	
+	ENDIF
+	
+ELSEIF RESULTS == "3" && FLAG:도주불가フラグ == 0
+	SELECTCASE FLAG:SHOPコマンド
+		CASE [[SHOP:탐색]]
+			LOCALS = DUNGEON
+			LOCAL = FLAG:現던전
+		CASE [[SHOP:콜로세움참가]]
+			LOCALS = COLOSSEUM
+			LOCAL = FLAG:進行中コロシアム
+		CASE [[SHOP:이벤트]]
+			LOCALS = EVENT
+			LOCAL = FLAG:進行中이벤트
+		CASE [[SHOP:의뢰청부]]
+			LOCALS = REQUEST
+			LOCAL = FLAG:進行中의뢰
+	ENDSELECT
+	TRYCCALLFORM BATTLE_EVENT_ESCAPE_%LOCALS%_{LOCAL}
+		IF RESULT == 0
+			GOTO BREAK_ENEMYATTACK
+		ENDIF
+	CATCH
+	ENDCATCH
+	CALL ESCAPE_CHECK
+	IF RESULT == 0
+		FOR LOCAL,0,6
+			LOCALS = 포지션{LOCAL+1}
+			IF FLAG:LOCALS > -1
+				CFLAG:(FLAG:LOCALS):입력行動 = -1
+			ENDIF
+		NEXT
+		FOR LOCAL,0,10
+			LOCALS = 포지션{LOCAL+7}
+			IF FLAG:LOCALS > -1
+				CALL ACTIONABLE_CHARA,FLAG:LOCALS
+				IF RESULT == 1
+					CALL SET_ACTION_ENEMY,FLAG:LOCALS
+				ELSE
+					CFLAG:(FLAG:LOCALS):입력行動 = -1
+				ENDIF
+			ENDIF
+		NEXT
+		
+		CALL BATTLE_DECIDE_INITIATIVE
+		;디버그용
+		;CALL SHOW_INITIATIVE
+		CALL BATTLE_TURNSTART
+		IF FLAG:勝利フラグ
+			CALL BATTLE_END
+			RETURN 1
+		ENDIF
+		CALL BATTLE_TURNEND
+	ELSE
+		RETURN 0
+	ENDIF
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD START ----
+ELSEIF RESULTS == "4" || RESULTS == "5" || RESULTS == "6" || RESULTS == "a" || RESULTS == "s" || RESULTS == "d"
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD END ------
+	LOCALS:99 = %RESULTS%
+	FOR LOCAL,0,6
+		LOCALS = 포지션{LOCAL+1}
+		IF FLAG:LOCALS > -1
+			;ノーマルオート
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD START ----
+			IF LOCALS:99 == "4" || LOCALS:99 == "a"
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD END ------
+				CFLAG:(FLAG:LOCALS):링케이지발동 = 0
+				CFLAG:(FLAG:LOCALS):링케이지참가 = 0
+				
+				CALL CHECK_ACTIONABLE,FLAG:LOCALS,0
+				IF RESULT == 1
+					CFLAG:(FLAG:LOCALS):입력行動 = 0
+					CALL RANDOM_TARGET,FLAG:LOCALS,0
+					CFLAG:(FLAG:LOCALS):방어フラグ = 0
+				ELSE
+					IF EQUIP:(FLAG:LOCALS):총
+						CALL CHECK_ACTIONABLE,FLAG:LOCALS,2101
+						IF RESULT == 1
+							CFLAG:(FLAG:LOCALS):입력行動 = 2101
+							CFLAG:(FLAG:LOCALS):방어フラグ = 0
+							CALL RANDOM_TARGET,FLAG:LOCALS,2101
+						ELSE
+							CFLAG:(FLAG:LOCALS):입력行動 = -1
+							CFLAG:(FLAG:LOCALS):방어フラグ = 1
+						ENDIF
+					ELSE
+						CFLAG:(FLAG:LOCALS):입력行動 = -1
+						CFLAG:(FLAG:LOCALS):방어フラグ = 1
+					ENDIF
+				ENDIF
+			;ガンオート
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD START ----
+			ELSEIF LOCALS:99 == "5" || LOCALS:99 == "s"
+;---- EDIT FPS操作時전투コマンド対応キー변경(2011/02/13) MOD END ------
+				CFLAG:(FLAG:LOCALS):링케이지발동 = 0
+				CFLAG:(FLAG:LOCALS):링케이지참가 = 0
+				
+				CALL CHECK_ACTIONABLE,FLAG:LOCALS,2101
+				IF RESULT == 1
+					CFLAG:(FLAG:LOCALS):입력行動 = 2101
+					CFLAG:(FLAG:LOCALS):방어フラグ = 0
+					CALL RANDOM_TARGET,FLAG:LOCALS,2101
+				ELSE
+					CALL CHECK_ACTIONABLE,FLAG:LOCALS,0
+					IF RESULT == 1
+						CFLAG:(FLAG:LOCALS):입력行動 = 0
+						CFLAG:(FLAG:LOCALS):방어フラグ = 0
+						CALL RANDOM_TARGET,FLAG:LOCALS,0
+					ELSE
+						CFLAG:(FLAG:LOCALS):입력行動 = -1
+						CFLAG:(FLAG:LOCALS):방어フラグ = 1
+					ENDIF
+				ENDIF
+				
+			;リピートオート
+			ELSE
+				;링케이지참가자は입력行動が-1に
+				IF CFLAG:(FLAG:LOCALS):링케이지참가
+					CFLAG:(FLAG:LOCALS):입력行動 = -1
+					CFLAG:(FLAG:LOCALS):방어フラグ = 0
+				ENDIF
+			ENDIF
+			
+			
+		ENDIF
+	NEXT
+	;操作不能の아군の行動
+	FOR LOCAL,1,7
+		LOCALS = 포지션{LOCAL}
+		IF FLAG:LOCALS > -1 && CFLAG:(FLAG:LOCALS):操作不能フラグ
+			CALL ACTIONABLE_CHARA,FLAG:LOCALS
+			IF RESULT == 1
+				CALL SET_ACTION_ENEMY,FLAG:LOCALS
+			ELSE
+				CFLAG:(FLAG:LOCALS):입력行動 = -1
+			ENDIF
+		ENDIF
+		;魅了されたキャラは専用処理
+		IF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "CHARM"
+			CFLAG:(FLAG:LOCALS):입력行動 = 0
+			CALL SET_TARGET_CHARM,FLAG:LOCALS
+		ENDIF
+		;混乱中キャラは専用処理
+		IF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "PANIC"
+			CALL SET_ACT_PANIC,FLAG:LOCALS
+		ENDIF
+		;オルギ아키ャラは専用処理
+		IF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "ORGY"
+			CALL SET_ACT_ORGY,FLAG:LOCALS
+		ENDIF
+	NEXT
+	IF FLAG:先制공격フラグ == 0
+		FOR LOCAL,0,10
+			LOCALS = 포지션{LOCAL+7}
+			IF FLAG:LOCALS > -1
+				CALL ACTIONABLE_CHARA,FLAG:LOCALS
+				IF RESULT == 1
+					CALL SET_ACTION_ENEMY,FLAG:LOCALS
+				ELSE
+					CFLAG:(FLAG:LOCALS):입력行動 = -1
+				ENDIF
+			ENDIF
+		NEXT
+	ENDIF
+	PRINTL
+	PRINTL
+	CALL BATTLE_DECIDE_INITIATIVE
+	;디버그용
+	;CALL SHOW_INITIATIVE
+	CALL BATTLE_TURNSTART
+	IF FLAG:勝利フラグ || FLAG:도주フラグ
+		CALL BATTLE_END
+		RETURN 1
+	ENDIF
+	CALL BATTLE_TURNEND
+ELSEIF RESULTS == "2"
+		IF NUM_SUMMONER(1) == 0
+			PRINTW 아무도 ＣＯＭＰ를 쓸 수 있는 상태가 아니다
+			GOTO BREAK_ENEMYATTACK
+		ENDIF
+		CALL SHOP_COM_110
+		GOTO BREAK_ENEMYATTACK
+ELSEIF RESULTS == "9"
+	FLAG:相性等표시ON += 1
+	SIF FLAG:相性等표시ON > 2
+		FLAG:相性等표시ON = 0
+	GOTO BREAK_ENEMYATTACK
+ELSE
+	GOTO INPUT_LOOP
+ENDIF
+
+CALL EVENT_BATTLE_TURNTOP
+RESTART
+
+
+
+;===================================
+;行動順番の決定
+;===================================
+@BATTLE_DECIDE_INITIATIVE
+#DIM LCOUNT
+#LOCALSIZE 4
+#LOCALSSIZE 5
+LOCAL:1 = 0
+LOCAL:2 = 0
+FOR LCOUNT, 0, 16
+	LOCALS = 行動順{LCOUNT+1}
+	FLAG:LOCALS = -1
+NEXT
+
+FOR LOCAL,0,16
+	RESULT = 0
+	LOCALS = 포지션{LOCAL+1}
+	LOCAL:1 = FLAG:LOCALS
+	LOCALS:2 = 行動順{1}
+	SIF LOCAL:1 > -1 && CFLAG:(LOCAL:1):입력行動 == -1
+		CONTINUE
+	SIF LOCAL:1 > -1 && CFLAG:(LOCAL:1):ＣＨＡＮＧＥ대상フラグ == 1
+		CONTINUE
+	SIF LOCAL:1 > -1
+		CALL ACTIONABLE_CHARA,LOCAL:1
+	IF RESULT > 0
+		IF CFLAG:(LOCAL:1):링케이지발동 == 0
+			CFLAG:(LOCAL:1):行動速度 = MAXBASE:(LOCAL:1):(GET_BASESTATUS(5))
+		ELSE
+			CFLAG:(LOCAL:1):行動速度 = MAXBASE:(LOCAL:1):(GET_BASESTATUS(5))
+			FOR LCOUNT,1,6
+				IF CFLAG:(LOCAL:1):("링케이지참가자"+ TOSTR(LCOUNT)) > -1
+					SIF MAXBASE:(CFLAG:(LOCAL:1):("링케이지참가자"+ TOSTR(LCOUNT))):(GET_BASESTATUS(5)) < CFLAG:(LOCAL:1):行動速度
+						CFLAG:(LOCAL:1):行動速度 = MAXBASE:(CFLAG:(LOCAL:1):("링케이지참가자"+ TOSTR(LCOUNT))):(GET_BASESTATUS(5))
+				ENDIF
+			NEXT
+		ENDIF
+		CALLFORM SKILL_SPEED_{CFLAG:(LOCAL:1):입력行動}
+		CFLAG:(LOCAL:1):行動速度 += RESULT - (CFLAG:(LOCAL:1):行動した횟수 * 5)
+		SIF (CFLAG:(LOCAL:1):PTフラグ == 2 && LOCAL < 3) || (CFLAG:(LOCAL:1):PTフラグ == 0 && LOCAL < 11)
+			CFLAG:(LOCAL:1):行動速度 += 2
+		CFLAG:(LOCAL:1):行動速度 += CFLAG:(LOCAL:1):속도보정
+		;PRINTFORML %NAME:(LOCAL:1)%の行動速度は{CFLAG:(LOCAL:1):行動速度}
+			FOR LOCAL:2,0,16
+				LOCALS:2 = 行動順{LOCAL:2+1}
+				IF FLAG:(LOCALS:2) == -1
+					FLAG:(LOCALS:2) = LOCAL:1
+					BREAK
+					;PRINTFORML 誰もいないので{LOCAL:2}にいれます
+				ELSEIF CFLAG:(FLAG:(LOCALS:2)):行動速度 > CFLAG:(LOCAL:1):行動速度
+					;PRINTFORML {LOCAL:2}よりおそいです
+					CONTINUE
+				ELSEIF CFLAG:(FLAG:(LOCALS:2)):行動速度 < CFLAG:(LOCAL:1):行動速度
+					;PRINTFORML {LOCAL:2}より速いです
+					FOR LOCAL:3,0,(15-LOCAL:2)
+						LOCALS:3 = 行動順{16-LOCAL:3}
+						LOCALS:4 = 行動順{15-LOCAL:3}
+						FLAG:(LOCALS:3) = FLAG:(LOCALS:4)
+					NEXT
+					FLAG:(LOCALS:2) = LOCAL:1
+					BREAK
+				ELSEIF CFLAG:(FLAG:(LOCALS:2)):行動順 == CFLAG:(LOCAL:1):行動順
+					;PRINTFORML {LOCAL:2}と同速です
+					SIF RAND:2 == 0
+						CONTINUE
+					FOR LOCAL:3,0,(15-LOCAL:2)
+						LOCALS:3 = 行動順{16-LOCAL:3}
+						LOCALS:4 = 行動順{15-LOCAL:3}
+						FLAG:(LOCALS:3) = FLAG:(LOCALS:4)
+					NEXT
+					FLAG:(LOCALS:2) = LOCAL:1
+					BREAK
+				ENDIF
+			NEXT
+	ENDIF
+NEXT
+
+
+;===================================
+;デバグ：行動順番と内容の표시
+;===================================
+@SHOW_INITIATIVE
+#DIM LCOUNT
+#LOCALSSIZE 1
+FOR LCOUNT, 0, 16
+	LOCALS = 行動順{LCOUNT+1}
+	IF FLAG:LOCALS > -1
+		CALLFORM SKILL_NAME_{CFLAG:(FLAG:LOCALS):입력行動},FLAG:LOCALS
+		PRINTFORML {LCOUNT} [{CFLAG:(FLAG:LOCALS):포지션}]%CALLNAME:(FLAG:LOCALS)%:%RESULTS%
+	ENDIF
+NEXT
+
+
+;===================================
+;전투ターンの処理
+;===================================
+@BATTLE_TURNSTART
+#LOCALSIZE 12
+#LOCALSSIZE 1
+#DIM T_潜在방어
+#DIM LCOUNT
+;ターン開始処理
+;LOCAL 行動した人数
+;LOCAL:1 구상呼び出し時のターゲット保存
+LOCAL = 0
+;ループ用
+LOCAL:10 = 0
+
+$ACTION_LOOP
+
+;行動順一人눈が存在しない場合ターンエンド
+SIF FLAG:行動順1 == -1
+	RETURN 0
+;行動済みになっているとキャンセル
+SIF CFLAG:(FLAG:行動順1):입력行動 == -1
+	GOTO END_ACT
+;行動可能な상태でなければ行動済み処理
+CALL ACTIONABLE_CHARA,FLAG:行動順1
+SIF RESULT == 0
+	GOTO END_ACT
+;입력した스킬が実行可能でなければ終了
+CALL CHECK_ACTIONABLE,FLAG:行動順1,CFLAG:(FLAG:行動順1):입력行動
+SIF RESULT == 0
+	GOTO END_ACT
+;混乱、魅了が治っていると終了
+SIF CFLAG:(FLAG:行動順1):混乱매료리카バー > 0
+	GOTO END_ACT
+
+;링케이지の場合、全員が조건を満たせないと終了
+IF CFLAG:(FLAG:行動順1):링케이지발동 && RANGE(CFLAG:(FLAG:行動順1):입력行動,4000,4999)
+	CALLFORM 참가人数_{CFLAG:(FLAG:行動順1):입력行動}
+	LOCAL:11 = RESULT
+	FOR LOCAL:10 , 1 , LOCAL:11
+		SIF RANGE(CFLAG:(FLAG:行動順1):("링케이지참가자"+TOSTR(LOCAL:10)),0,CHARANUM) == 0
+			GOTO END_ACT
+		CALLFORM 참가者조건_{CFLAG:(FLAG:行動順1):입력行動}, CFLAG:(FLAG:行動順1):("링케이지참가자"+TOSTR(LOCAL:10)) , LOCAL:10
+		SIF RESULT == 0
+			GOTO END_ACT
+		CALL ACTIONABLE_CHARA,CFLAG:(FLAG:行動順1):("링케이지참가자"+TOSTR(LOCAL:10))
+		SIF RESULT == 0
+			GOTO END_ACT
+		SIF CFLAG:(CFLAG:(FLAG:行動順1):("링케이지참가자"+TOSTR(LOCAL:10))):PTフラグ < 2
+			GOTO END_ACT
+	NEXT
+ENDIF
+
+;行動順一人눈のターゲットが存在しているかを確認
+
+TRYCCALLFORM SKILL_T_RESERVE_{CFLAG:(FLAG:行動順1):입력行動}
+	SIF RESULT == 0
+		GOTO NO_RESERVE
+	CALLFORM SKILL_SPECIAL_TARGET_{CFLAG:(FLAG:行動順1):입력行動},CFLAG:(FLAG:行動順1):ターゲット
+	SIF RESULT == 0
+		GOTO END_ACT
+CATCH
+	$NO_RESERVE
+	IF CFLAG:(FLAG:行動順1):ターゲット < 1 || CFLAG:(FLAG:行動順1):ターゲット > 23
+		;ありえないターゲットをしている
+		PRINTFORMW 에러：%NAME:(FLAG:行動順1)%의 행동 {CFLAG:(FLAG:行動順1):입력行動} 의 타겟이 오류입니다 → {CFLAG:(FLAG:行動順1):ターゲット}
+		PRINTFORMW 스킬이 사용 가능하다면 타겟을 다시 정하겠습니다
+			CALL CHECK_ACTIONABLE,(FLAG:行動順1),CFLAG:(FLAG:行動順1):입력行動
+			;不可の場合行動済み処理
+			SIF RESULT == 0
+				GOTO END_ACT
+			;可能な場合はターゲットを랜덤に決めなおす
+			CALL RANDOM_TARGET,FLAG:行動順1,CFLAG:(FLAG:行動順1):입력行動
+			SIF RESULT == 0
+				GOTO END_ACT
+	ELSEIF CFLAG:(FLAG:行動順1):ターゲット < 17 && CFLAG:(FLAG:行動順1):소환予定キャラ < 1 && CFLAG:(FLAG:行動順1):입력行動 != 2301
+		LOCALS = 포지션{CFLAG:(FLAG:行動順1):ターゲット}
+		IF (FLAG:LOCALS) == -1
+			;居ない場合は스킬사용可能かを판정
+			CALL CHECK_ACTIONABLE,(FLAG:行動順1),CFLAG:(FLAG:行動順1):입력行動
+			;不可の場合行動済み処理
+			SIF RESULT == 0
+				GOTO END_ACT
+			;可能な場合はターゲットを랜덤に決めなおす
+			CALL RANDOM_TARGET,FLAG:行動順1,CFLAG:(FLAG:行動順1):입력行動
+			SIF RESULT == 0
+				GOTO END_ACT
+		ELSE
+			CALLFORM SKILL_EFECT_{CFLAG:(FLAG:行動順1):입력行動}
+			IF (RESULT == 1 || RESULT == 3 || RESULT == 4) && CFLAG:(FLAG:LOCALS):ステート == GET_STATE_NUM("DYING")
+				;居ない場合は스킬사용可能かを판정
+				CALL CHECK_ACTIONABLE,(FLAG:行動順1),CFLAG:(FLAG:行動順1):입력行動
+				;不可の場合行動済み処理
+				SIF RESULT ==0
+					GOTO END_ACT
+				;可能な場合はターゲットを랜덤に決めなおす
+				CALL RANDOM_TARGET,FLAG:行動順1,CFLAG:(FLAG:行動順1):입력行動
+			SIF RESULT == 0
+				GOTO END_ACT
+			ELSEIF RESULT == 2 && CFLAG:(FLAG:LOCALS):ステート == GET_STATE_NUM("DYING")
+				TRYCCALLFORM SKILL_SPECIAL_TARGET_{CFLAG:(FLAG:行動順1):입력行動},CFLAG:(FLAG:行動順1):ターゲット
+					IF RESULT == 0
+						;居ない場合は스킬사용可能かを판정
+						CALL CHECK_ACTIONABLE,(FLAG:行動順1),CFLAG:(FLAG:行動順1):입력行動
+						;不可の場合行動済み処理
+						SIF RESULT ==0
+							GOTO END_ACT
+						;可能な場合はターゲットを랜덤に決めなおす
+						CALL RANDOM_TARGET,FLAG:行動順1,CFLAG:(FLAG:行動順1):입력行動
+					ENDIF
+				CATCH
+					;居ない場合は스킬사용可能かを판정
+					CALL CHECK_ACTIONABLE,(FLAG:行動順1),CFLAG:(FLAG:行動順1):입력行動
+					;不可の場合行動済み処理
+					SIF RESULT ==0
+						GOTO END_ACT
+					;可能な場合はターゲットを랜덤に決めなおす
+					CALL RANDOM_TARGET,FLAG:行動順1,CFLAG:(FLAG:行動順1):입력行動
+				ENDCATCH
+			ENDIF
+		ENDIF
+	ENDIF
+ENDCATCH
+
+;行動順一人눈の行動を実行
+;行動のたびに相性표시とかしてみたけど微妙な気がしたのでコメントアウト
+;CALLFORM SKILL_TYPE_{CFLAG:(FLAG:行動順1):입력行動},FLAG:行動順1
+;CALL SHOW_NOW_FORMATION_E,0,2, RESULT
+CALL SHOW_NOW_FORMATION_E,0,2, -2
+DRAWLINE
+CALL SHOW_NOW_FORMATION_P,0,2
+DRAWLINE
+
+;行動順一人눈が魅了なら以下の処理
+IF GET_STATE(CFLAG:(FLAG:行動順1):ステート) == "CHARM"
+	CALL ACT_CHARM,(FLAG:行動順1)
+ENDIF
+
+;行動順一人눈が混乱なら以下の処理
+IF GET_STATE(CFLAG:(FLAG:行動順1):ステート) == "PANIC"
+	CALL ACT_PANIC,(FLAG:行動順1)
+ENDIF
+
+SIF CFLAG:(FLAG:行動順1):PTフラグ == 0
+	SETCOLOR 0xff0033
+SIF CFLAG:(FLAG:行動順1):PTフラグ > 0
+	SETCOLOR 0x33ffcc
+
+;2019/11/1追記 입력行動に-1が指定されている場合、強制的に行動不能とする。
+IF CFLAG:(FLAG:行動順1):입력行動 == -1
+	CFLAG:(FLAG:行動順1):입력行動 = [[스킬:행동불능]]
+ENDIF
+
+PRINTFORML ┏>CHARA━━━━━━━━━━┓　┏>ACT━━━━━━━━━━━━━━━━━━┓
+PRINTFORM ┃[{CFLAG:(FLAG:行動順1):포지션,2}] %CALLNAME:(FLAG:行動順1),21,LEFT%┃　┃
+CALLFORM SKILL_NAME_{CFLAG:(FLAG:行動順1):입력行動},FLAG:行動順1
+PRINTFORML %RESULTS,40,LEFT%┃
+PRINTFORMW ┗━━━━━━━━━━━━━┛　┗━━━━━━━━━━━━━━━━━━━━┛
+
+IF FLAG:RPG구상
+	SKIPDISP 1
+ENDIF
+;TARGET保存
+LOCAL:11 = TARGET
+TARGET = FLAG:行動順1
+IF CFLAG:(FLAG:行動順1):PTフラグ == 0
+	TRYCCALLFORM ENEMY_BATTLE_MESSAGE_K{NO:(FLAG:行動順1)},FLAG:行動順1
+	CATCH
+	ENDCATCH
+ELSE
+;전투行動対応충성도上昇から呼び出すように변경
+;	TRYCCALLFORM BATTLE_MESSAGE_K{NO:(FLAG:行動順1)},FLAG:行動順1
+;	CATCH
+;		TRYCALLFORM BATTLE_MESSAGE_PUB{ABL:(FLAG:行動順1):회화타입},FLAG:行動順1
+;	ENDCATCH
+	;性格素質に応じて충성도が増える
+	CALL 전투行動対応충성도上昇,FLAG:行動順1
+	IF TALENT:(FLAG:行動順1):페르소나구사자
+		RESULT = 0
+		TRYCALLFORM 참가人数_{CFLAG:(FLAG:行動順1):입력行動}
+		;페르소나구사자は공격참가で2の페르소나経験値を得る(링케이지の場合は참가人数*2)
+		CALL INCREASE_PERSONA_EXP, FLAG:行動順1, (RESULT+1)*2, CFLAG:(FLAG:行動順1):ターゲット
+	ENDIF
+ENDIF
+TARGET = LOCAL:11
+SKIPDISP 0
+RESETCOLOR
+
+;ボイコットフラグが立っている場合はボイコットする
+IF CFLAG:(FLAG:行動順1):ボイコットフラグ == 1 && FLAG:전투시보이콧설정 > 2
+	SETCOLOR COLOR("RED")
+	PRINTFORMW [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 보이콧했다
+	RESETCOLOR
+	CFLAG:(FLAG:行動順1):ボイコットフラグ = 0
+	GOTO END_ACT
+ENDIF
+
+
+;HAPPYなら50％で실패、발정중だと80％で실패
+IF CFLAG:(FLAG:100):ステート == GET_STATE_NUM("HAPPY") && RAND:100 <= 50 + 30 * (FLAG:ムフフ전개 && 위험일(FLAG:100) == 2)
+	IF 위험일(FLAG:100) == 2 && CFLAG:(FLAG:100):PTフラグ > 0
+		SETCOLOR COLOR("pink")
+		PRINTFORML [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 자기 몸을 더듬고 있다
+		RESETCOLOR
+		SOURCE:(FLAG:行動順1):쾌Ｃ += 100
+		SOURCE:(FLAG:行動順1):쾌Ｂ += 100
+		CALL TECHNIQUE_CHECK, FLAG:行動順1, FLAG:行動順1
+		CALL SOURCE_CHECK_DUNGEON , FLAG:行動順1
+	ELSE
+		PRINTFORML [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 행복해하고 있다
+	ENDIF
+	GOTO END_ACT
+ENDIF
+;바이브付きの下着を장비しているとＶ감각orＡ감각+(위험일+10、発情+20、満月（악마限定）+30）/2の확률でイク
+IF FLAG:ムフフ전개
+	SETCOLOR COLOR("pink")
+	IF RAND:100 < (ABL:(FLAG:100):Ｖ감각 + (10 * 위험일(FLAG:100))) / 2 && CFLAG:(FLAG:100):속옷（하） == 612 ||  CFLAG:(FLAG:100):속옷（하） == 614 || CFLAG:(FLAG:100):속옷（하） == 624 || CFLAG:(FLAG:100):속옷（하） == 626
+		PRINTL 
+		PRINTFORML [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 입고 있는 %ITEMNAME:(6000+CFLAG:(FLAG:100):속옷（하）)%의 진동 때문에 몸을 부르르 떨며 절정에 달했다
+		TCVAR:(FLAG:100):획득Ｖ경험 = 1
+	ENDIF
+	IF RAND:100 < (ABL:(FLAG:100):Ａ감각 + (10 * 위험일(FLAG:100))) / 2 && CFLAG:(FLAG:100):속옷（하） == 613 ||CFLAG:(FLAG:100):속옷（하） == 615 || CFLAG:(FLAG:100):속옷（하） == 625 || CFLAG:(FLAG:100):속옷（하） == 614 || CFLAG:(FLAG:100):속옷（하） == 626
+		PRINTL 
+		PRINTFORML [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 입고 있는 %ITEMNAME:(6000+CFLAG:(FLAG:100):속옷（하）)%의 진동 때문에 몸을 부르르 떨며 절정에 달했다
+		TCVAR:(FLAG:100):획득Ａ경험 = 1
+	ENDIF
+	;촉수アーマーを장비していると(Ｃ、Ｖ、Ａ、Ｂ감각+(위험일+10、発情+20、満月（악마限定）+30）/4) +촉수중독の확률でイク
+	IF RAND:100 < ((ABL:(FLAG:100):Ｃ감각 + ABL:(FLAG:100):Ｖ감각 + ABL:(FLAG:100):Ａ감각 + ABL:(FLAG:100):Ｂ감각 + (10 * 위험일(FLAG:100))) / 4) + ABL:(FLAG:100):촉수중독 && CFLAG:(FLAG:100):전신복 == 340
+		PRINTL 
+		PRINTFORML [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 입고 있는 %ITEMNAME:(6000+CFLAG:(FLAG:100):전신복)%에 의한 고문으로 절정에 달했다
+		TCVAR:(FLAG:100):획득Ｖ경험 = 1
+		TCVAR:(FLAG:100):획득Ａ경험 = 1
+		TCVAR:(FLAG:100):획득촉수경험 = 1
+	ENDIF
+	;촉수수트を장비しているとＣ、Ｖ、Ａ、Ｂ감각+(위험일+10、発情+20、満月（악마限定）+30） +촉수중독の확률でイク 攻略中に着るのはとんでもない레벨の制限プ레이
+	IF RAND:100 < ((ABL:(FLAG:100):Ｃ감각 + ABL:(FLAG:100):Ｖ감각 + ABL:(FLAG:100):Ａ감각 + ABL:(FLAG:100):Ｂ감각 + (10 * 위험일(FLAG:100))) / 1) + ABL:(FLAG:100):촉수중독 && CFLAG:(FLAG:100):전신속옷 == 722
+		PRINTL 
+		PRINTFORML [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 입고 있는 %ITEMNAME:(6000+CFLAG:(FLAG:100):전신속옷)%에 의한 고문으로 절정에 달했다
+		TCVAR:(FLAG:100):획득Ｖ경험 = 1
+		TCVAR:(FLAG:100):획득Ａ경험 = 1
+		TCVAR:(FLAG:100):획득촉수경험 = 1
+	ENDIF
+	;イクと50％の확률で行動不能
+	IF TCVAR:(FLAG:100):획득Ａ경험 + TCVAR:(FLAG:100):획득Ｖ경험 > 0
+		PRINTL 
+		IF RAND:2 == 0
+			PRINTFORMW [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 이를 악물고 몸서리치며 쾌락을 참았다
+			CFLAG:(FLAG:行動順1):던전内発情用욕정치 += 1000
+			SIF TCVAR:(FLAG:100):획득촉수경험 > 0
+				CFLAG:(FLAG:行動順1):던전内発情用욕정치 += 100 * ABL:(FLAG:100):촉수중독
+		ELSE
+			PRINTFORMW [{CFLAG:(FLAG:行動順1):포지션,2}] %조사처리(CALLNAME:(FLAG:行動順1),"는")% 몸을 부르르 떨며 절정의 여운에 잠겨있다
+			CFLAG:(FLAG:行動順1):던전内発情用욕정치 -= 1000
+			SIF TCVAR:(FLAG:100):획득촉수경험 > 0
+				CFLAG:(FLAG:行動順1):던전内発情用욕정치 += 50 * ABL:(FLAG:100):촉수중독
+			SIF CFLAG:(FLAG:行動順1):던전内発情用욕정치 < 0
+				CFLAG:(FLAG:行動順1):던전内発情用욕정치 = 0
+			SIF RAND:2 == 0
+				CFLAG:(FLAG:行動順1):ステート = GET_STATE_NUM("HAPPY")
+			GOTO END_ACT
+		ENDIF
+		EXP:(FLAG:100):절정경험 += TCVAR:(FLAG:100):획득Ａ경험 + TCVAR:(FLAG:100):획득Ｖ경험
+		TCVAR:(FLAG:100):획득Ａ경험 = 0
+		TCVAR:(FLAG:100):획득Ｖ경험 = 0
+		TCVAR:(FLAG:100):획득촉수경험 = 0
+	ENDIF
+	RESETCOLOR
+ENDIF
+
+CFLAG:(FLAG:行動順1):HP흡수量 = 0
+
+LOCAL:11 = TARGET
+TARGET = FLAG:行動順1
+CALL PAY_COST, FLAG:行動順1, CFLAG:(FLAG:行動順1):입력行動
+CALLFORM ACTION_{CFLAG:(FLAG:行動順1):입력行動}, FLAG:行動順1, CFLAG:(FLAG:行動順1):ターゲット
+TARGET = LOCAL:11
+
+RESULT = 0
+SIF FLAG:行動順1 >= 0 && CFLAG:(FLAG:行動順1):입력行動 >= 0
+	CALLFORM SKILL_EFECT_{CFLAG:(FLAG:行動順1):입력行動}
+SIF RESULT == 1 && CFLAG:(FLAG:行動順1):입력行動 >= 0
+	CALL BATTLE_EVENT_ATTACK
+;기합・集中フラグの終了
+IF CFLAG:(FLAG:行動順1):입력行動 > -1
+	RESULT = 0
+	TRYCALLFORM SKILL_DAMAGETYPE_{CFLAG:(FLAG:行動順1):입력行動}
+	IF RESULT == 1
+		CFLAG:(FLAG:行動順1):기합フラグ = 0
+		CFLAG:(FLAG:行動順1):베어내기フラグ = 0
+		CFLAG:(FLAG:行動順1):방어반감フラグ = 0
+	ELSEIF RESULT == 2
+		CFLAG:(FLAG:行動順1):集中フラグ = 0
+		CFLAG:(FLAG:行動順1):마법효과반감フラグ = 0
+	ENDIF
+ENDIF
+;---- EDIT 035 ADD START ---------------------------
+FLAG:총공격中 = 0
+;---- EDIT 035 ADD END   ---------------------------
+;HP흡수処理
+SIF CFLAG:(FLAG:行動順1):ステート == GET_STATE_NUM("BRAND") && CFLAG:(FLAG:行動順1):HP흡수量 > 0
+	CFLAG:(FLAG:行動順1):HP흡수量 = 1
+SIF CFLAG:(FLAG:行動順1):회복不能フラグ && CFLAG:(FLAG:行動順1):HP흡수量 > 0
+	CFLAG:(FLAG:行動順1):HP흡수量 = 0
+IF CFLAG:(FLAG:行動順1):HP흡수量 != 0
+	PRINTL
+	PRINTFORM 　ATTACKER:[{CPOS(FLAG:行動順1),2}] %CALLNAME:(FLAG:行動順1),20,LEFT%
+	IF CFLAG:(FLAG:行動順1):HP흡수量 > 0
+		PRINTFORM 　흡수>>　{CFLAG:(FLAG:行動順1):HP흡수量}회복
+		CALL VAR_HP((FLAG:行動順1), CFLAG:(FLAG:行動順1):HP흡수量, 3)
+		PRINTL
+		PRINTW
+	ELSE
+		IF -CFLAG:(FLAG:行動順1):HP흡수量 >= BASE:(FLAG:行動順1):ＨＰ && (HAVE_SKILL((FLAG:行動順1), [[스킬:불굴의투지]]) || (EQUIP:(FLAG:行動順1):바・벨 && FLAG:벨신撃破 & 8)) && CFLAG:(FLAG:行動順1):이악물기フラグ == 0
+			PRINTFORM 　반동>>　{-CFLAG:(FLAG:行動順1):HP흡수量}데미지
+			CALL VAR_HP((FLAG:行動順1), CFLAG:(FLAG:行動順1):HP흡수量, 2)
+			CFLAG:(FLAG:行動順1):이악물기フラグ = 1
+		ELSEIF -CFLAG:(FLAG:行動順1):HP흡수量 >= BASE:(FLAG:行動順1):ＨＰ && HAVE_SKILL((FLAG:行動順1), [[스킬:네버기브업]]) && CFLAG:(FLAG:行動順1):이악물기フラグ == 0
+			PRINTFORM 　반동>>　{-CFLAG:(FLAG:行動順1):HP흡수量}데미지
+			CALL VAR_HP((FLAG:行動順1), CFLAG:(FLAG:行動順1):HP흡수量, 5)
+			CFLAG:(FLAG:行動順1):이악물기フラグ = 1
+		ELSEIF -CFLAG:(FLAG:行動順1):HP흡수量 >= BASE:(FLAG:行動順1):ＨＰ && HAVE_SKILL((FLAG:行動順1), [[스킬:이악물기]]) && CFLAG:(FLAG:行動順1):이악물기フラグ == 0
+			PRINTFORM 　반동>>　{-CFLAG:(FLAG:行動順1):HP흡수量}데미지
+			CALL VAR_HP((FLAG:行動順1), CFLAG:(FLAG:行動順1):HP흡수量, 1)
+			CFLAG:(FLAG:行動順1):이악물기フラグ = 1
+		ELSEIF -CFLAG:(FLAG:行動順1):HP흡수量 >= 0
+			PRINTFORM 　반동>>　{-CFLAG:(FLAG:行動順1):HP흡수量}데미지
+			CALL VAR_HP((FLAG:行動順1), CFLAG:(FLAG:行動順1):HP흡수量, 0)
+		ENDIF
+		PRINTL
+		PRINTW
+	ENDIF
+ENDIF
+CFLAG:(FLAG:行動順1):HP흡수量 = 0
+
+;브레이크系処理
+LOCAL:11 = 0
+FOR LOCAL:10,0,CHARANUM
+	IF (GETBIT(TFLAG:테트라브레이크,0) && CFLAG:(LOCAL:10):PTフラグ == 0) || (GETBIT(TFLAG:테트라브레이크,1) && CFLAG:(LOCAL:10):PTフラグ > 0)
+		IF CFLAG:(LOCAL:10):물리반사フラグ > 0
+			PRINTFORML 　　TARGET:[{CPOS(LOCAL:10),2}] %CALLNAME:(LOCAL:10),20,LEFT% >>>>>> 물리반사 상태를 해제！
+			LOCAL:11 = 1
+		ENDIF
+		CFLAG:(LOCAL:10):물리반사フラグ = 0
+	ENDIF
+	IF (GETBIT(TFLAG:마카라브레이크,0) && CFLAG:(LOCAL:10):PTフラグ == 0) || (GETBIT(TFLAG:마카라브레이크,1) && CFLAG:(LOCAL:10):PTフラグ > 0)
+		IF CFLAG:(LOCAL:10):마법반사フラグ > 0
+			PRINTFORML 　　TARGET:[{CPOS(LOCAL:10),2}] %CALLNAME:(LOCAL:10),20,LEFT% >>>>>> 마법반사 상태를 해제！
+			LOCAL:11 = 1
+		ENDIF
+		CFLAG:(LOCAL:10):마법반사フラグ = 0
+	ENDIF
+	IF (GETBIT(TFLAG:실드브레이크,0) && CFLAG:(LOCAL:10):PTフラグ == 0) || (GETBIT(TFLAG:실드브레이크,1) && CFLAG:(LOCAL:10):PTフラグ > 0)
+		IF CFLAG:(LOCAL:10):무효フラグ > 0
+			PRINTFORML 　　TARGET:[{CPOS(LOCAL:10),2}] %CALLNAME:(LOCAL:10),20,LEFT% >>>>>> 만능이외 무효화 상태를 해제！
+			LOCAL:11 = 1
+		ENDIF
+		CFLAG:(LOCAL:10):무효フラグ = 0
+		FOR LCOUNT , 0 , FLAG:相性数
+			IF CFLAG:(LOCAL:10):@"%GET_TYPE(LCOUNT)%무효화횟수" > 0
+				PRINTFORML 　　TARGET:[{CPOS(LOCAL:10),2}] %CALLNAME:(LOCAL:10),20,LEFT% >>>>>> %GET_TYPE(LCOUNT)%무효화 상태를 해제！
+				LOCAL:11 = 1
+			ENDIF
+			CFLAG:(LOCAL:10):@"%GET_TYPE(LCOUNT)%무효화횟수" = 0
+		NEXT
+	ENDIF
+	IF (GETBIT(TFLAG:배리어브레이크,0) && CFLAG:(LOCAL:10):PTフラグ == 0) || (GETBIT(TFLAG:배리어브레이크,1) && CFLAG:(LOCAL:10):PTフラグ > 0)
+		IF CFLAG:(LOCAL:10):バステ무효화횟수 > 0
+			PRINTFORML 　　TARGET:[{CPOS(LOCAL:10),2}] %CALLNAME:(LOCAL:10),20,LEFT% >>>>>> 모든 상태이상 무효화 상태를 해제！
+			LOCAL:11 = 1
+		ENDIF
+		CFLAG:(LOCAL:10):バステ무효화횟수 = 0
+		FOR LCOUNT , 0 , FLAG:ステート数
+			IF CFLAG:(LOCAL:10):(GET_STATE(LCOUNT) + "무효화횟수") > 0
+				PRINTFORML 　　TARGET:[{CPOS(LOCAL:10),2}] %CALLNAME:(LOCAL:10),20,LEFT% >>>>>> %GET_STATE(LCOUNT)%무효화 상태 해제！
+				LOCAL:11 = 1
+			ENDIF
+			CFLAG:(LOCAL:10):(GET_STATE(LCOUNT) + "무효화횟수") = 0
+		NEXT
+	ENDIF
+	;가드킬브레이크は적のみ
+	IF TFLAG:가드킬브레이크 > 0 && CFLAG:(LOCAL:10):PTフラグ == 0
+		FOR LCOUNT , 0 , FLAG:相性数
+			IF CFLAG:(LOCAL:10):(GET_TYPE(LCOUNT)+"가드킬") > 0
+				PRINTFORML 　　TARGET:[{CPOS(LOCAL:10),2}] %CALLNAME:(LOCAL:10),20,LEFT% >>>>>> %GET_TYPE(LCOUNT)%가드킬을 해제！
+				LOCAL:11 = 1
+			ENDIF
+			CFLAG:(LOCAL:10):(GET_TYPE(LCOUNT)+"가드킬") = 0
+		NEXT
+	ENDIF
+NEXT
+SIF LOCAL:11 > 0
+	WAIT
+;カウンター処理
+FLAG:カウンター中 = 1
+FOR LOCAL:10,0,CHARANUM
+	SIF 0 < CFLAG:(LOCAL:10):포지션 && 17 > CFLAG:(LOCAL:10):포지션
+		CALL COUNTER_CHECK,LOCAL:10,FLAG:行動順1
+	CFLAG:(LOCAL:10):受けフラグ = 0
+	CFLAG:(LOCAL:10):現데미지 = 0
+	CFLAG:(LOCAL:10):회피실패 = 0
+	;---- EDIT 035 ADD START ---------------------------
+	FLAG:총공격中 = 0
+	;---- EDIT 035 ADD END   ---------------------------
+NEXT
+FLAG:カウンター中 = 0
+;무효화횟수を減らす処理
+FOR LOCAL:10,0,CHARANUM
+	FOR LOCAL:11,0,FLAG:相性数
+		IF CFLAG:(LOCAL:10):(GET_TYPE(LOCAL:11) + "被弾")
+			CFLAG:(LOCAL:10):(GET_TYPE(LOCAL:11) + "무효화횟수") -= 1
+			CFLAG:(LOCAL:10):(GET_TYPE(LOCAL:11) + "被弾") = 0
+		ENDIF
+	NEXT
+	
+	FOR LOCAL:11,0,FLAG:ステート数
+		IF CFLAG:(LOCAL:10):(GET_STATE(LOCAL:11) + "被弾")
+			CFLAG:(LOCAL:10):(GET_STATE(LOCAL:11) + "무효화횟수") -= 1
+			CFLAG:(LOCAL:10):(GET_STATE(LOCAL:11) + "被弾") = 0
+		ENDIF
+	NEXT
+	
+	IF CFLAG:(LOCAL:10):バステ被弾
+		CFLAG:(LOCAL:10):バステ被弾 = 0
+		CFLAG:(LOCAL:10):バステ무효화횟수 -= 1
+	ENDIF
+NEXT
+
+;마이ト化による爆発フラグが立っているキャラが居たら爆発する
+SIF FINDCHARA(CFLAG:BOMB引火フラグ,1) != -1
+	CALL BOMB_BANG
+
+SIF CFLAG:(FLAG:行動順1):도주フラグ
+	CALL REMOVE_POSITION, CPOS(FLAG:行動順1)
+;勝敗を체크
+CALL FIGHT_IT_OUT
+
+;-1が返されると強制的にターンエンド
+SIF RESULT == -1
+	RETURN 0
+
+;敗北フラグ立ってたらゲームオーバー呼び出し
+SIF FLAG:敗北フラグ == 1
+	CALL BATTLE_LOSE
+;勝利フラグ立ってたら関数を抜ける
+SIF FLAG:勝利フラグ == 1
+	RETURN 0
+
+
+
+;아군ならDEVIL-COOP呼び出し
+IF CFLAG:(FLAG:行動順1):PTフラグ > 0
+	CALL DEVIL_COOP,FLAG:行動順1
+	;DEVIL_COOP초기化処理
+	FOR LCOUNT,0,CHARANUM
+		CFLAG:LCOUNT:ＣＯＯＰフラグ = 0
+		CFLAG:LCOUNT:ＣＯＯＰ참가フラグ = 0
+	NEXT
+ELSE
+;적であれば1more판정
+	;1more動作변경설정が有効
+	IF BATTLE_SETTING_IS_1MORE()
+		IF CFLAG:(FLAG:行動順1):１moreフラグ > 0 && CFLAG:(FLAG:行動順1):１moreフラグ < 900
+			CFLAG:(FLAG:行動順1):１moreフラグ = 999
+			CALL ACTIONABLE_CHARA,FLAG:行動順1
+			IF RESULT == 1
+				CALL SET_ACTION_ENEMY,FLAG:行動順1
+				ALIGNMENT CENTER
+				SETCOLOR 0xff0033
+				PRINTFORML ┏━━━━━━━━━━┓
+				PRINTFORML ┃　　 　1more！　　　┃
+				PRINTFORMW ┗━━━━━━━━━━┛
+				RESETCOLOR
+				ALIGNMENT LEFT
+				GOTO ACTION_LOOP
+			ELSE
+				CFLAG:(FLAG:行動順1):방어フラグ = 1
+				CFLAG:(FLAG:行動順1):입력行動 = -1
+			ENDIF
+		ENDIF
+	;1more動作변경설정が無効(バニラ)
+	ELSE
+		IF CFLAG:(FLAG:行動順1):１moreフラグ == 1
+			CFLAG:(FLAG:行動順1):１moreフラグ = 2
+			CALL ACTIONABLE_CHARA,FLAG:行動順1
+			IF RESULT == 1
+				CALL SET_ACTION_ENEMY,FLAG:行動順1
+				ALIGNMENT CENTER
+				SETCOLOR 0xff0033
+				PRINTFORML ┏━━━━━━━━━━┓
+				PRINTFORML ┃　　 　1more！　　　┃
+				PRINTFORMW ┗━━━━━━━━━━┛
+				RESETCOLOR
+				ALIGNMENT LEFT
+				GOTO ACTION_LOOP
+			ELSE
+				CFLAG:(FLAG:行動順1):방어フラグ = 1
+				CFLAG:(FLAG:行動順1):입력行動 = -1
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+
+CFLAG:(FLAG:行動順1):１moreフラグ = 0
+
+;페르소나の랭크アップを체크
+CALL CHECK_PRANK_UP, FLAG:行動順1
+;勝敗を체크
+CALL FIGHT_IT_OUT
+
+;行動終了後이벤트呼び出し
+CALLFORM EVENT_BATTLE_ACTEND
+
+;敗北フラグ立ってたらゲームオーバー呼び出し
+SIF FLAG:敗北フラグ == 1
+	CALL BATTLE_LOSE
+;勝利フラグ立ってたら関数を抜ける
+SIF FLAG:勝利フラグ == 1
+	RETURN 0
+
+;도주フラグ立ってたら関数を抜ける
+SIF FLAG:도주フラグ == 1
+	RETURN 0
+
+$END_ACT
+CFLAG:(FLAG:行動順1):行動した횟수 += 1
+;行動횟수が残っているなら、もう一度行動を決めて再度行動順決定
+IF CFLAG:(FLAG:行動順1):行動した횟수 < CFLAG:(FLAG:行動順1):行動횟수
+	CALL ACTIONABLE_CHARA,FLAG:行動順1
+	IF RESULT == 1
+		CALL SET_ACTION_ENEMY,FLAG:行動順1
+	ELSE
+		CFLAG:(FLAG:行動順1):방어フラグ = 1
+		CFLAG:(FLAG:行動順1):입력行動 = -1
+	ENDIF
+	CALL BATTLE_DECIDE_INITIATIVE
+	GOTO ACTION_LOOP
+ENDIF
+;行動し終わった一人눈を行動済みにする
+CFLAG:(FLAG:行動順1):입력行動 = -1
+
+;行動順を決定しなおす
+CALL BATTLE_DECIDE_INITIATIVE
+;行動順を繰り上げ
+;FOR LCOUNT,0, (15-LOCAL)
+;	LOCALS = 行動順{LCOUNT+1}
+;	LOCALS:1 = 行動順{LCOUNT+2}
+;	FLAG:LOCALS = FLAG:(LOCALS:1)
+;NEXT
+;LOCALS = 行動順{16-LOCAL}
+;FLAG:LOCALS = -1
+LOCAL += 1
+
+GOTO ACTION_LOOP
+
+
+
+
+
+
+
+;===================================
+;ターン終了時の処理
+;===================================
+@BATTLE_TURNEND
+#LOCALSIZE 2
+#LOCALSSIZE 1
+#DIM LCOUNT
+FOR LOCAL,0,16
+	LOCALS = 포지션{LOCAL+1}
+	IF FLAG:LOCALS > -1
+		LOCAL:1 = FLAG:LOCALS
+		SIF CFLAG:(FLAG:LOCALS):クリティカル강화 > 0
+			CFLAG:(FLAG:LOCALS):クリティカル강화 -= 1
+		SIF CFLAG:(FLAG:LOCALS):クリティカル강화 < 0
+			CFLAG:(FLAG:LOCALS):クリティカル강화 += 1
+		SIF CFLAG:(FLAG:LOCALS):BS付着率강화 > 0
+			CFLAG:(FLAG:LOCALS):BS付着率강화 -= 1
+		SIF CFLAG:(FLAG:LOCALS):BS付着率강화 < 0
+			CFLAG:(FLAG:LOCALS):BS付着率강화 += 1
+		SIF CFLAG:(FLAG:LOCALS):롱기누스 > 0
+			CFLAG:(FLAG:LOCALS):롱기누스 -= 1
+		SIF CFLAG:(FLAG:LOCALS):회복不能フラグ > 0
+			CFLAG:(FLAG:LOCALS):회복不能フラグ -= 1
+		;가드킬効果ターン減少
+		FOR LCOUNT, 0, 19
+			SIF CFLAG:(FLAG:LOCALS):(GET_TYPE(LCOUNT)+"가드킬") > 0
+				CFLAG:(FLAG:LOCALS):(GET_TYPE(LCOUNT)+"가드킬") --
+		NEXT
+		;고유게이지増減
+		FOR LCOUNT, 1, 21
+			SIF CFLAG:(FLAG:LOCALS):("고유게이지D"+TOSTR(LCOUNT)) > 0
+				CFLAG:(FLAG:LOCALS):("고유게이지D"+TOSTR(LCOUNT)) --
+			SIF CFLAG:(FLAG:LOCALS):("고유게이지D"+TOSTR(LCOUNT)) < 0
+				CFLAG:(FLAG:LOCALS):("고유게이지D"+TOSTR(LCOUNT)) ++
+		NEXT
+		;解析度アップ
+		CALL INCREASE_ANALYZE,NO:(LOCAL:1),5
+		IF CFLAG:(FLAG:LOCALS):회복不能フラグ < 1
+			IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2410) && BASE:(LOCAL:1):ＨＰ < MAXBASE:(LOCAL:1):ＨＰ
+			;DYING상태でなく、치유촉진(대)の스킬を持っており、現在ＨＰが최대ＨＰより低いなら
+				IF CFLAG:(LOCAL:1):PTフラグ > 0
+				;パーティキャラなら
+					IF CFLAG:(LOCAL:1):ＭＡＧ自己소비 == 0 && ABL:(LOCAL:1):종족 != 0 && ABL:(LOCAL:1):종족 != 45
+					;MAG主人소비の설정なら
+						IF (BASE:MASTER:ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ/10 * BASE:(LOCAL:1):LV)
+						;主人の소지MAG量が소비MAG量を上回っているなら主人のMAGを소비して회복
+							PRINTFORML 치유촉진(대) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1) }회복 (MAG주인소비)
+							CALL CONTROL_MAG,MASTER,-MAXBASE:(LOCAL:1):ＨＰ/10 * BASE:(LOCAL:1):LV
+							CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1),3
+						ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ/10 * BASE:(LOCAL:1):LV)
+						;主人の소지MAG量が발りず、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを소비して회복
+							PRINTFORML 치유촉진(대) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1) }회복 (MAG자기소비)
+							CALL CONTROL_MAG,LOCAL:1,-MAXBASE:(LOCAL:1):ＨＰ/10 * BASE:(LOCAL:1):LV
+							CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1),3
+						ENDIF
+					ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ/10 * BASE:(LOCAL:1):LV)
+					;MAG主人소비の설정でなく、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを사용して회복
+						PRINTFORML 치유촉진(대) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1) }회복 (MAG자기소비)
+						CALL CONTROL_MAG,LOCAL:1,-MAXBASE:(LOCAL:1):ＨＰ/10 * BASE:(LOCAL:1):LV
+						CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1),3
+					ENDIF
+				ELSEIF CFLAG:(LOCAL:1):PTフラグ == 0
+				;적キャラならMAG関連の処理を飛ばして회복
+					PRINTFORML 치유촉진(대) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1) }회복
+					CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1),3
+				ENDIF
+			ELSEIF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2409) && BASE:(LOCAL:1):ＨＰ < MAXBASE:(LOCAL:1):ＨＰ
+			;DYING상태でなく、치유촉진(중)の스킬を持っており、現在ＨＰが최대ＨＰより低いなら
+				IF CFLAG:(LOCAL:1):PTフラグ > 0
+				;パーティキャラなら
+					IF CFLAG:(LOCAL:1):ＭＡＧ自己소비 == 0 && ABL:(LOCAL:1):종족 != 0 && ABL:(LOCAL:1):종족 != 45
+					;MAG主人소비の설정なら
+						IF (BASE:MASTER:ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ/20 * BASE:(LOCAL:1):LV)
+						;主人の소지MAG量が소비MAG量を上回っているなら主人のMAGを소비して회복
+							PRINTFORML 치유촉진(중) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/20,1) }회복 (MAG주인소비)
+							CALL CONTROL_MAG,MASTER,-MAXBASE:(LOCAL:1):ＨＰ/20 * BASE:(LOCAL:1):LV
+							CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ/20,1),3
+						ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ/20 * BASE:(LOCAL:1):LV)
+						;主人の소지MAG量が발りず、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを소비して회복
+							PRINTFORML 치유촉진(중) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/20,1) }회복 (MAG자기소비)
+							CALL CONTROL_MAG,LOCAL:1,-MAXBASE:(LOCAL:1):ＨＰ/20 * BASE:(LOCAL:1):LV
+							CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ/20,1),3
+						ENDIF
+					ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ/20 * BASE:(LOCAL:1):LV)
+					;MAG主人소비の설정でなく、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを사용して회복
+						PRINTFORML 치유촉진(중) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/20,1) }회복 (MAG자기소비)
+						CALL CONTROL_MAG,LOCAL:1,-MAXBASE:(LOCAL:1):ＨＰ/20 * BASE:(LOCAL:1):LV
+						CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ/20,1),3
+					ENDIF
+				ELSEIF CFLAG:(LOCAL:1):PTフラグ == 0
+				;적キャラならMAG関連の処理を飛ばして회복
+					PRINTFORML 치유촉진(중) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/20,1) }회복
+					CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ/20,1),3
+				ENDIF
+			ELSEIF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2408) && BASE:(LOCAL:1):ＨＰ < MAXBASE:(LOCAL:1):ＨＰ
+			;DYING상태でなく、치유촉진(소)の스킬を持っており、現在ＨＰが최대ＨＰより低いなら
+				IF CFLAG:(LOCAL:1):PTフラグ > 0
+				;パーティキャラなら
+					IF CFLAG:(LOCAL:1):ＭＡＧ自己소비 == 0 && ABL:(LOCAL:1):종족 != 0 && ABL:(LOCAL:1):종족 != 45
+					;MAG主人소비の설정なら
+						IF (BASE:MASTER:ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ*3/100 * BASE:(LOCAL:1):LV)
+						;主人の소지MAG量が소비MAG量を上回っているなら主人のMAGを소비して회복
+							PRINTFORML 치유촉진(소) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1) }회복 (MAG주인소비)
+							CALL CONTROL_MAG,MASTER,-MAXBASE:(LOCAL:1):ＨＰ*3/100 * BASE:(LOCAL:1):LV
+							CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1),3
+						ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ*3/100 * BASE:(LOCAL:1):LV)
+						;主人の소지MAG量が발りず、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを소비して회복
+							PRINTFORML 치유촉진(소) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1) }회복 (MAG자기소비)
+							CALL CONTROL_MAG,LOCAL:1,-MAXBASE:(LOCAL:1):ＨＰ*3/100 * BASE:(LOCAL:1):LV
+							CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1),3
+						ENDIF
+					ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= MAXBASE:(LOCAL:1):ＨＰ*3/100 * BASE:(LOCAL:1):LV)
+					;MAG主人소비の설정でなく、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを사용して회복
+						PRINTFORML 치유촉진(소) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1) }회복 (MAG자기소비)
+						CALL CONTROL_MAG,LOCAL:1,-MAXBASE:(LOCAL:1):ＨＰ*3/100 * BASE:(LOCAL:1):LV
+						CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1),3
+					ENDIF
+				ELSEIF CFLAG:(LOCAL:1):PTフラグ == 0
+				;적キャラならMAG関連の処理を飛ばして회복
+					PRINTFORML 치유촉진(소) %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1) }회복
+					CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1),3
+				ENDIF
+			;---- EDIT 026 MOD START ---------------------------
+			ELSEIF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,3544) && BASE:(LOCAL:1):ＨＰ < MAXBASE:(LOCAL:1):ＨＰ
+			;DYING상태でなく、고속재생の스킬を持って一回以上사용しており、現在ＨＰが최대ＨＰより低いなら
+				IF TFLAG:고속재생
+					PRINTFORML 고속재생 %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1) }회복
+					CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ*3/100,1),3
+				ENDIF
+			;---- EDIT 026 MOD END -----------------------------
+			;---- EDIT 029 MOD START ---------------------------
+			ELSEIF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,3567) && BASE:(LOCAL:1):ＨＰ < MAXBASE:(LOCAL:1):ＨＰ
+			;DYING상태でなく、최후의이악물기の스킬を持って一回以上사용しており、現在ＨＰが최대ＨＰより低いなら
+				IF TFLAG:최후의이악물기
+					PRINTFORML 최후의이악물기 %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ*5/100,1) }회복
+					CALL VAR_HP,LOCAL:1,MAX(MAXBASE:(LOCAL:1):ＨＰ*5/100,1),3
+				ENDIF
+			;---- EDIT 029 MOD END -----------------------------
+			ENDIF
+			IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2413) && BASE:(LOCAL:1):ＭＰ < MAXBASE:(LOCAL:1):ＭＰ
+			;DYING상태でなく、기공(대)の스킬を持っており、現在ＭＰが최대ＭＰより低いなら
+				IF CFLAG:(LOCAL:1):PTフラグ > 0
+				;パーティキャラなら
+					IF CFLAG:(LOCAL:1):ＭＡＧ自己소비 == 0 && ABL:(LOCAL:1):종족 != 0 && ABL:(LOCAL:1):종족 != 45
+					;MAG主人소비の설정なら
+						IF (BASE:MASTER:ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*200))
+						;主人の소지MAG量が소비MAG量を上回っているなら主人のMAGを소비して회복
+							PRINTFORML 기공(대) %CALLNAME:(LOCAL:1)% >>>>> { 10 }회복(MAG주인소비)
+							CALL CONTROL_MAG,MASTER:1,-(MAXBASE:(LOCAL:1):LV*200)
+							CALL VAR_MP,LOCAL:1,10,3
+						ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*200))
+						;主人の소지MAG量が발りず、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを소비して회복
+							PRINTFORML 기공(대) %CALLNAME:(LOCAL:1)% >>>>> { 10 }회복(MAG자기소비)
+							CALL CONTROL_MAG,LOCAL:1,-(MAXBASE:(LOCAL:1):LV*200)
+							CALL VAR_MP,LOCAL:1,10,3
+						ENDIF
+					ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*200))
+					;MAG主人소비の설정でなく、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを사용して회복
+						PRINTFORML 기공(대) %CALLNAME:(LOCAL:1)% >>>>> { 10 }회복(MAG자기소비)
+						CALL CONTROL_MAG,LOCAL:1,-(MAXBASE:(LOCAL:1):LV*200)
+						CALL VAR_MP,LOCAL:1,10,3
+					ENDIF
+				ELSEIF CFLAG:(LOCAL:1):PTフラグ == 0
+				;적キャラならMAG関連の処理を飛ばして회복
+					PRINTFORML 기공(대) %CALLNAME:(LOCAL:1)% >>>>> { 10 }회복
+					CALL VAR_MP,LOCAL:1,10,3
+				ENDIF
+			ELSEIF (NO:(LOCAL:1) == [[キャラ:단테]] || NO:(LOCAL:1) == [[キャラ:라이도우]]) && CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,[[스킬:도발]]) && BASE:(LOCAL:1):ＭＰ < MAXBASE:(LOCAL:1):ＭＰ
+			;ダンテあるいは라이도우がDYING상태でなく、도발の스킬を持っており、現在ＭＰが최대ＭＰより低いなら
+				IF CFLAG:(LOCAL:1):PTフラグ > 0
+				;パーティキャラでもMAG関連の処理を飛ばして회복
+					PRINTFORML 도발 %CALLNAME:(LOCAL:1)% >>>>> ＭＰ{ 20 }회복
+					CALL VAR_MP,LOCAL:1,20,3
+				ELSEIF CFLAG:(LOCAL:1):PTフラグ == 0
+				;적キャラならMAG関連の処理を飛ばして회복
+					PRINTFORML 도발 %CALLNAME:(LOCAL:1)% >>>>> ＭＰ{ 20 }회복
+					CALL VAR_MP,LOCAL:1,20,3
+				ENDIF
+			ELSEIF (NO:(LOCAL:1) == 0 || NO:(LOCAL:1) == 4999) && (CFLAG:MASTER:당신の専攻分野 == 7) && CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,[[스킬:도발]]) && BASE:(LOCAL:1):ＭＰ < MAXBASE:(LOCAL:1):ＭＰ
+			;악마狩人당신がDYING상태でなく、도발の스킬を持っており、現在ＭＰが최대ＭＰより低いなら
+					IF CFLAG:(LOCAL:1):PTフラグ > 0
+					;パーティキャラでもMAG関連の処理を飛ばして회복
+					PRINTFORML 도발 %CALLNAME:(LOCAL:1)% >>>>> ＭＰ{ 7 }회복
+					CALL VAR_MP,LOCAL:1,7,3
+				ENDIF
+			ELSEIF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2412) && BASE:(LOCAL:1):ＭＰ < MAXBASE:(LOCAL:1):ＭＰ
+			;DYING상태でなく、기공(중)の스킬を持っており、現在ＭＰが최대ＭＰより低いなら
+				IF CFLAG:(LOCAL:1):PTフラグ > 0
+				;パーティキャラなら
+					IF CFLAG:(LOCAL:1):ＭＡＧ自己소비 == 0 && ABL:(LOCAL:1):종족 != 0 && ABL:(LOCAL:1):종족 != 45
+					;MAG主人소비の설정なら
+						IF (BASE:MASTER:ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*120))
+						;主人の소지MAG量が소비MAG量を上回っているなら主人のMAGを소비して회복
+							PRINTFORML 기공(중) %CALLNAME:(LOCAL:1)% >>>>> { 8 }회복 (MAG주인소비)
+							CALL CONTROL_MAG,MASTER:1,-(MAXBASE:(LOCAL:1):LV*120)
+							CALL VAR_MP,LOCAL:1,8,3
+						ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*120))
+						;主人の소지MAG量が발りず、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを소비して회복
+							PRINTFORML 기공(중) %CALLNAME:(LOCAL:1)% >>>>> { 8 }회복 (MAG자기소비)
+							CALL CONTROL_MAG,LOCAL:1,-(MAXBASE:(LOCAL:1):LV*120)
+							CALL VAR_MP,LOCAL:1,8,3
+						ENDIF
+					ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*120))
+					;MAG主人소비の설정でなく、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを사용して회복
+						PRINTFORML 기공(중) %CALLNAME:(LOCAL:1)% >>>>> { 8 }회복 (MAG자기소비)
+						CALL CONTROL_MAG,LOCAL:1,-(MAXBASE:(LOCAL:1):LV*120)
+						CALL VAR_MP,LOCAL:1,8,3
+					ENDIF
+				ELSEIF CFLAG:(LOCAL:1):PTフラグ == 0
+				;적キャラならMAG関連の処理を飛ばして회복
+					PRINTFORML 기공(중) %CALLNAME:(LOCAL:1)% >>>>> { 8 }회복
+					CALL VAR_MP,LOCAL:1,8,3
+				ENDIF
+			ELSEIF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2411) && BASE:(LOCAL:1):ＭＰ < MAXBASE:(LOCAL:1):ＭＰ
+			;DYING상태でなく、기공(소)の스킬を持っており、現在ＭＰが최대ＭＰより低いなら
+				IF CFLAG:(LOCAL:1):PTフラグ > 0
+				;パーティキャラなら
+					IF CFLAG:(LOCAL:1):ＭＡＧ自己소비 == 0 && ABL:(LOCAL:1):종족 != 0 && ABL:(LOCAL:1):종족 != 45
+					;MAG主人소비の설정なら
+						IF (BASE:MASTER:ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*50))
+						;主人の소지MAG量が소비MAG量を上回っているなら主人のMAGを소비して회복
+							PRINTFORML 기공(소) %CALLNAME:(LOCAL:1)% >>>>> { 5 }회복 (MAG주인소비)
+							CALL CONTROL_MAG,MASTER:1,-(MAXBASE:(LOCAL:1):LV*50)
+							CALL VAR_MP,LOCAL:1,5,3
+						ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*50))
+						;主人の소지MAG量が발りず、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを소비して회복
+							PRINTFORML 기공(소) %CALLNAME:(LOCAL:1)% >>>>> { 5 }회복 (MAG자기소비)
+							CALL CONTROL_MAG,LOCAL:1,-(MAXBASE:(LOCAL:1):LV*50)
+							CALL VAR_MP,LOCAL:1,5,3
+						ENDIF
+					ELSEIF (BASE:(LOCAL:1):ＭＡＧ >= (MAXBASE:(LOCAL:1):LV*50))
+					;MAG主人소비の설정でなく、스킬사용キャラの소지MAG量が소비MAG量を上回っているなら스킬사용キャラのMAGを사용して회복
+						PRINTFORML 기공(소) %CALLNAME:(LOCAL:1)% >>>>> { 5 }회복 (MAG자기소비)
+						CALL CONTROL_MAG,LOCAL:1,-(MAXBASE:(LOCAL:1):LV*50)
+						CALL VAR_MP,LOCAL:1,5,3
+					ENDIF
+				ELSEIF CFLAG:(LOCAL:1):PTフラグ == 0
+				;적キャラならMAG関連の処理を飛ばして회복
+					PRINTFORML 기공(소) %CALLNAME:(LOCAL:1)% >>>>> { 5 }회복
+					CALL VAR_MP,LOCAL:1,5,3
+				ENDIF
+			ENDIF
+		ENDIF
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2562) && BASE:(LOCAL:1):ＭＰ > 2
+		;황제특권 MP소비 1
+			IF CFLAG:(LOCAL:1):PTフラグ > 0
+			;パーティキャラなら
+				PRINTFORML 황제특권 %CALLNAME:(LOCAL:1)% >>>>> ＭＰ{ 1 }소비
+				CALL VAR_MP,LOCAL:1,-1,3
+			ENDIF
+		ENDIF
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2561) && BASE:(LOCAL:1):ＭＰ > 4
+		;마술용심・마력방출 MP소비 5
+			IF CFLAG:(LOCAL:1):PTフラグ > 0
+			;パーティキャラなら
+				PRINTFORML 마술용심・마력방출 %CALLNAME:(LOCAL:1)% >>>>> ＭＰ{ 5 }소비
+				CALL VAR_MP,LOCAL:1,-5,3
+			ENDIF
+		ENDIF
+		IF CFLAG:(LOCAL:1):ステート > 0
+			CFLAG:(LOCAL:1):ステート経過ターン += 1
+
+		;治癒促進、気功の판정
+
+
+		;バッド스테이터스・セービング
+			CALL BADSTATUS_SAVING,LOCAL:1
+			;毒ならダメージ
+			IF CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("POISON")
+				PRINTFORML POISON [{LOCAL}] %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＨＰ/16,1) }데미지
+				CALL VAR_HP,LOCAL:1,-MAX(MAXBASE:(LOCAL:1):ＨＰ/16,1),3
+			ENDIF
+			;麻痺ならMP減少
+			IF CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("PALYZE")
+				PRINTFORML PALYZE [{LOCAL}] %CALLNAME:(LOCAL:1)% >>>>> { MAX(MAXBASE:(LOCAL:1):ＭＰ/16,1) }ＭＰ감소
+				CALL VAR_MP,LOCAL:1,-MAX(MAXBASE:(LOCAL:1):ＭＰ/16,1),3
+			ENDIF
+			;炎上ならダメージ
+			IF CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("FLAME")
+				PRINTFORML FLAME [{LOCAL}] %CALLNAME:(LOCAL:1)% >>>>> 불타고 있다！ { MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1) }데미지
+				CALL VAR_HP,LOCAL:1,-MAX(MAXBASE:(LOCAL:1):ＨＰ/10,1),3
+			ENDIF
+		ENDIF
+
+;---- EDIT 023 ADD START -------------------------
+		;엑스링케이지をインスコ中でムフフONならば전투中욕정増加処理
+		IF FLAG:ムフフ전개 && EQUIP:MASTER:엑스링케이지
+			SELECTCASE GET_STATE(CFLAG:(LOCAL:1):ステート)
+				CASE "DYING","STONE","PALYZE","BIND","FREEZE","SHOCK","SLEEP"
+					;히트、スリップ以外の行動不可상태체크。それ以外ならELSEで処理
+				CASEELSE
+					;CFLAG:던전内発情用욕정치が15000以下の場合
+					IF CFLAG:(LOCAL:1):던전内発情用욕정치 < 15000
+						;정액の箇所ひとつに付き욕정が정액중독ＬＶ分増える
+						CFLAG:(LOCAL:1):던전内発情用욕정치 += GET_STAIN("질내" , "정액" , LOCAL:1) * ABL:(LOCAL:1):정액중독
+						CFLAG:(LOCAL:1):던전内発情用욕정치 += GET_STAIN("바기나" , "정액" , LOCAL:1) * ABL:(LOCAL:1):정액중독
+						CFLAG:(LOCAL:1):던전内発情用욕정치 += GET_STAIN("입" , "정액" , LOCAL:1) * ABL:(LOCAL:1):정액중독
+						CFLAG:(LOCAL:1):던전内発情用욕정치 += GET_STAIN("손" , "정액" , LOCAL:1) * ABL:(LOCAL:1):정액중독
+						CFLAG:(LOCAL:1):던전内発情用욕정치 += GET_STAIN("가슴" , "정액" , LOCAL:1) * ABL:(LOCAL:1):정액중독
+						CFLAG:(LOCAL:1):던전内発情用욕정치 += GET_STAIN("애널" , "정액" , LOCAL:1) * ABL:(LOCAL:1):정액중독
+						CFLAG:(LOCAL:1):던전内発情用욕정치 += GET_STAIN("머리카락" , "정액" , LOCAL:1) * ABL:(LOCAL:1):정액중독
+						;アソコと유두が노출していると노출증ＬＶ分욕정が増える
+						SIF TEQUIP:(LOCAL:1):유두노출 == -1
+							CFLAG:(LOCAL:1):던전内発情用욕정치 += ABL:(LOCAL:1):노출증
+						SIF TEQUIP:(LOCAL:1):음순노출 == -1
+							CFLAG:(LOCAL:1):던전内発情用욕정치 += ABL:(LOCAL:1):노출증
+		
+						SIF 위험일(LOCAL:1) == 2
+							CFLAG:(LOCAL:1):던전内発情用욕정치 += 2 * ABL:(LOCAL:1):욕망
+
+						;HAPPYなら욕망ＬＶ分の욕정値上昇
+						SIF CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("HAPPY")
+							CFLAG:(LOCAL:1):던전内発情用욕정치 += 2 * ABL:(LOCAL:1):욕망
+						;CHARMなら봉사정신と욕망ＬＶ×１．５分の욕정値上昇
+						SIF CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("CHARM")
+							CFLAG:(LOCAL:1):던전内発情用욕정치 += (3 * (ABL:(LOCAL:1):욕망 + ABL:(LOCAL:1):봉사정신)) /2
+
+						;CFLAG:던전内発情用욕정치の上限は15000
+						SIF CFLAG:(LOCAL:1):던전内発情用욕정치 > 15000
+							CFLAG:(LOCAL:1):던전内発情用욕정치 = 15000
+					ENDIF
+					
+					;질내が정액で불결ている場合は10％の확률で바기나に불결が付く
+					IF GET_STAIN("질내" , "정액" , LOCAL:1) && GET_STAIN("바기나" , "정액" , LOCAL:1) == 0 && RAND:100 < 10
+						SETCOLOR COLOR("pink")
+						PRINTFORMW %CALLNAME:(LOCAL:1)%의 보지에 쏟아진 정액이 흘러나왔다…
+						RESETCOLOR
+						CALL SET_STAIN("바기나" , "정액" , LOCAL:1)
+						;三分の一の確立で질내の불결소거
+						SIF RAND:3 == 0
+							STAIN:(LOCAL:1):질내 = 0
+					ENDIF
+				
+					;욕정一定値以下、かつHAPPY、CHARMでなければ発情終了
+					IF  CFLAG:(LOCAL:1):던전内発情用욕정치 < 2000 && CFLAG:(LOCAL:1):던전内発情 && GET_STATE(CFLAG:(LOCAL:1):ステート) != "CHARM" && GET_STATE(CFLAG:(LOCAL:1):ステート) != "HAPPY"
+						CFLAG:(LOCAL:1):던전内発情 = 0
+						PRINTFORMW %조사처리(CALLNAME:(LOCAL:1),"는")% 침착해졌다
+					ENDIF
+			
+					;욕정が10000以上になると発情
+					IF (!TALENT:(LOCAL:1):남자 || TALENT:(LOCAL:1):오토코노코) && !CFLAG:(LOCAL:1):던전内発情 && CFLAG:(LOCAL:1):던전内発情用욕정치 >= 10000
+						CFLAG:(LOCAL:1):던전内発情 = 1
+						CALL SET_STAIN("질내" , "애액" , LOCAL:1)
+						CALL SET_STAIN("바기나" , "애액" , LOCAL:1)
+						SETCOLOR COLOR("pink")
+						PRINTFORMW %조사처리(CALLNAME:(LOCAL:1),"는")% 머릿속이 핑크색으로 물들었다
+						RESETCOLOR
+
+					;発情상태の時に10％の확률でHAPPYになる
+					ELSEIF RAND:100 < 10 && CFLAG:(LOCAL:1):던전内発情 && CFLAG:(LOCAL:1):ステート == 0
+						CFLAG:(LOCAL:1):ステート = GET_STATE_NUM("HAPPY")
+					ENDIF
+					;素質『발정가능』を持っていると魅了상태時に10％の확률で発情する
+					IF TALENT:(LOCAL:1):남자 == 0 && CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("CHARM") && TALENT:(LOCAL:1):발정가능 && CFLAG:(LOCAL:1):던전内発情 == 0 && RAND:100 < 10
+						CFLAG:(LOCAL:1):던전内発情 = 1
+						CALL SET_STAIN("질내" , "애액" , LOCAL:1)
+						CALL SET_STAIN("바기나" , "애액" , LOCAL:1)
+						SETCOLOR COLOR("pink")
+						PRINTFORMW %조사처리(CALLNAME:(LOCAL:1),"는")% 머릿속이 핑크색으로 물들었다
+						RESETCOLOR
+					ENDIF
+			ENDSELECT
+		ENDIF
+;---- EDIT 023 MOD END ---------------------------
+
+	ENDIF
+NEXT
+SIF TFLAG:알파블라스터
+	CALL SPECIAL_ACTION_1311
+SIF TFLAG:적오메가클러스터 + TFLAG:아군오메가클러스터 > 0
+	CALL SPECIAL_ACTION_1415
+SIF TFLAG:드럼헤드
+	CALL SPECIAL_ACTION_3555
+SIF TFLAG:블리자드
+	CALL SPECIAL_ACTION_3560
+WAIT
+FOR LCOUNT, 0, CHARANUM
+	CFLAG:LCOUNT:行動順 = 0
+	CFLAG:LCOUNT:ターゲット = 0
+	CFLAG:LCOUNT:行動速度 = 0
+	CFLAG:LCOUNT:行動した횟수 = 0
+	CFLAG:LCOUNT:ＣＨＡＮＧＥ대상フラグ = 0
+	CFLAG:LCOUNT:소환予定キャラ = -1
+	CFLAG:LCOUNT:입력行動 = -1
+	CFLAG:LCOUNT:방어フラグ = 0
+	CFLAG:LCOUNT:물리반사フラグ = 0
+	CFLAG:LCOUNT:마법반사フラグ = 0
+	CFLAG:LCOUNT:１moreフラグ = 0
+	CFLAG:LCOUNT:링케이지참가 = 0
+	CFLAG:LCOUNT:링케이지발동 = 0
+	CFLAG:LCOUNT:被소환フラグ = 0
+	CFLAG:LCOUNT:DDS사용횟수 = 0
+	CFLAG:LCOUNT:混乱매료리카バー = 0
+	CFLAG:LCOUNT:SLIP中중력被弾フラグ = 0
+	CFLAG:LCOUNT:어택커 = -1
+	CFLAG:LCOUNT:現ターン蓄積데미지 = 0
+	VARSET CFLAG:LCOUNT:0, 0, GETNUM(CFLAG, "검격웨이트"),  GETNUM(CFLAG, "검격웨이트") + FLAG:相性数
+NEXT
+
+FOR LCOUNT, 0, 16
+	LOCALS = 行動順{LCOUNT+1}
+	FLAG:LOCALS = -1
+NEXT
+VARSET TFLAG, 0, 300, 335
+VARSET TFLAG, 0, 400, 435
+FLAG:経過ターン数 += 1
+
+FLAG:先制공격フラグ = 0
+FLAG:不意打ちフラグ = 0
+
+
+
+CALLFORM EVENT_BATTLE_TURNEND
+;敗北フラグ立ってたらゲームオーバー呼び出し
+SIF FLAG:敗北フラグ == 1
+	CALL BATTLE_LOSE
+;勝利フラグ立ってたら関数を抜ける
+SIF FLAG:勝利フラグ == 1
+	RETURN 0
+CALL REFRESH_FORMATION
+
+
+
+;입력行動をＲＥＰＥＡＴから呼び出して登録
+FOR LOCAL,0,6
+	LOCALS = 포지션{LOCAL+1}
+	SIF FLAG:LOCALS > -1
+	CALL COMMAND_REPEAT,FLAG:LOCALS
+NEXT
+
+
+
+;===================================
+;バッド스테이터스の自動회복
+;===================================
+@BADSTATUS_SAVING,ARG
+#LOCALSIZE 1
+LOCAL = RAND:100
+SELECTCASE GET_STATE(CFLAG:ARG:ステート)
+	CASE "HAPPY","PANIC","SLEEP"
+		;HAPPY
+		SIF LOCAL > 95
+			RETURN 0
+		IF  (CFLAG:ARG:ボスフラグ && LOCAL < CFLAG:ARG:ステート経過ターン * 20 -10) || (CFLAG:ARG:ボスフラグ == 0 && LOCAL < CFLAG:ARG:ステート経過ターン * 20 -30) || LOCAL < 5
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+		ENDIF
+	CASE "SHOCK","FREEZE"
+		;SHOCK,FREEZE 必ず治る
+		CFLAG:ARG:ステート = 0
+		CFLAG:ARG:ステート経過ターン = 0
+	CASE "SLIP"
+		;SLIP
+		IF CFLAG:ARG:SLIP中중력被弾フラグ > 0 && ((CFLAG:ARG:ボスフラグ && LOCAL < CFLAG:ARG:ステート経過ターン * 45) || (CFLAG:ARG:ボスフラグ == 0 && LOCAL < CFLAG:ARG:ステート経過ターン * 35))
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+		ELSEIF (CFLAG:ARG:ボスフラグ && LOCAL < CFLAG:ARG:ステート経過ターン * 45 +50) || (CFLAG:ARG:ボスフラグ == 0 && LOCAL < CFLAG:ARG:ステート経過ターン * 35 +45) || LOCAL < 5
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+		ENDIF
+	CASE "BIND","BOMB"
+		;BIND
+		SIF LOCAL > 95
+			RETURN 0
+		IF (CFLAG:ARG:ボスフラグ && LOCAL < CFLAG:ARG:ステート経過ターン * 5 + 30) || (CFLAG:ARG:ボスフラグ == 0 && LOCAL < CFLAG:ARG:ステート経過ターン * 5 + 20) || LOCAL < 5
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+		ENDIF
+	CASE "CLOSE"
+		;CLOSE
+		SIF LOCAL > 95
+			RETURN 0
+		IF (CFLAG:ARG:ボスフラグ && LOCAL < CFLAG:ARG:ステート経過ターン * 5 + 40) || (CFLAG:ARG:ボスフラグ == 0 && LOCAL < CFLAG:ARG:ステート経過ターン * 5 + 15) || LOCAL < 5
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+		ENDIF
+	CASE "POISON","BRAND","CURSE"
+		;POISON,BRAND,CURSE ボス以外治らない
+		SIF LOCAL > 95
+			RETURN 0
+		IF (CFLAG:ARG:ボスフラグ && LOCAL < CFLAG:ARG:ステート経過ターン * 10)
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+		ENDIF
+	CASE "CHARM","FLAME"
+		;CHARM
+		SIF LOCAL > 95
+			RETURN 0
+		IF (CFLAG:ARG:ボスフラグ && LOCAL < CFLAG:ARG:ステート経過ターン * 5 + 30) || (CFLAG:ARG:ボスフラグ == 0 && LOCAL < CFLAG:ARG:ステート経過ターン * 10 - 20) || LOCAL < 5
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+		ENDIF
+	CASE "PALYZE"
+		;PALYZE
+		SIF LOCAL > 95
+			RETURN 0
+		IF (CFLAG:ARG:ボスフラグ && LOCAL < CFLAG:ARG:ステート経過ターン * 10 + 15) || (CFLAG:ARG:ボスフラグ == 0 && LOCAL < CFLAG:ARG:ステート経過ターン * 20 - 40) || LOCAL < 5
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+		ENDIF
+	CASE "STONE","DYING"
+		;STON,DYING 治らない
+		RETURN 0
+	CASE "FLY"
+		;3ターンは必ず続く
+		SIF CFLAG:ARG:ステート経過ターン < 4
+			RETURN 0
+		IF CFLAG:ARG:ボスフラグ || LOCAL < CFLAG:ARG:ステート経過ターン * 20 || LOCAL < 5
+			CFLAG:ARG:ステート = 0
+			CFLAG:ARG:ステート経過ターン = 0
+			CALL SYNC_STATUS,ARG
+		ENDIF
+		
+	CASE "ORGY","HEAT"
+		;ORGY,HEAT ３ターンで確実に次へ移行
+		IF CFLAG:ARG:ステート経過ターン > 2
+			IF GET_STATE(CFLAG:ARG:ステート) == "ORGY"
+				CFLAG:ARG:ステート = GET_STATE_NUM("HEAT")
+				CFLAG:ARG:ステート経過ターン = 0
+			ELSE
+				CFLAG:ARG:ステート = 0
+				CFLAG:ARG:ステート経過ターン = 0
+			ENDIF
+		ENDIF
+	CASEELSE
+		RETURN 0
+ENDSELECT
+
+
+;===================================
+;逃亡판정
+;===================================
+@ESCAPE_CHECK
+#LOCALSIZE 8
+#LOCALSSIZE 1
+PRINTFORMW %CALLNAME:MASTER% 일행은 도망쳤다
+;逃亡できたかどうかの판정
+;ここから
+LOCAL:1 = 0
+;プ레이ヤー側の판정値
+LOCAL:3 = 0
+;人数
+LOCAL:2 = 0
+;적側の판정値
+FOR LOCAL,1,7
+	LOCALS = 포지션{LOCAL}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	LOCAL:1 += (BASE:(FLAG:LOCALS):(GET_BASESTATUS(5)) + BASE:(FLAG:LOCALS):(GET_BASESTATUS(6)))
+	LOCAL:3 += 1
+NEXT
+LOCAL:1 /= LOCAL:3
+LOCAL:3 = 0
+FOR LOCAL,7,17
+	LOCALS = 포지션{LOCAL}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	LOCAL:2 += (BASE:(FLAG:LOCALS):(GET_BASESTATUS(5)))
+	LOCAL:3 += 1
+NEXT
+LOCAL:2 /= LOCAL:3
+
+;ここまでに処理を
+IF RAND:100 < 60 + LOCAL:1 - LOCAL:2 || FLAG:先制공격フラグ > 0
+	PRINTFORMW ………도망쳤다
+	;---- EDIT 034 MOD START -------------------------
+	LOCAL:7 = 0
+	FOR LOCAL,1,7
+		LOCALS = 포지션{LOCAL}
+		SIF FLAG:LOCALS < 0
+			CONTINUE
+		SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+			CONTINUE
+		LOCAL:(LOCAL:7 + 1) = FLAG:LOCALS
+		LOCAL:7 ++
+	NEXT
+	IF LOCAL:7 > 0
+		SETCOLOR 0x33ffcc
+		LOCAL = LOCAL:(RAND:(LOCAL:7) + 1)
+		TFLAG:전투이벤트 = 92
+		SWAP LOCAL,TARGET
+		CALL BATTLE_EVENT,TARGET
+		SWAP LOCAL,TARGET
+		RESETCOLOR
+	ENDIF
+	;---- EDIT 034 MOD END ---------------------------
+	CALL BATTLE_END
+	RETURN 1
+ELSE
+	PRINTFORMW ………넘어졌다
+	;---- EDIT 034 MOD START -------------------------
+	LOCAL:7 = 0
+	FOR LOCAL,1,7
+		LOCALS = 포지션{LOCAL}
+		SIF FLAG:LOCALS < 0
+			CONTINUE
+		SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+			CONTINUE
+		LOCAL:(LOCAL:7 + 1) = FLAG:LOCALS
+		LOCAL:7 ++
+	NEXT
+	IF LOCAL:7 > 0
+		SETCOLOR 0x33ffcc
+		LOCAL = LOCAL:(RAND:(LOCAL:7) + 1)
+		TFLAG:전투이벤트 = 93
+		SWAP LOCAL,TARGET
+		CALL BATTLE_EVENT,TARGET
+		SWAP LOCAL,TARGET
+		RESETCOLOR
+	ENDIF
+	;---- EDIT 034 MOD END ---------------------------
+	RETURN 0
+ENDIF
+
+;===================================
+;決着판정
+;===================================
+@FIGHT_IT_OUT
+#LOCALSIZE 2
+#LOCALSSIZE 1
+;LOCAL 적パーティの전투不能じゃない人数
+LOCAL = 0
+FOR LOCAL:1,0,10
+	LOCALS = 포지션{LOCAL:1+7}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+		CONTINUE
+	LOCAL = 1
+	BREAK
+NEXT
+SIF LOCAL == 0
+	FLAG:勝利フラグ = 1
+
+LOCAL = 0
+FOR LOCAL:1,1,7
+	LOCALS = 포지션{LOCAL:1}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	SIF MASTER != FLAG:LOCALS && TALENT:(FLAG:LOCALS):연모 == 0 && TALENT:(FLAG:LOCALS):친애 == 0 && TALENT:(FLAG:LOCALS):복종 == 0 && TALENT:(FLAG:LOCALS):예속 == 0 && TALENT:(FLAG:LOCALS):음란 == 0 && TALENT:(FLAG:LOCALS):창부 == 0 
+		CONTINUE
+	SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+		CONTINUE
+	LOCAL = 1
+	BREAK
+NEXT
+SIF LOCAL == 0
+	FLAG:敗北フラグ = 1
+
+;===================================
+;敗北時の処理
+;===================================
+@BATTLE_LOSE
+IF FLAG:デバッグ전투フラグ
+	FLAG:勝利フラグ = 1
+	RETURN 0
+ENDIF
+SIF ASSI > 0
+	CALL SUPORT(2, 2)
+IF FLAG:SHOPコマンド == 102
+	TRYCCALLFORM EVENT_COLOSSEUM_LOSE_{FLAG:進行中コロシアム}
+		IF RESULT == 0
+			CALL LOSE_COLOSSEUM
+		ENDIF
+	CATCH
+		CALL LOSE_COLOSSEUM
+	ENDCATCH
+ELSEIF  FLAG:SHOPコマンド == 103
+	TRYCCALLFORM EVENT_EVENT_LOSE_{FLAG:進行中이벤트}
+		IF RESULT == 0
+			CALL DEADEND
+			QUIT
+		ENDIF
+	CATCH
+		CALL DEADEND
+		QUIT
+	ENDCATCH
+ELSEIF  FLAG:SHOPコマンド == 104
+	TRYCCALLFORM EVENT_REQUEST_LOSE_{FLAG:進行中의뢰}
+		IF RESULT == 0
+			CALL DEADEND
+			QUIT
+		ENDIF
+	CATCH
+		CALL DEADEND
+		QUIT
+	ENDCATCH
+ELSE
+	TRYCCALLFORM EVENT_BATTLE_LOSE_{FLAG:現던전}
+		IF RESULT == 0
+			CALL DEADEND
+			QUIT
+		ENDIF
+	CATCH
+		CALL DEADEND
+		QUIT
+	ENDCATCH
+ENDIF
+
+
+;====================================================
+;전투終了時の処理
+;====================================================
+@BATTLE_END
+#LOCALSIZE 1
+#LOCALSSIZE 1
+SIF FLAG:勝利フラグ && !FLAG:RESULTスキップ
+	CALL BATTLE_WIN
+;적を削除
+CALL DELENEMY
+
+FOR LOCAL,0,CHARANUM
+	;リスト표시用に被소환フラグを折る
+	CFLAG:LOCAL:被소환フラグ = 0
+	;オルギア치료処理
+	IF GET_STATE(CFLAG:LOCAL:ステート) == "ORGY"
+		CFLAG:LOCAL:ステート = 0
+		CFLAG:LOCAL:ステート経過ターン = 0
+	ENDIF
+	IF GET_STATE(CFLAG:LOCAL:ステート) == "HEAT"
+		CFLAG:LOCAL:ステート = 0
+		CFLAG:LOCAL:ステート経過ターン = 0
+	ENDIF
+	IF GET_STATE(CFLAG:LOCAL:ステート) == "FLY"
+		CFLAG:LOCAL:ステート = 0
+		CFLAG:LOCAL:ステート経過ターン = 0
+	ENDIF
+	CFLAG:LOCAL:熱り弱点부여 = 0
+NEXT
+
+FLAG:先制공격フラグ = 0
+FLAG:不意打ちフラグ = 0
+FLAG:도주フラグ = 0
+
+;バックアタック時に保存していた陣形に戻す。
+IF FLAG:バックアタックフラグ
+	FOR LOCAL,0,CHARANUM
+		CFLAG:LOCAL:포지션 = 0
+	NEXT
+	FOR LOCAL,1,7
+		LOCALS = 포지션{LOCAL}保存
+		IF (FLAG:LOCALS) > -1 && (GET_STATE(CFLAG:(FLAG:LOCALS):ステート) != "DYING" || ABL:(FLAG:LOCALS):종족 == 0 || ABL:(FLAG:LOCALS):종족 > 45)
+			CFLAG:(FLAG:LOCALS):포지션 = LOCAL
+		ENDIF
+	NEXT
+	FLAG:バックアタックフラグ = 0
+	CALL REFRESH_POS
+ENDIF
+;ジャックポットに積立をいれる
+FLAG:ジャックポット += RAND:100
+TFLAG:전투中 = 0
+
+;命乞いフラグをリセット
+FLAG:命乞いフラグ = 0
+
+;====================================================
+;勝利時の処理
+;====================================================
+@BATTLE_WIN
+;東方ＭＯＤ用にLOCALを一つ추가
+;LOCAL:11 だれかが스킬:재보「골드러시」を持っている場合、1を立てる
+;勝利구상用にLOCALを更に一つ추가(LOCAL:12)
+#LOCALSIZE 13
+#LOCALSSIZE 2
+#DIM 見깨달음えフラグ , 1
+#DIM 화이트앨범ON , 1
+#DIM 초기値, 25
+#DIM 加算値, 25
+#DIM バー速度, 25
+#DIM バー표시値
+#DIM 레벨 , 7
+#DIM 레벨アップタイミング , 7
+#DIM 加算前NEXT , 7
+#DIM 초기値ＥＸＰ割合 , 7
+#DIM 입수아이템, 30
+#DIM LINE
+화이트앨범ON = SOFT_ON("화이트앨범")
+SIF ASSI > 0
+	CALL SUPORT(2, 1)
+PRINTW 승리했다
+;---- EDIT 034 MOD START -------------------------
+LOCAL:9 = 0
+FOR LOCAL,1,7
+	LOCALS = 포지션{LOCAL}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+		CONTINUE
+	LOCAL:(LOCAL:9 + 1) = FLAG:LOCALS
+	LOCAL:9 ++
+NEXT
+IF LOCAL:9 > 0
+	SETCOLOR 0x33ffcc
+	LOCAL = LOCAL:(RAND:(LOCAL:9) + 1)
+	TFLAG:전투이벤트 = 90
+;---- EDIT 036 ADD START -------------------------
+	;勝利구상설정→最終行動者
+	IF FLAG:勝利구상설정 == 1 && FLAG:行動順1 > -1
+		LOCAL:12 = FLAG:行動順1
+		;最終行動者が生きてる아군で、かつ당신じゃない
+		IF CFLAG:(LOCAL:12):PTフラグ == 2 && LOCAL:12 != MASTER && GET_STATE(CFLAG:(LOCAL:12):ステート) != "DYING"
+			CALL BATTLE_EVENT,FLAG:行動順1
+		;당신とか적なら랜덤(적の공격반사で撃破とかカウンターで撃破とか？)
+		ELSE
+			SWAP LOCAL,TARGET
+			CALL BATTLE_EVENT,TARGET
+			SWAP LOCAL,TARGET
+		ENDIF
+	;勝利구상설정→랜덤(今までと同じ。デフォ)
+	ELSE
+		SWAP LOCAL,TARGET
+		CALL BATTLE_EVENT,TARGET
+		SWAP LOCAL,TARGET
+	ENDIF
+;---- EDIT 036 ADD END -------------------------
+RESETCOLOR
+ENDIF
+;---- EDIT 034 MOD END ---------------------------
+;経験値の입수処理を行う予定
+CUSTOMDRAWLINE =
+PRINTL □ＲＥＳＵＬＴ
+CUSTOMDRAWLINE =
+LOCAL:5 = 0
+LOCAL:9 = 0
+;東方ＭＯＤ추가----------------------------------------
+LOCAL:11 = 0
+;東方ＭＯＤ추가ここまで----------------------------------------
+FLAG:입수￥ = 0
+FLAG:입수ＭＡＧ = 0
+FOR LOCAL:1,1,7
+	LOCALS = 포지션{LOCAL:1}
+	SIF FLAG:LOCALS > -1
+		LOCAL:9 += 1
+	;갖지못한자의반지を持っていると経験値もらえない
+	SIF FLAG:LOCALS > -1 && EQUIP:(FLAG:LOCALS):악세사리 == [[아이템:갖지못한자의반지]]
+		CONTINUE
+						;****改造ここから****
+	;플러그인／死せる大地を持っていると経験値もらえない
+	SIF FLAG:LOCALS > -1 && EQUIP:(FLAG:LOCALS):악세사리 == [[아이템:플러그인／死せる大地]]
+		CONTINUE
+						;****改造ここまで****
+	;東方ＭＯＤEX・黄金の팔찌を持っていると経験値もらえない
+	SIF FLAG:LOCALS > -1 && EQUIP:(FLAG:LOCALS):팔 == [[아이템:황금의팔찌]]
+		CONTINUE
+	;東方ＭＯＤEX추가分ここまで
+	;조마は経験値もらえない
+	SIF FLAG:LOCALS > -1 && ABL:(FLAG:LOCALS):종족 == 45
+		CONTINUE
+	SIF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) != "DYING"
+		LOCAL:5 += 1
+	;東方ＭＯＤ추가----------------------------------------
+	;だれかがDYINGでない＆스킬:재보「골드러시」を持っている場合、LOCAL:11に1を立てる
+	SIF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) != "DYING" && (HAVE_SKILL(POS(LOCAL:1), [[스킬:재보「골드러시」]]) || HAVE_SKILL(POS(LOCAL:1), [[스킬:황제특권]]))
+		LOCAL:11 = 1
+	;東方ＭＯＤ추가ここまで----------------------------------------
+NEXT
+
+VARSET G,0
+
+FOR LOCAL,CHARANUM,0,-1
+	IF CFLAG:(LOCAL-1):PTフラグ == 0 && (GET_STATE(CFLAG:(LOCAL-1):ステート) == "DYING" || GET_STATE(CFLAG:(LOCAL-1):ステート) == "STONE")
+		IF FLAG:도주불가フラグ > 0
+			CALL INCREASE_ANALYZE,NO:(LOCAL-1),100
+			SIF CFLAG:(LOCAL-1):ボスフラグ > 0
+				CALL INCREASE_ANALYZE,NO:(LOCAL-1),400
+		ENDIF
+		FOR LOCAL:1,0,CHARANUM
+			見깨달음えフラグ = HAVE_SKILL(LOCAL:1,[[스킬:견학성장]]) + (ABL:(LOCAL:1):종족 != 0 && 화이트앨범ON)
+			;パーティに참가しているor견학성장を持っているor악마であり、화이트앨범が有効である
+			SIF CFLAG:(LOCAL:1):PTフラグ == 0
+				CONTINUE
+			SIF (CFLAG:(LOCAL:1):PTフラグ) == 1 && !見깨달음えフラグ
+				CONTINUE
+			;자택서버に居る악마はパーティに참가してないと経験値をもらえない
+			SIF CFLAG:(LOCAL:1):所属ＣＯＭＰ == -1 && CFLAG:(LOCAL:1):PTフラグ != 2
+				CONTINUE
+			IF GET_STATE(CFLAG:(LOCAL:1):ステート) != "DYING"
+				;経験値
+				LOCAL:2 = (COEFFICIENT_EXP(ABL:(LOCAL-1):종족)+CFLAG:(LOCAL-1):ＥＸＰ보정) * BASE:(LOCAL-1):(GET_BASESTATUS(0)) * (4+BASE:(LOCAL-1):LV/4) / 4 * (90 + LOCAL:5*10) / 100
+
+				;ボス보정
+				SIF CFLAG:(LOCAL-1):ボスフラグ
+					LOCAL:2 *= 4
+				;레벨差による보정
+;---- EDIT 023 MOD START -------------------------
+				SIF BASE:(LOCAL:1):(GET_BASESTATUS(0)) > BASE:(LOCAL-1):(GET_BASESTATUS(0)) + 5 +10*(EQUIP:MASTER:마인드시커 && CFLAG:(LOCAL-1):アンノウンフラグ)
+					LOCAL:2 /= POWER(2 , MIN((BASE:(LOCAL:1):(GET_BASESTATUS(0)) - BASE:(LOCAL-1):(GET_BASESTATUS(0)) - 5 -10*(EQUIP:MASTER:마인드시커 && CFLAG:(LOCAL-1):アンノウンフラグ) )/4 , 30))
+;---- EDIT 023 MOD END ---------------------------
+				IF BASE:(LOCAL:1):(GET_BASESTATUS(0)) < BASE:(LOCAL-1):(GET_BASESTATUS(0)) 
+					LOCAL:2 *= POWER(3, MIN(( BASE:(LOCAL-1):(GET_BASESTATUS(0)) - BASE:(LOCAL:1):(GET_BASESTATUS(0)))/4,4))
+					LOCAL:2 /= POWER(2, MIN(( BASE:(LOCAL-1):(GET_BASESTATUS(0)) - BASE:(LOCAL:1):(GET_BASESTATUS(0)))/4,4))
+				ENDIF
+				;계약素質보정
+				;SIF (TALENT:(LOCAL:1):아내 || TALENT:(LOCAL:1):남편 || TALENT:(LOCAL:1):음마 || TALENT:(LOCAL:1):노리개)
+				SIF 계약(LOCAL:1)
+					TIMES LOCAL:2, 1.25
+				;猛勉強による보정
+				SIF HAVE_SKILL(LOCAL:1,[[스킬:필사적인공부]])
+					TIMES LOCAL:2, 1.50
+				;---------------素質複合関連추가ここから-----------------------------------
+				;전투用素質が複合している場合、経験値보정がかかる
+				SIF (TALENT:(LOCAL:1):데빌시프터 || TALENT:(LOCAL:1):식노 || TALENT:(LOCAL:1):악마빙의자) && (TALENT:(LOCAL:1):서머너 || TALENT:(LOCAL:1):이능자 || TALENT:(LOCAL:1):페르소나구사자 || TALENT:(LOCAL:1):달인)
+					TIMES LOCAL:2, 0.80
+				;---------------素質複合関連추가ここまで-----------------------------------
+				;MAG
+				;IF CFLAG:(LOCAL:1):PTフラグ == 2
+				;	LOCAL:3 = BASE:(LOCAL-1):ＭＡＧ * BASE:(LOCAL-1):(GET_BASESTATUS(0))
+				;	CFLAG:(LOCAL:1):입수ＭＡＧ += LOCAL:3
+				;ENDIF
+				;AP
+				IF EQUIP:(LOCAL:1):장비만트라 && CFLAG:(LOCAL:1):PTフラグ == 2
+					;기본値 폭음폭식がスタメン化できるあたりで減少措置
+					SELECTCASE CFLAG:(LOCAL:1):만트라適性레벨
+						CASE IS > 45
+							LOCAL:3 = 30 * 100
+						CASE IS > 20
+							LOCAL:3 = 50 * 100
+						CASEELSE
+							LOCAL:3 = 75 * 100
+					ENDSELECT
+					LOCAL:4 = BASE:(LOCAL-1):LV - CFLAG:(LOCAL:1):만트라適性레벨
+					WHILE LOCAL:4
+						IF LOCAL:4 > 0
+							TIMES LOCAL:3, 1.10
+							LOCAL:4--
+						ELSE
+							TIMES LOCAL:3, 0.80
+							LOCAL:4++
+						ENDIF
+					WEND
+					LOCAL:3 = MAX(LOCAL:3 / 100, 1)
+					;ハントは5倍
+					IF CFLAG:(LOCAL-1):被ハント == LOCAL:1 + 1
+						CFLAG:(LOCAL:1):입수AP += LOCAL:3 * 5
+					ELSEIF CFLAG:(LOCAL-1):被ハント == 0
+						CFLAG:(LOCAL:1):입수AP += LOCAL:3
+					ENDIF
+				ENDIF
+				
+				;갖지못한자의반지を持っていると経験値もらえない
+				SIF LOCAL:1 > -1 && EQUIP:(LOCAL:1):악세사리 == [[아이템:갖지못한자의반지]]
+					CONTINUE
+						;****改造ここから****
+				;플러그인／死せる大地を持っていると経験値もらえない
+				SIF LOCAL:1 > -1 && EQUIP:(LOCAL:1):악세사리 == [[아이템:플러그인／死せる大地]]
+					CONTINUE
+						;****改造ここまで****
+				;東方ＭＯＤEX・황금의팔찌を持っていると経験値もらえない
+				SIF LOCAL:1 > -1 && EQUIP:(LOCAL:1):팔 == [[아이템:황금의팔찌]]
+					CONTINUE
+				;東方ＭＯＤEX추가分ここまで
+				;조마は経験値もらえない
+				SIF LOCAL:1 > -1 && ABL:(LOCAL:1):종족 == 45
+					CONTINUE
+				;貰えるパターンで分岐
+				SIF CFLAG:(LOCAL:1):PTフラグ == 2
+					CFLAG:(LOCAL:1):입수경험치 += LOCAL:2 / LOCAL:5
+				SIF 見깨달음えフラグ && CFLAG:(LOCAL:1):PTフラグ == 1
+					CFLAG:(LOCAL:1):입수경험치 += LOCAL:2 / 6 / 2 * 見깨달음えフラグ
+			ENDIF
+		NEXT
+		
+		
+		FOR LOCAL:1,0,3
+			LOCALS = 아이템{LOCAL:1+1}
+			LOCALS:1 = 입수확률{LOCAL:1+1}
+			SIF ITEMPRICE:(ABL:(LOCAL-1):LOCALS) == 0
+				CONTINUE
+			;ドロップ率はキャラ소거で消えるので直接増やしてしまう
+			;とりあえず、作者さんの意図はわからないけど、固定で20％アップ
+			SIF EQUIP:MASTER:히로에몽 == 1 && NUM_SUMMONER()
+				TIMES ABL:(LOCAL-1):(LOCALS:1), 1.20
+			;東方ＭＯＤ추가---------------------------------------------
+			;ナズーリンの財宝『ゴールドラッシュ』がある場合、ドロップ率10％アップ
+			SIF LOCAL:11 == 1
+				TIMES ABL:(LOCAL-1):(LOCALS:1), 1.10
+			;東方ＭＯＤ추가ここまで----------------------------------------
+			SIF RAND:100 < ABL:(LOCAL-1):(LOCALS:1)
+				G:(ABL:(LOCAL-1):LOCALS) += 1
+		NEXT
+		IF EQUIP:MASTER:아르센 && NUM_SUMMONER()
+			IF (0 < ABL:(LOCAL-1):종족 && ABL:(LOCAL-1):종족 < 12) || (14 < ABL:(LOCAL-1):종족 && ABL:(LOCAL-1):종족 < 19)
+				SIF ABL:(LOCAL-1):종족 == 17
+					BREAK
+				SELECTCASE ABL:(LOCAL-1):종족
+					CASE 1
+						LOCAL:1 = 279;진주
+					CASE 2
+						LOCAL:1 = 282;사파이어
+					CASE 3
+						LOCAL:1 = 284;토파즈
+					CASE 4
+						LOCAL:1 = 278;에메랄드
+					CASE 5
+						LOCAL:1 = 276;아쿠아마린
+					CASE 6
+						LOCAL:1 = 281;오닉스
+					CASE 7
+						LOCAL:1 = 274;가넷
+					CASE 8
+						LOCAL:1 = 275;아메지스트
+					CASE 9
+						LOCAL:1 = 285;터키석
+					CASE 10
+						LOCAL:1 = 275;아메지스트
+					CASE 11
+						LOCAL:1 = 283;오팔
+					CASE 15
+						LOCAL:1 = 280;루비
+					CASE 16
+						LOCAL:1 = 277;다이아몬드
+					CASE 18
+						LOCAL:1 = 278;에메랄드
+				ENDSELECT
+				LOCAL:2 = 2
+				SIF GET_SUMMONER_LV() > 3
+					LOCAL:2 = 4
+				SIF GET_SUMMONER_LV() > 4
+					LOCAL:2 = 6
+				SIF RAND:100 < LOCAL:2
+					G:(LOCAL:1) += 1
+			ENDIF
+		ENDIF
+		FLAG:입수￥ += (COEFFICIENT_MONEY(ABL:(LOCAL-1):종족)+CFLAG:(LOCAL-1):￥보정) * BASE:(LOCAL-1):LV
+		FLAG:입수ＭＡＧ += (COEFFICIENT_MAG(ABL:(LOCAL-1):종족)+CFLAG:(LOCAL-1):ＭＡＧ보정) * BASE:(LOCAL-1):LV * (1+BASE:(LOCAL-1):LV/8) * 4/5
+	ENDIF
+NEXT
+VARSET 입수아이템, -1
+;아이템입수＋표시用に格納
+LOCAL:1 = 0
+FOR LOCAL,0,VARSIZE("ITEM")
+	IF G:LOCAL > 0
+		입수아이템:(LOCAL:1) = G:LOCAL * 1E6 + LOCAL
+		LOCAL:1++
+		CALL GET_ITEM,LOCAL,G:LOCAL
+	ENDIF
+NEXT
+
+;입수したＭＡＧを分配
+IF LOCAL:9 == 1
+	;一人なら総取り
+	CFLAG:MASTER:입수ＭＡＧ = FLAG:입수ＭＡＧ
+ELSE
+	;主人が５０％
+	CFLAG:MASTER:입수ＭＡＧ = FLAG:입수ＭＡＧ
+	FLAG:입수ＭＡＧ -= CFLAG:MASTER:입수ＭＡＧ * 75 / 100
+	FOR LOCAL,1,7
+		SIF POS(LOCAL) < 1
+			CONTINUE
+;		IF TALENT:POS(LOCAL):식노
+;			SELECTCASE CFLAG:POS(LOCAL):ハント횟수
+;				CASE 0
+;					 CFLAG:POS(LOCAL):입수ＭＡＧ = (FLAG:입수ＭＡＧ / (LOCAL:9-1)) * 50 / 100
+;				CASE 1
+;					CFLAG:POS(LOCAL):입수ＭＡＧ = (FLAG:입수ＭＡＧ / (LOCAL:9-1)) * 80 / 100
+;				CASE 2
+;					CFLAG:POS(LOCAL):입수ＭＡＧ = (FLAG:입수ＭＡＧ / (LOCAL:9-1)) * 1
+;				CASE 3
+;					CFLAG:POS(LOCAL):입수ＭＡＧ = (FLAG:입수ＭＡＧ / (LOCAL:9-1)) * 130 / 100
+;				CASE 3
+;					CFLAG:POS(LOCAL):입수ＭＡＧ = (FLAG:입수ＭＡＧ / (LOCAL:9-1)) * 150 / 100
+;				CASE IS >= 5
+;					CFLAG:POS(LOCAL):입수ＭＡＧ = (FLAG:입수ＭＡＧ / (LOCAL:9-1)) * 2
+;			ENDSELECT
+;		ELSE
+			;영매체질がある場合,1.5倍になる
+			CFLAG:POS(LOCAL):입수ＭＡＧ = FLAG:입수ＭＡＧ / (LOCAL:9-1) * (TALENT:POS(LOCAL):영매체질 + 2) / 2
+;		ENDIF
+	NEXT
+	
+ENDIF
+VARSET 加算値
+VARSET 초기値
+VARSET 加算前NEXT
+;EXPバーの加算値取得
+FOR LOCAL, 1, 7
+	SIF POS(LOCAL) == -1
+		CONTINUE
+	;EXP초기値の計算
+	레벨 = BASE:POS(LOCAL):LV
+	;함락によって필요EXPが変化する場合、초기値が마이ナスいく問題があるので、0保証しておく
+	초기値:(LOCAL) = MAX(0, (BASE:POS(LOCAL):ＥＸＰ - GET_NEXT_EXP(레벨-1, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL)))) * 191 / (GET_NEXT_EXP(레벨, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL))) - GET_NEXT_EXP(레벨-1, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL)))))
+	초기値ＥＸＰ割合:LOCAL = 초기値:LOCAL
+	加算前NEXT:(LOCAL) = MAX(MAXBASE:POS(LOCAL):ＥＸＰ - BASE:POS(LOCAL):ＥＸＰ , 0)
+	;MAG초기値の計算
+	초기値:(LOCAL+6) = BASE:POS(LOCAL):ＭＡＧ * 959 / MAXBASE:POS(LOCAL):ＭＡＧ
+	;충성도초기値の計算
+	초기値:(LOCAL+12) = MIN(BASE:POS(LOCAL):충성도, 10000) * 959 / 10000
+	;AP초기値の計算
+	SIF EQUIP:POS(LOCAL):장비만트라 > 0
+		초기値:(LOCAL+18) = CDFLAG:POS(LOCAL):만트라:(EQUIP:POS(LOCAL):장비만트라) * 191 / 10000
+;	PRINTFORML {(BASE:POS(LOCAL):ＥＸＰ - GET_NEXT_EXP(레벨-1, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL))))} * 191 / {(GET_NEXT_EXP(레벨, ABL:ARG:종족 != 0 && !함락(ARG)) - GET_NEXT_EXP(레벨-1, ABL:ARG:종족 != 0 && !함락(ARG)))}
+;	PRINTFORML ({BASE:POS(LOCAL):ＥＸＰ} - {GET_NEXT_EXP(레벨-1, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL)))}) * 191 / ({GET_NEXT_EXP(레벨, ABL:ARG:종족 != 0 && !함락(ARG))} - {GET_NEXT_EXP(레벨-1, ABL:ARG:종족 != 0 && !함락(ARG))})
+;	PRINTFORML %CALLNAME:POS(LOCAL)% 초기値:{초기値:(LOCAL)} 加算値:{加算値:(LOCAL)}
+	;加算値の計算
+	IF GET_STATE(CFLAG:POS(LOCAL):ステート) != "DYING"
+		LOCAL:2 = 초기値:(LOCAL)
+		;EXP加算
+		BASE:POS(LOCAL):ＥＸＰ += CFLAG:POS(LOCAL):입수경험치
+		WHILE GET_NEXT_EXP(레벨, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL))) <= BASE:POS(LOCAL):ＥＸＰ
+			IF 레벨 == BASE:POS(LOCAL):LV
+				加算値:(LOCAL) += 191 - 초기値:(LOCAL)
+			ELSE
+				加算値:(LOCAL) += 191
+			ENDIF
+			레벨++
+			LOCAL:2 = 0
+		WEND
+		加算値:(LOCAL) += (BASE:POS(LOCAL):ＥＸＰ - GET_NEXT_EXP(레벨-1, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL)))) * 191 / (GET_NEXT_EXP(레벨, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL))) - GET_NEXT_EXP(레벨-1, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL)))) - LOCAL:2
+		加算値:(LOCAL) = MAX(0, 加算値:(LOCAL))
+		;MAG加算値
+		CALL CONTROL_MAG,POS(LOCAL),CFLAG:POS(LOCAL):입수ＭＡＧ
+		加算値:(LOCAL+6) = BASE:POS(LOCAL):ＭＡＧ * 959 / MAXBASE:POS(LOCAL):ＭＡＧ - 초기値:(LOCAL+6)
+		IF POS(LOCAL) > 0
+			TCVAR:POS(LOCAL):획득충성도 += 10
+			BASE:POS(LOCAL):충성도 += TCVAR:POS(LOCAL):획득충성도
+			加算値:(LOCAL+12) = MIN(BASE:POS(LOCAL):충성도, 10000) * 959 / 10000 - 초기値:(LOCAL+12)
+		ENDIF
+		;AP加算値　ここでは9999までにしておいて、あとの메시지표시のときに10000にする
+		IF EQUIP:POS(LOCAL):장비만트라 > 0 && CDFLAG:POS(LOCAL):만트라:(EQUIP:POS(LOCAL):장비만트라) < 10000
+			CDFLAG:POS(LOCAL):만트라:(EQUIP:POS(LOCAL):장비만트라) = MIN(9999, CDFLAG:POS(LOCAL):만트라:(EQUIP:POS(LOCAL):장비만트라) + CFLAG:POS(LOCAL):입수AP)
+			;9999だとぎりぎり214になってしまうので調整
+			IF CDFLAG:POS(LOCAL):만트라:(EQUIP:POS(LOCAL):장비만트라) == 9999
+				加算値:(LOCAL+18) = 191 - 초기値:(LOCAL+18)
+			ELSE
+				加算値:(LOCAL+18) = CDFLAG:POS(LOCAL):만트라:(EQUIP:POS(LOCAL):장비만트라) * 191 / 10000 - 초기値:(LOCAL+18)
+			ENDIF
+		ENDIF
+	ELSE
+		;획득の초기化
+		TCVAR:POS(LOCAL):획득충성도 = 0
+		CFLAG:POS(LOCAL):입수경험치 = 0
+		CFLAG:POS(LOCAL):입수ＭＡＧ = 0
+		CFLAG:POS(LOCAL):입수AP = 0
+	ENDIF
+	;조마はEXPの加算なし
+	IF ABL:POS(LOCAL):종족 == 45
+		초기値:LOCAL = 0
+		加算値:LOCAL = 0
+	ENDIF
+NEXT
+;----------------------------
+;스킬などの処理
+;----------------------------
+FOR LOCAL, 1, 7
+	SIF POS(LOCAL) == -1
+		CONTINUE
+	SIF GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"
+		CONTINUE
+	; 후카救済計画 ADD START
+	SIF HAVE_SKILL(POS(LOCAL), [[스킬:치유의파동]])
+		CALL SKILL_2428_EXEC_HEALING, POS(LOCAL)
+	; 후카救済計画 ADD END
+	CALL BADSTATUS_SAVING,POS(LOCAL)
+	CALL SYNC_STATUS,POS(LOCAL)
+	CALL INCREASE_ANALYZE,NO:POS(LOCAL),5
+	;PRINTFORML %CALLNAME:POS(LOCAL)% 초기値:{초기値:(LOCAL)} 加算値:{加算値:(LOCAL)}
+NEXT
+
+LOCAL:6 = 0
+LOCAL:7 = 0
+;입수경험치・입수ＭＡＧ・입수충성도のうちの最長を調査
+;名前のうち最長のものを調査
+FOR LOCAL, 1, 7
+	SIF POS(LOCAL) == -1
+		CONTINUE
+	LOCAL:6 = MAX(LOCAL:6, CFLAG:POS(LOCAL):입수경험치, CFLAG:POS(LOCAL):입수ＭＡＧ, TCVAR:POS(LOCAL):획득충성도)
+	LOCAL:7 = MAX(LOCAL:7, STRLENS(CALLNAME:POS(LOCAL)))
+NEXT
+;桁数に変換
+LOCAL:6= STRLENS(TOSTR(LOCAL:6))
+;余白추가
+LOCAL:7 += 2
+
+;速度설정
+FOR LOCAL, 0, 25
+	;이상値の排除
+	IF 加算値:LOCAL < 0
+		加算値:LOCAL = 0
+		초기値:LOCAL = 0
+	ENDIF
+	バー速度:LOCAL = 1 + MIN(加算値:LOCAL / 27, 8)
+NEXT
+LINE = LINECOUNT
+VARSET 레벨
+VARSET 레벨アップタイミング
+;FOR LOCAL:1, 0, MAXARRAY(加算値) + 1 + MIN(9, MAXARRAY(加算値)/36), 1 + MIN(9, MAXARRAY(加算値)/36)
+LOCAL:3 = 0
+;チラツキ抑止
+REDRAW 0
+DO
+	;右クリック中
+	IF MESSKIP()
+		IF FLAG:バーアニメスキップ
+			FOR LOCAL, 0, 25
+				バー速度:LOCAL = 加算値:LOCAL
+			NEXT
+		ELSE
+			REDRAW 1
+		ENDIF
+	ENDIF
+	CLEARLINE LINECOUNT -LINE
+	FOR LOCAL, 1, 7
+		SIF POS(LOCAL) < 0
+			CONTINUE
+		PRINTFORM %@"LV{BASE:POS(LOCAL):LV+초기値:LOCAL/192}", LOCAL:7, LEFT%
+		;IF 초기値:LOCAL < 192
+		;	PRINTFORM %@"LV{BASE:POS(LOCAL):LV}", LOCAL:7, LEFT%
+		;ELSE
+		;	PRINTFORM %@"LV{BASE:POS(LOCAL):LV} → LV{BASE:POS(LOCAL):LV+초기値:LOCAL/192}", LOCAL:7, LEFT%
+		;ENDIF
+		;PRINTFORM %CALLNAME:POS(LOCAL), LOCAL:7, LEFT%
+		PRINTFORM ＥＸＰ:
+		IF STR:(ABL:POS(LOCAL):종족) == "조마"
+			PRINTFORM %" " * 24%　　　 GET:+{0, LOCAL:6,LEFT}
+		ELSE
+			IF LOCAL:3
+				초기値:LOCAL += MIN(加算値:LOCAL, バー速度:LOCAL)
+				加算値:LOCAL -= MIN(加算値:LOCAL, バー速度:LOCAL)
+			ENDIF
+			IF 초기値:LOCAL >= 192*(레벨:LOCAL+1)
+				초기値ＥＸＰ割合:LOCAL = 0
+				加算前NEXT = GET_NEXT_EXP(BASE:POS(LOCAL):LV + 레벨:LOCAL , ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL)) )
+				레벨:LOCAL ++
+				레벨アップタイミング:LOCAL = 15
+			ENDIF
+			;SETCOLOR COLOR("p-blue")
+			CALL PRINT_EIGHT_BAR, 초기値:LOCAL % 192, 24, 0x7070C0, 0xC0C0C0
+			RESETCOLOR
+			PRINTFORM 　　　 GET:+{CFLAG:POS(LOCAL):입수경험치, LOCAL:6,LEFT}
+			IF GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"
+				SETCOLOR COLOR("red")
+				PRINTFORM 　%"DEAD",LOCAL:6,LEFT%
+				RESETCOLOR
+			ELSEIF 레벨アップタイミング:LOCAL > 0
+				레벨アップタイミング:LOCAL --
+				SETCOLOR COLOR("aqua")
+				PRINT 　LEVEL UP! 
+				RESETCOLOR
+			ELSE
+				;PRINTFORM 　NEXT :{GET_NEXT_EXP(BASE:POS(LOCAL):LV - 1 + 초기値:LOCAL / 192, ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL))) * (192 - 초기値:LOCAL % 192) / 192}
+				IF 加算値:LOCAL == 0
+					PRINTFORM 　NEXT :{GET_NEXT_EXP(BASE:POS(LOCAL):LV + 레벨:LOCAL , ABL:POS(LOCAL):종족 != 0 && !함락(POS(LOCAL)) ) - BASE:POS(LOCAL):ＥＸＰ}
+				ELSE
+					PRINTFORM 　NEXT :{加算前NEXT:(LOCAL) * (192 - 초기値:LOCAL % 192) / (192 - 초기値ＥＸＰ割合:LOCAL)}
+				ENDIF
+			ENDIF
+		ENDIF
+		PRINTL 
+		PRINTFORM %CALLNAME:POS(LOCAL), LOCAL:7, LEFT%ＭＡＧ:
+		;PRINTFORM %" " * LOCAL:7%
+		;SETCOLOR COLOR("p-red")
+		CALL PRINT_EIGHT_BAR, 초기値:(LOCAL+6) % 192, 24, 0xC07070, 0xC0C0C0
+		PRINT  
+		IF LOCAL:3
+			초기値:(LOCAL+6) += MIN(加算値:(LOCAL+6), バー速度:(LOCAL+6))
+			加算値:(LOCAL+6) -= MIN(加算値:(LOCAL+6), バー速度:(LOCAL+6))
+		ENDIF
+		FOR LOCAL:2, 1, 5
+			SETCOLOR 초기値:(LOCAL+6) > 192 * LOCAL:2 ? COLOR("p-red") # COLOR("gray")
+			PRINTFORM %UNICODE(0x258A)%
+		NEXT
+		RESETCOLOR
+		PRINTFORM 　GET:
+		IF BASE:(POS(LOCAL)):ＭＡＧ == MAXBASE:(POS(LOCAL)):ＭＡＧ
+			SETCOLOR COLOR("p-red")
+			PRINTFORM %"MAX!",LOCAL:6+1,LEFT%
+			RESETCOLOR
+		ELSE
+			PRINTFORM +{CFLAG:(POS(LOCAL)):입수ＭＡＧ,LOCAL:6,LEFT}
+		ENDIF
+		PRINTFORM 　TOTAL:%TOSTR1000(BASE:POS(LOCAL):ＭＡＧ)%
+		PRINTL 
+		IF POS(LOCAL) > 0
+			IF LOCAL:3
+				초기値:(LOCAL+12) += MIN(加算値:(LOCAL+12), バー速度:(LOCAL+12))
+				加算値:(LOCAL+12) -= MIN(加算値:(LOCAL+12), バー速度:(LOCAL+12))
+			ENDIF
+			PRINTFORM %" " * LOCAL:7%충성도:
+			;SETCOLOR COLOR("p-green")
+			CALL PRINT_EIGHT_BAR, 초기値:(LOCAL+12), 24, 0x70C070, 0xC0C0C0
+			PRINT  
+			FOR LOCAL:2, 1, 5
+				SETCOLOR 초기値:(LOCAL+12) > 192 * LOCAL:2 ? COLOR("p-green") # COLOR("gray")
+				PRINTFORM %UNICODE(0x258A)%
+			NEXT
+			RESETCOLOR
+			PRINTFORM 　GET:+{TCVAR:POS(LOCAL):획득충성도, LOCAL:6, LEFT}
+			;---- EDIT 025 MOD START ---------------------------
+			PRINTFORM 　TOTAL:{BASE:(POS(LOCAL)):충성도}
+			;---- EDIT 025 MOD END -----------------------------
+			PRINTL 
+		ENDIF
+		IF EQUIP:POS(LOCAL):장비만트라 > 0
+			IF LOCAL:3
+				초기値:(LOCAL+18) += MIN(加算値:(LOCAL+18), バー速度:(LOCAL+18))
+				加算値:(LOCAL+18) -= MIN(加算値:(LOCAL+18), バー速度:(LOCAL+18))
+			ENDIF
+			PRINTFORM %" " * LOCAL:7%%GET_MANTRA(EQUIP:POS(LOCAL):장비만트라), 6,LEFT%:
+			;SETCOLOR COLOR("p-purple")
+			CALL PRINT_EIGHT_BAR, 초기値:(LOCAL+18), 24, 0xC070C0, 0xC0C0C0
+			IF 초기値:(LOCAL+18) ==191
+				SETCOLOR COLOR("aqua")
+				PRINTFORM %" "*(14+LOCAL:6)%MASTER
+			ENDIF
+			PRINTL 
+		ENDIF
+		RESETCOLOR
+		DRAWLINE
+	NEXT
+	CLEARLINE 1
+	CUSTOMDRAWLINE =
+	PRINTL □전리품
+	CUSTOMDRAWLINE =
+	IF 입수아이템 >= 0
+		FOR LOCAL:1, 0, 30
+			SIF 입수아이템:(LOCAL:1) == -1
+				BREAK
+			PRINTFORML %ITEMNAME:(입수아이템:(LOCAL:1)%1E6),20,LEFT% × {입수아이템:(LOCAL:1)/1E6}
+		NEXT
+	ELSE
+		PRINTFORML 
+	ENDIF
+	DRAWLINE
+	TWAIT 100, 0
+	LOCAL:3++
+LOOP MAXARRAY(加算値) > 0
+WAIT
+REDRAW 1
+
+GOTO NEW
+FOR LOCAL:1,0,6
+	LOCALS = 포지션{LOCAL:1+1}
+	IF FLAG:LOCALS > -1 && GET_STATE(CFLAG:(FLAG:LOCALS):ステート) != "DYING"
+		BASE:(FLAG:LOCALS):ＥＸＰ += CFLAG:(FLAG:LOCALS):입수경험치
+;		IF FLAG:LOCALS > 0
+;			CFLAG:(FLAG:LOCALS):입수ＭＡＧ /= 50
+;		ENDIF
+		CALL CONTROL_MAG,FLAG:LOCALS,CFLAG:(FLAG:LOCALS):입수ＭＡＧ
+		PRINTFORM %CALLNAME:(FLAG:LOCALS),20% 
+		PRINTFORM EXP +{CFLAG:(FLAG:(71+LOCAL:1)):입수경험치,LOCAL:7} 
+		IF BASE:(FLAG:LOCALS):ＥＸＰ >= MAXBASE:(FLAG:LOCALS):ＥＸＰ
+			PRINT LEVEL UP! 
+			;NEXT:XXXXXXX
+			;LEVEL UP! __←LIMITの中身はこの部分
+			PRINTFORM %" " * LIMIT(5 + LOCAL:9 - 9, 0, 100)%
+		ELSE
+			PRINTFORM NEXT:{MAXBASE:(FLAG:LOCALS):ＥＸＰ - BASE:(FLAG:LOCALS):ＥＸＰ, LIMIT(LOCAL:9, 4, 100)} 
+		ENDIF
+		IF BASE:(FLAG:LOCALS):ＭＡＧ == MAXBASE:(FLAG:LOCALS):ＭＡＧ
+			PRINT MAG MAX!   
+			PRINTFORM %" " * LIMIT(5 + LOCAL:8 - 8, 0, 100)%
+		ELSE
+			PRINTFORM MAG +{CFLAG:(FLAG:LOCALS):입수ＭＡＧ,LIMIT(LOCAL:8, 3, 100)}   
+		ENDIF
+		IF FLAG:LOCALS > 0
+			PRINTFORM 충성도:{BASE:(FLAG:LOCALS):충성도, LOCAL:10}
+			IF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) != "DYING"
+				PRINT +10
+				BASE:(FLAG:LOCALS):충성도 += 10
+			ENDIF
+		ENDIF
+		PRINTL
+	ENDIF
+NEXT
+$NEW
+;PT外のキャラの経験値입수処理
+FOR LOCAL,0,CHARANUM
+	SIF CFLAG:LOCAL:PTフラグ == 1 && CFLAG:LOCAL:입수경험치 > 0
+		BASE:LOCAL:ＥＸＰ += CFLAG:LOCAL:입수경험치
+	CFLAG:LOCAL:입수경험치 = 0
+NEXT
+
+;IF FLAG:조교난이도 == 1
+;SIF FLAG:조교난이도 > 1
+;	FLAG:입수￥ /= 2
+;SIF FLAG:조교난이도 > 2
+;	FLAG:입수￥ /= 2
+;PRINTFORML 입수￥ {FLAG:입수￥}
+;MONEY += FLAG:입수￥
+;ENDIF
+PRINTL
+
+;マスターが속성악세사리장비時に랜덤で속성を변경する
+;비석의반지
+SIF EQUIP:MASTER:악세사리 == [[아이템:비석의반지]] && RAND:3 > 0
+	CALL INCREASE_LD,-1
+;로자리오
+SIF EQUIP:MASTER:악세사리 == [[아이템:로자리오]] && RAND:3 > 0
+	CALL INCREASE_LC,1
+;염주
+SIF EQUIP:MASTER:악세사리 == [[아이템:염주]] && RAND:3 > 0
+	CALL INCREASE_LC,-1
+
+DRAWLINE
+FOR LOCAL:1 , 0 , CHARANUM
+	IF CFLAG:(LOCAL:1):PTフラグ > 0
+		CALL CHECK_LEVEL_UP , LOCAL:1
+	ENDIF
+NEXT
+;処理の簡素化のために페르소나の勝利後の措置は전투に出てるメンバーのみに
+;만트라の체크も同様
+FOR LOCAL, 1, 7
+	SIF POS(LOCAL) < 0
+		CONTINUE
+	IF TALENT:POS(LOCAL):페르소나구사자
+		SIF GROUPMATCH(GET_STATE(CFLAG:POS(LOCAL):ステート), "DYING", "STONE")
+			CONTINUE
+		;승리의포효
+		IF HAVE_SKILL(POS(LOCAL), [[스킬:승리의포효]])
+			;新페르소나処理
+			IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+			
+			;旧페르소나処理
+			ELSE
+				DITEMTYPE:(EQUIP:POS(LOCAL):장비페르소나):페르소나("EXP") = 1000
+			ENDIF
+			CALL CHECK_PRANK_UP(POS(LOCAL))
+		ENDIF
+		;변이체크
+		CALL CHECK_PERSONA_MUTATION, POS(LOCAL)
+	ENDIF
+	IF EQUIP:POS(LOCAL):장비만트라 > 0 && CDFLAG:POS(LOCAL):만트라:(EQUIP:POS(LOCAL):장비만트라) == 9999
+		DRAWLINE
+		CDFLAG:POS(LOCAL):만트라:(EQUIP:POS(LOCAL):장비만트라) = 10000
+		CALL GET_MANTRA_ABILITY, EQUIP:POS(LOCAL):장비만트라
+		PRINTFORMW %조사처리(CALLNAME:POS(LOCAL),"는")% 전술의 폭을 넖혔다!
+		IF RESULT:3 == -2
+			PRINTFORML %조사처리(CALLNAME:POS(LOCAL),"는")% 스테이터스를 대폭 변화시킬 수 있게끔 되었다!
+		ELSEIF RESULT:3 == -1
+			PRINTFORML 그러나 그 만트라의 스킬은 미실장이었다…
+		ELSE
+			FOR LOCAL:1, 3, 11
+				LOCAL:(LOCAL:1) = RESULT:(LOCAL:1)
+			NEXT
+			FOR LOCAL:1, 3, 11
+				IF LOCAL:(LOCAL:1) >= 0
+					CALLFORM SKILL_NAME_{LOCAL:(LOCAL:1)}
+					PRINTFORML %조사처리(CALLNAME:POS(LOCAL),"는")% %조사처리(RESULTS,"를")% 습득했다!
+					FOR LOCAL:2,1,21
+						SIF LOCAL:(LOCAL:1) == ABL:POS(LOCAL):@"초기변신악마습득스킬{LOCAL:2}"
+							ABL:POS(LOCAL):@"초기변신악마습득LV{LOCAL:2}" = -1
+					NEXT
+				ENDIF
+			NEXT
+		ENDIF
+	ENDIF
+NEXT
+CUSTOMDRAWLINE =
+
+PRINTW
+
+
+
+
+
+
+;===================================
+;主人公死亡時
+;===================================
+@DEADEND
+#LOCALSIZE 2
+
+CUSTOMDRAWLINE =
+LOCAL:1 = RAND:13
+SELECTCASE LOCAL:1
+	CASE 0
+		;진 여신전생（ＳＦＣ版）
+		PRINTW 뜻을 다하지 못하고 힘이 다한 자여
+		PRINTW 이 앞은 영혼이 돌아가는 곳
+		PRINTW 두려워할 것은 없다…
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.000 ( 전멸 END -진 여신전생（ＳＦＣ판）편- )
+		CALL GLOBAL_BADEND_SET(0)
+	CASE 1
+		;진 여신전생（ＧＢＡ版）
+		PRINTW 뜻을 다하지 못하고 힘이 다한 자여
+		PRINTW 이 앞은 영혼이 돌아가는 곳
+		PRINTW 두려워할 것은 없다…
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.001 ( 전멸 END -진 여신전생（ＧＢＡ판）편- )
+		CALL GLOBAL_BADEND_SET(1)
+	CASE 2
+		;진 여신전생2
+		PRINTW 강의 저편은 불로불사의 나라 사망자의 영혼이
+		PRINTW 다음의 생을 기다리는 곳
+		PRINTW 자아 강을 건너자……
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.002 ( 전멸 END -진 여신전생 2 편- )
+		CALL GLOBAL_BADEND_SET(2)
+	CASE 3
+		;진 여신전생3
+		PRINTW 평안함은 평등하게 찾아오나니
+		PRINTW 사람도 아니고 악마도 아니고
+		PRINTW 거대한 의지의 인도로 인해
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.003 ( 전멸 END -진 여신전생 3 편- )
+		CALL GLOBAL_BADEND_SET(3)
+	CASE 4
+		;아바타르 튜너
+		PRINTW 거짓된 것으로부터 진실로
+		PRINTW 어둠 안으로부터 빛으로
+		PRINTW 멸망해가는 것으로부터 불멸의 것으로…
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.004 ( 전멸 END -아바타르 튜너 편- )
+		CALL GLOBAL_BADEND_SET(4)
+	CASE 5
+		;アバタール・チューナー2
+		PRINTW Om Mani Padome Hm
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.005 ( 전멸 END -아바타르 튜너 2 편- )
+		CALL GLOBAL_BADEND_SET(5)
+	CASE 6
+		;ソウルハッカーズ
+		PRINTW 세계에는 삶도 죽음도 없다
+		PRINTW 그저、영혼이 모습을 바꾸는 것에 지나지 않는다
+		PRINTW 너의 강한 영혼은 다음의 세계에서
+		PRINTW 행진을 계속하자……
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.006 ( 전멸 END -소울 해커즈 편- )
+		CALL GLOBAL_BADEND_SET(6)
+	CASE 7
+		;페르소나3
+		PRINTW 죽음은 갑자기 찾아오는 사냥꾼이 아니니
+		PRINTW 물론 누구나 그것을 알고 있다…
+		PRINTW 삶이란 죽음을 향한 여행…
+		PRINTW 하면 산다는 것은 바라면서 나아가는 것.
+		PRINTW 그를 이루어서만이 죽어서도 남음이라.
+		PRINTW 배웅하는 자에게 ”이야기”가 남으리라.
+		PRINTW 허나 지금 객인의 목숨이 다했으니、
+		PRINTW 이야기는 이 손에 남지 않았다…
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.007 ( 전멸 END -페르소나 3 편- )
+		CALL GLOBAL_BADEND_SET(7)
+	CASE 8
+		;페르소나4
+		PRINTW 삶은 진실、잠시의 꿈조차 되지 않는다。
+		PRINTW 물론 누구나 그것을 알고 있다…
+		PRINTW 진실이란、선택해 취하는 것…
+		PRINTW 시선과 의지로 찾아내는 것.
+		PRINTW 그것을 얻어야만、당신도 진실해진다.
+		PRINTW 과거와 미래를 묶는 실은 충분하다.
+		PRINTW 하지만 지금、손님의 규정은 중단되어、
+		PRINTW 아직도 진실은、안개의 숲 속에…
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.008 ( 전멸 END -페르소나 4 편- )
+		CALL GLOBAL_BADEND_SET(8)
+	CASE 9
+		;ストレンジジャーニー
+		PRINTFORMW %플레이어는()% 움직일 수 없게 되었다…
+		PRINTW 
+		PRINTW Mission Failed
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.009 ( 전멸 END -스트레인지 저니 편- )
+		CALL GLOBAL_BADEND_SET(9)
+	CASE 10
+		;여신異聞録페르소나（ＰＳＰ版）改変
+		PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 힘이 모자라、막강한 악마 앞에 패배하였다。
+		PRINTW 기쁨도 슬픔도、그 마음도 영혼도、
+		PRINTW 쌓아 올린 추억도、기억도、모두 무로 돌려 보내려 하고 있다…
+		PRINTW 하지만、만약 아직、
+		PRINTW 그 마음 속 깊은 곳에 희망의 의지가 남아 있다면、
+		PRINTW 내 힘을 부르고 있다는 것을 깨달았다면、다시 일어 나라。
+		PRINTW 당신의 진실한 인생을、자신의 손으로 붙잡는 것이다！
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.010 ( 전멸 END -여신이문록 페르소나（ＰＳＰ판）편- )
+		CALL GLOBAL_BADEND_SET(10)
+	CASE 11
+		;페르소나２罪　Innocent sin.（ＰＳ版）改変
+		PRINTFORMW %조사처리(CALLNAME:MASTER,"여")%…
+		PRINTW 거기서 죽을 것인가？
+		PRINTW 몇 번 실패하더라도、
+		PRINTW 과거를 돌아보며、미래를 잡으려는 것이 사람의 본성…
+		PRINTW 자아、다시 한 번、새겨진 시간에서부터 걸어 나가자。
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.011 ( 전멸 END -페르소나 ２ 죄　Innocent sin.（ＰＳ판）편- )
+		CALL GLOBAL_BADEND_SET(11)
+	CASE 12
+		;마신転生改変
+		PRINTFORMW %조사처리(CALLNAME:MASTER,"는")%
+		PRINTW 뜻을 이루지 못하고 힘이 다하였다・・・
+		PRINTW GAME OVER
+		PRINTW 그 정도의 힘으로 반항하다니
+		PRINTW 분수도 모르는 어리석은 녀석！
+		PRINTW 
+		PRINTW 　　　　　　　　――  Bad Ending No.012 ( 전멸 END -마신전생 편- )
+		CALL GLOBAL_BADEND_SET(12)
+ENDSELECT
+
+JUMP GAME_OVER
+
+
+
+
+;=======================================================
+;行動可能かの판정
+;====================================================
+@ACTIONABLE_CHARA,ARG
+SELECTCASE GET_STATE(CFLAG:ARG:ステート)
+	CASE "DYING","STONE","PALYZE","BIND","FREEZE","SHOCK","SLEEP","HEAT","SLIP"
+	;死んでると駄눈
+	;石になってると駄눈
+	;麻痺してると駄눈
+	;金縛りだと駄눈
+	;凍ってると駄눈
+	;感電してると駄눈
+	;眠ってるとダメ
+	;オーバー히트でダメ
+	;転倒してると駄눈
+		RETURN 0
+ENDSELECT
+RETURN 1
+
+@ACTIONABLE_CHARA_F,ARG
+#FUNCTION
+SELECTCASE GET_STATE(CFLAG:ARG:ステート)
+	CASE "DYING","STONE","PALYZE","BIND","FREEZE","SHOCK","SLEEP","HEAT","SLIP"
+	;死んでると駄눈
+	;石になってると駄눈
+	;麻痺してると駄눈
+	;金縛りだと駄눈
+	;凍ってると駄눈
+	;感電してると駄눈
+	;眠ってるとダメ
+	;オーバー히트でダメ
+	;転倒してると駄눈
+		RETURNF 0
+ENDSELECT
+RETURNF 1
+
+;=======================================================
+;적の行動可能かの판정
+;====================================================
+@ACTIONABLE_NPC_COMMAND,ARG
+
+
+;=======================================================
+;사용可能な스킬をリスト化
+;====================================================
+@SEARCH_ACT,ARG
+#LOCALSIZE 4
+#LOCALSSIZE 1
+#DIM LCOUNT
+LOCAL = 0
+LOCAL:1 = 0
+LOCAL:3 = 0
+FOR LCOUNT, 0, 21
+	S:(10+LCOUNT) = 0
+NEXT
+
+CALL CHECK_ACTIONABLE,ARG,0
+IF RESULT == 1
+	LOCAL += 1
+ENDIF
+SIF LOCAL == 1
+	S:10 = 0
+
+IF CFLAG:ARG:ボスフラグ && CFLAG:ARG:PTフラグ == 0
+	FOR LOCAL:2,0,20
+		LOCALS = 스킬{LOCAL:2+1}
+		SIF ABL:ARG:LOCALS == 0
+			BREAK
+		RESULT = 1
+		TRYCALLFORM SKILL_ACTIONABLE_BATTLE_{ABL:ARG:LOCALS}
+		SIF RESULT == 0
+			CONTINUE
+		CALL CHECK_ACTIONABLE,ARG,ABL:ARG:LOCALS
+		IF RESULT == 1
+			LOCAL += 1
+			S:(9+LOCAL) = ABL:ARG:LOCALS
+		ENDIF
+	NEXT
+ELSEIF TALENT:ARG:이능자 || TALENT:ARG:달인 || TALENT:ARG:인수라
+	FOR LOCAL:2,0,FLAG:이능자스킬数
+		LOCALS = 스킬{LOCAL:2+1}
+		SIF ABL:ARG:LOCALS == 0
+			BREAK
+		RESULT = 1
+		TRYCALLFORM SKILL_ACTIONABLE_BATTLE_{ABL:ARG:LOCALS}
+		SIF RESULT == 0
+			CONTINUE
+		CALL CHECK_ACTIONABLE,ARG,ABL:ARG:LOCALS
+		IF RESULT == 1
+			LOCAL += 1
+			S:(9+LOCAL) = ABL:ARG:LOCALS
+		ENDIF
+	NEXT
+ELSE
+	FOR LOCAL:2,0,FLAG:스킬数
+		LOCALS = 스킬{LOCAL:2+1}
+		SIF ABL:ARG:LOCALS == 0
+			BREAK
+		RESULT = 1
+		TRYCALLFORM SKILL_ACTIONABLE_BATTLE_{ABL:ARG:LOCALS}
+		SIF RESULT == 0
+			CONTINUE
+		CALL CHECK_ACTIONABLE,ARG,ABL:ARG:LOCALS
+		IF RESULT == 1
+			LOCAL += 1
+			S:(9+LOCAL) = ABL:ARG:LOCALS
+		ENDIF
+	NEXT
+ENDIF
+
+RETURN LOCAL
+
+;===============================================
+;指定したコマンドが사용可能か
+;===============================================
+@CHECK_ACTIONABLE,ARG,ARG:1
+#LOCALSIZE 1
+;악마・이능자・페르소나구사자・악마빙의자・악마변신中のキャラ以外はEXTRA・MAGICに分類される링케이지以外の스킬は사용불가능
+RESULT = 0
+TRYCALLFORM SKILL_DECIDE_TYPE_{ARG:1}
+SIF RESULT != 0 && ABL:ARG:종족 == 0 && TALENT:ARG:이능자 == 0 && TALENT:ARG:달인 == 0 && TALENT:ARG:페르소나구사자 == 0 && TALENT:ARG:악마빙의자 == 0 && CFLAG:ARG:악마변신 == 0 && ARG:1 < 4000
+	RETURN 0
+SIF CFLAG:ARG:롱기누스 && ARG:1 > 0 && (ARG:1 >= 4000 || ARG:1 < 3000)
+	RETURN 0
+TRYCCALLFORM SKILL_SPECIAL_ACTIONABLE_{ARG:1},ARG
+	SIF RESULT == 0
+		RETURN 0
+CATCH
+ENDCATCH
+
+CALLFORM SKILL_DECIDE_TYPE_{ARG:1}
+IF RESULT == 2 && CFLAG:ARG:ステート == GET_STATE_NUM("CLOSE")
+	RETURN 0
+ENDIF
+;自動発動系스킬を弾く
+IF (ARG:1/100) == 24
+	RETURN 0
+ENDIF
+;1체蘇生 도반옥・반혼향・리캄・사마리캄・トンリン芳香
+IF ARG:1== [[스킬:리캄]] || ARG:1== [[스킬:사마리캄]] || ARG:1== [[스킬:도반옥]] || ARG:1== [[스킬:반혼향]] || ARG:1== [[스킬:통령「통령요시카」]]
+	;1체蘇生대상が存在するか체크
+	CALL CHECK_TARGET_RESUSCITATION, ARG
+	IF RESULT == -1
+		RETURN 0
+	ENDIF
+ENDIF
+CALLFORM SKILL_COSTTYPE_{ARG:1}
+IF RESULT > 1
+	IF RESULT == 2
+		CALLFORM SKILL_COST_{ARG:1}, ARG
+		;/////////素質추가항목
+		;RESULT = RESULT * MAXBASE:ARG:ＨＰ / 100	;諸悪の根源
+		CALL COST_CUT, RESULT, ARG:1, ARG
+		;/////////////////////
+		LOCAL = MAXBASE:ARG:ＨＰ * RESULT /100
+		SIF CFLAG:ARG:ボスフラグ
+			LOCAL /= 10
+		SIF BASE:ARG:ＨＰ <= LOCAL
+			RETURN 0
+	ELSE
+		CALLFORM SKILL_COST_{ARG:1}, ARG
+		;/////////素質추가항목
+		CALL COST_CUT, RESULT, ARG:1, ARG
+		;/////////////////////
+		SIF BASE:ARG:ＭＰ < RESULT
+			RETURN 0
+	ENDIF
+ENDIF
+
+CALL SEARCH_TARGET,ARG,ARG:1
+SIF FLAG:SHOPコマンド == [[SHOP:능력확인]] || RESULT == 1
+	RETURN 1
+
+RETURN 0
+
+;===============================================
+;指定したコマンドの대상がいるか
+;===============================================
+@SEARCH_TARGET,ARG,ARG:1
+#LOCALSIZE 31
+#LOCALSSIZE 1
+;CALLFORM SKILL_EFECT_{ARG:1}
+
+;IF RESULT == 2 || RESULT == 5
+;	RETURN 1
+;ELSEIF RESULT == 4
+;	
+;	CALLFORM SKILL_SPECIAL_ACTIONABLE_{ARG:1},ARG
+;	SIF RESULT == 1
+;		RETURN 1
+;ELSEIF RESULT == 6
+;	RETURN 0
+;ELSE
+CALLFORM SKILL_TARGET_{ARG:1}
+IF RESULT == 1
+	RESULT = 0
+	TRYCCALLFORM SKILL_RANGE_{ARG:1},ARG
+		;적
+		IF CFLAG:ARG:PTフラグ == 0
+			IF (RESULT == 1 && CFLAG:ARG:포지션 < 12) || RESULT == 2
+				FOR LOCAL:30,0,3
+					LOCALS = 포지션{LOCAL:30+1}
+					IF FLAG:LOCALS > -1 && CFLAG:(FLAG:LOCALS):ステート != GET_STATE_NUM("DYING")
+						RETURN 1
+					ENDIF
+				NEXT
+			ELSEIF RESULT == 3 || (RESULT == 4 && CPOS(ARG) < 12)
+				FOR LOCAL:30,0,6
+					LOCALS = 포지션{LOCAL:30+1}
+					IF FLAG:LOCALS > -1 && CFLAG:(FLAG:LOCALS):ステート != GET_STATE_NUM("DYING")
+						RETURN 1
+					ENDIF
+				NEXT
+			ENDIF
+			RETURN 0
+		ELSEIF CFLAG:ARG:PTフラグ == 2
+		;아군
+			IF (RESULT == 1 && CFLAG:ARG:포지션 < 4) || RESULT == 2
+				FOR LOCAL:30,7,12
+					LOCALS = 포지션{LOCAL:30}
+					IF FLAG:LOCALS > -1 && CFLAG:(FLAG:LOCALS):ステート != GET_STATE_NUM("DYING")
+						RETURN 1
+					ENDIF
+				NEXT
+			ELSEIF RESULT == 3 || (RESULT == 4 && CPOS(ARG) < 4)
+				FOR LOCAL:30,7,17
+					LOCALS = 포지션{LOCAL:30}
+					IF FLAG:LOCALS > -1 && CFLAG:(FLAG:LOCALS):ステート != GET_STATE_NUM("DYING")
+						RETURN 1
+					ENDIF
+				NEXT
+			ENDIF
+			RETURN 0
+		ENDIF
+	CATCH
+	ENDCATCH
+ELSE
+	RETURN 1
+ENDIF
+
+;===================================
+;混乱時の行動
+;===================================
+@ACT_PANIC,ARG
+PRINTFORML ┏>CHARA━━━━━━━━━━┓　┏>ACT━━━━━━━━━━━━━━━━━━┓
+PRINTFORM ┃[{CFLAG:ARG:포지션,2}] %CALLNAME:ARG,21,LEFT%┃　┃
+
+PRINTFORML 혼란해하고 있다!　　　　　　　　　　　　　┃
+PRINTFORMW ┗━━━━━━━━━━━━━┛　┗━━━━━━━━━━━━━━━━━━━━┛
+
+PRINTL
+
+SELECTCASE RAND:100
+	CASE IS < 40
+		IF RAND:4 == 0 && CFLAG:ARG:PTフラグ > 0
+			CFLAG:ARG:입력行動 = [[스킬:금전뿌리기]]
+		ELSE
+			CFLAG:ARG:입력行動 = [[스킬:행동불능]]
+		ENDIF
+	CASEELSE
+		CALL SET_ACT_PANIC,ARG
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+;===================================
+;混乱時の行動決定
+;===================================
+@SET_ACT_PANIC,ARG
+#LOCALSIZE 2
+$DECIDE_ACTION
+CALL SEARCH_ACT,ARG
+IF RESULT <= 0
+	CFLAG:ARG:입력行動 = -1
+	CFLAG:ARG:방어フラグ = 1
+	RETURN 0
+ENDIF
+LOCAL = RAND:RESULT
+		;스킬番号決定
+LOCAL:1 = S:(10+LOCAL)
+SIF LOCAL:1 == [[스킬:사바트마]]
+	LOCAL:1 = 0
+SIF LOCAL:1 == [[스킬:초래의무도]]
+	LOCAL:1 = 0
+SIF LOCAL:1 == -1
+	LOCAL:1 = 0
+$TARGET_LOOP
+		
+CALL SET_TARGET_PANIC,ARG,LOCAL:1
+CALLFORM SKILL_TARGET_{LOCAL:1}
+		;ここで스킬番号を行動内容に代入
+SIF CFLAG:ARG:ターゲット == -1
+	GOTO DECIDE_ACTION
+CFLAG:ARG:입력行動 = LOCAL:1
+
+;===================================
+;混乱時の대상決定
+;===================================
+@SET_TARGET_PANIC,ARG,ARG:1
+#LOCALSIZE 31
+#DIM LCOUNT
+FOR LCOUNT, 0, 16
+	LOCAL:LCOUNT = -1
+NEXT
+LOCAL:16 = 0
+CALLFORM SKILL_TARGET_{ARG:1}
+IF RESULT == 2 
+
+;사용者の아군
+	IF RAND:2 == 0
+	;적
+		FOR LOCAL:20,0,10
+			IF POS(7+LOCAL:20) > -1 && CFLAG:(POS(7+LOCAL:20)):ステート != GET_STATE_NUM("DYING")
+				LOCAL:(LOCAL:16) = 7+LOCAL:20
+				LOCAL:16 += 1
+			ENDIF
+		NEXT
+		CFLAG:ARG:ターゲット = LOCAL:(RAND:(LOCAL:16))
+		
+	ELSE
+	;아군
+		FOR LOCAL:20,0,6
+			IF POS(1+LOCAL:20) > -1 && CFLAG:(POS(1+LOCAL:20)):ステート != GET_STATE_NUM("DYING")
+				LOCAL:(LOCAL:16) = 1+LOCAL:20
+				LOCAL:16 += 1
+			ENDIF
+		NEXT
+		CFLAG:ARG:ターゲット = LOCAL:(RAND:(LOCAL:16))
+	
+	ENDIF
+ELSEIF RESULT == 5
+
+ELSEIF RESULT == 3
+	IF RAND:2 == 0
+		CFLAG:ARG:ターゲット = 19
+	ELSE
+		CFLAG:ARG:ターゲット = 22
+	ENDIF
+ELSEIF RESULT == 1
+;사용者の적
+	RESULT = 0
+	TRYCCALLFORM SKILL_RANGE_{ARG:1},ARG
+		;적
+		IF RAND:2 == 0
+			IF (RESULT == 1 && CPOS(ARG) < 12) || RESULT == 2
+				FOR LOCAL:30,0,3
+					IF POS(1+LOCAL:30) > -1 && CFLAG:(POS(1+LOCAL:30)):ステート != GET_STATE_NUM("DYING")
+						LOCAL:(LOCAL:16) = 1+LOCAL:30
+						LOCAL:16 += 1
+					ENDIF
+				NEXT
+			ELSEIF RESULT == 3 || RESULT == 4
+				FOR LOCAL:30,0,6
+					IF POS(1+LOCAL:30) > -1 && CFLAG:(POS(1+LOCAL:30)):ステート != GET_STATE_NUM("DYING")
+						LOCAL:(LOCAL:16) = 1+LOCAL:30
+						LOCAL:16 += 1
+					ENDIF
+				NEXT
+			ENDIF
+			IF LOCAL:16 == 0
+				CFLAG:ARG:ターゲット = CFLAG:ARG:포지션
+			ELSE
+				CFLAG:ARG:ターゲット = LOCAL:(RAND:(LOCAL:16))
+			ENDIF
+		ELSE
+		;아군
+			IF (RESULT == 1 && CPOS(ARG) < 4) || RESULT == 2
+				FOR LOCAL:30,0,5
+					IF POS(7+LOCAL:30) > -1 && CFLAG:(POS(7+LOCAL:30)):ステート != GET_STATE_NUM("DYING")
+						LOCAL:(LOCAL:16) = 7+LOCAL:30
+						LOCAL:16 += 1
+					ENDIF
+				NEXT
+			ELSEIF RESULT == 3 || RESULT == 4
+				FOR LOCAL:30,0,10
+					IF POS(7+LOCAL:30) > -1 && CFLAG:(POS(7+LOCAL:30)):ステート != GET_STATE_NUM("DYING")
+						LOCAL:(LOCAL:16) = 7+LOCAL:30
+						LOCAL:16 += 1
+					ENDIF
+				NEXT
+			ENDIF
+			IF LOCAL:16 == 0
+				CFLAG:ARG:ターゲット = CFLAG:ARG:포지션
+			ELSE
+				CFLAG:ARG:ターゲット = LOCAL:(RAND:(LOCAL:16))
+			ENDIF
+		ENDIF
+	CATCH
+	ENDCATCH
+ENDIF
+
+
+;===================================
+;魅了時の行動
+;===================================
+@ACT_CHARM,ARG
+IF RAND:10 > 6;30%
+	PRINTFORML ┏>CHARA━━━━━━━━━━┓　┏>ACT━━━━━━━━━━━━━━━━━━┓
+	PRINTFORM ┃[{CFLAG:ARG:포지션,2}] %CALLNAME:ARG,21,LEFT%┃　┃
+	PRINTFORML 매료되어 있다！   　　　　　　　　　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━┛　┗━━━━━━━━━━━━━━━━━━━━┛
+	PRINTL
+	
+	CFLAG:ARG:입력行動 = [[스킬:행동불능]]
+ELSE
+	PRINTFORML ┏>CHARA━━━━━━━━━━┓　┏>ACT━━━━━━━━━━━━━━━━━━┓
+	PRINTFORM ┃[{CFLAG:ARG:포지션,2}] %CALLNAME:ARG,21,LEFT%┃　┃
+	PRINTFORML 동료마를 배신했다！　　　　　　　　　　　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━┛　┗━━━━━━━━━━━━━━━━━━━━┛
+
+	PRINTL
+
+	CFLAG:ARG:입력行動 = 0
+	CALL SET_TARGET_CHARM,ARG
+ENDIF
+;===================================
+;魅了時の대상決定
+;===================================
+@SET_TARGET_CHARM,ARG
+#LOCALSIZE 22
+LOCAL:20 = 0
+
+IF CFLAG:ARG:PTフラグ == 0
+	LOCAL:18 = 7
+	LOCAL:19 = 17
+ELSE
+	LOCAL:18 = 1
+	LOCAL:19 = 7
+ENDIF
+
+FOR LOCAL:21,LOCAL:18,LOCAL:19
+	IF POS(LOCAL:21) > -1 && GET_STATE(CFLAG:(POS(LOCAL:21)):ステート) != "DYING"
+		LOCAL:(LOCAL:20) = LOCAL:21
+		LOCAL:20 += 1
+	ENDIF
+NEXT
+IF LOCAL:20 == 0
+	CFLAG:ARG:ターゲット = CFLAG:ARG:포지션
+ELSE
+	CFLAG:ARG:ターゲット = LOCAL:(RAND:(LOCAL:20))
+ENDIF
+
+;---------------------------------------------------------------
+;전투開始時이벤트呼び出し関数
+;---------------------------------------------------------------
+@EVENT_BATTLE_START
+CALL KAJA_AUTO
+CALL 전투개시시효과
+SELECTCASE FLAG:SHOPコマンド
+	CASE 101
+		TRYCALLFORM EVENT_BATTLE_START_DUNGEON{FLAG:現던전}
+	CASE 102
+		TRYCALLFORM EVENT_BATTLE_START_COLOSSEUM{FLAG:進行中コロシアム}
+	CASE 103
+		TRYCALLFORM EVENT_BATTLE_START_EVENT{FLAG:進行中이벤트}
+	CASE 104
+		TRYCALLFORM EVENT_BATTLE_START_REQUEST{FLAG:進行中의뢰}
+ENDSELECT
+
+;---------------------------------------------------------------
+;ターン開始時이벤트呼び出し関数
+;---------------------------------------------------------------
+@EVENT_BATTLE_TURNTOP
+SELECTCASE FLAG:SHOPコマンド
+	CASE 101
+		TRYCALLFORM EVENT_BATTLE_TURNTOP_DUNGEON{FLAG:現던전}
+	CASE 102
+		TRYCALLFORM EVENT_BATTLE_TURNTOP_COLOSSEUM{FLAG:進行中コロシアム}
+	CASE 103
+		TRYCALLFORM EVENT_BATTLE_TURNTOP_EVENT{FLAG:進行中이벤트}
+	CASE 104
+		TRYCALLFORM EVENT_BATTLE_TURNTOP_REQUEST{FLAG:進行中의뢰}
+ENDSELECT
+
+
+;---------------------------------------------------------------
+;ターン終了時이벤트呼び出し関数
+;---------------------------------------------------------------
+@EVENT_BATTLE_TURNEND
+SELECTCASE FLAG:SHOPコマンド
+	CASE 101
+		TRYCALLFORM EVENT_BATTLE_TURNEND_DUNGEON{FLAG:現던전}
+	CASE 102
+		TRYCALLFORM EVENT_BATTLE_TURNEND_COLOSSEUM{FLAG:進行中コロシアム}
+	CASE 103
+		TRYCALLFORM EVENT_BATTLE_TURNEND_EVENT{FLAG:進行中이벤트}
+	CASE 104
+		TRYCALLFORM EVENT_BATTLE_TURNEND_REQUEST{FLAG:進行中의뢰}
+ENDSELECT
+
+;---------------------------------------------------------------
+;行動終了時이벤트呼び出し関数
+;---------------------------------------------------------------
+@EVENT_BATTLE_ACTEND
+RESULT = 0
+SELECTCASE FLAG:SHOPコマンド
+	CASE 101
+		TRYCALLFORM EVENT_BATTLE_ACTEND_DUNGEON{FLAG:現던전}
+	CASE 102
+		TRYCALLFORM EVENT_BATTLE_ACTEND_COLOSSEUM{FLAG:進行中コロシアム}
+	CASE 103
+		TRYCALLFORM EVENT_BATTLE_ACTEND_EVENT{FLAG:進行中이벤트}
+	CASE 104
+		TRYCALLFORM EVENT_BATTLE_ACTEND_REQUEST{FLAG:進行中의뢰}
+ENDSELECT
+RETURN RESULT
+
+
+
+;---------------------------------------------------------------
+;カジャオート
+;---------------------------------------------------------------
+@KAJA_AUTO
+#LOCALSIZE 3
+LOCAL:2 = LINECOUNT
+FOR LOCAL,0,16
+	LOCALS:5 = 포지션{LOCAL+1}
+	IF FLAG:(LOCALS:5) > -1
+		LOCAL:1 = FLAG:(LOCALS:5)
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2414) && CFLAG:(FLAG:(LOCALS:5)):공격강화 < 1
+			IF CFLAG:(LOCAL:1):PTフラグ == 0
+				A:7 = 7
+				A:8 = 17
+			ELSE
+				A:7 = 1
+				A:8 = 7
+			ENDIF
+			FOR A,A:7,A:8
+				LOCALS:2 = 포지션{A}
+				SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+				CFLAG:(FLAG:(LOCALS:2)):공격강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):공격강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 = 32
+			NEXT
+			PRINTFORML [타루카쟈오토] %CALLNAME:(LOCAL:1)% >>>>> \@ CFLAG:(LOCAL:1):PTフラグ == 0 ? 적 # 아군 \@ 전체의 공격력이 올라갔다!
+		ENDIF
+		LOCAL:1 = FLAG:(LOCALS:5)
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2415) && CFLAG:(FLAG:(LOCALS:5)):방어강화 < 1
+			IF CFLAG:(LOCAL:1):PTフラグ == 0
+				A:7 = 7
+				A:8 = 17
+			ELSE
+				A:7 = 1
+				A:8 = 7
+			ENDIF
+			FOR A,A:7,A:8
+				LOCALS:2 = 포지션{A}
+				SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+				CFLAG:(FLAG:(LOCALS:2)):방어강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):방어강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 = 32
+			NEXT
+			PRINTFORML [라쿠카쟈오토] %CALLNAME:(LOCAL:1)% >>>>> \@ CFLAG:(LOCAL:1):PTフラグ == 0 ? 적 # 아군 \@ 전체의 방어력이 올라갔다!
+		ENDIF
+		LOCAL:1 = FLAG:(LOCALS:5)
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2416) && CFLAG:(FLAG:(LOCALS:5)):마법위력강화 < 1
+			IF CFLAG:(LOCAL:1):PTフラグ == 0
+				A:7 = 7
+				A:8 = 17
+			ELSE
+				A:7 = 1
+				A:8 = 7
+			ENDIF
+			FOR A,A:7,A:8
+				LOCALS:2 = 포지션{A}
+				SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+				CFLAG:(FLAG:(LOCALS:2)):마법위력강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법위력강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 = 32
+			NEXT
+			PRINTFORML [마카카쟈오토] %CALLNAME:(LOCAL:1)% >>>>> \@ CFLAG:(LOCAL:1):PTフラグ == 0 ? 적 # 아군 \@ 전체의 마법위력이 올라갔다!
+		ENDIF
+		LOCAL:1 = FLAG:(LOCALS:5)
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2417) && CFLAG:(FLAG:(LOCALS:5)):회피강화 < 1 && CFLAG:(FLAG:(LOCALS:5)):명중강화 < 1
+			IF CFLAG:(LOCAL:1):PTフラグ == 0
+				A:7 = 7
+				A:8 = 17
+			ELSE
+				A:7 = 1
+				A:8 = 7
+			ENDIF
+			FOR A,A:7,A:8
+				LOCALS:2 = 포지션{A}
+				SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+				CFLAG:(FLAG:(LOCALS:2)):명중강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):명중강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 = 32
+				CFLAG:(FLAG:(LOCALS:2)):회피강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):회피강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 = 32
+			NEXT
+			PRINTFORML [스쿠카쟈오토] %CALLNAME:(LOCAL:1)% >>>>> \@ CFLAG:(LOCAL:1):PTフラグ == 0 ? 적 # 아군 \@ 전체의 명중률・회피율이 올라갔다!
+			PRINTFORMW 
+		ENDIF
+		LOCAL:1 = FLAG:(LOCALS:5)
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && HAVE_SKILL(LOCAL:1,2444) && CFLAG:(FLAG:(LOCALS:5)):마법효과강화 < 1
+			IF CFLAG:(LOCAL:1):PTフラグ == 0
+				A:7 = 7
+				A:8 = 17
+			ELSE
+				A:7 = 1
+				A:8 = 7
+			ENDIF
+			FOR A,A:7,A:8
+				LOCALS:2 = 포지션{A}
+				SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+				CFLAG:(FLAG:(LOCALS:2)):마법효과강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법효과강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 = 32
+			NEXT
+			PRINTFORML [사마카쟈오토] %CALLNAME:(LOCAL:1)% >>>>> \@ CFLAG:(LOCAL:1):PTフラグ == 0 ? 적 # 아군 \@ 전체의 마법효과가 올라갔다!
+			PRINTFORMW
+		ENDIF
+;---- EDIT 035 ADD START ---------------------------
+		CALL WEAPON_STYLE_CHECK(LOCAL:1,GET_WEAPON_TYPE_NUM("刀"))
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && RESULT == 2 && !RAND:3
+			CFLAG:(LOCAL:1):베어내기フラグ = 1
+			PRINTFORMW [도술　제 2형] %CALLNAME:(LOCAL:1)% >>>>> 베어내기상태가 되었다！
+		ENDIF
+		CALL WEAPON_STYLE_CHECK(LOCAL:1,GET_WEAPON_TYPE_NUM("斧、鈍器"))
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && RESULT == 2 && !RAND:3
+			CFLAG:(LOCAL:1):기합フラグ = 1
+			PRINTFORMW [도끼술　제 2형] %CALLNAME:(LOCAL:1)% >>>>> 기합상태가 되었다！
+		ENDIF
+		CALL WEAPON_STYLE_CHECK(LOCAL:1,GET_WEAPON_TYPE_NUM("杖、祭具"))
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && RESULT == 2 && !RAND:3
+			CFLAG:(LOCAL:1):集中フラグ = 1
+			PRINTFORMW [제사　제 2형] %CALLNAME:(LOCAL:1)% >>>>> 컨센트레이트상태가 되었다！
+		ENDIF
+;---- EDIT 035 ADD END   ---------------------------
+		
+		;東方ＭＯＤ추가---------------------------------------------
+		;鍵山雛　액부「배드포츈」
+		;적아군全員のクリティカル率上昇
+		LOCAL:1 = FLAG:(LOCALS:5)
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && CHECK_SKILL(LOCAL:1,2874) && CFLAG:(FLAG:(LOCALS:5)):クリティカル강화 < 1
+			A:7 = 1
+			A:8 = 17
+			FOR A,A:7,A:8
+				LOCALS:2 = 포지션{A}
+				SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+				CFLAG:(FLAG:(LOCALS:2)):クリティカル강화 += 6
+				SIF CFLAG:(FLAG:(LOCALS:2)):クリティカル강화 > 8
+					CFLAG:(FLAG:(LOCALS:2)):クリティカル강화 = 8
+			NEXT
+			PRINTFORML [액부「배드포츈」] %CALLNAME:(LOCAL:1)% >>>>> 적과 아군 전체의 크리티컬 확률이 올라갔다!
+			PRINTFORMW 
+		ENDIF
+		;藤原妹紅　「봉래인형」
+		;아군に即死방어フィールドを張る
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && CHECK_SKILL(LOCAL:1,2866) && CFLAG:(FLAG:(LOCALS:5)):DYING무효화횟수 < 1
+			IF CFLAG:(LOCAL:1):PTフラグ == 0
+				A:7 = 7
+				A:8 = 17
+			ELSE
+				A:7 = 1
+				A:8 = 7
+			ENDIF
+			FOR A,A:7,A:8
+				LOCALS:2 = 포지션{A}
+				SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+				SIF CFLAG:(FLAG:(LOCALS:2)):DYING무효화횟수 < 1
+					CFLAG:(FLAG:(LOCALS:2)):DYING무효화횟수 = 1
+			NEXT
+			PRINTFORML [「봉래인형」] %CALLNAME:(LOCAL:1)% >>>>> \@ CFLAG:(LOCAL:1):PTフラグ == 0 ? 적 # 아군 \@은 즉사를 방어!
+			PRINTFORMW 
+		ENDIF
+;東方ＭＯＤ추가ここまで-------------------------------------
+;東方ＭＯＤEX추가-------------------------------------
+		;헤카티아・라피스라줄리　「トリニタリアンラプソ디무」
+		;아군の即死방어＋명중회피강화1
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && CHECK_SKILL(LOCAL:1,2935) && CFLAG:(FLAG:(LOCALS:5)):DYING무효화횟수 < 1
+			IF CFLAG:(LOCAL:1):PTフラグ == 0
+				A:7 = 7
+				A:8 = 17
+			ELSE
+				A:7 = 1
+				A:8 = 7
+			ENDIF
+			FOR A,A:7,A:8
+				LOCALS:2 = 포지션{A}
+				SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+				SIF CFLAG:(FLAG:(LOCALS:2)):DYING무효화횟수 < 1
+					CFLAG:(FLAG:(LOCALS:2)):DYING무효화횟수 = 1
+				CFLAG:(FLAG:(LOCALS:2)):명중강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):명중강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 = 32
+				CFLAG:(FLAG:(LOCALS:2)):회피강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):회피강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 = 32
+			NEXT
+			PRINTFORML [「트리니테리언랩소디」] %CALLNAME:(LOCAL:1)% >>>>> \@ CFLAG:(LOCAL:1):PTフラグ == 0 ? 적 # 아군 \@을 다른 세계의 헤카티아가 엄호했다！
+			PRINTFORMW 
+		ENDIF
+		;依神紫苑　「최흉최악의극빈불행신」
+		;적아군全員に랜덤で能力低下や必殺率の上昇。稀に能力上昇
+		LOCAL:1 = FLAG:(LOCALS:5)
+		IF CFLAG:(LOCAL:1):ステート != GET_STATE_NUM("DYING") && CHECK_SKILL(LOCAL:1,2811) && CFLAG:(FLAG:(LOCALS:5)):クリティカル강화 < 1
+				A = RAND:99
+				IF A == 0
+					A:7 = 1
+					A:8 = 17
+					FOR A,A:7,A:8
+					LOCALS:2 = 포지션{A}
+					SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 += 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):공격강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 += 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):방어강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 += 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법위력강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 += 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법효과강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 += 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):명중강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 += 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):회피강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 = 32
+							NEXT
+							PRINTFORML [「최흉최악의극빈불행신？」] 적과 아군 전체의 모든 능력이 대폭 상승！
+							PRINTFORMW 
+				ELSEIF A <= 11
+					A:7 = 1
+					A:8 = 17
+					FOR A,A:7,A:8
+					LOCALS:2 = 포지션{A}
+					SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):공격강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):방어강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법위력강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법효과강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):명중강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 += 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):회피강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 = 32
+					NEXT
+							PRINTFORML [「최흉최악의극빈불행신？」] 적과 아군 전체의 모든 능력이 상승！
+							PRINTFORMW 
+				ELSEIF A <= 24
+					A:7 = 1
+					A:8 = 17
+					FOR A,A:7,A:8
+					LOCALS:2 = 포지션{A}
+					SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+						CFLAG:(FLAG:(LOCALS:2)):クリティカル강화 +=3
+					SIF CFLAG:(FLAG:(LOCALS:2)):クリティカル강화 > 8
+						CFLAG:(FLAG:(LOCALS:2)):クリティカル강화 = 8
+							NEXT
+							PRINTFORML [「최흉최악의극빈불행신」] 적과 아군 전체의 크리티컬 확률 상승！
+							PRINTFORMW 
+				ELSEIF A <= 50
+					A:7 = 1
+					A:8 = 17
+					FOR A,A:7,A:8
+					LOCALS:2 = 포지션{A}
+					SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 -= 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):공격강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 -= 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):방어강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 -= 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법위력강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 -= 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법효과강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 -= 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):명중강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 -= 8
+				SIF CFLAG:(FLAG:(LOCALS:2)):회피강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 = 32
+					NEXT
+							PRINTFORML [「최흉최악의극빈불행신」] 적과 아군 전체의 모든 능력이 대폭 저하！
+							PRINTFORMW 
+				ELSE
+					A:7 = 1
+					A:8 = 17
+					FOR A,A:7,A:8
+					LOCALS:2 = 포지션{A}
+					SIF FLAG:(LOCALS:2) < 0
+					CONTINUE
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 -= 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):공격강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):공격강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 -= 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):방어강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):방어강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 -= 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법위력강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법위력강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 -= 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):마법효과강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):마법효과강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 -= 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):명중강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):명중강화 = 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 -= 4
+				SIF CFLAG:(FLAG:(LOCALS:2)):회피강화 > 32
+					CFLAG:(FLAG:(LOCALS:2)):회피강화 = 32
+					NEXT
+							PRINTFORML [「최흉최악의극빈불행신」] 적과 아군 전원의 모든 능력이 저하！
+							PRINTFORMW 
+					ENDIF
+		ENDIF
+;東方ＭＯＤEX추가-------------------------------------
+	ENDIF
+NEXT
+SIF LINECOUNT != LOCAL:2
+	WAIT
+RETURN 0
+
+;===================================
+;命乞い판정
+;적の場合は残り一体でＨＰ半分以下
+;FLAG:命乞いフラグ = 1.적の命乞い　2.적からの取引　3.￥が50000以上あるか　4.마카が1000以上あるか　5.相손の性の대상になるか　6.このターンで命乞いの処理に入ったか
+;LOCAL:1 = パーティの전투不能じゃない人数
+;RESULTS = 적회화相손の포지션番号
+;===================================
+@命乞い
+#LOCALSIZE 3
+#LOCALSSIZE 1
+CLEARBIT FLAG:命乞いフラグ, 1
+CLEARBIT FLAG:命乞いフラグ, 2
+;옵션설정판정
+SIF FLAG:전투時命乞い이벤트 == 0
+	RETURN
+;命乞いが起きるのは一전투に一回だけ
+SIF GETBIT(FLAG:命乞いフラグ, 6)
+	RETURN
+LOCAL:1 = 0
+;적の命乞い판정
+FOR LOCAL,0,10
+	LOCALS = 포지션{LOCAL + 7}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	;당신の레벨が대상악마よりも１5以上高い場合、指定확률で命乞い
+	IF BASE:MASTER:LV > BASE:(FLAG:LOCALS):LV + 15 && RAND:100 < FLAG:전투時命乞い이벤트発生率
+		LOCAL:1 = 1
+		RESULTS = %LOCALS%
+		BREAK
+	ENDIF
+	;ＨＰが半分より大きい時または100%-指定확률で적の命乞いを発生させない
+	IF BASE:(FLAG:LOCALS):ＨＰ > MAXBASE:(FLAG:LOCALS):ＨＰ / 2 || RAND:100 < (100 - FLAG:전투時命乞い이벤트発生率)
+		LOCAL:1 = 0
+		BREAK
+	ENDIF
+	LOCAL:1 += 1
+	SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+		CONTINUE
+	;生き残っているキャラの番号
+	RESULTS = %LOCALS%
+	;二体以上生き残っている場合は終了
+	SIF LOCAL:1 > 1
+		BREAK
+NEXT
+;적の命乞いを優先する
+IF LOCAL:1 == 1
+	SETBIT FLAG:命乞いフラグ, 1
+	;話しかけられた아군キャラを決める
+	;『당신』がDYING、STONEの場合
+	IF GET_STATE(CFLAG:MASTER:ステート) == "DYING" || GET_STATE(CFLAG:MASTER:ステート) == "STONE"
+		FOR LOCAL,1,7
+			LOCALS = 포지션{LOCAL}
+			SIF FLAG:LOCALS < 0
+				CONTINUE
+			SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+				CONTINUE
+			;生き残っているキャラの番号
+			;とりあえず最初にヒットしたキャラにする
+			PLAYER = POS(LOCAL)
+			BREAK
+		NEXT
+	;通常は『당신』が회화をする
+	ELSE
+		PLAYER = MASTER
+	ENDIF
+	RETURN
+ENDIF
+
+;아군の命乞い판정
+;生き残っているキャラを捜す
+LOCAL:1 = 0
+FOR LOCAL,1,7
+	LOCALS = 포지션{LOCAL}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	;ＨＰが半分以下じゃない
+	IF BASE:(FLAG:LOCALS):ＨＰ > MAXBASE:(FLAG:LOCALS):ＨＰ / 2
+		LOCAL:1 = 0
+		BREAK
+	ENDIF
+	SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "DYING" || GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+		CONTINUE
+	LOCAL:1 += 1
+	;生き残っているキャラの番号
+	PLAYER = POS(LOCAL)
+	;二人以上生き残っている場合は終了
+	SIF LOCAL:1 > 1
+		BREAK
+NEXT
+;조건に合わない場合は終了
+SIF LOCAL:1 > 1 || LOCAL:1 == 0
+	RETURN
+;話しかけてきた적キャラを決める
+LOCAL:1 = 0
+FOR LOCAL,0,10
+	LOCALS = 포지션{LOCAL + 7}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	SIF GET_STATE(CFLAG:(FLAG:LOCALS):ステート) == "STONE"
+		CONTINUE
+	;￥50000以下又は마카1000以下の場合を弾く
+	SIF MONEY <= 50000 || MONEY:1 <= 1000
+		CONTINUE
+	;FLAG:ムフフ전개がオフの場合は￥、마카の판정のみ
+	SIF FLAG:ムフフ전개 == 0
+		CONTINUE
+	;아군が남자かつ오토코노코でない時に、적が남자かつ오토코노코でない場合は弾く（純男同士は弾く
+	SIF TALENT:PLAYER:남자 && !TALENT:PLAYER:오토코노코 && TALENT:(FLAG:LOCALS):남자 && !TALENT:(FLAG:LOCALS):오토코노코
+		CONTINUE
+	;아군が남자の時、남성혐오は弾く
+	SIF TALENT:PLAYER:남자 && TALENT:(FLAG:LOCALS):남성혐오
+		CONTINUE
+	;아군がオンナの時に적がオンナorオンナ嫌いの場合は弾く
+	SIF !TALENT:PLAYER:남자 && (!TALENT:(FLAG:LOCALS):남자 || TALENT:(FLAG:LOCALS):여성혐오)
+		CONTINUE
+	;話しかけてきた적キャラの番号
+	;とりあえず最初にヒットしたキャラにする
+	RESULTS = %LOCALS%
+	LOCAL:1 = 1
+	BREAK
+NEXT
+;적に該当キャラがいない場合は終了
+SIF LOCAL:1 == 0
+	RETURN
+
+SETBIT FLAG:命乞いフラグ, 2
+SIF MONEY > 50000
+	SETBIT FLAG:命乞いフラグ, 3
+SIF MONEY:1 > 1000
+	SETBIT FLAG:命乞いフラグ, 4
+SIF FLAG:ムフフ전개 && (TALENT:PLAYER:남자 && !TALENT:(FLAG:LOCALS):남자 && !TALENT:(FLAG:LOCALS):남성혐오 || (TALENT:PLAYER:오토코노코 || TALENT:(FLAG:LOCALS):오토코노코) && !TALENT:(FLAG:LOCALS):남성혐오 || !TALENT:PLAYER:남자 && TALENT:(FLAG:LOCALS):남자 && !TALENT:(FLAG:LOCALS):여성혐오 || TALENT:(FLAG:LOCALS):바이)
+	SETBIT FLAG:命乞いフラグ, 5
+RETURN

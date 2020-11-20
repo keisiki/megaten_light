@@ -1,0 +1,65 @@
+﻿
+;======================================================
+;장비品の데이터
+;캘러미티부츠
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_4543,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "속도"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4543,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 9
+	CASE "회피"
+		RETURN 13
+	CASE "마법효과"
+		RETURN 12
+ENDSELECT
+RETURN 0
+
+@방어상성_4543,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@バステ내성_4543,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "ORGY"
+		RETURN 75
+ENDSELECT
+RETURN 0
+
+@장비箇所_4543
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4543
+RETURN 28
+
+@장비조건_4543,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 28
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4543
+PRINTL 장비조건：♀ LV28～
+
+@장비해설_4543
+PRINTL カラミティ「災厄」の意、某虚言癖のガンマンが愛用していた。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4543
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 20000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_4543
+RETURN 0

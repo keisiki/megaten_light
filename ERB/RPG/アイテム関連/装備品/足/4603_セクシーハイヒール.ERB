@@ -1,0 +1,49 @@
+﻿
+;======================================================
+;장비品の데이터
+;섹시하이힐
+;======================================================
+
+@기본능력수정_4603,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4603,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 4
+	CASE "회피"
+		RETURN 4
+ENDSELECT
+RETURN 0
+
+@방어상성_4603,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_4603
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4603
+RETURN 1
+
+@장비조건_4603,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4603
+PRINTL 장비조건：♀
+
+@장비해설_4603
+PRINTL 女性美を引き立たせる하이힐。
+PRINTL 　　　　　　　　ヒールの高さは7センチ。お仕置きにも使える。
+
+
+@구입조건_4603
+RETURN 0
+
+@引継ぎ可不可_4603
+RETURN 1

@@ -1,0 +1,51 @@
+﻿
+;======================================================
+;장비品の데이터
+;여의사의하이힐
+;======================================================
+
+@기본능력수정_4600,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4600,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 1
+	CASE "회피"
+		RETURN 6
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_4600,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_4600
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4600
+RETURN 1
+
+@장비조건_4600,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4600
+PRINTL 장비조건：♀
+
+@장비해설_4600
+PRINTL 女性美を引き立たせる하이힐。
+PRINTL 　　　　　　　　ヒールの高さは7センチ。お仕置きにも使える。
+
+
+@구입조건_4600
+RETURN 0
+
+@引継ぎ可不可_4600
+RETURN 1

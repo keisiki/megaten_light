@@ -1,0 +1,81 @@
+﻿@EVENT_93_1
+
+CUSTOMDRAWLINE =
+
+PRINTFORMW ある時、%NAME:MASTER%の連絡用端末に着信が届いた。
+PRINTW 入れた깨달음えのない軽쾌な、しかし不安をあおる呼び出し音。
+PRINTW 発信者は불명。
+PRINTW 番号も非通知。
+PRINTW 화면には丸いキリンのアイコンがゆっくりと回っている……。
+PRINTW あからさまに怪しいが、どうする？
+PRINTL
+$INPUT_LOOP1
+PRINTL [0]電話に出る
+PRINTL [1]危険すぎる
+;$INPUT_LOOP1
+INPUT
+IF RESULT == 0
+	PRINTL 
+	PRINTW ねっとりとした男性の声が聞こえてきた。
+	PRINTL 
+	PRINTW 『初めまして、裏社会のデビル・서머너。
+	PRINTW 　いきなりのお電話、驚かせてしまったでしょうか。
+	PRINTW 　ああ、警戒しているのが分かります！　でも切らないで。ステイ、ステイ……。
+	PRINTW 　これは、“의뢰”の、申し込みなのです』
+	PRINTL 
+	PRINTW 切りたい。
+	PRINTW そんな感情を飲み込み、相손に言葉の先を促す。
+	PRINTL 
+	PRINTW 『ありがとう、心優しいデビル・서머너。
+	PRINTW 　ところで당신は、お芝居とか……ご覧になられますか？
+	PRINTW 　ええ、ええ。
+	PRINTW 　分かりやすく申し上げれば、いわゆる“ヅカ”とか、ハイ。
+	PRINTW 　私は、それが、だぁい好きで、ございまして』
+	PRINTL 
+	PRINTW ……知るか。
+	PRINTW 당신が端末から耳を離そうとすると、
+	PRINTW 相손は慌てたように――まるで見ているかのように――声のオクターブをひとつ上げた。
+	PRINTL 
+	PRINTW 『アーッ！　お待ちくださいお待ちください！
+	PRINTW 　済みません、人見知りするんです、こう見えても。
+	PRINTW 　お電話では何ですから、今回は、お座席をご用意いたしました。
+	PRINTW 　特等席です。
+	PRINTW 　普段は一般販売しておりません。
+	PRINTW 　당신のためにご用意したのです、心優しいデビル・서머너。
+	PRINTW 　……それでは、お返事は次回に譲るとして。
+	PRINTW 　本日はここでお暇させていただきましょう』
+	PRINTL 
+	PRINTW あ、ちょっと。
+	PRINTW 男は、言いたいことを言い終わると、
+	PRINTW あまりにもあっさりと、
+	PRINTW 電話を切ってしまった。
+	PRINTL 
+	PRINTW 당신は取り残されたような気がして無性に腹が立った。
+	PRINTL 
+	PRINTW ………
+	PRINTW ……
+	PRINTW …
+	PRINTL 
+	PRINTW 座ろうとした椅子の上に、見깨달음えのないパンフレットがあった。
+	PRINTL 
+	PRINTW 『聖翔音楽学園　第９９期生　入学案内』
+	PRINTW 表紙の印字は、２０１７年度。
+	PRINTL 
+	PRINTW こんなもの、取り寄せた깨달음えはない。
+	PRINTW もちろん필요もない。
+	PRINTW 丸めてゴミ箱に入れようとした瞬間、携오비端末がワン切りされた。
+	PRINTL 
+	PRINTW ……回りくどい！
+	PRINTL 
+	PRINTW 당신はパンフレットを雑にデスクに放ると釈然としないまま別な作業に取り掛かった……
+	PRINTL 
+	이벤트フラグ:93:0 = 1
+ELSEIF RESULT == 1
+	PRINTW 通信を介して공격する악마もいる、迂闊なことはするべきではない。
+	PRINTW 組織への報告だけ行って、着信は無視することにした。
+	PRINTW その後、コールは何度か鳴り響いたが、당신は無視をし続けた……。
+	;無視したら이벤트消滅
+	이벤트フラグ:93:0 = -1
+ELSE
+	GOTO INPUT_LOOP1
+ENDIF

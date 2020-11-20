@@ -1,0 +1,51 @@
+﻿
+;======================================================
+;장비品の데이터
+;학생모
+;======================================================
+
+@기본능력수정_3026,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3026,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 4
+	CASE "회피"
+		RETURN 2
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_3026,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_3026
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3026
+RETURN 1
+
+@장비조건_3026, ARG = -1
+SIF ARG >= 0 && NO:ARG == [[キャラ:라이도우]]
+	RETURN 1
+RETURN 0
+
+@장비조건설명_3026
+PRINTL 쿠즈노하 라이도우 전용
+
+@장비해설_3026
+PRINTL 쿠즈노하 라이도우의 트레이드마크
+PRINTL 　　　　　　　　何時如何なる時も彼は모자を脱がない
+
+
+@구입조건_3026
+RETURN 0
+
+@引継ぎ可不可_3026
+RETURN 0

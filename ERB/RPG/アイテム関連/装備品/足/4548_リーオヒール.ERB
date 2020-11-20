@@ -1,0 +1,68 @@
+﻿
+;======================================================
+;장비品の데이터
+;리오힐
+;Lv50장비までは반사まで　기본능력に합계+6まで
+;======================================================
+
+@기본능력수정_4548,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "마력"
+		RETURN 2
+	CASE "속도"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4548,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 16
+	CASE "회피"
+		RETURN 22
+	CASE "마법효과"
+		RETURN 17
+	CASE "마법위력"
+		RETURN 4
+ENDSELECT
+RETURN 0
+
+@방어상성_4548,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "핵열"
+		RETURN 50
+	CASE "화염"
+		RETURN 25
+	CASE "주살"
+		RETURN 0
+	CASE "빙결","수격"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@장비箇所_4548
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4548
+RETURN 45
+
+@장비조건_4548,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 45
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4548
+PRINTL 장비조건：♀ LV45～
+
+@장비해설_4548
+PRINTL 実体のない炎のできた신발
+PRINTL 　　　　　　　　
+
+
+@구입조건_4548
+RETURN 0
+
+@引継ぎ可不可_4548
+RETURN 1

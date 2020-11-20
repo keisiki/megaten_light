@@ -1,0 +1,290 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:REQUEST_99.ERB
+;	Facility	:의뢰:099(セブンスドラゴン2020)
+;
+;	Licence		:ライセンスフリー
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		2019/10/15		ナナドラMOD				新規作成
+;	002		2019/10/19		ナナドラMOD				CHAPTER1.5추가
+;	003		2019/10/22		ナナドラMOD				CHAPTER2추가
+;	004		2019/10/24		ナナドラMOD				CHAPTER3추가
+;	005		2019/10/26		ナナドラMOD				CHAPTER4추가
+;	006		2019/10/27		ナナドラMOD				CHAPTER5추가
+;	007		2019/10/30		ナナドラMOD				CHAPTER6추가
+;	008		2019/11/01		ナナドラMOD				CHAPTER7추가
+;	009		2019/11/03		ナナドラMOD				CHAPTERX추가
+;	010		2019/12/08		ナナドラMOD				첼시参戦に伴う処理추가
+;
+;	의뢰フラグ:99:0…恥ずかしい女フラグ。0だと회피、1だと発生
+;	의뢰フラグ:99:1…13班フラグ。1だと첼시加入、それ以外だと카타나코加入상태
+;	의뢰フラグ:99:2…シナリオ決定フラグ。1だと切り替えフラグを설정済み。
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+@PLAYABLE_REQUEST_99
+SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 || GETBIT(FLAG:EXTRA이벤트필터, 14) == 1
+	RETURN 0
+;도청クリア済みでないとだめ
+SIF 던전フラグ:26:2 < 4
+	RETURN 0
+IF FLAG:ナナドラ의뢰進行度 == 0 && GETBIT(FLAG:発見ED2,1) && 의뢰フラグ:99:2 == 0
+	RESULTS = (세븐스 드래곤 MOD) 사람과 용의 이야기
+	RETURN 1
+;2020シナリオ
+ELSEIF FLAG:ナナドラ의뢰進行度 < 19
+	IF FLAG:ナナドラ의뢰進行度 == 0
+		RESULTS = (세븐스 드래곤 MOD)카운트、제로 -Time Count,Zero-(1)
+		RETURN 1
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 1
+		RESULTS = (세븐스 드래곤 MOD)카운트、제로 -Time Count,Zero-(2)
+		RETURN 1
+	;첼시加入済み
+	ELSEIF FLAG:ナナドラ의뢰進行度 > 1 && 의뢰フラグ:99:1 == 1
+		;ここからは첼시がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+		IF FLAG:ナナドラ의뢰進行度 == 2 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)전장의 포효 -The Warcry-(1)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 3 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)전장의 포효 -The Warcry-(2)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 4 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)생존자 -SKY and The Others-(1)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 5 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)생존자 -SKY and The Others-(2)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 6 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)하늘의 초전하포 -The Jigowatt-(1)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 7 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)하늘의 초전하포 -The Jigowatt-(2)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 8 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)끝나지 않는 월야 -The Lore-A-Lua-
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 9 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)열사의 Ｄ프론트 -The Tri-Nitro-
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 10 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)눈을 뜬 광기 -The Sleepy-Hollow-
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 11 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)어둠과 대동의 왕 -The Scaber-(1)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 12 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルートなら아오이がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+				IF GETCHARA([[キャラ:아오이]]) > 0 || CFLAG:GETCHARA([[キャラ:아오이]]):전투참가불가능 < 0
+					RESULTS = (세븐스 드래곤 MOD)어둠과 대동의 왕 -The Scaber-(2)
+					RETURN 1
+				ENDIF
+			ELSE
+				RESULTS = (세븐스 드래곤 MOD)어둠과 대동의 왕 -The Scaber-(2)
+				RETURN 1
+			ENDIF
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 13 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルートなら아오이がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+				IF GETCHARA([[キャラ:아오이]]) > 0 || CFLAG:GETCHARA([[キャラ:아오이]]):전투참가불가능 < 0
+					RESULTS = (세븐스 드래곤 MOD)고요한 바다 -The Zero-Blue-
+					RETURN 1
+				ENDIF
+			ELSE
+				RESULTS = (세븐스 드래곤 MOD)고요한 바다 -The Zero-Blue-
+				RETURN 1
+			ENDIF
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 14 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルートなら아오이がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+				IF GETCHARA([[キャラ:아오이]]) > 0 || CFLAG:GETCHARA([[キャラ:아오이]]):전투참가불가능 < 0
+					RESULTS = (세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(1)
+					RETURN 1
+				ENDIF
+			ELSE
+				RESULTS = (세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(1)
+				RETURN 1
+			ENDIF
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 15 && ( GETCHARA([[キャラ:첼시]]) > 0 || CFLAG:GETCHARA([[キャラ:첼시]]):전투참가불가능 < 0)
+			IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルートなら아오이がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+				IF GETCHARA([[キャラ:아오이]]) > 0 || CFLAG:GETCHARA([[キャラ:아오이]]):전투참가불가능 < 0
+					RESULTS = (세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(2)
+					RETURN 1
+				ENDIF
+			ELSE
+				RESULTS = (세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(2)
+				RETURN 1
+			ENDIF
+		ENDIF
+	;카타나코加入済み
+	ELSEIF FLAG:ナナドラ의뢰進行度 > 1
+		;ここからは카타나코がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+		IF FLAG:ナナドラ의뢰進行度 == 2 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)전장의 포효 -The Warcry-(1)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 3 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)전장의 포효 -The Warcry-(2)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 4 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)생존자 -SKY and The Others-(1)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 5 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)생존자 -SKY and The Others-(2)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 6 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)하늘의초전하포 -The Jigowatt-(1)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 7 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)하늘의초전하포 -The Jigowatt-(2)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 8 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)끝나지 않는 월야 -The Lore-A-Lua-
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 9 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)열사의 Ｄ프론트 -The Tri-Nitro-
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 10 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)눈을 뜬 광기 -The Sleepy-Hollow-
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 11 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			RESULTS = (세븐스 드래곤 MOD)어둠과 대동의 왕 -The Scaber-(1)
+			RETURN 1
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 12 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルートなら아오이がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+				IF GETCHARA([[キャラ:아오이]]) > 0 || CFLAG:GETCHARA([[キャラ:아오이]]):전투참가불가능 < 0
+					RESULTS = (세븐스 드래곤 MOD)어둠과 대동의 왕 -The Scaber-(2)
+					RETURN 1
+				ENDIF
+			ELSE
+				RESULTS = (세븐스 드래곤 MOD)어둠과 대동의 왕 -The Scaber-(2)
+				RETURN 1
+			ENDIF
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 13 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルートなら아오이がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+				IF GETCHARA([[キャラ:아오이]]) > 0 || CFLAG:GETCHARA([[キャラ:아오이]]):전투참가불가능 < 0
+					RESULTS = (세븐스 드래곤 MOD)고요한 바다 -The Zero-Blue-
+					RETURN 1
+				ENDIF
+			ELSE
+				RESULTS = (세븐스 드래곤 MOD)고요한 바다 -The Zero-Blue-
+				RETURN 1
+			ENDIF
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 14 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルートなら아오이がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+				IF GETCHARA([[キャラ:아오이]]) > 0 || CFLAG:GETCHARA([[キャラ:아오이]]):전투참가불가능 < 0
+					RESULTS = (세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(1)
+					RETURN 1
+				ENDIF
+			ELSE
+				RESULTS = (세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(1)
+				RETURN 1
+			ENDIF
+		ELSEIF FLAG:ナナドラ의뢰進行度 == 15 && ( GETCHARA([[キャラ:카타나코]]) > 0 || CFLAG:GETCHARA([[キャラ:카타나코]]):전투참가불가능 < 0)
+			IF 의뢰フラグ:99:0 == 0;아오이ちゃん生存ルートなら아오이がいて、전투に참가できなきゃだめ（パーティにはいなくてもいい）
+				IF GETCHARA([[キャラ:아오이]]) > 0 || CFLAG:GETCHARA([[キャラ:아오이]]):전투참가불가능 < 0
+					RESULTS = (세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(2)
+					RETURN 1
+				ENDIF
+			ELSE
+				RESULTS = (세븐스 드래곤 MOD)신ＸＸＸＸＸＸＸ히트 -Nyarla of 7th-(2)
+				RETURN 1
+			ENDIF
+		ENDIF
+	ENDIF
+;2020-Ⅱシナリオ
+ELSE
+	IF FLAG:ナナドラ의뢰進行度 == 20
+		RESULTS = (세븐스 드래곤 MOD)202X년 도쿄
+		RETURN 1
+	ENDIF
+ENDIF
+
+@EXPLAIN_REQUEST_99
+IF FLAG:ナナドラ의뢰進行度 == 0 && GETBIT(FLAG:発見ED2,1) && 의뢰フラグ:99:2 == 0
+	CALL EXPLAIN_REQUEST_99_00
+;2020シナリオ
+ELSEIF FLAG:ナナドラ의뢰進行度 < 19
+	IF FLAG:ナナドラ의뢰進行度 == 0
+		CALL EXPLAIN_REQUEST_99_01
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 1
+		CALL EXPLAIN_REQUEST_99_02
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 2
+		CALL EXPLAIN_REQUEST_99_03
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 3
+		CALL EXPLAIN_REQUEST_99_04
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 4
+		CALL EXPLAIN_REQUEST_99_05
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 5
+		CALL EXPLAIN_REQUEST_99_06
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 6
+		CALL EXPLAIN_REQUEST_99_07
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 7
+		CALL EXPLAIN_REQUEST_99_08
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 8
+		CALL EXPLAIN_REQUEST_99_09
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 9
+		CALL EXPLAIN_REQUEST_99_10
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 10
+		CALL EXPLAIN_REQUEST_99_11
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 11
+		CALL EXPLAIN_REQUEST_99_12
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 12
+		CALL EXPLAIN_REQUEST_99_13
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 13
+		CALL EXPLAIN_REQUEST_99_14
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 14
+		CALL EXPLAIN_REQUEST_99_15
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 15
+		CALL EXPLAIN_REQUEST_99_16
+	ENDIF
+;2020-Ⅱシナリオ
+ELSE
+	IF FLAG:ナナドラ의뢰進行度 == 20
+		CALL EXPLAIN_REQUEST_99_21
+	ENDIF
+ENDIF
+
+@REQUEST_99
+IF FLAG:ナナドラ의뢰進行度 == 0 && GETBIT(FLAG:発見ED2,1) && 의뢰フラグ:99:2 == 0
+	CALL REQUEST_99_00
+;2020シナリオ
+ELSEIF FLAG:ナナドラ의뢰進行度 < 19
+	IF FLAG:ナナドラ의뢰進行度 == 0
+		CALL REQUEST_99_01
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 1
+		CALL REQUEST_99_02
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 2
+		CALL REQUEST_99_03
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 3
+		CALL REQUEST_99_04
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 4
+		CALL REQUEST_99_05
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 5
+		CALL REQUEST_99_06
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 6
+		CALL REQUEST_99_07
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 7
+		CALL REQUEST_99_08
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 8
+		CALL REQUEST_99_09
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 9
+		CALL REQUEST_99_10
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 10
+		CALL REQUEST_99_11
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 11
+		CALL REQUEST_99_12
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 12
+		CALL REQUEST_99_13
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 13
+		CALL REQUEST_99_14
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 14
+		CALL REQUEST_99_15
+	ELSEIF FLAG:ナナドラ의뢰進行度 == 15
+		CALL REQUEST_99_16
+	ENDIF
+;2020-Ⅱシナリオ
+ELSE
+	IF FLAG:ナナドラ의뢰進行度 == 20
+		CALL REQUEST_99_21
+	ENDIF
+ENDIF
+

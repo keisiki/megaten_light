@@ -1,0 +1,54 @@
+﻿
+;======================================================
+;장비品の데이터
+;강철꽃장식
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_3048,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3048,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 10
+	CASE "회피"
+		RETURN 4
+	CASE "마법효과"
+		RETURN 6
+ENDSELECT
+RETURN 0
+
+@방어상성_3048,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_3048
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3048
+RETURN 14
+
+@장비조건_3048,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 14
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3048
+PRINTL 장비조건：♀ LV14～
+
+@장비해설_3048
+PRINTL 鋼鉄だけで作られた花飾り。
+PRINTL 　　　　　　　　職人の遊び心満載。
+
+
+@구입조건_3048
+RETURN 1
+
+@引継ぎ可不可_3048
+RETURN 0

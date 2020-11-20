@@ -1,0 +1,69 @@
+﻿
+;======================================================
+;장비品の데이터
+;댄싱힐
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_4504,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "속도"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4504,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 2
+	CASE "회피"
+		RETURN 15
+	CASE "마법효과"
+		RETURN 6
+ENDSELECT
+RETURN 0
+
+@방어상성_4504,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "전술"
+		RETURN 75
+	CASE "지변"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@バステ내성_4504,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "BIND","PALYZE"
+		RETURN -50
+	CASE "PANIC"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@장비箇所_4504
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4504
+RETURN 22
+
+@장비조건_4504,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 22
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4504
+PRINTL 장비조건：♀ LV22～
+
+@장비해설_4504
+PRINTL 歩きにくいヒールの見た눈とは裏腹に
+PRINTL 　　　　　　　　着用者に踊るような華麗なステップを가능にする一品
+
+
+@구입조건_4504
+RETURN 1
+
+@引継ぎ可不可_4504
+RETURN 0

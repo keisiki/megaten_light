@@ -1,0 +1,63 @@
+﻿;======================================================
+;장비品の데이터
+;은손 아케트라브
+;======================================================
+@기본능력수정_8000,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@증가CP_8000
+RETURN 10
+
+@전투능력수정_8000,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_8000,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_8000, ARG = -1
+RETURN 2
+
+@최저공격횟수_8000, ARG = -1
+RETURN 1
+
+@최대공격횟수_8000, ARG = -1
+RETURN 1
+
+@사거리_8000, ARG = -1
+RETURN 1
+
+@공격범위_8000, ARG = -1
+RETURN 1
+
+@장비箇所_8000
+RETURN 0
+
+@필요레벨_8000
+RETURN 1
+
+@P습득스킬_8000,ARG
+LOCAL=0
+LOCAL:1=0
+SELECTCASE ARG
+	CASE 0
+		LOCAL   = [[스킬:산바람]]
+		LOCAL:1 = 4
+ENDSELECT
+RETURN LOCAL,LOCAL:1
+
+@장비조건_8000,ARG
+RETURN 1
+
+@구입조건_8000
+RETURN 0
+
+@장비해설_8000
+PRINTL 힘が少しあがる

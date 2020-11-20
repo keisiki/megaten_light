@@ -1,0 +1,63 @@
+﻿
+;======================================================
+;장비品の데이터
+;번개의팔찌
+;수태아이템
+;======================================================
+
+@기본능력수정_4035,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4035,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 3
+	CASE "회피"
+		RETURN 3
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_4035,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "전격"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@バステ내성_4035,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "SHOCK"
+		RETURN -100
+ENDSELECT
+RETURN 0
+
+@장비箇所_4035
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4035
+RETURN 1
+
+@장비조건_4035,ARG
+RETURN 1
+
+@장비조건설명_4035
+PRINTL 장비조건：
+
+@장비해설_4035
+PRINTL SHOCK무효
+PRINTL 　　　　　　　　
+
+
+@구입조건_4035
+RETURN 0
+
+;마카교환가능か
+@EQUIP_EXCHANGE_4035
+RETURN 0
+
+@引継ぎ可不可_4035
+RETURN 1

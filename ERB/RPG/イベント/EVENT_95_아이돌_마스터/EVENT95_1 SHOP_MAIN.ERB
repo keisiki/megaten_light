@@ -1,0 +1,28 @@
+﻿;=======================================================================
+;사무실 방문시
+;=======================================================================
+@EVENT_95_SHOP_MAIN
+LOCAL:10 = 0
+$START
+CUSTOMDRAWLINE =
+PRINTL ＞어떻게 할지 선택해 주세요
+CUSTOMDRAWLINE =
+WAIT
+	PRINTL [0] 지하실의 인간을 산다 (50 마카)
+SIF 이벤트フラグ:95:0 > 1
+	PRINTL [1] 노예를 데려오게 한다
+;ENDIF
+PRINTL [100] 돌아간다
+CALL INPUTINT(0, 1, 100)
+SELECTCASE RESULT
+	CASE 0
+		CALL KIDNAP_MANUAL_2
+	CASE 1
+		CALL CHARA_BUY
+	CASE 100
+		RESULT = 0
+ENDSELECT
+SIF RESULT == -1
+	GOTO START
+PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 오자와의 사무실을 뒤로했다…
+RETURN 0

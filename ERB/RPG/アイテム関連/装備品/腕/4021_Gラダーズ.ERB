@@ -1,0 +1,58 @@
+﻿
+;======================================================
+;장비品の데이터
+;Ｇ－라다즈
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4021,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4021,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 4
+	CASE "회피"
+		RETURN 2
+	CASE "마법효과"
+		RETURN 8
+ENDSELECT
+RETURN 0
+
+@방어상성_4021,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "중력"
+		RETURN 50
+ENDSELECT
+RETURN 100
+
+@장비箇所_4021
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4021
+RETURN 10
+
+@장비조건_4021,ARG
+SIF BASE:ARG:LV < 10
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4021
+PRINTL 장비조건：LV10～
+
+@장비해설_4021
+PRINTL 중력の影響を抑える팔時計。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4021
+RETURN 1
+
+;마카교환가능か
+@EQUIP_EXCHANGE_4021
+RETURN 0
+
+@引継ぎ可不可_4021
+RETURN 0

@@ -1,0 +1,81 @@
+﻿
+;======================================================
+;장비品の데이터
+;防毒마스크R-6型
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_3030,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3030,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 11
+	CASE "회피"
+		RETURN 9
+	CASE "마법효과"
+		RETURN 4
+ENDSELECT
+RETURN 0
+
+@방어상성_3030,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "신경"
+		RETURN 0
+	CASE "정신"
+		RETURN 125
+	CASE "주살"
+		RETURN 115
+ENDSELECT
+RETURN 100
+
+@バステ내성_3030,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "HAPPY"
+		RETURN -25
+	CASE "PANIC"
+		RETURN -25
+	CASE "SLEEP"
+		RETURN -25
+	CASE "BIND"
+		RETURN -25
+	CASE "POISON"
+		RETURN -100
+	CASE "PALYZE"
+		RETURN -100
+	CASE "HEAT"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@장비箇所_3030
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3030
+RETURN 22
+
+@장비조건_3030,ARG
+SIF BASE:ARG:LV < 22
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3030
+PRINTL 장비조건：LV22～
+
+@장비해설_3030
+PRINTL 対化学兵器用に開発されたフィルダーで입を覆い、ハーネスを머리部で固定する마스크。
+PRINTL 　　　　　　　　耐毒필터ーで各種이상をシャットアウト！（自社調べ）
+
+
+@구입조건_3030
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 35000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_3030
+RETURN 0

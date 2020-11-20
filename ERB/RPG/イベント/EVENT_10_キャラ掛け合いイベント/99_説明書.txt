@@ -1,0 +1,105 @@
+①タイトル作成
+「1_タイトル一覧」フォルダの
+SELECTCASE内に挿入する
+
+@EVENT_10_TITLELIST_0(ARG)
+SELECTCASE ARG
+-------挿入欄----------------
+CASE ○
+	RESULTS = （タイトル）
+-----------------------------
+CASEELSE
+	RETURN 0
+ENDSELECT
+RETURN 1
+※（タイトル）を書きかえればOK
+※○の部分は数字を入れる。数字は0～63までできる
+　63まで行ってしまった場合、@EVENT_10_TITLELIST_1(ARG)がコメントアウトしてあるので
+　それを使う
+
+*挿入例
+CASE 4
+	RESULTS = 最初の女1
+
+
+
+
+②出現チェック
+「2_出現チェック」フォルダの
+SELECTCASE内に挿入する（CASEの数字は①と一緒）
+
+@EVENT_10_PLAYABLE_0(ARG)
+SELECTCASE ARG
+-------挿入欄----------------
+CASE ○ ; （タイトル）
+	
+	;(キャラ1)と(キャラ2)がいる事
+	SIF EVENT_10_2人掛け合いチェック([[キャラ:(キャラ1)]],[[キャラ:(キャラ2)]])
+		RETURN 1
+	
+-----------------------------
+-------挿入欄2---------------
+CASE ◎ ; （タイトル2）
+	
+	;（タイトル）を見ている
+	SIF !GETBIT(イベントフラグ:10:0,○)
+		RETURN 0
+	;(キャラ1)と(キャラ2)がいて二人の絆(互いへの好感度+忠誠)が一定値以上
+	SIF !EVENT_10_2人掛け合いチェック([[キャラ:(キャラ1)]],[[キャラ:(キャラ2)]],2500)
+		RETURN 0
+	;両者の忠誠値が700以上
+	SIF BASE:GETCHARA([[キャラ:(キャラ1)]]):忠誠度 < 700
+		RETURN 0
+	SIF BASE:GETCHARA([[キャラ:(キャラ2)]]):忠誠度 < 700
+		RETURN 0
+	RETURN 1
+-----------------------------
+ENDSELECT
+RETURN 0
+
+※(キャラ1)と(キャラ2)はそのキャラクターのCSVの呼び名に置換すればOK
+※挿入欄2は続きを作るときの挿入欄、◎は前と違う数字
+　GETBIT内の○は前のCASEの番号を入れる
+
+
+
+
+③イベント
+「3_イベント」フォルダの
+SELECTCASE内に挿入する（CASEの数字は①と一緒）
+
+@EVENT_10_MAINEVENT_0(ARG)
+SELECTCASE ARG
+-------挿入欄----------------
+CASE ○
+	PRINTL
+	PRINTL
+	PRINTFORMW （イベント）
+	PRINTFORMW （イベント）
+	PRINTFORMW （イベント）
+	PRINTFORMW （イベント）
+	PRINTFORMW （イベント）
+	PRINTFORMW （イベント）
+	PRINTFORMW （イベント）
+-----------------------------
+-------挿入欄2----------------
+	CALL 特殊友情追加,GETCHARA([[キャラ:(キャラ1)]]),GETCHARA([[キャラ:(キャラ2)]])
+	IF !GETBIT(イベントフラグ:10:0,○)
+		CALL LEARN_SKILL(GETCHARA([[キャラ:(キャラ1)]]),SSSS,0)
+		CALL LEARN_SKILL(GETCHARA([[キャラ:(キャラ2)]]),SSSS,0)
+		CALL GET_ITEMS(ITEMNAME:XXX,1)
+	ENDIF
+-----------------------------
+CASEELSE
+	RETURN 0
+ENDSELECT
+RETURN 1
+
+※（イベント）はそのキャラ同士の会話などを入れていく
+　○はCASEの数字
+
+※挿入欄2はそのイベントのおまけ
+　CALL 特殊友情追加はそのキャラクター同士に特殊友情が付く　戦闘時のCOOP発動時、最大値で
+　以下はIF !GETBIT(イベントフラグ:10:0,○)内で作る（そうしないと何度も起きる）
+　　CALL LEARN_SKILL　キャラクターにSSSSのスキルを覚えさせる
+　　CALL GET_ITEMS　　XXXのアイテムを入手する

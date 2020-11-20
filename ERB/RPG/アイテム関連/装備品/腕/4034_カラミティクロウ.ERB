@@ -1,0 +1,69 @@
+﻿
+;======================================================
+;장비品の데이터
+;캘러미티클로
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_4034,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "운"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4034,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "명중"
+		RETURN 2
+	CASE "방어"
+		RETURN 10
+	CASE "회피"
+		RETURN 13
+	CASE "마법효과"
+		RETURN 10
+ENDSELECT
+RETURN 0
+
+@방어상성_4034,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "타격"
+		RETURN 70
+	CASE "비구"
+		RETURN 80
+ENDSELECT
+RETURN 100
+
+@バステ내성_4034,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "PANIC","ORGY"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@장비箇所_4034
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4034
+RETURN 23
+
+@장비조건_4034,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 23
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4034
+PRINTL 장비조건：♀ LV23～
+
+@장비해설_4034
+PRINTL カラミティ「災厄」の意、某虚言癖のガンマンが愛用していた。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4034
+RETURN 1
+
+@引継ぎ可不可_4034
+RETURN 0

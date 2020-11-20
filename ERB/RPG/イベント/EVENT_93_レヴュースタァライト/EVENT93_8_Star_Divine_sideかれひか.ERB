@@ -1,0 +1,424 @@
+﻿@EVENT_93_8
+
+CUSTOMDRAWLINE =
+
+	PRINTL
+	SETCOLOR 0x5687e6
+	PRINTW 「強く掲げた손の平に――」
+	SETCOLOR 0xff0033
+	PRINTW 「可憐に사키かせる愛の華」
+	PRINTL
+	SETCOLOR 0x5687e6
+	PRINTW 「例え悲劇で終わるとしても――」
+	SETCOLOR 0xff0033
+	PRINTW 「きらめく舞台に飛び込み参上！」
+	RESETCOLOR
+	PRINTL
+	PRINTW 張り詰めた鋼のごとき声が響き渡る。
+	PRINTW 濃いスモークが雲海のごとくうねる。
+	PRINTW カンカンカンと音を立て熱を오비びた照明装置が稼働する。
+	PRINTL
+	PRINTW 浮かび上がる、２人のシルエット。
+	PRINTL
+	SETCOLOR 0x5687e6
+	PRINTW 「99期生、神楽ひかり！」
+	SETCOLOR 0xff0033
+	PRINTW 「99期生、愛城華恋！」
+	RESETCOLOR
+	PRINTL
+	PRINTW バッ！
+	PRINTW ひときわ大きな光が放たれ、
+	PRINTW 細身の体が、鋭い影を切り取った。
+	PRINTL
+	PRINTW 瞳が輝いている。
+	PRINTW 吸い込まれるような気がして、堪らず당신は눈を逸らした。
+	PRINTL
+	SETCOLOR 0x5687e6
+	PRINTW 「皆を――」
+	SETCOLOR 0xff0033
+	PRINTW 「スタァライトしちゃいます！」
+	RESETCOLOR
+	PRINTL
+	PRINTW 彼女たちは遥かな高みを見つめていた。
+	PRINTW 本来당신の位置に立つ誰か――
+	PRINTW いや、それすらも飛び越えた、大きな何かをそれぞれが見つめていた。
+	PRINTL
+	PRINTL 무대소녀 愛城華恋 が現れた！
+	PRINTW 무대소녀 神楽ひかり が現れた！
+	PRINTL
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	
+	;※方바늘　검격＋수격＆신경　そして레볼루션で事故らせる
+	;最終戦：전체수격・전체신경あり。신경내성が無いとアレ。
+	;		 デバフも撒く
+	;　　　　片方を沈めると片方が파워アップして復活
+	
+	;6戦눈　★★★★★
+	IF 이벤트フラグ:93:0 > 6
+		LOCAL:99 = 3
+	;5戦눈　★★★★☆
+	ELSEIF 이벤트フラグ:93:0 > 5
+		LOCAL:99 = 3
+	;4戦눈　★★★★☆
+	ELSEIF 이벤트フラグ:93:0 > 4
+		LOCAL:99 = 2
+	;3戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 3
+		LOCAL:99 = 2
+	;2戦눈　★★☆☆☆
+	ELSEIF 이벤트フラグ:93:0 > 2
+		LOCAL:99 = 1
+	;1戦눈　★☆☆☆☆
+	ELSEIF 이벤트フラグ:93:0 > 1
+		LOCAL:99 = 1
+	ENDIF
+	
+	;레벨は自軍최대値（최저値15）
+	LOCAL:1 = 0
+	FOR LOCAL , 0 , CHARANUM
+		SIF CFLAG:LOCAL:PTフラグ == 0 || TALENT:LOCAL:비전투원
+			CONTINUE
+		LOCAL:98 = MAX(LOCAL:98 , BASE:LOCAL:LV)
+	NEXT
+	SIF LOCAL:98 < 10
+		LOCAL:98 = 10
+	
+	;- SET:카렌（무대소녀）
+		CALL SET_ENEMY,8,[[キャラ:카렌（무대소녀）]],LOCAL:98,1,LOCAL:99
+		CFLAG:(CHARANUM-1):行動횟수 = 2
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 8000
+		ABL:(CHARANUM-1):공격상성 = 0
+		ABL:(CHARANUM-1):스킬1 = [[스킬:기합]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:히트웨이브]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:소작권]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:파사의광인]]
+		ABL:(CHARANUM-1):스킬5 = [[스킬:번개찌르기]]
+		ABL:(CHARANUM-1):스킬7 = [[스킬:레볼루션]]
+		LOCAL = CHARANUM-1
+		;초인扱いに
+		ABL:(CHARANUM-1):종족 = 43
+		CSTR:(CHARANUM-1):종족명 = 무대소녀
+		
+		;解析度MAX処理
+		CALL INCREASE_ANALYZE([[キャラ:카렌（무대소녀）]],1000)
+
+
+	;- SET:히카리
+		CALL SET_ENEMY,10,[[キャラ:히카리]],LOCAL:98,1,LOCAL:99
+		CFLAG:(CHARANUM-1):行動횟수 = 2
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 8000
+		ABL:(CHARANUM-1):공격상성 = 0
+		ABL:(CHARANUM-1):스킬1 = [[스킬:라쿠・카쟈]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:뉴록런치]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:번개찌르기]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:부드러운파도]]
+		ABL:(CHARANUM-1):스킬5 = [[스킬:마하・아쿠에스]]
+		ABL:(CHARANUM-1):스킬6 = [[스킬:타루・카쟈]]
+		ABL:(CHARANUM-1):스킬7 = [[스킬:코칭]]
+		ABL:(CHARANUM-1):스킬8 = [[스킬:어드바이스]]
+		LOCAL = CHARANUM-1
+		;초인扱いに
+		ABL:(CHARANUM-1):종족 = 43
+		CSTR:(CHARANUM-1):종족명 = 무대소녀
+
+		;解析度MAX処理
+		CALL INCREASE_ANALYZE([[キャラ:히카리]],1000)
+
+
+		;6戦눈　★★★★★
+		IF LOCAL:99 > 5
+			;素＆ギミックで対応
+		;5戦눈　★★★★☆
+		;行動횟수増加＆前衛に검격내성が無いと死ぬ
+		ELSEIF LOCAL:99 > 4
+			CFLAG:(CHARANUM-2):行動횟수 = 2
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			ABL:(CHARANUM-2):스킬3 = [[스킬:레볼루션]]
+			ABL:(CHARANUM-2):스킬4 = [[스킬:번개찌르기]]
+			ABL:(CHARANUM-2):스킬5 = 0
+			ABL:(CHARANUM-2):스킬6 = 0
+			ABL:(CHARANUM-2):스킬7 = 0
+			ABL:(CHARANUM-2):스킬8 = 0
+
+			;코칭・어드바이스以外削除
+			;마하・아쿠에스、타루・카쟈추가
+			ABL:(CHARANUM-1):스킬1 = [[스킬:마하・아쿠에스]]
+			ABL:(CHARANUM-1):스킬2 = [[스킬:타루・카쟈]]
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+		;4戦눈　★★★☆☆
+		;行動횟수増加＆前衛に검격내성が無いと死ぬ
+		ELSEIF LOCAL:99 > 3
+			CFLAG:(CHARANUM-2):行動횟수 = 2
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			;번개찌르기と기합と레볼루션だけ残す
+			ABL:(CHARANUM-2):스킬3 = [[스킬:레볼루션]]
+			ABL:(CHARANUM-2):스킬4 = [[스킬:번개찌르기]]
+			ABL:(CHARANUM-2):스킬5 = 0
+			ABL:(CHARANUM-2):스킬6 = 0
+			ABL:(CHARANUM-2):스킬7 = 0
+			ABL:(CHARANUM-2):스킬8 = 0
+
+			;코칭・어드바이스以外削除
+			;마하・아쿠에스、타루・카쟈추가
+			ABL:(CHARANUM-1):스킬1 = [[스킬:마하・아쿠에스]]
+			ABL:(CHARANUM-1):스킬2 = [[스킬:타루・카쟈]]
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			
+		;3戦눈　★★★☆☆
+		;行動횟수増加＆前衛に검격내성が無いと死ぬ
+		ELSEIF LOCAL:99 > 2
+			;行動횟수1
+			CFLAG:(CHARANUM-2):行動횟수 = 2
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			;번개찌르기と기합と레볼루션だけ残す
+			ABL:(CHARANUM-2):스킬3 = [[스킬:레볼루션]]
+			ABL:(CHARANUM-2):스킬4 = [[스킬:번개찌르기]]
+			ABL:(CHARANUM-2):스킬5 = 0
+			ABL:(CHARANUM-2):스킬6 = 0
+			ABL:(CHARANUM-2):스킬7 = 0
+			ABL:(CHARANUM-2):스킬8 = 0
+			
+			;코칭・어드바이스以外削除
+			;마하・아쿠에스、타루・카쟈추가
+			ABL:(CHARANUM-1):스킬1 = [[스킬:마하・아쿠에스]]
+			ABL:(CHARANUM-1):스킬2 = [[스킬:타루・카쟈]]
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			
+		;2戦눈　★★☆☆☆
+		;前衛に검격내성が無いと死ぬ
+		ELSEIF LOCAL:99 > 1
+			;行動횟수1
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			;히트웨이브と기합と레볼루션だけ残す
+			ABL:(CHARANUM-2):스킬3 = [[스킬:레볼루션]]
+			ABL:(CHARANUM-2):스킬4 = 0
+			ABL:(CHARANUM-2):스킬5 = 0
+			ABL:(CHARANUM-2):스킬6 = 0
+			ABL:(CHARANUM-2):스킬7 = 0
+			ABL:(CHARANUM-2):스킬8 = 0
+
+			ABL:(CHARANUM-1):스킬1 = [[스킬:마하・아쿠아]]
+			ABL:(CHARANUM-1):스킬2 = [[스킬:타루・카쟈]]
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			
+		;1戦눈　★☆☆☆☆
+		;기합使った次のターンをガードしとけばいいんじゃねえかな
+		ELSEIF LOCAL:99 > 0
+			;行動횟수1
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			;기합だけ残す
+			ABL:(CHARANUM-2):스킬2 = 0
+			ABL:(CHARANUM-2):스킬3 = 0
+			ABL:(CHARANUM-2):스킬4 = 0
+			ABL:(CHARANUM-2):스킬5 = 0
+			ABL:(CHARANUM-2):스킬6 = 0
+			ABL:(CHARANUM-2):스킬7 = 0
+			ABL:(CHARANUM-2):스킬8 = 0
+
+			ABL:(CHARANUM-1):스킬1 = [[스킬:아쿠아]]
+			ABL:(CHARANUM-1):스킬2 = 0
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			
+		ENDIF
+		
+		CALL SYNC_STATUS,(CHARANUM-2)
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-2)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+
+	;かれひか復活フラグ
+	SETBIT 이벤트フラグ:93:11, 1
+	CALL BATTLE_START
+	CLEARBIT 이벤트フラグ:93:11, 1
+
+	CUSTOMDRAWLINE =
+
+	PRINTL
+	PRINTW 「――あれ？　この人、天堂さんじゃないよ！？」
+	PRINTW 「……こっちも、違う人にすり替わってる」
+	PRINTL
+	PRINTW 空間に飛び散った濃いマグネタイトを흡수して、２人の意識がハッキリし始めたようだ。
+	PRINTW 당신は事情を説明し、２人に무기を収めてもらうよう求めた。
+	PRINTL
+	PRINTW 「악마……？　デビル・서머너……？
+	PRINTW 　それに、聖翔が存在しないって、どういうことですか！？
+	PRINTW 　私たちを帰してください！　やらなくちゃいけないことがあるんです！」
+	PRINTW 「落ち着いて、카렌（무대소녀）。
+	PRINTW 　さっきの説明が本当なら、私たちは……キラめきの……」
+	PRINTW 「そんなの関係ないよ、
+	PRINTW 　舞台には天堂さんやクロちゃんが待ってるんだ。
+	PRINTW 　レヴューから逃げたくない。
+	PRINTW 　だって私は、舞台소녀なんだから！」
+	PRINTL
+	PRINTW 華恋は毅然とした態度で立ち上がり、
+	PRINTW その場でぐるりと一周したあと、
+	PRINTL
+	PRINTW 「どうしようひかりちゃん、帰り道が分からないよ」
+	PRINTL
+	PRINTW 心底困った顔でそう呟いた。
+	PRINTL
+	PRINTW 「バ華恋……。
+	PRINTW 　ええと、デビル・서머너、だったかしら。
+	PRINTW 　당신と계약しないと、私たち、消えてしまうのなら、
+	PRINTW 　お願いします、仲間に入れて」
+	PRINTL
+	PRINTW 華恋はパチパチとまばたきした。
+	PRINTL
+	PRINTW 「ひかりちゃん！？　どうして」
+	PRINTL
+	PRINTW ひかりは一度、舞台の中央――塔の頂上に灯る星のキラめきを見つめたあと、感情を殺した눈で呟いた。
+	PRINTL
+	PRINTW 「……消えるより、マシだからよ。
+	PRINTW 　카렌（무대소녀）、気付いてないようなら言うけれど、
+	PRINTW 　私たち、身体が토오루けているわ」
+	PRINTW 「っ」
+	PRINTL
+	PRINTW 気づいていないはずはない。
+	PRINTW 直視したくなかっただけなのだろう。
+	PRINTW 華恋は、傷を隠すみたいに토오루けた손を後ろで組んだが、
+	PRINTW 反らした가슴も、토오루けていた。
+	PRINTL
+	PRINTW 「そんな……急に言われても……
+	PRINTW 　私、ひかりちゃんに、選んでもらえて、
+	PRINTW 　やっと、２人で、スタァになれるって――」
+	PRINTW 「バカッ、バッ華恋ッ！　私が何も感じてないとでも思ってるの！？
+	PRINTW 　私だって、당신と……やっと……！
+	PRINTW 　……ッ
+	PRINTW 　……」
+	PRINTL
+	PRINTW 　しばらく、潤んだ눈で床を睨んでいた２人であったが、
+	PRINTW 　不意にひかりが、華恋の손を取り、
+	PRINTW 　真검な――しかし芝居かかった――顔で、彼女の눈を見つめた。
+	PRINTL
+	SETCOLOR 0x5687e6
+	PRINTW 「“小さな星を摘んだなら、당신は小さな幸せを손に入れる。”」
+	RESETCOLOR
+	PRINTL
+	PRINTW 華恋は息を呑み、
+	PRINTW そして、パッと無邪気な笑顔――そう、芝居がかった――を浮かべた。
+	PRINTL
+	SETCOLOR 0xff0033
+	PRINTW 「“大きな星を摘んだなら、당신は大きな富を손に入れる。”」
+	RESETCOLOR
+	PRINTL
+	PRINTW ２人は、薄れつつある細い指を絡ませると、
+	PRINTW はるか遠くに見える、塔の輝きへと視線を向け、叫んだ。
+	PRINTL
+	SETCOLOR 0x5687e6
+	PRINTW 「“行こう、２人で”」
+	SETCOLOR 0xff0033
+	PRINTW 「“あの星を摘みに！”」
+	RESETCOLOR
+	PRINTL
+	PRINTW 風が吹いたような気がした。
+	PRINTW とても強い閃光に晒された気がして、당신は思わず눈を細めた。
+	PRINTL
+	PRINTW 「まだ消えるわけにはいかない、そうでしょ」
+	PRINTW 「……うん」
+	PRINTW 「スタァライトごっこ、今日で２度눈よ」
+	PRINTW 「そうだね」
+	PRINTL
+	PRINTW ２人はクスクスと笑いあったあと、당신に向き直った。
+	PRINTL
+	PRINTW 「よろしくおねがいます！」
+	PRINTL
+	PRINTW 今のやり取りに、彼女たちしか分からない何かがあったようだ。
+	PRINTW 華恋もひかりも、迷いは既に無いらしい。
+	PRINTW 당신は少々面食らったが、계약処理を行い、マグネタイトを供給することにした。
+	PRINTL
+	PRINTW 「ひゃあああ！？
+	PRINTW 　ひ、ひかりちゃん、なんか눈がバチバチするぅ！？」
+	PRINTW 「いい感触じゃないわね。
+	PRINTW 　気持ちよく感じるあたりが余計に嫌」
+	PRINTL
+	PRINTW きゃいきゃいと、一転して賑やかになった２人を連れて、당신は事務所へと戻った。
+	PRINTL
+	PRINTW 「――これで、良かったのよ、きっと。
+	PRINTW 　キリンのオー디무ションなんて、これで。
+	SETCOLOR 0x2e2e41
+	PRINTW “２人の夢は、叶わないのよ。”」
+	RESETCOLOR
+	PRINTL
+	PRINTW ひかりのその言葉は、華恋には聞こえていなかった。
+	PRINTL
+
+	CALL ADD_NEW_COMPANION,5313,200
+	LOCAL = GETCHARA(5313)
+	CFLAG:LOCAL:전투참가불가능 = -1
+
+	CALL ADD_NEW_COMPANION,5314,200
+	LOCAL = GETCHARA(5314)
+	CFLAG:LOCAL:전투참가불가능 = -1
+	
+	이벤트フラグ:93:0 += 1
+	SETBIT 이벤트フラグ:93:1, 1
+	SETBIT 이벤트フラグ:93:2, 1
+	CALL EVENT_93_TURN_END
+
+
+@EVENT_BATTLE_ACTEND_EVENT_93_8
+;最終戦かつひかりちゃんが先に死んだ
+IF 이벤트フラグ:93:0 > 6 && BASE:(CHARANUM-1):ＨＰ < 1 && 이벤트フラグ:93:1 == 0
+	PRINTFORML 
+SETCOLOR 0xff0033
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORMW ┃――ノンノンだよ。私たちは勝つ！　　　　　　┃
+	PRINTFORMW ┃ひかりちゃん、私が付いてる。一緒に行こう！　┃
+	PRINTFORMW ┃愛城華恋……기합２００パーセントぉぉぉ！　　┃
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞華恋のキラめきが舞台装置を稼働させる！
+	PRINTFORMW ＞華恋のHP＆MPが完全회복した！
+	;なんか盛りたいけど、約束タワーの出番はここじゃないよね……。
+;	ABL:(CHARANUM-2):스킬8 = [[스킬:만마의일격]]
+	CFLAG:(CHARANUM-2):行動횟수 = 3
+	CALL HEALTH_CHARA,(CHARANUM-2)
+	SETBIT 이벤트フラグ:93:1, 1
+	SETBIT 이벤트フラグ:93:2, 1
+;最終戦かつ華恋が先に死んだ
+ELSEIF 이벤트フラグ:93:0 > 6 && BASE:(CHARANUM-2):ＨＰ < 1 && 이벤트フラグ:93:2 == 0
+	PRINTFORML 
+	SETCOLOR 0x5687e6
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORMW ┃華恋が居るから、ここまで来れた。　　　　　　┃
+	PRINTFORMW ┃華恋が居るから、私はもう一度、花開いた。　　┃
+	PRINTFORMW ┃負けない、ここまで来て、負けたくない。　　　┃
+	PRINTFORMW ┃たとえ、あの娘と、戦うことになったとしても。┃
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞ひかりのキラめきが舞台装置を稼働させる！
+	PRINTFORMW ＞ひかりのHP＆MPが完全회복した！
+	;東京タワーに同じ。盛り過ぎても倒せなくなるしね……自重しようね……
+	CFLAG:(CHARANUM-1):行動횟수 = 3
+;	ABL:(CHARANUM-1):스킬8 = [[스킬:테트라프리즌]]
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	SETBIT 이벤트フラグ:93:1, 1
+	SETBIT 이벤트フラグ:93:2, 1
+ENDIF
+

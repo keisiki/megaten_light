@@ -1,0 +1,133 @@
+﻿
+;======================================================
+;장비品の데이터
+;하이레그아머
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_3501,ARG,ARG:1 = -1
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	SELECTCASE GET_BASESTATUS(ARG)
+		CASE "마력"
+			RETURN 2
+	ENDSELECT
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+ENDIF
+RETURN 0
+
+;장비者のLv50超えたら능력大幅UPぐらいほしいかな
+@전투능력수정_3501,ARG,ARG:1 = -1
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	SELECTCASE GET_BATTLESTATUS(ARG)
+		CASE "방어"
+			RETURN 14
+		CASE "회피"
+			IF ARG:1 > -1
+				SELECTCASE ABL:(ARG:1):노출증
+					CASE 0
+						RETURN -7
+					CASE 1
+						RETURN 0
+					CASE IS < 4
+						RETURN 7
+					CASEELSE
+						RETURN 14
+				ENDSELECT
+			ELSE
+				RETURN 8
+			ENDIF
+		CASE "마법효과"
+			RETURN 3
+	ENDSELECT
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+	SELECTCASE ARG
+		CASE 2
+			RETURN 14
+		CASE 3
+			IF ARG:1 > -1
+				SELECTCASE ABL:(ARG:1):노출증
+					CASE 0
+						RETURN -7
+					CASE 1
+						RETURN 0
+					CASE IS < 4
+						RETURN 7
+					CASEELSE
+						RETURN 14
+				ENDSELECT
+			ELSE
+				RETURN 5
+			ENDIF
+		CASE 5
+			RETURN 3
+	ENDSELECT
+ENDIF
+RETURN 0
+
+@방어상성_3501,ARG,ARG:1 = -1
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	SELECTCASE GET_TYPE(ARG)
+		CASE "검격","신경"
+			RETURN 75
+		CASE "화염","정신"
+			RETURN 50
+		CASE "빙결"
+			RETURN 150
+	ENDSELECT
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+ENDIF
+RETURN 100
+
+@장비箇所_3501
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3501
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	RETURN 10
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+ENDIF
+
+@장비조건_3501,ARG
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	SIF IS_LOOKSLIKE_MALE(ARG)
+		RETURN 0
+	SIF BASE:ARG:LV < 10
+		RETURN 0
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+	SIF IS_LOOKSLIKE_MALE(ARG)
+		RETURN 0
+ENDIF
+RETURN 1
+
+@장비조건설명_3501
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	PRINTL 장비조건：♀　Lv10～
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+	PRINTL 장비조건：♀
+ENDIF
+
+@장비해설_3501
+PRINTL 首元・가슴カップ・二の팔・太ももにアーマーを配し、몸통体部繋ぎがないハイレグとロンググ로브・ソックスの女性用鎧？
+PRINTL 　　　　　　　　一見전투用には見えないが数々の女性전사たちが장비しているところを見ると有効なのかもしれない。
+;PRINTFORML 강조된 앞가슴、Ｔ자로 먹혀든 힙라인
+;PRINTFORML 아슬아슬한 라인이 특징적인 여성전용 방어구
+;PRINTFORML 전투용이라기보단 장식을 목적으로 만들어졌다
+
+
+@구입조건_3501
+RETURN 1
+
+@引継ぎ可不可_3501
+RETURN 0

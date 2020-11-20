@@ -1,0 +1,67 @@
+﻿
+;======================================================
+;장비品の데이터
+;바버트(バルビュータ
+;Lv50장비までは반사まで　기본능력に합계+6まで
+;======================================================
+
+@기본능력수정_3047,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "속도"
+		RETURN -2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3047,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 28
+	CASE "회피"
+		RETURN -2
+	CASE "마법효과"
+		RETURN 7
+ENDSELECT
+RETURN 0
+
+@방어상성_3047,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "검격"
+		RETURN 50
+ENDSELECT
+RETURN 100
+
+@バステ내성_3047,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "HEAT"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@장비箇所_3047
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3047
+RETURN 30
+
+@장비조건_3047,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 30
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3047
+PRINTL 장비조건：♂ LV30～
+
+@장비해설_3047
+PRINTL イタリア産머리頂部が丸みのある前面にＴ字型のサイトを持つ투구。
+PRINTL 　　　　　　　　正面のサイト以外覆っており丸いため검격を滑らせるなど방어性能が高い。
+
+
+@구입조건_3047
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 460000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_3047
+RETURN 0

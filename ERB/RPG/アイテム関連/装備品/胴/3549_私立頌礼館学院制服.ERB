@@ -1,0 +1,41 @@
+﻿
+;======================================================
+;장비品の데이터
+;사립송례관학원교복
+;======================================================
+
+@기본능력수정_3549,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3549,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 14
+	CASE "회피"
+		RETURN 7
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_3549,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_3549
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3549
+RETURN 1
+
+@장비조건_3549,ARG
+RETURN 1
+
+@구입조건_3549
+RETURN 0
+
+@引継ぎ可不可_3549
+RETURN 1

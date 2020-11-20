@@ -1,0 +1,69 @@
+﻿
+;======================================================
+;장비品の데이터
+;수달모자
+;======================================================
+
+@기본능력수정_3028,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 1
+	CASE "인내력"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3028,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 6
+	CASE "회피"
+		RETURN 11
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_3028,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "수격"
+		RETURN 50
+	CASE "빙결"
+		RETURN 75
+	CASE "화염"
+		RETURN 90
+	CASE "전격"
+		RETURN 125
+	CASE "주살"
+		RETURN 115
+ENDSELECT
+RETURN 100
+
+@장비箇所_3028
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3028
+RETURN 14
+
+@장비조건_3028,ARG
+SIF BASE:ARG:LV < 14
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3028
+PRINTL 장비조건：LV14～
+
+@장비해설_3028
+PRINTL 수달로 장식된 귀여운 모자
+PRINTL 　　　　　　　　
+
+
+@구입조건_3028
+RETURN 0
+
+;마카교환가능か
+@EQUIP_EXCHANGE_3028
+RETURN 0
+
+@引継ぎ可不可_3028
+RETURN 0

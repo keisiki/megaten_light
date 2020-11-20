@@ -1,0 +1,2411 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:TALK_PUB302.ERB
+;	Facility	:회화타입：女・淑女の회화用메시지＋挨拶・問答処理
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX		----					新規作成
+;	002		2011/01/10		Ｎ鳥					기본処理をTALK_COMMONに一元化し、메시지を구상呼び出し用関数に移植
+;	003		2011/06/11		元248					文章の整理・増補
+;	004		2012/11/04		ネトリス				CASE 6:一発おｋ一ヶ所、62:仲魔になる一ヶ所、66〜75:ＯＯをくれる一ヶ所、79:同じ仲魔がいる場合二ヶ所に加筆
+;	005		2013/01/25		ネトリス				CASE 6:一発おｋ、40:異性との성교渉を要求、41:異性を宛がってもらった時の反応、46:満발、53:満발し、仲魔になる、
+;														54:満발し、아이템をくれる、62:仲魔になる、88:ヤらせてもらう・交渉が성공した場合に加筆
+;	006		2013/03/12		ネトリス				CASE 4:取り付く島もなし、6:一発おｋ、54:満발し、아이템をくれるに加筆
+;	007		2019/08/28		空気					デビルチェンバー사용中の挙動を修正。また、DDM사용時は容量いっぱいでも仲魔になって自宅ストレージに送るように。운がいいほど회화실패しやすくなっていたのを修正
+;
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;=====================================================================
+;입調타입：女・淑女の汎用구상＋회화用ファイルです
+;=====================================================================
+@KOJO_TALK_PUB306,ARG,ARG:1
+
+SELECTCASE ARG:1
+	CASE 1
+		;1:레이디・킬러즈
+		PRINTFORMW 「……！」
+		PRINTFORMW 「ああ、なんということでしょう。こんなところで巡り合うなんて」
+		PRINTFORMW 「そう、%CSTR:ARG:一人称%には分かってしまったのです。당신が%CSTR:ARG:一人称%の운命の人であると」
+		PRINTFORMW 「そして、%CSTR:ARG:一人称%が당신と共に行く운命であると……」
+	CASE 2
+		; 2:おねだり前の逡巡時(아이さつor問答で눈的が決まっている場合)
+		PRINTFORML 「당신、なかなか見どころがありますわね」
+		PRINTFORMW 「先程のお願い、聞いて差し上げてもいいですわよ」
+	CASE 3
+		; 3:交渉の눈的を尋ねる
+		SELECTCASE CFLAG:ARG:友好度
+			CASE IS < 35
+				PRINTFORMW 「それで、당신は%CSTR:ARG:11%に何か御用でいらっしゃるのですか？」
+			CASE IS < 50
+				PRINTFORML 「お喋りを続けたいところですが、そろそろ本題に入るとしましょう」
+				PRINTFORMW 「당신は%CSTR:ARG:11%に何をお望みですの？」
+			CASE IS < 70
+				PRINTFORMW 「なかなか楽しめましたわ。%CSTR:ARG:11%に何か出来る事はございまして？」
+			CASEELSE
+				PRINTFORMW 「%CSTR:ARG:11%に用が御有りでしたら、聞いて差し上げてもいいですわよ」
+		ENDSELECT
+	CASE 84
+		;84:要求前の1文
+		PRINT 「そうですわね……」
+	CASE 4
+		; 4-6:交渉목적：やらせてくれと言った時の反応
+		; 4:取り付く島もなし
+		PRINTFORML 
+		PRINTFORMW 「生憎と…野良犬と交わる趣味はありませんのッ」
+		PRINTFORML 
+		PRINTFORMW 激しく拒否された
+	CASE 5
+		; 5:交渉次第
+		PRINTFORMW 조건次第でヤらせてくれるようだ
+	CASE 6
+		; 6:一発おｋ
+		IF TALENT:ARG:천사
+			SELECTCASE RAND:3
+				CASE 0
+					PRINTFORML 
+					PRINTFORMW 「……ッ！！」
+					PRINTFORMW 「よろしいですわよ」
+					PRINTFORMW 「ええ、断る理由なんてありませんわ……ただ…」
+					PRINTFORML 
+					PRINTFORMW 「痛く…しないで下さいね」
+					PRINTFORML 
+				CASE 1
+					PRINTFORML 
+					PRINTFORMW 「え、えぇ、いいですわよッ」
+					PRINTFORMW 「たた、正しき子を孕む役割、こ、拒む理由がありませんものッッ」
+					PRINTFORML 
+					PRINTFORMW 「ふ、ふ、ふ、不安がらなくても宜しいですのことよ！%CSTR:ARG:一人称%に任せていただければ全て滞りなく終わりますので！」
+					PRINTFORML 
+				CASEELSE
+					PRINTFORML 
+					PRINTFORMW 「よろしいですわ、貴方程の者の『種』なら逞しき子を孕めるでしょうから」
+					PRINTFORMW 「ただ…その……」
+					PRINTFORML 
+					PRINTFORMW 「初めてですので…優しくお願いいたしますね」
+					PRINTFORML 
+			ENDSELECT
+		ENDIF
+		PRINTFORMW 쾌く承諾してくれた
+		GOTO ヤらせてもらう・交渉が성공した場合行為中
+	CASE 7
+		; 7-9:交渉목적：やらせてくれと言った時の反応
+		; 7:取り付く島もなし
+		PRINTFORMW 激しく拒否された
+	CASE 8
+		; 8:交渉次第
+		PRINTFORMW 조건次第で犯してくれるようだ
+	CASE 9
+		; 9:一発おｋ
+		PRINTFORMW 쾌く承諾してくれた
+	CASE 10
+		;10:要求額を提示：￥
+		PRINTFORML 「￥{TFLAG:TALK用要求値}を頂けるかしら」
+	CASE 11
+		;11-13:￥を払おうとしてお金が발りない
+		;11:別のものを要求する
+		PRINTFORMW 「あら、その程度のお金もありませんの？」
+		PRINTFORMW 「仕方ありませんわね。でしたら、別の物を頂けますかしら」
+	CASE 85
+		;85:恵まれる
+		PRINTFORMW 「あら、その程度のお金もありませんの？」
+		IF TALENT:PLAYER:남자
+			PRINTFORML 「情けないですわね。男性には常の万全を心掛けてほしいものですのに」
+		ELSE
+			PRINTFORML 「情けないですわね。交渉をなさる気がありますの？」
+		ENDIF
+		PRINTFORMW 「仕方ありませんわね。少しですが、恵んで差し上げます」
+	CASE 12
+		;12:交渉실패。立ち去る
+		PRINTFORMW 「あら、その程度のお金もありませんの？」
+		PRINTFORML 「ふう……何だか憂鬱になってきましたわ」
+		PRINTFORMW 「%CSTR:ARG:11%、失礼させていただきます」
+	CASE 13
+		;13:交渉실패。적対する
+		PRINTFORMW 「あら、その程度のお金もありませんの？」
+		IF TALENT:PLAYER:남자
+			PRINTFORMW 「はぁ、幻滅ですわ。당신、男失格ですわね」
+		ELSE
+			PRINTFORMW 「はぁ、당신には失望いたしましたわ」
+		ENDIF
+	CASE 14
+		;14-16:￥を支払った
+		;14:払ったのに逃げられる
+		PRINTFORMW 「ふふ、感謝いたしますわ。それでは、ごきげんよう」
+	CASE 15
+		;15:さらに要求される
+		PRINTFORML 「ふふ、そう焦らないでくださいな」
+	CASE 16
+		;16:交渉성공
+		PRINTFORMW 「ふふ、感謝いたしますわ」
+	CASE 17
+		;17-19:￥を支払うのを断った::
+		;17:交渉실패。奇襲する
+		PRINTFORML 「%CSTR:ARG:11%には払えないと仰るの？」
+		PRINTFORML 「恥ずかしいですわね、器の小ささが露見しましてよ」
+		PRINTFORMW 「もういいですわ、代わりに당신の命を頂きます」
+	CASE 18
+		;18:交渉실패。적対する
+		PRINTFORML 「%CSTR:ARG:11%には払いたくないと？」
+		PRINTFORML 「そう。理由はあるのでしょうけど……良い気はしませんわね」
+		PRINTFORMW 「もう당신と話す事なんてありませんわ」
+	CASE 19
+		;19:他のものを要求する:
+		PRINTFORMW 「でしたら、別の物を頂けるかしら」
+	CASE 20
+		;20:要求額を提示：ＭＡＧ
+		PRINTFORML 「{TFLAG:TALK用要求値}MAGほど頂けるかしら」
+		PRINTFORML
+	CASE 21
+		;21-23:ＭＡＧを支払おうとしたが발りない
+		;21:別のものを要求する
+		PRINTFORMW 「あら、その程度のMAGもありませんの？」
+		PRINTFORMW 「仕方ありませんわね。でしたら、別の物を頂けますかしら」
+	CASE 86
+		;86:恵まれる
+		PRINTFORMW 「あら、その程度のMAGもありませんの？」
+		PRINTFORML 「악마にとってMAGとはとても重要なもの」
+		PRINTFORML 「交渉をなさる気が御有りなら、用意を怠るのはいけませんわね」
+		PRINTFORMW 「少し恵んで差し上げますわ。これを機にお勉強なさいね？」
+	CASE 22
+		;22:交渉실패。立ち去る
+		PRINTFORMW 「あら、その程度のMAGもありませんの？」
+		PRINTFORML 「ふう……何だか憂鬱になってきましたわ」
+		PRINTFORMW 「%CSTR:ARG:11%、失礼させていただきます」
+	CASE 23
+		;23:交渉실패。적対する
+		PRINTFORMW 「あら、その程度のMAGもありませんの？」
+		IF TALENT:PLAYER:남자
+			PRINTFORMW 「はぁ、幻滅ですわ。당신、男失格ですわね」
+		ELSE
+			PRINTFORMW 「はぁ、당신には失望いたしましたわ」
+		ENDIF
+	CASE 24
+		;24-26:ＭＡＧを支払った
+		;24:払ったのに逃げられる
+		PRINTFORMW 「ふふ、感謝いたしますわ。それでは、ごきげんよう」
+	CASE 25
+		;25:さらに要求される
+		PRINTFORMW 「ふふ、そう焦らないでくださいな」
+	CASE 26
+		;26:交渉성공
+		PRINTFORMW 「ふふ、感謝いたしますわ」
+	CASE 27
+		;27-29:ＭＡＧを支払うのを断った
+		;27:交渉실패。奇襲する
+		PRINTFORML 「%CSTR:ARG:11%には払えないと仰るの？」
+		PRINTFORML 「恥ずかしいですわね、器の小ささが露見しましてよ」
+		PRINTFORMW 「もういいですわ。お死になさい」
+	CASE 28
+		;28:交渉실패。적対する
+		PRINTFORML 「%CSTR:ARG:11%には払いたくないと？」
+		PRINTFORML 「そう、理由はあるのでしょうけど……あまり良い気はしませんわね」
+		PRINTFORMW 「もう당신と話す事なんてありませんわ」
+	CASE 29
+		;29:他のものを要求する
+		PRINTFORMW 「でしたら、別の物を頂けますかしら」
+	CASE 30
+		;30:마석を要求
+		PRINTFORML 「마석を頂けませんか？」
+		PRINTFORML
+	CASE 31
+		;31-33:마석を渡そうとしたが持っていない
+		;31:別のものを要求する
+		PRINTFORMW 「마석を持っていないのですか？」
+		PRINTFORMW 「仕方ありませんわね。でしたら、別の物を頂けます？」
+	CASE 87
+		;87:恵まれる
+		PRINTFORMW 「마석を持っていないのですか？」
+		PRINTFORMW 「仕方ありませんね、%CSTR:ARG:11%の物を一つ分けてあげましょう」
+	CASE 32
+		;32:交渉실패。立ち去る
+		PRINTFORMW 「마석を持っていないのですか？」
+		PRINTFORMW 「마석もないだなんて……幻滅してしまいました」
+		PRINTFORMW 「これでお暇させていただきますわ」
+	CASE 33
+		;33:交渉실패。적対する
+		PRINTFORMW 「마석を持っていないのですか？」
+		PRINTFORMW 「마석も持たずに악마と交渉するだなんて、少々軽率ではありませんか？」
+	CASE 34
+		;34-36:마석を渡した
+		;34:払ったのに逃げられる
+		PRINTFORMW 「ふふ、感謝いたしますわ。それでは、ごきげんよう」
+	CASE 35
+		;35:さらに要求される
+		PRINTFORMW 「ふふ、そう焦らないでくださいな」
+	CASE 36
+		;36:交渉성공
+		PRINTFORMW 「ふふ、感謝いたしますわ」
+	CASE 37
+		;37-39:마석を渡すのを断った
+		;37:交渉실패。奇襲する
+		PRINTFORML 「%CSTR:ARG:11%には渡せないと仰るの？」
+		PRINTFORML 「恥ずかしいですわね、器の小ささが露見しましてよ」
+		PRINTFORMW 「もういいですわ。お死になさい」
+	CASE 38
+		;38:交渉실패。적対する
+		;気分を害される
+		PRINTFORML 「%CSTR:ARG:11%には渡したくないと？」
+		PRINTFORML 「そう、理由はあるのでしょうけど……あまり良い気はしませんわね」
+		PRINTFORMW 「もう당신と話す事なんてありませんわ」
+	CASE 39
+		;39:他のものを要求する
+		PRINTFORMW 「でしたら、別の物を頂けますかしら」
+	CASE 40
+		;40:異性との성교渉を要求
+		PRINTFORML 
+		PRINTFORMW 「こんなことを言うとはしたないと思われるかもしれませんが…」
+		PRINTFORMW 「此処のところ…一人寝が寂しいんですの…」
+		PRINTFORML 
+		PRINTFORML \@TALENT:ARG:남자 ?女#男\@を要求されました
+	CASE 41
+		;41:異性を宛がってもらった時の反応
+		IF TALENT:(捧げたキャラ()):남자
+			PRINTFORML 
+			PRINTFORMW 「あっ…や・さ・し・く、お願いしますね%ハート()%」
+			PRINTFORML 
+		ENDIF
+			CALL MESSAGE_TALK
+		IF TALENT:(捧げたキャラ()):남자
+			PRINTFORML
+			PRINTFORMW 「はぁぁ〜%ハート()%」
+			PRINTFORMW 「イイ…ですわ、とっても%ハート()%」
+			PRINTFORML 
+		ENDIF
+	CASE 42
+		;42-46:성교渉が終わった後
+		;42:敗北してる場合ここでゲームオーバー
+	CASE 43
+		;43:話しかけたキャラが倒れている
+	CASE 44
+		;44:ヤらせたのに逃げられる
+		PRINTFORMW %CALLNAME:ARG%に逃げられた
+	CASE 45
+		;45:満발してない
+		PRINTFORML %CALLNAME:ARG%はまだ満발していないようだ
+	CASE 46
+		;46:満발
+		IF TALENT:(捧げたキャラ()):남자
+			PRINTFORML 
+			PRINTFORML 「はぁ%ハート()%　満발しましたわ…ちゅっ%ハート()%」
+			PRINTFORML 
+		ENDIF
+		PRINTFORMW %CALLNAME:ARG%は満발したようだ
+	CASE 47
+		;47-49:성교渉を断った
+		;47:交渉실패。奇襲する
+	CASE 48
+		;48:交渉실패。적対する
+	CASE 49
+		;49:他のものを要求する
+	CASE 50
+		;50-55:ヤらせてもらった後
+		;50:敗北してる場合ここでゲームオーバー
+	CASE 51
+		;51:話かけたキャラが倒れいる
+	CASE 52
+		;52:去っていく
+	CASE 53
+		;53:満발し、仲魔になる
+		;勝てなかったよ…
+		IF TALENT:PLAYER:크고아름다움 && FLAG:악마만족도 == 200
+			PRINTFORMW 「あひぃっ、あ〜〜ッ…な、なりましゅ……%CSTR:ARG:一人称%はごしゅじんしゃまのド레이でしゅうぅ%ハート()%%ハート()%%ハート()%」
+			PRINTFORMW %CALLNAME:ARG%は%CALLNAME:PLAYER%のイチモツに突かれながら、仲魔になる事を承諾した
+		;通常
+		ELSE
+			IF TALENT:ARG:천사
+				SELECTCASE RAND:3
+					CASE 0
+						PRINTFORML 
+						PRINTFORMW 「………………溺れていません」
+						PRINTFORMW 「%CSTR:ARG:一人称%、肉体の욕망などには溺れていませんから」
+						PRINTFORML 
+						PRINTFORMW 「ただ、アナタのその罪深き욕망を見てみぬ振りなど出来ませんから付いていくわけで〜〜〜」
+						PRINTFORMW %CALLNAME:ARG%は延々と言い訳（？）を続けている…
+						PRINTFORML 
+					CASE 1
+						PRINTFORML 
+						PRINTFORMW 「…ア、アナタのような淫猥な方を、これ以上のさばらせる訳にはいきません！」
+						PRINTFORMW 「ですので、%CSTR:ARG:一人称%も『監視』、あくまで『監視』の為に同行させて頂きます」
+						PRINTFORML 
+					CASEELSE
+						PRINTFORML 
+						PRINTFORMW 「…こほん…%CSTR:ARG:11%も貴方に同行させていただきます」
+						PRINTFORMW 「貴方を正しき道へ導く使命が降りましたので……」
+						PRINTFORML 
+						PRINTFORMW 「……初めても奪われちゃいましたし（ぼそっ」
+						PRINTFORML 
+						PRINTFORMW 「な、なんでもありません！では、今後ともヨロシクお願いしますわ」
+						PRINTFORML 
+				ENDSELECT
+			ENDIF
+		ENDIF
+	CASE 54
+		;54:満발し、아이템をくれる
+		IF TALENT:ARG:천사
+			SELECTCASE RAND:3
+				CASE 0
+					PRINTFORML 
+					PRINTFORMW 「…うぅ……まだ入っているような感じが…」
+					PRINTFORMW 「こ、これはお礼です」
+					PRINTFORML 
+				CASE 1
+					PRINTFORML 
+					PRINTFORMW 「…こ、これを受け取りなさい…」
+					PRINTFORMW 「け、決して疚しい気持ちがあるわけではありませんからねっ！！」
+					PRINTFORML 
+				CASEELSE
+					PRINTFORML 
+					PRINTFORMW 「はぁ…%ハート()%　はっ！？こほんっ…」
+					PRINTFORMW 「貴方の『種』、確かに受け取りました」
+					PRINTFORMW 「これはお礼です」
+					PRINTFORML 
+			ENDSELECT
+		ENDIF
+	CASE 53
+		;53:満발し、見逃してくれる
+		;現状、死に処理
+	CASE 56
+		;56-61:犯してもらった後
+		;56:敗北してる場合ここでゲームオーバー
+	CASE 57
+		;57:話かけたキャラが倒れいる
+	CASE 58
+		;58:去っていく
+	CASE 59
+		;59:満발し、仲魔になる
+	CASE 60
+		;60:満발し、아이템をくれる
+	CASE 61
+		;61:満발し、見逃してくれる
+		;現状、死に処理
+	CASE 62
+		;62:仲魔になる
+		;犯してもらう、ヤラせてもらうの場合
+		IF FLAG:交渉목적 > 3
+			PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、%CALLNAME:ARG%が仲魔になってくれました
+		ELSE
+			;異性を捧げた場合
+			IF TFLAG:捧げたキャラ > -1 && TALENT:(捧げたキャラ()):남자 == 1
+				PRINTFORML 
+				PRINTFORML 「%CSTR:ARG:11%、%STR:(ABL:ARG:종족)% %CALLNAME:ARG%と申しますの」
+				PRINTFORMW 「今後ともヨロシクお願いしますわね……」
+				PRINTFORML 
+				PRINTFORMW %CALLNAME:ARG%は%CALLNAME:(捧げたキャラ())%を、じーっと見つめている
+				PRINTFORMW 「え？　ふふっ、なんでもありませんわ♪」
+				PRINTFORML 
+			;그외
+			ELSE
+				PRINTFORML 「%CSTR:ARG:11%、%STR:(ABL:ARG:종족)% %CALLNAME:ARG%と申しますの」
+				PRINTFORMW 「今後ともヨロシクお願いしますわね」
+			ENDIF
+		ENDIF
+	CASE 63
+		;63:マスターの레벨より高い場合
+		PRINTFORML 「……今更で大変恐縮なのですが、당신と一緒には行けませんわ」
+		PRINTFORMW 「악마として、%CSTR:ARG:11%より弱い方に付き従う訳にはいきませんの」
+		PRINTFORMW 「より強くなってくださいね。その時をお待ちしていますわ…」
+		
+	CASE 64
+		;64:ＣＯＭＰの空きが無い場合
+		PRINTFORML 「あら、お邪魔しようにもお部屋が一杯のようですわね」
+		PRINTFORMW 「またお会いできる日までに、%CSTR:ARG:11%の場所を用意しておいてくださいね」
+		
+	CASE 65
+		;65:搾りとられた
+		PRINTFORML 「大変美味しゅうございましたわ、당신の精気%UNICODE(0x2661)%」
+	CASE 66 TO 75
+		;66:お金をくれる
+		IF FLAG:交渉목적 > 3
+			IF ARG:1 == 66
+				PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、お金を恵んでもらいました
+			ELSEIF ARG:1 == 67
+				PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、ＭＡＧを恵んでもらいました
+			;아이템を貰う場合（適当な文が思い浮かばなかった為空欄）
+			ELSE
+			
+			ENDIF
+		ELSE
+			PRINTFORMW 「これを差し上げましょう」
+		ENDIF
+;	CASE 67
+;		;67:ＭＡＧをくれる
+;		IF FLAG:交渉목적 > 3
+;			PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、ＭＡＧを恵んでもらいました
+;		ELSE
+;			PRINTFORMW 「コレあげるですぅ！」
+;		ENDIF
+;	CASE 68
+;		;68:ダメージをくれる
+;		PRINTFORMW 「コレあげるですぅ！」
+;	CASE 69
+;		;69-75:아이템をくれるor회복してくれる
+;		;69:소마を使ってくれる
+;		PRINTFORMW 「コレあげるですぅ！」
+;	CASE 70
+;		;70:보옥륜を使ってくれる
+;		PRINTFORMW 「コレあげるですぅ！」
+;	CASE 71
+;		;71:ITEMor마석をくれる
+;		PRINTFORMW 「コレあげるですぅ！」
+;	CASE 72
+;		;72:마석をくれる
+;		PRINTFORMW 「コレあげるですぅ！」
+;	CASE 73
+;		;73:마석を使ってくれる
+;		PRINTFORMW 「コレあげるですぅ！」
+;	CASE 74
+;		;74:보옥を使ってくれる
+;		PRINTFORMW 「コレあげるですぅ！」
+;	CASE 75
+;		;75:보옥をくれる
+;		PRINTFORMW 「コレあげるですぅ！」
+	CASE 76
+		;76-78:気まずくなった
+		;76:회화실패。奇襲する
+		PRINTFORMW 「당신……불쾌ですわ。何故、당신のような方が存在しているのか……」
+		PRINTFORMW 「全く理解出来ませんわ。今すぐに死んでくださらない？」
+	CASE 77
+		;77:회화실패。적対する
+		PRINTFORMW 「もう、失礼な方！　こんな方とお喋りなんて時間の無駄ですわ」
+		PRINTFORMW 「金輪際、당신と입を聞く気なんてありません！」
+	CASE 78
+		;78:회화継続
+		PRINTFORMW 「そうですわね……%CSTR:ARG:11%もどちらかといえば寛容な方ですし……」
+		PRINTFORMW 「もう少しだけ、付き合ってあげますわね」
+	CASE 79
+		;79-83:立ち去る
+		;79:同じ仲魔がいる場合
+		IF FLAG:交渉목적 > 3
+			IF TALENT:ARG:천사 
+				PRINTFORML 
+				PRINTFORMW 「あの、%CSTR:ARG:11%も貴方のお傍にっ……いえ、なんでもありませんわ」
+				PRINTFORMW 「仲魔を…お願いしますね」
+				PRINTFORML 
+			ELSE
+				PRINTFORML 
+			ENDIF
+		ELSE
+			PRINTFORML 「%CSTR:ARG:11%の仲魔をお願いしますわ」
+		ENDIF
+	CASE 80
+		;険悪な雰囲気
+		PRINTFORML 「……不愉쾌ですわ。%CSTR:ARG:11%、失礼いたします」
+	CASE 81
+		;友好度が低い
+		PRINTFORML 「それじゃ失礼させてもらうわね」
+	CASE 82
+		;友好度が普通
+		PRINTFORML 「では、ごきげんよう」
+	CASE 83
+		;友好度が高い
+		PRINTFORML 「……また、お会いできるといいですわね」
+	CASE 88
+		;88:ヤらせてもらう・交渉が성공した場合
+		PRINTFORMW 交渉に성공し、犯させてもらえることになった
+		CALL MESSAGE_TALK
+		$ヤらせてもらう・交渉が성공した場合行為中
+		;천사の場合
+		IF TALENT:ARG:천사
+			SELECTCASE RAND:3
+				CASE 0
+					PRINTFORML 
+					PRINTFORMW 「いっ、痛いっ！？痛いですっ！！」
+					PRINTFORMW 「やっぱりそんな大きなモノは入るようには出来ていないのです！！」
+					PRINTFORML 
+					PRINTFORMW 「だからヤメっっ！？」
+					PRINTFORMW 「あッ、ぐぅぅぅぅぅっっ！！！」
+					PRINTFORML 
+				CASE 1
+					PRINTFORML 
+					PRINTFORMW 「みみみ、見ないでください！」
+					PRINTFORMW 「麻袋！麻袋は何処ですかー！！」
+					PRINTFORML 
+				CASEELSE
+					PRINTFORML 
+					PRINTFORMW 「はぁ…これが사정……%ハート()%」
+					PRINTFORMW 「これで子が…貴方の子が宿ったのですね…%ハート()%」
+					PRINTFORMW %CALLNAME:ARG%は惚けた様子で下腹部を撫でている
+					PRINTFORML 
+			ENDSELECT
+		ENDIF
+	CASE 89
+		;犯してもらう・交渉が성공した場合
+		PRINTFORMW 交渉に성공し、犯してもらえることになった
+		CALL MESSAGE_TALK
+	CASE 91
+		;적が命乞いCASE91〜93
+		;91:命乞い
+	CASE 92
+		;92:助けた場合（RETURN 0, X = 0.逃げる　1.仲魔になる　2.何か貰う　3.奇襲）
+		;『@KOJO_TALK』をはさむ為、RESULT:0が上書きされてしまうのでRESULT:1を使う
+	CASE 93
+		;93:断った場合
+	CASE 94
+		;적から助ける代わりに取引を持ちかけられるCASE94〜101
+		;94:取引内容（RETURN 0, X = 1.￥　2.마카　3.異性）
+		PRINTFORML %CALLNAME:ARG%が%CALLNAME:PLAYER%に取引を持ちかけてきた
+	CASE 95
+		;95:要求をのむ（￥）
+	CASE 96
+		;96:要求をのむ（마카）
+	CASE 97
+		;97:要求をのむ（異性）
+		CALL MESSAGE_TALK
+	CASE 98
+		;98:約束を守るかどうか구상内で決める（RETURN 0, X = 1.去っていく　2.전투続行）
+	CASE 99
+		;99:約束を守って去っていく
+	CASE 100
+		;100:約束を守らず전투続行
+	CASE 101
+		;101:要求を断る
+ENDSELECT
+
+
+
+;===========================================================================
+;회화時挨拶
+;===========================================================================
+@GREET_PUB306,ARG
+SELECTCASE CFLAG:ARG:友好度
+	CASE IS > 25
+		PRINTFORML 「あら、こんな素적な人に声をかけられるなんて」
+		PRINTFORMW 「今日はいい日ですわね」
+	CASE IS > -25
+		PRINTFORML
+		PRINTFORML 「あら、인간に声をかけられるなんて」
+		PRINTFORMW 「珍しい事もあるものですわね」
+		PRINTFORML
+	CASEELSE
+		PRINTFORML 「%CSTR:ARG:一人称%に声をかけてくるなんて」
+		PRINTFORMW 「その勇気に免じてとりあえず話を聞いてあげますわ」
+ENDSELECT
+
+SELECTCASE RAND:4
+	CASE 0
+		PRINTFORMW 「ねえ、いったい何の用ですの？」
+		PRINTFORML
+		PRINTFORML [1]お茶でもどう？　[2]カラオケに行こう
+		PRINTFORML [3]何か欲しいな　　[4]黙ってついてこい
+		$INPUT_LOOP0
+		INPUT
+		PRINTFORML
+		IF RESULT == 1
+			;お茶でもどう？
+			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+			SIF TALENT:ARG:겁쟁이
+				CFLAG:ARG:友好度 += RAND:15
+			SIF TALENT:ARG:얌전함
+				CFLAG:ARG:友好度 += RAND:15
+			SIF TALENT:ARG:영맹
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:반항적
+				CFLAG:ARG:友好度 += RAND:5
+			SIF TALENT:ARG:프라이드높음
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:교만
+				CFLAG:ARG:友好度 += RAND:10
+				
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:50
+				;실패
+				IF TALENT:ARG:프라이드높음
+					PRINTFORML 「あら、당신、ご自分の身分を弁えてらっしゃらないの？」
+					PRINTFORMW 「鏡を見て、出直してらして」
+					RETURN 6
+				ELSE
+					PRINTFORMW 「申し訳ありませんけど、ご遠慮いたしますわ」
+					RETURN 6
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:30
+				;성공
+				IF RAND:2 == 0 && TALENT:ARG:프라이드높음
+					CFLAG:ARG:友好度 += RAND:10
+					PRINTFORML 「それもいいかもしれませんわね」
+					PRINTFORMW 「ふふ、考えておきますわ」
+					RETURN 0
+				ELSE
+					PRINTFORML 「お誘いくださる気持ちはとても嬉しいのですが」
+					PRINTFORMW 「もう少しだけ考えてもよろしいかしら？」
+					RETURN 0
+				ENDIF
+			ENDIF
+		ELSEIF RESULT == 2
+			;カラオケに行こう
+			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+			SIF TALENT:ARG:솔직함
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:낙관적
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:해방
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:영맹
+				CFLAG:ARG:友好度 -= RAND:10
+			SIF TALENT:ARG:잔학
+				CFLAG:ARG:友好度 -= RAND:10
+
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:30
+				;실패
+				IF RAND:3 == 0 && TALENT:ARG:영맹
+					PRINTFORML 「歌よりももっと良いものが有りますわよ」
+					PRINTFORMW 「聞かせてくださいな、당신の断末魔を」
+					RETURN 3
+				ELSEIF RAND:2 == 0 && TALENT:ARG:잔학
+					PRINTFORML 「わざわざ발を운ばなくとも、歌ならここに在りますわよ？」
+					PRINTFORMW 「팔？　それとも발？　……당신はどこを切り取ればどう歌ってくださるの？」
+					RETURN 3
+				ELSE
+					PRINTFORMW 「何か下心がお有りなんでしょう？お断りしますわ」
+					RETURN 6
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:30
+				;성공
+				IF RAND:2 == 0 && TALENT:ARG:호기심
+					CFLAG:ARG:友好度 += RAND:10
+					PRINTFORML 「あら、いいですわね。こう見えても%CSTR:ARG:11%、なかなかのものですのよ？」
+					PRINTFORMW 「どちらの歌が優れているか、勝負といきたい所ですわね」
+					RETURN 0
+				ELSE
+					PRINTFORML 「カラオケですか？　たまには、良いかもしれませんわね……」
+					PRINTFORMW 「はしたない事ですが、時々、夜通し騒いでみたくなりますの」
+					RETURN 0
+				ENDIF
+			ENDIF
+		ELSEIF RESULT == 3
+			;何か欲しい
+			LOCAL = RAND:80 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+			SIF TALENT:ARG:프라이드높음
+				CFLAG:ARG:友好度 -= RAND:10
+			SIF TALENT:ARG:반항적
+				CFLAG:ARG:友好度 -= RAND:10
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:50
+				;실패
+				IF TALENT:ARG:프라이드높음
+					PRINTFORML 「まあ、物乞いでしたの。見苦しいですわね」
+					PRINTFORMW 「さっさと視界から消えていただけるかしら？」
+					RETURN 3
+				ELSE
+					PRINTFORML 「急にそんな事を言われても困りますわ」
+					PRINTFORMW 「당신、失礼にも程がありましてよ！」
+					RETURN 6
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:30
+				;성공
+				IF TALENT:ARG:헌신적
+				CFLAG:ARG:友好度 += RAND:10
+					PRINTFORML 「まぁ、貧しい思いをしていらっしゃるのですね……可哀想に」
+					PRINTFORMW 「いいでしょう、ここで出会ったのも何かの縁というものです」
+					RETURN 2
+				ELSE
+					PRINTFORML 「何か、と言われましても……ううん、困りましたわね」
+					PRINTFORMW 「あぁ！　そうですわ、アレがありました！」
+					RETURN 2
+				ENDIF
+			ENDIF
+		ELSEIF RESULT == 4
+			;黙って付いて来い
+			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2) - RAND:20
+			SIF TALENT:ARG:마조
+				CFLAG:ARG:友好度 += RAND:30
+			SIF TALENT:ARG:처녀
+				CFLAG:ARG:友好度 -= RAND:10
+			SIF TALENT:ARG:호기심
+				CFLAG:ARG:友好度 += RAND:20
+			SIF TALENT:ARG:정조관결여
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:정조관념
+				CFLAG:ARG:友好度 -= RAND:10
+			SIF TALENT:ARG:프라이드높음
+				CFLAG:ARG:友好度 -= RAND:10
+			SIF TALENT:ARG:반항적
+				CFLAG:ARG:友好度 -= RAND:10
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:50
+				;실패
+				IF TALENT:ARG:처녀 || TALENT:ARG:겁쟁이
+					PRINTFORML 「絶対にお断りですわ。誰が당신なんかと」
+					PRINTFORMW 「……さようなら」
+					RETURN 5
+				ELSEIF TALENT:ARG:프라이드높음
+					PRINTFORML 「당신……何様のおつもりですの？」
+					PRINTFORMW 「鏡を見てから物を仰った方がよろしくてよ」
+					RETURN 6
+				ELSE
+					PRINTFORML 「い、いきなり何ですの、その横暴な態度」
+						IF TALENT:PLAYER:남자
+						PRINTFORMW 「全く、紳士としての振る舞いがなっていませんわ」
+						ELSE
+						PRINTFORMW 「お馬鹿な男の方ならともかく、%CSTR:ARG:11%には通用しませんわよ」
+						ENDIF
+					RETURN 6
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:30
+				;성공
+				IF TALENT:PLAYER:남자 && TALENT:ARG:마조
+					CFLAG:ARG:友好度 += RAND:30
+					PRINTFORML 「あぁ……なんて、男らしい方……」
+					PRINTFORMW 「당신のような方になら、この身も心も預けられますわ！」
+					RETURN 1
+				ELSEIF TALENT:ARG:호기심
+					CFLAG:ARG:友好度 += RAND:5
+					PRINTFORML 「はい、と答えたらどちらへ連れていってくださるのかしら」
+					PRINTFORMW 「ふふ。そう考えると、思わず頷いてしまいたくなりますわね」
+					RETURN 0
+				ELSE
+					PRINTFORML 「有無を言わさぬその態度、失礼にも程がありますわ」
+					PRINTFORML 「ですが、その無뼈な強さは一つの매력ですわね」
+					PRINTFORMW 「そういうのも、嫌いじゃありませんわよ」
+					RETURN 0
+				ENDIF
+			ENDIF
+		ELSE
+			GOTO INPUT_LOOP0
+		ENDIF
+
+
+	CASE 1
+		PRINTFORMW 「%CSTR:ARG:11%、%STR:(ABL:ARG:종족)% %CALLNAME:ARG%と申します。ごきげんよう」
+		PRINTFORML
+		PRINTFORML [1]挨拶を返す　　[2]無視
+		$INPUT_LOOP1
+		INPUT
+		PRINTFORML
+		IF RESULT == 1
+			;挨拶を返す
+			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+			SIF TALENT:ARG:솔직함
+				CFLAG:ARG:友好度 += RAND:15
+			SIF TALENT:ARG:프라이드높음
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:교만
+				CFLAG:ARG:友好度 += RAND:5
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:50
+				;실패
+				IF TALENT:ARG:프라이드높음
+					PRINTFORML 「まあ、何ですのその返し方」
+					PRINTFORMW 「姿勢も言葉も表情も。何もかも品格に欠けますわよ」
+					RETURN 3
+				ELSEIF TALENT:ARG:교만
+					PRINTFORML 「いやだわ、ヒキガエルの様な下品なお声」
+					PRINTFORMW 「%CSTR:ARG:11%の耳が腐り落ちたらどうしてくれますの！」
+					RETURN 3
+				ELSE
+					PRINTFORML 「申し訳ないのですが、もう一度仰って？」
+					PRINTFORMW 「お声が小さ過ぎて、よく聞こえませんでしたの」
+					RETURN 6
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:30
+				;성공
+				IF TALENT:ARG:프라이드높음
+					CFLAG:ARG:友好度 += RAND:10
+					PRINTFORML 「あら、인간にしては礼儀を心得ていますのね」
+					PRINTFORMW 「そういう方、嫌いじゃないですわよ。ふふ」
+					RETURN 0
+				ELSEIF RAND:2 == 0
+					PRINTFORML 「挨拶には挨拶を。とても가운純な事ですが」
+					PRINTFORMW 「こうして返していただけると、心が弾みますわね」
+					RETURN 0
+				ELSE
+					PRINTFORML 「ふふ、礼儀正しい方ですのね」
+					PRINTFORMW 「礼節を重んじる方はとても好ましいですわ」
+					RETURN 0
+				ENDIF
+			ENDIF
+
+		ELSEIF RESULT == 2
+			;無視
+			LOCAL = RAND:80 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+			CFLAG:ARG:友好度 -= RAND:10
+			SIF TALENT:ARG:반항적
+				CFLAG:ARG:友好度 -= RAND:20
+			SIF TALENT:ARG:프라이드높음
+				CFLAG:ARG:友好度 -= RAND:20
+			SIF TALENT:ARG:잔학
+				CFLAG:ARG:友好度 -= RAND:10
+			SIF TALENT:ARG:영맹
+				CFLAG:ARG:友好度 -= RAND:10
+			IF RESULT < 30
+				CFLAG:ARG:友好度 -= RAND:30
+				;실패
+				IF TALENT:ARG:영맹
+					PRINTFORML 「挨拶も返せないなんて、所詮はお猿さんですのね」
+					PRINTFORMW 「その모피、剥いで差し上げますわ！」
+					RETURN 3
+				ELSEIF TALENT:ARG:프라이드높음
+					PRINTFORML 「挨拶も返せないなんて……なんて失礼な方なんでしょう！」
+					PRINTFORMW 「不愉쾌ですわ。ええ、本当に」
+					RETURN 6
+				ELSE
+					PRINTFORML 「黙っていないで、何か仰ってくださいな」
+					PRINTFORMW 「こうして直に接しているのに、寂しくなりますわ」
+					RETURN 6
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:30
+				;성공
+				IF RAND:3 == 0 && TALENT:ARG:우애
+				CFLAG:ARG:友好度 += RAND:10
+					PRINTFORML 「あの、どうかしまして？お体の具合でも悪くされましたの？」
+					PRINTFORMW 「……まあ、照れてらっしゃるの？ふふ、可愛い方ね」
+					RETURN 0
+				ELSEIF RAND:2 == 0 && TALENT:ARG:마조
+					PRINTFORML 「んもう、連れない方ですのね」
+					PRINTFORMW 「でも、そんな쿨な所も素적ですわ」
+					RETURN 0
+				ELSE
+					PRINTFORML 「あの、%CSTR:ARG:11%の言葉……聞こえてらして？」
+					PRINTFORMW 「……ああ、良かった。もう、謝る位ならお返事してくださいな！」
+					RETURN 0
+				ENDIF
+			ENDIF
+			GOTO INPUT_LOOP1
+		ENDIF
+
+	CASE 2
+		PRINTFORML 「ねえ、聞いてくださらない？」
+		PRINTFORML 「最近、自分でも肌にハリがなくなったかなと思う時があるのですけど……」
+		PRINTFORMW 「당신は、どう思います？」
+		PRINTFORML
+		PRINTFORML [1]そんな事はない　[2]良い化粧品がある
+		PRINTFORML [3]そうだな　　　　[4]エステを勧める
+
+		$INPUT_LOOP2
+		INPUT
+		PRINTFORML
+		IF RESULT == 1
+			;そんな事はない
+			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				CFLAG:ARG:友好度 += RAND:5
+			SIF TALENT:ARG:솔직함
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:얌전함
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:프라이드높음
+				CFLAG:ARG:友好度 += RAND:10
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:20
+				;실패
+				IF TALENT:ARG:프라이드높음
+					CFLAG:ARG:友好度 -= RAND:10
+					PRINTFORML 「気休めはよしてくださいな……はぁ」
+					RETURN 0
+				ELSE
+					PRINTFORML 「本当に、心の底からそう思います？」
+					PRINTFORMW 「%CSTR:ARG:11%、ね。お世辞というものが大嫌いなんです」
+					RETURN 6
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:30
+				;성공
+				IF RAND:3 == 0 && LOCAL > 80 && TALENT:ARG:프라이드높음
+					PRINTFORML 「そ、そうですわよね！？　ええ、ええ！」
+					PRINTFORMW 「%CSTR:ARG:11%の美貌はこの程度で衰えたりなどしませんわ！」
+					PRINTFORML 「당신のおかげで自信が取り戻せましたわ」
+					PRINTFORML 「その、感謝の印というわけではないのですが……」
+					PRINTFORMW 「당신にご同行させていただいても……よろしいかしら？」
+					RETURN 1
+				ELSEIF RAND:2 == 0
+					SIF TALENT:ARG:비관적
+						CFLAG:ARG:友好度 += RAND:10
+					PRINTFORML 「気休めでも嬉しいですわ……ありがとう」
+					PRINTFORMW 「당신の優しさに、これを贈りたいと思いますの」
+					RETURN 2
+				ELSE
+					PRINTFORML 「ありがとう、少し気持ちが軽くなりましたわ」
+					PRINTFORMW 「ふふ、당신は인간なのに優しい方ですのね」
+					RETURN 0
+				ENDIF
+			ENDIF
+		ELSEIF RESULT == 2
+			;良い化粧品がある
+			LOCAL = RAND:80 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+			SIF TALENT:ARG:프라이드높음
+				CFLAG:ARG:友好度 -= RAND:10
+			SIF TALENT:ARG:비관적
+				CFLAG:ARG:友好度 -= RAND:10
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:30
+				;실패
+				PRINTFORML 「……つまり、ハリが無いと仰りたいんですのね？」
+				IF TALENT:PLAYER:남자
+					PRINTFORMW 「ふふ。女心の解らないお方……死になさい」
+					RETURN 3
+				ELSE
+					PRINTFORMW 「당신も何時か解りますわよ、今の%CSTR:ARG:11%の気持ちが」
+					RETURN 6
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:40
+				;성공
+				PRINTFORML 「お化粧は不慣れですけど、この際文句は言ってられませんわね」
+				PRINTFORMW 「そのお話、もっと詳しくお聞かせ願いますわ」
+				RETURN 7
+			ENDIF
+		ELSEIF RESULT == 3
+			;そうだな
+			LOCAL = RAND:70 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)			
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:20
+				;실패
+				PRINTFORMW 「正直な方ですのね。でも입は災いの元、とも言いますわよね？」
+				RETURN 3
+			ELSE
+				CFLAG:ARG:友好度 += RAND:15
+				;성공
+				PRINTFORML 「まあ、意地悪。命が惜しくないんですの？」
+				PRINTFORMW 「でも嫌いじゃないですわよ、そういう正直な方」
+				RETURN 0
+			ENDIF
+		ELSEIF RESULT == 4
+			;エステを勧める
+			LOCAL = RAND:85 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+			SIF TALENT:ARG:프라이드높음
+				CFLAG:ARG:友好度 -= RAND:5
+			SIF TALENT:ARG:솔직함
+				CFLAG:ARG:友好度 += RAND:10
+			SIF TALENT:ARG:낙관적
+				CFLAG:ARG:友好度 += RAND:10		
+			IF LOCAL < 30
+				CFLAG:ARG:友好度 -= RAND:20
+				;실패
+				IF LOCAL < 15
+					IF TALENT:PLAYER:남자
+						PRINTFORML 「……つまり、ハリが無いと仰りたいんですのね？」
+						PRINTFORMW 「ふふ。女心の解らないお方……死になさい」
+						RETURN 3
+					ELSE
+						PRINTFORML 「という事は貴女もエステに？　……ぷ」
+						PRINTFORMW 「今の貴女を見る限り、効果は期待出来ませんわね」
+						RETURN 0
+					ENDIF
+				ELSEIF LOCAL < 30
+					PRINTFORML 「エステ……ううん、もうそれしかないのかしら」
+					PRINTFORML 「……仕方ありませんわね。さあ、そうと決まれば膳は急げですわ」
+					PRINTFORMW 「では、ごきげんよう」
+					RETURN 5
+				ENDIF
+			ELSE
+				CFLAG:ARG:友好度 += RAND:30
+				;성공
+				PRINTFORML 「%CSTR:ARG:11%もかねがねエステというものに興味があったんですの」
+				PRINTFORML 「女を磨く努힘は、惜しんでいられませんものね」
+				PRINTFORMW 「良いお話を聞かせていただいたお礼ですわ」
+				RETURN 2
+			ENDIF
+		ELSE
+			GOTO INPUT_LOOP2
+		ENDIF
+
+	CASE 3
+		PRINTFORML 「ですが、まず무기を収めてお話をするのが礼儀じゃなくって？」
+		PRINTFORML
+		PRINTFORML [1]YES
+		PRINTFORML [2]NO
+		$INPUT_LOOP3
+		INPUT
+		PRINTFORML
+		IF RESULT == 1
+			;YES
+			LOCAL = RAND:100 + RAND:(1+MAXBASE:PLAYER:운/2)
+			IF LOCAL < 40
+				CFLAG:ARG:友好度 -= RAND:50
+				;실패
+				PRINTFORMW 「いけませんね。そう簡가운に악마の誘いを乗ってはなりませんわ」
+				PRINTFORMW 「たとえば……こういう風にね！」
+				RETURN 3
+			ELSE
+				CFLAG:ARG:友好度 += RAND:50
+				;성공
+				PRINTFORMW 「よろしいですわ。聞き分けのよい方は嫌いではありませんよ」
+				RETURN 0
+			ENDIF
+		ELSEIF RESULT == 2
+			;NO
+			LOCAL = RAND:100 + RAND:(1+MAXBASE:PLAYER:운/2)
+			IF LOCAL < 40
+				CFLAG:ARG:友好度 -= RAND:50
+				;실패
+				PRINTFORML 「%CSTR:ARG:11%の言うことが聞けないというのですか」
+				PRINTFORMW 「인간風情が、粋がるのも大概になさい」
+				PRINTFORMW 「殺しますわよ？」
+				RETURN 6
+			ELSE
+				CFLAG:ARG:友好度 += RAND:50
+				;성공
+				PRINTFORML 「ふふ……そう身構えないでください」
+				PRINTFORMW %CALLNAME:ARG%は妖しく微笑んでいる。
+				RETURN 0
+			ENDIF
+		ELSE
+			GOTO INPUT_LOOP3
+		ENDIF
+
+ENDSELECT
+
+;===========================================================================
+;회화時問答
+;===========================================================================
+@QUESTION_PUB306,ARG,ARG:1
+;RAND:X (Xは問答の個数)
+
+PRINTFORML
+CUSTOMDRAWLINE ･
+PRINTFORML
+
+DO
+
+	RESULT:1 = RAND:6
+
+	SELECTCASE RESULT:1
+		CASE ARG:1
+			CONTINUE
+		CASE 0
+			PRINTFORML 「質問があるのですが、よろしいかしら」
+			PRINTFORMW 「당신は一日の時間でどれがお好き？」
+			PRINTFORML
+			PRINTFORML [1]朝　[2]昼
+			PRINTFORML [3]夕　[4]夜
+			$INPUT_LOOP0
+			INPUT
+			PRINTFORML
+			IF RESULT == 1
+				;朝
+				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				SIF TALENT:ARG:솔직함
+					CFLAG:ARG:友好度 += RAND:10
+				SIF TALENT:ARG:얌전함
+					CFLAG:ARG:友好度 += RAND:10
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:20
+					;실패
+					PRINTFORML 「成程、朝がお好きなのですね」
+					PRINTFORML 「ではこれからは、朝の外出は控えるとしましょう」
+					PRINTFORMW 「え？どうして、ですか？　……説明しなければ解りません？」
+					RETURN 6
+				ELSE
+					CFLAG:ARG:友好度 += RAND:30
+					;성공
+					IF RAND:3 == 0
+						PRINTFORML 「素적ですわよね、朝。%CSTR:ARG:11%は特に明け方が好きですわ」
+						PRINTFORML 「まだ肌寒さの残る清廉な空気、静謐な空間」
+						PRINTFORML 「大きく息を吸い、身体中がゆっくりと눈깨달음めていくあの감각……」
+						PRINTFORMW 「ふふ、당신とは近しいものを感じますわ」
+						RETURN 0
+					ELSEIF RAND:2 == 0
+						PRINTFORML 「素적ですわよね、朝。%CSTR:ARG:11%は特に明け方が好きですわ」
+						PRINTFORML 「葉には朝露が残り、昇る日に照らされ煌きを放つ……」
+						PRINTFORML 「宝石に勝るとも劣らない、自然が引き出すあの美しさ」
+						PRINTFORMW 「%CSTR:ARG:11%も、あんな風に輝きたいものですわ」
+						RETURN 0
+					ELSE
+						SIF TALENT:ARG:일광욕
+						CFLAG:ARG:友好度 += RAND:30
+						PRINTFORML 「昇ったばかりの太陽は仄かな温かさが매력ですわね」
+						PRINTFORML 「強すぎるとお肌が焼けてしまったりが問題ですけど」
+						PRINTFORMW 「柔らかな光なら、浴びるのも嫌いじゃないですわ」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSEIF RESULT == 2
+				;昼
+				LOCAL = RAND:95 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				SIF TALENT:ARG:솔직함
+					CFLAG:ARG:友好度 += RAND:10
+				IF LOCAL < 30
+					;실패
+					PRINTFORML 「昼がお好きなんですの？残念ですけど、%CSTR:ARG:11%はあまり好きではないですわ」
+					PRINTFORML 「ほら、紫外線とかお肌に悪いでしょう？　악마といえど例外はありませんの」
+					PRINTFORML 「クリームを塗ったり日傘を用意したり……大変ですのよ、美を保つ事は」
+					IF TALENT:PLAYER:남자
+						PRINTFORMW 「まぁ、男の方にはこの苦労は解らないかもしれませんけど」
+						RETURN 6
+					ELSE
+						PRINTFORMW 「당신も女ならお解かりでしょう？　この苦労が」
+						RETURN 0
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:30
+					;성공
+					IF RAND:2 == 0
+						SIF TALENT:ARG:프라이드높음
+							CFLAG:ARG:友好度 += RAND:10
+						PRINTFORML 「ふふ、%CSTR:ARG:11%も。といっても燦々と輝く太陽の下、木陰にクロスを敷いて
+						PRINTFORML 　お友達と午後のお茶会を楽しむのが、ですけどね」
+						PRINTFORMW 「よろしければ、당신もお招きしてさしあげてもいいですわよ」
+						RETURN 7
+					ELSE
+						SIF TALENT:ARG:우애
+							CFLAG:ARG:友好度 += RAND:10
+						PRINTFORML 「強すぎる陽の光はお肌の적ですが、日傘を差してのお散歩なら
+						PRINTFORML 　そんなに嫌いではないですわね。暖かさはまた別のお話ですもの」
+						PRINTFORML 「もし好きな人と並んで歩けたら、きっとより楽しくなれるのでしょうね……」
+						PRINTFORMW 「ふふ、お相손はまだ居りませんけどね」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSEIF RESULT == 3
+				;夕
+				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:20
+					;실패
+						PRINTFORML 「不思議ですわね。自分が好む物を인간も好むと解った瞬間」
+						PRINTFORMW 「とても불쾌な気持ちになりましたわ。責任を取ってくださらない？」
+						RETURN 3
+				ELSE
+					CFLAG:ARG:友好度 += RAND:25
+					;성공
+					IF RAND:4 == 0
+						SIF TALENT:ARG:프라이드높음
+							CFLAG:ARG:友好度 += RAND:10
+						PRINTFORML 「陽が세계に溶けていく、昼と夜が出会うほんの僅かな時間」
+						PRINTFORML 「沈む赤に青はより色濃く、混じり紫へ、そして黒へと転じていく……」
+						PRINTFORML 「不意に心が締め付けられるような感傷さえ깨달음える、儚く美しい光景」
+						PRINTFORML 「ふふ。%CSTR:ARG:11%、夕方の中でも特に夕暮れが好きですの」
+						PRINTFORMW 「好きと言ってくれた당신にもそれを理解してもらえたら嬉しいですわ」
+						RETURN 0
+					ELSEIF RAND:3 == 0
+						SIF TALENT:ARG:솔직함
+							CFLAG:ARG:友好度 += RAND:10
+						PRINTFORML 「『夕暮れや 彼は誰 誰そ彼 逢魔が時』」
+						PRINTFORML 「狭間の時間。夜と並び、%CSTR:ARG:11%達のような人ならざるモノが彷徨い歩く時間」
+						PRINTFORML 「そんな時間に出歩けば、不意に%CSTR:ARG:11%達と出会う事もあるかもしれませんわね」
+						PRINTFORMW 「ふふ、簡가운に%CSTR:ARG:11%達と出会える당신には、意味の無いお話でしたわね」
+						RETURN 0
+					ELSEIF RAND:2 == 0
+						SIF TALENT:ARG:비관적
+							CFLAG:ARG:友好度 += RAND:20
+						SIF TALENT:ARG:우애
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「焼けた空と地に伸びていく影法師。一つだと、何処か物悲しさを感じますわね」
+						PRINTFORML 「당신は、そんな経験をなさった事がお有りかしら？」
+						PRINTFORML 「誰かと共に影を伸ばせるようになれたら、素적ですわね」
+						PRINTFORMW 「そのお相손は……ふふ、誰でしょうね？」
+						RETURN 0
+					ELSE
+						SIF TALENT:ARG:프라이드높음
+							CFLAG:ARG:友好度 += RAND:10
+						PRINTFORML 「夕暮れがお好きなんですの？」
+						PRINTFORML 「ふふ、인간にもあの儚い美しさが理解出来るなんて感心致しましたわ」
+						PRINTFORML 「ロマンのない人ですと、光の加減がどうのなんて、ただの一つの現象で済ませて」
+						PRINTFORML 「雰囲気を壊してしまうのがそれはもう、許せませんわ」
+						PRINTFORMW 「당신は……そんな無粋な事、なさらないでくださいね？」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSEIF RESULT == 4
+				;夜
+				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 40
+					CFLAG:ARG:友好度 -= RAND:20
+					;실패
+					IF LOCAL < 10
+						PRINTFORML 「ぐ、ぐっすり眠れるから好き……？　ま、まぁ間違ってはいませんけど……」
+						PRINTFORML 「당신に欠片ほどのロマンを期待した%CSTR:ARG:11%が愚かでしたわ」
+						PRINTFORMW 「……本当に、気分が台無しですわ」
+						RETURN 6
+					ELSEIF LOCAL < 20
+						PRINTFORML 「당신の言う夜とは何ですの？　街の光で星を焼いたまやかしの夜ではなくて？」
+						PRINTFORML 「静かな夜は何よりの安らぎだと言うのに、人は進んで喧騒と光で壊してしまう」
+						PRINTFORMW 「……本当に、愚かしいですわ」
+						RETURN 6	
+					ELSEIF LOCAL < 30
+						PRINTFORML 「당신の夜と%CSTR:ARG:11%の夜は、きっと違うのでしょうね」
+						PRINTFORMW 「悲しい事ですが、仕方ありませんわね」
+						RETURN 0
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:30
+					;성공
+					IF RAND:8 == 0 && TALENT:ARG:잔학 || TALENT:ARG:영맹
+						CFLAG:ARG:友好度 += RAND:10
+						PRINTFORML 「%CSTR:ARG:11%も夜は好きですわ。闇に紛れて獲物を狩る楽しみがありますものね」
+						PRINTFORMW 「あぁ、あの時の獲物の絶望に染まった顔。思い出すだけで身体が昂ぶりますわ」
+						RETURN 0
+					ELSEIF RAND:7 == 0 && TALENT:ARG:현명
+						CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「당신も夜がお好き？　まぁ、星を眺めるのも？」
+						PRINTFORML 「今度、一緒に星を見に行きません？　こう見えても%CSTR:ARG:11%、星には詳しいんですの」
+						PRINTFORMW 「당신に色々教えて差し上げますわ。ふふ、寝かせませんわよ？」
+						RETURN 7
+					ELSEIF RAND:6 == 0 && TALENT:ARG:월광욕
+						CFLAG:ARG:友好度 += RAND:30
+						SIF TALENT:ARG:자위하기쉬움
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「%CSTR:ARG:11%も夜、特に월광욕をしている時が心地よくて好きですわ」
+						PRINTFORMW 「ただ、月の光に含まれる마력を浴びると心の内で냉정さと激情がせめぎ合って」
+						PRINTFORMW 「それはそれは身体が疼いて一人で致してしまうのが……な、なんでもありませんわ！」
+						RETURN 0
+					ELSEIF RAND:5 == 0
+						SIF TALENT:ARG:헌신적
+							CFLAG:ARG:友好度 += RAND:15
+						PRINTFORML 「ならお教えしますわね。夜に魔が多いのは月の光に마력が宿っている事が大きいんですの」
+						PRINTFORML 「芳醇な마력を浴びて、つい気持ちが昂ぶって無闇に出歩いてしまうんですのね」
+						PRINTFORML 「特に満月なんて회화もままならない事も多くて、それは凄いものなのですわ」
+						PRINTFORMW 「ですから、당신も月の出ている夜は色々と気をつけてくださいね」
+						RETURN 0
+					ELSEIF RAND:4 == 0
+						SIF TALENT:ARG:보수적
+							CFLAG:ARG:友好度 += RAND:20
+						SIF TALENT:ARG:솔직함
+							CFLAG:ARG:友好度 += RAND:10
+						PRINTFORML 「月を眺め、星を数え、涼気を纏い、静謐な空間に身を浸す」
+						PRINTFORMW 「何て事の無い事ですが、心がとても落ち着きますわね」
+						RETURN 0
+					ELSEIF RAND:3 == 0
+						SIF TALENT:ARG:얌전함
+							CFLAG:ARG:友好度 += RAND:20
+						SIF TALENT:ARG:솔직함
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「夜は癒しの夜。疲れた時には夜空を見上げてみるのをお勧めしますわ」
+						PRINTFORMW 「満天の星空はもちろん、一面の闇に疲れも吸い込まれていきますから」
+						RETURN 0
+					ELSEIF RAND:2 == 0
+						PRINTFORML 「静かな夜の闇は生きとし生ける者全てに贈られた安らぎですわ」
+						PRINTFORMW 「それをけして忘れないでくださいね」
+						RETURN 0
+					ELSE
+						SIF TALENT:ARG:호기심
+							CFLAG:ARG:友好度 += RAND:10
+						SIF TALENT:ARG:낙관적
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「夜空に瞬く星は、けして손の届かない宝石達」
+						PRINTFORML 「身を飾らせる事は叶いませんが、文字通り星の数ほどの輝きを眺められるというのは」
+						PRINTFORMW 「少しお得と思いませんか？　ふふ」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSE
+				GOTO INPUT_LOOP0
+			ENDIF
+
+		CASE 1
+			PRINTFORML 「そういえば、今日の占いでは인간に会うと吉だそうですわ」
+			PRINTFORMW 「당신、占いは信じていらっしゃる？」
+			PRINTFORML
+			PRINTFORML [1]信じている　　[2]信じていない
+			$INPUT_LOOP1
+			INPUT
+			PRINTFORML
+			IF RESULT == 1
+				;信じている
+				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:10
+					;실패
+					IF TALENT:ARG:프라이드높음 && TALENT:PLAYER:남자
+						PRINTFORML 「そう……でも、いささか男らしくないですわね」
+						PRINTFORMW 「女としては、占いより自分を信じて進む方が好みですわ」
+						RETURN 0
+					ELSE
+						IF RAND:2 == 0
+							CFLAG:ARG:友好度 -= RAND:10
+							PRINTFORML 「どうもご機嫌取りに見えるのですが……」
+							PRINTFORMW 「입からでまかせじゃありませんわよね？」
+								RETURN 6
+						ELSE
+							PRINTFORML 「そうですか。%CSTR:ARG:11%は……あまり信じられなくなりましたわ」
+							PRINTFORMW 「だって、당신と出会った事自体が不운に思えますもの」
+							RETURN 6
+						ENDIF
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:50
+					;성공
+					IF RAND:5 == 0 && TALENT:ARG:프라이드높음
+						PRINTFORML 「あら、인간にしては見所がありますわね」
+						PRINTFORMW 「特別に%CSTR:ARG:11%の知っている占いをお教えしてもいいですわよ」
+						RETURN 0
+					ELSEIF RAND:4 == 0 && TALENT:PLAYER:남자 == 0
+						CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「ふふ、同じ女ですものね。その気持ち、よく解りますわ」
+						PRINTFORMW 「機会があれば、何か一緒にしてみたいですわね」
+						RETURN 0
+					ELSEIF RAND:3 == 0
+						SIF TALENT:ARG:낙관적
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「ふふ、悪い結果が出ると思いのほか気落ちしますわよね」
+						PRINTFORML 「でもそうならないように努힘しようと思えるのも、占いの不思議なところですわね」
+						RETURN 0
+					ELSEIF RAND:2 == 0
+						SIF TALENT:ARG:솔직함
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「良い結果が出るとその日は心が弾みますわよね」
+						PRINTFORML 「ラッキー아이템がおかしかったりするのもご愛嬌ですわ」
+						IF RAND:4 == 0
+							PRINTFORML 「まぁ、さすがに운命の出会いに쇠파이프はどうかと思いましたけど…」
+							PRINTFORMW 「正直ロマンチックとは程遠いですわよね、アレ」
+							RETURN 0
+						ELSEIF RAND:3 == 0
+							PRINTFORML 「まぁ、外は大雪なのに山に昇ると良いと言われた時には困りましたけど」
+							PRINTFORMW 「下손したら死にますわよね。それとも絶対に死なないのかしら…？」
+							RETURN 0
+						ELSEIF RAND:2 == 0
+							PRINTFORML 「まぁ、金운アップに漬物石を持ち歩け、は困りましたけど」
+							PRINTFORMW 「用意するのも大変ですし、持ち歩くなんて到底無理でしたわ」
+							RETURN 0
+						ELSE
+							PRINTFORMW
+							RETURN 0
+						ENDIF
+					ELSE
+						SIF TALENT:ARG:얌전함
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「占いにも色々ありますが、どれも神秘的ですわよね……」
+						IF RAND:4 == 0
+							PRINTFORMW 「星読みなんてどうやっているんでしょうね、不思議ですわ」
+							RETURN 0
+						ELSEIF RAND:3 == 0
+							PRINTFORMW 「トランプ占いなんて簡가운な物でも、時にハッとさせられますわ」
+							RETURN 0
+						ELSEIF RAND:2 == 0
+							PRINTFORML 「水晶球を覗いて云々なんて、一度はやってみたいものですけど……」
+							PRINTFORML 「やっぱり色々な才能が필요なのでしょうね」
+							PRINTFORMW 「スタイルだけならきっと似合うと思うのですけど」
+							RETURN 0
+						ELSE
+							PRINTFORMW 「タロットなんて、眺めているだけでも素적な気持ちになれますわ」
+							RETURN 0
+						ENDIF
+					ENDIF
+				ENDIF
+			ELSEIF RESULT == 2
+				;信じていない
+				LOCAL = RAND:80 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:30
+					;실패
+					IF TALENT:ARG:프라이드높음
+						PRINTFORML 「당신のようなロマンの欠片も無さそうな方では無理もありませんわね」
+						PRINTFORMW 「先程の質問は忘れてくださいな、%CSTR:ARG:11%も忘れますから」
+						RETURN 6
+					ELSE
+						PRINTFORML 「占いではなく、己を信じると？」
+						PRINTFORML 「ふふ、よくもまぁそんな青臭い台詞が出ますわね」
+						PRINTFORML 「今の당신の顔……そうですわね、ドヤ顔でしたかしら？」
+						PRINTFORMW 「とても気持ち悪い顔をしてますわよ」
+						RETURN 6
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:10
+					;성공
+					SIF TALENT:ARG:프라이드높음
+						CFLAG:ARG:友好度 += RAND:20
+					IF RAND:3 == 0
+						PRINTFORML 「占いではなく、己を信じると？」
+						PRINTFORML 「強いのですね、당신は……」
+						PRINTFORML 「ですが誰もが당신のようには強くない」
+						PRINTFORML 「時には何かに縋りたくなる時だってありますわ」
+						PRINTFORMW 「……申し訳ありません、お恥ずかしいところを見せましたわ」
+						RETURN 0
+					ELSEIF RAND:2 == 0
+						PRINTFORML 「占いではなく、己を信じると？」
+						PRINTFORML 「揺ぎ無い信念を感じますわね、素적ですわ」
+						IF TALENT:PLAYER:남자
+							PRINTFORMW 「道を自ら切り開く。ふふ、男らしいですわね」
+							RETURN 0
+						ELSE
+							PRINTFORMW 「%CSTR:ARG:11%も당신のようになれますかしら？」
+							RETURN 0
+						ENDIF
+					ELSE
+						PRINTFORML 「そうですか。お話を弾ませようと思ったのですが残念ですわね」
+						PRINTFORMW 「まぁ仕方ありませんわね。別のお話をするとしましょう」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSE
+				GOTO INPUT_LOOP1
+			ENDIF
+
+		CASE 2
+			PRINTFORML 「%CSTR:ARG:11%、最近、손相を見るのに凝ってますの」
+			PRINTFORMW 「ねぇ、당신の손も見せてくださらない？」
+			PRINTFORML
+			PRINTFORML [1]見せる　　[2]見せない
+			$INPUT_LOOP2
+			INPUT
+			PRINTFORML
+			IF RESULT == 1
+				;見せる
+				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:10
+					;실패
+					IF RAND:4 == 0 && TALENT:ARG:교활
+						PRINTFORMW 「純粋なのも考えものですわね……隙だらけですわ！」
+						RETURN 3
+					ELSEIF RAND:3 == 0
+						CFLAG:ARG:友好度 -= RAND:10
+						PRINTFORML 「손が汚すぎて全く読み取れませんわ。ちゃんと洗ってますの？」
+						PRINTFORMW 「……後で念入りに洗わなければなりませんわね」
+						RETURN 6
+					ELSEIF RAND:2 == 0
+						PRINTFORML 「可も無く不可も無く……平凡ですわね」
+						PRINTFORMW 「頼んでおきながら申し訳ありませんけど、とてもつまらないですわ」
+						RETURN 6
+					ELSE
+						PRINTFORML 「あら、いけませんわね。生命線がこんなに薄く短い」
+						PRINTFORML 「残念ですけど、당신、きっと長生き出来ませんわよ」
+						PRINTFORMW 「まぁ、こんな所をうろつくような方ですし当然な気もしますけど」
+						RETURN 6
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:50
+					;성공
+					IF  LOCAL > 130
+						PRINTFORML 「……！　す、素晴らしいですわ！」
+						PRINTFORML 「これ程に恵まれた相を見たのは初めて……気になりますわね」
+						PRINTFORML 「あ、あの、不躾で大変申し訳ないのですけど……」
+						PRINTFORMW 「당신の先行きを、お傍で見させていただいてもよろしいかしら？」
+						RETURN 1
+					ENDIF
+					IF RAND:5 == 0
+						SIF TALENT:ARG:현명
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「まぁ、知能線がこんなにも深い。당신、きっと머리の回転が速いのですね」
+						PRINTFORML 「눈的を果たすための最適な손段を取るのが得意なのではなくて？」
+						PRINTFORMW 「%CSTR:ARG:11%、현명方は好きですわ」
+						RETURN 0
+					ELSEIF RAND:4 == 0
+						PRINTFORML 「寵愛線がありましたわ。당신、人から支持されやすいのですね」
+						IF TALENT:ARG:헌신적
+							CFLAG:ARG:友好度 += RAND:20
+							PRINTFORMW 「ふふ。不思議と%CSTR:ARG:11%も、何かお손伝いしたくなりましたわ」
+							RETURN 7
+						ENDIF
+						PRINTFORML 「もし助けてくださった方が居るのであれば、その方への感謝を忘れないであげてくださいね」
+						RETURN 0
+					ELSEIF  RAND:3 == 0
+						SIF TALENT:ARG:낙관적
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「この財운線の伸び方は努힘が財に繋がる線ですわね」
+						PRINTFORML 「努힘を怠わなければ、きっと富が報いてくれますわ」
+						PRINTFORMW 「何を、かまでは解りませんが頑張ってくださいね」
+						RETURN 0
+					ELSEIF  RAND:2 == 0 && TALENT:PLAYER:수수께끼의매력
+						CFLAG:ARG:友好度 += RAND:30
+						PRINTFORML 「金星오비がありましたわ。良い金星오비はその人の매력が
+						PRINTFORML 　優れている事を表したりしますの」
+						PRINTFORMW 「そういえば…당신、不思議と輝いて見えますわね」
+						RETURN 0
+					ELSE
+						PRINTFORML 「可も無く不可も無く……至って平凡ですわね」
+						PRINTFORML 「……あ、あの、そんなに落ち込まないでくださいな」
+						PRINTFORMW 「何事も、普通が一番と仰いますでしょう？」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSEIF RESULT == 2
+				;見せない
+				LOCAL = RAND:80 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:30
+					;실패
+					IF RAND:3 == 0 && TALENT:ARG:영맹 || TALENT:ARG:잔학
+						PRINTFORML 「所詮は素人、と馬鹿にしてらっしゃるのでしょう？」
+						PRINTFORMW 「……ならいいですわよ。당신の손だけ貰っていきますから」
+						RETURN 3
+					ELSEIF RAND:2 == 0
+						PRINTFORMW 「まぁ、酷いですわ。信じてくださらないのね」
+						RETURN 6
+					ELSE
+						PRINTFORMW 「減るものじゃありませんでしょうに、器の小さい方ね」
+						RETURN 6
+					ENDIF
+				ELSE
+					;성공
+					CFLAG:ARG:友好度 += RAND:10
+					IF RAND:3 == 0
+						PRINTFORMW 「まぁ、照れてますの？　ふふ、可愛らしい方ね」
+						RETURN 0
+					ELSEIF RAND:2 == 0
+						PRINTFORML 「あ、あの、そんなに構えなくてもよろしいんですのよ？」
+						PRINTFORML 「別に隙を突いて손を切り取ろうなんて考えてませんし……少ししか」
+						PRINTFORMW 「……ただの冗談ですから、震えながら무기を構えないでくださいな」
+						RETURN 0
+					ELSE
+						PRINTFORML 「そうですか。お話を弾ませようと思ったのですが残念ですわね」
+						PRINTFORMW 「まぁ仕方ありませんわね。別のお話をするとしましょう」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSE
+				GOTO INPUT_LOOP2
+			ENDIF
+
+		CASE 3
+			PRINTFORMW 「ねえ、最近、인간の間では何が流行していますの？」
+			PRINTFORML
+			PRINTFORML [1]악마狩り　　　[2]악마の조교
+			PRINTFORML [3]ゲーム　　　　[4]ド라이브
+
+			$INPUT_LOOP3
+			INPUT
+			PRINTFORML
+			IF RESULT == 1
+				;악마狩り
+				LOCAL = RAND:75 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				CFLAG:ARG:友好度 -= RAND:20
+				SIF TALENT:ARG:영맹
+					CFLAG:ARG:友好度 += RAND:15
+				IF RESULT < 40
+					CFLAG:ARG:友好度 -= RAND:50
+					;실패
+					IF STR:(ABL:ARG:종족) == "천사"
+						CFLAG:ARG:友好度 -= RAND:10
+						PRINTFORML 「まぁ嘆かわしい……世も末ですわね」
+						PRINTFORMW 「そんな愚かな인간には罰を与えたくなりますわね」
+						RETURN 6
+					ELSE
+						PRINTFORML 「당신もそれをなさっていますの？」
+						PRINTFORMW 「でしたら、逆に狩られてみるのはいかが？」
+						RETURN 3
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:30
+					;성공
+					IF STR:(ABL:ARG:종족) == "천사"
+						CFLAG:ARG:友好度 += RAND:10
+						PRINTFORML 「もし、당신がそれをなさっているのでしたら……」
+						PRINTFORML 「即刻お止めなさい。まだ、引き返せます」
+						PRINTFORML 「無理だと言うのなら、%CSTR:ARG:11%は당신を罰しなければいけません」
+						PRINTFORMW 「それは互いに悲しい事でしょうから……」
+						RETURN 0
+					ENDIF
+					IF RAND:2 == 0
+						PRINTFORML 「まぁ、인간達にそれだけの힘が？」
+						PRINTFORML 「それは脅威ですわね。早速、対策を練らねばいけませんわ」
+						PRINTFORMW 「%CSTR:ARG:11%、これにて失礼致します」
+						RETURN 5
+					ELSE
+						PRINTFORML 「流行る程に互いの領域が近いという事なのかしら……」
+						PRINTFORMW 「終末が近づいているのかもしれませんわね」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSEIF RESULT == 2
+				;악마の조교
+				LOCAL = RAND:80 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:50
+					;실패
+					IF TALENT:ARG:새드 || TALENT:ARG:프라이드높음 || TALENT:ARG:교만
+						PRINTFORML 「%CSTR:ARG:11%は조교されるより、する方が好みですわ」
+						PRINTFORML 「ねぇ、당신、%CSTR:ARG:11%のペットになりません？」
+						PRINTFORMW 「断っても無駄ですわよ、捕まえますもの！」
+						RETURN 3
+					ENDIF
+					IF RAND:2 == 0	
+						PRINTFORML 「そういえば악마を捕らえては売り捌く인간の소문が……」
+						PRINTFORMW 「まさか당신……！　許せませんわ！！」
+						RETURN 3
+					ELSE
+						PRINTFORMW 「최저ですわね。악마だって生きていますのよ」
+						RETURN 6
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:30
+					;성공
+					IF RAND:3 && TALENT:ARG:마조 || TALENT:ARG:도착적
+						CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「조교……ほんの少し心惹かれる甘美な響きですわね」
+						PRINTFORML 「あの、具体的には何をなされるんですの？」
+						PRINTFORMW 「べ、別に深い意味は有りませんわよ？　ただ少し気になるだけですわ」
+						RETURN 7
+					ELSEIF RAND:2 && TALENT:ARG:새드 || TALENT:ARG:도착적
+						CFLAG:ARG:友好度 += RAND:20
+						PRINTFORMW 「まぁ、楽しそうですわね。%CSTR:ARG:11%も混ぜてほしいものですわ」
+						RETURN 0
+					ELSE
+						PRINTFORML 「조교？それはまた随分と予想外な答えですわね」
+						PRINTFORML 「まぁ、一昔前には%CSTR:ARG:11%達の間でも인간を조교するのが流行っていましたし」
+						PRINTFORML 「こういう事は巡るものなのかしら」
+						PRINTFORMW 「ところで당신、%CSTR:ARG:11%に飼われてみません？　………ふふ、冗談ですわよ」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSEIF RESULT == 3
+				;ゲーム
+				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)			
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:20
+					;실패
+					IF RAND:2 && TALENT:ARG:잔학 || TALENT:ARG:영맹
+						PRINTFORML 「%CSTR:ARG:11%達の間でも인간を殺すゲームが流行っていますのよ」
+						PRINTFORML 「女は一点、男は三点。簡가운だから아이や老人は無得点というルール」
+						PRINTFORML 「당신、아이でも老人でもないですわよね……？」
+						PRINTFORML 「このままだとお友達に負けてしまいそうなんです。だから、ね？」
+						PRINTFORMW 「당신の命、くださいな」
+						RETURN 3
+					ELSE
+						PRINTFORMW 「成程、くだらないですわね」
+						RETURN 6
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:15
+					;성공
+					IF RAND:6 == 0 && TALENT:ARG:헌신적
+						CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「ゲームも良いですけど、ちゃんと外にも出てくださいね」
+						PRINTFORML 「陽の光を少しも浴びずに篭りきりは身体に悪いですもの」
+						PRINTFORMW 「特別に、携오비ゲームの소지くらいなら譲歩しますから。ね？」
+						RETURN 0
+					ELSEIF RAND:5 == 0
+						SIF TALENT:ARG:솔직함
+							CFLAG:ARG:友好度 += RAND:15
+						PRINTFORML 「인간の作るゲームって最近は特に凄いでしょう？」
+						PRINTFORML 「ここだけの話、악마の間でも流行っていますのよ」
+						PRINTFORML 「大作の新作が発表されると男の方達なんてそれはもう大はしゃぎで…」
+						PRINTFORMW 「악마も人も変わりませんわ。ふふ、それもまた可愛いのですけどね」
+						RETURN 0
+					ELSEIF RAND:4 == 0
+						SIF TALENT:ARG:호기심
+							CFLAG:ARG:友好度 += RAND:15
+						PRINTFORML 「あんなに多くの作品を作り出せるのは인간くらいなものですわね」
+						PRINTFORMW 「そういう意味では인간も尊敬に値しますわ」
+						RETURN 0
+					ELSEIF RAND:3 == 0 
+						SIF TALENT:ARG:억압
+							CFLAG:ARG:友好度 += RAND:15
+						PRINTFORML 「ゲームは良いですわよね。時間を忘れて熱中出来ますもの」
+						PRINTFORMW 「嫌な事があればリセット出来るのも매력ですわ。……ええ、本当に」
+						RETURN 0
+					ELSEIF RAND:2 == 0
+						SIF TALENT:ARG:비관적
+							CFLAG:ARG:友好度 -= RAND:10
+						SIF TALENT:ARG:냉정
+							CFLAG:ARG:友好度 -= RAND:10
+						PRINTFORML 「最近、現実とゲームの区別が付かない方が増えていると聞きますけど」
+						PRINTFORMW 「娯楽が増えるのも考えものですわね。당신は、そんな事ありませんわよね？」
+						RETURN 0
+					ELSE
+						PRINTFORML 「%CSTR:ARG:11%も少々嗜んでおりますのよ。例えば恋愛ゲームとか」
+						PRINTFORML 「お遊びと解っていてもこれが中々、心に来るんですのよ……」
+						PRINTFORMW 「もちろん、現実の方がいいですわよ？　……でも、素적ですわよね」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSEIF RESULT == 4
+				;ド라이브
+				LOCAL = RAND:90 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:20
+					;실패
+					IF TALENT:ARG:프라이드높음
+						PRINTFORML 「인간ってよくあんな臭くて汚くて騒がしい物に乗れますわね」
+						PRINTFORMW 「まぁ、下賎な인간にはお似合いですけど」
+						RETURN 6
+					ELSE
+						PRINTFORML 「車。空気を汚染する毒気を撒き散らす、鉄の乗り物でしたわね」
+						PRINTFORMW 「당신方はそうやって未だ세계を汚すのですね……」
+						RETURN 6
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:30
+					;성공
+					IF RAND:2 == 0
+						SIF TALENT:ARG:얌전함
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「一度乗った事がありますけど……」
+						PRINTFORML 「思いきり酔ってしまって、以来トラウマですわ」
+						PRINTFORMW 「인간は凄いですわね……あんな物に日々乗るなんて%CSTR:ARG:11%には無理ですわ」
+						RETURN 0
+					ELSE
+						SIF TALENT:ARG:호기심
+							CFLAG:ARG:友好度 += RAND:20
+						SIF TALENT:ARG:해방
+							CFLAG:ARG:友好度 += RAND:20
+						PRINTFORML 「いいですわね、%CSTR:ARG:11%もたまには誰かとド라이브に行きたいものですわ」
+						PRINTFORML 「당신、愛車はお持ちかしら。でしたら%CSTR:ARG:11%を隣に乗せてくださらない？」
+						PRINTFORMW 「ふふ、冗談ですわ。でも、考えてみてくださいね」
+						RETURN 0
+					ENDIF
+				ENDIF
+			ELSE
+				GOTO INPUT_LOOP3
+			ENDIF
+
+		CASE 4
+			PRINTFORML 「こう言うのもなんですが……%CSTR:ARG:11%、당신が思う程たいした힘を持ち合わせていませんわ」
+			PRINTFORMW 「それでも%CSTR:ARG:11%の助힘が필요とおっしゃるのなら、喜んで付き従いましょう」
+			PRINTFORMW 「いかがなさいますか？」
+			PRINTFORML
+			PRINTFORML [1]連れていく
+			PRINTFORML [2]やめておく
+			$INPUT_LOOP4
+			INPUT
+			PRINTFORML
+			IF RESULT == 1
+				;YES
+				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:LV+MAXBASE:PLAYER:운/2)
+				;---- EDIT 007 MOD START -------------------------
+				IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && LOCAL > 40
+					CFLAG:ARG:友好度 += RAND:50
+					;성공
+					PRINTFORML 「では……今後とも、よろしくお願いいたしますわ」
+					PRINTFORMW 「%CSTR:ARG:11%の힘が필요な時には、いつでも呼んでください」
+					CALL ADD_NEW_COMPANION,NO:ARG,0
+					;악마解析度が100未満なら100に。
+					SIF FLAG:(20000+NO:ARG) < 100
+						FLAG:(20000+NO:ARG) = 100
+					RETURN 9
+				;---- EDIT 005 MOD END -------------------------
+				ELSE
+					CFLAG:ARG:友好度 -= RAND:50
+					;실패
+					PRINTFORMW 「なんて……당신のような욕망まみれのケダモノとは、付き合わない事にしていますの」
+					PRINTFORMW 「ケダモノはケダモノらしく、此処でのたれ死になさい」
+					RETURN 3
+				ENDIF
+			ELSEIF RESULT == 2
+				;NO
+				LOCAL = RAND:100 + RAND:(1+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 40
+					CFLAG:ARG:友好度 -= RAND:50
+					;실패
+					IF RAND:2 == 0
+						PRINTFORMW 「女性のご好意を無碍にする方は嫌われますわよ」
+						PRINTFORMW 「たとえば……こういう風にね！」
+						RETURN 3
+					ELSE
+						PRINTFORMW 「はぁ、つまらないですわ」
+						RETURN 5
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:10
+					;성공
+					IF RAND:2 == 0
+						PRINTFORMW 「はぁ、つれないお方ですわね」
+						PRINTFORMW 「時間の無駄でしたわ、%CSTR:ARG:11%はこれで失礼します」
+						RETURN 5
+					ELSE
+						PRINTFORML 「あら……？　よく見抜けましたね」
+						PRINTFORMW 「見かけによらず、素晴らしい慧眼をお持ちのようね」
+						PRINTFORMW 「気に入ったわ、ご褒美よ」
+						PRINTFORMW %CALLNAME:ARG%は%CALLNAME:PLAYER%に입づけをした。
+						PRINTFORMW 「今回はこれで失礼しますわ、またお会いしましょう」
+						RETURN 5
+					ENDIF
+				ENDIF
+			ELSE
+				GOTO INPUT_LOOP4
+			ENDIF
+
+		CASE 5
+			PRINTFORMW 「%CSTR:ARG:11%は今、退屈を持て余していますの」
+			PRINTFORMW 「당신なら、%CSTR:ARG:11%を楽しませてくれるかしら？」
+			PRINTFORML
+			PRINTFORML [1]踊ってみる　[2]笑わせてみせる
+			PRINTFORML [3]ない　　　　[4]気持ち良いこと
+			$INPUT_LOOP5
+			INPUT
+			PRINTFORML
+			IF RESULT == 1
+				;歌って踊る
+				LOCAL = RAND:75 + RAND:(MAXBASE:PLAYER:마력+MAXBASE:PLAYER:운/2)
+				IF RESULT < 40
+					CFLAG:ARG:友好度 -= RAND:50
+					;실패
+					PRINTFORMW %CALLNAME:PLAYER%は踊ってみせた！
+					PRINTFORMW しかし、%CALLNAME:ARG%には受けなかった……
+					PRINTFORML 「なんて、低俗極まりないダンスですの……！」
+					PRINTFORMW 「인간の踊りは、ここまで堕落したというのですか」
+					RETURN 6
+				ELSE
+					CFLAG:ARG:友好度 += RAND:30
+					;성공
+					PRINTFORMW %CALLNAME:PLAYER%は踊ってみせた！
+					PRINTFORMW なんと、%CALLNAME:ARG%には受けたようだ！！
+					PRINTFORML 「まぁ！　随分と楽しそうなダンスですこと」
+					PRINTFORMW 「%CSTR:ARG:11%も混ぜてくださらない？」
+					PRINTFORMW %CALLNAME:ARG%は%CALLNAME:PLAYER%と一緒に踊りまくった！
+					PRINTFORMW 「久々に楽しめましたわ」
+					RETURN 0
+				ENDIF
+			ELSEIF RESULT == 2
+				;笑わせてみせる
+				LOCAL = RAND:80 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:50
+					;실패
+					PRINTFORMW %CALLNAME:PLAYER%は気のきいたジョークで笑わせようとした
+					PRINTFORMW しかし、%CALLNAME:ARG%には受けなかったようだ……
+					PRINTFORML 「……なんですの。まさか、それで%CSTR:ARG:11%を笑わせようと？」
+					PRINTFORMW 「つまらないですわ……」
+					RETURN 6
+				ELSE
+					CFLAG:ARG:友好度 += RAND:40
+					;성공
+					PRINTFORMW %CALLNAME:PLAYER%は気のきいたジョークで笑わせようとした
+					PRINTFORMW なんと%CALLNAME:ARG%に受けてしまった！！
+					PRINTFORMW 「ぷっ……はは！　こんなに笑うのは随分、久しいですわ！　ふふ……！」
+					RETURN 0
+				ENDIF
+			ELSEIF RESULT == 3
+				;ない
+				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:20
+					;실패
+					IF RAND:2 == 0
+						PRINTFORML 「%CSTR:ARG:11%を楽しませる芸が一つもないと？」
+						PRINTFORMW 「ふう、인간というのはつくづく面白みのない生き物ですわね」
+						RETURN 5
+					ELSE
+						PRINTFORML 「はぁ、인간なら一芸くらいはお持ちかと思いましたのに」
+						PRINTFORMW 「訊ねた%CSTR:ARG:11%が愚かでしたわね」
+						PRINTFORMW 「時間の無駄でしたわ、%CSTR:ARG:11%はこれで失礼します」
+						RETURN 5
+					ENDIF
+				ELSE
+					CFLAG:ARG:友好度 += RAND:15
+					;성공
+					PRINTFORML 「そうですか……なら、他の方に訊ねようかしら」
+					PRINTFORMW 「時間をとらせてしまいましたわね。では、%CSTR:ARG:11%はこれで失礼します」
+					RETURN 5
+				ENDIF
+			ELSEIF RESULT == 4
+				;気持ち良いこと
+				;この辺は、당신のLVと純粋たる운で成否판정する
+				LOCAL = RAND:90 + RAND:(MAXBASE:PLAYER:LV+MAXBASE:PLAYER:운/2)
+				IF LOCAL < 30
+					CFLAG:ARG:友好度 -= RAND:50
+					;실패
+					PRINTFORML 「욕망に忠実なケダモノですね」
+					PRINTFORMW 「下等である인간がこの%CSTR:ARG:11%を抱こうなんて、虫がよいのもほどがありますわ」
+					PRINTFORMW 「身の程を弁えなさい、下衆が……！」
+					RETURN 5
+				ELSE
+					CFLAG:ARG:友好度 -= RAND:80
+					;성공
+					;偽典での思いつきで作ってみた
+					;당신が男or후타나리の場合は以下の選択、それ以外は一番下の処理に移行
+					;まだ製作段階であり、内容を변경する場合があるので注意
+					IF RAND:2 == 0 && (TALENT:PLAYER:남자 || TALENT:PLAYER:후타나리 || TALENT:PLAYER:오토코노코)
+						$START_RAPE
+						PRINTFORML 「や、やめてください！　そのような不埒ごとなど……！」
+						PRINTFORML
+						$INPUT_RAPE02
+						PRINTFORML [1] 身体を触る　[2] 가슴を애무する
+						PRINTFORML [3] 봉사させる　[4] 無理矢理犯す
+						$INPUT_RAPE01
+						INPUT
+						PRINTFORML
+						IF RESULT == 1
+							;1.
+							;やることがヤることなので、
+							;成否판정の지혜から힘に변경する
+							LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:힘+MAXBASE:PLAYER:운/2)
+							SIF TALENT:ARG:마조
+								CFLAG:ARG:友好度 += RAND:30
+							IF LOCAL < 30
+								CFLAG:ARG:友好度 -= RAND:50
+								;실패
+								PRINTFORMW 「離しなさい！　このケダモノが……！」
+								PRINTFORMW 「汚らわしいその손で%CSTR:ARG:11%の身体に触れようとは、なんて野蛮なお方なの！　もう！」
+								RETURN 6
+							ELSE
+								CFLAG:ARG:友好度 -= RAND:25
+								;성공
+								PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:ARG%の身体中を触りまくった！
+								IF RAND:4 == 0
+									PRINTFORMW 「あぁ、凄い……もっと……お願いです、もっと……！」
+								ELSEIF RAND:3 == 0
+									PRINTFORMW 「やっ、あぁ……！　や、めてください……」
+								ELSEIF RAND:2 == 0
+									PRINTFORMW 「あっ……ぅん、んんっ……素적ですわぁ……あぁんっ！」
+								ELSE
+									PRINTFORMW 「ぅっ……あ、ぁあ……そんなに強く……あぁっ！」
+								ENDIF
+								EXP:PLAYER:조교경험      += 5
+								GOTO INPUT_RAPE02
+							ENDIF
+						ELSEIF RESULT == 2
+							;2.
+							LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:힘+MAXBASE:PLAYER:운/2)
+							SIF TALENT:ARG:마조
+								CFLAG:ARG:友好度 += RAND:30
+							IF LOCAL < 35
+								CFLAG:ARG:友好度 -= RAND:50
+								;실패
+								PRINTFORMW 「離しなさい！　このケダモノが……！」
+								PRINTFORMW 「汚らわしいその손で%CSTR:ARG:11%の身体に触れようとは、なんて野蛮なお方なの！　もう！」
+								RETURN 6
+							ELSE
+								CFLAG:ARG:友好度 -= RAND:25
+								PRINTFORM %CALLNAME:PLAYER%は%CALLNAME:ARG%の
+								IF TALENT:ARG:거유 == 1 || TALENT:ARG:폭유 == 1
+									PRINT 豊満な가슴
+								ELSEIF TALENT:ARG:절벽 == 1 || TALENT:ARG:빈유 == 1
+									PRINT 真っ平らな가슴
+								ELSE
+									PRINT 가슴
+								ENDIF
+									IF RAND:2 == 0
+										PRINTFORMW を揉みしだいた……
+									ELSE
+										PRINTFORMW に顔を埋め、유두を強く吸った……
+									ENDIF
+								IF RAND:3 == 0
+									PRINTFORMW 「あぁ、凄い……もっと……お願いです、もっと……！」
+								ELSEIF RAND:2 == 0
+									PRINTFORMW 「あっ……ぅん、んんっ……素적ですわぁ……あぁんっ！」
+								ELSE
+									PRINTFORMW 「ぅっ……あ、ぁあ……そんなに強く……あぁっ！」
+								ENDIF
+								EXP:PLAYER:조교경험      += 5
+								GOTO INPUT_RAPE02
+							ENDIF
+						ELSEIF RESULT == 3
+							;3.
+							LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
+							IF LOCAL < 30
+								CFLAG:ARG:友好度 -= RAND:50
+								;실패
+								PRINTFORMW 「嫌ですわ！　誰が당신のご봉사など……！」
+								PRINTFORMW 「こうなったら、ここで殺してあげますわ！」
+								RETURN 3
+							ELSE
+								CFLAG:ARG:友好度 -= RAND:70
+								;성공
+								IF RAND:3 == 0
+									PRINTFORM %CALLNAME:PLAYER%は%CALLNAME:ARG%の
+									IF TALENT:ARG:거유 == 1 || TALENT:ARG:폭유 == 1
+										PRINT 豊満な乳の谷間に
+									ELSEIF TALENT:ARG:절벽 == 1 || TALENT:ARG:빈유 == 1
+										PRINT 真っ平らな가슴に無理矢理
+									ELSE
+										PRINT 가슴に
+									ENDIF
+										PRINTFORMW 肉棒を挟み、擦り上げていく……
+										IF RAND:3 == 0
+											PRINTFORMW 「ぐっ……この屈辱、絶対に忘れませんわ……！」
+										ELSEIF RAND:2 == 0
+											PRINTFORMW 「この%CSTR:ARG:11%になんたる仕打ちを……っ！」
+										ELSE
+											PRINTFORMW 「……ん、ちゅっ、ゅる……ちゅぶ、んむっ、ちゅうっ……」
+											PRINTFORMW %CALLNAME:ARG%は肉棒の先端をチロチロと舐め、上눈遣いで%CALLNAME:PLAYER%を見上げながらしゃぶっていく……
+										ENDIF
+										EXP:PLAYER:조교경험      += 5
+										GOTO INPUT_RAPE02
+								ELSEIF RAND:2 == 0
+									PRINTFORMW %CALLNAME:ARG%は言われるがままに%CALLNAME:PLAYER%の肉棒を掴み、咥えた。
+									PRINTFORMW 肉棒に舌を這わせ、입で吸い上げて、激しくしゃぶっていく……
+									EXP:PLAYER:조교경험      += 5
+									GOTO INPUT_RAPE02
+								ELSE
+									PRINTFORMW 「んんっ……んちゅ、ちゅぶ……ちゅっ……」
+									PRINTFORMW %CALLNAME:ARG%は黙々と%CALLNAME:PLAYER%の肉棒をしゃぶっている……
+									EXP:PLAYER:조교경험      += 5
+									GOTO INPUT_RAPE02
+								ENDIF
+							ENDIF
+						ELSEIF RESULT == 4
+							;4.
+							;これもやることがヤることなので、
+							;당신と相손の힘の値によって成否판정をする
+							LOCAL = RAND:100 + RAND:(MAX(1,MAXBASE:PLAYER:힘-MAXBASE:ARG:힘/2)) + RAND:(MAX(1,CFLAG:ARG:友好度))
+
+							;성공
+							IF LOCAL < 30
+								CFLAG:ARG:友好度 -= RAND:90
+								IF TALENT:ARG:처녀 == 1
+									PRINTFORML 「いやぁ……いやですわっ！　このケダモノ！」
+									PRINTFORMW 「二度と%CSTR:ARG:11%の前に姿を見せないで！」
+									RETURN 5
+								ELSE
+								ENDIF
+							;실패
+							ELSE
+								CFLAG:ARG:友好度 -= RAND:80
+								;처녀
+								IF TALENT:ARG:처녀 == 1
+									PRINTFORML 「いやぁ……いやですわっ！　このケダモノ！」
+									PRINTFORMW 「お放しなさいこの下郎！　誰かおりませんの！　助けて！」
+
+									PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:ARG%を押し倒し、幾度もなく犯し続けた……
+									PRINTFORMW %CALLNAME:ARG%の身体中は白い粘液で불결、秘部からは破瓜の血と混ざり合った大量の白濁液が滴り落ちていた。
+									PRINTFORMW 「もう……どうにでもしてちょうだい%UNICODE(0x2661)%」
+									EXP:PLAYER:사정경험      += 5
+									EXP:PLAYER:조교경험      += 5
+
+									EXP:ARG:Ｖ경험   += 5
+									EXP:ARG:성교경험 += 5
+									EXP:ARG:정액경험 += 5
+									EXP:ARG:질사경험 += 5
+									TALENT:ARG:처녀 = 0
+									
+									;처녀관통履歴用
+									IF PLAYER == MASTER
+										SETBIT FLAG:(50000+NO:ARG), 7
+										;처녀奪取人数カウント
+										FLAG:처녀탈취人数 += 1
+									ENDIF
+									
+									RETURN 1
+								;처녀以外
+								ELSE
+									PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:ARG%を押し倒し、幾度もなく犯し続けた……
+									PRINTFORMW %CALLNAME:ARG%の身体中は白い粘液で불결、秘部からは大量の白濁液が滴り落ちていた。
+									PRINTFORMW 「もう……どうにでもしてください%UNICODE(0x2661)%」
+
+									EXP:PLAYER:사정경험      += 5
+									EXP:PLAYER:조교경험      += 5
+
+									EXP:ARG:Ｖ경험   += 5
+									EXP:ARG:성교경험 += 5
+									EXP:ARG:정액경험 += 5
+									EXP:ARG:질사경험 += 5
+
+									RETURN 1
+								ENDIF
+							ENDIF
+						ELSE
+						GOTO INPUT_RAPE01
+						ENDIF
+					ELSE
+						PRINTFORML 「気持ちいいこと、ねぇ……この%CSTR:ARG:11%を悦ばせられると思って？」
+						;女악마とのムフフ전개を추가
+						;IF FLAG:ムフフ전개 == 0
+						PRINTFORML [1]できる
+						PRINTFORML [2]できない
+						$INPUT_SEX
+						INPUT
+						PRINTFORML
+						IF RESULT == 1
+							IF TALENT:ARG:처녀 == 1
+								PRINTFORML 「生憎ですが、ここで당신とまぐわう気はございません」
+								PRINTFORMW 「何故かですって？　……場の視線というものを分かってほしいですわね」
+								PRINTFORMW 「ふう、気が削がれましたわ、%CSTR:ARG:11%はもう帰ります。ごきげんよう」
+
+								;1/2でPLAYERにナニが生えてるなら無理矢理犯るか分岐
+								IF RAND:2 == 0 && ( TALENT:PLAYER:남자 || TALENT:PLAYER:후타나리 || TALENT:PLAYER:오토코노코 )
+									PRINTFORML
+									PRINTFORML 幾分か油断している今なら、無理矢理襲うことも出来そうだ
+									PRINTFORML [1]襲う
+									PRINTFORML [2]襲わない
+									$INPUT_ARE_YOU_RAPER
+									INPUT
+									PRINTFORML
+									IF RESULT == 1
+										GOTO START_RAPE
+									ELSEIF RESULT == 2
+										RETURN 5
+									ELSE
+										GOTO INPUT_ARE_YOU_RAPER
+									ENDIF
+								ENDIF
+
+								;수수께끼의매력or유혹がある場合は強引にできる
+								IF TALENT:PLAYER:수수께끼의매력 || HAVE_SKILL(PLAYER,[[스킬:유혹]])
+									PRINTFORML [1]強引に迫る
+									PRINTFORML [2]残念そうにする
+									$INPUT_SEX_4
+									INPUT
+									PRINTFORML
+									IF RESULT == 1
+										CALL SEX_NEGOTIATE_PUB306_처녀,ARG
+										IF RESULT == 0
+											RETURN 1
+										ELSE
+											RETURN 5
+										ENDIF
+									;ホッとしつつも大人ぶる
+									ELSEIF RESULT == 2
+										CFLAG:ARG:友好度 += RAND:20
+										PRINTFORMW 「…あらあらウフフ%UNICODE(0x2661)%、でも御免なさいね♪」
+									ELSE
+										GOTO INPUT_SEX_4
+									ENDIF
+								;수수께끼의매력or유혹がない
+								ELSE
+									RETURN 5
+								ENDIF
+								RETURN 5
+							;ムフフ전개突入
+							ELSE
+								PRINTFORML 「ふふ……良い返事ですわね」
+								PRINTFORMW 「ではともに、めくるめく官能を愉しみましょう……」
+								CALL SEX_NEGOTIATE_PUB306,ARG
+								IF RESULT == 0
+									RETURN 10
+								ELSE
+									RETURN 11
+								ENDIF
+							ENDIF
+						ELSEIF RESULT == 2
+							PRINTFORML 「甲斐性のないお方ですね、残念ですわ」
+							PRINTFORMW 「せっかく당신を%CSTR:ARG:11%の小姓にする絶好の機会でしたのに……」
+							RETURN 0
+						ELSE
+							GOTO INPUT_SEX
+						ENDIF
+						;ENDIF
+					ENDIF
+				ENDIF
+				GOTO INPUT_LOOP5
+			ENDIF
+
+	ENDSELECT
+
+LOOP 1
+
+;====================================================================
+;ムフフ전개
+;====================================================================
+;@SEX_NEGOTIATE,ARG
+@SEX_NEGOTIATE_PUB306,ARG
+;LOCAL:5 ムフフ전개の판정結果。
+
+;ムフフ전개突入
+PRINTFORMW 
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORMW しばらくお待ち下さい%UNICODE(0x2661)%
+;ムフフ結果の合否판정
+
+;自分と相손との기교の差でほぼ決まる
+IF ABL:PLAYER:기교 < ABL:ARG:기교
+	LOCAL = RAND:5
+ELSE
+	LOCAL = RAND:5 + (ABL:PLAYER:기교-ABL:ARG:기교)
+ENDIF
+
+;エロいことしたので双方に経験추가
+;ナニが生えてる
+IF TALENT:PLAYER:남자 == 1 || TALENT:PLAYER:오토코노코 == 1 || TALENT:PLAYER:후타나리 == 1
+	EXP:PLAYER:사정경험 += 5
+	EXP:ARG:성교경험    += 5
+	EXP:ARG:질사경험    += 5
+	EXP:ARG:Ｖ경험      += 5
+;ナニが生えてない(貝合わせ想定)
+ELSE
+	EXP:PLAYER:레즈경험 += 5
+	EXP:ARG:레즈경험    += 5
+ENDIF
+
+IF LOCAL < 5
+	;실패　ＭＡＧを搾られるので友好度自体はあがる
+	CFLAG:ARG:友好度 += RAND:20
+	PRINTFORML 「あら？　もうイッてしまいますの、だらしないですわね」
+
+	IF TALENT:PLAYER:남자 == 1 && TALENT:PLAYER:오토코노코 == 0
+		PRINTFORMW %CALLNAME:PLAYER%の腹の上で%CALLNAME:ARG%が激しく腰を振っている。
+		PRINTFORMW 肉棒が%CALLNAME:ARG%の中で幾度も挟まれ、搾られ、精気を放たれていた。
+		PRINTFORMW 인간と악마の歴然とする性欲・肉欲の差が、今の%CALLNAME:PLAYER%に重くのしかかっていた。
+		PRINTFORMW 「はぁっ、ぅあっ、あぁ……ふふ、今の당신の顔、とても醜いですわ……あぁっ……%UNICODE(0x2661)%」
+		PRINTFORML 쾌락地獄に呻く%CALLNAME:PLAYER%の苦しい顔を%CALLNAME:ARG%は余裕たっぷりに嘲笑い、
+		PRINTFORMW 尻を打ちつける度に甘い喘ぎを洩らす。
+		PRINTFORML %CALLNAME:ARG%は身体を屈めて、あんぐりと입を開きっぱなしの%CALLNAME:PLAYER%の입を吸ってきた。
+		PRINTFORMW 舌が這入りこみ、%CALLNAME:PLAYER%の舌と激しく絡み、強く吸いついてくる。
+		PRINTFORMW 「ん、んちゅ、ゅっ……いかがですか、%CSTR:ARG:11%の키스のお味は？　인간では到底、味わえられませんわ」
+		PRINTFORMW 「ほら、もう限界でしょう？　出してもかまいませんのよ、理智など捨てて、楽になりなさい……」
+		PRINTFORMW 悩ましげに濡れた声だった。%CALLNAME:ARG%の一声で、%CALLNAME:PLAYER%は何度눈かの精を彼女の中に放出した。
+		PRINTFORML 사정後の虚脱感が押し寄せ、%CALLNAME:PLAYER%は%CALLNAME:ARG%の哄笑する顔を見上げながら、
+		PRINTFORMW 意識を失った。
+	ELSEIF TALENT:PLAYER:후타나리 == 1
+		PRINTFORMW %CALLNAME:PLAYER%の腹の上で%CALLNAME:ARG%が激しく腰を振っている。
+		PRINTFORMW 肉棒が%CALLNAME:ARG%の中で幾度も挟まれ、搾られ、精気を放たれていた。
+		PRINTFORMW 인간と악마の歴然とする性欲・肉欲の差が、今の%CALLNAME:PLAYER%に重くのしかかっていた。
+		PRINTFORMW %CALLNAME:PLAYER%の유두を弄びながら、%CALLNAME:ARG%は愉しげに笑んだ。
+		PRINTFORMW 「ふふ……その様子だと濡れてきているのしょう、そうでしょう？」
+		PRINTFORMW 「でもやめてあげませんわ、まだお愉しみはこれからですわよ」
+		PRINTFORMW 「じっくりと味わってくださる？　ふふ……」
+	ELSEIF TALENT:PLAYER:오토코노코 == 1
+		PRINTFORMW %CALLNAME:PLAYER%の腹の上で%CALLNAME:ARG%が激しく腰を振っている。
+		PRINTFORMW 肉棒が%CALLNAME:ARG%の中で幾度も挟まれ、搾られ、精気を放たれていた。
+		PRINTFORMW 인간と악마の歴然とする性欲・肉欲の差が、今の%CALLNAME:PLAYER%に重くのしかかっていた。
+		PRINTFORMW %CALLNAME:PLAYER%の呻く顔を%CALLNAME:ARG%は見下ろし、愉しげに、底冷えするような笑みを浮かべた。
+		PRINTFORMW 「顔の割には随分と可愛い声を出しますのね、당신って」
+		PRINTFORMW 「もっと聞かせてくださいな、당신の呻き声、喘ぎ声、泣き声……」
+		PRINTFORML そう言って、%CALLNAME:ARG%は%CALLNAME:PLAYER%の유두を摘み、
+		PRINTFORMW 引き千切らんとばかりに持ち上げていく。
+		PRINTFORMW 「さぁ、この유두を千切ればどんな声を出してくださるのかしら？　……ふふ」
+	ELSE
+		PRINTFORMW 全裸となった%CALLNAME:PLAYER%の顔は、恍惚と生気の失った双眸で虚空を見上げていた。
+		PRINTFORMW %CALLNAME:PLAYER%の肢体に%CALLNAME:ARG%の舌が這うたびに、%CALLNAME:PLAYER%を悩ましげに悶えさせる。
+		PRINTFORML 女魔の舌が%CALLNAME:PLAYER%の민감な箇所を舐っては、입で유두を吸い、
+		PRINTFORMW 秘部に顔を埋めては、滴る愛液を舐めとる。
+		PRINTFORMW 「ここかしら？　……당신が最も感じるところは？」
+		PRINTFORMW この切なくも甘い쾌感に%CALLNAME:PLAYER%の喘ぎは止まず、%CALLNAME:ARG%の舌に嬲られていく。
+		PRINTFORMW 魂が、악마の舌で陵辱される一方であった。
+		PRINTFORMW 「ふふ……とても可愛い子ね。その顔も、小새のような声も、全てが愛おしくなりますわ……」
+		PRINTFORMW 「でも、%CSTR:ARG:11%とは結ばれない宿命――せめて、당신が악마であったなら……」
+	ENDIF
+
+	PRINTFORMW 
+	PRINTFORMW ………
+	PRINTFORMW ……
+	PRINTFORMW …
+	PRINTFORMW 酷い눈に逢いました%UNICODE(0x2661)%
+	PRINTFORMW 仲魔達の冷たい視線を感じる……
+	PRINTFORMW ものすごい脱힘感を感じる。
+	PRINTFORMW 
+	;ペナルティとして生体エネルギー的なものを失う
+	RETURN 0
+
+ELSE
+;성공　満발したので友好度もあがる
+	CFLAG:ARG:友好度 += RAND:50
+	IF TALENT:PLAYER:남자 == 1 || TALENT:PLAYER:후타나리 == 1
+		PRINTFORMW 「あぁん！　はぁっ、んぁっ……！　も、もう……許してぁっ……ください……ぁあっ！」
+		PRINTFORMW %CALLNAME:PLAYER%は全裸の%CALLNAME:ARG%の尻を掴み、後ろから激しく動いていた。
+		PRINTFORML 濡れた肉同士の音が弾き、肉棒に突き入れられる쾌感に%CALLNAME:ARG%は淫らな顔で喘ぎ続けた。
+		PRINTFORMW 地面に肘をつき、背後から%CALLNAME:PLAYER%がのしかかってくる。
+		IF TALENT:ARG:거유 == 1 || TALENT:ARG:폭유 == 1
+			PRINTFORML 大きく揺れる%CALLNAME:ARG%の豊かな유방を鷲掴みにし、捏ねるように大きくまさぐった。
+			PRINTFORMW 손の中で形が柔らかく変わり、%CALLNAME:PLAYER%の指の間からその柔らかさと熱い肉の感触が伝わる。
+		ELSE
+		ENDIF
+		PRINTFORML %CALLNAME:ARG%の유방を揉みしだき、隆起した유두を摘み弄りながら、
+		PRINTFORMW %CALLNAME:PLAYER%は肉棒を深く突き入れていった。
+		PRINTFORMW 「だ、出してください……당신の、당신の精を！　ぁっ、あぁ――っ！！」
+		PRINTFORML 存分に%CALLNAME:PLAYER%は%CALLNAME:ARG%の中へ放出してやった。
+		PRINTFORMW 熱い精が%CALLNAME:ARG%の질내に流れ込んでいく。
+		PRINTFORMW 息を荒くしながら、%CALLNAME:ARG%は地面へ倒れ込んだ。
+		PRINTFORML しかし、まだだ、と%CALLNAME:PLAYER%は%CALLNAME:ARG%を仰向けにさせて、
+		PRINTFORMW 白濁の粘液が滴る秘部に再び肉棒を突き入れた。
+		PRINTFORMW 「も、もう限界ですわ……！　やめてください、やめて……やめてぇっ！」
+		PRINTFORMW 「はっ、あぅっ、ぁあ、あんっ！　もっと……もっといっぱい、んあぁ……ご主人様ぁ……%UNICODE(0x2661)%」
+		PRINTFORMW 
+		PRINTFORMW ………
+		PRINTFORMW ……
+		PRINTFORMW …
+	ELSE
+	ENDIF 
+	PRINTFORMW 「もう、どうにでもしてください……」
+	PRINTFORMW %CALLNAME:ARG%は大変満발したようだ。
+	PRINTFORMW しかしどうしたことか、仲魔達の冷たい視線を感じる……
+	PRINTFORMW 
+	LOCAL:5  = 1
+	RETURN 1
+ENDIF
+
+;相손が처녀の場合の판정
+@SEX_NEGOTIATE_PUB306_처녀,ARG
+CFLAG:ARG:友好度 += RAND:50
+PRINTFORML 「きゃっ？いきなり何を…―――ムグッ！？」
+PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:ARG%の입を키스で塞ぐと
+PRINTFORML [1]優しく抱きしめた
+PRINTFORML [2]無理やり押し倒した
+$INPUT_ARE_YOU_RAPER2
+INPUT
+PRINTFORML
+IF RESULT == 1
+	GOTO START_NOMAL_SEX
+ELSEIF RESULT == 2
+	CALL SEX_NEGOTIATE_PUB306_강간,ARG
+	RETURN RESULT
+ELSE
+	GOTO INPUT_ARE_YOU_RAPER2
+ENDIF
+
+$START_NOMAL_SEX
+;성공
+IF RAND:100 < (ABL:PLAYER:기교 * 8)
+	PRINTFORML %CALLNAME:ARG%はウットリとした表情で%CALLNAME:PLAYER%に身体を預けている
+	PRINTFORML 
+	PRINTFORML ………
+	PRINTFORML ……
+	PRINTFORML …
+	PRINTFORMW しばらくお待ち下さい%UNICODE(0x2661)%
+	PRINTFORML 「いあっ…ひぃ…ぁ…――っんふ！ひぃああっ！！」
+	PRINTFORMW %CALLNAME:PLAYER%は艶やかな声を上げる%CALLNAME:ARG%を下に眺めながら、激しく動いている
+	PRINTFORML 先程まで生娘だったとは思えないほどの乱れ様に、打ち付ける腰にもさらに힘が入る
+	PRINTFORMW 「――やだ、きちゃう…きちゃうの！！」
+	PRINTFORML 절정が近いと訴える%CALLNAME:ARG%の中に躊躇することなく정액を放った
+	PRINTFORMW 誰の손も入った事のない穢れなき部分を侵す事で、%CALLNAME:PLAYER%の支配欲が満たされていく
+	PRINTFORML 「…ゃぁ…一杯……ナカ…出っちゃってる%UNICODE(0x2661)%」
+	PRINTFORMW 恍惚に浸る%CALLNAME:ARG%の頬に손を添え、労うように優しく唇を重ねた
+	PRINTFORMW 「んっ……ちゅ……はぁ……」
+	PRINTFORMW 「んん……まだ元気ですわ、……その…イタしても宜しくてよ？」
+	PRINTFORML 
+	PRINTFORML ………
+	PRINTFORML ……
+	PRINTFORML …
+	PRINTFORML 　　　　　　　　　・・・
+	PRINTFORMW 「その不束者ですが末永く宜しくお願い致しますわ%UNICODE(0x2661)%」
+	PRINTFORML %CALLNAME:ARG%は貞淑な雰囲気の中に色香を感じさせる挨拶をしてきた
+	PRINTFORML ……なにか重いものも若干背負った気もするが
+	PRINTFORML 
+	EXP:PLAYER:사정경험      += 5
+	EXP:PLAYER:조교경험      += 5
+	EXP:ARG:Ｖ경험 += 5
+	EXP:ARG:질사경험 += 3
+	EXP:ARG:절정경험 += 1
+	RETURN 0
+;실패
+ELSE
+	PRINTFORMW 「――ちょ！…え、あ…御免なさい……でもちょっと強引すぎるのではないかしら%UNICODE(0x2661)%」
+	RETURN 1
+ENDIF
+
+@SEX_NEGOTIATE_PUB306_강간,ARG
+CFLAG:ARG:友好度 -= RAND:80
+;처녀
+IF TALENT:ARG:처녀 == 1
+	;새드ッ気LV10で素質새드を持っている場合は레이프
+	;IF TALENT:PLAYER:새드 && ABL:PLAYER:새드끼
+	;당신と相손の힘の値によって成否판정をする
+	LOCAL = RAND:100 + RAND:(MAX(1,MAXBASE:PLAYER:힘-MAXBASE:ARG:힘/2)) + RAND:(MAX(1,CFLAG:ARG:友好度))
+	IF LOCAL > 30
+		PRINTFORMW 「――えっちょ、おやめにな――い、嫌ぁぁああぁぁッ！！」
+		PRINTFORMW %CALLNAME:PLAYER%は逃げようとする%CALLNAME:ARG%を無理矢理押し倒し、幾度もなく犯し続けた……
+		PRINTFORMW %CALLNAME:ARG%の身体中は白い粘液で불결、秘部からは破瓜の血が混じった白濁液が大量に滴り落ちていた。
+		EXP:PLAYER:사정경험      += 5
+		EXP:PLAYER:조교경험      += 5
+		EXP:ARG:Ｖ경험 += 5
+		EXP:ARG:질사경험 += 3
+		EXP:ARG:이상경험 += 1
+		TALENT:ARG:처녀 = 0
+		;처녀관통履歴用
+		IF PLAYER == MASTER
+			SETBIT FLAG:(50000+NO:ARG), 7
+			;처녀奪取人数カウント
+			FLAG:처녀탈취人数 += 1
+		ENDIF
+		
+		;仲間加入판정＝기교LV*7
+		;성공
+		IF RAND:100 < (ABL:PLAYER:기교 * 7)
+			PRINTFORMW 「もう……どうにでもしてちょうだい%UNICODE(0x2661)%」
+			EXP:ARG:절정경험 += 1
+			RETURN 0
+		;실패
+		ELSE
+			PRINTFORMW 「…鬼…人でなし…うっ、うぅぅ…」
+			RETURN 1
+		ENDIF
+	;실패
+	ELSE
+		PRINTFORML 「いやぁ……いやですわっ！　このケダモノ！」
+		PRINTFORMW 「二度と%CSTR:ARG:11%の前に姿を見せないで！」
+		RETURN 1
+	ENDIF
+;非처녀
+ELSE
+	PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:ARG%を押し倒し、幾度もなく犯し続けた……
+	PRINTFORMW %CALLNAME:ARG%の身体中は白い粘液で불결、秘部からは大量の白濁液が滴り落ちていた。
+	PRINTFORMW 「もう……どうにでもしてちょうだい%UNICODE(0x2661)%」
+	EXP:PLAYER:사정경험      += 5
+	EXP:PLAYER:조교경험      += 5
+	EXP:ARG:Ｖ경험   += 5
+	EXP:ARG:성교경험 += 5
+	EXP:ARG:정액경험 += 5
+	EXP:ARG:질사경험 += 5
+	RETURN 0
+ENDIF
+

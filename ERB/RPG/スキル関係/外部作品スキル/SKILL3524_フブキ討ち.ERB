@@ -1,0 +1,139 @@
+﻿;스킬名
+@SKILL_NAME_3524,ARG
+RESULTS = 눈보라베기
+
+;　명중
+@SKILL_HITRATE_3524, ARG
+RETURN 90
+
+;　威힘
+@SKILL_POWER_3524, ARG
+SIF FLAG:공격횟수 == 1
+	RETURN 100
+RETURN 120
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_3524,ARG
+RETURN 2
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_3524,ARG
+RETURN 2
+
+;　ＨＰ2を支払うかＭＰ3を支払うか
+@SKILL_COSTTYPE_3524, ARG
+RETURN 3
+;소비なし＝1
+
+;　コストの量
+@SKILL_COST_3524,ARG
+RETURN 23
+
+;　相性
+@SKILL_TYPE_3524,ARG
+SIF FLAG:공격횟수 == 1
+	RETURN GET_TYPE_NUM("빙결")
+RETURN GET_TYPE_NUM("검격")
+;검격
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_3524
+RETURN 1
+;どちらでもない
+
+;　1物理ダメージで計算するか2魔法ダメージで計算するか
+@SKILL_DAMAGETYPE_3524
+RETURN 1
+
+;　대상が1적か2아군か3場전체か4特殊か
+@SKILL_TARGET_3524
+RETURN 1
+
+;　사거리
+@SKILL_RANGE_3524,ARG
+RETURN 1
+
+;　範囲　11체　21열　3전체　4　적아군전체
+@SKILL_SPHERE_3524,ARG
+RETURN 1
+
+;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+@SKILL_EFECT_3524
+RETURN 1
+
+;　 特殊処理の有無、及び処理内容
+@SKILL_SPECIALEFECT_3524,ARG
+;ARG = 1だった場合は処理の有無を返します
+SIF ARG == 1
+	RETURN 0
+;以下に特殊な処理を記述します
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_3524
+RETURN 0
+;검격
+
+;속도보정
+@SKILL_SPEED_3524, ARG = -1
+RETURN 2
+
+;　구상の표시とその타입
+@SKILL_MESSAGE_3524,ARG
+
+;전투時以外に사용できるか
+@SKILL_ACTIONABLE_FIELD_3524
+RETURN 0
+
+;스킬変化？用랭크
+@SKILL_RANK_3524
+RETURN 16
+
+@継承不能_3524
+RETURN 1
+;不可
+
+;テンプレート用、추가효과シリーズ
+;추가효과스테이터스
+@SKILL_ADDTIONAL_STATE_3524,ARG
+RETURN GET_STATE_NUM("FREEZE")
+
+;추가효과상성
+@SKILL_ADDTIONAL_TYPE_3524,ARG
+RETURN 5
+
+;추가효과기본부여확률
+@SKILL_ADDTIONAL_BASE_RATE_3524,ARG
+RETURN 20
+
+;추가효과부여확률上限
+@SKILL_ADDTIONAL_MAX_RATE_3524,ARG
+RETURN 50
+;====================================================
+;스킬及び行動の実行
+;====================================================
+@ACTION_3524,ARG,ARG:1
+LOCAL = POS(ARG:1)
+CALL ATTACK_SINGLE,ARG,LOCAL,3524
+
+
+
+
+
+
+;====================================================
+;実行内容ここまで
+;====================================================
+
+;　 説明文の표시
+@SKILL_EXPLAIN_3524
+PRINTL [전열] 적 1체에 2회 복합속성(검격+빙결) 소 물리데미지. 발동이 빠르다. (낮은 확률로 FREEZE)
+
+;継承に필요な部位
+@継承部位_3524,ARG
+RETURN 0
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_3524,ARG
+RETURN 1
+;とくにない
+

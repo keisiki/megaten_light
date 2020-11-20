@@ -1,0 +1,85 @@
+﻿
+;======================================================
+;장비品の데이터
+;페르소나より어벤져
+;…これ2トンあるよ？これが持ち운べる上にM134발칸よりちょっと強いだけなんて…
+;同じA10Ⅱに積んであったM61と間違えたんだよね？そうだよね？
+;======================================================
+
+
+@기본능력수정_2547,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+
+@전투능력수정_2547,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_2547,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2547, ARG = -1
+RETURN 1
+
+@최저공격횟수_2547, ARG = -1
+RETURN 2
+
+@최대공격횟수_2547, ARG = -1
+RETURN 8
+
+@사거리_2547, ARG = -1
+RETURN 3
+
+@공격범위_2547, ARG = -1
+RETURN 3
+
+@장비해설_2547
+PRINTL A-10Ⅱに搭載されているガトリング砲。米空軍搭載の機関砲の中で최대、最重そして공격력の点で最強を誇る
+PRINTL 총本体だけで重量300kg弱、装弾システムまで含めた総重量は2トン弱に達し、およそ人型生物が持ち歩ける총ではない
+RESETCOLOR
+
+
+@장비箇所_2547
+RETURN GET_EQUIPNUM("총")
+
+@필요레벨_2547
+RETURN 80
+
+@장비조건_2547,ARG
+SIF (BASE:ARG:힘 + BASE:ARG:인내력) > 79 && BASE:ARG:LV > 59
+	RETURN 1
+SIF (BASE:ARG:힘 + BASE:ARG:인내력) > 59 && BASE:ARG:LV > 59 && TALENT:ARG:기계의처녀 == 1
+	RETURN 1
+RETURN 0
+
+@장비조건설명_2547
+PRINTL 장비조건：힘・인내력の합계80以上　[기계의처녀]소지時は힘・인내력の합계60以上　LV60～
+
+@구입조건_2547
+;二人組みを撃破
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 5000000
+	RETURN 0
+RETURN 1
+
+@총공격_2547, ARG = -1
+RETURN 122
+
+@총명중_2547, ARG = -1
+RETURN 107
+
+@특수탄창_2547, ARG = -1
+RETURN 3
+
+@GUN_RANDOMTARGET_2547
+RETURN 1
+
+@총타입_2547
+;1 = 핸드건 2 = 샷건 3 = アサルト라이플、머신건 4 = 狙撃라이플 5 = 그외
+RETURN 3
+@속도보정_2547
+RETURN 0

@@ -1,0 +1,58 @@
+﻿
+;======================================================
+;장비品の데이터
+;세이프티부츠
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4523,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "인내력"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4523,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 5
+	CASE "회피"
+		RETURN 7
+	CASE "마법효과"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@방어상성_4523,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "화염","전격"
+		RETURN 75
+	CASE "비구"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@장비箇所_4523
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4523
+RETURN 8
+
+@장비조건_4523,ARG
+SIF BASE:ARG:LV < 8
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4523
+PRINTL 장비조건：LV8～
+
+@장비해설_4523
+PRINTL 고온이나 전류에 의한 피해를 줄여주는、작업자들이 애용하는 튼튼한 신발。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4523
+RETURN 1
+
+@引継ぎ可不可_4523
+RETURN 0

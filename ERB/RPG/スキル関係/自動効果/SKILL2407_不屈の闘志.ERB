@@ -1,0 +1,46 @@
+﻿;통상공격
+;스킬のテン플레이트になっています
+
+;스킬名
+@SKILL_NAME_2407,ARG
+;SCP-191は死亡後に再起動
+IF SKILL_CHANGE_CHECK(ARG, [[キャラ:SCP-191]]) == 1
+	RESULTS = 사망 후에 재기동
+ELSE
+	RESULTS = 불굴의투지
+ENDIF
+
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_2407
+RETURN 0
+;どちらでもない
+
+;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복、6자동효과
+@SKILL_EFECT_2407
+RETURN 6
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_2407
+RETURN 22
+;何でもおｋ
+
+
+;스킬변화？用랭크
+@SKILL_RANK_2407
+RETURN 10
+;변화
+
+
+;　 설명文の표시
+@SKILL_EXPLAIN_2407
+PRINTL [자동] 전투 중 딱 한번 HP가 0이 되어도 HP 최대로 부활한다.
+
+
+@SKILL_ACTIONABLE_BATTLE_2407
+RETURN 0
+
+;継承に필요한部位
+@継承部位_2407,ARG
+RETURN 1
+

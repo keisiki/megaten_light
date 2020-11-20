@@ -1,0 +1,66 @@
+﻿
+;======================================================
+;장비品の데이터
+;하이퍼세일러
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_3536,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "인내력"
+		RETURN 1
+	CASE "속도"
+		RETURN 1
+	CASE "운"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3536,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 22
+	CASE "회피"
+		RETURN 21
+	CASE "마법위력"
+		RETURN 9
+ENDSELECT
+RETURN 0
+
+@방어상성_3536,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "타격","정신"
+		RETURN 75
+	CASE "검격"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@장비箇所_3536
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3536
+RETURN 32
+
+@장비조건_3536,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 32
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3536
+PRINTL 장비조건：♀ LV32～
+
+@장비해설_3536
+PRINTL 세일러복に似せて作られた전투옷。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3536
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 70000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_3536
+RETURN 0

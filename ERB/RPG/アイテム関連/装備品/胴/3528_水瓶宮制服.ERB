@@ -1,0 +1,67 @@
+﻿
+;======================================================
+;장비品の데이터
+;수병궁교복
+;======================================================
+
+@기본능력수정_3528,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3528,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 12
+	CASE "회피"
+		RETURN 19
+	CASE "마법위력"
+		RETURN 5
+	CASE "마법효과"
+		RETURN 6
+ENDSELECT
+RETURN 0
+
+;소문によって変動する。중력もち多くないし、지변もちも少ないし、実はダントツに強い気がする
+@방어상성_3528,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "질풍"
+		SIF STRFLAG_NUM_EV("가면당은 유행에 민감 소문", TOSTR(0), [[이벤트:소문]]) == 2
+			RETURN -50
+		SIF STRFLAG_NUM_EV("가면당은 전통의 향기 소문", , , , [[이벤트:소문]]) == 2
+			RETURN 50
+	CASE "지변"
+		SIF STRFLAG_NUM_EV("가면당은 유행에 민감 소문", TOSTR(0), [[이벤트:소문]]) == 2
+			RETURN 200
+		SIF STRFLAG_NUM_EV("가면당은 전통의 향기 소문", , , , [[이벤트:소문]]) == 2
+			RETURN 125
+	CASE "중력"
+		SIF STRFLAG_NUM_EV("가면당은 유행에 민감 소문", TOSTR(0), [[이벤트:소문]]) == 2
+			RETURN 125
+ENDSELECT
+RETURN 100
+
+@장비箇所_3528
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3528
+RETURN 28
+
+@장비조건_3528,ARG
+SIF BASE:ARG:LV < 28
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3528
+PRINTL 장비조건：LV28～
+
+@장비해설_3528
+PRINTFORML 물병가면이 몸에 걸친 녹 색의 로브
+PRINTFORML 몸에 걸친 자에게 물병자리의 수호를 내려주는 힘을 가지고 있다
+
+
+@구입조건_3528
+RETURN 0
+
+@引継ぎ可不可_3528
+RETURN 0

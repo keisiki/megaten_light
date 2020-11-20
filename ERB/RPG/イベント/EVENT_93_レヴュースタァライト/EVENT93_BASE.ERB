@@ -1,0 +1,1502 @@
+﻿;発生조건は組織貢献度10000以上
+;最速でチュートリアルクリア段階から突入可能
+;キリンとかいう만능の存在。わかります
+
+;偽典からフラグリセット関数を拝借
+;이벤트フラグ:93:0
+;0:開始時点　1:レヴュー観戦
+;2:初戦　3:２戦눈　4:３戦눈　5:４戦눈　6:５戦눈　7:６戦눈
+
+;舞台소녀別이벤트記録変数
+;出席番号順の方が不公平感が無いかなと思ったけど
+;おれが　おぼえ　られない
+;なので並び順に他意はありません、悪しからず
+
+;以下はbit演算で記録
+;이벤트フラグ:93:1　1:華恋に勝利　2〜個別이벤트制御（以下同じ）
+;이벤트フラグ:93:2　1:ひかりに勝利
+;이벤트フラグ:93:3　1:純那に勝利
+;이벤트フラグ:93:4　1:まひるに勝利
+;이벤트フラグ:93:5　1:双葉に勝利
+;이벤트フラグ:93:6　1:ぶぶ漬けに勝利
+;이벤트フラグ:93:7　1:ばななに勝利
+;이벤트フラグ:93:8　1:天堂真矢に勝利
+;이벤트フラグ:93:9　1:クロに勝利
+
+;이벤트フラグ:93:1X　전투ギミックとかに使う（Xは↑の이벤트記録変数と同じ通し番号で）
+
+;=================================================
+;   sub EVENT_93_FLAG_RESET
+;=================================================
+;   의뢰:フラグリセット
+;-------------------------------------------------
+;   MENU화면で「의뢰出現」が出る様、
+;   의뢰登録フラグをリセットする
+;-------------------------------------------------
+@EVENT_93_FLAG_RESET
+
+;- フラグがONの場合、クリアしてOFFに변경
+SIF GETBIT(FLAG:이벤트出現2,93 - 64)
+	CLEARBIT FLAG:이벤트出現2, 93 - 64
+
+;====================
+;조건
+;====================
+
+@PLAYABLE_EVENT_93
+	;メガテン系이벤트以外불허가の場合、離脱
+	SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 || GETBIT(FLAG:EXTRA이벤트필터, 13) == 1
+		RETURN 0
+	
+	;CALL EVENT_93_大場なな_毎日の판정
+	
+	;組織貢献度10000で해방
+	SIF FLAG:組織貢献度 < 10000
+		RETURN 0
+	;舞台소녀戦制覇後は생략
+	IF 이벤트フラグ:93:0 == 0 && GLOBAL:キリンの記憶 < 1
+		RESULTS = 怪しい電話
+		RETURN 1
+	;舞台소녀戦制覇後は생략
+	ELSEIF 이벤트フラグ:93:0 == 1 && GLOBAL:キリンの記憶 < 1
+		RESULTS = 情熱のレヴュー【-Re_PLAY-】
+		RETURN 1
+	ELSE
+		IF 이벤트フラグ:93:0 > 7
+			RESULTS = 舞台소녀と向き合う
+		ELSE
+			RESULTS = キリンの地下劇場でレヴューに挑む
+		ENDIF
+		RETURN 1
+	ENDIF
+
+RETURN 0
+
+
+;====================
+;内容
+;====================
+@SHOPCOM_EVENT_93
+#DIMS わたしたちは舞台소녀
+#DIM 舞台소녀の人数
+
+わたしたちは舞台소녀 = %EVENT93_出席確認()%
+舞台소녀の人数 = EVENT93_人数確認()
+
+;FOR LOCAL, 0, CHARANUM
+;	IF GROUPMATCH(NO:LOCAL, [[キャラ:카렌（무대소녀）]], [[キャラ:히카리]], [[キャラ:마히루]], [[キャラ:쥰나]], [[キャラ:후타바（무대소녀）]], [[キャラ:카오루코]], [[キャラ:나나]], [[キャラ:마야（무대소녀）]], [[キャラ:클로딘]]) && CFLAG:LOCAL:전투참가불가능 < 1 && TALENT:LOCAL:비전투원 < 1
+;		わたしたちは舞台소녀 += @"%CSVCALLNAME(NO:LOCAL)%_"
+;		舞台소녀の人数 += 1
+;	ENDIF
+;NEXT
+
+LOADGLOBAL
+
+;電話
+IF 이벤트フラグ:93:0 == 0 && GLOBAL:キリンの記憶 < 1
+	CALL EVENT_93_1
+	RETURN 0
+	
+;地下劇場
+ELSEIF 이벤트フラグ:93:0 == 1 && GLOBAL:キリンの記憶 < 1
+	CALL EVENT_93_2
+	RETURN 0
+ENDIF
+
+;以後
+SIF GLOBAL:キリンの記憶 > 0 && 이벤트フラグ:93:0 < 2
+	이벤트フラグ:93:0 = 2
+
+CUSTOMDRAWLINE =
+
+PRINTL キリンからリ・プ레이発生の知らせが来た。
+PRINTL エレベータに乗って、참가しようか？
+PRINTL （向かうと時間오비が一つ進みます）
+
+PRINTL どの상연목록を選びますか？
+
+IF 이벤트フラグ:93:0 == 2
+	CUSTOMDRAWLINE =
+	IF GLOBAL:キリンの記憶 > 0
+		PRINTL 
+		
+		GETTIME
+		SUBSTRING RESULTS:0, 11,2
+		TOINT RESULTS:0
+		
+		IF RESULT:0 > 2 && RESULT:0 < 10
+			PRINTW 「おはようございます、心優しき、デビル・서머너。
+		ELSEIF RESULT:0 < 17
+			PRINTW 「こんにちは、心優しき、デビル・서머너。
+		ELSE
+			PRINTW 「夜分遅く失礼します、心優しき、デビル・서머너。
+		ENDIF
+			PRINTW 　세계が一周し、キラめきの残滓もまた、
+			PRINTW 　この地下劇場に戻ってしまいました。
+			PRINTL 
+			PRINTW 　今回も私に、リ・プ레이の可能性を見せてくださることを、
+			PRINTW 　……期待していますよ？
+			PRINTL 　
+			PRINTW 　では、ご武운を。
+			PRINTW 　당신ですよ、당신に言っています。
+			PRINTW 　心優しきデビル・서머너。
+			PRINTL 
+			PRINTW 　――勝ったらキチンと『포지션・ゼロ！』と叫ぶのですよ！」
+	ELSE
+		PRINTL 
+		PRINTL 「そうそう、言い忘れておりましたが、
+		PRINTL 　舞台소녀たちは、【당신方の최대LV】で登場します。
+		PRINTL 　レベリングよりも対策と傾向、大事ですよ？
+		PRINTL 　
+		PRINTL 　また、勝ち抜けば勝ち抜くほど、
+		PRINTL 　残されたものにキラめきが濃縮されていきます。
+		PRINTL 　いかにも強そうな相손は後回しにしない方が良いでしょう。
+		PRINTL 　
+		PRINTL 　では、ご武운を。
+		PRINTL 　당신ですよ、당신に言っています。
+		PRINTL 　心優しきデビル・서머너。
+		PRINTL 
+		PRINTL 　――勝ったらキチンと『포지션・ゼロ！』と叫ぶのですよ！」
+		PRINTL 
+	ENDIF
+ELSEIF 이벤트フラグ:93:0 == 3
+		PRINTL 
+		PRINTL 「おや、さっそく一つ、贋作を拾い上げたのですね。
+		PRINTL 　
+		PRINTL 　ひとつ注意があります。
+		PRINTL 　舞台소녀は、【복종】や【붕괴】となると、
+		PRINTL 　舞台に上がる힘を失ってしまいます。
+		SETCOLOR 0xff0033
+		PRINTL 　もっと分かりやすく言えば、いろいろフラグが折れて비전투원になります。
+		RESETCOLOR
+		PRINTL 　ご留意くださいネ」
+		PRINTL 　
+ELSEIF 이벤트フラグ:93:0 == 7
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTW 「ご無沙汰しております、私です。これが最後のリ・プ레이ですね？
+	PRINTL 
+	IF 이벤트フラグ:93:1 == 0
+		PRINTW 　――무대소녀、愛城華恋、そして神楽ひかり。
+		PRINTL 　
+		PRINTW 　幼き頃に、友と交わした約束を果たすため、
+		PRINTW 　そして、自らに燃え上がった、舞台소녀としての宿命を果たすため、
+		PRINTW 　彼女たちは私のオー디무ションに참가しました。
+		PRINTL 　
+		PRINTW 　ああ、당신にも見せたかった……ッ！
+		PRINTW 　見せたかったのです！　彼女と彼女の行く末を！
+		PRINTW 　가슴に星を抱いたが故の罪を！
+		PRINTW 　そして、それを凌駕する、
+		PRINTW 　愛と友情の約束タワーが舞台へと突き刺さるその瞬間をォォォ……ッ
+		PRINTL 　
+		PRINTW 　はあ。私だって、見たかった。
+		PRINTW 　私、こんなところで何をしてるんでしょう？
+		PRINTW 　こんな夢も希望も無い、ちょいちょい세계が붕괴する宇宙など……ハア。
+		PRINTL 　
+		PRINTW 　まあ、お持ちなさい、
+		PRINTW 　당신の残したキラめきを。
+		PRINTW 　心優しき――デビル・서머너」
+	ELSEIF 이벤트フラグ:93:3 == 0
+		PRINTW 　――무대소녀、星見純那。
+		PRINTW 　今、あそこにいる彼女は、完成系です。
+		PRINTL 　
+		PRINTW 　全ての星を射落として、
+		PRINTW 　たった一つの己の星を손に入れた、
+		PRINTW 　トップスタァ・星見純那。
+		PRINTL 　
+		PRINTW 　私は見たかった、完全なる彼女を。
+		PRINTW 　その生涯をかけて叩き上げ、それでもなお渇望を絶やさない、
+		PRINTW 　激しき恒星となった彼女の生涯を。
+		PRINTL 　
+		PRINTW 　……残念ながら、エチュードすら出来ない残り香では、無駄に光っているだけでしょうけれど、ね。
+		PRINTL 　
+		PRINTW 　さあ、お持ちなさい、
+		PRINTW 　당신の残したキラめきを。
+		PRINTW 　心優しき――デビル・서머너」
+	ELSEIF 이벤트フラグ:93:4 == 0
+		PRINTW 　――무대소녀、露崎まひる。
+		PRINTW 　今、あそこにいる彼女は、完成系です。
+		PRINTL 　
+		PRINTW 　あらゆるライバルを叩き落し、
+		PRINTW 　満塁ホームランを決めたその雄姿。
+		PRINTW 　トップスタァ……露崎まひる。
+		PRINTL 　
+		PRINTW 　私は見たかった、完成した彼女を。
+		PRINTW 　しなやかな肢体から繰り広げられる、
+		PRINTW 　豊かな表現힘に支えられた、美しきレヴューを。
+		PRINTL 　
+		PRINTW 　……残念ながら、友への妄執に囚われたリ・プ레이では、無駄に激しく描き割りが動くだけですが。
+		PRINTL 　
+		PRINTW 　さあ、お持ちなさい、
+		PRINTW 　당신の残したキラめきを。
+		PRINTW 　心優しき――デビル・서머너」
+	ELSEIF 이벤트フラグ:93:5 == 0
+		PRINTW 　――ああ、麗しき舞台소녀たち。
+		PRINTL 　
+		PRINTW 　花柳香子。あれは一度は曇った刃。
+		PRINTW 　怠惰に埋もれ、錆び付きかけた舞台소녀。
+		PRINTL 　
+		PRINTW 　石動双葉。あれは本来、端役の定め。
+		PRINTW 　しかし友の背を追ううちに、輝くつぼみを付けるに至ります。
+		PRINTL 　
+		PRINTW 　私は見たかった、十全な彼女たちを……。
+		PRINTL 　
+		PRINTW 　彼女は応えたでしょう、己を慕う友の愛に。
+		PRINTW 　彼女は応えたでしょう、己を求める友の背中に。
+		PRINTL 　
+		PRINTW 　……幸いにして、あそこは彼女たちの세계。
+		PRINTW 　異物である당신は、いわば冬の山に落ちる稲아내。
+		PRINTW 　私は見たい、リ・プ레이に囚われた輝きが、再び熱く燃え上がる瞬間を……。
+		PRINTL 　
+		PRINTW 　さあ、お持ちなさい、
+		PRINTW 　당신の残したキラめきを。
+		PRINTW 　心優しき――デビル・서머너」
+	ELSEIF 이벤트フラグ:93:7 == 0
+		PRINTW 　――무대소녀、大場なな。
+		PRINTW 　彼女は不思議ですね。リ・プ레이に堕ちてなお、かつての光を失っておりません。
+		PRINTL 　
+		PRINTW 　すでに、トップスタァになれるだけのキラめきが、
+		PRINTW 　この地下劇場に溜まっているというのに、
+		PRINTW 　ずっとずっと……あの輝きを、追い求めているのですね。
+		PRINTL 　
+		PRINTW 　美しい姿です。深い感動を깨달음えます。
+		PRINTW 　しかし、それは果てなき永遠のロンド。
+		PRINTW 　光り輝くキラめきがマンネリズムへと向かうさまは……。
+		PRINTL 　
+		PRINTW 　さあ、お持ちなさい、
+		PRINTW 　당신の残したキラめきを。
+		PRINTW 　心優しき――デビル・서머너」
+	ELSEIF 이벤트フラグ:93:8 == 0
+		PRINTW 　――天堂真矢、そして、西條클로딘。
+		PRINTW 　天才だ秀才だと、人は軽率に呼びますが、
+		PRINTW 　真に恐ろしきは奢らぬ天才。
+		PRINTL 　
+		PRINTW 　２人を最後に残したのは失策ですよ、デビル・서머너。
+		PRINTW 　異物があれば、彼女たちは即座に、リ・プ레이から解き放たれるでしょう。
+		PRINTW 　それが天堂真矢、西條클로딘という舞台소녀です。
+		PRINTL 　
+		PRINTW 　きっと、ああ、きっと。
+		PRINTW 　リ・プ레이では起こり得ない化学反応が、
+		PRINTW 　情熱的な、愛と友情の、素晴らしきレヴューが！
+		PRINTW 　今ここで눈の前でああああ久しぶりに！　開演されることでしょう！
+		PRINTL 　
+		PRINTW 　さあ！　歌って！　踊って！　奪い合いましょうッッ！
+		PRINTW 　負けてもいいのでせめてイイところまで行ってください！
+		PRINTW 　頼みましたよ！　心優しきデビル・서머너！」
+	ENDIF
+ENDIF
+
+
+$INPUT_LOOP1
+CUSTOMDRAWLINE =
+	PRINTL [0]……今、忙しい。
+	PRINTL 
+	;카렌（무대소녀）
+	IF 이벤트フラグ:93:1 == 0 && 이벤트フラグ:93:2 == 0
+		PRINT [1]운命のレヴュー　主演:愛城華恋・神楽ひかり　難易度：
+		IF 이벤트フラグ:93:0 > 6
+			PRINTL ★★★★★
+		ELSEIF 이벤트フラグ:93:0 > 5
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 4
+			PRINTL ★★★☆☆
+		ELSEIF 이벤트フラグ:93:0 > 3
+			PRINTL ★★★☆☆
+		ELSEIF 이벤트フラグ:93:0 > 2
+			PRINTL ★★☆☆☆
+		ELSEIF 이벤트フラグ:93:0 > 1
+			PRINTL ★☆☆☆☆
+		ENDIF
+	ELSE
+		;存在しない、または붕괴している、または복종系함락、または전투참가不能
+		;その場合は이벤트が進行しない
+		LOCAL = GETCHARA([[キャラ:카렌（무대소녀）]])
+		IF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+			SETCOLOR 0x2e2e41
+				PRINTL [-]公演未定
+			RESETCOLOR
+		ELSEIF GETBIT(이벤트フラグ:93:1, 2) == 0
+			PRINTL [1]華恋とひかりのことを考える
+		ELSEIF GETBIT(이벤트フラグ:93:2, 3) && GETBIT(이벤트フラグ:93:1, 3) == 0
+			PRINTL [1]愛城華恋が呼んでいる
+		ELSE
+			SETCOLOR 0x2e2e41
+				PRINTL [-]------
+			RESETCOLOR
+		ENDIF
+	ENDIF
+	
+	;히카리
+	;IF 
+	;ELSE
+		;存在しない、または붕괴している、または복종系함락、または전투참가不能
+		;その場合は이벤트が進行しない
+		LOCAL = GETCHARA([[キャラ:히카리]])
+		IF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+			SETCOLOR 0x2e2e41
+				PRINTL [-]公演未定
+			RESETCOLOR
+		;起点は華恋
+		ELSEIF GETBIT(이벤트フラグ:93:1, 2) && GETBIT(이벤트フラグ:93:2, 3) == 0
+			PRINTL [2]神楽ひかりが呼んでいる
+		ELSE
+			SETCOLOR 0x2e2e41
+				PRINTL [-]------
+			RESETCOLOR
+		ENDIF
+	;ENDIF
+	
+	;쥰나
+	IF 이벤트フラグ:93:3 == 0
+		PRINT [3]渇望のレヴュー　主演:星見純那　　　　　　　難易度：
+		IF 이벤트フラグ:93:0 > 6
+			PRINTL ★★★★★
+		ELSEIF 이벤트フラグ:93:0 > 5
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 4
+			PRINTL ★★★☆☆
+		ELSEIF 이벤트フラグ:93:0 > 3
+			PRINTL ★★★☆☆
+		ELSEIF 이벤트フラグ:93:0 > 2
+			PRINTL ★★☆☆☆
+		ELSEIF 이벤트フラグ:93:0 > 1
+			PRINTL ★☆☆☆☆
+		ENDIF
+	ELSE
+		;存在しない、または비전투원化している、または붕괴している、または복종系함락、または전투참가不能
+		;その場合は이벤트が進行しない
+		LOCAL = GETCHARA([[キャラ:쥰나]])
+		IF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+			SETCOLOR 0x2e2e41
+				PRINTL [-]公演未定
+			RESETCOLOR
+		ELSEIF GETBIT(이벤트フラグ:93:3, 2) == 0
+			PRINTL [3]純那のことを考える
+		ELSEIF GETBIT(이벤트フラグ:93:3, 3) == 0
+			PRINTL [3]地下劇場で純那を見かける
+		ELSE
+			SETCOLOR 0x2e2e41
+			PRINTL [-]------
+			RESETCOLOR
+		ENDIF
+	ENDIF
+	
+	;마히루
+	IF 이벤트フラグ:93:4 == 0
+		PRINT [4]질투のレヴュー　主演:露崎まひる　　　　　　難易度：
+		IF 이벤트フラグ:93:0 > 6
+			PRINTL ★★★★★
+		ELSEIF 이벤트フラグ:93:0 > 5
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 4
+			PRINTL ★★★☆☆
+		ELSEIF 이벤트フラグ:93:0 > 3
+			PRINTL ★★☆☆☆
+		ELSEIF 이벤트フラグ:93:0 > 2
+			PRINTL ★★☆☆☆
+		ELSEIF 이벤트フラグ:93:0 > 1
+			PRINTL ★★☆☆☆
+		ENDIF
+	ELSE
+		;存在しない、または비전투원化している、または붕괴している、または복종系함락、または전투참가不能
+		;その場合は이벤트が進行しない
+		LOCAL = GETCHARA([[キャラ:마히루]])
+		IF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+			SETCOLOR 0x2e2e41
+				PRINTL [-]公演未定
+			RESETCOLOR
+		ELSEIF GETBIT(이벤트フラグ:93:4, 2) == 0
+			PRINTL [4]まひるのことを考える
+		ELSEIF GETBIT(이벤트フラグ:93:4, 3) == 0
+			PRINTL [4]まひるが당신を呼んでいる
+		ELSE
+			SETCOLOR 0x2e2e41
+			PRINTL [-]------
+			RESETCOLOR
+		ENDIF
+	ENDIF
+	
+	;双葉はん
+	IF 이벤트フラグ:93:5 == 0 && 이벤트フラグ:93:6 == 0
+		PRINT [5]約束のレヴュー　主演:石動双葉・花柳香子　　難易度：
+		IF 이벤트フラグ:93:0 > 6
+			PRINTL ★★★★★
+		ELSEIF 이벤트フラグ:93:0 > 5
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 4
+			PRINTL ★★★☆☆
+		ELSEIF 이벤트フラグ:93:0 > 3
+			PRINTL ★★☆☆☆
+		ELSEIF 이벤트フラグ:93:0 > 2
+			PRINTL ★★☆☆☆
+		ELSEIF 이벤트フラグ:93:0 > 1
+			PRINTL ★☆☆☆☆
+		ENDIF
+	ELSE
+		;存在しない、または비전투원化している、または붕괴している、または복종系함락、または전투참가不能
+		;その場合は이벤트が進行しない
+		;京都組はセットで판정
+		LOCAL:1 = 0
+		LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+		SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+			LOCAL:1 = -1
+		LOCAL = GETCHARA([[キャラ:카오루코]])
+		SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+			LOCAL:1 = -1
+		
+		IF LOCAL:1 < 0
+			SETCOLOR 0x2e2e41
+				PRINTL [-]公演未定
+			RESETCOLOR
+		ELSEIF GETBIT(이벤트フラグ:93:5, 2) == 0
+			PRINTL [5]双葉のことを考える
+		ELSEIF GETBIT(이벤트フラグ:93:5,2) && GETBIT(이벤트フラグ:93:6,2) && GETBIT(이벤트フラグ:93:5,3) == 0
+			PRINTL [5]京都組が騒がしい
+		ELSE
+			SETCOLOR 0x2e2e41
+			PRINTL [-]------
+			RESETCOLOR
+		ENDIF
+	ENDIF
+	
+	;ぶぶ漬け
+	;IF 
+	;		PRINTL [6]
+	;ELSE
+		;京都組はセットで판정
+		IF LOCAL:1 < 0
+			SETCOLOR 0x2e2e41
+				PRINTL [-]公演未定
+			RESETCOLOR
+		ELSEIF GETBIT(이벤트フラグ:93:6, 2) == 0
+			PRINTL [6]香子のことを考える
+		ELSEIF GETBIT(이벤트フラグ:93:5,2) && GETBIT(이벤트フラグ:93:6,2) && GETBIT(이벤트フラグ:93:6,3) == 0
+			PRINTL [6]京都組が騒がしい
+		ELSE
+			SETCOLOR 0x2e2e41
+			PRINTL [-]------
+			RESETCOLOR
+		ENDIF
+	;ENDIF
+	
+	;ばなな
+	IF 이벤트フラグ:93:7 == 0
+		PRINT [7]絆のレヴュー　　主演:大場なな　　　　　　　難易度：
+		IF 이벤트フラグ:93:0 > 6
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 5
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 4
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 3
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 2
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 1
+			PRINTL ★★★★☆
+		ENDIF
+	ELSE
+		SETCOLOR 0x2e2e41
+			PRINTL [-]公演未定
+		RESETCOLOR
+	ENDIF
+	
+	;天堂真矢
+	IF 이벤트フラグ:93:8 == 0 && 이벤트フラグ:93:9 == 0
+		PRINT [8]운命のレヴュー　主演:天堂真矢・西條ｸﾛﾃﾞｨｰﾇ 難易度：
+		IF 이벤트フラグ:93:0 > 6
+			PRINTL ★★★★★
+		ELSEIF 이벤트フラグ:93:0 > 5
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 4
+			PRINTL ★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 3
+			PRINTL ★★★☆☆
+		ELSEIF 이벤트フラグ:93:0 > 2
+			PRINTL ★★★☆☆
+		ELSEIF 이벤트フラグ:93:0 > 1
+			PRINTL ★★★☆☆
+		ENDIF
+	ELSE
+		;存在しない、または비전투원化している、または붕괴している、または복종系함락、または전투참가不能
+		;その場合は이벤트が進行しない
+		;真矢クロはセットで판정
+		LOCAL:2 = 0
+		LOCAL = GETCHARA([[キャラ:마야（무대소녀）]])
+		SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+			LOCAL:2 = -1
+		LOCAL = GETCHARA([[キャラ:클로딘]])
+		SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+			LOCAL:2 = -1
+		
+		IF LOCAL:2 < 0
+			SETCOLOR 0x2e2e41
+				PRINTL [-]公演未定
+			RESETCOLOR
+		ELSEIF GETBIT(이벤트フラグ:93:8, 2) == 0
+			PRINTL [8]真矢のことを考える
+		ELSEIF GETBIT(이벤트フラグ:93:8,2) && GETBIT(이벤트フラグ:93:8,3) == 0
+			;天堂真矢の弱点を知っている
+			IF GETBIT(이벤트フラグ:93:8,20)
+				PRINTL [8]真矢と클로딘がお茶会をしているらしい
+			;知らない
+			ELSE
+				PRINTL [8]클로딘が당신を探しているらしい
+			ENDIF
+		ELSE
+			SETCOLOR 0x2e2e41
+			PRINTL [-]------
+			RESETCOLOR
+		ENDIF
+	ENDIF
+	
+	;클로딘
+	;IF 
+	;		PRINTL [9]
+		IF LOCAL:2 < 0
+			SETCOLOR 0x2e2e41
+				PRINTL [-]公演未定
+			RESETCOLOR
+		ELSEIF GETBIT(이벤트フラグ:93:9, 2) == 0
+			PRINTL [9]클로딘のことを考える
+		;クロちゃん이벤트3は天堂真矢이벤트3のあとで
+		ELSEIF GETBIT(이벤트フラグ:93:9,2) && GETBIT(이벤트フラグ:93:9,3) == 0 && GETBIT(이벤트フラグ:93:8,3)
+			LOCAL:3 = 0
+			LOCAL = GETCHARA([[キャラ:카렌（무대소녀）]])
+			SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+				LOCAL:3 = -1
+			LOCAL = GETCHARA([[キャラ:히카리]])
+			SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+				LOCAL:3 = -1
+			;がっつり殺し合いを経たクロちゃん（かれひかも居ないと進まない）
+			IF GETBIT(이벤트フラグ:93:9,20) && LOCAL:3 > -1
+				PRINTL [9]클로딘が舞台の上で何かしている
+			;がっつり　かつ　かれひか居ない
+			ELSEIF GETBIT(이벤트フラグ:93:9,20)
+				SETCOLOR 0x2e2e41
+					PRINTL [-]公演未定
+				RESETCOLOR
+			;棘の取れた클로딘
+			ELSE
+				PRINTL [9]舞台소녀たちがお茶会をしているようだ
+			ENDIF
+		ELSE
+			SETCOLOR 0x2e2e41
+			PRINTL [-]------
+			RESETCOLOR
+		ENDIF
+	;ENDIF
+CUSTOMDRAWLINE =
+	
+INPUT
+
+
+;もう一度京都판정
+LOCAL:1 = 0
+LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+	LOCAL:1 = -1
+LOCAL = GETCHARA([[キャラ:카오루코]])
+SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+	LOCAL:1 = -1
+
+;もう一度真矢クロ판정
+LOCAL:2 = 0
+LOCAL = GETCHARA([[キャラ:마야（무대소녀）]])
+SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+	LOCAL:2 = -1
+LOCAL = GETCHARA([[キャラ:클로딘]])
+SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+	LOCAL:2 = -1
+
+;もう一度かれひか판정
+LOCAL:3 = 0
+LOCAL = GETCHARA([[キャラ:카렌（무대소녀）]])
+SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+	LOCAL:3 = -1
+LOCAL = GETCHARA([[キャラ:히카리]])
+SIF LOCAL == -1 || TALENT:LOCAL:비전투원 || TALENT:LOCAL:붕괴 || TALENT:LOCAL:복종 || TALENT:LOCAL:예속 || (CFLAG:LOCAL:전투참가불가능 > 0)
+	LOCAL:3 = -1
+
+
+
+[IF_DEBUG]
+	IF RESULT == 877
+		PRINTL グローバル変数操作
+		PRINTL [0]でえばリセット
+		PRINTL [1]キリンリセット
+		INPUT
+		IF RESULT == 0
+			FOR LOCAL:4, 0, 10
+				大場ななの記憶:0:(LOCAL:4) = 0
+			NEXT
+			FOR LOCAL:4, 0, 10
+				大場ななの記憶:1:(LOCAL:4) = 0
+			NEXT
+			FOR LOCAL:4, 0, 10
+				大場ななの記憶:2:(LOCAL:4) = 0
+			NEXT
+		ELSEIF RESULT == 1
+			GLOBAL:キリンの記憶 = 0
+		ENDIF
+		SAVEGLOBAL
+ENDIF
+[ENDIF]
+
+
+IF RESULT == 0
+	SELECTCASE 이벤트フラグ:93:0
+		CASE 2
+			PRINTW 今、トイレに入っているのだが……。
+			PRINTW 用を발してる最中に電話など出たくない。당신は着信を無視した。
+		CASE 3
+			PRINTW 仮眠を取ろうとしているときに掛けてくるとかどんな嫌がらせだ。
+			PRINTW 당신は端末をマナーモードに変え着信を無視した……。
+		CASE 4
+			PRINTW いやいや、今、食事中なんですけど。このカツカレー見えないの？
+			PRINTW 당신は端末をマナーモードに変え食事を続行した。
+		CASE 5
+			PRINTW なんであのキリンは忙しい時ばかり電話を掛けてくるの？
+			PRINTW なんかムカついたので今日は行かないことにした。
+		CASE 6
+			PRINTW いつも電話なのに今日はメールだったので気が乗らない。
+			PRINTW キリンめ、손を抜いたな？　당신は端末を放って作業を続行した。
+		CASE 7
+			PRINTW なんで芋の皮を剥いているときに電話が掛かってくるんだ……
+			PRINTW どうせキリンなので、당신は着信を無視することにした。
+	    CASEELSE
+			PRINTW やっぱりやめておこう。
+			PRINTW 당신はスケジュールを考え直した。
+	ENDSELECT
+	RETURN
+
+;愛城華恋
+ELSEIF RESULT == 1 && 이벤트フラグ:93:1 == 0 && 이벤트フラグ:93:2 == 0
+	$INPUT_LOOP_01
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「では、ヒントです。愛城華恋は【검격】を、
+	PRINTL 　神楽ひかりは【수격】を得意としています。
+	IF 이벤트フラグ:93:0 == 7
+		PRINTL 　おっと、さらに今回は【화염】【신경】상성も使って来るようですね？
+	ENDIF
+	PRINTL 　特に前者は기합を溜めてドーンとぶちかますのを好んでおりますので、
+	PRINTL 　相손の行動をよく見てみると良いでしょう」
+	PRINTL 
+	PRINTL [1]リ・プ레이と戦う
+	PRINTL [0]考え直す
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_8
+		CALL EVENT_93_総当たり戦後のキリン
+	ELSE
+		GOTO INPUT_LOOP_01
+	ENDIF
+;愛城華恋　個別이벤트02
+ELSEIF RESULT == 1 && GETBIT(이벤트フラグ:93:1, 2) == 0
+	$INPUT_LOOP_01_02
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「おや、どうしました？
+	PRINTL 　ぼんやりして、何か考え事でしょうか？」
+	PRINTL 
+	PRINTL [1]考え事を続ける
+	PRINTL [0]やっぱりやめる
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_愛城華恋_02
+	ELSE
+		GOTO INPUT_LOOP_01_02
+	ENDIF
+;愛城華恋　個別이벤트03
+ELSEIF RESULT == 1 && GETBIT(이벤트フラグ:93:2, 3) && GETBIT(이벤트フラグ:93:1, 3) == 0
+	$INPUT_LOOP_01_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「愛城華恋が당신を呼んでいましたよ？
+	PRINTL 　なにやら、行きたいところが有るとのことです」
+	PRINTL 
+	PRINTL [1]会いに行く
+	PRINTL [0]今忙しい
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_愛城華恋_03
+	ELSE
+		GOTO INPUT_LOOP_01_03
+	ENDIF
+	
+	
+	
+;神楽ひかり　個別이벤트03
+ELSEIF RESULT == 2 && GETBIT(이벤트フラグ:93:1, 2) && GETBIT(이벤트フラグ:93:2, 3) == 0
+	$INPUT_LOOP_02_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「神楽ひかり……。
+	PRINTL 　彼女と愛城華恋は、二人で一つの운命。
+	PRINTL 　舞台소녀と向き合う気があるならば、扱いは慎重に」
+	PRINTL 
+	PRINTL [1]ひかりの呼び出しに応じる
+	PRINTL [0]今忙しい
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_神楽ひかり_03
+	ELSE
+		GOTO INPUT_LOOP_02_03
+	ENDIF
+	
+	
+	
+;星見純那
+ELSEIF RESULT == 3 && 이벤트フラグ:93:3 == 0
+	$INPUT_LOOP_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「さて、ヒントです。星見純那は【비구】の使い손……
+	IF 이벤트フラグ:93:0 > 3
+		PRINTL 　彼女は奇襲奇策が大好きです。
+		PRINTL 　ちゃんと対策しないと、【即死】させられてしまうかもしれませんよ？
+	ENDIF
+	IF 이벤트フラグ:93:0 == 7
+		PRINTL 
+		PRINTL 　そのうえ、今の彼女は비구가드브레이크を使いこなします。
+		PRINTL 　테트라칸……おススメですよ？
+		PRINTL 　また、【정신】相性の공격も사용してきますから、
+		PRINTL 　そちらの対策もしておかないと、調子を狂わされてしまうかもしれません」
+	ELSE
+		PRINTL 
+		PRINTL 　そのうえ、愛用のメガネを並べて【정신】相性も飛ばしてきます。
+		PRINTL 　まあ、所詮はメガネです、範囲공격で薙ぎ倒せると一番いいでしょうね。
+		PRINTL 　バステ対策もきちんとしておきましょう」
+	ENDIF
+	PRINTL 
+	PRINTL [1]リ・プ레이と戦う
+	PRINTL [0]考え直す
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_3
+		CALL EVENT_93_総当たり戦後のキリン
+	ELSE
+		GOTO INPUT_LOOP_03
+	ENDIF
+;星見純那　個別이벤트02
+ELSEIF RESULT == 3 && GETBIT(이벤트フラグ:93:3, 2) == 0
+	$INPUT_LOOP_03_02
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「おや？　今日はぼんやりしてますね。
+	PRINTL 　星見純那のことでも……考えているのですか？」
+	PRINTL 
+	PRINTL [1]このまま思案にふける
+	PRINTL [0]今忙しい
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_星見純那_02
+	ELSE
+		GOTO INPUT_LOOP_03_02
+	ENDIF
+	
+;星見純那　個別이벤트03
+ELSEIF RESULT == 3 && GETBIT(이벤트フラグ:93:3, 3) == 0
+	$INPUT_LOOP_03_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「ああ、ちょうどよいところに……
+	PRINTL 　星見純那の残り香が、私の劇場に入り浸っているのです！
+	PRINTL 　迷惑なので、何とかしてくれませんか、デビル・서머너」
+	PRINTL 
+	PRINTL [1]分かった分かった
+	PRINTL [0]知るか
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_星見純那_03
+	ELSE
+		GOTO INPUT_LOOP_03_03
+	ENDIF
+	
+	
+;露崎まひる
+ELSEIF RESULT == 4 && 이벤트フラグ:93:4 == 0
+	$INPUT_LOOP_04
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「さて、ヒントです。露崎まひるは大量のスズダルキャットを連れています。
+	PRINTL 　……ええ？　それは何だ、ですか？
+	PRINTL 　私に訊かないでください、私だって分からないことくらいあります。
+	PRINTL 
+	PRINTL 　そんなことより、あの猫たちはとにかく芸達者です。
+	PRINTL 　彼らは【타격】や【파마】や【지변】、
+	PRINTL 　場合によっては【주살】なども使ってくるでしょう。
+	PRINTL 　共通の弱点は【수격】です。마하・아쿠아や운디네弾を用意してきてくださいね。
+	PRINTL 　【전격】も悪くないでしょう。
+	IF 이벤트フラグ:93:0 == 7
+		PRINTL 
+		PRINTL 　あと、今回は、
+		PRINTL 　なにやら妙に激しく動く描き割りが居るようです。
+		PRINTL 　【검격】【화염】に、特に注意すると良いでしょう。
+	ENDIF
+	PRINTL 
+	PRINTL 　更に更に、露崎まひる本人は蘇生魔法を使うかもしれません。
+	PRINTL 　放っておくと倒した猫が起き上がり、
+	PRINTL 　拳を振り上げこちらを見ている……なんてことも。
+	PRINTL 　注意事項盛りだくさんですが、これはそういうレヴューですから、どうぞご容赦を」
+	PRINTL 
+	PRINTL [1]リ・プ레이と戦う
+	PRINTL [0]考え直す
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_4
+		CALL EVENT_93_総当たり戦後のキリン
+	ELSE
+		GOTO INPUT_LOOP_04
+	ENDIF
+	
+;露崎まひる　個別이벤트02
+ELSEIF RESULT == 4 && GETBIT(이벤트フラグ:93:4, 2) == 0
+	$INPUT_LOOP_04_02
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「おや、ぼんやりしてますね、考え事ですか？
+	PRINTL 　露崎まひる……。
+	PRINTL 　本来はもっと朗らかな子なのですが、ね」
+	PRINTL 
+	PRINTL [1]このまま思案にふける
+	PRINTL [0]おっといけない、ぼんやりしてた
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_露崎まひる_02
+	ELSE
+		GOTO INPUT_LOOP_04_02
+	ENDIF
+	
+;露崎まひる　個別이벤트03
+ELSEIF RESULT == 4 && GETBIT(이벤트フラグ:93:4, 3) == 0
+	$INPUT_LOOP_04_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「おや？　こんなところをお散歩していて、宜しいのですか？
+	PRINTL 　露崎まひる……당신を呼んでいたみたいですが？
+	PRINTL 　顔を出しておいた方が、あとで後悔しなくて済むでしょうね」
+	PRINTL 
+	PRINTL [1]そこまで言うなら会いに行くか
+	PRINTL [0]知るか、あとでね
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_露崎まひる_03
+	ELSE
+		GOTO INPUT_LOOP_04_03
+	ENDIF
+	
+	
+;石動双葉
+ELSEIF RESULT == 5 && 이벤트フラグ:93:5 == 0 && 이벤트フラグ:93:6 == 0
+	$INPUT_LOOP_05
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「では、ヒントです。石動双葉は【타격】と【충격】、
+	PRINTL 　花柳香子は【질풍】【주살】を得意とします。
+	IF 이벤트フラグ:93:0 > 4
+		PRINTL 　さらに前者は物理공격を２０％の확률で自動반사、
+		PRINTL 　後者はバフ行動を繰り返し能力の底上げを行う徹底ぶり。
+		PRINTL 　なかなかデンジャラスですねえ、デビル・서머너？」
+	ELSE
+		PRINTL 　……しかし、このリ・プ레이は、少し連携が悪いようです。
+		PRINTL 　各々が사용してくる속성は非常に限られてくるでしょう」
+	ENDIF
+	PRINTL 
+	PRINTL [1]リ・プ레이と戦う
+	PRINTL [0]考え直す
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_5
+		CALL EVENT_93_総当たり戦後のキリン
+	ELSE
+		GOTO INPUT_LOOP_05
+	ENDIF
+;石動双葉　個別이벤트02　京都組はセットで판정
+ELSEIF RESULT == 5 && GETBIT(이벤트フラグ:93:5,2) == 0 && LOCAL:1 > -1
+	$INPUT_LOOP_05_02
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「石動双葉が気になりますか？
+	PRINTL 　フフフ、それならば思案にふけるのも良いでしょう、邪魔は致しません」
+	PRINTL 
+	PRINTL [1]このまま思案にふける
+	PRINTL [0]別にそんなことはない
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_石動双葉_02
+	ELSE
+		GOTO INPUT_LOOP_05_02
+	ENDIF
+;石動双葉　個別이벤트02　京都組はセットで판정
+ELSEIF RESULT == 5 && GETBIT(이벤트フラグ:93:5,2) && GETBIT(이벤트フラグ:93:6,2) && GETBIT(이벤트フラグ:93:5,3) == 0 && LOCAL:1 > -1
+	$INPUT_LOOP_05_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「おや、こんなところに居てよいのですか？
+	PRINTL 　上……騒がしいですよ？」
+	PRINTL 
+	PRINTL [1]確認しに行く
+	PRINTL [0]後でいいや
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_石動双葉_03
+	ELSE
+		GOTO INPUT_LOOP_05_02
+	ENDIF
+	
+;ぶぶ漬け　個別イベ02
+ELSEIF RESULT == 6 && GETBIT(이벤트フラグ:93:6,2) == 0 && LOCAL:1 > -1 && 이벤트フラグ:93:5
+	$INPUT_LOOP_06_02
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「花柳香子……気になりますよね？
+	PRINTL 　思慮にふけるのならどうぞご自由に、座席も空いておりますので」
+	PRINTL 
+	PRINTL [1]このまま思案にふける
+	PRINTL [0]別にそんなことはない
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_花柳香子_02
+	ELSE
+		GOTO INPUT_LOOP_06_02
+	ENDIF
+
+;ぶぶ漬け　個別イベ03
+ELSEIF RESULT == 6 && GETBIT(이벤트フラグ:93:5,2) && GETBIT(이벤트フラグ:93:6,2) && GETBIT(이벤트フラグ:93:6,3) == 0 && LOCAL:1 > -1
+	$INPUT_LOOP_06_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「おや、こんなところに居てよいのですか？
+	PRINTL 　上……騒がしいですよ？」
+	PRINTL 
+	PRINTL [1]確認しに行く
+	PRINTL [0]気のせいでは？
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_花柳香子_03
+	ELSE
+		GOTO INPUT_LOOP_06_03
+	ENDIF
+
+;大場なな
+ELSEIF RESULT == 7 && 이벤트フラグ:93:7 == 0
+	$INPUT_LOOP_07
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「さて、ヒントです。
+	PRINTL 　大場ななは大火힘の【검격】【전술】【중력】を得意とします。
+	PRINTL 　無理に応戦しようとすれば、
+	PRINTL 　圧倒的な팔힘で薙ぎ倒されてしまうでしょう。
+	PRINTL 
+	PRINTL 　さらに、あの舞台は、彼女の独壇場です。
+	PRINTL 　いわゆるカジャ／ンダはかき消されてしまうのでご注意を。
+	PRINTL 　前衛は솔직함に身を固めていたほうが良いのではないでしょうか？
+	PRINTL 
+	PRINTL 　ああ、もう一つ。
+	PRINTL 　魔法は마카라칸で반사される可能性があります。
+	PRINTL 　大火힘で押し切ろうとすると……ドカーン！
+	PRINTL 　フフフ。
+	PRINTL 
+	PRINTL 　よろしいですね？　デビル・서머너」
+	PRINTL 
+	PRINTL [1]リ・プ레이と戦う
+	PRINTL [0]考え直す
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_6
+		CALL EVENT_93_総当たり戦後のキリン
+	ELSE
+		GOTO INPUT_LOOP_07
+	ENDIF
+;大場なな　個別イベ2
+;開発中につき、正規の손段ではいけないようにありえない数字を入れておく
+;へたに弄ると取り返しのつかないことになるので触らないでネ
+ELSEIF RESULT == 7 && GETBIT(이벤트フラグ:93:7, 2) == 99999999
+	$INPUT_LOOP_07_02
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「フフフ、誰のことを考えているか、当てて差し上げましょうか？
+	PRINTL 　いえ、いえ、答え合わせは結構……こう見えて、カンは良いのです、私
+	PRINTL 　でもまだ工事中なので今日のところは回れ右した方が良いですよ？
+	PRINTL 　具体的に言うとコメントアウトしてますので」
+	PRINTL 
+	PRINTL [1]大場なな、ねえ……
+	PRINTL [0]何言ってんだこの偶蹄눈
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		;CALL EVENT_93_大場なな_02
+	ELSE
+		GOTO INPUT_LOOP_07_02
+	ENDIF
+;大場なな　個別イベ3　全員と戦った後で、かつ全員が전투참가可能で손元に居る
+ELSEIF RESULT == 7 && GETBIT(이벤트フラグ:93:7, 3) == 0 && 이벤트フラグ:93:0 > 7 && 舞台소녀の人数 > 8
+	$INPUT_LOOP_07_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL ……大場ななが、観客席に立っている。
+	PRINTL 
+	PRINTL [1]声をかける
+	PRINTL [0]後でいいや
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		;CALL EVENT_93_大場なな_03
+	ELSE
+		GOTO INPUT_LOOP_07_03
+	ENDIF
+;天堂真矢
+ELSEIF RESULT == 8 && 이벤트フラグ:93:8 == 0
+	$INPUT_LOOP_08
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「では、ヒントです。
+	PRINTL 　天堂真矢は【검격】【지변】、更に데・카쟈を、
+	PRINTL 　西條클로딘は【화염】【전격】【타격】を、
+	PRINTL 　それぞれ사용してきます。
+	PRINTL 
+	PRINTL 　特に危険なのは【검격】でしょうか？
+	PRINTL 　天堂真矢は、사거리こそ短いものの、스킬の威힘が桁違いです。
+	PRINTL 　내성を用意できないなら、前衛は身を固めていたほうが良いかもしれませんねえ
+	IF 이벤트フラグ:93:0 == 7
+		PRINTL 
+		PRINTL 　更に、更に。天堂真矢は、
+		PRINTL 　２０％の확률で物理相性を무효화・반격する、하이퍼카운터기능を搭載……。
+		PRINTL 　迂闊に손を上げれば、손痛いしっぺ返しが、
+		PRINTL 　降り注いでくることでしょう……
+	ENDIF
+	PRINTL 　傾向と対策、大事ですよ？」
+	
+	PRINTL 
+	PRINTL [1]リ・プ레이と戦う
+	PRINTL [0]考え直す
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_7
+		CALL EVENT_93_総当たり戦後のキリン
+	ELSE
+		GOTO INPUT_LOOP_08
+	ENDIF
+;天堂真矢　個別イベ2
+ELSEIF RESULT == 8 && GETBIT(이벤트フラグ:93:8, 2) == 0 && LOCAL:2 > -1
+	$INPUT_LOOP_08_02
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「父は舞台俳優、母はプリマドンナ。
+	PRINTL 　類まれなる血筋の上に、キリリと冷えた闘争心。
+	PRINTL 　……무대소녀、天堂真矢。彼女は一筋밧줄ではいきませんよ？」
+	PRINTL 
+	PRINTL [1]彼女のことを考える
+	PRINTL [0]突然ポエムを입にするのやめてくださいます？？？
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_天堂真矢_02
+	ELSE
+		GOTO INPUT_LOOP_08_02
+	ENDIF
+	
+;天堂真矢　個別イベ3
+ELSEIF RESULT == 8 && GETBIT(이벤트フラグ:93:8, 3) == 0 && LOCAL:2 > -1
+	$INPUT_LOOP_08_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	
+	;天堂真矢の弱点を知っている
+	IF GETBIT(이벤트フラグ:93:8,20)
+		PRINTL 「おやおや、こちらにいて良いんですか？
+		PRINTL 　天堂真矢、西條클로딘……深刻な顔でお茶会をしているようですが？」
+		PRINTL 
+		PRINTL [1]顔を出したほうが良いかね
+		PRINTL [0]あとでいいや
+	;しらん
+	ELSE
+		PRINTL 「おや、デビル・서머너
+		PRINTL 　西條클로딘が당신を探していましたよ？
+		PRINTL 　なんでも、天堂真矢について、相談したいことがあるとか」
+		PRINTL 
+		PRINTL [1]はいはい、行けばいいんでしょ
+		PRINTL [0]あとでいいや
+	ENDIF
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_天堂真矢_03
+	ELSE
+		GOTO INPUT_LOOP_08_03
+	ENDIF
+	
+;西條클로딘
+ELSEIF RESULT == 9 && 이벤트フラグ:93:8 && GETBIT(이벤트フラグ:93:9, 2) == 0 && LOCAL:2 > -1
+	$INPUT_LOOP_09_02
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTL 「西條클로딘。
+	PRINTL 　日本人の父とフランス人の母を持ち、
+	PRINTL 　幼いころから芸能活動を行っていた“元”天才子役。
+	PRINTL 　……彼女の持つプライドは本物ですよ、怪我しないように、注意なさってくださいね」
+	PRINTL 
+	PRINTL [1]彼女のことを考える
+	PRINTL [0]はいはいあとでね
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_西條클로딘_02
+	ELSE
+		GOTO INPUT_LOOP_09_02
+	ENDIF
+	
+;西條클로딘
+ELSEIF RESULT == 9 && 이벤트フラグ:93:8 && GETBIT(이벤트フラグ:93:9, 3) == 0 && LOCAL:2 > -1 && (GETBIT(이벤트フラグ:93:9,20) < 1 || GETBIT(이벤트フラグ:93:9,20) && LOCAL:3 > -1)
+	$INPUT_LOOP_09_03
+	CUSTOMDRAWLINE =
+	PRINTL 
+	;がっつり殺し合いを経たクロちゃん
+	IF GETBIT(이벤트フラグ:93:9,20)
+		PRINTL 「ああ、ちょうどいいところに……
+		PRINTL 　西條클로딘が私の劇場を勝손に使っているのです、
+		PRINTL 　何とかしてもらえませんか？」
+		PRINTL 
+		PRINTL [1]はいはい
+		PRINTL [0]自分で何とかしなさい
+	;それ以外
+	ELSE
+		PRINTL 「ああ、ちょうどいいところに……
+		PRINTL 　西條さんたちが、ちょいちょいお茶会を開いているのです。
+		PRINTL 　飲食禁止ではないのですが……常識を、常識をですね、もう少し彼女には常識を！」
+		PRINTL 
+		PRINTL [1]はいはい、お話してくるね
+		PRINTL [0]今忙しいからあとでね
+	ENDIF
+	INPUT
+	
+	IF RESULT == 0
+		GOTO INPUT_LOOP1
+	ELSEIF RESULT == 1
+		CALL EVENT_93_西條클로딘_03
+	ELSE
+		GOTO INPUT_LOOP_09_03
+	ENDIF
+	ELSE
+	GOTO INPUT_LOOP1
+ENDIF
+
+
+@EVENT_93_総当たり戦後のキリン
+;最終戦後
+LOADGLOBAL
+IF 이벤트フラグ:93:0 > 7 && GLOBAL:キリンの記憶 < 1
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTW ねっとりとした男性の声が聞こえてくる……。
+	PRINTL 
+	PRINTW 「私です。
+	PRINTW 　まずは、お礼を。
+	PRINTW 　당신のおかげで、よいキラめきを見せていただくことが出来ました」
+	PRINTL 
+	PRINTW 声の調子から察するに、なかなかの上機嫌であるようだ。
+	PRINTL 
+	PRINTW 「コロス未満のリ・プ레이が、
+	PRINTW 　たかだかマグネタイトごときで、
+	PRINTW 　本物とよく似たメンタリティを획득するとは……いやはや……」
+	PRINTL 
+	PRINTW キリンはフンスと鼻息を漏らすと、言葉の続きを紡いだ。
+	PRINTL 
+	PRINTW 「漂っていたリ・プ레이は、今はこれで全てです。
+	PRINTW 　あとは당신の裁量で、
+	PRINTW 　好きに扱うと良いでしょう」
+	PRINTL 
+	PRINTW ……遠くから動物園のニオイがする。
+	PRINTW 당신は顔を向ける。
+	PRINTW 暗闇の中に、翡翠色の瞳が、光っている。
+	PRINTL 
+	PRINTW 「でも、こんな宇宙を選ぶ人です。
+	PRINTW 　使い道など、一つだけでございましょうか。
+	PRINTW 　それとも……あのキラめきの残り香を、舞台소녀として扱ってしまうのでしょうか？」
+	PRINTL 
+	PRINTW だんだんと、ニオイが、濃くなってくる。
+	PRINTW 翡翠の瞳が迫ってくる。
+	PRINTL 
+	PRINTW キリンは당신の눈の前にいる。
+	PRINTL 
+	PRINTW 「私は、당신のことを、見ていますよ。
+	PRINTW 　당신は……殺しますか？
+	PRINTW 　それとも……歌いますか？
+	PRINTW 　フフフ、分かります。ここは당신の세계です。
+	PRINTW 　お好きになさって。
+	PRINTW 　당신は、自由。
+	PRINTW 　そうでしょう？　心優しき、デビル・서머너」
+	PRINTL 
+	LOADGLOBAL
+	SETBIT GLOBAL:キリンの記憶 ,1
+	SAVEGLOBAL
+	CUSTOMDRAWLINE =
+;二周눈以降
+ELSEIF 이벤트フラグ:93:0 > 7
+	CUSTOMDRAWLINE =
+	PRINTL 
+	PRINTW ねっとりとした男性の声が聞こえてくる……。
+	PRINTL 
+	PRINTW 「私です。
+	PRINTW 　また、당신は、舞台소녀たちを拾い上げたのですね」
+	PRINTL 
+	PRINTW ……遠くから動物園のニオイがする。
+	PRINTW 당신は顔を向ける。
+	PRINTW 暗闇の中に、翡翠色の瞳が、光っている。
+	PRINTL 
+	PRINTW 「あれは偽物、しょせんは、贋作。
+	PRINTW 　당신がどう扱おうと咎められることも……
+	PRINTW 　そして、褒められることも、ございません」
+	PRINTL 
+	PRINTW だんだんと、ニオイが、濃くなってくる。
+	PRINTW 翡翠の瞳が迫ってくる。
+	PRINTL 
+	PRINTW キリンは당신の눈の前にいる。
+	PRINTL 
+	PRINTW 「お好きになさって。自由になさって。
+	PRINTW 　당신を見つめるのが、とても楽しいのです。
+	PRINTW 　これからもよろしくお願いします、心優しき、デビル・서머너」
+	PRINTL 
+	CUSTOMDRAWLINE =
+ENDIF
+
+RETURN 0
+
+
+
+@EVENT_93_TURN_END
+;- 1ターン経過
+FLAG:휴식フラグ = 1
+BEGIN TURNEND
+RETURN
+
+
+@EVENT_BATTLE_TURNEND_EVENT93
+	;ななの이니셜라이즈
+	IF GETBIT(이벤트フラグ:93:17, 1)
+		CALL EVENT_BATTLE_TURNEND_EVENT_93_6_0
+	ENDIF
+RETURN
+
+@EVENT_BATTLE_ACTEND_EVENT93
+	;かれひか復活フラグ
+	IF GETBIT(이벤트フラグ:93:11, 1)
+		CALL EVENT_BATTLE_ACTEND_EVENT_93_8
+	;星見純那각성フラグ
+	ELSEIF GETBIT(이벤트フラグ:93:13, 1)
+		CALL EVENT_BATTLE_ACTEND_EVENT_93_3
+	;ふたかお復活フラグ
+	ELSEIF GETBIT(이벤트フラグ:93:15, 1)
+		CALL EVENT_BATTLE_ACTEND_EVENT_93_5
+	;ばなな파워アップ拒否
+	ELSEIF GETBIT(이벤트フラグ:93:17, 1)
+		CALL EVENT_BATTLE_ACTEND_EVENT_93_6
+	;天堂真矢復活フラグ
+	ELSEIF  GETBIT(이벤트フラグ:93:18, 1)
+		CALL EVENT_BATTLE_ACTEND_EVENT_93_7
+	ENDIF
+RETURN
+
+
+@EVENT93_出席確認
+#FUNCTIONS
+#DIM DYNAMIC ループ用
+#DIMS DYNAMIC 舞台소녀点呼 = "_"
+
+FOR ループ用, 0, CHARANUM
+	SIF GROUPMATCH(NO:ループ用, [[キャラ:카렌（무대소녀）]], [[キャラ:히카리]], [[キャラ:마히루]], [[キャラ:쥰나]], [[キャラ:후타바（무대소녀）]], [[キャラ:카오루코]], [[キャラ:나나]], [[キャラ:마야（무대소녀）]], [[キャラ:클로딘]]) && CFLAG:ループ用:전투참가불가능 < 1 && TALENT:ループ用:비전투원 < 1 && TALENT:ループ用:예속 < 1 && TALENT:ループ用:복종 < 1 && TALENT:ループ用:붕괴 < 1
+		舞台소녀点呼 += @"%CSVCALLNAME(NO:ループ用)%_"
+NEXT
+
+RETURNF 舞台소녀点呼
+
+;キラめきを失った（복종・예속・붕괴・비전투원）場合はカウントしない
+;전투참가不能상태でもカウントしない
+@EVENT93_人数確認
+#FUNCTION
+#DIM DYNAMIC ループ用
+#DIM DYNAMIC 舞台소녀点呼
+
+FOR ループ用, 0, CHARANUM
+	SIF GROUPMATCH(NO:ループ用, [[キャラ:카렌（무대소녀）]], [[キャラ:히카리]], [[キャラ:마히루]], [[キャラ:쥰나]], [[キャラ:후타바（무대소녀）]], [[キャラ:카오루코]], [[キャラ:나나]], [[キャラ:마야（무대소녀）]], [[キャラ:클로딘]]) && CFLAG:ループ用:전투참가불가능 < 1 && TALENT:ループ用:비전투원 < 1 && TALENT:ループ用:예속 < 1 && TALENT:ループ用:복종 < 1 && TALENT:ループ用:붕괴 < 1
+		舞台소녀点呼++
+NEXT
+RETURNF 舞台소녀点呼
+
+;キラめきを失った（복종・예속・붕괴・비전투원）場合はカウントしない
+;전투참가不能상태はカウントする
+@EVENT93_人数確認_전투참가不能あり
+#FUNCTION
+#DIM DYNAMIC ループ用
+#DIM DYNAMIC 舞台소녀点呼
+
+FOR ループ用, 0, CHARANUM
+	SIF GROUPMATCH(NO:ループ用, [[キャラ:카렌（무대소녀）]], [[キャラ:히카리]], [[キャラ:마히루]], [[キャラ:쥰나]], [[キャラ:후타바（무대소녀）]], [[キャラ:카오루코]], [[キャラ:나나]], [[キャラ:마야（무대소녀）]], [[キャラ:클로딘]]) && TALENT:ループ用:비전투원 < 1 && TALENT:ループ用:예속 < 1 && TALENT:ループ用:복종 < 1 && TALENT:ループ用:붕괴 < 1
+		舞台소녀点呼++
+NEXT
+RETURNF 舞台소녀点呼
+
+
+
+
+;비전투원化処理
+;ARG=대상キャラの番号
+@EVENT93_KIRAMEKI_LOST,ARG
+
+	;ただの인간に
+	CSTR:ARG:종족명 = 인간
+	ABL:ARG:종족 = 0
+	
+	;비전투원を부여し、전투系素質全削除
+	TALENT:ARG:비전투원 = 1
+	TALENT:ARG:이능자 = 0
+	TALENT:ARG:석세서 = 0
+	TALENT:ARG:데빌시프터 = 0
+	TALENT:ARG:페르소나구사자 = 0
+	TALENT:ARG:도구지식 = 0
+	TALENT:ARG:아이템숙련 = 0
+	TALENT:ARG:건슬링거 = 0
+	TALENT:ARG:식노 = 0
+	TALENT:ARG:달인 = 0
+	TALENT:ARG:서머너 = 0
+	
+	;스킬全소거
+	ABL:ARG:스킬1 = 0
+	ABL:ARG:스킬2 = 0
+	ABL:ARG:스킬3 = 0
+	ABL:ARG:스킬4 = 0
+	ABL:ARG:스킬5 = 0
+	ABL:ARG:스킬6 = 0
+	ABL:ARG:스킬7 = 0
+	ABL:ARG:스킬8 = 0
+	ABL:ARG:스킬9 = 0
+	ABL:ARG:스킬10 = 0
+	ABL:ARG:스킬11 = 0
+	ABL:ARG:스킬12 = 0
+
+	;습득するはずだった스킬も全소거
+	ABL:ARG:습득스킬1 = 0
+	ABL:ARG:습득스킬2 = 0
+	ABL:ARG:습득스킬3 = 0
+	ABL:ARG:습득스킬4 = 0
+	ABL:ARG:습득스킬5 = 0
+	ABL:ARG:습득스킬6 = 0
+	ABL:ARG:습득스킬7 = 0
+	ABL:ARG:습득스킬8 = 0
+	ABL:ARG:습득스킬9 = 0
+	ABL:ARG:습득스킬10 = 0
+	ABL:ARG:습득스킬11 = 0
+	ABL:ARG:습득스킬12 = 0
+	ABL:ARG:습득스킬13 = 0
+	ABL:ARG:습득스킬14 = 0
+	ABL:ARG:습득스킬15 = 0
+	ABL:ARG:습득스킬16 = 0
+	ABL:ARG:습득스킬17 = 0
+	ABL:ARG:습득스킬18 = 0
+	ABL:ARG:습득스킬19 = 0
+	ABL:ARG:습득스킬20 = 0
+	ABL:ARG:습득LV1 = 0
+	ABL:ARG:습득LV2 = 0
+	ABL:ARG:습득LV3 = 0
+	ABL:ARG:습득LV4 = 0
+	ABL:ARG:습득LV5 = 0
+	ABL:ARG:습득LV6 = 0
+	ABL:ARG:습득LV7 = 0
+	ABL:ARG:습득LV8 = 0
+	ABL:ARG:습득LV9 = 0
+	ABL:ARG:습득LV10 = 0
+	ABL:ARG:습득LV11 = 0
+	ABL:ARG:습득LV12 = 0
+	ABL:ARG:습득LV13 = 0
+	ABL:ARG:습득LV14 = 0
+	ABL:ARG:습득LV15 = 0
+	ABL:ARG:습득LV16 = 0
+	ABL:ARG:습득LV17 = 0
+	ABL:ARG:습득LV18 = 0
+	ABL:ARG:습득LV19 = 0
+	ABL:ARG:습득LV20 = 0
+
+
+;テスト用構文
+;SIF STRCOUNT(わたしたちは舞台소녀, "카렌（무대소녀）")
+;	PRINTL 愛城華恋ですスタァライトしちゃいます
+;SIF STRCOUNT(わたしたちは舞台소녀, "히카리")
+;	PRINTL 神楽ひかりよろしくどうぞ
+;SIF STRCOUNT(わたしたちは舞台소녀, "마히루")
+;	PRINTL えと、あ、わたし、露崎まひる
+;SIF STRCOUNT(わたしたちは舞台소녀, "쥰나")
+;	PRINTL 星見純那、学級委員長
+;SIF STRCOUNT(ESCAPE(わたしたちは舞台소녀), "후타바（무대소녀）")
+;	PRINTL 殺陣が得意石動双葉
+;SIF STRCOUNT(わたしたちは舞台소녀, "카오루코")
+;	PRINTL ぶぶ漬け
+;SIF STRCOUNT(わたしたちは舞台소녀, "나나")
+;	PRINTL みんなが大好き大場なな
+;SIF STRCOUNT(わたしたちは舞台소녀, "마야（무대소녀）")
+;	PRINTL お呼びですか天堂真矢です
+;SIF STRCOUNT(わたしたちは舞台소녀, "클로딘")
+;	PRINTL 西條클로딘 Allez, on y va
+

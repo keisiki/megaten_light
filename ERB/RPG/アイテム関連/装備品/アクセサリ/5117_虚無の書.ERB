@@ -1,0 +1,81 @@
+﻿
+;======================================================
+;장비品の데이터
+;허무의서
+;アバドン수태아이템
+;参考：황금반지
+;======================================================
+@기본능력수정_5117,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘","지혜","마력","인내력","속도","운"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_5117,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@방어상성_5117,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "정신"
+		RETURN 150
+	CASE "신경"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@バステ내성_5117,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "CHARM"
+		RETURN -100
+	CASE "HAPPY"
+		RETURN -100
+	CASE "PANIC"
+		RETURN -100
+	CASE "SLEEP"
+		RETURN -100
+	CASE "SHOCK"
+		RETURN -100
+	CASE "FREEZE"
+		RETURN -100
+	CASE "BOMB"
+		RETURN -100
+	CASE "CLOSE"
+		RETURN -100
+ENDSELECT
+RETURN 0
+
+@장비箇所_5117
+RETURN GET_EQUIPNUM("악세사리")
+
+;-----------------------------
+;- 조건・설명処理
+;-----------------------------
+@필요레벨_5117
+RETURN 65
+
+@장비조건_5117,ARG
+SIF BASE:ARG:LV < 65
+	RETURN 0
+RETURN 1
+
+@장비조건설명_5117
+PRINTL 장비조건：LV65～
+
+@장비해설_5117
+PRINTL 
+
+;-----------------------------
+;- 구입・引き継ぎ
+;-----------------------------
+@구입조건_5117
+RETURN 0
+
+;마카교환가능か
+@EQUIP_EXCHANGE_5117
+RETURN 0
+
+@引継ぎ可不可_5117
+RETURN 1

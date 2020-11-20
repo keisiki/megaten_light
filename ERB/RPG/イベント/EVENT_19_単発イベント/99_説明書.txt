@@ -1,0 +1,56 @@
+
+@EVENT_19_LIST_0(ARG,ARG:1)
+;ARG:1 0 = タイトル
+;　　　1 = 出現チェック
+;　　　2 = イベント
+;
+SELECTCASE ARG
+CASE 1
+	IF ARG:1 == 0
+		①
+		RESULTS = (タイトル)
+	ELSEIF ARG:1 == 1
+		②
+		;貢献度860000以上だと出現　※貢献度についてはSHOP.ERB参照
+		SIF FLAG:組織貢献度 + FLAG:名声 * 100 >= 860000
+			RETURN 1
+	ELSEIF ARG:1 == 2
+		③
+		PRINTFORMW （イベント）
+		PRINTFORMW （イベント）
+		PRINTFORMW （イベント）
+		CALL ADD_NEW_COMPANION, （キャラ）, 100
+		SIF RESULT == 0
+			CFLAG:(RESULT:1):戦闘参加不可能 = -1
+		RETURN 1
+	ENDIF
+CASEELSE
+	RETURN 0
+ENDSELECT
+RETURN 0
+
+①
+RESULTS にタイトルを入れる
+
+②
+イベントの出現条件を入れる
+闘技場、依頼、イベントなどの出現条件とやり方は一緒
+RETURN 1で出現する
+
+③
+イベントを出す
+ここでPRINTFORMを使ったイベントや仲間を手に入れたりする
+仲間を手に入れるとき↓
+CALL ADD_NEW_COMPANION, （キャラ）, 100
+SIF RESULT == 0
+	CFLAG:(RESULT:1):戦闘参加不可能 = -1
+RETURN 1 で二度目は出現しないようになる
+	
+
+
+※全体的に普通のイベントなどとやり方は一緒（EVENT_3が結構シンプルで分かりやすい）
+　違いはタイトルと出現条件が分かれていることくらい
+
+
+
+

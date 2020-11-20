@@ -1,0 +1,67 @@
+﻿
+;======================================================
+;장비品の데이터
+;카우부츠
+;火に弱く、水に強い
+;약점のほうが大きめなのは발防具が無내성ばっかりなので
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4524,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4524,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 4
+	CASE "회피"
+		RETURN 8
+	CASE "마법효과"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@방어상성_4524,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "검격"
+		RETURN 95
+	CASE "수격","질풍"
+		RETURN 80
+	CASE "화염"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@バステ내성_4524,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "HEAT"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@장비箇所_4524
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4524
+RETURN 8
+
+@장비조건_4524,ARG
+SIF BASE:ARG:LV < 8
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4524
+PRINTL 장비조건：♂ LV8～
+
+@장비해설_4524
+PRINTL 외국풍의 세련된 부츠
+PRINTL 　　　　　　　　抜群の耐水性をほこり、雨の日でも安心な逸品
+
+
+@구입조건_4524
+RETURN 0
+
+@引継ぎ可不可_4524
+RETURN 0

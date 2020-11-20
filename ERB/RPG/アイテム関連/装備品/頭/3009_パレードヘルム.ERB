@@ -1,0 +1,71 @@
+﻿
+;======================================================
+;장비品の데이터
+;퍼레이드헬름
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_3009,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 1
+	CASE "운"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3009,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 18
+	CASE "회피"
+		RETURN 8
+	CASE "마법효과"
+		RETURN 14
+ENDSELECT
+RETURN 0
+
+@방어상성_3009,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "화염"
+		RETURN 50
+	CASE "파마"
+		RETURN 75
+	CASE "전격"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@バステ내성_3009,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "ORGY"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@장비箇所_3009
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3009
+RETURN 32
+
+@장비조건_3009,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 32
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3009
+PRINTL 장비조건：♂ LV32～
+
+@장비해설_3009
+PRINTL 儀礼用にきらびやかな装飾を施され、また軽量化で脆くなった金属製투구。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3009
+RETURN 1
+
+@引継ぎ可不可_3009
+RETURN 0

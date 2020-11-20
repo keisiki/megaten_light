@@ -1,0 +1,63 @@
+﻿
+;======================================================
+;장비品の데이터
+;월하의송곳니
+;======================================================
+
+@기본능력수정_5252,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@전투능력수정_5252,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "회피"
+		RETURN 10
+ENDSELECT
+RETURN 0
+
+@방어상성_5252,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "비구"
+		RETURN 75
+	CASE "중력"
+		RETURN 50
+	CASE "화염"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@장비箇所_5252
+RETURN GET_EQUIPNUM("악세사리")
+
+;-----------------------------
+;- 조건・설명処理
+;-----------------------------
+@필요레벨_5252
+RETURN 1
+
+@장비조건_5252,ARG
+RETURN 1
+
+@장비조건설명_5252
+PRINTL 장비조건：
+
+@장비해설_5252
+PRINTL 내성：비구・중력　약점：화염
+PRINTL 나는 도구와 중력을 아랑곳하지 않고 민첩하게 움직일 수 있계 되지만, 잘 점화한다.
+PRINTL 마수 이마이즈미 카게로의 수태아이템
+
+;-----------------------------
+;- 구입・引き継ぎ
+;-----------------------------
+@구입조건_5252
+RETURN 0
+
+@EQUIP_EXCHANGE_5252
+RETURN 0
+
+;にしておいたほうが良いかな。
+@引継ぎ可不可_5252
+RETURN 1

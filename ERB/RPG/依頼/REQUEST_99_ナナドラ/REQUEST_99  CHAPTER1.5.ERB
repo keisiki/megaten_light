@@ -1,0 +1,1148 @@
+﻿;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_05
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 어쩌면、「중요한 뉴스」가 있는듯해서
+PRINTFORML %CALLNAME:MASTER%에게도 회의에 참석하길 원한다는 것이다。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥40000
+PRINTFORML （ 주의：이 의뢰를 받으면、시간이 경과합니다 ）
+;====================
+;内容
+;====================
+@REQUEST_99_05
+IF 의뢰フラグ:99:1 == 1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+ELSE
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+ENDIF
+PRINTFORMW 東京 ― 신주쿠・東京도청　７Ｆ　会議室
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 集合場所である７Ｆの会議室に着くと、既に大体の座席が埋まっていた。
+PRINTFORMW ナツメ、キリノ、リン、政治家たち……そして%CALLNAME:LOCAL%。
+PRINTFORMW 時刻通りに着いたが、どうやら%CALLNAME:MASTER%が最後のようである。
+PRINTFORMW 
+PRINTFORML キリノ：
+PRINTFORMW 「予定より少々早いですが、会議を開始しましょう」
+PRINTFORMW 「今日は、今後の作戦について話し合うため、皆さんに集まってもらったのですが…」
+PRINTFORMW 「その前に、重大なニュースをお伝えします」
+PRINTFORMW 「つい１時間前、緊急回線を通じてアメ리카から呼びかけがありました」
+PRINTFORMW その一言で静まり返った会議室が湧いた。
+PRINTFORMW 何しろ세계中で通信が途絶、どの国も安否불명の상태だったからだ。
+PRINTFORMW 驚愕する声があれば、これで救われると根拠のない낙관적観測をする声まである。
+PRINTFORML キリノ：
+PRINTFORMW 「そこで、今から通信衛星による正式な国家会談を開くことになりました」
+PRINTFORMW 「先程、総理にお伝えした通りです」
+PRINTFORMW 「時刻はそろそろ…のはずですが」
+PRINTFORMW ヴン、と低い音を立てて、モニターに新たなウィンドウが開く。
+PRINTFORMW 화면の向こうには金머리카락をオールバックに纏めた男と、そのすぐ傍に女が立っている。
+PRINTFORMW テレビでも見た事はある。あれが米国大統領ジャック・ミュラーだろう。
+PRINTFORMW 一方、女の方は見た事がない。普通に考えれば秘書だろうが、どこか人ならぬ雰囲気を感じた。
+PRINTFORMW だが、政治家同士の話し合いなど興味がない。指先でペンを弄びながら時間を潰した……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 会議の要点を纏めるならば、以下の通りだ。
+;フィネガンとか마요네とか強い人が向かったんだと思うよ
+PRINTFORMW 『ＥＵ本部と連絡は取れた。一部の国は応戦できているものの、それ以外は함락間近である』
+PRINTFORMW 『ドラゴンに対し、駐日米軍の戦힘は頼れない』
+PRINTFORMW 『アメ리카は「専門家」の存在によって辛うじて均衡を保てている』
+PRINTFORMW 特に最後の一点はファントムに持ち帰れば評価されるかもしれない。
+PRINTFORMW 思わぬ収穫だったが、総理からすればたまったものではなかった。
+PRINTFORMW 無理もない、救いの손と思っていた人物から「自힘で頑張れ」と突き放されればはこうもなろう。
+PRINTFORML 
+PRINTFORML ナツメ：
+PRINTFORMW 「…今できることを行い、東京奪還に向けて前進するしかありません」
+PRINTFORMW 「まずは변이した土地を調査すること。それから、ドラゴンへの対抗策を練ること…」
+PRINTFORMW 『対抗策』――その一言に、議員が反応する。君たちならば、対抗策があるのかと。
+PRINTFORML ナツメ：
+PRINTFORMW 「あります。我々、ムラクモ機関になら」
+PRINTFORMW ……その自信に溢れた一言が決め손となった。
+PRINTFORMW 先の帝竜討伐と、東京도청の해방。これらの功績を確かに挙げたムラクモ機関に対し、
+PRINTFORMW 東京도청における全権を総理が委譲したのだ。
+PRINTFORMW もはや政府は関わらない――それを示すように、総理を含め議員らは会議室から退出した。
+PRINTFORML 
+PRINTFORMW 再び、キリノを議長にして会議が進んでいく……。
+PRINTFORMW 今後の눈標は二つ。
+PRINTFORMW 一つは、도청の기능拡充のために渋谷区のドラゴンを討伐、資源を回収すること。
+PRINTFORMW もう一つは、地下道を調査し、他エリアへの移動経路を確保すること。
+PRINTFORMW 前者は１３班が、後者は自衛隊が担当する운びとなった。
+PRINTFORMW ムラクモに指揮されるのが気に入らないのか、リンは終始仏頂面だった……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+
+CALL REQUEST_TITLE_99("1.5")
+
+PRINTFORMW 東京 ― 渋谷・繁花樹海　駅前交差点
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW かつてスクランブル交差点と呼ばれたこの場所も、今は縦横無尽に繁殖する樹海に飲み込まれている……。
+PRINTFORMW 人類が滅亡した後の街並み、というイメージがそのまま現実に現れたような有様だ。
+PRINTFORMW 전회の帝竜が東京도청のみを根城としたのに対し、渋谷の帝竜は渋谷一오비を根城としているようだ。
+PRINTFORML 
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『ポイント４２８…モニターＯＫ、ロケーション確認』
+PRINTFORMW 『おい、１３班。今回のナビはオレが担当になった…ま、よろしくな』
+PRINTFORMW 『今回の任務は『資源の回収』と『生存者の탐색』か…そんなもんいるのかなぁ』
+PRINTFORMW 『今回は左側の道…道玄坂付近を捜索する。ではとっとと向かってくれ…オーヴァ』
+PRINTFORMW 右側の道を見ると、作業を行っている自衛隊員の姿が見えた。
+PRINTFORMW 邪魔する理由はない。大人しく指示に従っておこう……。
+PRINTFORML 
+PRINTFORMW 東京 ― 渋谷・繁花樹海　道玄坂
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 情報通り、道玄坂にはドラゴンが多く活動しているようだ。
+PRINTFORMW どうやって討伐していこうか考えていた矢先、悲鳴が聞こえてくる。
+PRINTFORMW 見れば一般人と思しき男性が、ドラゴンに周囲を囲まれている……。
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『お、おい、人がいるぞ…！！　１３班、急いで救助してくれ！』
+PRINTFORMW よくも今まで生きていたものだと感心しながら、ドラゴンの一団に奇襲を仕掛けた。
+PRINTFORML 
+PRINTFORMW ケミカルドラグの群れが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:先制공격フラグ = 1
+
+	CALL SET_ENEMY,8, [[キャラ:타라스크]], 40, 0
+	NAME:(CHARANUM-1) = ケミカルドラグ
+	CALLNAME:(CHARANUM-1) = ケミカルドラグ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬3 = [[스킬:독가스브레스]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	ABL:(CHARANUM-1):스킬6 = 0
+	MAXBASE:(CHARANUM-1):전술 = 50
+	BASE:(CHARANUM-1):전술 = 50
+	MAXBASE:(CHARANUM-1):화염 = 150
+	BASE:(CHARANUM-1):화염 = 150
+	MAXBASE:(CHARANUM-1):빙결 = 50
+	BASE:(CHARANUM-1):빙결 = 50
+	MAXBASE:(CHARANUM-1):전격 = 50
+	BASE:(CHARANUM-1):전격 = 50
+	MAXBASE:(CHARANUM-1):충격 = 150
+	BASE:(CHARANUM-1):충격 = 150
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	MAXBASE:(CHARANUM-1):핵열 = 150
+	BASE:(CHARANUM-1):핵열 = 150
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 体躯自体は小柄であるが、自身と同等の球体を常に掴んでおり
+	CSTR:(CHARANUM-1):33 = これごと몸통박치기を行う。
+	CSTR:(CHARANUM-1):34 = また、입からヘドロを吐き出して周囲を汚染させる。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には繁花樹海に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,9, [[キャラ:퓌톤]], 39, 0
+	NAME:(CHARANUM-1) = サラマンドラ
+	CALLNAME:(CHARANUM-1) = サラマンドラ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:아기다인]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:파이어스톰]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	MAXBASE:(CHARANUM-1):전술 = 50
+	BASE:(CHARANUM-1):전술 = 50
+	MAXBASE:(CHARANUM-1):화염 = -200
+	BASE:(CHARANUM-1):화염 = -200
+	MAXBASE:(CHARANUM-1):빙결 = 250
+	BASE:(CHARANUM-1):빙결 = 250
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	MAXBASE:(CHARANUM-1):핵열 = -150
+	BASE:(CHARANUM-1):핵열 = -150
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 赤い直立するトカゲのような姿をしたドラゴン。
+	CSTR:(CHARANUM-1):33 = 입からは炎のブレスを吐き出す一方、退化したのか팔を持たない。
+	CSTR:(CHARANUM-1):34 = そうした個体の特徴を裏切らず、빙결には弱い。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には逆サ도청、繁花樹海に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):41 = 
+	CSTR:(CHARANUM-1):42 = 
+	CSTR:(CHARANUM-1):43 = 
+	CSTR:(CHARANUM-1):44 = 
+	CSTR:(CHARANUM-1):45 = 
+	CSTR:(CHARANUM-1):46 = 
+	CSTR:(CHARANUM-1):47 = 
+	CSTR:(CHARANUM-1):48 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,10, [[キャラ:타라스크]], 40, 0
+	NAME:(CHARANUM-1) = ケミカルドラグ
+	CALLNAME:(CHARANUM-1) = ケミカルドラグ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬3 = [[스킬:독가스브레스]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	ABL:(CHARANUM-1):스킬6 = 0
+	MAXBASE:(CHARANUM-1):전술 = 50
+	BASE:(CHARANUM-1):전술 = 50
+	MAXBASE:(CHARANUM-1):화염 = 150
+	BASE:(CHARANUM-1):화염 = 150
+	MAXBASE:(CHARANUM-1):빙결 = 50
+	BASE:(CHARANUM-1):빙결 = 50
+	MAXBASE:(CHARANUM-1):전격 = 50
+	BASE:(CHARANUM-1):전격 = 50
+	MAXBASE:(CHARANUM-1):충격 = 150
+	BASE:(CHARANUM-1):충격 = 150
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	MAXBASE:(CHARANUM-1):핵열 = 150
+	BASE:(CHARANUM-1):핵열 = 150
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 体躯自体は小柄であるが、自身と同等の球体を常に掴んでおり
+	CSTR:(CHARANUM-1):33 = これごと몸통박치기を行う。
+	CSTR:(CHARANUM-1):34 = また、입からヘドロを吐き出して周囲を汚染させる。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には繁花樹海に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,13, [[キャラ:퓌톤]], 39, 0
+	NAME:(CHARANUM-1) = サラマンドラ
+	CALLNAME:(CHARANUM-1) = サラマンドラ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:아기다인]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:파이어스톰]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	MAXBASE:(CHARANUM-1):전술 = 50
+	BASE:(CHARANUM-1):전술 = 50
+	MAXBASE:(CHARANUM-1):화염 = -200
+	BASE:(CHARANUM-1):화염 = -200
+	MAXBASE:(CHARANUM-1):빙결 = 250
+	BASE:(CHARANUM-1):빙결 = 250
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	MAXBASE:(CHARANUM-1):핵열 = -150
+	BASE:(CHARANUM-1):핵열 = -150
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 赤い直立するトカゲのような姿をしたドラゴン。
+	CSTR:(CHARANUM-1):33 = 입からは炎のブレスを吐き出す一方、退化したのか팔を持たない。
+	CSTR:(CHARANUM-1):34 = そうした個体の特徴を裏切らず、빙결には弱い。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には逆サ도청、繁花樹海に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):41 = 
+	CSTR:(CHARANUM-1):42 = 
+	CSTR:(CHARANUM-1):43 = 
+	CSTR:(CHARANUM-1):44 = 
+	CSTR:(CHARANUM-1):45 = 
+	CSTR:(CHARANUM-1):46 = 
+	CSTR:(CHARANUM-1):47 = 
+	CSTR:(CHARANUM-1):48 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,15, [[キャラ:퓌톤]], 39, 0
+	NAME:(CHARANUM-1) = サラマンドラ
+	CALLNAME:(CHARANUM-1) = サラマンドラ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:아기다인]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:파이어스톰]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	MAXBASE:(CHARANUM-1):전술 = 50
+	BASE:(CHARANUM-1):전술 = 50
+	MAXBASE:(CHARANUM-1):화염 = -200
+	BASE:(CHARANUM-1):화염 = -200
+	MAXBASE:(CHARANUM-1):빙결 = 250
+	BASE:(CHARANUM-1):빙결 = 250
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	MAXBASE:(CHARANUM-1):핵열 = -150
+	BASE:(CHARANUM-1):핵열 = -150
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 赤い直立するトカゲのような姿をしたドラゴン。
+	CSTR:(CHARANUM-1):33 = 입からは炎のブレスを吐き出す一方、退化したのか팔を持たない。
+	CSTR:(CHARANUM-1):34 = そうした個体の特徴を裏切らず、빙결には弱い。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には逆サ도청、繁花樹海に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):41 = 
+	CSTR:(CHARANUM-1):42 = 
+	CSTR:(CHARANUM-1):43 = 
+	CSTR:(CHARANUM-1):44 = 
+	CSTR:(CHARANUM-1):45 = 
+	CSTR:(CHARANUM-1):46 = 
+	CSTR:(CHARANUM-1):47 = 
+	CSTR:(CHARANUM-1):48 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW …どうやら救助に성공したようだ。
+PRINTFORMW 要救助者は自衛隊の인간に任せ、ついでに資源回収は例によって%CALLNAME:LOCAL%に任せておく。
+PRINTFORML ナツメ：
+PRINTFORMW 『やっぱり…生存者がいたようね』
+PRINTFORMW 『１３班はこのまま、生存者の救出に当たって。きっとまだ誰かいるはずよ』
+PRINTFORMW たった独りで生き抜いてきたとは考えにくい。普通に考えるならばグループを形成しているはずだ。
+PRINTFORMW この先へと向かってみよう……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『おい、１３班。前方２００ｍに２名、生存者確認だ』
+PRINTFORMW 前方には座り込んでいる男女が見える……。
+PRINTFORMW ドラゴンの巣窟にいるとは思えないリラックスぶりは、コンビニの前でたむろしているようである。
+PRINTFORML 軽薄そうな女：
+PRINTFORMW 「あっれ～？　またまた生き残りはっけぇ～ん♪」
+PRINTFORML 浅慮そうな男：
+PRINTFORMW 「やったぜ、これで今日のノルマ달성ー！」
+PRINTFORMW 「それじゃ、食べ物とー、酒とー、タバコとー、とりあえず持ってるモノ全部出してみ？」
+PRINTFORMW こちらを視認するなり、下卑た笑いを張り付けて近づいてくる男女。
+PRINTFORMW 見れば이능자としての資質は持っているようである。
+PRINTFORMW しかし彼我の戦힘差を見極めることもできない程には未熟であった。
+PRINTFORMW さて、どうしたものか――と考えていると、女が%CALLNAME:LOCAL%を指差した。
+PRINTFORML 軽薄そうな女：
+PRINTFORMW 「あれ？　てゆーかよく見たらあの팔章…タケハヤの言ってた、ムラクモってヤツじゃん？」
+PRINTFORML 浅慮そうな男：
+PRINTFORMW 「うおっ、マジかよ！？　したらカツアゲやめてフツーにボコっべ！」
+PRINTFORML 軽薄そうな女：
+PRINTFORMW 「そーだね、そっちのがタケハヤも喜ぶし！　よーし、予定へんこー！」
+PRINTFORMW 何やら知らないが、向こうは무기を取り出し本気で戦う様子だ。
+PRINTFORMW アレも一応生存者に含まれるならば、殺してしまう訳にはいかない……。
+PRINTFORML 
+PRINTFORMW 이능자二人組が現れた！
+	
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	CALL SET_ENEMY,8, [[キャラ:오니죠로]], 35, 0
+	NAME:(CHARANUM-1) = 軽薄そうな女
+	CALLNAME:(CHARANUM-1) = 軽薄そうな女
+	ABL:(CHARANUM-1):스킬1 = [[스킬:아기라오]]
+	ABL:(CHARANUM-1):스킬2 = 0
+	ABL:(CHARANUM-1):스킬3 = 0
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):전술 = 100
+	BASE:(CHARANUM-1):전술 = 100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = 이능자
+	CSTR:(CHARANUM-1):30 = 渋谷に拠点を置くグループ「ＳＫＹ」のメンバー。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 通称イノ。本名は불명。
+	CSTR:(CHARANUM-1):33 = 전투では魔法を繰り出すことから、サイキック系統の이능자と思われる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,10, [[キャラ:정키]], 35, 0
+	NAME:(CHARANUM-1) = 浅慮そうな男
+	CALLNAME:(CHARANUM-1) = 浅慮そうな男
+	ABL:(CHARANUM-1):스킬1 = [[스킬:회전베기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:트윈슬래시]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):타격 = 100
+	BASE:(CHARANUM-1):타격 = 100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):신경 = 100
+	BASE:(CHARANUM-1):신경 = 100
+	MAXBASE:(CHARANUM-1):정신 = 100
+	BASE:(CHARANUM-1):정신 = 100
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = 이능자
+	CSTR:(CHARANUM-1):30 = 渋谷に拠点を置くグループ「ＳＫＹ」のメンバー。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 通称グチ。本名は불명。
+	CSTR:(CHARANUM-1):33 = 전투では刀검を持ち出すことから、サムライ系統の이능자と思われる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML 浅慮そうな男：
+PRINTFORMW 「クッソ…なんだよこいつら！　シャレになんねーし！」
+PRINTFORML 軽薄そうな女：
+PRINTFORMW 「痛～いっ！　もーやだ、ネイル割れたし！　中止ちゅーしー！！」
+PRINTFORMW 至って当たり前の結果である。素人如きに負けるなど洒落にもならない。
+PRINTFORMW 男女は喚きながら逃げ去っていった……。
+PRINTFORMW あちらの方角に行けば、何か손掛かりが見つかるかもしれない。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORML 大きな歯形――ドラゴンに噛みつかれ殺されたであろう死骸が転がる道を奥へと進むと、
+PRINTFORMW ドラゴンに狙われる女性二人の姿が見える。
+PRINTFORML 赤머리카락の소녀：
+PRINTFORMW 「…あのビルの角まで、走ってくださいね！　私がちゃんと引きつけてますから！」
+PRINTFORMW 「だーいじょぶですって！　さっき오니ギリ食べたんで、戦えます！」
+PRINTFORMW 간호사복の女性を庇うようにして立つ소녀は꿋꿋함に言い張っているが、발が震えている。
+PRINTFORMW どうやら先程の이능자どもよりは己の実힘を理解しているようだ。
+PRINTFORMW 話も多少は通じそうだ、と期待しながら%CALLNAME:MASTER%はドラゴンへ挑みかかった。
+PRINTFORML 
+PRINTFORMW スモウドラグが現れた！
+	
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	CALL SET_ENEMY,9, [[キャラ:나가・라쟈]], 42, 0
+	NAME:(CHARANUM-1) = スモウドラグ
+	CALLNAME:(CHARANUM-1) = スモウドラグ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:마구날뛰기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:전광석화]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:어설트다이브]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:기합]]
+	MAXBASE:(CHARANUM-1):검격 = 75
+	BASE:(CHARANUM-1):검격 = 75
+	MAXBASE:(CHARANUM-1):비구 = 75
+	BASE:(CHARANUM-1):비구 = 75
+	MAXBASE:(CHARANUM-1):화염 = 50
+	BASE:(CHARANUM-1):화염 = 50
+	MAXBASE:(CHARANUM-1):신경 = 200
+	BASE:(CHARANUM-1):신경 = 200
+	MAXBASE:(CHARANUM-1):정신 = 200
+	BASE:(CHARANUM-1):정신 = 200
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):핵열 = 100
+	BASE:(CHARANUM-1):핵열 = 100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 머리部に巨大な角を二本持つドラゴン。
+	CSTR:(CHARANUM-1):33 = 힘を溜めてからの돌격は例え장비を固めていようと問答無用で蹂躙する。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 第一次東京侵蝕時には繁花樹海に出現が確認されている。
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW ドラゴンの거체が倒れ、二度と動かなくなるのを確認してから赤머리카락の소녀がこちらに向かってきた……。
+PRINTFORML 赤머리카락の소녀：
+PRINTFORMW 「あ、あの…ありがとうございます！　ひとりじゃ、たぶんムリでした…」
+PRINTFORMW 「私、雨瀬（ウノセ）아오이っていいます。何かお礼を――」
+PRINTFORML ナツメ：
+PRINTFORMW 『…아오이？　もしかして……ナビ、照合をお願い』
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『了解……。サーチ完了。声紋、虹彩が９９．８％一致…』
+PRINTFORMW 『第７４回ムラクモ選抜試験の候補者だ』
+PRINTFORML ナツメ：
+PRINTFORMW 『…なるほどね。対ドラゴンでの判断힘、気迫――訓練前としてはかなり優秀だわ』
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『だけど、試験は連絡ナシですっぽかしてる。…使えるのか？』
+PRINTFORML ナツメ：
+PRINTFORMW 『Ｓ級の才能を持つ인간は、どんなに우둔でも凡人数十人分の戦힘よ。今日の収穫はこれで十分ね』
+PRINTFORMW 『１３班、聞こえる？　その子を連れて帰還しなさい。私は彼女を迎え入れる準備をしておくわ』
+PRINTFORMW 了解、と返事し、%CALLNAME:LOCAL%の方を見ると、資源の回収に손間取っている。
+PRINTFORMW そういえば物理方面に내성を持つドラゴンだったことを思い出し、손伝ってやろうと向かった時――
+PRINTFORML 
+PRINTFORML ネコ：
+PRINTFORMW 「ふ～ん…結構やるじゃん。イノとグチが손抜きした…ってワケじゃなさそうだね」
+PRINTFORML ダイゴ：
+PRINTFORMW 「…さっきはウチの仲間が迷惑かけたな」
+PRINTFORMW 選抜試験の日、도청で囮を買って出た男女が現れた。
+PRINTFORMW あの特徴的な外見は流石に忘れはしない。
+PRINTFORML ダイゴ：
+PRINTFORMW 「カツアゲの件はこっちの統制ミスだ。今…ウチの大将が、がっつり説教している」
+PRINTFORMW 「…だが、渋谷は俺たちのシマだ。これ以上、介入するつもりなら容赦はしない」
+PRINTFORML ネコ：
+PRINTFORMW 「特に、うちらはムラクモってヤツが大っキライだからね～」
+PRINTFORML ダイゴ：
+PRINTFORMW 「今回は警告だけにしておく。分かったら、さっさと消えろ…」
+PRINTFORML ネコ：
+PRINTFORMW 「そっちのはうちらのこと、ゼンゼン깨달음えてないんだ。ま、い～けどさ。んじゃね～」
+PRINTFORMW 各々言いたいことだけを言って去っていった。
+PRINTFORMW 何があったかは知らないが、ムラクモとは関わりたくもないのだろう。
+PRINTFORMW その割にイノとグチ…恐らくあの이능자二人組の非を直接謝罪しに来るあたり、義理堅くもあるようだ。
+PRINTFORML 
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『とにかく、필요な人材も손に入った。一旦도청へ帰還してくれ』
+PRINTFORMW 『…ああ、資源の回収も忘れるなよ』
+PRINTFORMW ……%CALLNAME:LOCAL%は未だに回収に손こずっているようだった……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 아오이が発見した生存者は、간호사복の女性一人だけではなかった。
+PRINTFORMW 同僚と思しき女性や、曰く「ゴミ箱の中で隠れていた」という男性など。
+PRINTFORMW どうやらムラクモが活動する前から独自で救出活動に当たっていたらしい。
+PRINTFORMW 帰還ついでに彼らを도청へ送り届けた……。
+PRINTFORML 
+PRINTFORML 아오이：
+PRINTFORMW 「あの…ありがとうございました」
+PRINTFORMW 「皆さん、カッコ良かったです！　ちょっと、あこがれちゃいました！」
+PRINTFORMW 아오이は%CALLNAME:MASTER%と%CALLNAME:LOCAL%に向き直ると二度눈の礼をした。
+PRINTFORMW こちらとしては任務でしかなく、ついでに言えば「상품」になればラッキー程度の認識しかない。
+PRINTFORMW ……もっとも、Ｓ級の才能の持ち主とあっては、ナツメがそれを許さないであろうが。
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『ふう…疲れた…オレはもう休みたいぞ。도청の改修は%CALLNAME:LOCAL%たちに任せるよ…じゃあな！』
+PRINTFORMW 解散していく救助者を見送ってから、%CALLNAME:MASTER%も拠点に帰還した……。
+PRINTFORML 
+PRINTFORMW 입座に報酬￥40000が支払われ、名声25を得た。
+MONEY += 40000
+FLAG:名声 += 25
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 5
+RESULTS = 의뢰【(ナナドラMOD)生存者 -SKY and The Others-(2)】が出現！
+CALL MESSAGE_B(1, RESULTS)
+
+CALL REQUEST_99_TURN_END
+
+;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_06
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 시부야에서 실시하는、다음 임무에 대한 설명을 하고 싶다고 한다。
+PRINTFORML ……다이고에게서는 시부야에 두 번 다시 나타나지 않겠다고 다짐 받았지만。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥40000
+PRINTFORML （ 주의：이 의뢰를 받으면、하루가 종료됩니다 ）
+;====================
+;内容
+;====================
+@REQUEST_99_06
+IF 의뢰フラグ:99:1 == 1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+ELSE
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+ENDIF
+PRINTFORMW 東京 ― 신주쿠・東京도청　６Ｆ　研究室
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 少し見ないうちに、도청は着々と発展を遂げていた。
+PRINTFORMW 一般人向けの生活フ로어まで整備されており、より多くの生存者を泊められそうだ。
+PRINTFORMW 今回呼び出された研究室も、そんな改修された部屋の一つだった。
+PRINTFORML ナツメ：
+PRINTFORMW 「研究室の改修、お疲れ様…おかげで、ドラゴンの研究が始められるわ」
+PRINTFORML キリノ：
+PRINTFORMW 「早速だけど、自衛隊員向けのエネミーレーダーを開発しているんだ。完成はもうちょっと先だからね…！」
+PRINTFORMW 「ああ、やっぱり…やっぱり研究は楽しいなァ～！」
+PRINTFORMW 喜々と語るキリノの눈は若干怪しく光っている。やはり研究者としては補佐より研究の方が活き活きするのだろう。
+PRINTFORMW ……人を呼び出しておいてどこかへ行ってしまったが。
+PRINTFORML ナツメ：
+PRINTFORMW 「ふぅ…相変わらずね…」
+PRINTFORMW 「では、次の作戦任務について話しておくわ」
+PRINTFORMW 「전회の任務で渋谷一오비で活動する組織…『ＳＫＹ』に気づいたでしょ？」
+PRINTFORMW 「彼らは、この有事の東京で人に危害を加えて生きている…それは、到底許せることではないわ」
+PRINTFORMW 「今、人類は１つになって協힘し合うべき時…そうでない者は排除すべきだと、私は思う」
+PRINTFORMW 「…アナタたちには、再び渋谷に出向いてＳＫＹを討伐してもらいたいの」
+PRINTFORMW ……正気だろうか？
+PRINTFORMW 確かにＳＫＹは渋谷一오비で好き放題に暴れ回っている。中心メンバーはそうではないのだろうが、末端まで統制が取れていない。
+PRINTFORMW しかし組織立ってムラクモを妨害している訳でもないのだ。
+PRINTFORMW それをわざわざ討伐に向かうとなれば、残党による도청への襲撃や以後の作戦への妨害を行う理由を与えてしまう。
+PRINTFORMW 更に言えば%CALLNAME:LOCAL%自身の問題もある。
+PRINTFORMW 話を聞くだけでも表情が曇るような인간が、人相손に殺生が出来るとは思えない。
+PRINTFORMW 才能や実힘がどれだけあろうと정신が不調ならば十全に発揮できないのが戦場である。
+PRINTFORML ナツメ：
+PRINTFORMW 「…気持ちは分かるわ。でも、彼らをこのまま放っておけば、更なる犠牲が出る可能性もある」
+PRINTFORMW 「ドラゴンと安心して戦うためにも、인간同士で裏切り合うような…そんな憂いを、取り除いておきたいのよ」
+PRINTFORMW 「…やってくれるわね？」
+PRINTFORMW 尤もらしい台詞に、何か含むものを感じつつも%CALLNAME:MASTER%は黙って聞いていた。
+PRINTFORMW 結局のところ、１３班として判断するのは%CALLNAME:LOCAL%の仕事だ。
+PRINTFORMW だがナツメの諭すような物言いに、%CALLNAME:LOCAL%はあっさり根負けしてしまったようだった……。
+PRINTFORML ナツメ：
+PRINTFORMW 「…ありがとう。でも、彼らはかなりの손練れのようだわ。深追いは避けてちょうだい」
+PRINTFORMW 「ガトウが動けない今…アナタたちを失う訳にはいかないのよ」
+PRINTFORML 
+PRINTFORML ナツメ：
+PRINTFORMW 「…ああ、そうだわ。任務にあたって、アナタたちの専属네비게이터を決めようと思うの」
+PRINTFORMW 「その方が何かと意思疎通が取りやすいでしょう？」
+PRINTFORMW 「ＮＡＶ３．６と３．７…２人から選んでちょうだい。それぞれ仕事をしたことはあるはずね？」
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 「…ま、どっちを選んでも、能力的には大差ないよ」
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 「私たち、双子ですから…仕事がやりやすかった方を選んでいただければいいと思います」
+PRINTFORMW 能力が変わらないなら好きな方を選ばせればいい。どうする、と%CALLNAME:LOCAL%の方を見ると――
+PRINTFORMW ――ＮＡＶ３．７で。
+PRINTFORMW 即答であった。
+PRINTFORMW やはり同性の方が付き合いやすいのだろうか？
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 「了解です。問題はありませんよね、ミロク」
+PRINTFORML ミロク：
+PRINTFORMW 「あ…ミロクってのはオレのあだ名だ」
+PRINTFORMW 「オレたちは研究室の生まれで、個別の名前ってのを持ってないんだよ」
+PRINTFORMW 「３．６の語呂合わせでミロク…３．７は미이나…近しいヤツらはそう呼んでる」
+PRINTFORML 미이나：
+PRINTFORMW 「당신たちも、そう呼んでいただいて構いません」
+PRINTFORML ナツメ：
+PRINTFORMW 「それじゃあ…準備を整えて渋谷に向かってちょうだい。ＳＫＹのこと、頼んだわよ」
+;エネミーレーダーは犠牲となったのだ
+PRINTFORMW ……終ぞキリノは姿を見せなかった。代わりに喜びに満ち満ちた声は聞こえてきたが。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 渋谷・繁花樹海　駅前交差点
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。自衛隊より伝言があります』
+PRINTFORMW 『渋谷通りのバリケードは撤去した。以後自由に通行されたし』
+PRINTFORMW 『…おそらく、バリケードはＳＫＹが作ったものでしょうね』
+PRINTFORMW 『ＳＫＹは以前から渋谷通りやセンター街を根城に活動していたようですから』
+PRINTFORMW 『では右側の道…渋谷通りから捜索を始めましょう…オーヴァ』
+PRINTFORMW 右側は、전회自衛隊が作業を行っていた方だ。
+PRINTFORMW 何をやっているのかと思っていたが、バリケードの撤去に当たっていたのか。
+PRINTFORML 
+PRINTFORMW 東京 ― 渋谷・繁花樹海　センター街
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 大樹の根に分断された渋谷通りから、センター街へと辿り着く。
+PRINTFORMW ここに至るまで全くＳＫＹ構成員と遭遇しなかったということは、センター街こそが本拠地と見るべきか。
+PRINTFORMW それともムラクモの襲撃を予期し、防衛ラインを一つにすることで戦힘を集中させたか。
+PRINTFORML 
+PRINTFORML 粗暴そうな男：
+PRINTFORML 「おいおいおい～！　お前、ここがどこだか分かってんのか？
+PRINTFORMW 　聞いて驚け、ＳＫＹの밧줄張りだぜェ？」
+PRINTFORML 下品そうな男：
+PRINTFORMW 「っつーかコイツ、ムラクモじゃね？　ダサい팔章してっしよォ！」
+PRINTFORML 「おうおう、ムラクモのねーちゃんよォ。人んチに土발で踏み込んどいて
+PRINTFORMW 　詫びもねーとかありえないよなァ？」
+PRINTFORML 粗暴そうな男：
+PRINTFORMW 「ムリヤリにでも、土下座してってもらおーぜ！」
+PRINTFORMW ……やはりアレを見る限り、そこまで考えが及んでいるとは考えにくかった。
+PRINTFORML 
+PRINTFORMW 이능자二人組が現れた！
+	
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	CALL SET_ENEMY,8, [[キャラ:정키]], 36, 0
+	NAME:(CHARANUM-1) = 下品そうな男
+	CALLNAME:(CHARANUM-1) = 下品そうな男
+	ABL:(CHARANUM-1):스킬1 = [[스킬:회전베기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:트윈슬래시]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):타격 = 100
+	BASE:(CHARANUM-1):타격 = 100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):신경 = 100
+	BASE:(CHARANUM-1):신경 = 100
+	MAXBASE:(CHARANUM-1):정신 = 100
+	BASE:(CHARANUM-1):정신 = 100
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = 이능자
+	CSTR:(CHARANUM-1):30 = 渋谷に拠点を置くグループ「ＳＫＹ」のメンバー。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 通称タオ。本名は불명。
+	CSTR:(CHARANUM-1):33 = 전투では刀검を持ち出すことから、サムライ系統の이능자と思われる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,10, [[キャラ:정키]], 36, 0
+	NAME:(CHARANUM-1) = 粗暴そうな男
+	CALLNAME:(CHARANUM-1) = 粗暴そうな男
+	ABL:(CHARANUM-1):스킬1 = [[스킬:회전베기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:트윈슬래시]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):타격 = 100
+	BASE:(CHARANUM-1):타격 = 100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):신경 = 100
+	BASE:(CHARANUM-1):신경 = 100
+	MAXBASE:(CHARANUM-1):정신 = 100
+	BASE:(CHARANUM-1):정신 = 100
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = 이능자
+	CSTR:(CHARANUM-1):30 = 渋谷に拠点を置くグループ「ＳＫＹ」のメンバー。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 通称아키ラ。本名は불명。
+	CSTR:(CHARANUM-1):33 = 전투では刀검を持ち出すことから、サムライ系統の이능자と思われる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML 粗暴そうな男：
+PRINTFORMW 「ちょっ…ちょっと待て！　ありえねえだろ、この強さよォ！？」
+PRINTFORML 下品そうな男：
+PRINTFORML 「ムラクモってこんなヤベー奴らなのかよ？　マジ聞いてねェっつの！
+PRINTFORMW 　グチの野郎、吹きやがって…」
+PRINTFORMW 「くっそ、イテテテテ…先に行きたきゃ行けよ。オレらはもう降参だ！」
+PRINTFORML 미이나：
+PRINTFORMW 『あれ…もうＳＫＹのアジトだったんですね』
+PRINTFORMW ……네비게이터なのにそれでいいのか。
+PRINTFORML 미이나：
+PRINTFORMW 『仕方ないじゃないですか…ＳＫＹかどうかなんて、生体反応からじゃ区別できないんですから』
+PRINTFORMW 『それよりも、先に進んでください。他のＳＫＹも倒さないと』
+PRINTFORMW 先の連中は逃げていったが、それで良かったのか？
+PRINTFORML 미이나：
+PRINTFORMW 『末端の인간をいくら倒しても意味はないでしょう。討伐するとすれば幹部メンバーです』
+PRINTFORMW それもそうだ。なら遠巻きからこちらを警戒する奴は放っておいて問題ないことになる。
+PRINTFORMW 立ち塞がる雑물고기以外は無視してさっさと進んでしまおう……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 前方に待ち構える男女の姿が見える。あれは確か、イノとグチとか言う奴らだ。
+PRINTFORMW 正直、先程遭遇した連中と見てくれがあまり変わらないのだが。
+PRINTFORML イノ：
+PRINTFORMW 「はあ～い♪　まさかアタシのこと、忘れたりしてないよね？」
+PRINTFORMW 「こないだのお返ししなきゃって、ここで、ずーっと待ってたんだから～」
+PRINTFORML グチ：
+PRINTFORMW 「あの後、ネコにはなじられるし、タケハヤには怒られるし、マジでけっこー大変だったのよォ？」
+PRINTFORMW 無様に負け、上からは怒られて、なお反省しないのか。
+PRINTFORMW 反뼈心と言えば聞こえはいいが、己の分を弁えない愚劣さの証左でもある。
+PRINTFORML イノ：
+PRINTFORMW 「ま、そーゆーわけで…倍返しさせてもらうから、깨달음悟しなよ？」
+PRINTFORML 
+PRINTFORMW 性懲りもなく이능자二人組が現れた！
+	
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	CALL SET_ENEMY,8, [[キャラ:오니죠로]], 37, 0
+	NAME:(CHARANUM-1) = イノ
+	CALLNAME:(CHARANUM-1) = イノ
+	ABL:(CHARANUM-1):스킬1 = [[스킬:마하・라기온]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:아기라오]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):전술 = 100
+	BASE:(CHARANUM-1):전술 = 100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = 이능자
+	CSTR:(CHARANUM-1):30 = 渋谷に拠点を置くグループ「ＳＫＹ」のメンバー。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 通称イノ。本名は불명。
+	CSTR:(CHARANUM-1):33 = 전투では魔法を繰り出すことから、サイキック系統の이능자と思われる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 전회敗北した悔しさをバネに、多少は成長したようだ。
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,10, [[キャラ:정키]], 37, 0
+	NAME:(CHARANUM-1) = グチ
+	CALLNAME:(CHARANUM-1) = グチ
+	ABL:(CHARANUM-1):스킬1 = [[스킬:회전베기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:트윈슬래시]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:강절단]]
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):타격 = 100
+	BASE:(CHARANUM-1):타격 = 100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):신경 = 100
+	BASE:(CHARANUM-1):신경 = 100
+	MAXBASE:(CHARANUM-1):정신 = 100
+	BASE:(CHARANUM-1):정신 = 100
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = 이능자
+	CSTR:(CHARANUM-1):30 = 渋谷に拠点を置くグループ「ＳＫＹ」のメンバー。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 通称グチ。本名は불명。
+	CSTR:(CHARANUM-1):33 = 전투では刀검を持ち出すことから、サムライ系統の이능자と思われる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 전회敗北した悔しさをバネに、多少は成長したようだ。
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML イノ：
+PRINTFORMW 「痛い痛い痛ーい！　女の子に손加減ナシとかマジ最ッ低！」
+PRINTFORML グチ：
+PRINTFORMW 「バカ、オレだってイテーよ！　なんか鼻血まで出てきたし…」
+PRINTFORMW 「こいつらと関わんの、もうやめよーぜ？」
+PRINTFORML イノ：
+PRINTFORMW 「えーヤダヤダ！　負けっぱとかありえないでしょ？　今度はマジで勝ちに行くし！」
+PRINTFORMW 「でもま、今回はここまでだね。次は깨달음悟してなよ？」
+PRINTFORMW 負け惜しみを吐いて再び去っていく二人。
+;ギャグ보정ですね
+PRINTFORMW 加減せずにぶちのめしたはずだが、思ったより被害が小さい。
+PRINTFORMW 少なくとも鼻血程度で収まる訳がないのだが……大した生命힘というべきか。
+PRINTFORMW 連中が逃げていった先は、渋谷通り……大樹に分断された、向こう側に続いているようだ。
+PRINTFORML 
+PRINTFORMW 東京 ― 渋谷・繁花樹海　渋谷通り
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 渋谷通りには、大量の物資が山積みとなっている。間違いない、これこそがＳＫＹの拠点だろう。
+PRINTFORMW 周囲にはネコやダイゴの他、構成員が複数名立っている……。
+PRINTFORML ダイゴ：
+PRINTFORMW 「…来てしまったか」
+PRINTFORML ネコ：
+PRINTFORMW 「アタシは、来るって思ってたけどね。あのしつこい年増オンナの部下でしょ？」
+PRINTFORML ダイゴ：
+PRINTFORMW 「…お前は上に言われた通り動いているだけだろうが、約束は約束だ」
+PRINTFORMW 「俺は一度警告をした…渋谷には、近づくなってな」
+PRINTFORML ネコ：
+PRINTFORMW 「ダイゴは優しいからね～…だけど、アンタたちはそれを破った」
+PRINTFORML ダイゴ：
+PRINTFORMW 「힘づくでもお引き取り願おう。ついでに、二度とここに来たくなくなるよう土産もつけて、な」
+PRINTFORML 
+PRINTFORMW ＳＫＹが現れた！
+	
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	CALL SET_ENEMY,8, [[キャラ:정키]], 45, 0
+	NAME:(CHARANUM-1) = ダイゴ
+	CALLNAME:(CHARANUM-1) = ダイゴ
+	ABL:(CHARANUM-1):스킬1 = [[스킬:소닉펀치]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:백열찌르기]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:수비무너뜨리기]]
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):타격 = 100
+	BASE:(CHARANUM-1):타격 = 100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):신경 = 100
+	BASE:(CHARANUM-1):신경 = 100
+	MAXBASE:(CHARANUM-1):정신 = 100
+	BASE:(CHARANUM-1):정신 = 100
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = 이능자
+	CSTR:(CHARANUM-1):30 = 渋谷に拠点を置くグループ「ＳＫＹ」の幹部メンバー。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 通称ダイゴ。本名は불명。
+	CSTR:(CHARANUM-1):33 = 전투では拳を用いることから、デストロイヤー系統の이능자と思われる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』・『セブンスドラゴン2020-Ⅱ』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,10, [[キャラ:오니죠로]], 45, 0
+	NAME:(CHARANUM-1) = ネコ
+	CALLNAME:(CHARANUM-1) = ネコ
+	ABL:(CHARANUM-1):스킬1 = [[스킬:부후다인]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:마하・부후라]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:타룬・다]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):검격 = 100
+	BASE:(CHARANUM-1):검격 = 100
+	MAXBASE:(CHARANUM-1):전술 = 100
+	BASE:(CHARANUM-1):전술 = 100
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):중력 = 100
+	BASE:(CHARANUM-1):중력 = 100
+	CSTR:(CHARANUM-1):종족명 = 이능자
+	CSTR:(CHARANUM-1):30 = 渋谷に拠点を置くグループ「ＳＫＹ」の幹部メンバー。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 通称ネコ。本名は불명。
+	CSTR:(CHARANUM-1):33 = 전투では魔法を繰り出すことから、サイキック系統の이능자と思われる。
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』・『セブンスドラゴン2020-Ⅱ』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML ネコ：
+PRINTFORMW 「あの時助けなくてもフツーに平気だったんじゃないの、アイツ……！」
+PRINTFORML ダイゴ：
+PRINTFORMW 「クッ…コイツ、強い…！　かくなる上は…！」
+PRINTFORMW 
+PRINTFORMW 「…へぇ、面白そうなコトやってんじゃねェか。俺も、混ぜてもらおうか」
+PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　　　　　・・・・・・
+PRINTFORMW 背後から声がかかり、전투が中断された。確かにここにはいるべき人物が一名、いない。
+PRINTFORML ダイゴ：
+PRINTFORMW 「タケハヤ…」
+PRINTFORMW ＳＫＹリーダー・タケハヤが現れた。
+PRINTFORMW 傍には青い머리카락の女性。美しくはあるが、どこか인간から外れた雰囲気を感じさせる……。
+PRINTFORML タケハヤ：
+PRINTFORMW 「…お前ら、渋谷に近付くなって忠告されなかったか？」
+PRINTFORMW 「つっても…それを聞くような組織じゃねーか…正直に言えよ。何が눈的で、ここに来た？」
+PRINTFORMW タケハヤという男の戦힘は未知数。加えて적地の真っ只中。ここは慎重に言葉を選ばなければ――
+PRINTFORML 
+PRINTFORMW ――ＳＫＹを倒すために来た。
+PRINTFORMW %CALLNAME:LOCAL%はド直球で言い切った。言い切ってしまった。
+PRINTFORMW 嘘を吐けないのか？　正直は美徳かもしれないが時と場合によるだろうが。
+PRINTFORMW 呆れる%CALLNAME:MASTER%を気にせず、タケハヤは笑う。
+PRINTFORML タケハヤ：
+PRINTFORMW 「クククク…そりゃ無理な話だ」
+PRINTFORMW 「お前はダイゴとネコが손加減してんのも分かっちゃいねェだろ？」
+IF CFLAG:MASTER:당신の専攻分野 == 1;서머너なら
+	PRINTFORMW 「ついでにそっちの악마술사は本気で殺しにかかってない」
+ELSE
+	PRINTFORMW 「ついでにそっちのお前も本気で殺しにかかってない」
+ENDIF
+SIF CFLAG:MASTER:당신の専攻分野 == 3 || CFLAG:MASTER:당신の専攻分野 == 6 || CFLAG:MASTER:당신の専攻分野 == 7;이능자か달인か악마狩人なら
+	PRINTFORMW 「팔章巻いてないってことは、外様だな？　大方金で釣られたってとこだろーが」
+PRINTFORMW 確かに、殺すつもりはなかった。
+PRINTFORMW 도청の一件で囮を買って出てもらった借りがある。適当な理由をつけて逃がすのも悪くなかったし――
+PRINTFORMW はたまた恩を仇で返して「상품」にするにも悪くないと思っていた。
+PRINTFORMW 「それで俺たちを潰そうなんて、無謀もいいとこだぜ」
+PRINTFORMW 「それにしてもＳＫＹ狩りとはね…相変わらず가슴クソわりぃバァさんだぜ」
+PRINTFORMW 「何を吹き込んだかは知らねェが…よほど俺たちが邪魔らしい」
+PRINTFORMW タケハヤの言葉を信用する訳ではないが、今回の의뢰はどことなく強引だとは感じていた。
+PRINTFORMW やはり、ナツメはＳＫＹに関して何かを隠している。そしてそれは恐らく誰にも知られたくないものだ。
+PRINTFORMW 大義名分を掲げて彼らで消してしまうことで、全て闇に葬り去ろうと考えた……。
+PRINTFORMW 証拠のない推論でしかないが、筋は通る。
+PRINTFORMW ナツメ個人を信用し過ぎるのは控えた方がいいかもしれない……。
+PRINTFORML タケハヤ：
+PRINTFORMW 「…ま、お前はド新人みてーだし、すぐに理解しろってのも無理な話か」
+PRINTFORMW 「だが、俺たちと一緒に来れば、すぐにその意味も分かるようになる…」
+PRINTFORMW 「どうだ、ＳＫＹに入らねェか？」
+PRINTFORML ネコ：
+PRINTFORMW 「タ、タケハヤ！？」
+PRINTFORML タケハヤ：
+PRINTFORMW 「冗談だ……行くぞ」
+PRINTFORMW その場を去るタケハヤを追って、他の面々もその場を離れていく。
+PRINTFORMW 青い머리카락の女は終始沈黙を保っていた。あの雰囲気と似た감각、どこかで見たような気がしたのだが……。
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『ガラの悪い連中の言うことです。どうせ、９９％ウソばかりでしょう…！』
+PRINTFORMW 『しかし、この状況は…残念ながら、ミッションは실패ですね』
+PRINTFORMW 『とりあえず、帰還してください』
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+;東京地下道の自衛隊救助はキャンセルだ
+;ガトウ班がリハビリがてら上손くやってくれたことにしよう
+PRINTFORMW 도청へと帰還すると、今戻ってきたところなのかガトウ、아오이、自衛隊の姿が見える。
+PRINTFORML 아오이：
+PRINTFORMW 「お疲れ様です、センパイ！　私、ムラクモ１０班として活動させてもらえることになりました」
+PRINTFORMW 「ついさっきまで、地下道で救助に行ってきたところなんですよ！」
+PRINTFORML ガトウ：
+PRINTFORMW 「といっても、コイツの役눈は見つけた自衛隊員を拾って地上に운ぶ使いっ走りだけどな」
+PRINTFORMW 先の帝竜討伐と、今回の救助作戦からムラクモの実힘は自衛隊に少しずつ認められているようだ。
+PRINTFORMW ……隊長のリンを除いて。
+PRINTFORMW 話を聞けば、前任の隊長が戦死したことで急遽隊長に抜擢されてしまい、功績を求めて空回りしているのだという。
+PRINTFORMW 今後の作戦でこの意地が발枷とならなければいいが……。
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、皆さん。ナツメ総長から連絡です』
+PRINTFORML ナツメ：
+PRINTFORMW 『任務、ご苦労さま。渋谷の件についても報告は受けているわ』
+PRINTFORMW 『ＳＫＹはひとまず放置するしかなさそうね。やはり、一筋밧줄ではいかないようだし…』
+PRINTFORMW 『しばらく任務はないと思うから、ゆっくり休んでちょうだい…以上よ』
+PRINTFORML 
+PRINTFORMW ガトウ、아오이はこれから報告書の作成。%CALLNAME:LOCAL%は集めた資源で도청を改修するらしい。
+PRINTFORMW これ以上することもないため、%CALLNAME:MASTER%は拠点に帰還した……。
+PRINTFORML 
+PRINTFORMW 입座に報酬￥40000が支払われた。
+MONEY += 40000
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 6
+RESULTS = 의뢰【(세븐스 드래곤 MOD)하늘의 초전하포 -The Jigowatt-(1)】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+CALL REQUEST_99_DAY_END
+
+
+

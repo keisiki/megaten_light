@@ -1,0 +1,275 @@
+﻿
+;GO RI O SHI
+@REQUEST_80_맹목적인소녀
+PRINTL 
+PRINTW 당신은 산책을 나왔습니다
+PRINTW 적당히 어슬렁거리며 어느 곳에 도착했습니다.
+PRINTW 그 곳에서 어떤 일을 떠올렸습니다.
+PRINTW 언제 였던가 눈을 닮은 소녀와 부딪쳤었지.
+PRINTW 바로 쓰러져버지고、바로 괜찮아라고 물어보며 손을 내밀었는데
+PRINTW 그대로 그 소녀는 얼굴을 붉히며 그 도망쳤었지.
+PRINTW 소녀의 목소리「…저기」
+PRINTW 등 뒤에서 나를 부르는 소리가 들려서 돌아보았다.
+PRINTL 소녀읨 목소리「역시、그 때……
+PRINTW 　　　　　겨우 만났어요……계속、기다리고 있었답니다.
+PRINTW 　　　　　마유의 일、기억하고 계시나요？」
+PRINTW 어디선가 만났던가? 긴가민가한 소녀다
+PRINTW 지금 당장은 기억나지 않기 때문에 누군지 물어보았다.
+PRINTL 소녀「저、사쿠마 마유라고 합니다
+PRINTW 　　　16살이고 B형、별자리는 처녀자리랍니다。우훗♪」
+PRINTW 지금、생각해보니 여기서 만난 적이 있던 소녀다。
+PRINTFORMW  %CALLNAME:MASTER% 「누군지는 알겠어.」
+PRINTW 마유「저번에 만났을 때는、마유、촬영중이었답니다.
+PRINTW 　　　　마유、잡지 모델이라구요?。우후훗♪」
+PRINTFORMW  %CALLNAME:MASTER% 「그런 모델이 나한테는 무슨 용건이야?」
+PRINTW 마유「우후훗♪알고 싶으신가요?？
+PRINTW 　　　　그건말이죠、당신을 만나고 싶어서에요
+PRINTW 　　　　그리고、모델이 아니라 '전' 모델이랍니다♪
+PRINTW 　　　　왜냐면、운명을 느껴버렸거든요。…
+PRINTW 　　　　당신에게 한 눈에 반해버렸다고 깨달아버렸어요。
+PRINTW 　　　　저에게 다가온 사랑스러운 기적……♪
+PRINTW 　　　　저기……당신은…운명을 느끼고 있으신가요？
+PRINTW 　　　　느끼고 있으시죠？네…？
+PRINTW 　　　　왜나면、마유、결정했거든요
+PRINTW 　　　　당신을 따라가기로
+PRINTW 　　　　잡지모델도 그만뒀고 부모님도 설득했답니다
+PRINTW 　　　　그러니까、이제 더 이상 저를 붙잡는 족쇄는 없어요.
+PRINTW 　　　　그저、마유의 손을 붙잡아주세요. 언제까지나…♪」
+CALL INPUT_YN("손을 잡는다", "도망친다")
+
+IF RESULT == 0
+	PRINTW 마유「계속…앞으로도 계속…함께네요…♪」
+	PRINTW 이 소녀는 대단히 순종적이고、여러군데서 쓸만할 것 같다
+	SETCOLOR COLOR("p-green")
+	PRINTL 　　　　　　　　　　　　ⅩⅡ
+	PRINTL 　　　　　　　　　　・　｜　・
+	PRINTL 　　　　　　　　◇　　　｜　　　◇
+	PRINTL 　　　　　　　　　　　　｜
+	PRINTL 　　　　　　・　　　　　｜　　　　　・
+	PRINTL 　　　　　　　　　　　　｜
+	PRINTL 　　　　　◇　　　　　　｜　　　　　　◇
+	PRINTL 　　　　　　　　　　　　｜
+	PRINTL 　　　　・　　　　　　　｜　　　　　　　・
+	PRINTL 　　　　　　　　　　　　｜
+	PRINTL 　　　Ⅸ　　　　カ　　　｜　　　チ　　　　Ⅲ
+	PRINTL 　　　
+	PRINTL 　　　　・　　　　　　　　　　　　　　　・
+	PRINTL 　　　
+	PRINTL 　　　　　◇　　　　　　　　　　　　　◇
+	PRINTL 　　　
+	PRINTL 　　　　　　・　　　　　　　　　　　・
+	PRINTL 　　　
+	PRINTL 　　　　　　　　◇　　　　　　　◇
+	PRINTL 　　　　　　　　　　・　　　・
+	PRINTW 　　　　　　　　　　　　Ⅵ
+	RESETCOLOR
+	CLEARLINE 21
+	PRINTL
+	PRINTW 어디선가 당신의 운명이 또 다시 비틀리는 소리가 들려온다.
+	;정식가입
+	CALL ADD_NEW_COMPANION,5601,2000
+	PRINTL 【사쿠마 마유】가 추가되었습니다。
+	PRINTL 
+	
+ELSE
+	PRINTW 아무리 생각해도 이 소녀는 이상하다. 엮이지 않는 것이 좋은 것 같다.
+	PRINTW 당신은 전력으로 도망쳤다.
+	PRINTW 마유「아…」
+	PRINTW 이 거리에는 더 이상 오지 않는 것이 좋을 것 같다.
+ENDIF
+
+@REQUEST_80_수상한전화
+PRINTL 
+CALL MESSAGE_WINDOW, "", " -메일이 도착했습니다-"
+PRINTL 
+PRINTW 　당신의 COMP가 의뢰 메일이 왔다는 것을 알렸다。
+PRINTL 　COMP를 조작해、새로운 메일이 복수의 프로그램의 검사를 마친 것을 확인한 뒤
+PRINTW 　메일 앱을 기동시켰다。
+PRINTL 
+SETCOLOR COLOR("p-green")
+PRINTW 　　　　　　　　　　　　　　　ｶﾁｯ
+RESETCOLOR
+CLEARLINE 1
+PRINTL 
+CALL MESSAGE_WINDOW, "", "‥‥팬텀에게서"
+CLEARLINE 1
+SETCOLOR COLOR("p-green")
+PRINTW 　　　　　　　　　　ｶﾁｯ
+RESETCOLOR
+CLEARLINE 1
+PRINTW ｻﾞｻﾞｯ
+CLEARLINE 1
+PRINTL 
+PRINTL 　？　COMP의 화면이 순간 지직거리는 것 같더니
+PRINTW 　발신자 표시 제한의 전화로 변해 있었다, 버그인가？
+PRINTW 　당신의 COMP는 발신자 표시 제한을 받지 않을텐데…
+PRINTL 
+PRINTW 　당신은 이상하다 생각하면서도 전화를 받았다.。
+PRINTW 　당신은 조심성보다는 호기심이 강한 사람이었다。
+PRINTL 
+SETCOLOR COLOR("p-green")
+PRINTW 　　　　ｶﾁｯ　　어디선가, 시계의
+RESETCOLOR
+CLEARLINE 1
+PRINTL 
+PRINTW 　통화를 시작하자。
+PRINTL 
+PRINTL 
+CALL MESSAGE_WINDOW, "？？？", @"「여보세요、%CALLNAME:MASTER% 아이돌 사무소 맞나요？/　요전날에 스카우트 받은 타카가키 카에데입니다/　%CALLNAME:MASTER%씨 인가요？」"
+PRINTL 
+PRINTL 　【타카가키 카에데】젊은 여성의 목소리가, 그렇게 말했다。
+PRINTL 　좋은 음색이다。
+PRINTL 
+PRINTL 　하지만、세상에는 변성기에서 목소리가 변하지 않는 남성도 존재하기에
+PRINTW 　여성이라고 단정 지을 수는 없다。
+PRINTW 　당신에게、목소리로 상대의 개인정보를 특정할 수 있는 수단이 없다는 것이 애석하게 느껴진다。
+PRINTL 
+PRINTL 　그건 그렇다 치더라도 당신은 언제부터 아이돌 사무소같은 것을 경영하고 있던걸까
+PRINTW 　그런 시시한 생각이 떠오른다。
+PRINTW 　당신의 이름이 알려져 있는 점이 신경쓰이지만…뭐、그건 좋다고 치자。
+PRINTL 
+PRINTW 　어떻게 대답할까。
+SETCOLOR COLOR("p-green")
+PRINTW カチッ
+RESETCOLOR
+CLEARLINE 1
+PRINTL 
+CALL INPUT_YN("네、저입니다", "모릅니다")
+
+IF RESULT == 0
+	PRINTL 
+	PRINTW 　당신은 대화를 이어가는 것을 선택했다。
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", "「어제 했던 아이돌 이야기…/　하룻밤 동안 생각한 결과, 승낙하기로 했습니다/　빠르지만, 지금부터 방문해도 괜찮을까요。」"
+	PRINTL 
+	PRINTW 　당신은 【카에데】의 물음에 수긍하고、시간을 확인하며 기다리기로 했다。
+	PRINTL 
+	PRINTL ・
+	PRINTL ・
+	PRINTL ・
+	PRINTL 
+	PRINTW 　어느 정도 시간이 지나고
+	PRINTW 　예정된 것보다 조금 이른 시간에、당신의 세이프 하우스의 문을 두드리는 것과 함께 목소리가 들렸다。
+	PRINTL 
+	PRINTL 
+	PRINTW 　아무래도, 진짜 장소가 알려져 있는 것 같다。
+	PRINTW 　이걸로, 잘못 걸린 전화일 가능성은 사라졌다。
+	PRINTL 
+	PRINTL 　당신은, 사전에 확인해둔 탈출 루트의 트랩을 떠올려내며
+	PRINTW 　장비에 문제가 없는지 최종확인한 뒤에, 대응하러 나갔다。
+	PRINTL 
+	PRINTL 
+	PRINTW 　조심스레 문을 열자
+	PRINTW 　딱히, 보디아머를 장비한 녀석들이 미소지은채 기다리는 일은 없었고
+	PRINTL 
+	PRINTW 　가벼운 차림의 여성이 한 명、그녀가 【타카가키 카에데】인 걸까。총기류나 COMP、장비 등은 눈에 띄지 않는다。
+	PRINTL 
+	PRINTL 
+	PRINTW 　둥실한 보브컷 풍의 헤어스타일에、겉보기에는 １０～２０대로 보이는 모델 체형의 여성이 있었다。
+	PRINTW 　왼쪽 눈 밑에는 눈물점이 있고、약간 천진난만하고 어려보이는 외모다。
+	PRINTW 　눈을 자세히 살펴보자、아무래도 오른쪽 눈이 그린、왼쪽 눈이 블루인 오드아이 같다。
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", @"「저、저기、 %CALLNAME:MASTER%씨…맞죠？」"
+	PRINTL 
+	PRINTW 　너무 뚫어지게 쳐다본 건지, 약간 얼굴이 붉어져 있다。
+	PRINTL 
+	PRINTW 　의식해서 억지 미소를 지으며 긍정하고、【타카가키 카에데】를 안으로 불러들였다。
+	PRINTL 
+	PRINTW 　당신은 의식을、전투계 아이돌 사무소의 프로듀서로 전환시켰다。
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", "「저기 실례지만、다른 아이돌 분들은…。」"
+	PRINTL 
+	PRINTW 　당신은 카에데가, 최초의 아이돌 후보다、핑하고 감이 왔다는 식으로 말하며 속여넘겼다。
+	PRINTL 
+	PRINTW 　화제를 전환해、카에데의 스타일이 좋다는 점을 칭찬하며, 이전 직장에 대해 물어봤다。
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", "「네、모델 경험을 조금…。」/（아、뜬 머리가 흔들리고 있어）"
+	PRINTL 
+	PRINTW 　시선을 돌리는 게 신경쓰이긴 하지만、이야기는 거짓말이 아닐 것이라는 직감을 믿는다。
+	PRINTL 
+	PRINTW 　전투계 아이돌 사무소이기에 그런 내용들이 있지만, 문제 없는가에 대해 물어본다。
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", "「”센토우(공중목욕탕[전투와 발음이 같음])”？라는건 업무 내용이군요。/　네、조금 부끄럽지만…하겠습니다。」/（목욕탕 순회라도 하는걸까、후후、술잔에 술을 조금 받아서････）"
+	PRINTL 
+	PRINTW 　！　전투는 승낙해준 것 같다、의외라고 생각했지만, 좋다치고 넘어가기로 했다。
+	PRINTW 　근육같은건 없어 보이지만、이래보여도 전투 경험이 있는 이능자 계열일지도 모른다。
+	PRINTL 
+	PRINTL 　당신은 이어서 악마 교섭은 해본 적 있는지、혹은 알고 있는지 물어봤다。
+	PRINTW 　알지 못하고 섬멸중인 이능자 타입인가、알고 있다면 서머너쪽일지도 모른다。
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", "「”악마 교섭”？인가요/　아뇨、모르는 말이네요。」/（새로운 일본주인 걸까、안주는 뭐가 잘 맞으려나）"
+	PRINTL 
+	PRINTW 　아무래도 이능자 계열 확정인 것 같다。
+	PRINTL 
+	PRINTW 　당신은 마지막으로 목표를 물어봤다。
+	PRINTW 　목표에서 성질을 확인할 수 있다、라이트나 노멀이 유력、예상 외가 다크。
+	PRINTW 　그렇다고 너무 뉴트럴에 치우치면、동료로 가세시키는 것이 곤란해진다。
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", "「목표…인가요。/　저、아이돌 활동을 통해 자기 자신을 찾아내고 싶다고 생각중이에요。」"
+	PRINTL 
+	PRINTL 　아직 흔들리는 중인 노멀이라는 느낌같다。
+	PRINTW 　당신이 마음 속으로 안심하고 있자
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", "「하지만 그것 뿐만이 아니라、하기로 한 이상…톱 아이돌이 되고 싶어。아뇨、될 거예요。」"
+	PRINTL 
+	PRINTW 　마지막 한마디에서 영혼이 뜨거워지는 것이 느껴진다。
+	PRINTW 　톱을 노리는…숨겨진 가능성이 지금、눈 뜬 것일지도 모른다。
+	PRINTW 　방금 전부터、그녀의 신비로운 오라가 흘러넘치는 것처럼 보인다。
+	PRINTW 　당신은 좋은 만남을 얻은 것 같다。이 행운에 감사하자。
+	PRINTL 
+	PRINTW 　재빨리、지금부터 잘 부탁드리겠습니다、라고 말하며 ”계약”의 악수를 했다。
+	PRINTL 
+	CALL MESSAGE_WINDOW, "카에데", @"「！　이쪽이야말로, 잘 부탁드립니다。%CALLNAME:MASTER%씨。」"
+	PRINTL
+	SETCOLOR COLOR("p-green")
+	PRINTL 　　　　　　　　　　　　ⅩⅡ
+	PRINTL 　　　　　　　　　　・　｜　・
+	PRINTL 　　　　　　　　◇　　　｜　　　◇
+	PRINTL 　　　　　　　　　　　　｜
+	PRINTL 　　　　　　・　　　　　｜　　　　　・
+	PRINTL 　　　　　　　　　　　　｜
+	PRINTL 　　　　　◇　　　　　　｜　　　　　　◇
+	PRINTL 　　　　　　　　　　　　｜
+	PRINTL 　　　　・　　　　　　　｜　　　　　　　・
+	PRINTL 　　　　　　　　　　　　｜
+	PRINTL 　　　Ⅸ　　　　カ　　　｜　　　チ　　　　Ⅲ
+	PRINTL 　　　
+	PRINTL 　　　　・　　　　　　　　　　　　　　　・
+	PRINTL 　　　
+	PRINTL 　　　　　◇　　　　　　　　　　　　　◇
+	PRINTL 　　　
+	PRINTL 　　　　　　・　　　　　　　　　　　・
+	PRINTL 　　　
+	PRINTL 　　　　　　　　◇　　　　　　　◇
+	PRINTL 　　　　　　　　　　・　　　・
+	PRINTW 　　　　　　　　　　　　Ⅵ
+	RESETCOLOR
+	CLEARLINE 21
+	PRINTL
+	CALL MESSAGE_WINDOW, "", "어디선가 당신의 운명이 다시 뒤틀린 소리가 들린 생각이 들었다."
+	PRINTL 
+
+	;正式加入
+	CALL ADD_NEW_COMPANION,5600,100
+	SIF RESULT == 1
+		CFLAG:(RESULT:1):전투참가불가능 = -1
+	SETCOLOR COLOR("p-green")
+	PRINTL 　【타카가키 카에데】가 사무소？에 참가했다。
+	PRINTL 
+	RESETCOLOR
+	
+	CALL MESSAGE_WINDOW, "카에데", "「에、에。전투는 그런거였나요！」"
+	PRINTL 
+	PRINTW 　계약은 엄수해야 합니다。
+	PRINTL 
+	CUSTOMDRAWLINE =
+	
+ELSE
+	SETCOLOR COLOR("red")
+	PRINTW 　당신은 전화를 끊었다。
+	PRINTL 
+	RESETCOLOR
+ENDIF
+
+
+

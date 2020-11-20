@@ -1,0 +1,935 @@
+﻿;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_09
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 요츠야에서 제룡이 출현했다고 한다。
+PRINTFORML 
+PRINTFORML 일단 도청 회의실로 향하자。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥55000
+PRINTFORML （ 주의：이 의뢰를 받으면、하루가 종료됩니다 ）
+;====================
+;内容
+;====================
+@REQUEST_99_09
+IF 의뢰フラグ:99:1 == 1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+ELSE
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+ENDIF
+PRINTFORMW 東京 ― 신주쿠・東京도청　７Ｆ　会議室
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 会議室へと入ると、既にほとんどの席は埋まっていた。
+PRINTFORMW %CALLNAME:LOCAL%、キリノ、ナツメ、아오이……自衛隊員が着席しているものの、リンの姿がない。
+PRINTFORML キリノ：
+PRINTFORMW 「堂島三佐なら、先の攻略作戦で負った怪我が完治していないので本日は欠席です」
+PRINTFORMW それで代理の自衛隊員が選抜された、という訳か。
+PRINTFORML ナツメ：
+PRINTFORMW 「…全員、揃ったようね。ではキリノ、概要を」
+PRINTFORML キリノ：
+PRINTFORMW 「はい。今回の議題は…新たな帝竜が発見された四ツ谷についてです」
+PRINTFORMW 「四ツ谷の이상については、観測班からの報告で既にご存知の方もいるでしょう」
+PRINTFORMW %CALLNAME:MASTER%宛の의뢰文にも、そのことについて軽く触れられていた。
+PRINTFORMW ――なんでも、四ツ谷一오비はずっと夜が続いているのだという。いわゆる極夜というヤツである。
+PRINTFORMW だがそれが起きるのは北極圏、あるいは南極圏。当然東京の、しかもごく一部で起きる訳はない。
+PRINTFORML キリノ：
+PRINTFORMW 「現在もなお、四ツ谷上空では『終わらない夜』…夜空と月が、常時確認されています」
+PRINTFORML 「夜のエリアでは、워크라이が逆サ도청において중력干渉していた時と同じ反応があるため
+PRINTFORMW 　我々は、この夜の現象も帝竜による現実干渉と判断しました」
+PRINTFORMW 「しかし、現在四ツ谷は、レーダーを遮断してしまう힘が働いていて、内部の情報が全く把握できていません」
+PRINTFORML ナツメ：
+PRINTFORMW 「そこで、四ツ谷に部隊を送り込んで…実地で調査を行いたい、と考えています」
+PRINTFORMW 「実働は１３班に、バックアップは自衛隊にお願いしたいのだけれど…」
+PRINTFORMW 「残念ながら今の自衛隊はろくに動ける状況ではありません」
+PRINTFORMW 「かと言って、１３班단독任務というのもリスクが高いわ。…さて、どうしたものかしら」
+PRINTFORML キリノ：
+PRINTFORMW 「…僕に、行かせてください」
+PRINTFORMW 「今回は、四ツ谷に探査機を持ち込んで、実地で調査をすることになります」
+PRINTFORMW 「となれば、技術者のバックアップは必須かと」
+PRINTFORML ナツメ：
+PRINTFORMW 「――承認します。現場経験ゼロのアナタに頼むのはやや不安はありますが…」
+PRINTFORMW 「今はそんな悠長なことを言っていられる場合でもありませんね…キリノを信用します」
+PRINTFORMW 「ただ、一人だけ護衛をつけさせて。…아오이、やってもらえるかしら」
+PRINTFORML 아오이：
+PRINTFORMW 「はい、任せてください！」
+PRINTFORML ナツメ：
+PRINTFORMW 「では、作戦は以上とします。それぞれ、準備を進めてちょうだい」
+PRINTFORMW キリノの운転するバンに乗り込み、%CALLNAME:MASTER%らは四ツ谷へと向かった……。
+
+CALL REQUEST_TITLE_99("3")
+
+PRINTFORMW 東京 ― 四ツ谷・常夜の丘　椎뼈大橋
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 帝竜の支配領域へと踏み込み、세계が変わるのを知깨달음する。
+PRINTFORMW 日が沈み、妖しく輝く満月が四ツ谷を照らす。だがこれが現実干渉である以上、空も月も紛い物に過ぎない。
+PRINTFORMW それ以上に気にかかるのは――
+PRINTFORML キリノ：
+PRINTFORMW 「な、な、なんだ？　ここは…まるでホラー映画の세계じゃないか」
+PRINTFORML 아오이：
+PRINTFORMW 「あれー？　キリノさんってば、もしかして震えてます？」
+PRINTFORMW 何故か墓石が立つビルの、屋上と屋上を繋ぐ橋のようにかかる、巨大な뼈が乱立する景色だった。
+PRINTFORMW 確かにホラーもののような趣きはあるかもしれない。
+PRINTFORMW もっとも、「本物」の악마と戦う%CALLNAME:MASTER%にはチャチな演出にしか映らないが。
+PRINTFORML キリノ：
+PRINTFORMW 「こ、こら！　バカなことを言うんじゃない」
+PRINTFORMW 「僕はこれでも科学者だ。科学で証明できないことは、この世に無いと思ってるクチだからね」
+PRINTFORMW 「ただ、ちょっと…その…寒気が…しないか…？」
+PRINTFORML 아오이：
+PRINTFORMW 「え〜、そうですかね？」
+PRINTFORMW 「あ！　キリノさん、お腹空いてるんじゃないですか？　食べかけでよければ、チョコバーどうぞ！」
+PRINTFORML キリノ：
+PRINTFORMW 「いらーん！　というか、任務中はおやつ禁止だ！」
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。こちらからスキャンを試してみていますが、やっぱり엘라ーコードが返ってきます』
+PRINTFORMW 『帝竜の居場所はおろか、周辺の地形すら把握できません』
+PRINTFORMW 『あの…本当に、こんな何の데이터もない状況で、作戦を実行するんですか？　私は…反対です』
+PRINTFORML キリノ：
+PRINTFORMW 「…とは言っても、待っているだけじゃ데이터は集まってくれないからね」
+PRINTFORMW 「こちらで探査機を전개すれば、四ツ谷の状況だって、明らかにできるはずだ」
+PRINTFORMW 「…という訳で、まずは던전解析のために１３班には３台の探査機の設置をお願いしたい」
+PRINTFORMW 「探査機から送られてくる情報をこのベースで集積し…僕がチューニングした上でナビに送る」
+PRINTFORMW 「このチューニングって作業がポイントでね、職人的な勘と数学的な分析能力が双方要求される、非常に難度の高い――」
+PRINTFORML 아오이：
+PRINTFORMW 「はーい、そこまで！　では、気をつけて行ってくださいね！」
+PRINTFORMW 「探査機さえ設置すれば、キリノさんが速やか〜にマップを復旧してくれるらしいですから」
+PRINTFORML キリノ：
+PRINTFORMW 「せっかくの僕のターンなのに…」
+PRINTFORMW 「しかしとにかく、僕はチューニングに集中したい。ナビは미이나に任せたぞ」
+PRINTFORML 미이나：
+PRINTFORMW 『…了解しました』
+IF 의뢰フラグ:99:0 == 0
+	PRINTFORML 아오이：
+	PRINTFORMW 「あ、%CALLNAME:MASTER%さんちょっと待ってください。はい、これを持っていってください」
+	PRINTFORMW もしやと思えば、案の定チョコバーであった。
+	PRINTFORMW %CALLNAME:LOCAL%が若干嬉しそうな表情を見せる。気に入っていたのか。
+	PRINTFORML 아오이：
+	PRINTFORMW 「こんなこともあろうかと、今日はたくさん持ってきてるんです。ファイトですよ！」
+	PRINTFORMW 「……それにしても、何で四ツ谷に뼈なんでしょうね？」
+	PRINTFORMW 「帝竜が四ツ谷怪談好き…とか？　それはそれで、親近感ありすぎですね…」
+	PRINTFORMW ……流石に、던전と帝竜の嗜好は関係ないんじゃないか？
+	PRINTFORMW 워크라이は逆さまが好きだから도청を逆さにした訳ではないだろうし……。
+	PRINTFORMW ともかく、礼をして눈の前の橋を渡っていく……。
+ELSE
+	PRINTFORML 아오이：
+	PRINTFORMW 「キリノさんは私に任せてくださいね！」
+	PRINTFORMW 아오이の応援を背で聞きながら、눈の前の橋を渡っていく……。
+ENDIF
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 四ツ谷・常夜の丘　墓標エリア
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。さっそく探査機の設置にかかりましょう』
+PRINTFORMW 『最初は、そこから１００ｍくらい先です。マップにマーカーをつけて――』
+PRINTFORMW 『って、使えないんでしたね…とにかく、そのまま道なりに進んでください』
+IF TALENT:MASTER:200
+	PRINTFORMW ＣＯＭＰも同様にマップ기능が使えない。
+	PRINTFORMW 던전全域がダークゾーン、しかもインス토르ソフトで対処できないようなものである。
+ELSE
+	PRINTFORMW 今まではムラクモから貸与された情報端末でマップを確認していた。
+	PRINTFORMW それが突如使えないとあっては、大幅な効率低下である。
+ENDIF
+PRINTFORMW とりあえずは미이나の指示通りに進んでいこう……。
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。そこに１台눈の探査機を置いてください』
+PRINTFORMW 指定された場所にはドラゴンが陣取っている。即刻退場願おう。
+PRINTFORML 
+PRINTFORMW ドラゴライアーンが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	CALL SET_ENEMY,9, [[キャラ:루흐]], 50, 0
+	NAME:(CHARANUM-1) = ドラゴライアーン
+	CALLNAME:(CHARANUM-1) = ドラゴライアーン
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:패닉보이스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:텐타라후]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:소닉무버]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):비구 = 150
+	BASE:(CHARANUM-1):비구 = 150
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):신경 = 0
+	BASE:(CHARANUM-1):신경 = 0
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = トンボのような姿をした小柄なドラゴン。
+	CSTR:(CHARANUM-1):33 = その날개音は聴いた者から正気を奪う。
+	CSTR:(CHARANUM-1):34 = か細い날개ではあるが、충격波を放てる程度には強靭。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には常夜の丘に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,14, [[キャラ:루흐]], 50, 0
+	NAME:(CHARANUM-1) = ドラゴライアーン
+	CALLNAME:(CHARANUM-1) = ドラゴライアーン
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:패닉보이스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:텐타라후]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:소닉무버]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):비구 = 150
+	BASE:(CHARANUM-1):비구 = 150
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):신경 = 0
+	BASE:(CHARANUM-1):신경 = 0
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = トンボのような姿をした小柄なドラゴン。
+	CSTR:(CHARANUM-1):33 = その날개音は聴いた者から正気を奪う。
+	CSTR:(CHARANUM-1):34 = か細い날개ではあるが、충격波を放てる程度には強靭。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には常夜の丘に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW キリノから預かっていた探査機を、%CALLNAME:LOCAL%が設置し始める。
+PRINTFORMW 率先して行動するのは１３班リーダーとしての矜持か、はたまた%CALLNAME:MASTER%が손伝うとは思ってない諦観か。
+PRINTFORML キリノ：
+PRINTFORMW 『１３班、聞こえるか？　１台눈の探査機の設置を確認した…早速チューニングを始めるよ』
+PRINTFORMW 『その１台だけでも、기본的なマップ기능ならすぐに復旧できると思う』
+PRINTFORMW 『不便だと思うが、もうちょっと我慢して――…う…う…ぶえーっくしょい！！』
+PRINTFORMW その時、次の進路を眺めていた%CALLNAME:MASTER%は何かの嗤い声を聞いた。視界の向こうに何かが映った。
+PRINTFORMW 自衛隊員のような恰好をしたソレは、柵に引っかかったり橋に腰を掛けたり宙に浮いたりと実に多種多様だ。
+PRINTFORMW ついでに青く揺らめく炎がその周囲に浮いている。いわゆる鬼火である。
+PRINTFORML 아오이：
+IF 의뢰フラグ:99:0 == 0
+	PRINTFORMW 『ひ、ひえっ！　%CALLNAME:MASTER%さん、今のなんですか！？』
+ELSE
+	PRINTFORMW 『ひ、ひえっ！　センパイ、今のなんですか！？』
+ENDIF
+PRINTFORMW 아오이もモニター越しに見てしまったようだった。
+PRINTFORMW 一方%CALLNAME:LOCAL%は設置作業に専念していたのか、見ていなかったようだ。
+PRINTFORMW 特に反応しないところを見るに、仮に見えたとしても大した反応は期待できそうにない。
+PRINTFORML 아오이：
+IF 의뢰フラグ:99:0 == 0
+	PRINTFORMW 『見ましたよね、人影と…人魂みたいなの！』
+ELSE
+	PRINTFORMW 『見てなかったんですか、人影と…人魂みたいなの！』
+ENDIF
+PRINTFORML キリノ：
+PRINTFORMW 『そ、そんなの見えたか…？』
+PRINTFORML 아오이：
+PRINTFORMW 『もー…キリノさんって、肝心な時に頼りないなぁ…』
+PRINTFORMW キリノは見ていないようだったが、寧ろ良かったような気がする。
+PRINTFORMW 雰囲気だけで寒気を깨달음えるような인간が、アレを見ては恐慌に駆られるのでは？
+PRINTFORML キリノ：
+PRINTFORMW 『いや、そんなこと言われても…そうだ、미이나はどうだい？　何か見え――』
+PRINTFORML 미이나：
+PRINTFORMW 『み、見えてないことにします！！』
+PRINTFORMW 『だってあんなのオカシイです！　変な場所だし、何かと見間違えたんですよ』
+PRINTFORMW 『に、인간の肉眼なんて…信用できません。確かな데이터がない限り、私は見たものを認めませんから！』
+PRINTFORMW キリノの発言をぶった切って、早입でまくし立てた。
+PRINTFORML 아오이：
+PRINTFORMW 『えぇ〜…？　自分の눈で見てるのに…？』
+PRINTFORML 미이나：
+PRINTFORMW 『ナビに필요なのは、確かな데이터だけです！』
+PRINTFORMW 『それより、探査機の２台눈を置きに行きましょう。もっと奥に進んでください』
+PRINTFORMW 『…いろいろ不安定なんだから、寄り道はしないでくださいね』
+PRINTFORMW ……どちらが正解か分からないのに、寄り道も何もないだろう。
+PRINTFORML 
+PRINTFORMW 道なりに進んでいくと、前方に自衛隊員が独り、立っている。
+PRINTFORMW 눈つきはどこか虚ろだ……。
+PRINTFORMW 「君たちは…１３班じゃないか…！」
+PRINTFORMW 「よくここまで来たね…仲間たちも待ってたんだ」
+PRINTFORMW 「さあ、一緒に会いに行こう…なぁに、すぐそこだ」
+PRINTFORML 미이나：
+PRINTFORMW 『あれ…？　自衛隊の先行隊がいたんですね』
+PRINTFORMW 『もう…そんな作戦데이터、もらってないのに…総長から注意してもらわないと』
+PRINTFORMW はて、自衛隊は確か動ける隊員がほとんどいなかったはず。
+PRINTFORMW 無理を押してまで出動することは流石にもうないと思うが……今のところ進める道はこれしかない。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 道はこれのみ、それは間違いない。
+PRINTFORMW 他の自衛隊員も、確かに道中見かけた。
+PRINTFORMW ……妙に傾いていたり、血色が悪かったりはしたが。
+PRINTFORMW そして隊員の先導は終わり、ひとまず仲間が待っている行き止まりに辿り着く。
+PRINTFORML キリノ：
+PRINTFORMW 『…１３班、聞こえるか？　ひとまずのチューニングは完了した…』
+PRINTFORMW 『これで、マップ기능は復活すると思う。ナビ、데이터リンクを頼む』
+PRINTFORML 미이나：
+PRINTFORMW 『了解。데이터受け取り準備中…』
+PRINTFORMW 「さあ、着いた…皆はこの下にいる、ここから飛び降りるんだ…」
+PRINTFORMW ……この下は、先の見えない真っ暗闇だ。
+PRINTFORMW 応えずにいると痺れを切らしたのか、周囲の隊員たちが입々に飛び降りるよう催促してくる。
+PRINTFORMW %CALLNAME:LOCAL%がどうしよう、とこちらに視線で訴えている。答えなど一つしかないだろう。
+PRINTFORML 미이나：
+PRINTFORMW 『데이터リンク完了…！　マップ기능と反応検知、復旧――』
+PRINTFORMW 『…あ、あれ？　周辺に、１３班以外の生体反応が見当たりません…！』
+PRINTFORMW 『ど、どういうこと…！？　モニターに映ってる自衛隊員は、いったい…』
+PRINTFORMW どうせ、そんなものだろうと思っていた。というか、こんなモノで騙せると思ったのか。
+PRINTFORMW 向き直って무기を抜くと、自衛隊員の形をしたソレらが襲い掛かってきた――！
+PRINTFORML 
+PRINTFORMW 좀비아미の群れが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	CALL SET_ENEMY,7, [[キャラ:좀비아미]], 45, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,9, [[キャラ:좀비아미]], 45, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,11, [[キャラ:좀비아미]], 45, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML キリノ：
+PRINTFORMW 『大丈남편かい、１３班！　急に전투に入ったから、驚いたよ…』
+PRINTFORMW 『あれは、一見すると自衛隊だったが…ナビ、ドラゴンの反応は？』
+PRINTFORML 미이나：
+PRINTFORMW 『…ありません。악마の反応も…同様です』
+PRINTFORML キリノ：
+PRINTFORMW 『…となると、見た通りに言えば『死者が蘇った』ってことか』
+PRINTFORMW 『악마ならできることだ、帝竜ができたとしても…』
+PRINTFORML 미이나：
+PRINTFORMW 『…そんなバカなこと…！』
+PRINTFORMW 『周囲に악마の反応はないんです、生体マグネタイトの反応だってない』
+PRINTFORMW 『なのに死者が蘇るだなんて…だから生体反応がないって言うんですか？　そんな데이터見たことありません…！』
+PRINTFORMW 確かに、좀비とは魔術的に使役される死体、あるいは악마に憑依された死体のいずれかだ。
+PRINTFORMW であれば生体反応がないのはともかく、악마もマグネタイトの反応もないのは解せない。
+PRINTFORML キリノ：
+PRINTFORMW 『ま、まぁまぁ…데이터にはないかもしれないが、自衛隊좀비とは、実際に戦っている訳――』
+PRINTFORML 미이나：
+PRINTFORMW 『あ・り・え・ま・せ・んっ！』
+PRINTFORMW 『みんな、現場の雰囲気に呑まれてるんだよ…変なことばっかり言って…』
+PRINTFORMW 『一度、入り입に戻って、マップを見ながら攻略し直しましょう！　今度は데이터を取りながら行きますからね！』
+PRINTFORMW いやいや、途中まで来ているのだから、やり直すのは손間だろう。
+PRINTFORMW ここから데이터を取っていけば――
+PRINTFORML 미이나：
+PRINTFORMW 『い・い・で・す・ねっ！？』
+PRINTFORMW ……有無を言わせない迫힘に、%CALLNAME:MASTER%は저항を諦めた。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 四ツ谷・常夜の丘　椎뼈大橋
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 미이나の指示に従い、来た道を引き返してきた……。
+PRINTFORMW やってきた時と同じように、キリノと아오이が立っている。どうやら護衛の任は果たせているらしい。
+PRINTFORML キリノ：
+PRINTFORMW 「お帰り、１３班」
+PRINTFORML 아오이：
+PRINTFORMW 「お疲れ様です、みなさん！　お腹、減ってませんか？　良かったら、チョコバーどうぞ！」
+PRINTFORMW 탐색で疲れた体に、チョコの糖分が染み渡る……。
+PRINTFORMW 체력が회복した訳ではないが、リラックスはできた気がする。
+PRINTFORML キリノ：
+PRINTFORMW 「아오이くん…それ、何本持ってきてるんだ…」
+PRINTFORML 아오이：
+PRINTFORMW 「まだまだありますよ！」
+PRINTFORMW おかしい……아오이はウェストポーチの他に鞄は持ち込んでいないはずだ。
+PRINTFORMW 一体どこに仕舞い、どこから取り出しているのだろうか……。
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。…そろそろ、気を取り直して再出発です』
+PRINTFORMW 『今度は慎重に…雰囲気に呑まれないようにしてくださいね』
+PRINTFORML キリノ：
+PRINTFORMW 「それなら、僕はチューニングに戻る」
+PRINTFORMW 「マップは復帰したけど…まだ、中心部が暴けていなくてね。帝竜も見つけないといけない」
+PRINTFORMW 「１３班にも、引き続き残り２つの探査機を設置してもらいたい。よろしく頼んだよ！」
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 四ツ谷・常夜の丘　墓標エリア
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW そろそろ좀비に先導されたエリアに入る。
+PRINTFORMW マップ기능が復活している上に、一度通った道だ。大体は깨달음えている。
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。そこから北東に進んだところに２台눈の探査機を設置してください』
+PRINTFORMW ここから北東へ繋がる道はドラゴンが塞いでいる。
+PRINTFORMW 筋뼈隆々で仮面にメリケンサックまで장비している、物々しい風貌だ……。
+PRINTFORML 
+PRINTFORMW デストロイドラグが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	CALL SET_ENEMY,9, [[キャラ:베리얼]], 54, 0
+	NAME:(CHARANUM-1) = デストロイドラグ
+	CALLNAME:(CHARANUM-1) = デストロイドラグ
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = 346;묵시록
+	ABL:(CHARANUM-1):스킬2 = 205;메가톤프레스
+	ABL:(CHARANUM-1):스킬3 = 214;약자필멸권
+	ABL:(CHARANUM-1):스킬4 = 229;백열찌르기
+	MAXBASE:(CHARANUM-1):화염 = 125
+	BASE:(CHARANUM-1):화염 = 125
+	MAXBASE:(CHARANUM-1):전격 = 100
+	BASE:(CHARANUM-1):전격 = 100
+	MAXBASE:(CHARANUM-1):신경 = 200
+	BASE:(CHARANUM-1):신경 = 200
+	MAXBASE:(CHARANUM-1):정신 = 200
+	BASE:(CHARANUM-1):정신 = 200
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 鉄仮面とメリケンサックを장비した、二발歩行のドラゴン。
+	CSTR:(CHARANUM-1):33 = しかし必殺技は重量を活かしたドロップキック。
+	CSTR:(CHARANUM-1):34 = その外見から来るイメージとは裏腹に、行動を封じる眼光を放つ기교派でもある。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には常夜の丘に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW ２台눈の探査機を設置した。
+PRINTFORMW %CALLNAME:LOCAL%は１台눈よりも無駄なく設置作業をこなしていく。
+PRINTFORML 미이나：
+PRINTFORMW 『あ、設置完了…ですよね？』
+PRINTFORMW ナビはこちらを常にモニタリングしているはずだが…何か障害が発生しているのだろうか？
+PRINTFORML 미이나：
+PRINTFORMW 『いえ、見えてるんですが…とにかく、置けているなら問題ないです』
+PRINTFORMW 『……だめ、やっぱり不安です！　本当は置けてないとか…そもそも、%CALLNAME:MASTER%も%CALLNAME:LOCAL%もそこにいないとか…』
+PRINTFORMW 『そういうことは、ないですよね？』
+PRINTFORML キリノ：
+PRINTFORMW 『…미이나。そんなに心配することないだろう？』
+PRINTFORMW 『１３班の行動は、ちゃんとモニタリングされているはずだ。もうちょっと、自分の눈を信じていいんだよ』
+PRINTFORML 미이나：
+PRINTFORMW 『だって…モニターだけじゃ、心配なんです』
+PRINTFORMW 『いつもは、もっと膨大な데이터があって、どれも信じられるのに…今回は……』
+PRINTFORMW 『…もしかして、今話しているキリノもニセモノなんじゃないですか？　私を惑わし、１３班を陥れようとする――』
+PRINTFORML キリノ：
+PRINTFORMW 『はぁ…これは重症だな。僕はチューニングに専念したいのに…』
+PRINTFORML 아오이：
+PRINTFORMW 『それなら、私が代わりにナビしましょうか？』
+PRINTFORML キリノ：
+PRINTFORMW 『気持ちはありがたいけど、キミの方向감각の素晴らしさは、良く知ってるよ…』
+PRINTFORMW 『미이나はずっと、데이터を頼りに仕事をしてきたからね。…こういうことに、慣れていないんだ』
+PRINTFORMW 『死者が蘇るなんて、とんでもないことだし…正直言って、さっきは僕だって驚いたよ』
+PRINTFORML 아오이：
+PRINTFORMW 『ホント、顔を真っ青にして腰まで抜かしてましたもんね！』
+PRINTFORML キリノ：
+PRINTFORMW 『そこまで言わなくてよろしい！』
+PRINTFORMW 『…とにかく、キミたちは設置作業を続けてくれ。こちらもチューニングを急ぐよ。…オーヴァ』
+PRINTFORML 
+PRINTFORMW ……マップを見ながら常夜の丘を탐색して、気付いたことがある。
+PRINTFORMW この던전は、구조こそ複雑ではないものの、空間と空間の繋がりが이상な상태にあるのだ。
+PRINTFORMW あるエリアの左端に掛かる橋を渡っていけば、そのエリアの右端から出てくることさえある。
+PRINTFORMW 嘲笑うかのように響く嗤い声まで聞こえてくるものだから、気が散って仕方がない。
+PRINTFORMW 更に、時折キリノから唸り声のような何かが通信が届く始末。
+PRINTFORMW ――チューニングは難航中？
+PRINTFORMW %CALLNAME:LOCAL%が声をかけると、
+PRINTFORML キリノ：
+PRINTFORMW 『うわぁっ、１３班！！　…す、すまないね。作業に集中すると、どうも周りが見えなくて』
+PRINTFORMW 盛大に驚くキリノの声。尻餅をつく音まで聞こえてくる。いいリアクションだ。
+PRINTFORML キリノ：
+PRINTFORMW 『いや、イイ線までは来てるんだ。だけどそこから先が…その…あはは……』
+PRINTFORMW 『という訳で、集中して作業をするために一旦通信を遮断させてもらう』
+PRINTFORMW 『すまんっ！　幸운を祈ってるよ！』
+PRINTFORML 미이나：
+PRINTFORMW 『ええっ、キリノ！？　いくらなんでも、投げっぱなし――』
+PRINTFORMW 『うぅ…意味がわかりません…私にどうしろって言うの…？』
+PRINTFORMW …こうなったら、もう一度戻ろうか。
+PRINTFORML 미이나：
+PRINTFORMW 『それは…ダメです。任務の放棄になってしまいます…』
+PRINTFORMW 『…探査機の３台눈を設置しましょう。そのまま進んでください』
+PRINTFORMW ナビがこの調子では任務などろくに遂行できないのでは……とは言えなかった。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班。ここに３台눈の探査機を設置しましょう』
+PRINTFORMW %CALLNAME:LOCAL%が早速設置の準備にかかると、四方八方から気配がする。
+PRINTFORMW 全方位から、自衛隊の좀비がこちらに迫ってくるのが見える……。
+PRINTFORML 미이나：
+PRINTFORMW 『自衛隊の…좀비、ですよね？　적…でいいんでしょうか？』
+PRINTFORMW 『ま、また来ました…！　キリノも応答しないし…どうしたら…』
+PRINTFORMW 十、二十程度では収まらない数――帝竜はどうやら物量戦でこちらを압살する作戦に切り替えたらしい。
+PRINTFORMW よく見れば一般人だったものと思われる좀비までこちらに向かってきている。
+PRINTFORMW 一体一体の戦힘ならば然程でもないが、全滅させるには손間がかかりすぎる。
+PRINTFORMW ――逃げ道を探して。
+PRINTFORMW %CALLNAME:LOCAL%も同様の考えであるようだった。
+PRINTFORML 미이나：
+PRINTFORMW 『…そ、それはムリです。周辺から続々と集まってるみたいで…完全に囲まれてます！』
+PRINTFORMW 『うぅ…데이터が役に立たない相손に…どうしたら…』
+PRINTFORML 
+PRINTFORML 男：
+PRINTFORMW 「コラアアアアッ！！」
+PRINTFORMW 「おい、ボサっとしてんじゃねぇ…ナビは何やってんだ？」
+PRINTFORMW 一오비に、男の声が轟く。
+PRINTFORMW これも帝竜が操る死体？　いや、それにしては発音が明瞭すぎる。まるで本当に生きているようだ。
+PRINTFORML 男：
+PRINTFORMW 「まーた…데이터がどうとかこうとか、グジグジ言ってやがるんじゃねェだろうな？」
+PRINTFORMW 「あーあ、かわいそうに…ナビがオロオロ悩んでるうちに、１３班はオダブツだ」
+PRINTFORMW 「いつもは偉っそうにしてるクセに、肝心なトコはお子様のままってかぁ？」
+PRINTFORML 미이나：
+PRINTFORMW 『そんな…私は…そんなのじゃありません……っ！』
+PRINTFORMW 『だ、誰だか知りませんが…失礼です！　絶対…なんとかしてみせますから！』
+PRINTFORML 男：
+PRINTFORMW 「おうおう、言うねぇ…！　そう…お前らのそのクソ건방짐なところ、俺は結構、気に入ってたんだぜ？」
+PRINTFORMW 「…だからボサっとすんな！　なんでもいい、ほら、声を出せ！」
+PRINTFORMW 좀비の壁のせいで、声しか聞こえない。「彼」が誰なのか、姿が見えない。
+PRINTFORML 미이나：
+PRINTFORMW 『じ、１３班！　今から指示を出します！　ちょっと待ってて！』
+PRINTFORMW しかし미이나も%CALLNAME:LOCAL%も、きっとその答えを知っている。
+PRINTFORMW ……死して尚助けに来るとは、何とも面倒見のいいことだ。
+PRINTFORML 男：
+PRINTFORMW 「ったく……世話が焼ける奴らだぜ」
+PRINTFORMW 突如として좀비らの向こう側に現れる、青い머리카락の女。
+PRINTFORMW アレは確か、タケハヤの傍にいた――
+PRINTFORML 男：
+PRINTFORMW 「…おっと、お迎えか」
+PRINTFORMW 「分かってるよ…これ以上、손は出さねぇ。ホントなら、俺はココにいちゃいけねぇんだ」
+PRINTFORMW 「…頼むぜ。安心して眠らせてくれよ？」
+PRINTFORMW そう言い残すと、女の姿は掻き消え、男の気配も消え去った……。
+PRINTFORML 미이나：
+PRINTFORMW 『い、今のは……って、その前に…！　コール、１３班！　その人たちの데이터を、探査機の測定情報から洗ってみます！』
+PRINTFORMW 『…やっぱり、私は데이터を信じたい。絶対何か、あるはずです。根拠は…悔しいけど…私の勘！』
+PRINTFORMW 『時間、稼いで！　全ての可能性を計算してみます！』
+PRINTFORMW 殲滅ではないなら、やりようはある。
+PRINTFORMW ここは미이나を信じて、付き合ってやるとしよう……。
+PRINTFORML 
+PRINTFORMW 좀비아미の群れが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	CALL SET_ENEMY,7, [[キャラ:좀비아미]], 52, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,8, [[キャラ:좀비아미]], 50, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,9, [[キャラ:좀비아미]], 52, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,10, [[キャラ:좀비아미]], 50, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,11, [[キャラ:좀비아미]], 52, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,12, [[キャラ:좀비아미]], 45, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,13, [[キャラ:좀비아미]], 45, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,14, [[キャラ:좀비아미]], 50, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,15, [[キャラ:좀비아미]], 45, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,16, [[キャラ:좀비아미]], 45, 0
+	ABL:(CHARANUM-1):스킬7 = [[스킬:디아라마]]
+	CSTR:(CHARANUM-1):30 = 四ツ谷の帝竜の손によって操られた、自衛隊員の좀비。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 生前のような전투行動はもはや取れず、本能の赴くままに襲い掛かる。
+	CSTR:(CHARANUM-1):33 = 
+	CSTR:(CHARANUM-1):34 = 
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン2020』
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班！　分かりました！　この人たち、音に操られてます！』
+PRINTFORMW 『この던전中に『聞こえない音』が鳴り響いてて…生物の신경を誤動作させてるみたいです』
+PRINTFORMW 『例えそれが死体だったとしても、操り人形みたいに動き出すような…！』
+PRINTFORMW 『今から、探査機を使って全パターンの音波妨害をかけてみます！』
+PRINTFORMW 『うるさいかもしれないから…耳、塞いでて！』
+PRINTFORMW %CALLNAME:LOCAL%のすぐ傍から奇妙な音色が聞こえてくる。
+PRINTFORMW そういえば、設置準備の最中に襲われていたことを思い出した。
+PRINTFORMW %CALLNAME:LOCAL%は耳を塞いでも防ぎ切れないのだろうな……と思いつつ%CALLNAME:LOCAL%に感づかれないよう数歩離れた。
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『動きが…止まった……？　やった、効きましたっ……！』
+PRINTFORMW 『…あ、あの……さっき私のことを叱ったの…あれって、やっぱり…』
+PRINTFORMW 『…こんなありえない記録、履歴데이터としては残せません』
+PRINTFORMW 『だけど、私にはちゃんと伝わりました。それで、いいんですよね』
+PRINTFORML キリノ：
+PRINTFORMW 『こちらキリノ、聞こえるか？　全ての探査機の設置を確認した』
+PRINTFORMW 『そして…ふふふ……チューニングも、バッチリ完了済みだ！』
+PRINTFORMW 『不整合の原因を割り出すのに、ずいぶん時間と머리を使ったけれど…』
+PRINTFORMW 『さっきのスゴイ音で、ピンと来てね！　この四ツ谷には、『聞こえない音』が――』
+PRINTFORML 미이나：
+PRINTFORMW 『その音なら、私が…まぁ、役に立ったならいいんだけど…』
+PRINTFORMW 『っと、데이터受信…コンプリート。スキャン完了です！』
+PRINTFORMW 『なるほど…こんな地形だったんですか。このまま闇雲に進んでも帝竜には辿り着けなかったでしょうね…』
+PRINTFORML キリノ：
+PRINTFORMW 『ああ…ずいぶんと巧妙に隠されたものさ。だけど、それは既に破られた。では、これより――』
+PRINTFORML 미이나：
+PRINTFORMW 『これより、四ツ谷탐색を帝竜討伐作戦に切り替えます。１３班は私の指示に従って、最奥の帝竜を討伐してください』
+PRINTFORML キリノ：
+PRINTFORMW 『――承認します。……台詞まで、すっかり取られちゃったなぁ…』
+PRINTFORMW 随分と翻弄してくれたようだが、それもこれで終わりだ。後は帝竜の元へと向かい、討伐するだけ。
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『ここは厄介な迷路のようなエリアになっています』
+PRINTFORMW 『帝竜の出す音と、変な地形のせいで…方向감각がメチャクチャに狂ってしまって、絶対にゴールに辿り着けないんです』
+PRINTFORMW 『でも、私がきちんとナビしますから言う通り進んでくれれば大丈남편です…！』
+PRINTFORMW ナビの言う通りに道を進む。時に入った場所から出てくるような奇妙なルートだったが、
+PRINTFORMW %CALLNAME:MASTER%の머리上に怪しく輝く満月が次第に大きくなっていく事実が、正解なのだと確信させた。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 四ツ谷・常夜の丘　月下ノ路
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『…よし、抜けました！　これで迷路エリアは突破です』
+PRINTFORMW 『あとは帝竜눈指して進むだけ…行きましょう、１３班！』
+PRINTFORMW 空高くに坐す満月が、いつの間にか傾き地平線へと近づいている。
+PRINTFORMW それは果たして終わらない夜が終わる暗示か、はたまたこの地への降臨か。
+PRINTFORMW 間近で見る月明かりが言いようのない不安感を煽る。
+PRINTFORMW ……だが、何が待っていようと関係ない。%CALLNAME:MASTER%は의뢰通り、帝竜を討伐するだけだ。
+PRINTFORML 
+PRINTFORMW 東京 ― 四ツ谷・常夜の丘　月夜ノ決戦地
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 미이나：
+PRINTFORMW 『コール、１３班！　あの月から帝竜反応を検知しました』
+PRINTFORMW 『討伐대상は、月に擬態した帝竜と認定。もう隠れはさせません…！』
+PRINTFORMW ビルに突き刺さる뼈を伝って、最奥――この四ツ谷で最も高いビルへと飛び移る。
+PRINTFORMW 満月の大きさは既に本来の月を超えるサイズに至り、狂ったパースは손を伸ばせば触れられそうな錯깨달음さえ感じさせる。
+PRINTFORMW %CALLNAME:LOCAL%が一歩、踏み出すと――煩わしい嗤い声が鳴り響き、月が消えた。交代するように夜空に竜のシルエットが浮かぶ。
+PRINTFORMW この声は、最初に自衛隊を見た時に聞いた声だ。やはり、白銀の翼をはためかせるアレこそが――
+PRINTFORML 미이나：
+PRINTFORMW 『帝竜、来ます…！　死者を弄んだ罪、償ってもらいましょう！』
+PRINTFORMW 罪など知らぬとばかりに哄笑を上げながら、帝竜が襲い掛かる――！
+PRINTFORML 
+PRINTFORMW 로어=아=루아が現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	;- 악마解析度増加処理(1000でMAX)
+	CALL INCREASE_ANALYZE([[キャラ:로어=아=루아]],1000)
+	
+	CALL SET_ENEMY,9, [[キャラ:로어=아=루아]], 55, 0,1
+	MAXBASE:(CHARANUM-1):ＭＰ = 99999
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	CSTR:(CHARANUM-1):사고패턴 = 5426
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW 帝竜로어=아=루아を討伐した！
+PRINTFORML 
+PRINTFORMW やはり、이케부쿠로と同じように四ツ谷の夜は明けない。
+PRINTFORML 미이나：
+PRINTFORMW 『…やりました！　四ツ谷地区の帝竜――討伐完了！』
+PRINTFORML 아오이：
+PRINTFORMW 『わ〜い、お疲れ様でした！』
+PRINTFORML キリノ：
+PRINTFORMW 『キミはホントにチョコバー食べに来ただけだったね…』
+PRINTFORMW 『…よし、도청に帰ろう。僕は熱いお風呂に入りたいよ』
+PRINTFORMW 敢えて訂正するならば、他者にもチョコバーを補給していたところだろうか。
+PRINTFORMW %CALLNAME:LOCAL%による샘플回収を待ってから、入り입へと帰還した……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 四ツ谷・常夜の丘　椎뼈大橋
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 아오이：
+PRINTFORM 「センパイ、
+IF 의뢰フラグ:99:0 == 0
+	PRINTFORM %CALLNAME:MASTER%さん、
+ENDIF
+PRINTFORMW お帰りなさーい！」
+PRINTFORMW 「途中でキリノさんが通信切っちゃうからどうなってるか、すごく心配したんですよ！」
+PRINTFORML キリノ：
+PRINTFORMW 「いやいや、こっちだってチューニングで必死だったんだよ！」
+PRINTFORMW 「ま、無事に討伐できたんだから良しとしようじゃないか！」
+PRINTFORMW 「それに、水入らずのおかげなのかな？　미이나とずいぶん仲良くなったみたいだけど」
+PRINTFORML 미이나：
+PRINTFORMW 『邪魔が入りませんでしたからね。話が弾みました！』
+PRINTFORML キリノ：
+PRINTFORMW 「じ、邪魔…？　そ、そういうこと言わないでくれよ…さびしいなあ」
+PRINTFORMW 「はぁ…帰りは아오이君が운転してくれ。確か免許、持ってたよね？」
+PRINTFORML 아오이：
+PRINTFORMW 「ペーパーでよければ」
+PRINTFORMW ペーパー以前に、方向감각が『素晴らしい』のだろう。
+PRINTFORMW 平時ならばともかく、今からその손のアトラクションは勘弁願いたい。
+PRINTFORML キリノ：
+PRINTFORMW 「それじゃあ、%CALLNAME:MASTER%は――」
+PRINTFORML 아오이：
+PRINTFORMW 「ドラゴン討伐でクタクタな人に任せます、普通？」
+PRINTFORMW その理屈ならば、キリノも分析やらナビゲーションやらを担当していたのだが……
+PRINTFORMW 余計なことを言って仕事を増やすのも嫌だと%CALLNAME:MASTER%は黙ることにした。
+PRINTFORMW がっくりとうなだれるキリノの姿は、どこか哀愁が漂っていた。
+PRINTFORML キリノ：
+PRINTFORMW 「…僕が…운転するよ…」
+PRINTFORMW キリノの운転するバンで、拠点まで直接送り届けてもらった……。
+PRINTFORML 
+PRINTFORMW 입座に報酬￥55000が支払われ、名声75を得た。
+MONEY += 55000
+FLAG:名声 += 75
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 9
+RESULTS = 의뢰【(세븐스 드래곤 MOD)열사의 Ｄ프론트 -The Tri-Nitro-】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+CALL REQUEST_99_DAY_END
+

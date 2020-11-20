@@ -1,0 +1,100 @@
+﻿;======================================================
+;장비品の데이터
+;2131　라이엇실드
+;======================================================
+
+
+@기본능력수정_2131,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+
+@전투능력수정_2131,ARG,ARG:1 = -1
+	SELECTCASE ARG
+		;공격
+		CASE 0
+			RETURN 5
+		;명중
+		CASE 1
+			RETURN 5
+		;방어（熟練度に応じて性能向上、최저20)）
+		CASE 2
+			SIF ARG:1 == -1
+				RETURN 0
+			RETURN 20 + CFLAG:(ARG:1):刀熟練度 / 20 + CFLAG:(ARG:1):레이피어熟練度 / 20 + CFLAG:(ARG:1):弓熟練度 / 20 + CFLAG:(ARG:1):검熟練度 / 20 + CFLAG:(ARG:1):槍熟練度 / 20 + CFLAG:(ARG:1):斧、鈍器熟練度 / 20 + CFLAG:(ARG:1):채찍熟練度 / 20 + CFLAG:(ARG:1):投具熟練度 / 20 + CFLAG:(ARG:1):杖・祭具熟練度 / 20 + CFLAG:(ARG:1):棍熟練度 / 20 + CFLAG:(ARG:1):拳闘具熟練度 / 20
+	ENDSELECT
+RETURN 0
+
+@방어상성_2131,ARG,ARG:1 = -1
+SELECTCASE ARG
+	;검격（刀熟練度、레이피어熟練度、검熟練度に応じて性能向上、最初90、최저20)
+	CASE 0
+		SIF ARG:1 == -1
+				RETURN 100
+		RETURN 90 - MIN( CFLAG:(ARG:1):刀熟練度 + CFLAG:(ARG:1):레이피어熟練度 + CFLAG:(ARG:1):검熟練度,1400) / 20
+	;비구（弓熟練度、投具熟練度に応じて性能向上、最初90、최저20)
+	CASE 1
+		SIF ARG:1 == -1
+				RETURN 100
+		RETURN 90 - MIN( CFLAG:(ARG:1):弓熟練度 + CFLAG:(ARG:1):投具熟練度,1400) / 20
+	;타격（斧、鈍器熟練度、杖・祭具熟練度、棍熟練度に応じて性能向上、最初90、최저20）
+	CASE 2
+		SIF ARG:1 == -1
+				RETURN 100
+		RETURN 90 - MIN( CFLAG:(ARG:1):斧、鈍器熟練度 + CFLAG:(ARG:1):杖・祭具熟練度 + CFLAG:(ARG:1):棍熟練度,1400) / 20
+	;전술（槍熟練度、拳闘具熟練度に応じて性能向上、最初90、최저20）
+	CASE 3
+		SIF ARG:1 == -1
+				RETURN 100
+		RETURN 90 - MIN( CFLAG:(ARG:1):槍熟練度 + CFLAG:(ARG:1):拳闘具熟練度,1400) / 20
+ENDSELECT
+RETURN 100
+
+@공격상성_2131, ARG = -1
+RETURN 2
+
+@최저공격횟수_2131, ARG = -1
+RETURN 1
+
+@최대공격횟수_2131, ARG = -1
+RETURN 1
+
+@사거리_2131, ARG = -1
+RETURN 1
+
+@공격범위_2131, ARG = -1
+RETURN 1
+
+@장비箇所_2131
+RETURN GET_EQUIPNUM("검")
+
+
+;-----------------------------
+;- SHOP
+;-----------------------------
+@구입조건_2131
+RETURN 1
+
+@필요레벨_2131
+RETURN 1
+
+@장비조건_2131,ARG
+SIF BASE:ARG:힘 < 10
+	RETURN 0
+RETURN 1
+
+@장비조건설명_2131
+PRINTL 장비조건：힘10以上
+
+@장비해설_2131
+PRINTL 머리부터 무릎까지 덮을 수 있는 크기의 방패、힘이 없다면 들고 다니기 힘들다。
+PRINTL 무기숙련을 쌓으면、방어력이 오른다…는 듯 하다。
+
+@引継ぎ可不可_2131
+RETURN 0
+
+@검타입_2131
+;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
+;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+RETURN 11

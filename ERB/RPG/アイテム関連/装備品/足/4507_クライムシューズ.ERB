@@ -1,0 +1,58 @@
+﻿
+;======================================================
+;장비品の데이터
+;크라임슈즈
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4507,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 1
+	CASE "인내력"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4507,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 5
+	CASE "회피"
+		RETURN 9
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_4507,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "지변","수격"
+		RETURN 75
+ENDSELECT
+RETURN 100
+
+@장비箇所_4507
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4507
+RETURN 9
+
+@장비조건_4507,ARG
+SIF BASE:ARG:LV < 9
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4507
+PRINTL 장비조건：Lv9～
+
+@장비해설_4507
+PRINTL シビアなマウンテンにネバーギバァップするために生み出された、断崖に激流にナンでも来いなただの登山신발。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4507
+RETURN 1
+
+@引継ぎ可不可_4507
+RETURN 0

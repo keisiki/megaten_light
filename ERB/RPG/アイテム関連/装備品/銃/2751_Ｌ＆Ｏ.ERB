@@ -1,0 +1,83 @@
+﻿;======================================================
+;장비品の데이터
+;Ｌ＆Ｏ
+;악마狩人당신専用
+;======================================================
+
+
+@기본능력수정_2751,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+
+@전투능력수정_2751,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_2751,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2751, ARG = -1
+RETURN 1
+
+@최저공격횟수_2751, ARG = -1
+RETURN 4
+
+@최대공격횟수_2751, ARG = -1
+RETURN 4
+
+@사거리_2751, ARG = -1
+RETURN 2
+
+@공격범위_2751, ARG = -1
+RETURN 1
+
+@장비해설_2751
+PRINTL ルーチェ＆オンブラ(イタリア語で「光と闇」)
+PRINTL かつて伝説の魔검사が愛用していたと言う二丁の大型拳총
+PRINTL 圧倒的な連射性能を誇る
+RESETCOLOR
+
+@장비箇所_2751
+RETURN GET_EQUIPNUM("총")
+
+@필요레벨_2751
+RETURN 1
+
+
+@장비조건_2751,ARG
+SIF (NO:ARG == 0 || NO:ARG == 4999) && (CFLAG:MASTER:당신の専攻分野 == 7)
+	RETURN 1
+SIF TALENT:ARG:건슬링거 == 0
+	RETURN 0
+SIF TALENT:ARG:사격무기 == 0
+	RETURN 0
+RETURN 1
+
+@장비조건설명_2751
+PRINTL 장비조건：악마狩人당신専用
+
+@구입조건_2751
+RETURN 0
+
+@총공격_2751, ARG = -1
+RETURN 88
+
+@총명중_2751, ARG = -1
+RETURN 158
+
+@특수탄창_2751, ARG = -1
+RETURN 2
+
+@총타입_2751
+;1 = 핸드건 2 = 샷건 3 = アサルト라이플、머신건 4 = 狙撃라이플 5 = 그외
+RETURN 1
+@속도보정_2751
+RETURN 2
+
+@引継ぎ可不可_2751
+RETURN 0

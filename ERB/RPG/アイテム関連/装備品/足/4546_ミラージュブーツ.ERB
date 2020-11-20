@@ -1,0 +1,67 @@
+﻿
+;======================================================
+;장비品の데이터
+;신기루부츠
+;Lv51장비からは흡수有り　기본능력に합계+8まで
+;======================================================
+
+@기본능력수정_4546,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "인내력"
+		RETURN -1
+	CASE "속도"
+		RETURN 7
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4546,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 16
+	CASE "회피"
+		RETURN 36
+	CASE "마법효과"
+		RETURN 11
+ENDSELECT
+RETURN 0
+
+@방어상성_4546,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "지변"
+		RETURN 75
+	CASE "질풍"
+		RETURN 50
+	CASE "충격"
+		RETURN 25
+
+	CASE "전격"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@장비箇所_4546
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4546
+RETURN 57
+
+@장비조건_4546,ARG
+SIF BASE:ARG:LV < 57
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4546
+PRINTL 장비조건：LV57～
+
+@장비해설_4546
+PRINTL ジェット・부츠の性能に눈を付けたある企業によって、さらに改良を重ねられた銀色で彩られたハイテク・부츠。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4546
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 1500000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_4546
+RETURN 0

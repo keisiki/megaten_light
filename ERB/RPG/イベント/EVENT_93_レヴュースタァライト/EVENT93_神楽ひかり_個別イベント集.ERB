@@ -1,0 +1,663 @@
+﻿;이벤트フラグ:93:2（BIT制御）
+;開始トリガーは【愛城華恋個別이벤트02通過（이벤트フラグ:93:1のBIT:2）
+;　3　이벤트通過済みか否か
+;　20　ひかりの弱みを握った
+
+;00や01が02無いのは仕様です
+@EVENT_93_神楽ひかり_03
+
+CUSTOMDRAWLINE =
+	PRINTL
+	PRINTW 神楽ひかりが真검な顔でこちらを見ている……
+	PRINTL
+	PRINTW 「私は、당신の言っていることを、正確に捉えているつもりです。
+	PRINTW 　ここが、元居た세계とは、違うこと、
+	PRINTW 　私たちが、『本物』じゃないこと、
+	PRINTW 　……世の中は、そんなに、甘くないってこと」
+	PRINTL
+	PRINTW その通り。
+	PRINTW この세계は過酷で
+	PRINTW 舞台소녀とやらは尽く贋作だ。
+	PRINTL
+	PRINTW 神楽ひかりは눈を伏せた。
+	PRINTL
+	PRINTW 「당신は、良い人じゃ、ない。
+	PRINTW 　気に障ったなら、ごめんなさい。
+	PRINTW 　でも、私たちの세계の基準では、당신は邪悪。
+	PRINTW 　舞台소녀にぶつけるには……あまりにも、過激。
+	PRINTW 　だから」
+	PRINTL
+	PRINTW 소녀はそこで文章を区切った。
+	PRINTW 言葉を選んでいるのか、こちらの表情を伺いながら、眉根をハの字に寄せている。
+	PRINTL
+	PRINTW ひかりが、당신の눈を、じっと見つめた。
+	PRINTW しばらく無言で見つめ合った後、
+	PRINTW 薄い唇が、刀傷のように、ぱくっと開いた。
+	PRINTL
+	PRINTW 「華恋は、戦いに、向いてない。
+	PRINTW 　だから、손を、出さないで。
+	PRINTW 　私が２人分働くから。
+	PRINTW 　私が２人分、戦うから。
+	PRINTW 　だから、손を、出さないで」
+	PRINTL
+	PRINTW なるほど、トップスタァとやらを눈指すだけのことはある、はっきりした発声だ。
+	PRINTW 당신は、ひかりの눈の前で、わざとらしく무기の손入れをして見せたが、
+	PRINTW 彼女は視線を一切外さなかった。
+	PRINTL
+	PRINTW 肝は十分に据わっているようだ。何と返答したものか
+
+	LOCAL = GETCHARA([[キャラ:히카리]])
+	;念のため엘라ー회피
+	IF LOCAL != -1 && (TALENT:LOCAL:연모 || TALENT:LOCAL:친애)
+		
+		PRINTL
+		PRINTW 「……そんな눈で、見ないで」
+		PRINTL
+		PRINTW おっと、先に音を上げたのはひかりの方だった。
+		PRINTW 당신が少し微笑むと、ひかりは慌てて視線を外した。
+		PRINTL
+		PRINTW 「……당신が私を、どう思おうが、
+		PRINTW 　華恋は、わたしにとって、特別な存在。
+		PRINTW 　ぜったいに渡さない。それだけは、伝えておくから」
+		PRINTL
+		PRINTW 彼女は頬を赤く染め、勢いよく立ち上がると、
+		PRINTW ずかずかと部屋を出て行った。
+		PRINTL
+		
+	ELSEIF LOCAL != -1 && (TALENT:LOCAL:음란 || TALENT:LOCAL:창부)
+	
+		PRINTL
+		PRINTW 「……そんな눈で、見ないで」
+		PRINTL
+		PRINTW おっと、先に音を上げたのはひかりの方だった。
+		PRINTW 당신が少し微笑むと、ひかりは少し、前かがみになって、震えた。
+		PRINTL
+		PRINTW 「……당신が私を、どう思おうが、
+		PRINTW 　華恋は、わたしにとって、特別な存在。
+		PRINTW 　ぜったいに渡さない。それだけは、伝えておくから」
+		PRINTL
+		PRINTW 彼女は頬を赤く染め、勢いよく立ち上がると、
+		PRINTW ずかずかと部屋を出て行った。
+		PRINTL
+	
+	ELSE
+		PRINTL
+		PRINTL [0]　知るか、黙れ
+		PRINTL [1]　理解はできるけど……
+		PRINTL [2]　ならその身体を今この場で捧げろ
+		$HIKARI_03_SELECT
+		INPUT
+	
+		IF RESULT == 0
+			CFLAG:MASTER:秩混치 -= 8
+			
+			PRINTL
+			PRINTW 「っ……！」
+			PRINTL
+			PRINTW 甘い願いを、ぴしゃりと撥ねられたひかりは、僅かに입を尖らせた。
+			PRINTW 당신はそこで話を打ち切り、彼女を応接室から追い出した。
+			PRINTL
+			PRINTW 「なら、せめて、
+			PRINTW 　せめて、彼女が戦いに出るときは、
+			PRINTW 　私も一緒に……お願い！　お願い、します……！」
+			PRINTL
+			PRINTW 인간の장비はタダじゃない。
+			PRINTW 당신は、ドア越しに懇願を続けるひかりを適当にあしらった。
+			PRINTL
+			PRINTW ひかりはしばらくドアの前に突っ立っていたようだが、
+			PRINTW １時間もする頃には気配が無くなった。
+			PRINTW 居なくなったかと思って戸を開けたら、『また来ます』とだけ書かれた置손紙が残されていた。
+			PRINTL
+			PRINTW 執念深い……。
+			PRINTL
+			
+		ELSEIF RESULT == 1
+			CFLAG:MASTER:秩混치 += 8
+			
+			PRINTL
+			PRINTW 「なら！」
+			PRINTL
+			PRINTW 理解を示した당신に、ひかりはその端正な顔を近づけたが、
+			PRINTW ……ヒト一人を匿う経費、労힘を淡々と説明すると、困ったように입を尖らせた。
+			PRINTL
+			PRINTW 「――」
+			PRINTL
+			PRINTW 唇を指で弾いている。
+			PRINTW 何を考えこんでいるのだろうか。
+			PRINTW しばらく、ぷるぷる震える薄い입元を眺めていると、소녀は強い視線で당신を見た。
+			PRINTL
+			PRINTW 「いくら稼いだらいいの？
+			PRINTW 　あの子の価値は、どのくらい？
+			PRINTW 　どうしたら、あの子の身元を、引き受けることが出来るの？」
+			PRINTL
+			PRINTW は？　金で買うつもりか、愛城華恋を。
+			PRINTL
+			PRINTW 「郷にいては郷に従え、당신の流儀に合わせただけ。
+			PRINTW 　それで、幾らなの？
+			PRINTW 　教えてほしいの、愛城華恋の市場価値を……！」
+			PRINTL
+			PRINTW ひかりは真검だ。
+			PRINTW 握り拳を作り、細い肩を怒らせて、じっと당신を見つめている。
+			PRINTL
+			PRINTW 「稼ぐわ、악마を何匹殺してでも。
+			PRINTW 　あの子を守るためなら、何だって。
+			PRINTW 　私は、もう二度と、あの子を손放す事なんて……！」
+			PRINTL
+			PRINTW ああ、面倒なことになった。
+			PRINTW 涙눈になって必死に『華恋の価値とコスト』を聞いて来るひかりをなだめながら、
+			PRINTW 당신はソファーに背を預け天を仰いだ……。
+			PRINTL
+			
+		ELSEIF RESULT == 2
+			CFLAG:MASTER:善悪치 -= 16
+			
+			PRINTL
+			PRINTW 身体を捧げろ。
+			PRINTW その言葉に、ひかりは、びくりと肩を震わせた。
+			PRINTL
+			PRINTW 「どういう、意味」
+			PRINTL
+			PRINTW 당신は立ち上がり、ひかりの長い黒머리카락を握りしめた。
+			PRINTL
+			PRINTW 「痛っ……！？」
+			PRINTL
+			PRINTW そして、彼女の細い顎を摘まむと、
+			PRINTW 唇を、親指で、なぞり上げた。
+			PRINTL
+			PRINTW 「う……」
+			PRINTL
+			PRINTW 演劇の専門校などに通うお嬢様でも、
+			PRINTW 性の交わりを、知らない訳ではないらしい。
+			PRINTL
+			PRINTW 怒りか悲しみか、少なくとも羞恥ではない何かで、ひかりの身体は震え出した。
+			PRINTL
+			PRINTW 「私が、당신の、物になれば
+			PRINTW 　華恋は、
+			PRINTW 　華恋の安全は、
+			PRINTW 　保証して……くれるの？」
+			PRINTL
+			PRINTW 乙女は蚊の鳴くような声で言った。
+			PRINTW 당신の返答は――
+			PRINTL
+			PRINTL [0]　正直に“保証はできない、しない”と答える
+			IF TALENT:MASTER:남자 || TALENT:MASTER:후타나리
+				PRINTL [1]　マグネタイトを与える、自分で守れ……と言って페니스を出す
+			ELSE
+				PRINTL [1]　マグネタイトを与える、自分で守れ
+			ENDIF
+			SETCOLOR 0xff0033
+			PRINTL [2]　華恋をメンバーから降ろすことを約束する（嘘）
+			RESETCOLOR
+			$HIKARI_03_SELECT_2
+			INPUT
+			
+			IF RESULT == 0
+				PRINTL
+				PRINTW 당신の答えを聴き、
+				PRINTW ひかりは、黒머리카락が千切れそうなのにも係わらず、一歩、後ろに、後ずさった。
+				PRINTL
+				PRINTW 「だったら、私の身体も、あげない。あげるもんか」
+				PRINTL
+				PRINTW 彼女の身体は、まだぶるぶると震えていたが、
+				PRINTW その表情は心細げで、
+				PRINTW 細い指先は、白く血の気が引いていた。
+				PRINTL
+				PRINTW 당신は머리카락を離した。
+				PRINTW 소녀のじっとりとした体臭が、部屋の中に、沈んでいた。
+				PRINTL
+				PRINTW 「また来ます」
+				PRINTL
+				PRINTW ひかりは발早に応接室を後にした。
+				PRINTW 당신の손の中には、冷えた머리카락の温度だけが、残っていた。
+				PRINTL
+			
+			ELSEIF RESULT == 1
+			
+				IF TALENT:MASTER:남자 || TALENT:MASTER:후타나리
+					PRINTL 
+					PRINTW 「は？」
+					PRINTL 
+					PRINTW 突然눈の前に現れた페니스に対し、ひかりはポカンと입を開けた。
+					PRINTW そして言葉にならない奇声を上げた後、
+					PRINTW 応接室のソファーから転がり落ちながら、クッションやら何やらを손あたり次第投げ、痛い、痛い！
+					PRINTL 
+					IF TALENT:MASTER:남자
+						PRINTW 「あ……！
+						PRINTW 　ご、ごめんなさい、깨달음悟が全くなかった、わけではないけど、
+						PRINTW 　びっくりして、머리が、真っ白に……」
+						PRINTL 
+						PRINTW ひかりは눈を白黒させながら弁明している。
+						PRINTW まあ、彼女の言うことも、もっともだ。
+						PRINTW こちらも、うっかり악마どもと同じ扱いをしてしまった。
+						PRINTL 
+						PRINTW 당신は정액とマグネタイトの関係について説明をした。
+						
+					;후타나리
+					ELSE
+						PRINTW 「な、なんで、
+						PRINTW 　당신、女の人じゃ、
+						PRINTW 　ど、どうして、そんな、そんなもの！？」
+						PRINTL 
+						PRINTW ひかりは눈を白黒させながら生唾を飲み込んだ。
+						PRINTW ……言ってなかったっけ？
+						PRINTW 당신は自分が両性具有であることを織り交ぜつつ、
+						PRINTW 정액とマグネタイトの関係について説明した。
+						PRINTL 
+						PRINTW しかし……まあ……
+					ENDIF
+					PRINTW 성교でＭＡＧを注ぎ、힘を分け与える……ファントムの서머너にとっては常識であったが、
+					PRINTW 相손が、ただの소녀であることをすっかり失念していた。
+					PRINTL 
+					PRINTW だがきちんと説明すれば理解をするだろう。
+					PRINTW いい加減、超常の現象にも、慣れてきたはずだ。
+					PRINTW 해설し終えた당신は、期待を込めて、神楽ひかりの表情を見た。
+					PRINTL 
+					PRINTW 「――」
+					PRINTL 
+					PRINTW ひかりは握り拳を作っていた。
+					PRINTL 
+					PRINTW 「言い訳は、やめて。
+					PRINTW 　そんなので、騙されない」
+					PRINTL 
+					PRINTW えっ違う。
+					PRINTW 嘘じゃない、これは駆け引きでも何でもない、本当に神楽ひかりを強くしたいだけだった。
+					PRINTW 당신は必死にひかりに訴えかけたが、
+					PRINTW 彼女は分かってくれなかった。
+					PRINTL 
+					PRINTW 「汚したいなら、犯したいなら、そう言えばいいのに……ッ！」
+					PRINTL 
+					PRINTW このまま返すわけにもいかないので、
+					PRINTW 『これを입で咥えなければ愛城華恋にやらせる』
+					PRINTW と、半ば脅すような形で、페니스をひかりの입腔へと捻じ込んだ。
+					PRINTL 
+					PRINTW 「そんな、無理矢理……む、ぐむっ」
+					PRINTL 
+					PRINTW ひかりは、눈に涙を浮かべ、苦し気に咳込みながら、
+					PRINTW 입腔内を前後する肉の棒を忌々し気に睨んでいたが、
+					PRINTL 
+					PRINTW ……実際に사정された정액を臓腑に落とすと、今度は逆に、可哀そうなほど顔を青くして、心細そうな視線を左右に彷徨わせた。
+					PRINTL 
+					PRINTW 「どう、して……？
+					PRINTW 　体が熱い。本当に힘がみなぎって……
+					PRINTW 　じゃあ、今の話は、すべて本当……！？」
+					PRINTL 
+					PRINTW 怯える視線が、당신を見上げた。
+					PRINTW ひかりは青い顔をして縮こまった。
+					PRINTL 
+					PRINTW 「ごめん、なさい……っ！
+					PRINTW 　てっきり、私、騙されていると思って……っ」
+					PRINTL 
+					PRINTW ……당신は、改めて、生体マグネタイトの効能を説明した。
+					PRINTL 
+					PRINTW そして、自分は華恋を特別扱いする気はないこと、
+					PRINTW 気にかかるのならば自分で対処できるだけの힘を付けること、
+					PRINTW これらをひかりに説明した。
+					PRINTL 
+					PRINTW 「……わかり、ました」
+					PRINTL 
+					PRINTW 頷いたひかりに、もう一度페니스を突き付ける。
+					PRINTW 粘液滴る雄の性器に、さすがに顔を強張らせはしたものの、
+					PRINTL 
+					PRINTW 「は、む」
+					PRINTL 
+					PRINTW 今度は自分から、膨れ上がった怒張を、입腔の中に導き入れて見せた……。
+					PRINTL 
+						
+				ELSE
+					PRINTL 
+					PRINTW 「マグネタイト……？
+					PRINTW 　それは、私たちの身体を作っているっていう？
+					PRINTW 　당신が、常に分けてくれていると、聞いていますが」
+					PRINTL 
+					PRINTW ひかりが怪訝そうな눈でこちらを見ている。
+					PRINTW 당신は、彼女の細い顎をもう一度掴むと、
+					PRINTW 予告なく、소녀の薄い唇を、貪った。
+					PRINTL 
+					PRINTW 「むぐ……！？」
+					PRINTL 
+					PRINTW ひかりは손を振り上げた。
+					PRINTW しかし、自分の立場を思い出したか、
+					PRINTW 握り拳のまま、空中でぶるぶると震わせるにとどまった。
+					PRINTL 
+					PRINTW 「むフっ、んむむ……うブうーっ……！」
+					PRINTL 
+					PRINTW 당신はひかりの舌を追いかけながら唇を深く絡ませる。
+					PRINTW 소녀の身体が嫌がるように仰け反っていく。
+					PRINTW 당신は彼女を、ソファーの上に押し倒した。
+					PRINTW そのまま伸し掛かり、覆いかぶさるようにしながら、乙女の입腔に、清らかな喉に、自らの唾液を注ぎ込んでいく。
+					PRINTL 
+					PRINTW そのまま数分。
+					PRINTW ひかりが저항を諦めてしばらくして、
+					PRINTW ようやく당신は、彼女の唇を、해방した。
+					PRINTL 
+					PRINTW 「――っ
+					PRINTW 　げほっ、げほっ！　うええっ！」
+					PRINTL 
+					PRINTW 咳込みながら、ひかりは당신を睨み付けた。
+					PRINTW ……당신は、生体マグネタイトの受け渡し方法を、ひかりに説明した。
+					PRINTL 
+					PRINTW 「体液の交換でマグネタイトを注ぎ込む、ですって？
+					PRINTW 　そんな都合のいい話が……うっ！」
+					PRINTL 
+					PRINTW 言いかけたひかりの瞳孔が、急にキュッと窄まった。
+					PRINTW 彼女は、驚いたように自らの손を見つめると、
+					PRINTW 恐らく早鐘を撃ち始めたであろう薄い가슴を、掻き抱くように蹲った。
+					PRINTL 
+					PRINTW 「嘘じゃ……ない？」
+					PRINTL 
+					PRINTW 당신は再びひかりを抱き寄せた。
+					PRINTW 怯えたような、戸惑ったような彼女の눈が、
+					PRINTW 당신の視線と絡み合った。
+					PRINTL 
+					PRINTW 「だからって、こんな方法……むぐうっ！
+					PRINTW 　ふむう……！　ん、ぶは！　ひゃめ……
+					PRINTW 　ふーっ、ふーっ、やだぁ、うぶぶぶ……！」
+					PRINTL 
+					PRINTW ひかりは、당신の팔の中で、子犬のように震えながら、
+					PRINTW 何十分も、何時間も、
+					PRINTW 舌や歯、歯茎や喉に至るまで、ずっとなぞられ続けていた……。
+					PRINTL 
+					
+				ENDIF
+				
+				LOCAL:0 = GETCHARA([[キャラ:히카리]])
+				
+				IF TALENT:MASTER:남자 || TALENT:MASTER:후타나리
+					EXP:(LOCAL:0):정액경험 += 30
+					PRINTL ＞ひかりは정액경험を30得た
+					EXP:(LOCAL:0):펠라경험 += 50
+					PRINTL ＞ひかりは펠라경험を50得た
+					IF TALENT:MASTER:후타나리
+						EXP:(LOCAL:0):레즈경험 += 100
+						PRINTL ＞ひかりは레즈경험を100得た
+					ENDIF
+				;女同士
+				ELSE
+					EXP:(LOCAL:0):레즈경험 += 500
+					PRINTL ＞ひかりは레즈경험を500得た
+					EXP:(LOCAL:0):키스경험 += 500
+					PRINTL ＞ひかりは키스경험を500得た
+					SIF ABL:(LOCAL:0):키스중독 < 1
+						ABL:(LOCAL:0):키스중독 = 1
+					PRINTL ＞ひかりは키스중독を得た
+				ENDIF
+				PRINTL 
+				
+				;こっそり의존도増加
+				CFLAG:LOCAL:의존도 += 200
+				
+				BASE:(LOCAL:0):마력 += 3
+				PRINTW ＞ひかりは譲渡されたマグネタイトにより마력が3上がった
+				
+				SETBIT 이벤트フラグ:93:2, 22
+				
+			ELSEIF RESULT == 2
+				PRINTL
+				PRINTW ひかりの肉体は完璧だ。
+				PRINTL
+				PRINTW スレンダーな思春期の身体、よく整った顔立ち、
+				PRINTW 滑らかな筋肉、良く伸びる股関節。
+				PRINTW そして当人が、思春期の全てを燃やして培った、舞台人としての技術・정신힘……。
+				PRINTL
+				PRINTW 背徳的だ、これを변기に堕とすのは。
+				PRINTL
+				PRINTW 당신は愛城華恋の身の安全を宣言した。
+				PRINTW そして愛城華恋を、전투員、性奴隷、その両方のリストから外すと約束して見せた。
+				PRINTL
+				PRINTW ……その代償として、
+				PRINTW 神楽ひかりは一切の自由を奪われ、
+				PRINTW 都合のいい性奴隷として教育・조교、상품として出荷されることを伝えた。
+				PRINTL
+				PRINTW 당신の答えを聴き、ひかりは、後悔したみたいに눈を伏せた。
+				PRINTW その表情には、少なからぬ困惑が含まれている。
+				PRINTW どうやら……당신が조건を呑むと思っていなかったようだ。
+				PRINTW 甘い。
+				PRINTW それを守るとも決まっていないというのに。
+				PRINTL
+				PRINTW 「分かっ……た。
+				PRINTW 　당신が、あの子を、守ってくれるのなら、
+				PRINTW 　わたしは、全てを、
+				PRINTW 　全てを、당신に、捧げます。
+				PRINTW 　……たとえ、もう二度と、あの子に会えなくなったとしても」
+				PRINTL
+				PRINTW 血を絞るような声だった。
+				PRINTW 顔は真っ青に血の気が引いていた。
+				PRINTW ひかりは、옷の裾を握りながら、奥歯を強く噛み鳴らした。
+				PRINTL
+				PRINTW しかし당신は首を横に振る。
+				PRINTW 言葉だけでは、満발しない。
+				PRINTW 磨かれた肉体を、健やかな정신を、
+				PRINTW 肥溜めを有難く啜る惨めな蛆虫へと変態させなければならない。
+				PRINTL
+				PRINTW ――당신は、ひかりの耳元に、ある命令を囁いた。
+				PRINTL
+				PRINTW 「そんな」
+				PRINTL
+				PRINTW 理解できないものを見る顔で、소녀は立ち眩みを堪えた。
+				PRINTW ……出来ないのなら、この話は終わりだ。
+				PRINTW 欲しいのは굴복。
+				PRINTW 求めるのは自傷。
+				PRINTW 彼女が尊厳を捨てられないのなら、ここで深追いする意味もない。
+				PRINTL
+				PRINTW 당신は掴んでいた머리카락をあえて離す。
+				PRINTW しばらく、視線を交わす。
+				PRINTW ひかりは、迷子になった犬みたいに、照明を見上げた。
+				PRINTL
+				PRINTW それから、ガチガチと鳴る歯を噛みしめて
+				PRINTW 額の汗が、床に落ちるのを待ったあと、
+				PRINTL
+				PRINTW 「わかり、ました」
+				PRINTL
+				PRINTW ひかりは、自らの衣옷に、손を掛けた。
+				PRINTL
+				PRINTW 一枚ずつ、一枚ずつ。
+				PRINTW テキパキとした속도で、
+				PRINTW たまに、指が痙攣して、손間取りながら。
+				PRINTL
+				PRINTW 衣擦れの音がするたびに、彼女の肌が、つまびらかに明かされていく。
+				PRINTL
+				PRINTW 「くっ……」
+				PRINTL
+				PRINTW 下着のところで、손が止まったが、
+				PRINTW それで許されるとは、彼女自身も思っていないだろう。
+				PRINTW ひかりは僅かに躊躇したあと、硬く눈を瞑りながら、息を止めてインナーを脱ぎ捨てた。
+				PRINTL
+				PRINTW 「これで、いいかしら」
+				PRINTL
+				PRINTW 美しい身体だ。
+				PRINTL
+				PRINTW 滑らかで、しなやかで。
+				PRINTW 張りのある筋肉は、確かな苦心の跡があった。
+				PRINTL
+				PRINTW ひかりは、薄い가슴と、体毛の薄い股を손で隠しながら、
+				PRINTW 救いを求めるように당신を見上げたが、
+				PRINTW 許すわけがない。
+				PRINTW 後戻りなどさせはしない。
+				PRINTL
+				PRINTW 당신が、わざと冷たい눈で彼女を見下ろすと、
+				PRINTW ひかりは、青ざめた顔のまま、입を結んだ。
+				PRINTL
+				PRINTW 당신が命令したのは２つ。
+				PRINTW 一つは、今ここで옷を全て脱ぐこと。
+				PRINTW そして、もう一つは――土下座。
+				PRINTL
+				PRINTW 당신は微笑んだ。
+				PRINTW ひかりの눈に希望が浮かんだ。
+				PRINTL
+				PRINTW 思いきり平손で張り倒した。
+				PRINTW 這いつくばれ。
+				PRINTW 這いつくばれ。
+				PRINTW 這いつくばれ。
+				PRINTL
+				PRINTW 당신は再び微笑んだ。
+				PRINTL
+				PRINTW ……ひかりは、命綱を손放すかのごとく、床に膝をついた。
+				PRINTL
+				PRINTW ぺたり。ぺたり。
+				PRINTW 汗ばんだ손が、蛙のように、床に張り付く。
+				PRINTL
+				PRINTW こつん。
+				PRINTW 額が、床に、擦り付けられる。
+				PRINTL
+				PRINTW ぱらぱら。
+				PRINTW 遅れて、長い黒머리카락が、床の上へと散らばった。
+				PRINTL
+				PRINTW ぐりっ。
+				PRINTW 後머리部を踏みつけると、鼻が潰れたのか、グウと汚い呻きが聞こえてきた。
+				PRINTL
+				PRINTW 「う、うう……！」
+				PRINTL
+				PRINTW さて、神楽ひかりは、自尊心を捨てて見せた。
+				PRINTW 心を投げ出して見せた。
+				PRINTW ならば次は、身体を、踏みにじらなくては。
+				PRINTL
+				PRINTW 당신は、“何があっても動くな、喋るな”と命令し、
+				PRINTW ひかりの小さな尻を、持ち上げた。
+				PRINTL
+				PRINTL
+				PRINTL
+				PRINTW それから数時間かけて、
+				PRINTW 乙女の身体は、ひどく暴힘的に、蹂躙された。
+				PRINTL
+				PRINTW 「……」
+				PRINTL
+				PRINTW 床には、わざと乱暴に散らされた破瓜の血が、黒く乾いてこびりついていた。
+				PRINTW 無理矢理広げられた尻穴は、真赤に充血したまま、いびつに直腸を晒していた。
+				PRINTL
+				PRINTW 命令通り、ずっと土下座したままのひかりに、
+				PRINTW 당신は불결た床を掃除するよう命令し、
+				PRINTW 悠々とソファーに腰を下ろした。
+				PRINTL
+				PRINTW 「わかり……ました……」
+				PRINTL
+				PRINTW ひかりは、零れる涙をぬぐいもせず、
+				PRINTW 눈を見開いたまま、無言で、床を、磨き続けた。
+				PRINTL
+				PRINTW 「さよなら、카렌（무대소녀）
+				PRINTW 　さよなら――私たちの、スタァライト」
+				PRINTL
+				PRINTW ひかりの瞳からキラめきが消えた。
+				PRINTL
+				
+				;キラめき消滅、전투能力削除、素質변경
+				LOCAL = GETCHARA([[キャラ:히카리]])
+				CALL EVENT93_KIRAMEKI_LOST,LOCAL
+				
+				
+				;ただの마조肉に
+				SIF ABL:LOCAL:순종 < 2
+					ABL:LOCAL:순종 = 2
+				SIF ABL:LOCAL:Ｖ감각 < 1
+					ABL:LOCAL:Ｖ감각 = 1
+				SIF ABL:LOCAL:Ａ감각 < 1
+					ABL:LOCAL:Ａ감각 = 1
+				SIF ABL:LOCAL:마조끼 < 3
+					ABL:LOCAL:마조끼 = 3
+				
+				TALENT:LOCAL:저항 = 0
+				TALENT:LOCAL:쾌감에솔직 = 0
+				
+				TALENT:LOCAL:겁쟁이 = 1
+				TALENT:LOCAL:감정결핍 = 1
+				TALENT:LOCAL:약점 = 1
+				TALENT:LOCAL:도착적 = 1
+				
+				EXP:LOCAL:Ｖ경험 += 30
+				EXP:LOCAL:Ａ경험 += 30
+				EXP:LOCAL:Ｖ확장경험 += 15
+				EXP:LOCAL:Ａ확장경험 += 15
+				EXP:LOCAL:성교경험 += 15
+				EXP:LOCAL:피사경험 += 10
+				EXP:LOCAL:방뇨경험 += 15
+				
+				SIF MARK:LOCAL:고통각인 < 2
+					MARK:LOCAL:고통각인 = 2
+				SIF MARK:LOCAL:굴복각인 < 3
+					MARK:LOCAL:굴복각인 = 3
+				SIF MARK:LOCAL:반발각인 < 2
+					MARK:LOCAL:반발각인 = 2
+				
+				PRINTV LOCAL
+				PRINTL
+				IF TALENT:MASTER:남자
+					EXP:LOCAL:질사경험 += 1
+					EXP:LOCAL:정액경험 += 3
+					IF TALENT:LOCAL:처녀
+						CALL ADDS_ABNORMAL_EXP("처녀상실（강간）", LOCAL)
+					ENDIF
+				ELSE
+					IF TALENT:MASTER:후타나리
+						;후타나리チンポの方が사정량が多いに決まってる
+						EXP:LOCAL:질사경험 += 5
+						EXP:LOCAL:정액경험 += 15
+						IF TALENT:LOCAL:처녀
+							CALL ADDS_ABNORMAL_EXP("처녀상실（강간）", LOCAL)
+							CALL ADDS_ABNORMAL_EXP("처녀상실（동성）", LOCAL)
+						ENDIF
+					ENDIF
+					EXP:LOCAL:레즈경험 += 100
+					IF TALENT:LOCAL:처녀
+						CALL ADDS_ABNORMAL_EXP("처녀상실（바이브）", LOCAL)
+					ENDIF
+					
+				ENDIF
+				
+				TALENT:LOCAL:처녀 = 0
+				CALL ADDS_ABNORMAL_EXP("확장첫경험", LOCAL)
+				CALL ADDS_ABNORMAL_EXP("관장배설", LOCAL)
+				
+				CALL SHOW_ABNORMAL_EXP , LOCAL, 0
+				
+				;こっそり의존도減少
+				CFLAG:LOCAL:의존도 -= 500
+				
+				;まあフレーバー的にぱーっと표시
+				;経験値は多いので생략
+				PRINTL
+				PRINTL ＞ひかりの순종が2になった
+				PRINTL ＞ひかりのＶ감각が1になった
+				PRINTL ＞ひかりのＡ감각が1になった
+				PRINTL ＞ひかりの마조끼が3になった
+				PRINTL
+				PRINTL ＞ひかりは처녀を失った
+				PRINTL ＞ひかりは저항を失った
+				PRINTL ＞ひかりは쾌감에솔직を失った
+				PRINTL
+				PRINTL ＞ひかりは겁쟁이を得た
+				PRINTL ＞ひかりは감정결핍を得た
+				PRINTL ＞ひかりは도착적を得た
+				PRINTL ＞ひかりは弱みを得た
+				PRINTL
+				PRINTL ＞ひかりは굴복각인LV3を得た
+				PRINTL ＞ひかりは고통각인LV2を得た
+				PRINTL ＞ひかりは반발각인LV2を得た
+				PRINTL
+				PRINTL ＞ひかりは이상경험（관장배설）を得た
+				PRINTL ＞ひかりは이상경험（확장첫경험）を得た
+				IF TALENT:MASTER:남자
+					PRINTL ＞ひかりは이상경험（처녀상실：강간）を得た
+				ELSE
+					IF TALENT:MASTER:후타나리
+						PRINTL ＞ひかりは이상경험（처녀상실：동성）を得た
+					ELSE
+						PRINTL ＞ひかりは이상경험（처녀상실：바이브）を得た
+					ENDIF
+				ENDIF
+				PRINTL
+				PRINTL ＞ひかりは전투能力を失い、비전투원になった
+				WAIT
+				
+				SETBIT 이벤트フラグ:93:2, 22
+				
+			ENDIF
+			
+			
+		ELSE
+			GOTO HIKARI_03_SELECT
+		ENDIF
+	ENDIF
+	
+	
+	SETBIT 이벤트フラグ:93:2, 3
+	CALL EVENT_93_TURN_END
+

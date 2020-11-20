@@ -1,0 +1,77 @@
+﻿
+;======================================================
+;장비品の데이터
+;데저트이글
+;======================================================
+
+
+@기본능력수정_2501,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+
+@전투능력수정_2501,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_2501,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2501, ARG = -1
+RETURN 1
+
+@최저공격횟수_2501, ARG = -1
+RETURN 1
+
+@최대공격횟수_2501, ARG = -1
+RETURN 1
+
+@사거리_2501, ARG = -1
+RETURN 2
+
+@공격범위_2501, ARG = -1
+RETURN 1
+
+@장비해설_2501
+PRINTL アメ리카設計イスラエル監修の大型핸드건。特に.50AEモデルは最強の마그나ムピストルとして인기が高い
+;PRINTL イスラエル製の巨大な軍用拳총。強힘だが扱いにくい
+RESETCOLOR
+
+@장비箇所_2501
+RETURN GET_EQUIPNUM("총")
+
+@필요레벨_2501
+RETURN 1
+
+
+@장비조건_2501,ARG
+SIF BASE:ARG:LV < 15
+	RETURN 0
+RETURN 1
+
+@장비조건설명_2501
+PRINTL 장비조건：LV15〜
+
+@구입조건_2501
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 60000
+	RETURN 0
+RETURN 1
+
+@총공격_2501, ARG = -1
+RETURN 94
+
+@총명중_2501, ARG = -1
+RETURN 48
+
+@특수탄창_2501, ARG = -1
+RETURN 3
+
+@총타입_2501
+;1 = 핸드건 2 = 샷건 3 = アサルト라이플、머신건 4 = 狙撃라이플 5 = 그외
+RETURN 1
+@속도보정_2501
+RETURN 6

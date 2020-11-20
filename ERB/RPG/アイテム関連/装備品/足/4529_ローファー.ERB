@@ -1,0 +1,45 @@
+﻿
+;======================================================
+;장비品の데이터
+;로퍼
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4529,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4529,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 2
+	CASE "회피"
+		RETURN 6
+ENDSELECT
+RETURN 0
+
+@방어상성_4529,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_4529
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4529
+RETURN 1
+
+@장비조건_4529,ARG
+RETURN 1
+
+@장비해설_4529
+PRINTL 신발紐のないシンプルな가죽구두。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4529
+RETURN 1
+
+@引継ぎ可不可_4529
+RETURN 0

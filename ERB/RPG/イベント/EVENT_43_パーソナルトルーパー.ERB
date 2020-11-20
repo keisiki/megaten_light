@@ -1,0 +1,219 @@
+﻿;--------------------------------------------------------
+;幻影の幽霊と夜陰の古鉄と夕刻の白騎士
+;--------------------------------------------------------
+;アルトとヴァイスとゲシュペンスト입수이벤트。
+;2019/04/26　Mr・K
+;選択肢の分岐内容をちょこっと編集(クォヴレー君も出るよ！！)+ちょっと加筆修正
+;つかスパロボのプラモはコトブキヤから出てるんやで…
+;====================
+;조건
+;ゲーム開始時点から選択可能
+;====================
+@PLAYABLE_EVENT_43
+#LOCALSIZE 1
+#LOCALSSIZE 1
+	SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 || GETBIT(FLAG:EXTRA이벤트필터, 1) == 1
+	 RETURN 0
+	IF 이벤트フラグ:43:0 == 0 && BASE:MASTER:LV > 9
+		RESULTS = 환영의 유령
+		RETURN 1
+	ELSEIF 이벤트フラグ:43:0 == 1
+		IF FLAG:組織貢献度 >= 100000 && BASE:MASTER:LV > 24
+			RESULTS = 야밤의 고철과 석양의 백기사
+			RETURN 1
+		ELSE
+			RETURN 0
+		ENDIF
+	ELSEIF 이벤트フラグ:43:0 == 2 && FINDCHARA_B([[キャラ:팬텀]]) > 0
+		LOCAL = GETCHARA(1118)
+		IF BASE:LOCAL:LV > 25
+			RESULTS = 야밤의 고철과 석양의 백기사
+			RETURN 1
+		ELSE
+			RETURN 0
+		ENDIF
+	ELSE
+		RETURN 0
+	ENDIF
+
+
+
+;====================
+;内容
+;====================
+@SHOPCOM_EVENT_43
+#LOCALSIZE 1
+#LOCALSSIZE 1
+	IF  이벤트フラグ:43:0 == 0
+		PRINTW ＞머리の中に声が響いてくる…
+		PRINTW 「突然ですが당신は人型ロボットについてどのように思いますか？」
+		PRINTL
+		PRINTL [1]ロマンと実用性は両立できる
+		PRINTL [2]趣味の세계に両발突っ込んでる
+		PRINTL [3]そんなことより、お腹がすいたよ
+		
+		CALL INPUTINT,1,2,3
+		IF RESULT == 1
+			CALL MESSAGE_WINDOW, "", "＞端末から着信音が鳴り響く…", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞どうやらメールが届いているようだ", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『ファントムソサエティ物資調達部からの連絡、/　　所属서머너の協힘の下、謎の머신の捕獲に성공した』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『調査の結果、該当機は未知の技術が用いられた머신であることが判明し、/　　데이터収集を兼ねての実戦投入を上層部は決定』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『そのため、上層部は当機を支給すべき서머너の選定を行ったところ、/　　貴君への支給を決定したことを通達する。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『機体名は「게슈펜스트・팬텀」、我々ファントムソサエティと同じく「팬텀」の名を持つ機動兵器である。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『近接전투用の장비が中心であるが、가슴部にビーム砲、背部に投擲무기が搭載されているため、遠距離戦も可能と推測される。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『なお、捕獲時の전투の際のダメージの影響で장비が破損したため、/스킬카드を触媒に修理が施されている。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『なお、本機にはCOMPによるコール기능に対応しており他の仲魔同様にCOMPを用いて呼び出すことが可能だ。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『コールコードは「コール・게슈펜스트」、音声입력にも対応しているため、ぜひ叫んでもらいたい。つか叫べ。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『また、自己学習기능とそれに紐付けられた自己강화기능により、레벨アップという形でどんどん強くなるようである。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『なお、支給ではあるが指揮系統は貴君を指揮官、すなわちマスターとして認識するように설정した。/　　吉報を期待する。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞・・・", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞게슈펜스트・ファントムを입수しました", , , , , 4
+			CALL ADD_NEW_COMPANION,1118,500,1
+			이벤트フラグ:43:0 = 1
+		ELSEIF RESULT == 2
+			CALL MESSAGE_WINDOW, "", "＞メールが届いているようだ", , , , , 4
+			CALL MESSAGE_WINDOW, "", @"＞『%CALLNAME:MASTER%殿/　　こちらはファントムソサエティ技術開発部です/　　当部門では新しい악마の운用方法を開発し/　　その試験者として%CALLNAME:MASTER%殿が마요네様ほか数名の賛成多数で指名されました。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞『つきましては、下記の場所にいらしていただきたく存じます。』", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞・・・", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞指定された場所にやってくると/＞ここの責任者と思わしき男が出迎えてきた…。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", @"お待ちしておりました、%CALLNAME:MASTER%さん/早速ですが、移動しながら説明させていただきます。", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞男は先導して歩きながら話し始めた。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "先のメールでもお知らせしましたが/此処では新しい악마の운用方法を研究しております。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "現在のCOMPによる악마の운用は便利ですが/召還中のMAG소비は多くの서머너の悩みです。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "そこで我々は召還中にMAGを소비しない方法を開発いたしました。/こちらドアの先にその「答え」があります。", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞손招きされてドアを開けると、そこは大きな部屋であった。", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞部屋の周辺には多くの装置が並んでいる。/＞そして部屋の中心には机があり、その上には....", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞小型のロボット？、いやプラモデルか?/＞財団Bと呼ばれる組織が売り出している상품に良く似ている。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", @"마요네様から被験者に相応しいと名指しで推薦されるほどの%CALLNAME:MASTER%殿なら良くご存知でしょうが/악마はそれ自体で存在する以外に/人形や무기に宿ることでこちらの세계に存在することも出来ます。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "我々はその現象を分析・応用して/とある「依り代」に악마を人工的に憑依させ、制御する方法を開発しました。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "まだ「自由に憑依する악마を交換する」とはいきませんが/この方法であればMAGを소비せずに、仲魔を召還し続けることが出来ます。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "「依り代」がこれ（プラモデル）なのは...../数を揃えるのが簡가운なのと....開発チームの趣味です......", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "詳しくは分からないのですが、チームの主要メンバーが/「これぞコトブキヤの技術힘だぁぁぁぁ！！」や「ブキヤ万歳！！」、「財団Bざまぁみろ！！」と叫んでました", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", @"ですが、性能は本物です。/本日は%CALLNAME:MASTER%殿にこれらと戦っていただき/その性能試験を実施いたします。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", @"そうそう、戦う前に今回のターゲットについて説明しましょう。/機体名は「게슈펜스트・팬텀」、我々ファントムソサエティと同じ「팬텀」の名を持つ機動兵器です。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", @"正確には別の正式명칭があるのですが、서머너と共に戦う以上、この명칭が相応しいでしょう…/白兵戦だけでなく射撃戦も可能なバランス타입な機体、さてどう戦いますかね…？", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", @"最も、プラモデルに宿らせてる都合上一部の장비はそれを触媒とした스킬になっておりますが……/それでも十分性能はオリジナル相応には仕上がっておりますがね/", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞まさかプラモデルと戦う日が来るとは..../＞しかし、性能は折り紙つきらしい/", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "準備はよろしいですね？では始めます。/試験開始！/コール！！게슈펜스트！！", , , , , 4
+			CALL MESSAGE_WINDOW, "コンピューター音", "Beginning devil particle dispersal", , , , , 4
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			
+			CALL SET_ENEMY,7,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,8,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,9,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,10,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,11,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,12,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,13,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,14,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,15,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL SET_ENEMY,16,1118,10,0
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			
+			CALL BATTLE_START
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			
+			CALL MESSAGE_WINDOW, "責任者", "ありがとうございます。/おかげで重要な데이터を得ることが出来ました。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", @"どうです、%CALLNAME:MASTER%殿も一台운用してみませんか？", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "先ほど説明しましたように、召還し続けてもMAGを소비しませんし/MAGによる강화も非常にリーズナブルに行えます。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "あと、出来れば전투経験をつませて/その데이터を提供していただけると幸いです。", , , , , 4
+			CALL MESSAGE_WINDOW, "責任者", "そうそう、COMPによるコール時には「コール・게슈펜스트」と叫んで頂くと良いのですが…/え？駄눈？", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞・・・", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞게슈펜스트・ファントムを입수しました", , , , , 4
+			CALL ADD_NEW_COMPANION,1118,500
+			LOCAL = GETCHARA([[キャラ:팬텀]])
+			ABL:LOCAL:스킬1 = 9
+			ABL:LOCAL:스킬2 = 12
+			ABL:LOCAL:스킬3 = 3
+			ABL:LOCAL:스킬4 = 304
+			ABL:LOCAL:스킬5 = 2002
+			ABL:LOCAL:스킬6 = 206
+			
+			이벤트フラグ:43:0 = 2
+		ELSE
+			CALL MESSAGE_WINDOW, "", "＞何か食べに行くか", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞・・・", , , , , 4
+			CALL MESSAGE_WINDOW, "因果律の番人", "………それもまた一つの選択肢か…/だが次の輪廻でもそれを選ぶとは思えないが……", , , , , 4
+			CALL MESSAGE_WINDOW, "虚空の使者", "……そう急ぐ事ではない…だが、この세계も何かしろの危機に晒されているのは確かだ…/彼ならば俺たちの힘の断片を扱えるだろうからな…", , , , , 4
+			CALL MESSAGE_WINDOW, "", "＞重大な「何か」を손にするチャンスを永久に失った気がする…", , , , , 4
+			이벤트フラグ:43:0 = 99
+		ENDIF
+	ELSEIF  이벤트フラグ:43:0 == 1
+		CALL MESSAGE_WINDOW, "", "＞メールが届いている", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『ファントムソサエティ物資調達部からの連絡、/　　所属서머너の協힘の下、特殊な머신2機の捕獲に성공』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『しかし先に貴君へ支給したゲシュペンストと同様に未知の技術が使われた機体であるために라이브ラリ데이터が存在せず、/　　데이터収集を兼ねての実戦投入を上層部は決定』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『そのため、上層部はこの2機を貴君へ支給することを決定した。/　　なお、支給に先立って2機にゲシュペンストと同じ指揮系統コードをインス토르してある。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『머신の名前は「알트아이젠・나하트」と「바이스릿터・아벤트」。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『「알트아이젠・나하트」は右팔のパイルバンカーが特徴的な/　　膨大な加速힘と重装甲を兼ね備えた近接전투型のモデルであり、』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『逆に「바이스릿터・아벤트」は손にしている火器「パルチ잔・ランチャー」による火힘지원と/　　装甲を削ってまで得た高機動힘を生かした지원전투モデルである。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『どちらも設計思想的な意味合いではとてつもなくピーキーな機種と推測される、/　　また、ゲシュペンスト同様、コール기능、레벨アップ강화기능も持っている。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『なお、両機とも捕獲時の交戦でのダメージにより武装が損傷しており、/　　ゲシュペンスト同様に스킬카드を触媒とした武装修復が施されている。/　　스킬抽出時には注意されたし。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『貴君ならばこの機体を扱いこなせれると信じている。/　　吉報を期待する。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞・・・", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『追伸：先ほど解析班から送られてきた데이터によると、/　　ファントムとこの2機に共通点が判明した。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『本来あの3機は20m級の人型機動兵器であり、何らかの形でダウンサイジングされたと推測される。/　　もしこれが事実であればこの3機はすさまじい科学技術の結晶といえるだろう…』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『無論、ガイア教やメシア教ではなく、もっと別の勢힘が開発したと考えるのが妥当である。/　　それも、この세계に存在しない、異세계の勢힘によって開発された…そういうことなのかもしれない。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞・・・", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞알트아이젠・ナハトおよびヴァイスリッター・アーベントを입수しました", , , , , 4
+		CALL ADD_NEW_COMPANION,1116,500,1
+		CALL ADD_NEW_COMPANION,1117,500,1
+		이벤트フラグ:43:0 = 99
+		
+	ELSEIF  이벤트フラグ:43:0 == 2
+		CALL MESSAGE_WINDOW, "", "＞メールが届いている", , , , , 4
+		CALL MESSAGE_WINDOW, "", @"＞『%CALLNAME:MASTER%殿/　　こちらはファントムソサエティ技術開発部です/　　先日は貴重なお時間を割いていただき、誠にありがとうございました/　　その後の%CALLNAME:MASTER%殿のご活躍は当部門にも届いております。』", , , , , 4
+		CALL MESSAGE_WINDOW, "", @"＞『つきましては、以前に%CALLNAME:MASTER%殿にお譲りした「依り代」/　　こちらの데이터を回収させていただきたく存じます』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞『ご都合の良いときに、依然と同じ場所にいらしていただけると幸いです』", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞・・・", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞以前と同じ場所にやってくると/＞責任者の男が出迎えてきた…。", , , , , 4
+		CALL MESSAGE_WINDOW, "責任者", @"お久しぶりです、%CALLNAME:MASTER%さん/早速ですが、「依り代」の데이터を取らせてていただきます。", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞ファントムを渡すと/＞研究者と思わしき男たちが데이터を取り始めた", , , , , 4
+		CALL MESSAGE_WINDOW, "研究者たち", "「おお、これは」 「すごい！さすが実戦の데이터だ！」/「기본的な挙動に問題はなさそうだ」/「なるほど、こういう動きを.....」", , , , , 4
+		CALL MESSAGE_WINDOW, "責任者", @"ありがとうございます、%CALLNAME:MASTER%さん/予想以上に良い데이터が取れています。", , , , , 4
+		CALL MESSAGE_WINDOW, "責任者", "そこで、お礼にといっては何ですが/この데이터を基に今新しい「依り代」を作成しておりますので、完成次第…え？", , , , , 4
+		CALL MESSAGE_WINDOW, "研究者たち", "「出来たよ！新しい機体！！」/「やっぱゲシュペンストベースならこの2機っしょ！！」/「ピーキーだがあんたなら使いこなせるはずだぜ」", , , , , 4
+		CALL MESSAGE_WINDOW, "研究者たち", "「本当はこの데이터を生かして인간サイズの무기も作りてぇんだが…」/「この2機作るだけで相当金が飛んだぜ…」/「くそっ、予算よこしやがれ…」", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞いくらなんでも、仕事が速すぎる…", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞・・・", , , , , 4
+		CALL MESSAGE_WINDOW, "", "＞알트아이젠・ナハトおよびヴァイスリッター・アーベントを입수しました", , , , , 4
+		CALL ADD_NEW_COMPANION,1116,500,1
+		CALL ADD_NEW_COMPANION,1117,500,1
+		이벤트フラグ:43:0 = 99
+		
+	ELSEIF 이벤트フラグ:43:0 == 99
+		
+	ENDIF

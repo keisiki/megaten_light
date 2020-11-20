@@ -1,0 +1,309 @@
+﻿@EVENT_93_5
+
+CUSTOMDRAWLINE =
+
+	PRINTL
+SETCOLOR 0xdc7b8c
+	PRINTW 「歌に踊りに往き還り、歩み進んだ二人道」
+RESETCOLOR
+SETCOLOR 0x815ca1
+	PRINTW 「だけどアタシも見つけちまった、夜空にそびえる一本道！
+	PRINTW 　９９期生、石動双葉！기합い入れて突っ走ります！」
+RESETCOLOR
+SETCOLOR 0xdc7b8c
+	PRINTW 「９９期生、花柳香子！最後まで付きおうてもらうで！」
+RESETCOLOR
+	PRINTL
+	PRINTW ……既に戦いが始まっていた。
+	PRINTL
+	PRINTW 「あたしが勝ったら、今度は香子にあたしのお世話をしてもらう！
+	PRINTW 　お菓子買って、발揉んで、バイクで学校に送ってもらうからなァ！」
+	PRINTL
+	PRINTW 石動双葉、하루バードの舞台소녀。
+	PRINTW 体格こそ小さいが、ハスキーな声を張り上げて、長大な무기を振り回している。
+	PRINTL
+	PRINTW 「ほな、うちが勝ったら、一緒に京都帰るで！」
+	PRINTL
+	PRINTW 花柳香子、長刀の舞台소녀。
+	PRINTW えらく鼻につく京言葉を操りながら、薙刀を振り回して双葉の殺陣を追いかけている。
+	PRINTL
+	PRINTW 「やれるもんならやってみろ！
+	PRINTW 　카오루코、お前の性根――あたしが叩き直してやる！」
+	PRINTL
+	PRINTW 二人は全くこちらを見ていないが……。
+	PRINTW 通されたということは、横合いから殴っても良いということだろう。
+	PRINTW 당신は무기を構え、二人に襲い掛かった。
+	PRINTL
+	PRINTL 무대소녀 石動双葉 が現れた！
+	PRINTW 무대소녀 花柳香子 が現れた！
+	PRINTL
+SETCOLOR 0xdc7b8c
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃ふえ？　　　　　　　　　　　　　　　　　　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+SETCOLOR 0x815ca1
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃카오루코！　あぶねえッ！　　　　　　　　　　　　┃
+	PRINTFORML ┃……チッ。アンタ、舞台装置じゃないようだな？┃
+	PRINTFORML ┃飛び入り참가ってわけでもなさそうだ　　　　　┃
+	PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTL
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	;※方바늘　타격・충격、ちょっと질풍・주살
+	;最初：双葉はんを魔法でシメとけばＯＫ。即死だけ注意
+	;中盤：데・카쟈持参して충격対策でＦＡ
+	;最後：하이퍼카운터対策＆ぶぶ漬けが息切れしない
+	;ぶぶ漬けは레벨の影響が大きいのでゲーム後半まで放っておくと苦労する
+	
+	;6戦눈　★★★★★
+	IF 이벤트フラグ:93:0 > 6
+		LOCAL:99 = 3
+	;5戦눈　★★★★☆
+	ELSEIF 이벤트フラグ:93:0 > 5
+		LOCAL:99 = 3
+	;4戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 4
+		LOCAL:99 = 2
+	;3戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 3
+		LOCAL:99 = 2
+	;2戦눈　★★☆☆☆
+	ELSEIF 이벤트フラグ:93:0 > 2
+		LOCAL:99 = 1
+	;1戦눈　★☆☆☆☆
+	ELSEIF 이벤트フラグ:93:0 > 1
+		LOCAL:99 = 1
+	ENDIF
+	
+	;레벨は自軍최대値（최저値15）
+	LOCAL:1 = 0
+	FOR LOCAL , 0 , CHARANUM
+		SIF CFLAG:LOCAL:PTフラグ == 0 || TALENT:LOCAL:비전투원
+			CONTINUE
+		LOCAL:98 = MAX(LOCAL:98 , BASE:LOCAL:LV)
+	NEXT
+	SIF LOCAL:98 < 10
+		LOCAL:98 = 10
+	
+		
+	;- SET:후타바
+		CALL SET_ENEMY,9,[[キャラ:후타바（무대소녀）]],LOCAL:98,1,LOCAL:99
+		CALLNAME:(CHARANUM-1) = 후타바
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:ARG:ＨＰ*3
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 2
+		ABL:(CHARANUM-1):공격상성 = 0
+		ABL:(CHARANUM-1):사거리 = 2
+		CALL SYNC_STATUS,(CHARANUM-1)
+		ABL:(CHARANUM-1):스킬1 = [[스킬:라쿠・카쟈]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:기합]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:분노의철권]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:열풍격]]
+		ABL:(CHARANUM-1):스킬5 = [[스킬:하이퍼카운터]]
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		;小柄体系を外さないとポカポカ叩き始めるから……
+		TALENT:(CHARANUM-1):유아체형 = 0
+		;초인扱いに
+		ABL:(CHARANUM-1):종족 = 43
+		CSTR:(CHARANUM-1):종족명 = 무대소녀
+		LOCAL = CHARANUM-1
+		CALL HEALTH_CHARA,(CHARANUM-1)
+
+	;- SET:카오루코
+		CALL SET_ENEMY,14,[[キャラ:카오루코]],LOCAL:98,1,LOCAL:99
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:ARG:ＨＰ*2
+		;ぶぶ漬けはＭＰ보정無しで
+		CFLAG:(CHARANUM-1):行動횟수 = 3
+		ABL:(CHARANUM-1):공격상성 = 0
+		ABL:(CHARANUM-1):사거리 = 2
+		CALL SYNC_STATUS,(CHARANUM-1)
+		ABL:(CHARANUM-1):스킬1 = [[스킬:용분의춤]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:천상의춤]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:바람의춤]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:저주의언령]]
+		ABL:(CHARANUM-1):스킬5 = [[스킬:마하・갈라]]
+		ABL:(CHARANUM-1):스킬6 = [[스킬:기공(대)]]
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		;초인扱いに
+		ABL:(CHARANUM-1):종족 = 43
+		CSTR:(CHARANUM-1):종족명 = 무대소녀
+		LOCAL = CHARANUM-1
+		CALL HEALTH_CHARA,(CHARANUM-1)
+
+
+		;6戦눈　★★★★★
+		IF LOCAL:99 > 5
+			;ギミックで対応しよう
+		;5戦눈　★★★★☆
+		ELSEIF LOCAL:99 > 4
+			;素
+		;4戦눈　★★★☆☆
+		ELSEIF LOCAL:99 > 3
+			;行動횟수1
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			;行動횟수2
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+		;3戦눈　★★☆☆☆
+		ELSEIF LOCAL:99 > 2
+			;行動횟수1・열풍撃削除
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			ABL:(CHARANUM-2):스킬4 = 0
+		
+			;行動횟수１・死ねどす以外削除。ひたすら매도する京都人
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			ABL:(CHARANUM-1):스킬1 = [[스킬:저주의언령]]
+			ABL:(CHARANUM-1):스킬2 = 0
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+		;2戦눈　★★☆☆☆
+		ELSEIF LOCAL:99 > 1
+			;行動횟수1・열풍撃削除
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			ABL:(CHARANUM-2):스킬4 = 0
+		
+			;行動횟수１・死ねどす以外削除。ひたすら매도する京都人
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			ABL:(CHARANUM-1):스킬1 = [[스킬:저주의언령]]
+			ABL:(CHARANUM-1):스킬2 = 0
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+			
+		;1戦눈　★☆☆☆☆
+		ELSEIF LOCAL:99 > 0
+			;行動횟수1・기합以外削除
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			ABL:(CHARANUM-2):스킬1 = 0
+			ABL:(CHARANUM-2):스킬3 = 0
+			ABL:(CHARANUM-2):스킬4 = 0
+			ABL:(CHARANUM-2):스킬5 = 0
+			
+			;行動횟수１・스킬全消し。頑張って素殴りするぶぶ漬け
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			ABL:(CHARANUM-1):스킬1 = 0
+			ABL:(CHARANUM-1):스킬2 = 0
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+			ABL:(CHARANUM-1):스킬5 = 0
+		ENDIF
+		
+		CALL SYNC_STATUS,(CHARANUM-2)
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-2)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		;解析度MAX処理
+		CALL INCREASE_ANALYZE([[キャラ:후타바（무대소녀）]],1000)
+		CALL INCREASE_ANALYZE([[キャラ:카오루코]],1000)
+
+	;ふたかお復活フラグ
+	SETBIT 이벤트フラグ:93:15, 1
+	CALL BATTLE_START
+	CLEARBIT 이벤트フラグ:93:15, 1
+
+	CUSTOMDRAWLINE =
+
+	PRINTW 「くそっ、すまねぇ、카오루코……」
+	PRINTW 「あんた！　うちの双葉はんに酷いことするつもりやろ！
+	PRINTW 　불결やっ、손つきが불결っ。汚い손で触らんといて！」
+	;最初のver、ナチュラルに薄い本発言が出ておりましたが、
+	;ぶぶ漬けはそんなこと言わない（戒め）
+	;この場を借りてお詫びと訂正を致します。
+	PRINTL
+	PRINTW 喚き散らかす京都人をなだめつつ、당신は二人に악마退治の손伝いをするように求めた。
+	PRINTL
+	PRINTW 「……ふう、あんたはん、寝言が上손どすなあ？
+	PRINTW 　聖翔がもう無い？　うちらがキラめきの残り香ぁ？
+	PRINTW 　しょーもない三文小説、どーもおーきに。
+	PRINTW 　双葉はん、こんなんほっといて、さっさと決着つけまひょ」
+	PRINTW 「……카오루코、落ち着いて聞いてくれよ」
+	PRINTW 「ふえ？」
+	PRINTW 「アタシも、お前も……身体、토오루けてる」
+	PRINTW 「ぎょええええ！？」
+	PRINTL
+	PRINTW 무대소녀　石動双葉が仲間になった。
+	PRINTW 무대소녀　花柳香子が仲間になった。
+	PRINTL
+	PRINTW 「それもこれも、双葉はんが悪いんや！
+	PRINTW 　双葉はんがうちのこと引き留めるさかい！」
+	PRINTW 「――ごめん、そうかもしれない。
+	PRINTW 　あそこで、お前のコト、引き留めていなかったら。
+	PRINTW 　악마と戦うのはアタシだけでよかったのかもしれない」
+	PRINTW 「う……。
+	PRINTW 　なんやの、それ。
+	PRINTW 　そんな顔して、うちを悪者にしたいんやろ！？」
+	PRINTW 「本当に、ごめん。こんなはずじゃなかった。だってお前は……」
+	PRINTW 「やめえって言うてるやろ！？」
+	PRINTL
+	PRINTW 당신は気まずそうに無言になっている二人を連れて事務所に戻った……。
+	PRINTL
+
+	CALL ADD_NEW_COMPANION,5318,200
+	LOCAL = GETCHARA(5318)
+	CFLAG:LOCAL:전투참가불가능 = -1
+
+	CALL ADD_NEW_COMPANION,5319,200
+	LOCAL = GETCHARA(5319)
+	CFLAG:LOCAL:전투참가불가능 = -1
+
+	이벤트フラグ:93:0 += 1
+	SIF 이벤트フラグ:93:5 == 0
+		SETBIT 이벤트フラグ:93:5, 1
+	SIF 이벤트フラグ:93:6 == 0
+		SETBIT 이벤트フラグ:93:6, 1
+	CALL EVENT_93_TURN_END
+
+
+@EVENT_BATTLE_ACTEND_EVENT_93_5
+;最終戦かつぶぶ漬けが先に死んだ
+;双葉はん行動횟수爆上げ
+IF 이벤트フラグ:93:0 > 6 && BASE:(CHARANUM-1):ＨＰ < 1 && 이벤트フラグ:93:5 == 0
+	PRINTFORML 
+SETCOLOR 0x815ca1
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃アイツは、約束したんだ。　　　　　　　　　　┃
+	PRINTFORML ┃アタシに、一番、キラめくところを、　　　　　┃
+	PRINTFORML ┃一番最初に見せるって。だから――！　　　　　┃
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞双葉の行動횟수が増大した。
+	;対策はあるとはいえ、この威힘は高すぎる……
+	;ABL:(CHARANUM-2):스킬1 = [[스킬:풍신격]]
+	CFLAG:(CHARANUM-2):行動횟수 = 5
+	SETBIT 이벤트フラグ:93:5, 1
+	SETBIT 이벤트フラグ:93:6, 1
+;最終戦かつ双葉が先に死んだ
+;花柳香子스킬추가＋ＭＰ爆上げ＆회복
+;만능相性の상태이상を撒き散らすようになるので、死ぬ
+ELSEIF 이벤트フラグ:93:0 > 6 && BASE:(CHARANUM-2):ＨＰ < 1 && 이벤트フラグ:93:6 == 0
+	PRINTFORML 
+SETCOLOR 0xdc7b8c
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃双葉はんは……言うてくれはったんや。　　　　┃
+	PRINTFORML ┃うちが一番キラめくところを一番最初に見るって┃
+	PRINTFORML ┃――見とき。うちかて、舞台소녀なんや。　　　┃
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞香子の空気が一変する。
+	PRINTFORMW ＞香子のMPが完全회복した！
+	ABL:(CHARANUM-1):가창기능 = 10
+	;やりすぎかも知らんけど
+	;ぶぶ漬けもやればできる子だということを
+	;身をもって知っていただきたい
+	ABL:(CHARANUM-1):스킬5 = [[스킬:크로스포츈]]
+	ABL:(CHARANUM-1):스킬7 = [[스킬:질풍가드브레이크]]
+	CFLAG:(CHARANUM-1):行動횟수 = 3
+	MAXBASE:(CHARANUM-1):ＭＰ = 99999
+	BASE:(CHARANUM-1):ＭＰ = 99999
+	SETBIT 이벤트フラグ:93:5, 1
+	SETBIT 이벤트フラグ:93:6, 1
+ENDIF

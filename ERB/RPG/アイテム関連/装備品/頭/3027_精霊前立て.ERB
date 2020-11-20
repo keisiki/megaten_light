@@ -1,0 +1,80 @@
+﻿
+;======================================================
+;장비品の데이터
+;정령머리장식
+;Lv50장비までは반사まで　기본능력に합계+6まで
+;======================================================
+
+@기본능력수정_3027,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 2
+	CASE "마력"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3027,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 20
+	CASE "회피"
+		RETURN 12
+	CASE "마법효과"
+		RETURN 17
+	CASE "명중"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_3027,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "검격","수격"
+		RETURN 50
+	CASE "파마"
+		RETURN 0
+	CASE "비구","질풍"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@バステ내성_3027,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "BIND"
+		RETURN -50
+ENDSELECT
+RETURN 0
+
+@장비箇所_3027
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3027
+RETURN 43
+
+@장비조건_3027,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 43
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3027
+PRINTL 장비조건：♀ LV43～
+RETURN 1
+
+@장비해설_3027
+PRINTL 前立てに정령の姿を飾った、武者鎧の투구。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3027
+RETURN 0
+
+;마카교환가능か
+@EQUIP_EXCHANGE_3027
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 300000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_3027
+RETURN 0

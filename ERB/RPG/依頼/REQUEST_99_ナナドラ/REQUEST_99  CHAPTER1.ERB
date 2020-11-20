@@ -1,0 +1,515 @@
+﻿;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_03
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 내용은、드래곤에 의해 지배한당 도쿄도청 탈환작전、
+PRINTFORML 그 후방지원이다。
+PRINTFORML 
+PRINTFORML 우선은 신주쿠교엔 쉘터에서 집합할 것이다。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥38000
+;====================
+;内容
+;====================
+@REQUEST_99_03
+IF 의뢰フラグ:99:1 == 1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+ELSE
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+ENDIF
+PRINTFORMW 東京 ― 신주쿠御苑・地下シェルター　メインゲート前
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW メールで의뢰された通り、地下シェルターへと向かうと、
+PRINTFORMW キリノの他、若草色の머리카락をした소년と소녀が並んで立っていた。
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 「正式に作戦が始まる前に、挨拶しておこうと思いまして。さ、二人とも」
+PRINTFORML 소년：
+PRINTFORMW 「ムラクモ機関、第２班所属。ＮＡＶ３．６だ」
+PRINTFORML 소녀：
+PRINTFORMW 「同じく、第２班所属のＮＡＶ３．７です…」
+PRINTFORML キリノ：
+PRINTFORML 「この子たちはムラクモ第２班、通称『情報지원班』…
+PRINTFORMW 　前線のサポートを行うのが仕事です」
+PRINTFORMW 「ちょっと変わり者だけど、よろしくしてあげてください」
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 「…変わり者はお前の方だろ。今回、オレはガトウたちの担当だ。挨拶だけで悪いけど、これで」
+PRINTFORMW 見た눈通りの物怖じしない雰囲気の소년――ＮＡＶ３．６は去って行った。
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 「すいません、彼はちょっとぶっきらぼうなところがあって…」
+PRINTFORML 「今回の도청奪還作戦、당신のチームのサポートは私がナビゲートを担当することになりました。
+PRINTFORMW 　よろしくお願いします」
+PRINTFORMW 「それでは、のちほど…現場で」
+PRINTFORMW 大人しそうな雰囲気の소녀――ＮＡＶ３．７も追うようにその場を去った。
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 「ナビが아이でびっくりしましたか？」
+PRINTFORMW いや、能力の資質に年齢は関係ない。ＣＯＭＰや異能さえあれば여고생だって악마とやり合える。
+PRINTFORMW それより外部協힘者だからなのだろうが、いちいち敬語では堅苦しくてたまらない。
+PRINTFORML キリノ：
+PRINTFORML 「そうですか？　それでは――彼らの任務においての能力は申し分ないはずだ。
+PRINTFORMW 　現場では彼らの指示に従うようにして欲しい」
+PRINTFORML 「それともう一つ。『１３班』は欠番のエースナンバー…
+PRINTFORMW 　ナツメさんはキミも、彼女のことも買ってることを忘れないで」
+PRINTFORMW 「それじゃあ、後はここで待機していてくれ。ナツメさんも直にやってくるから」
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORML ナツメ：
+PRINTFORMW 「ムラクモ１３班、アナタたちに、任務を通達します」
+PRINTFORML 「１３班は、これから도청に趣き、ドラゴン討伐を行う。
+PRINTFORMW 　その際、ドラゴンの肉体から손に入れられる資源を回収する…これがアナタの任務よ」
+PRINTFORMW 「ドラゴンの資源は무기の原料にもなる素材よ。それを回収し、지원用の武装を増産するという눈的もあるわ」
+PRINTFORMW 「%CALLNAME:MASTER%には先に伝えた通り、%CALLNAME:LOCAL%の護衛をお願い」
+PRINTFORMW 「도청に行って生還できる인간なんて、数えるほどしかいないことを忘れないで」
+PRINTFORMW 重厚なモーター音を響かせて、シェルターのメインゲートが開く。
+PRINTFORMW シェルター内の避難民の視線を背に、東京도청へと向かった……。
+
+CALL REQUEST_TITLE_99("1")
+
+PRINTFORMW 東京 ― 신주쿠・逆サ도청　エントランス
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW ――도청内部に侵入した瞬間、세계が変わった。
+PRINTFORMW 窓の外から射し込む紫紺の明かり。
+PRINTFORMW 外とは比べ物にならないほどに사키き誇る赤い花。
+PRINTFORML 　　　　　　　　・・・・・・・・・
+PRINTFORMW そして、文字通り逆さまになっている도청。
+PRINTFORMW %CALLNAME:MASTER%は今、エントランスの天井に立っている形である。
+PRINTFORMW ムラクモからの情報によると、帝竜は自らの根城を好きな姿に変えてしまえるのだそうだ。
+PRINTFORMW ――物理法則さえも踏み躙って、この様に。
+PRINTFORMW もっとも、%CALLNAME:MASTER%からすれば異界化のようなものであり、
+PRINTFORMW 규모の大小こそあれど特筆するほど驚くことではない。
+PRINTFORMW が、これまで一般人として生きてきた%CALLNAME:LOCAL%は見慣れないのか落ち着かない様子だ。
+PRINTFORML 
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『コール、１３班。こちらＮＡＶ３．７…聞こえますか？』
+PRINTFORMW 『通信は正常のようですね。では、これよりナビゲートを開始します』
+PRINTFORMW 『今回の任務はドラゴンの肉体から採取できる資材の回収です』
+PRINTFORMW 『つまり今回のミッションは、ドラゴンを３体倒せばコンプリートということになります』
+PRINTFORMW 『ただ、２階のドラゴンは先遣隊によって駆逐済みなので、３階以降のフ로어を탐색してください』
+PRINTFORML 
+PRINTFORMW 先遣隊の情報によれば、下へ降りていけば最深部へ辿り着けるそうだ。
+PRINTFORMW ドラゴンが支配した地域に사키く赤い花――≪フロワロ≫を발で踏み散らしながら歩き出した。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠・逆サ도청　３Ｆ
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 門番でも気取っているのか、通路のど真ん中に立つドラゴンの影が見える。
+PRINTFORMW こちらを視認して尚、動く素振りはない。近づかない限り손を出す気はない、ということか。
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『前方に見えるのが、討伐대상のドラゴンです。討伐してください』
+PRINTFORMW ならば容赦なく倒させてもらうとしよう。
+PRINTFORML 
+PRINTFORMW ドラゴ한마ードが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	CALL SET_ENEMY,9, [[キャラ:타라스크]], 38, 0
+	NAME:(CHARANUM-1) = ドラゴ한마ード
+	CALLNAME:(CHARANUM-1) = ドラゴ한마ード
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:마구날뛰기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:브레인쉐이크]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):전술 = 50
+	BASE:(CHARANUM-1):전술 = 50
+	MAXBASE:(CHARANUM-1):화염 = 150
+	BASE:(CHARANUM-1):화염 = 150
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 머리部が巨大な한마ー状になっており、머리を振り下ろして戦う。
+	CSTR:(CHARANUM-1):33 = その代償かは불명だが、팔は退化しており、
+	CSTR:(CHARANUM-1):34 = 머리を振り回す際のバランス取り程度にしか使われない。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には逆サ도청に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『コール、１３班。なかなかの팔前ですね』
+PRINTFORMW 視界の片隅に、せっせとドラゴンの死骸から資源を回収する%CALLNAME:LOCAL%の姿が見える。
+PRINTFORMW ……バッチリ눈が合った。「손伝ってくれ」と눈が訴えていたが知らぬふりで通信を続ける。
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『ドラゴ한마ードの討伐、および、資源の回収を確認しました』
+PRINTFORMW 『このフ로어には、他にもドラゴンの出没情報があります。任務を続行しましょう』
+PRINTFORMW 回収を終えた%CALLNAME:LOCAL%が近づいてくる。탐색を再開しよう……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 先程撃破した個体が二体待ち構えている……。
+PRINTFORMW 警戒でもしているのか、やはりそこから動く気はないようだ。
+PRINTFORMW 徘徊するなら各個撃破も狙いやすかったが、仕方ない。
+PRINTFORMW %CALLNAME:MASTER%は物陰から飛び出し、奇襲を掛けた！
+PRINTFORML 
+PRINTFORMW ドラゴ한마ードの群れが現れた！
+	
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:先制공격フラグ = 1
+	
+	CALL SET_ENEMY,8, [[キャラ:타라스크]], 38, 0
+	NAME:(CHARANUM-1) = ドラゴ한마ード
+	CALLNAME:(CHARANUM-1) = ドラゴ한마ード
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:마구날뛰기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:브레인쉐이크]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):전술 = 50
+	BASE:(CHARANUM-1):전술 = 50
+	MAXBASE:(CHARANUM-1):화염 = 150
+	BASE:(CHARANUM-1):화염 = 150
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 머리部が巨大な한마ー状になっており、머리を振り下ろして戦う。
+	CSTR:(CHARANUM-1):33 = その代償かは불명だが、팔は退化しており、
+	CSTR:(CHARANUM-1):34 = 머리を振り回す際のバランス取り程度にしか使われない。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には逆サ도청に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,10, [[キャラ:타라스크]], 38, 0
+	NAME:(CHARANUM-1) = ドラゴ한마ード
+	CALLNAME:(CHARANUM-1) = ドラゴ한마ード
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:마구날뛰기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:브레인쉐이크]]
+	ABL:(CHARANUM-1):스킬3 = 0
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	MAXBASE:(CHARANUM-1):전술 = 50
+	BASE:(CHARANUM-1):전술 = 50
+	MAXBASE:(CHARANUM-1):화염 = 150
+	BASE:(CHARANUM-1):화염 = 150
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = 
+	CSTR:(CHARANUM-1):32 = 머리部が巨大な한마ー状になっており、머리を振り下ろして戦う。
+	CSTR:(CHARANUM-1):33 = その代償かは불명だが、팔は退化しており、
+	CSTR:(CHARANUM-1):34 = 머리を振り回す際のバランス取り程度にしか使われない。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = 第一次東京侵蝕時には逆サ도청に出現が確認されている。
+	CSTR:(CHARANUM-1):37 = 
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『コール、１３班。三体分の資源の回収を確認…任務完了です』
+PRINTFORMW %CALLNAME:LOCAL%の精힘的な回収活動の甲斐あって二体分の採取は先よりも早く終わった。
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『シェルターへ帰投し、４班…開発班にその資源を渡してください』
+PRINTFORMW 『では、私のナビはこれで。オーヴァ』
+PRINTFORMW 言い終えると通信は終了した。
+PRINTFORMW %CALLNAME:MASTER%としてもこんなところに長居する理由はない。
+PRINTFORMW 資源の受け渡しは%CALLNAME:LOCAL%に一任し、一旦拠点へ帰還した……。
+PRINTFORML 
+PRINTFORMW 입座に報酬￥35000が支払われ、名声25を得た。
+MONEY += 35000
+FLAG:名声 += 25
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 3
+RESULTS = 의뢰【(세븐스 드래곤 MOD)전장의 포효 -The Warcry-(2)】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_04
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 내용은、드래곤에 의해 지배한당 도쿄도청 탈환작전、
+PRINTFORML 그 후방지원이다。
+PRINTFORML 
+PRINTFORML 이번 목적은 최심부에 전개하고 있는 자위대에 장비를 전달하는 것이다。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥40000
+PRINTFORML （ 주의：이 의뢰를 받으면 、하루가 종료됩니다 ）
+;====================
+;内容
+;====================
+@REQUEST_99_04
+IF 의뢰フラグ:99:1 == 1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+ELSE
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+ENDIF
+PRINTFORMW 東京 ― 신주쿠・逆サ도청　도청前広場
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 集合地点として指定された、도청前広場。
+PRINTFORMW 外から見える東京도청は平時と何も変わりなく、何も知らなければ中で何が起きているか分からないことだろう。
+PRINTFORMW ……等と取り留めのないことを考えている内に、장비の山を抱えて%CALLNAME:LOCAL%がやってきた。
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『コール、１３班。今、自衛隊の指揮をとっているのは、堂島凛（ドウジマ・リン）三佐という方です』
+PRINTFORMW 『堂島三佐の部隊は１１階で現場を制圧しているようです。上…いえ、下へ向かいましょう』
+PRINTFORMW %CALLNAME:MASTER%は再び逆サ도청へと侵入した……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『コール、１３班。前方の壁の大穴が見えますか？』
+PRINTFORMW 『現状、１１階に向かうには…そこから外に出て、庁舎外周を下っていくしかありません』
+PRINTFORMW 『外は…やや常識外の光景ですが、今の東京では、もはや日常でしょう』
+PRINTFORMW ナビゲーションに従い、４階の壁から外に出る。
+PRINTFORMW 常識外など「この業界」では当たり前のことだ。如何な光景とて今更무서움るものでもないだろう……。
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠・逆サ도청　浮遊岩礁
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW %CALLNAME:MASTER%の視界に飛び込んでくるのは、底の見えない暗黒。
+PRINTFORMW 舞い上がるフロワロの花弁と、도청屋上付近で輝く朔の如き闇の天体。
+PRINTFORMW ――そして、浮遊する도청の残骸だった。辛うじて十数名程度ならば上に乗れそうなサイズの。
+PRINTFORMW 確かに詳細な説明を求めなかったのはこちらだ。それは認めよう。
+PRINTFORMW しかし、「外周を下る」と聞いて浮遊する残骸を飛び移るなどと誰が予想できるのだ。
+PRINTFORMW というか先遣隊は皆ここを飛び移って行ったのか。自衛隊すら。
+PRINTFORMW これがムラクモのやり方なのか……と呆れる%CALLNAME:MASTER%を尻눈に、%CALLNAME:LOCAL%は躊躇せず飛び移った。
+IF CFLAG:MASTER:당신の専攻分野 == 1;서머너なら
+	PRINTFORMW 新人如きに後れを取るのは気に入らない、と요조系악마を召喚、しっかりと掴んで残骸へと移動した……。
+ELSE
+	PRINTFORMW 新人如きに後れを取るのは気に入らない、と%CALLNAME:MASTER%も自힘で残骸へと飛び上がった……。
+ENDIF
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠・逆サ도청　１１Ｆ
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 気が狂っているとしか思えない、道ならぬ道を飛び移って一気に１１階まで降りることに성공した。
+PRINTFORMW 道中、奇襲に合わないかと気が気でなかったが、流石にあんな環境ではドラゴンも生息できないようだ。
+PRINTFORMW 二度とこんな体験はしたくないものだ……と考えながら탐색していると、自衛隊を発見した。
+PRINTFORMW あの特徴的な赤い머리카락の女性は、確か選抜試験の時にも現場にいたはずだ。彼女が堂島三佐か。
+PRINTFORML 
+PRINTFORML リン：
+PRINTFORMW 「ん…？　お前たちは、ムラクモの…アタシたちに何の用だ」
+PRINTFORMW %CALLNAME:LOCAL%が預かってきた自衛隊장비一式を손渡す。
+PRINTFORMW 『장비は討伐隊に優先的に回していた』だの、『出来る奴は討伐隊に引き抜かれた』だの、
+PRINTFORMW 『現状では戦線維持が精一杯だった』だのと自衛隊員からは喜びの声と愚痴が漏れた。
+PRINTFORMW ……これで今回の任務も終了だ。後は討伐隊が帝竜を討伐し、
+PRINTFORMW 自衛隊がその退路を確保する。これ以上ここですることはない。
+PRINTFORMW さあ帰ろう――
+PRINTFORMW ――と引き返した時、ノイズ混じりの通信が届いた。
+PRINTFORML 
+PRINTFORMW 『…れか……』
+PRINTFORMW 『誰…応答……くれ…』
+PRINTFORMW 『討伐…隊…壊滅…至急…増援を……ッ！』
+PRINTFORML 
+PRINTFORML リン：
+PRINTFORMW 「討伐隊が、壊滅……！？」
+PRINTFORMW 「おい、どうなってるんだムラクモ！　そんな話、こっちには全く…」
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『…こちらでも、詳細は掴めていません。屋上付近は、帝竜の影響で殆どモニタリングが利かないんです』
+PRINTFORMW 先程までの高揚が、反転した。
+PRINTFORMW 無理もない。通信すら満발に繋がらない状況では彼らも信じて待つしかないのだ。
+PRINTFORMW 更に言えば討伐隊はムラクモ１０班と、自衛隊の中でも精鋭から成る混成部隊である。
+PRINTFORMW それが突然壊滅したと、増援を求められたところで混乱するのは当然だった。
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『至急、状況を確認します。しばらくお待ち――』
+PRINTFORML リン：
+PRINTFORMW 「そんな悠長に待ってられるか…ッ！　総員、出動準備だ！」
+PRINTFORMW 「これより、屋上へ進軍し…討伐隊の援護を行う！」
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『堂島リン三佐に通達…本部からの命令は現状維持です』
+PRINTFORMW 『あくまで、このエリアを死守することにのみ努めるように、と』
+PRINTFORML リン：
+PRINTFORMW 「な…ッ！　仲間を見殺しにしろってのか！？」
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『皆さん自衛隊の現有戦힘では、屋上に到たちする段階で、生存率１８．７％…それは作戦と呼べません』
+PRINTFORMW 『１３班は、現地へ。直視にて屋上のガトウ隊の状況確認を行います…速やかに作戦を遂行されたし』
+PRINTFORML ナツメ：
+PRINTFORMW 『１３班、私よ。討伐隊とは相変わらず、連絡が取れない상태が続いているわ』
+PRINTFORMW 『最悪の場合、既に全滅している可能性もある…急いで屋上へ向かって状況を確認して』
+PRINTFORMW 『もし討伐隊が生存しているなら…彼らの救出を最優先に行動してちょうだい』
+PRINTFORMW 『私たちはここでガトウとナガレを失う訳にはいかないの。頼んだわよ』
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『『討伐隊の救出』が最優先のミッションとなりました』
+PRINTFORMW 『それから…これより先は、電波障害が強いため、私からの通信が一旦断絶します』
+PRINTFORMW 『細心の注意を払って、任務を遂行してください』
+PRINTFORMW %CALLNAME:LOCAL%が沈痛な面持ちをしている……聞けば、選抜試験で彼らには世話になったのだと言う。
+PRINTFORMW こうなってしまっては仕方がない。帝竜との전투も視野に入れておこう……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠・逆サ도청　１２Ｆ
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 討伐隊に近づいたからか、通信機からは彼らの音声がノイズ混じりだが届く。
+PRINTFORMW 途切れ途切れに聞こえる内容から察するに、討伐隊はまだ全滅していない。
+PRINTFORMW とはいえ既にガトウは差し違える깨달음悟を決めているようだ。時間はない。
+PRINTFORMW 死傷者が並ぶ、霊安室めいた廊下を駆け抜けて、屋上へと続く裂け눈を飛び降りた――！
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠・逆サ도청　屋上
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 再び訪れた屋上。竜の周囲には사키き誇るフロワロと屍山血河。生き残りは極少数。
+PRINTFORMW 配役が少し違うだけで、笑えるほどにあの日と同じだ。
+PRINTFORMW ガトウはまだ生きているようだが、もう一人の隊員…ナガレは事切れている。
+PRINTFORML ガトウ：
+PRINTFORMW 「お前ら……！　どうして、来やがった……ッ！」
+PRINTFORMW 「下がってろ……！　こいつは俺がやる……ッ！」
+PRINTFORMW 「ナガレの仇、は…俺、が……！」
+PRINTFORMW そんな傷でか？　邪魔だから退いていろ。
+PRINTFORMW 힘を込めて言い放つと、ガトウは悔しそうに後ずさった。
+PRINTFORMW 『討伐隊の救出』を遂行するならば、최대の脅威である帝竜を排除するのが最も가운純な解法だ。
+PRINTFORMW 幸い、帝竜は討伐隊との激戦を経て角が砕け、片翼が千切れて、全身に傷が刻まれている。
+PRINTFORMW 空間そのものを揺るがす大叫喚≪워크라이≫も、かつて感じたほどの脅威はない。
+PRINTFORMW 깨달음悟を決め、%CALLNAME:MASTER%は帝竜との전투を開始した。
+PRINTFORML 
+PRINTFORMW 워크라이が現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+
+	;- 악마解析度増加処理(1000でMAX)
+	CALL INCREASE_ANALYZE([[キャラ:워크라이]],1000)
+	
+	CALL SET_ENEMY,9, [[キャラ:워크라이]], 40, 0,1
+	;何ターンか経ってMPすっからかんなのは見るに堪えないので……
+	MAXBASE:(CHARANUM-1):ＭＰ = 99999
+	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	CSTR:(CHARANUM-1):사고패턴 = 5423
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW 帝竜워크라이を討伐した！
+PRINTFORMW 帝竜が撃破されたことで、阻害されていた通信が회복し始めたようだ……。
+PRINTFORML 
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『通信상태、회복！　ガトウ、ナガレ、応答せよ！』
+PRINTFORML ＮＡＶ３．７：
+PRINTFORMW 『１３班、状況を報告してください！』
+PRINTFORML ＮＡＶ３．６：
+PRINTFORMW 『…あ、れ？　帝竜の反応がない…こ、これって……！』
+PRINTFORML ナツメ：
+PRINTFORMW 『やったのね、１３班……！』
+PRINTFORMW その通りだ、と回答しようとした세츠나、逆サ도청전체が震動を始める。
+PRINTFORMW 中核存在たる帝竜が失われたことで、元の도청へと戻ろうとしているのだ。
+PRINTFORMW 捕まる場所などどこにもないが、必死に耐える。こんなところから落ちれば、二度と戻っては来れまい。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 気が付くと、도청は元の空間に復帰していた。
+PRINTFORMW 사키き誇るフロワロは消え去り、屋上からの景色は東京を一望できる。
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 『と、도청が…元に戻った…！！』
+PRINTFORML ナツメ：
+PRINTFORMW 『アナタたち、よくやったわ……！　ガトウとナガレは！？』
+PRINTFORML ガトウ：
+PRINTFORMW 『俺は、なんとか…生きてる…。だが…ナガレが……！』
+PRINTFORMW 『くそッ……！　すまねェ……！』
+PRINTFORML ナツメ：
+PRINTFORMW 『キリノ！　すぐに도청に向かうわよ…動ける인간は全員、駆り出して！』
+PRINTFORML キリノ：
+PRINTFORMW 『了解！』
+PRINTFORMW 『１３班、聞こえるか！？　これから人を向かわせる…キミたちは、そこで休んでいてくれ』
+PRINTFORMW 『いいかい、聞いてくれ。キミたちは、取り戻したんだ…僕たちの…いや、인간の居場所を……！』
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW その後の전개は、早かった。
+PRINTFORMW 東京도청を整備・改修し、シェルター内の避難民を受け入れて、瞬く間に人類の拠点として復興したのだ。
+PRINTFORMW 一般人も自衛隊も、そしてムラクモ機関にも、近しい人物を失った者は少なくない。
+PRINTFORMW そうした悲しみからの逃避として、肉体労働は余計なことを考えずに済む分、良かったのだろう。
+PRINTFORMW そして、%CALLNAME:MASTER%らは拠点完成と人類の反攻開始を祝した宴会に誘われた…。
+PRINTFORML 
+PRINTFORMW 입座に報酬￥40000が支払われ、名声50を得た。
+PRINTFORMW また、任務の更新に伴う추가報酬￥25000が支払われた。
+MONEY += 65000
+FLAG:名声 += 50
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 4
+RESULTS = 의뢰【(세븐스 드래곤 MOD)생존자 -SKY and The Others-(1)】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+CALL REQUEST_99_DAY_END
+

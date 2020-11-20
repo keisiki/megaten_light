@@ -1,0 +1,56 @@
+﻿
+;======================================================
+;장비品の데이터
+;트라이브수트・改（머리）
+;======================================================
+
+@기본능력수정_3208,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3208,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		SIF ARG:1 == -1
+			RETURN 4
+		RETURN (BASE:(ARG:1):LV + BASE:(ARG:1):인내력 + (BASE:(ARG:1):힘 + BASE:(ARG:1):인내력 * 2) / 2) / 5
+	CASE "회피"
+		SIF ARG:1 == -1
+			RETURN 2
+		RETURN (BASE:(ARG:1):LV + BASE:(ARG:1):속도 * 3/2 + BASE:(ARG:1):운 / 2) * 3/20
+	CASE "마법위력"
+		SIF ARG:1 == -1
+			RETURN 3
+		RETURN (BASE:(ARG:1):LV * 3/2 + BASE:(ARG:1):마력 * 3/2 + BASE:(ARG:1):지혜) / 20
+	CASE "마법효과"
+		SIF ARG:1 == -1
+			RETURN 3
+		RETURN (BASE:(ARG:1):LV + BASE:(ARG:1):지혜 / 2 + BASE:(ARG:1):속도 / 2 + BASE:(ARG:1):운 / 2) / 4
+ENDSELECT
+RETURN 0
+
+@방어상성_3208,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_3208
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3208
+RETURN 1
+
+@장비조건_3208,ARG
+RETURN 1
+
+@장비해설_3208
+PRINTL 過酷な『煉獄』を生き抜いた者が着けていた옷
+PRINTL 　　　　　　　　레벨・스테이터스에 따라 수치가 바뀐다
+
+
+@구입조건_3208
+RETURN 0
+
+@引継ぎ可不可_3208
+RETURN 1

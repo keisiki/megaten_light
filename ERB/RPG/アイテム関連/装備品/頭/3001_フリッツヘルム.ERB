@@ -1,0 +1,54 @@
+﻿
+;======================================================
+;장비品の데이터
+;프리츠헬름
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_3001,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3001,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 15
+	CASE "회피"
+		RETURN 6
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_3001,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "비구"
+		RETURN 95
+ENDSELECT
+RETURN 100
+
+@장비箇所_3001
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3001
+RETURN 23
+
+@장비조건_3001,ARG
+SIF BASE:ARG:LV < 23
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3001
+PRINTL 장비조건：LV23～
+
+@장비해설_3001
+PRINTL 많은 군대에서 사용되는 귀나 후두부까지 커버하는 케블라제 헬멧.
+PRINTL 　　　　　　　　사용성이 뛰어나 권총탄까지 저지할 수 있다.
+
+
+@구입조건_3001
+RETURN 1
+
+@引継ぎ可不可_3001
+RETURN 0

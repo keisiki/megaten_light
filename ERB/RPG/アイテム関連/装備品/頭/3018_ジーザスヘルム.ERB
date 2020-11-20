@@ -1,0 +1,80 @@
+﻿
+;======================================================
+;장비品の데이터
+;지저스헬름
+;======================================================
+
+@기본능력수정_3018,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 2
+	CASE "지혜"
+		RETURN 5
+	CASE "마력"
+		RETURN 3
+	CASE "속도"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3018,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 50
+	CASE "회피"
+		RETURN 26
+	CASE "마법효과"
+		RETURN 26
+	CASE "마법위력"
+		RETURN 8
+ENDSELECT
+RETURN 0
+
+@방어상성_3018,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "파마"
+		RETURN -50
+	CASE "비구","화염","핵열"
+		RETURN 50
+ENDSELECT
+RETURN 100
+
+@バステ내성_3018,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "SHOCK","FREEZE","PALYZE"
+		RETURN -50
+	CASE "POISON","CURSE"
+		RETURN -100
+	CASE "HAPPY","CHARM"
+		RETURN 25
+ENDSELECT
+RETURN 0
+
+@장비箇所_3018
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3018
+RETURN 100
+
+@장비조건_3018,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF ABL:ARG:속성LC != 1
+	RETURN 0
+SIF BASE:ARG:LV < 100
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3018
+PRINTL 장비조건：♂　＆　속성Law LV100～
+
+@장비해설_3018
+PRINTL 神聖なる防具は、身につける者を구세주へと導く。
+PRINTL 　　　　　　　　ジーザスアーマー、グラブ、レッグを同時に장비している場合…
+
+
+@구입조건_3018
+RETURN 0
+
+@引継ぎ可不可_3018
+RETURN 0

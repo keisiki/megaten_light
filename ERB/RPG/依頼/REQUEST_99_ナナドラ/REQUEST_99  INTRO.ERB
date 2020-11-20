@@ -1,0 +1,38 @@
+﻿;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_00
+PRINTFORML 
+PRINTFORML 세븐스 드래곤에 관한 이벤트를 제어합니다
+PRINTFORML 
+;====================
+;内容
+;====================
+@REQUEST_99_00
+PRINTFORMW 이 세계는 제 1차 도쿄침식을――
+PRINTFORML 
+PRINTFORML [0] 경험한 적 있다
+PRINTFORML [1] 경험한 적 없다
+PRINTFORML [2] 설명
+PRINTFORML 
+의뢰フラグ:99:2 = 1
+$NANADORA_LOOP
+INPUT
+IF RESULT == 0
+	PRINTFORMW 『세븐스 드래곤 ２０２０－Ⅱ』이벤트를 시작합니다。
+	FLAG:ナナドラ의뢰進行度 = 20
+	RESULTS = 의뢰【(세븐스 드래곤 MOD)202X년 도쿄】가 출현！
+	CALL MESSAGE_B(1, RESULTS)
+ELSEIF RESULT == 1
+	PRINTFORMW 『세븐스 드래곤 ２０２０』이벤트를 시작합니다。
+	RESULTS = 의뢰【(세븐스 드래곤 MOD)카운트、제로 -Time Count,Zero-(1)】가 출현！
+	CALL MESSAGE_B(1, RESULTS)
+ELSEIF RESULT == 2
+	PRINTFORML 『세븐스드래곤』에 관한 이벤트를 설정합니다。
+	PRINTFORML 「경험 있음」을 선택하면、『세븐스 드래곤 ２０２０－Ⅱ』이벤트가、
+	PRINTFORML 「미경험」을 선택하면、『세븐스 드래곤 ２０２０』이벤트가 발생합니다。
+	GOTO NANADORA_LOOP
+ELSE
+	GOTO NANADORA_LOOP
+ENDIF
+

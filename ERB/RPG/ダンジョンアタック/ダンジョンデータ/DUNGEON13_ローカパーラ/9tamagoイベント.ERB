@@ -1,0 +1,1274 @@
+﻿;=======================================================================
+;指定したマスに進入可能か
+;=======================================================================
+@tamago_ENTER,ARG,ARG:1
+;DA:ARG:(ARG:1)
+;ARG、ARG:1はそれぞれ대상のマスのX、Y座標を表しています。
+;この던전ではエレベーターの扉が一度右側から開けておかないと左側からは開けられない、という処理に사용しています。
+SELECTCASE FLAG:現M
+	CASE 3
+		IF 던전フラグ:13:25 && 던전フラグ:13:2 < 6
+			IF ARG:1 < 13 || ARG:1 > 25
+				CALL MESSAGE_WINDOW_D, "", "＞彼女を探さなくては…"
+				RETURN 0
+			ENDIF
+			
+		ENDIF
+ENDSELECT
+RETURN 1
+;=======================================================================
+;たまごタイル
+;=======================================================================
+;이벤트タイル特殊표시4
+@tamago_TILE, ARG,ARG:1,ARG:2
+SELECTCASE ARG / 10
+	;게일
+	CASE 5400
+		SETCOLOR 0x00ff00
+		RESULTS = ゲ
+	;서프
+	CASE 5401
+		SETCOLOR 0x00ff00
+		RESULTS = サ
+	;류지
+	CASE 5402
+		SETCOLOR 0x00ff00
+		RESULTS = 竜
+	;新島　마코토
+	CASE 5403
+		SETCOLOR 0x00ff00
+		RESULTS = 真
+	CASEELSE
+		RESULTS = ！
+ENDSELECT
+
+;이벤트タイル特殊표시9
+@tamago_TILE2, ARG,ARG:1,ARG:2
+SELECTCASE ARG / 10
+	CASE 5400
+		RESULTS = ↑
+	CASE 5500
+		RESULTS = ↓
+	CASE 410
+		RESULTS = ←
+	CASE 500
+		RESULTS = →
+	CASEELSE
+		RESULTS = □
+ENDSELECT
+
+;=======================================================================
+;たまご調べ이벤트(4)
+;=======================================================================
+@tamago_event_sw
+#LOCALSIZE 1
+LOCAL = DA:(FLAG:現X):(FLAG:現Y) / 10
+SELECTCASE LOCAL
+	;서프
+	CASE 5401
+		CALL MESSAGE_WINDOW_D, "서프", "前にも　제나が게일に対して/表情を変えたことがあってな… "
+		CALL MESSAGE_WINDOW_D, "서프", "やはり게일は제나との/関りがあった人物のようだな "
+		CALL INPUT_SELECT_D, "[1]仲間を入れ替える/[0]何でもない "
+		SIF RESULT == 1
+			CALL RECONSTRUCTION
+	;마코토
+	CASE 5403
+		CALL MESSAGE_WINDOW_D, "마코토", "私には…よくわかんなかったんですけど/제나と게일さんには何か関係があったみたいですね "
+		IF !GETBIT(던전フラグ:13:28,0) || !GETBIT(던전フラグ:13:28,1) || !GETBIT(던전フラグ:13:28,2)
+			CALL MESSAGE_WINDOW_D, "마코토", "회복していきますか？/ローカパーラからいくつか道具を預かってるんです "
+			LOCALS = {(!GETBIT(던전フラグ:13:28,0) + !GETBIT(던전フラグ:13:28,1) + !GETBIT(던전フラグ:13:28,2))}
+			CALL INPUT_SELECT_D, "[0]はい(残り" + LOCALS + "回)/[1]いいえ "
+			IF RESULT == 0
+				PRINTFORMW %CALLNAME:MASTER%達は회복した
+				FOR LOCAL, 1, 7
+					SIF POS(LOCAL) > -1
+						CALL HEALTH_CHARA, POS(LOCAL)
+				NEXT
+				SIF GETBIT(던전フラグ:13:28,1)
+					SETBIT 던전フラグ:13:28,2
+				SIF GETBIT(던전フラグ:13:28,0)
+					SETBIT 던전フラグ:13:28,1
+				SETBIT 던전フラグ:13:28,0
+			ENDIF
+		ENDIF
+	;류지
+	CASE 5402
+		CALL MESSAGE_WINDOW_D, "류지", "なんだ　제나のやつ…/あんな顔されると…なんだかなあ… "
+		CALL MESSAGE_WINDOW_D, "류지", "ところで　デイビットって誰？ "
+	;게일
+	CASE 5400
+		CALL MESSAGE_WINDOW_D, "게일", "…おかしなところを見せてしまったな/突然にすまなかったな "
+		CALL MESSAGE_WINDOW_D, "게일", "話は後だ/早く　行こうか "
+	CASEELSE
+		IF 5400 < LOCAL && 6300 > LOCAL && LOCAL%100 == 0
+			CALL MESSAGE_WINDOW_D, "", "刺さっている石柱を抜いた "
+			CALL MESSAGE_WINDOW_D, "", "地形が変わった "
+			던전フラグ:13:27 ++
+			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
+			SIF 던전フラグ:13:27 == 1
+				CALL MESSAGE_WINDOW_D, "", "緑の石柱を손に入れた "
+			SIF 던전フラグ:13:27 == 2
+				CALL MESSAGE_WINDOW_D, "", "黄の石柱を손に入れた "
+			SIF 던전フラグ:13:27 == 3
+				CALL MESSAGE_WINDOW_D, "", "青の石柱を손に入れた "
+			SIF 던전フラグ:13:27 == 4
+				CALL MESSAGE_WINDOW_D, "", "紫の石柱を손に入れた "
+			SIF 던전フラグ:13:27 == 5
+				CALL MESSAGE_WINDOW_D, "", "茶の石柱を손に入れた "
+			SIF 던전フラグ:13:27 == 6
+				CALL MESSAGE_WINDOW_D, "", "黒の石柱を손に入れた "
+			SIF 던전フラグ:13:27 == 7
+				CALL MESSAGE_WINDOW_D, "", "赤の石柱を손に入れた "
+			SIF 던전フラグ:13:27 == 8
+				CALL MESSAGE_WINDOW_D, "", "桃の石柱を손に入れた "
+			IF GETBIT(FLAG:発見ED, 45)
+				던전フラグ:13:27 = 8
+				CALL MESSAGE_WINDOW_D, "", "クリアボーナス！/すべての石柱を손に入れ/ボスに直行できるようになった "
+			ENDIF
+		ENDIF
+ENDSELECT
+
+
+;=======================================================================
+;たまご侵入이벤트(4)
+;=======================================================================
+@tamago_event
+
+;=======================================================================
+;たまご侵入이벤트（9）
+;=======================================================================
+@tamago_event2
+SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
+	CASE 5400
+		CALL DUNGEON_WORP,55,9,19
+	CASE 5500
+		CALL DUNGEON_WORP,54,6,1
+	CASE 5600
+		IF 던전フラグ:13:26 < 2
+			CALL MESSAGE_WINDOW_D, "", "扉の向こうから気配がする "
+			CALL INPUT_SELECT_D, "[0]向こうへ行く/[1]行かない "
+			IF RESULT == 1
+				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)-1
+			ELSEIF RESULT == 0
+				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)+2
+				
+				CALL MESSAGE_WINDOW_D, "고로", "来たな　お前ら… "
+				CALL MESSAGE_WINDOW_D, "", "そこには明智五郎が待ち構えていた "
+				CALL MESSAGE_WINDOW_D, "마코토", "明智君！　どうしてこんなことをするのよ！ "
+				CALL MESSAGE_WINDOW_D, "류지", "そうだぜ！/こんなところで奴らの아군していてもなんもなんねえだろ！ "
+				CALL MESSAGE_WINDOW_D, "안", "아이つらに　아군してたって意味ないでしょ！ "
+				CALL MESSAGE_WINDOW_D, "春", "そうだよ！/もう　やめてよ！ "
+				CALL MESSAGE_WINDOW_D, "유스케", "今でも　遅くない…/帰って来い "
+				CALL MESSAGE_WINDOW_D, "후타바", "… "
+				CALL MESSAGE_WINDOW_D, "고로", "はっ！　知らねえな…/俺はお前らを殺せればそれでいいんだよ… "
+				CALL MESSAGE_WINDOW_D, "모르가나", "ダメだぜ…/こいつはお前らの知っているアケチじゃねえ… "
+				CALL MESSAGE_WINDOW_D, "마코토", "え？ "
+				CALL MESSAGE_WINDOW_D, "모르가나", "こいつは怪盗団に勝った세계のアケチだ "
+				CALL MESSAGE_WINDOW_D, "모르가나", "こいつはシドウに最後まで従っていたが/認知の세계の通り세계が壊れた… "
+				CALL MESSAGE_WINDOW_D, "모르가나", "その後　シドウも殺したが/心の内には大きい恨みがあったんだ… "
+				CALL MESSAGE_WINDOW_D, "모르가나", "自分のとこを止めてくれなかった/怪盗団に対する恨みがな… "
+				CALL MESSAGE_WINDOW_D, "모르가나", "だから　別세계の生きてるお前らをこの세계に連れてきて/自分の손で殺す気でいたんだ "
+				CALL MESSAGE_WINDOW_D, "류지", "なんじゃそら！？ "
+				CALL MESSAGE_WINDOW_D, "마코토", "明智君にそんな힘が… "
+				CALL MESSAGE_WINDOW_D, "모르가나", "もちろん　やつの힘だけじゃねえ…/別の힘も使ってやがるんだ… "
+				CALL MESSAGE_WINDOW_D, "고로", "来ぉい！페르소나ぁ！ "
+				CALL MESSAGE_WINDOW_D, "", "吾郎から顔のたくさんある이형の페르소나が出てきた "
+				CALL MESSAGE_WINDOW_D, "안", "何…あれ… "
+				CALL MESSAGE_WINDOW_D, "유스케", "あんな페르소나見たことないぞ… "
+				CALL MESSAGE_WINDOW_D, "고로", "お前ら全員皆殺しにしてやる…/死ねぇ！"
+				
+					
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				
+				CALL SET_ENEMY,9, 4769, 74, 0, 1
+				CFLAG:(CHARANUM-1):行動횟수 = 3
+				CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+				CFLAG:(CHARANUM-1):ＭＰ보정 += 50000
+				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				ABL:(CHARANUM-1):종족 = 43
+				CSTR:(CHARANUM-1):종족명 = 인간
+		
+				ABL:(CHARANUM-1):공격상성 = 0
+				
+				ABL:(CHARANUM-1):스킬1 = 750
+				ABL:(CHARANUM-1):스킬2 = 525
+				ABL:(CHARANUM-1):스킬3 = 523
+				ABL:(CHARANUM-1):스킬4 = 1924
+				ABL:(CHARANUM-1):스킬5 = 2003
+				ABL:(CHARANUM-1):스킬6 = 2014
+				ABL:(CHARANUM-1):스킬7 = 2425
+				ABL:(CHARANUM-1):스킬8 = 2466
+				ABL:(CHARANUM-1):스킬9 = 0
+				ABL:(CHARANUM-1):스킬10 = 0
+				ABL:(CHARANUM-1):스킬11 = 0
+				
+				BASE:(CHARANUM-1):검격 = 100
+				BASE:(CHARANUM-1):타격 = 100
+				BASE:(CHARANUM-1):비구 = 100
+				BASE:(CHARANUM-1):전술 = 100
+				BASE:(CHARANUM-1):화염 = -100
+				BASE:(CHARANUM-1):빙결 = 110
+				BASE:(CHARANUM-1):전격 = 100
+				BASE:(CHARANUM-1):충격 = 100
+				BASE:(CHARANUM-1):파마 = -100
+				BASE:(CHARANUM-1):주살 = -100
+				BASE:(CHARANUM-1):지변 = 100
+				BASE:(CHARANUM-1):질풍 = 100
+				BASE:(CHARANUM-1):수격 = 110
+				BASE:(CHARANUM-1):중력 = 100
+				BASE:(CHARANUM-1):핵열 = -100
+				BASE:(CHARANUM-1):만능 = 100
+				BASE:(CHARANUM-1):사이코 = 100
+				
+				BASE:(CHARANUM-1):힘 += 10
+				BASE:(CHARANUM-1):마력 += 10
+				BASE:(CHARANUM-1):지혜 += 10
+				BASE:(CHARANUM-1):인내력 += 10
+				BASE:(CHARANUM-1):속도 += 10
+				BASE:(CHARANUM-1):운 += 10
+				
+				CFLAG:(CHARANUM-1):不死身フラグ = 1
+				CALL SYNC_STATUS, (CHARANUM-1)
+				CALL HEALTH_CHARA, (CHARANUM-1)
+			
+				CALL BATTLE_START
+			
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				FLAG:エンカウント率 = 0
+				FLAG:未遭遇歩数 = 0
+			
+				CALL MESSAGE_WINDOW_D, "고로", "ぐあああぁぁぁぁ……"
+				CALL MESSAGE_WINDOW_D, "모르가나", "今だっ！"
+				CALL MESSAGE_WINDOW_D, "", "モルガナは吾郎に何かを押し当てた"
+				CALL MESSAGE_WINDOW_D, "모르가나", "よしっ"
+				CALL MESSAGE_WINDOW_D, "春", "ねえ…明智君は大丈남편なの？"
+				CALL MESSAGE_WINDOW_D, "모르가나", "ダメだ…こうなったやつに助かったやつはいねえ…"
+				CALL MESSAGE_WINDOW_D, "마코토", "そんな…"
+				CALL MESSAGE_WINDOW_D, "류지", "でも、今のは何だったんだよ"
+				CALL MESSAGE_WINDOW_D, "모르가나", "アケチに取り憑いていたものを/取り除いたんだ"
+				CALL MESSAGE_WINDOW_D, "모르가나", "でも、もう体はボロボロだ/もう生きてられないだろう…/悪いがアケチはこのまま放っていく…"
+				CALL MESSAGE_WINDOW_D, "유스케", "そうか…"
+				CALL MESSAGE_WINDOW_D, "서프", "…先を急ごう/ここで발を止めてはだめだ"
+				CALL MESSAGE_WINDOW_D, "안", "う、うん"
+				CALL MESSAGE_WINDOW_D, "", "みんな奥に進んでいった"
+				CALL MESSAGE_WINDOW_D, "", "最後꼬리にいた당신は吾郎はまだ生きてられる/様子だということがわかる"
+				CALL MESSAGE_WINDOW_D, "", "ほかの皆は急いでいたので気づいていないみたいだ"
+				CALL MESSAGE_WINDOW_D, "", "明智をどうしますか？"
+				CALL INPUT_SELECT_D, "[0]持って帰る/[1]放っとく "
+				IF RESULT == 1
+					CALL MESSAGE_WINDOW_D, "", "倒れた明智を放っといて先に進んだ"
+				ELSEIF RESULT == 0
+					CALL ADD_NEW_COMPANION,[[キャラ:고로]],100
+					CALL MESSAGE_WINDOW_D, "", "아케치　吾郎を손に入れた"
+				ENDIF
+				
+				
+				
+				
+				던전フラグ:13:26 ++
+			ENDIF
+		ENDIF
+	CASE 5700
+		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL DUNGEON_WORP,57,21,11
+	CASE 5800
+		IF 던전フラグ:13:26 < 3
+			CALL MESSAGE_WINDOW_D, "", "扉の向こうから気配がする "
+			CALL INPUT_SELECT_D, "[0]向こうへ行く/[1]行かない "
+			IF RESULT == 1
+				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)-1
+			ELSEIF RESULT == 0
+				
+				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)+2
+				
+				
+				CALL MESSAGE_WINDOW_D, "이난나", "来たか "
+				CALL MESSAGE_WINDOW_D, "이난나", "ワラワは新宇宙を神々で満たし/만물の母…大지모신となる "
+				CALL MESSAGE_WINDOW_D, "알지라", "세라！　세라なんでしょう？ "
+				CALL MESSAGE_WINDOW_D, "알지라", "気をしっかり持って！/당신は이난나なんかじゃないでしょう！ "
+				CALL MESSAGE_WINDOW_D, "이난나", "ワラワを説得しようというのか…？/フッ　無駄なことを…ぬっ…な　んだ "
+				CALL MESSAGE_WINDOW_D, "이난나", "うぅ…알지라…/わた　し… "
+				CALL MESSAGE_WINDOW_D, "시에로", "おい！もしかして　세라の意識が戻ろうとしてんのか？ "
+				CALL MESSAGE_WINDOW_D, "서프", "세라　思い出せ！/俺たちのことを！エンブリオンのことを！ "
+				CALL MESSAGE_WINDOW_D, "이난나", "う　あっ…あああああああ/서프　시에로…み　んな… "
+				CALL MESSAGE_WINDOW_D, "", "突然　이난나の体がだらんと動かなくなった "
+				
+				CALL MESSAGE_WINDOW_D, "이난나", "アハッ…アハハハハハハハハハハ…/痴れ者め　そんな言葉が届くはずがなかろう "
+				CALL MESSAGE_WINDOW_D, "이난나", "どうした　鳩が豆鉄砲を食ったようだぞ？/もしや期待したか　思いが届くとでも？ "
+				CALL MESSAGE_WINDOW_D, "이난나", "傑作だ　笑いが耐えきれぬよ…くふふ…/アッハハハハハハハハハ "
+				CALL MESSAGE_WINDOW_D, "히트", "てめぇ　ただで死ねると思うんじゃねえぞ… "
+				CALL MESSAGE_WINDOW_D, "게일", "あまり　俺たちを甘く見ないでもらおうか "
+				
+				CALL MESSAGE_WINDOW_D, "이난나", "フッ　만물の母であるワラワに逆らうとは/身の程を知れ "
+				
+				CALL MESSAGE_WINDOW_D, "이난나", "無くしたものを取り戻す　欲しいものを손に入れる/ワラワがやろうとしていることはただそれだけの事… "
+				CALL MESSAGE_WINDOW_D, "이난나", "邪魔したければ邪魔するがいい…/ワラワは必ず本懐を遂げるッ "
+				
+				
+				
+				
+					
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				
+				CALL SET_ENEMY,9, 29, 79, 0, 3
+				CFLAG:(CHARANUM-1):行動횟수 = 3
+				CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+				CFLAG:(CHARANUM-1):ＭＰ보정 += 50000
+				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):クリティカル무효フラグ = 1
+				CFLAG:(CHARANUM-1):COOP被데미지보정 = 50
+				CSTR:LOCAL:사고패턴 = ローカ이난나
+				
+				ABL:(CHARANUM-1):스킬1 = 147
+				ABL:(CHARANUM-1):스킬2 = 140
+				ABL:(CHARANUM-1):스킬3 = 2517
+				ABL:(CHARANUM-1):스킬4 = 2517
+				ABL:(CHARANUM-1):스킬5 = 2517
+				ABL:(CHARANUM-1):스킬6 = 2512
+				ABL:(CHARANUM-1):스킬7 = 2419
+				ABL:(CHARANUM-1):스킬8 = 2420
+				ABL:(CHARANUM-1):스킬9 = 2447
+				ABL:(CHARANUM-1):스킬10 = 2448
+				ABL:(CHARANUM-1):스킬11 = 2449
+				ABL:(CHARANUM-1):스킬12 = 2419
+				
+				BASE:(CHARANUM-1):검격 = 100
+				BASE:(CHARANUM-1):타격 = 100
+				BASE:(CHARANUM-1):비구 = 100
+				BASE:(CHARANUM-1):전술 = 100
+				
+				BASE:(CHARANUM-1):힘 += 15
+				BASE:(CHARANUM-1):마력 += 15
+				BASE:(CHARANUM-1):지혜 += 15
+				BASE:(CHARANUM-1):인내력 += 15
+				BASE:(CHARANUM-1):속도 += 15
+				BASE:(CHARANUM-1):운 += 15
+				ABL:(CHARANUM-1):아이템1 = 12517
+				ABL:(CHARANUM-1):입수확률1 = 100
+				CALL SYNC_STATUS, (CHARANUM-1)
+				CALL HEALTH_CHARA, (CHARANUM-1)
+				CFLAG:(CHARANUM-1):810 = MAXBASE:(CHARANUM-1):ＨＰ * 3/20
+			
+				CALL BATTLE_START
+			
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				FLAG:エンカウント率 = 0
+				FLAG:未遭遇歩数 = 0
+			
+				
+				CALL MESSAGE_WINDOW_D, "이난나", "ワラワを殺し…ワラワから離れる…/これも…ワラワが만물の母たる故…か"
+				
+				FLAG:(10000+29) = 1
+				CALL MESSAGE_WINDOW_D, "", "이난나の合体が解禁された "
+				
+				
+				CALL MESSAGE_WINDOW_D, "", "이난나が消滅すると/全裸の세라が現れた"
+				CALL MESSAGE_WINDOW_D, "", "세라に서프達が駆け込む"
+				CALL MESSAGE_WINDOW_D, "서프", "세라っ　無事か？"
+				CALL MESSAGE_WINDOW_D, "", "서프は세라を抱きながら/声をかける"
+				CALL MESSAGE_WINDOW_D, "세라", "う…ん…"
+				CALL MESSAGE_WINDOW_D, "", "세라はゆっくりと눈を開けた"
+				CALL MESSAGE_WINDOW_D, "세라", "서프？/…서프！"
+				CALL MESSAGE_WINDOW_D, "", "세라は서프に抱き着いた"
+				CALL MESSAGE_WINDOW_D, "시에로", "やったぜ！/세라が元気だ！無事だぜ！"
+				CALL MESSAGE_WINDOW_D, "알지라", "よかった…/一時はどうなるかと思ったけど"
+				CALL MESSAGE_WINDOW_D, "히트", "…"
+				CALL MESSAGE_WINDOW_D, "게일", "何か声を掛けたらどうだ？히트"
+				CALL MESSAGE_WINDOW_D, "히트", "…うるせえ！/お前に言われなくても…"
+				CALL MESSAGE_WINDOW_D, "히트", "その…色々とすまなかったな　세라"
+				CALL MESSAGE_WINDOW_D, "세라", "みんな…ありがとう"
+				CALL MESSAGE_WINDOW_D, "로알드", "うちの構成員に세라を外に出すように頼んだ"
+				CALL MESSAGE_WINDOW_D, "로알드", "構成員に세라を預けたら先へ進もう"
+				
+				CALL MESSAGE_WINDOW_D, "", "しばらくすると　ローカパーラの構成員が来て/세라を預けた"
+				CALL MESSAGE_WINDOW_D, "서프", "あとはレンを助けに行くだけだな/行くぞ"
+				
+				CALL MESSAGE_WINDOW_D, "", "歩きながら　서프と게일は小声で話をはじめる"
+				CALL MESSAGE_WINDOW_D, "서프", "게일　세라は식노ではないはずだよな"
+				CALL MESSAGE_WINDOW_D, "게일", "どうかしたか？서프"
+				CALL MESSAGE_WINDOW_D, "서프", "仲間の混乱を避けるために咄嗟に隠したが…"
+				CALL MESSAGE_WINDOW_D, "서프", "세라の顔にはアート머신ボルのような痣があった"
+				CALL MESSAGE_WINDOW_D, "게일", "…"
+				CALL MESSAGE_WINDOW_D, "게일", "これは　奴らが세라に何かしたみたいだな…"
+				CALL MESSAGE_WINDOW_D, "게일", "だが　考察は後だ서프/今は　クリシュナに集中した方がいい"
+				CALL MESSAGE_WINDOW_D, "서프", "ああ…"
+				
+				던전フラグ:13:26 ++
+			ENDIF
+		ENDIF
+	CASE 6200
+		IF 던전フラグ:13:26 < 4
+			CALL MESSAGE_WINDOW_D, "", "扉の向こうから気配がする "
+			CALL INPUT_SELECT_D, "[0]向こうへ行く/[1]行かない "
+			IF RESULT == 1
+				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)+1
+			ELSEIF RESULT == 0
+				
+				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)-2
+				
+				
+				CALL MESSAGE_WINDOW_D, "", "広い空間に出た/中央には巨大な心臓のようなものがあり/脈を打っているように蠢いている "
+				CALL MESSAGE_WINDOW_D, "", "その心臓の前には磔になった黒머리카락の소년と/余裕の笑みを浮かべたクリシュナが待っている… "
+				
+				CALL MESSAGE_WINDOW_D, "크리슈나", "来たか… "
+				
+				CALL MESSAGE_WINDOW_D, "서프", "크리슈나… "
+				CALL MESSAGE_WINDOW_D, "류지", "てめえ　雨宮を返してもらうぜ！"
+				
+				CALL MESSAGE_WINDOW_D, "크리슈나", "인간は輪廻し　何度でも現世に転生する/これは覆せぬ大いなる理によるもの… "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "だが　現世を地獄にしているのは/계약の神に他ならない "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "奴は自ら創った今の宇宙を/인간の苦行の場としたんだ "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "苦行を乗り越えた者だけを救うと宣い/인간に依存と복종を強いている "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "そのために奴は악마を造り/인간を惑わせ　迷わせた "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "ただ秩序にかしずくだけでは迷いがない/ただ混沌に身を任すだけでは苦しめない "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "천사という秩序と악마という混沌があり/対となることで初めて인간は惑い迷う "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "人は奴との계약に縛られ/依存し　복종し　屈辱と受難を耐え続けた /だがそんなものは　ただの虚栄に過ぎない"
+				CALL MESSAGE_WINDOW_D, "크리슈나", "君たちは愛のない苦行を強いられている…/それはあまりに哀れだ "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "だからボクは　キミたち인간を/≪救済≫しようとしている "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "ボクの救済こそが/最も愛に満ちているのだ… "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "集めた魂をボクと合一することで/転生の輪から脱することができる "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "≪大いなる一つ≫になることで/人は救われるんだ… "
+				CALL MESSAGE_WINDOW_D, "게일", "無駄な演説は終わったか？"
+				CALL MESSAGE_WINDOW_D, "크리슈나", "なんだと…？ "
+				CALL MESSAGE_WINDOW_D, "서프", "言っておくがお前に従う気はさらさらない/さっさとレンを返してもらおうか "
+				
+				CALL MESSAGE_WINDOW_D, "크리슈나", "ふっ　嫌われたものだね…/だが　彼なら受け入れてくれるだろう "
+				CALL MESSAGE_WINDOW_D, "", "クリシュナは磔になっている雨宮に視線を向ける "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "雨宮 蓮…彼は　奴の犠牲者だ/奴の一人芝居に巻き込まれた　哀れな魂… "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "彼の苦しみは　ボクの愛に応じ/≪神殺し≫となることを受け入れるだろう "
+				
+				CALL MESSAGE_WINDOW_D, "", "クリシュナが雨宮に손を触れると/その손はそのまま雨宮の中にもぐっていく "
+				CALL MESSAGE_WINDOW_D, "", "やがてクリシュナは　その体全てを/雨宮の中に溶け込ませた "
+				CALL MESSAGE_WINDOW_D, "모르가나", "조커！"
+				CALL MESSAGE_WINDOW_D, "", "モルガナの声に雨宮の눈が開き/次の瞬間　雨宮の体が光に包まれる "
+				CALL MESSAGE_WINDOW_D, "", "すると雨宮の体が巨大な黒い姿に変わった "
+				
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "我は　비슈누レン "
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "奴の손の届かぬこの宇宙で/ようやく我は本来の힘を取り戻した "
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "これこそ　この姿こそが/究極の≪神殺し≫の姿… "
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "≪宇宙の卵≫は　貴様らには渡さん "
+				
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "魂を咎められた今の貴様らには/わが慈悲の心は届かぬやもしれぬ… "
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "だが　我が≪救済≫を得た暁には/必ずや我の言葉の意味を解せることだろう "
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "そのためなら　我は一時/貴様らにとっての적となろう "
+				
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				
+				CALL SET_ENEMY,9, 4665, 83, 0, 3
+		NAME:(CHARANUM-1) = 비슈누レン
+		CALLNAME:(CHARANUM-1) = 비슈누レン
+				ABL:(CHARANUM-1):종족 = 16
+				CFLAG:(CHARANUM-1):行動횟수 = 3
+				CFLAG:(CHARANUM-1):ＨＰ보정 += 2000
+				CFLAG:(CHARANUM-1):ＭＰ보정 += 50000
+				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				
+				ABL:(CHARANUM-1):스킬1 = 59
+				ABL:(CHARANUM-1):스킬2 = 249
+				ABL:(CHARANUM-1):스킬3 = 908
+				ABL:(CHARANUM-1):스킬4 = 1016
+				ABL:(CHARANUM-1):스킬5 = 2045
+				ABL:(CHARANUM-1):스킬6 = 2520;모어・샤인
+				ABL:(CHARANUM-1):스킬7 = 0;ナンダカになる
+				ABL:(CHARANUM-1):스킬8 = 2419
+				ABL:(CHARANUM-1):스킬9 = 2420
+				ABL:(CHARANUM-1):스킬10 = 2449
+				ABL:(CHARANUM-1):스킬11 = 2447
+				ABL:(CHARANUM-1):스킬12 = 2420
+				
+				BASE:(CHARANUM-1):신경 = 999
+				BASE:(CHARANUM-1):정신 = 999
+				BASE:(CHARANUM-1):파마 = 999
+				BASE:(CHARANUM-1):주살 = 999
+				
+				TALENT:(CHARANUM-1):검격 = 1
+				TALENT:(CHARANUM-1):타격 = 1
+				TALENT:(CHARANUM-1):전격 = 1
+				TALENT:(CHARANUM-1):충격 = 1
+				TALENT:(CHARANUM-1):만능 = 1
+				TALENT:(CHARANUM-1):파마 = 1
+				TALENT:(CHARANUM-1):주살 = 1
+				TALENT:(CHARANUM-1):신경 = 1
+				TALENT:(CHARANUM-1):정신 = 1
+				
+				
+				BASE:(CHARANUM-1):힘 += 25
+				BASE:(CHARANUM-1):마력 += 25
+				BASE:(CHARANUM-1):지혜 += 20
+				BASE:(CHARANUM-1):인내력 += 15
+				BASE:(CHARANUM-1):속도 += 20
+				BASE:(CHARANUM-1):운 += 15
+				
+				
+				CALL SYNC_STATUS, (CHARANUM-1)
+				CALL HEALTH_CHARA, (CHARANUM-1)
+				CFLAG:(CHARANUM-1):810 = MAXBASE:(CHARANUM-1):ＨＰ * 3/20
+			
+				CALL BATTLE_START
+			
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				FLAG:エンカウント率 = 0
+				FLAG:未遭遇歩数 = 0
+			
+				
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "がはっ…クソ　ダメージを負いすぎたか/体が言うことを…ッ"
+				CALL MESSAGE_WINDOW_D, "비슈누レン", "ぐ…ぅオオオオオオオオオォ！"
+				
+				CALL MESSAGE_WINDOW_D, "", "クリシュナが雨宮の体から離れ消滅した"
+				CALL MESSAGE_WINDOW_D, "", "雨宮はその場に倒れこむ"
+				CALL MESSAGE_WINDOW_D, "모르가나", "조커！　大丈남편か！？"
+				CALL MESSAGE_WINDOW_D, "", "モルガナ達は雨宮に駆け込んだ"
+				CALL MESSAGE_WINDOW_D, "蓮", "ん…　皆…"
+				CALL MESSAGE_WINDOW_D, "류지", "よかった　無事だったな"
+				CALL MESSAGE_WINDOW_D, "안", "もう心配したんだからね"
+				CALL MESSAGE_WINDOW_D, "마코토", "大丈남편？私たちがわかる？"
+				CALL MESSAGE_WINDOW_D, "유스케", "身体に傷はないみたいだな"
+				CALL MESSAGE_WINDOW_D, "후타바", "思いっきり변신したから/一時はどうなることかと思ったよ"
+				CALL MESSAGE_WINDOW_D, "春", "よかった…本当によかった…"
+				CALL MESSAGE_WINDOW_D, "蓮", "俺のことはいい/早くコアを破壊してくれ"
+				CALL MESSAGE_WINDOW_D, "서프", "コア？"
+				CALL MESSAGE_WINDOW_D, "蓮", "そこにある心臓みたいなやつだ/それを破壊すれば宇宙の卵の孵化を阻止できる"
+				CALL MESSAGE_WINDOW_D, "안", "え…クリシュナを倒せば終わりじゃないの？"
+				CALL MESSAGE_WINDOW_D, "蓮", "コアがある限り宇宙の卵は止まらない/コアの破壊は당신がやってくれ"
+				CALL MESSAGE_WINDOW_D, "", "蓮は서프を指して言った"
+				CALL MESSAGE_WINDOW_D, "서프", "わかった　破壊しよう"
+				CALL MESSAGE_WINDOW_D, "", "서프はコアを破壊した/すると　周りの鼓動のようなものが消えた"
+				
+				
+				CALL MESSAGE_WINDOW_D, "", "多神連合の눈的を阻止できた"
+				CALL MESSAGE_WINDOW_D, "", @"＞名声350を得た"
+				FLAG:名声 += 350
+				CALL DUNGEON_WORP,0,14,18
+				
+				CALL MESSAGE_WINDOW_D, "", "ローカパーラに戻ってきた"
+				CALL MESSAGE_WINDOW_D, "세라", "お帰りみんな"
+				CALL MESSAGE_WINDOW_D, "시에로", "세라！お前…"
+				CALL MESSAGE_WINDOW_D, "", "세라の頬にはアート머신ボルがついていた"
+				CALL MESSAGE_WINDOW_D, "세라", "あ…これね…/私も　鏡見るまで気付かなかったけど…"
+				CALL MESSAGE_WINDOW_D, "후타바", "それ…君を이난나の依り代にするために/多神連合がつけたんだよ…"
+				CALL MESSAGE_WINDOW_D, "류지", "知ってんのかよ！"
+				CALL MESSAGE_WINDOW_D, "후타바", "ぼんやりだけど記憶が残ってるから…"
+				CALL MESSAGE_WINDOW_D, "게일", "이난나が取り憑きやすく　姿を現しやすくするため/세라にウイルスを照射し　악마に近い存在にさせたか…"
+				CALL MESSAGE_WINDOW_D, "후타바", "そんなところだね/普段の生活はもうできないと思うけど…"
+				CALL MESSAGE_WINDOW_D, "서프", "악마になってしまった以上/喰らわないといけないからな…"
+				CALL MESSAGE_WINDOW_D, "서프", "세라も전투に出さなければいけないか…"
+				CALL MESSAGE_WINDOW_D, "세라", "大丈남편　私も何か奴に立ちたいから"
+				
+				
+				CALL ADD_NEW_COMPANION,[[キャラ:세라]],100
+				IF RESULT
+					ABL:(RESULT:1):초기변신악마습득스킬6 = 2708
+					ABL:(RESULT:1):초기변신악마습득LV6 = 63
+					ABL:(RESULT:1):초기변신악마습득스킬7 = 825
+					ABL:(RESULT:1):초기변신악마습득LV7 = 70
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					CALL MESSAGE_WINDOW_D, "", "세라が仲間になった "
+				ENDIF
+				
+				CALL ADD_NEW_COMPANION,4665,100
+				IF RESULT
+					BASE:(RESULT:1):LV = 75
+					BASE:(RESULT:1):힘 = 22
+					BASE:(RESULT:1):지혜 = 22
+					BASE:(RESULT:1):마력 = 28
+					BASE:(RESULT:1):인내력 = 22
+					BASE:(RESULT:1):속도 = 22
+					BASE:(RESULT:1):운 = 14
+					IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+					
+					;旧페르소나処理
+					ELSE
+						LOCAL = CFLAG:(RESULT:1):초기페르소나ナンバー
+						DITEMTYPE:LOCAL:페르소나("LV") = 75
+						DITEMTYPE:LOCAL:페르소나("힘") = 27
+						DITEMTYPE:LOCAL:페르소나("지혜") = 21
+						DITEMTYPE:LOCAL:페르소나("마력") = 21
+						DITEMTYPE:LOCAL:페르소나("인내력") = 21
+						DITEMTYPE:LOCAL:페르소나("속도") = 33
+						DITEMTYPE:LOCAL:페르소나("운") = 7
+						DITEMTYPE:LOCAL:페르소나("스킬1") = 1420
+						DITEMTYPE:LOCAL:페르소나("스킬2") = 601
+						DITEMTYPE:LOCAL:페르소나("스킬3") = 1432
+						DITEMTYPE:LOCAL:페르소나("스킬4") = 520
+						DITEMTYPE:LOCAL:페르소나("스킬5") = 513
+						DITEMTYPE:LOCAL:페르소나("스킬6") = 533
+						DITEMTYPE:LOCAL:페르소나("스킬7") = 2419
+						DITEMTYPE:LOCAL:페르소나("스킬8") = 2407
+					ENDIF
+					CFLAG:(RESULT:1):전투참가불가능 = -1
+					CALL SYNC_STATUS,(RESULT:1)
+					CALL HEALTH_CHARA,(RESULT:1)
+					LOCAL = (RESULT:1)
+					CALL MESSAGE_WINDOW_D, "", "雨宮　蓮が仲間になった "
+					PRINTFORML 彼の名前を変えますか？
+					PRINTL [1]はい	[0]いいえ
+					CALL INPUTINT,0,1
+					IF RESULT == 1
+						$INPUT_LOOP
+						PRINTFORML どれにしますか？
+						PRINTL [1]来栖 暁	[2]雨宮 蓮
+						PRINTL [3]名前を自分で決める
+
+						CALL INPUTINT,1,2,3
+						IF RESULT == 1
+							NAME:LOCAL = 来栖 暁
+							CALLNAME:LOCAL = 暁
+						ELSEIF RESULT == 2
+							NAME:LOCAL = 雨宮 蓮
+							CALLNAME:LOCAL = 蓮
+						ELSEIF RESULT == 3
+							PRINTL P5主人公の名前を입력してください
+							INPUTS
+							NAME:LOCAL = %RESULTS%
+							PRINTL P5主人公の愛称を입력してください
+							INPUTS
+							CALLNAME:LOCAL = %RESULTS%
+						ENDIF
+						PRINTFORML 名前　%NAME:LOCAL%
+						PRINTFORML 愛称　%CALLNAME:LOCAL%
+						PRINTL これでよろしいですか？
+						CALL INPUT_YN
+						SIF RESULT == 1
+							GOTO INPUT_LOOP
+					ELSE
+						NAME:LOCAL = 雨宮 蓮
+						CALLNAME:LOCAL = 蓮
+					ENDIF
+				ENDIF
+				
+				던전フラグ:13:26 ++
+				던전フラグ:13:1 = 15
+			ENDIF
+		ENDIF
+	CASE 315
+		IF 던전フラグ:13:24 < 1
+			CALL MESSAGE_WINDOW_D, "", "分かれ道がある "
+			CALL MESSAGE_WINDOW_D, "フレッド", "ここから北に進むと近道だ/でも　西はダメだぜ　かなり遠回りなる "
+			CALL MESSAGE_WINDOW_D, "", "と　言っているが/近道の方からはかなり발音が聞こえる "
+			CALL MESSAGE_WINDOW_D, "서프", "近道の方には적がたくさんいるみたいだ/安全に行くなら遠回りするべきかもしれないな "
+			던전フラグ:13:24 = 1
+		ENDIF
+	CASE 311
+		IF 던전フラグ:13:24 < 2
+			CALL MESSAGE_WINDOW_D, "", "扉の向こうから気配がする "
+			CALL INPUT_SELECT_D, "[0]向こうへ行く/[1]行かない "
+			IF RESULT == 1
+				CALL DUNGEON_WORP,3,(FLAG:現X),(FLAG:現Y)+1
+			ELSEIF RESULT == 0
+				CALL DUNGEON_WORP,3,(FLAG:現X),(FLAG:現Y)-2
+				
+				CALL MESSAGE_WINDOW_D, "カルマ兵", "この集団には勝てまい！/大人しく　捕まれ！ "
+				
+					
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
+				CALL SET_ENEMY,7,[[キャラ:스세리비메]],18,0,0
+				CALL SYNC_STATUS,(CHARANUM-1)
+				CALL HEALTH_CHARA,(CHARANUM-1)
+			
+				CALL BATTLE_START
+			
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				FLAG:エンカウント率 = 0
+				FLAG:未遭遇歩数 = 0
+			
+				던전フラグ:13:24 = 2
+			ENDIF
+		ENDIF
+ENDSELECT
+
+	
+
+
+;=======================================================================
+;たまご宝箱
+;=======================================================================
+@tamago_takara
+#LOCALSIZE 3
+;宝箱のフラグ管理用変数の番号
+LOCAL = FLAG:現M / 5 + 80
+;そのマップの何番눈の宝箱か
+LOCAL:1 = (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100
+LOCAL:1 += FLAG:現M % 5 * 10
+
+SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
+	CASE 5500
+		CALL GET_TREASURE, 2116 , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 5600
+		CALL GET_TREASURE, 4045 , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 5700
+		CALL GET_TREASURE, 4550 , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 5800
+		CALL GET_TREASURE, 10059 , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 5900
+		CALL GET_TREASURE, 3576 , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 6000
+		CALL GET_TREASURE, 3068 , 1 , FLAG:現던전, LOCAL , LOCAL:1
+	CASE 6100
+		CALL GET_TREASURE, 2117 , 1 , FLAG:現던전, LOCAL , LOCAL:1
+ENDSELECT
+RETURN 1
+;=======================================================================
+;たまご적
+;=======================================================================
+@tamago_enemy, ARG
+		IF ARG == 0
+			IF FLAG:現M > 58
+				SIF RAND:14 == 0		
+					RETURN [[キャラ:서왕모]]
+				SIF RAND:13 == 0		
+					RETURN [[キャラ:치치미틀]]
+				SIF RAND:12 == 0		
+					RETURN 1531
+				SIF RAND:11 == 0		
+					RETURN 1423
+				SIF RAND:10 == 0		
+					RETURN [[キャラ:팔라스아테나]]
+			ENDIF
+				SIF RAND:9 == 0		
+					RETURN [[キャラ:치치미틀]]
+				SIF RAND:8 == 0		
+					RETURN [[キャラ:팔레스]]
+				SIF RAND:7 == 0		
+					RETURN 1725
+				SIF RAND:6 == 0		
+					RETURN 1034
+				SIF RAND:5 == 0		
+					RETURN 914
+				SIF RAND:4 == 0		
+					RETURN 719
+				SIF RAND:3 == 0		
+					RETURN [[キャラ:라마슈투]]
+				SIF RAND:2 == 0		
+					RETURN 429
+				
+					RETURN [[キャラ:산달폰]]
+		ELSEIF ARG == 1
+			SIF FLAG:現M > 58
+				RETURN 75 + RAND:4
+			SIF FLAG:現M > 56
+				RETURN 72 + RAND:4
+				
+				RETURN 68 + RAND:4
+		ENDIF
+
+@EVENT_BATTLE_tamago
+IF FINDCHARA_ENEMY(4622)
+	LOCAL= RESULT:1
+	LOCAL:1 = CPOS(LOCAL)
+	IF FLAG:経過ターン数 % 3 == 2
+		IF CFLAG:LOCAL:마법被데미지보정 < 0
+			PRINTFORML 제나は시바形態になった
+				ABL:LOCAL:스킬1 = 2706
+				ABL:LOCAL:스킬2 = 19
+				ABL:LOCAL:스킬3 = 139
+				ABL:LOCAL:스킬4 = 256
+				ABL:LOCAL:스킬5 = 356
+				ABL:LOCAL:스킬6 = 2067
+				ABL:LOCAL:스킬7 = 2425
+				ABL:LOCAL:스킬8 = 2420
+				ABL:LOCAL:스킬9 = 2419
+				ABL:LOCAL:스킬10 = 2427
+				ABL:LOCAL:스킬11 = 2510
+				ABL:LOCAL:스킬12 = 2449
+				CFLAG:LOCAL:물리被데미지보정 = 0
+				CFLAG:LOCAL:마법被데미지보정 = 0
+		ELSE
+			PRINTFORML 제나は비슈누形態になった
+				ABL:LOCAL:스킬1 = 2707
+				ABL:LOCAL:스킬2 = 749
+				ABL:LOCAL:스킬3 = 823
+				ABL:LOCAL:스킬4 = 942
+				ABL:LOCAL:스킬5 = 1043
+				ABL:LOCAL:스킬6 = 1509
+				ABL:LOCAL:스킬7 = 1609
+				ABL:LOCAL:스킬8 = 1725
+				ABL:LOCAL:스킬9 = 1816
+				ABL:LOCAL:스킬10 = 1913
+				ABL:LOCAL:스킬11 = 2047
+				ABL:LOCAL:스킬12 = 2427
+				CFLAG:LOCAL:물리被데미지보정 = -50
+				CFLAG:LOCAL:마법被데미지보정 = -50
+		ENDIF
+	ENDIF
+ELSEIF FINDCHARA_ENEMY(4769)
+	LOCAL= RESULT:1
+	LOCAL:1 = CPOS(LOCAL)
+	IF CFLAG:LOCAL:800 == 0 && 現HP割合(LOCAL) <= 20
+		CALL MESSAGE_WINDOW_D, "고로", "畜生……なんでだ/なぜ殺れねえ！畜生！！畜生！！"
+		CALL MESSAGE_WINDOW_D, "고로", "畜生畜生畜生！！！！/認めねえ…認めねえぞぉ！！！"
+		CALL MESSAGE_WINDOW_D, "고로", "ぐぅあああああ！/な　なんだ！？　何かが　俺の中に入ってくる！"
+		CALL MESSAGE_WINDOW_D, "모르가나", "ダメだアケチ！/気をしっかり持て！"
+		CALL MESSAGE_WINDOW_D, "声", "フフフ……殺戮を望む男よ、/汝が望む힘とやらをくれてやろう……"
+		CALL MESSAGE_WINDOW_D, "고로", "はっはっは…/俺にもまだこんな힘が残ってたか…"
+		CALL MESSAGE_WINDOW_D, "고로", "いいだろう…この힘で…/ぐぁあああああああああ！"
+		CALL MESSAGE_WINDOW_D, "", "どこからともなく響く声と共に、明智は苦鳴を上げながら변이してゆく"
+		CALL MESSAGE_WINDOW_D, "", "악마のような姿をした「何か」だった"
+		;どんな姿かはご想像にお任せします
+		CALL MESSAGE_WINDOW_D, "안", "な　なに！？"
+		CALL MESSAGE_WINDOW_D, "류지", "コ　コイツは…"
+		CALL MESSAGE_WINDOW_D, "모르가나", "아이つに/身も心も支配されたか！？"
+		CALL MESSAGE_WINDOW_D, "고로", "俺は明智…/クラウド明智…"
+		CALL MESSAGE_WINDOW_D, "고로", "てめえら全員食い殺してやる…！"
+		
+		
+				CFLAG:LOCAL:行動횟수 = 3
+				ABL:LOCAL:종족 = 43
+				CSTR:LOCAL:종족명 = 초인
+		NAME:LOCAL = クラウド明智
+		CALLNAME:LOCAL = クラウド明智
+		CSTR:LOCAL:사고패턴 = ローカ明智
+		
+				ABL:LOCAL:공격상성 = 3
+				ABL:LOCAL:최저공격횟수 = 3
+				ABL:LOCAL:최대공격횟수 = 4
+		
+				CFLAG:LOCAL:공격보정 = 150
+				CFLAG:LOCAL:명중보정 = 150
+				CFLAG:LOCAL:마법효과보정 = 200
+		
+				ABL:LOCAL:스킬1 = 359
+				ABL:LOCAL:스킬2 = 357
+				ABL:LOCAL:스킬3 = 347
+				ABL:LOCAL:스킬4 = 2516;삼켜내기　（만능即死+대상の최대HP회복　転倒には必中）
+				ABL:LOCAL:스킬5 = 2514;베어먹기・식　（베어먹기に흡수効果　50％）
+				ABL:LOCAL:스킬6 = 2515;트리플바이스・식（트리플바이스に흡수効果　70％）
+				ABL:LOCAL:스킬7 = 1019
+				ABL:LOCAL:스킬8 = 1020
+				ABL:LOCAL:스킬9 = 523
+				ABL:LOCAL:스킬10 = 2448
+				ABL:LOCAL:스킬11 = 2419
+				ABL:LOCAL:스킬12 = 2453
+		
+	BASE:LOCAL:검격 = -100
+	BASE:LOCAL:타격 = -100
+	BASE:LOCAL:비구 = -100
+	BASE:LOCAL:전술 = -300
+	BASE:LOCAL:화염 = -100
+	BASE:LOCAL:빙결 = 100
+	BASE:LOCAL:전격 = 100
+	BASE:LOCAL:충격 = 100
+	BASE:LOCAL:파마 = -100
+	BASE:LOCAL:주살 = -100
+	BASE:LOCAL:지변 = 100
+	BASE:LOCAL:질풍 = 150
+	BASE:LOCAL:수격 = 100
+	BASE:LOCAL:중력 = 150
+	BASE:LOCAL:핵열 = -100
+	BASE:LOCAL:만능 = 100
+	BASE:LOCAL:사이코 = 100
+		CFLAG:LOCAL:810 = 1200
+		
+		
+		CFLAG:LOCAL:不死身フラグ = 0
+				CALL SYNC_STATUS, LOCAL
+				CALL HEALTH_CHARA, LOCAL
+		CFLAG:LOCAL:800 = 1
+	ENDIF
+ELSEIF FINDCHARA_ENEMY(4665)
+	LOCAL= RESULT:1
+	LOCAL:1 = CPOS(LOCAL)
+	IF CFLAG:LOCAL:800 == 0 && 現HP割合(LOCAL) <= 50
+		CALL MESSAGE_WINDOW_D, "비슈누レン", "ぐっ　これは… "
+		CALL MESSAGE_WINDOW_D, "", "비슈누レンの動きが一瞬止まった "
+		CALL MESSAGE_WINDOW_D, "비슈누レン", "雨宮 蓮…貴様か…/強情な　男だ… "
+		CALL MESSAGE_WINDOW_D, "모르가나", "これはもしかして…조커の自我はまだ/支配されていないのか！？"
+		CALL MESSAGE_WINDOW_D, "모르가나", "조커！！눈を깨달음ませー！！/こんな奴に操られてるんじゃねー！！"
+		CALL MESSAGE_WINDOW_D, "비슈누レン", "ぬぐっ…無駄な　ことを…これは我の≪神殺し≫だ　勝손は許さぬ… "
+		CALL MESSAGE_WINDOW_D, "", "비슈누レンの放つ凄まじい殺意は/姿形をも変化させるほど膨れ上がった… "
+		CALL MESSAGE_WINDOW_D, "", "浮遊する팔が2本出てきて/4本の손には赤い光の검が握られていた"
+		
+		CALL MESSAGE_WINDOW_D, "", "さらに能力降下が解け　全能力が大幅に上がった"
+		
+		FOR LOCAL:2,0,6
+			CFLAG:LOCAL:(GET_BATTLESTATUS(LOCAL:2) + "강화") = MAX(8, CFLAG:LOCAL:(GET_BATTLESTATUS(LOCAL:2) + "강화") + 8)
+		NEXT
+				ABL:LOCAL:공격상성 = 17
+				ABL:LOCAL:최저공격횟수 = 4
+				ABL:LOCAL:최대공격횟수 = 4
+		
+		
+		
+		
+				CFLAG:LOCAL:クリティカル무효フラグ = 1
+				CFLAG:LOCAL:COOP被데미지보정 = 100
+		CSTR:LOCAL:사고패턴 = ローカ비슈누レン
+	
+	
+		ABL:LOCAL:스킬7 = 2519
+	
+	
+		CFLAG:LOCAL:不死身フラグ = 0
+		CFLAG:LOCAL:800 = 1
+				CALL SYNC_STATUS, LOCAL
+				CALL HEALTH_CHARA, LOCAL
+	ENDIF
+ENDIF
+@SET_ACTION_ローカ비슈누レン,ARG
+#LOCALSSIZE 1
+#LOCALSIZE 18
+#DIM LCOUNT
+	BASE:ARG:ＭＰ = MAXBASE:ARG:ＭＰ
+
+LOCAL:1 = GET_STATE_NUM("SLEEP")
+LOCAL:2 = GET_STATE_NUM("BIND")
+LOCAL:3 = GET_STATE_NUM("BRAND")
+LOCAL:4 = GET_STATE_NUM("CURSE")
+LOCAL:5 = 0
+FOR LCOUNT, 1, 5
+	FOR LOCAL, 1, 7
+		SIF POS(LOCAL) < 0
+			CONTINUE
+		SIF GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"
+			CONTINUE
+		IF CFLAG:POS(LOCAL):ステート == LOCAL:LCOUNT
+			LOCAL:5 = LCOUNT
+			BREAK
+		ENDIF
+	NEXT
+	SIF LOCAL:5 > 0
+		BREAK
+NEXT
+IF LOCAL:5 > 0
+	CFLAG:ARG:입력行動 = (2520 + LOCAL:5)
+	CALL RANDOM_TARGET,ARG,(2520 + LOCAL:5)
+	RETURN 1
+ENDIF
+
+
+	LOCAL:1 = 0
+	LOCAL:2 = 0
+	LOCAL:13 = 32
+	FOR LOCAL,0,6
+		SIF CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화") < 0
+			LOCAL:1 -= CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화")
+		SIF CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화") < -8
+			LOCAL:2 = 1
+		SIF LOCAL:13 > CFLAG:ARG:(GET_BATTLESTATUS(LCOUNT) + "강화")
+			LOCAL:13 = CFLAG:ARG:(GET_BATTLESTATUS(LCOUNT) + "강화")
+		
+	NEXT
+	IF RAND:50 < LOCAL:1
+		IF LOCAL:2 == 1
+			CFLAG:ARG:입력行動 = 2512
+			CALL RANDOM_TARGET,ARG,2512
+			RETURN 1
+		ELSE
+			CFLAG:ARG:입력行動 = 4205
+			CALL RANDOM_TARGET,ARG,4205
+			RETURN 1
+		ENDIF
+	ENDIF
+	
+	LOCAL:1 = 0
+	LOCAL:2 = 0
+	LOCAL:3 = -16
+	FOR LOCAL, 1, 7
+		SIF POS(LOCAL) < 0
+			CONTINUE
+		SIF CFLAG:POS(LOCAL):ステート == GET_STATE_NUM("DYING")
+			CONTINUE
+		LOCAL:3 = 0
+		FOR LCOUNT,0,6
+			SIF CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화") > 0
+				LOCAL:3 += CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화")
+			SIF CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화") > 8
+				LOCAL:2 = 1
+		NEXT
+		SIF LOCAL:1 < LOCAL:3
+			LOCAL:1 = LOCAL:3
+	NEXT
+	IF RAND:50 < LOCAL:1
+		IF LOCAL:2 == 1
+			CFLAG:ARG:입력行動 = 509
+			CALL RANDOM_TARGET,ARG,509
+			RETURN 1
+		ELSE
+			CFLAG:ARG:입력行動 = 2045
+			CALL RANDOM_TARGET,ARG,2045
+			RETURN 1
+		ENDIF
+	ENDIF
+
+IF CFLAG:ARG:行動した횟수 > 0 || CFLAG:ARG:１moreフラグ
+	LOCAL:1 = 0
+	LOCAL:2 = 2
+	LOCAL:3 = 6
+	LOCAL:4 = 7
+	LOCAL:5 = 0
+	LOCAL:6 = 0
+	LOCAL:7 = 0
+	LOCAL:8 = 0
+	LOCAL:17 = 0
+	FOR LCOUNT, 1, 5
+		LOCALS = %GET_TYPE(LOCAL:LCOUNT)%
+		LOCAL:14 = -200
+		FOR LOCAL, 1, 7
+			SIF POS(LOCAL) < 0
+				CONTINUE
+			SIF GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"
+				CONTINUE
+			LOCAL:15 = MAXBASE:POS(LOCAL):LOCALS == 999 ? -200 # MAXBASE:POS(LOCAL):LOCALS
+			LOCAL:15 = CFLAG:POS(LOCAL):(LOCALS +"무효화횟수") ? 0 # LOCAL:15
+			LOCAL:15 = CFLAG:POS(LOCAL):무효フラグ ? 0 # LOCAL:15
+			SIF LOCAL:LCOUNT < 4
+				LOCAL:15 = CFLAG:POS(LOCAL):물리반사フラグ ? -200 # LOCAL:15
+			IF LOCAL:LCOUNT < 4 && CFLAG:ARG:集中フラグ && LOCAL:15 < 100
+				LOCAL:15 = MAXBASE:POS(LOCAL):LOCALS > 100 ? MAXBASE:POS(LOCAL):LOCALS # 100
+				LOCAL:15 = MAXBASE:POS(LOCAL):LOCALS == 999 ? 100 # MAXBASE:POS(LOCAL):LOCALS
+			ENDIF
+			SIF LOCAL:LCOUNT < 17 && LOCAL:LCOUNT > 3
+				LOCAL:15 = CFLAG:POS(LOCAL):마법반사フラグ ? -200 # LOCAL:15
+			IF LOCAL:LCOUNT < 17 && LOCAL:LCOUNT > 3 && CFLAG:ARG:기합フラグ && LOCAL:15 < 100
+				LOCAL:15 = MAXBASE:POS(LOCAL):LOCALS > 100 ? MAXBASE:POS(LOCAL):LOCALS # 100
+				LOCAL:15 = MAXBASE:POS(LOCAL):LOCALS == 999 ? 100 # MAXBASE:POS(LOCAL):LOCALS
+			ENDIF
+			
+			SIF CFLAG:POS(LOCAL):독각フラグ == 2 && LOCAL:15 > 100
+				LOCAL:15 = -LOCAL:15
+			LOCAL:15 = CFLAG:POS(LOCAL):(LOCALS +"웨이트") == 1 ? 0 # LOCAL:15
+			LOCAL:15 = CFLAG:POS(LOCAL):(LOCALS +"웨이트") == 2 ? -50 # LOCAL:15
+			LOCAL:15 = CFLAG:POS(LOCAL):(LOCALS +"웨이트") == 3 ? -200 # LOCAL:15
+			IF LOCAL:14 < LOCAL:15 && LOCAL:15 > 99
+				LOCAL:14 = LOCAL:15
+				LOCAL:(5 + LOCAL:17) = LOCAL
+			ENDIF
+			SIF LOCAL:15 > 99 && LOCAL:14 == LOCAL:15 && !RAND:2
+				LOCAL:(5 + LOCAL:17) = LOCAL
+		NEXT
+		SIF LOCAL:(5 + LOCAL:17) > 0 && LCOUNT == 1
+			LOCAL:(9 + LOCAL:17) = 59
+		SIF LOCAL:(5 + LOCAL:17) > 0 && LCOUNT == 2
+			LOCAL:(9 + LOCAL:17) = 249
+		SIF LOCAL:(5 + LOCAL:17) > 0 && LCOUNT == 3
+			LOCAL:(9 + LOCAL:17) = 908
+		SIF LOCAL:(5 + LOCAL:17) > 0 && LCOUNT == 4
+			LOCAL:(9 + LOCAL:17) = 1016
+		SIF LOCAL:(5 + LOCAL:17) > 0
+			LOCAL:17 ++
+	NEXT
+	IF RAND:10 == 0 && LOCAL:5 && LOCAL:9
+		CFLAG:ARG:입력行動 = LOCAL:9
+		CFLAG:ARG:ターゲット = LOCAL:5
+		RETURN 1
+	ELSEIF RAND:9 == 0 && LOCAL:6 && LOCAL:10
+		CFLAG:ARG:입력行動 = LOCAL:10
+		CFLAG:ARG:ターゲット = LOCAL:6
+		RETURN 1
+	ELSEIF RAND:8 == 0 && LOCAL:7 && LOCAL:11
+		CFLAG:ARG:입력行動 = LOCAL:11
+		CFLAG:ARG:ターゲット = LOCAL:7
+		RETURN 1
+	ELSEIF RAND:7 == 0 && LOCAL:8 && LOCAL:12
+		CFLAG:ARG:입력行動 = LOCAL:12
+		CFLAG:ARG:ターゲット = LOCAL:8
+		RETURN 1
+	ENDIF
+ENDIF
+	IF FLAG:経過ターン数 % 5 == 0 && CFLAG:ARG:行動した횟수 == 0
+		CFLAG:ARG:입력行動 = 2519
+		CALL RANDOM_TARGET,ARG,2519
+		RETURN 1
+	ELSEIF RAND:6 == 0 && LOCAL:13 < 32
+		CFLAG:ARG:입력行動 = 4205
+		CALL RANDOM_TARGET,ARG,4205
+		RETURN 1
+	ELSEIF RAND:5 == 0 && (CFLAG:ARG:기합フラグ == 0 || CFLAG:ARG:集中フラグ == 0)
+		CFLAG:ARG:입력行動 = 2518
+		CALL RANDOM_TARGET,ARG,2518
+		RETURN 1
+	ELSEIF RAND:4 == 0
+		CFLAG:ARG:입력行動 = 2520
+		CALL RANDOM_TARGET,ARG,2520
+		RETURN 1
+	ELSEIF RAND:3 == 0
+		CFLAG:ARG:입력行動 = 2045
+		CALL RANDOM_TARGET,ARG,2045
+		RETURN 1
+	ELSEIF RAND:2 == 0
+		CFLAG:ARG:입력行動 = 0
+		CALL RANDOM_TARGET,ARG,0
+		RETURN 1
+	ELSE
+		CFLAG:ARG:입력行動 = 2519
+		CALL RANDOM_TARGET,ARG,2519
+		RETURN 1
+	ENDIF
+	CALL 랜덤행동 , ARG
+
+@SET_ACTION_ローカ이난나,ARG
+#LOCALSIZE 20
+#DIM LCOUNT
+	BASE:ARG:ＭＰ = MAXBASE:ARG:ＭＰ
+
+
+	LOCAL:1 = 0
+	LOCAL:2 = 0
+	LOCAL:4 = 32
+	FOR LOCAL,0,6
+		SIF CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화") < 0
+			LOCAL:1 -= CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화")
+		SIF CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화") < -8
+			LOCAL:2 = 1
+		SIF LOCAL:4 > CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화")
+			LOCAL:4 = CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화")
+		
+	NEXT
+	IF RAND:50 < LOCAL:1
+		IF LOCAL:2 == 1
+			CFLAG:ARG:입력行動 = 2512
+			CALL RANDOM_TARGET,ARG,2512
+			RETURN 1
+		ELSE
+			CFLAG:ARG:입력行動 = 4205
+			CALL RANDOM_TARGET,ARG,4205
+			RETURN 1
+		ENDIF
+	ENDIF
+	
+	LOCAL:1 = 0
+	LOCAL:2 = 0
+	LOCAL:3 = -16
+	FOR LOCAL, 1, 7
+		SIF POS(LOCAL) < 0
+			CONTINUE
+		SIF CFLAG:POS(LOCAL):ステート == GET_STATE_NUM("DYING")
+			CONTINUE
+		
+		FOR LCOUNT,0,6
+			SIF CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화") > 0
+				LOCAL:1 += CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화")
+			SIF CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화") > 8
+				LOCAL:2 = 1
+			SIF LOCAL:3 < CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화")
+				LOCAL:3 = CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화")
+		NEXT
+	NEXT
+	IF RAND:100 < LOCAL:1
+		IF LOCAL:2 == 1
+			CFLAG:ARG:입력行動 = 509
+			CALL RANDOM_TARGET,ARG,509
+			RETURN 1
+		ELSE
+			CFLAG:ARG:입력行動 = 4216
+			CALL RANDOM_TARGET,ARG,4216
+			RETURN 1
+		ENDIF
+	ENDIF
+	FOR LOCAL, 1, 7
+		SIF POS(LOCAL) < 0
+			CONTINUE
+		SIF CFLAG:POS(LOCAL):ステート == GET_STATE_NUM("DYING")
+			CONTINUE
+		
+		FOR LCOUNT,0,6
+			SIF CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화") > 0
+				LOCAL:1 += CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화")
+			SIF CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화") > 8
+				LOCAL:2 = 1
+			SIF LOCAL:3 < CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화")
+				LOCAL:3 = CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LCOUNT) + "강화")
+		NEXT
+	NEXT
+	
+	IF !RAND:9 && LOCAL:4 < 32
+		CFLAG:ARG:입력行動 = 4205
+		CALL RANDOM_TARGET,ARG,4205
+		RETURN 1
+	ELSEIF !RAND:8 && LOCAL:3 > -16
+		CFLAG:ARG:입력行動 = 4216
+		CALL RANDOM_TARGET,ARG,4216
+		RETURN 1
+	ELSEIF !RAND:7 && (CFLAG:(ARG:1):기합フラグ == 0 || CFLAG:(ARG:1):集中フラグ == 0)
+		CFLAG:ARG:입력行動 = 2518
+		CALL RANDOM_TARGET,ARG,2518
+		RETURN 1
+	ENDIF
+	
+	CALL 랜덤행동 , ARG
+
+@SET_ACTION_ローカ明智,ARG
+LOCAL:1 = 0
+FOR LOCAL, 1, 7
+	SIF POS(LOCAL) < 0
+		CONTINUE
+	SIF GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"
+		CONTINUE
+	IF CFLAG:POS(LOCAL):ステート == GET_STATE_NUM("SLIP")
+		LOCAL:1 = LOCAL
+		BREAK
+	ENDIF
+NEXT
+IF LOCAL:1 > 0
+	CFLAG:ARG:입력行動 = 2516
+	CFLAG:ARG:ターゲット = LOCAL:1
+	RETURN 1
+ELSEIF CFLAG:ARG:行動した횟수 == 0
+	IF FLAG:経過ターン数 % 3 == 0
+		CFLAG:ARG:입력行動 = [[스킬:전술가드브레이크]]
+		CALL RANDOM_TARGET,ARG,[[스킬:전술가드브레이크]]
+		RETURN 1
+	ENDIF
+	LOCAL:3 = 0
+	FOR LOCAL, 1, 7
+		SIF POS(LOCAL) < 0
+			CONTINUE
+		SIF CFLAG:POS(LOCAL):ステート == GET_STATE_NUM("DYING")
+			CONTINUE
+		SIF CFLAG:POS(LOCAL):공격강화 > 0
+			LOCAL:3 += CFLAG:POS(LOCAL):공격강화
+		SIF CFLAG:POS(LOCAL):방어강화 > 0
+			LOCAL:3 += CFLAG:POS(LOCAL):방어강화
+		SIF CFLAG:POS(LOCAL):마법위력강화 > 0
+			LOCAL:3 += CFLAG:POS(LOCAL):마법위력강화
+		SIF CFLAG:POS(LOCAL):마법효과강화 > 0
+			LOCAL:3 += CFLAG:POS(LOCAL):마법효과강화
+		SIF CFLAG:POS(LOCAL):회피강화 + CFLAG:POS(LOCAL):명중강화 > 0
+			LOCAL:3 += (CFLAG:POS(LOCAL):회피강화 + CFLAG:POS(LOCAL):명중강화) / 2
+	NEXT
+	IF 50 < LOCAL:3
+		CFLAG:ARG:입력行動 = 509
+		CALL RANDOM_TARGET,ARG,509
+		RETURN 1
+	ENDIF
+	IF !RAND:5 && CFLAG:ARG:기합フラグ < 1
+		CFLAG:ARG:입력行動 = [[스킬:기합]]
+		CALL RANDOM_TARGET,ARG,[[스킬:기합]]
+		RETURN 1
+	ELSEIF !RAND:4
+		CFLAG:ARG:입력行動 = 525
+		CALL RANDOM_TARGET,ARG,525
+		RETURN 1
+	ELSEIF !RAND:3
+		CFLAG:ARG:입력行動 = 523
+		CALL RANDOM_TARGET,ARG,523
+		RETURN 1
+	ELSEIF !RAND:2
+		CFLAG:ARG:입력行動 = 519
+		CALL RANDOM_TARGET,ARG,519
+		RETURN 1
+	ELSE
+		CFLAG:ARG:입력行動 = 2512
+		CALL RANDOM_TARGET,ARG,2512
+		RETURN 1
+	ENDIF
+ENDIF
+CALL 랜덤행동 , ARG
+

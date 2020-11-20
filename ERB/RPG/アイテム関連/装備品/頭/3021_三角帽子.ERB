@@ -1,0 +1,75 @@
+﻿
+;======================================================
+;장비品の데이터
+;삼각모자
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_3021,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 1
+	CASE "마력"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3021,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 2
+	CASE "회피"
+		RETURN 4
+	CASE "마법위력"
+		RETURN 6
+	CASE "마법효과"
+		RETURN 9
+ENDSELECT
+RETURN 0
+
+@방어상성_3021,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "화염","정신"
+		RETURN 85
+	CASE "주살"
+		RETURN 75
+	CASE "지변"
+		RETURN 0
+	CASE "신경"
+		RETURN 115
+	CASE "파마"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@장비箇所_3021
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3021
+RETURN 21
+
+@장비조건_3021,ARG
+SIF BASE:ARG:LV < 21
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3021
+PRINTL 장비조건：LV21～
+RETURN 1
+
+@장비해설_3021
+PRINTL 마법・魔術使いがよくかぶっている삼각모자。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3021
+RETURN 0
+
+;마카교환가능か
+@EQUIP_EXCHANGE_3021
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 10000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_3021
+RETURN 0

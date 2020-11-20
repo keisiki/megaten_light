@@ -1,0 +1,1601 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:SYSTEM_BATTLE_DAMAGE.ERB
+;	Facility	:전투システム（ダメージ計算処理）
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX		----					新規作成
+;	002		2011/11/09		旅人					統合整備
+;													ファイルが肥大化している為、ダメージ処理を分離
+;			2011/11/11		旅人					統合整備（ダメージ計算処理統合）
+;	003		2013/04/13		총Ｐ					황천의회심が기능しないのを修正
+;	004		2016/12/09		Jガン					自身の素質によってダメージアップするように
+;	005		2016/12/11		Jガン					1moreフラグを少し변경
+;	006		2017/09/27		Jガン					幸福時にダメージに効果があるように
+;	006		2017/10/30		Jガン					독각時に弱点を흡수するように
+;	006		2017/10/30		Jガン					스킬흡수関数作成のための編集
+;	007		2018/06/06		JK好き					서드아이に被与クリティカル率アップ効果を추가
+;	008		2018/09/02		치즈루					各種ブースタ스킬の処理の추가
+;	009		2019/11/27		Jガン					クリティカル무효フラグ추가
+;	010		2019/12/30		Jガン					カウンター추가による회피실패等の추가
+;	011		2020/02/20		Jガン					FLY仕様변경による倍率변경
+;	012		2020/03/XX		Jガン					무기素質仕様の변경、추가
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+;===============================================================================
+;  ◇記載関数一覧(記載順)
+;
+;		Module Name						Explanation
+;
+;	・ DAMAGE_1							BTL計算:ダメージ(物理)
+;	・ DAMAGE_2							BTL計算:ダメージ(魔法)
+;;	・ ダメージ試算						
+;;	・ ダメージ試算_1					
+;;	・ ダメージ試算_2					
+;	・ BTL_CHK_링케이지				BTL:링케이지체크
+;	・ BTL_CHK_SKILL_관통				BTL:스킬체크(관통)
+;	・ BTL_CALC_DAMAGE_BLOCK			BTL計算:ダメージブロック
+;	・ BTL_CALC_BASE_DAMAGE				BTL計算:基礎ダメージ
+;	・ BTL_CALC_DAMAGE_ADJUSTMENT		BTL計算:ダメージ調整
+;	・ BTL_CALC_DAMAGE_EXE				BTL計算:ダメージ実行
+;	・ BTL_CALC_DAMAGE_COOP				BTL計算:COOP
+;
+;===============================================================================
+
+;=================================================
+;   sub DAMAGE_1
+;=================================================
+;   BTL計算:ダメージ(物理)
+;-------------------------------------------------
+;   기본的な物理공격のダメージ処理
+;-------------------------------------------------
+; Input:
+;  ARG:0				공격者
+;  ARG:1				被공격者
+;  ARG:2				威힘
+;  ARG:3				공격상성
+;  ARG:4				クリティカル率(%)
+;  ARG:5				흡수率
+;-------------------------------------------------
+@DAMAGE_1,ARG,ARG:1,ARG:2,ARG:3,ARG:4 = 5,ARG:5 = 0
+;---- EDIT 002 DEL START ---------------------------
+;#DIM ＣＯＯＰ횟수 , 1
+;---- EDIT 002 DEL END   ---------------------------
+;LOCAL ダメージ
+;LOCAL:1　1moreとCO-OPのフラグていうかクリフラグ
+LOCAL:1 = 0;more系
+
+CALL RECEIVE_SET,ARG:1,ARG:3,1
+SIF !FLAG:カウンター中
+	CFLAG:(ARG:1):회피실패 = 1
+;---- EDIT 002 DEL START ---------------------------
+;;링케이지の場合、能力参照者を指定できる
+;IF CFLAG:ARG:링케이지발동 && !CFLAG:ARG:단독링케이지
+;	TRYCCALLFORM 링케이지能力参照者_{CFLAG:ARG:사용링케이지}, ARG
+;		TRYCALLFORM 링케이지能力参照者_{CFLAG:ARG:사용링케이지}, ARG
+;		SIF RESULT
+;			ARG = CFLAG:ARG:@"링케이지참가자{RESULT}"
+;	CATCH
+;	ENDCATCH
+;ENDIF
+;---- EDIT 002 DEL END   ---------------------------
+;---- EDIT 002 ADD START ---------------------------
+;- BTL:링케이지체크
+CALL BTL_CHK_링케이지(ARG)
+ARG = RESULT
+;---- EDIT 002 ADD END   ---------------------------
+
+;---- EDIT 002 DEL START ---------------------------
+;IF (!CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "가드킬") && ((MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 0 && HAVE_SKILL(ARG,2420) == 0 && HAVE_SKILL(ARG,2421) == 0) || MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 999)) || (CFLAG:(ARG:1):물리반사フラグ && ARG:3 < 4) || (CFLAG:(ARG:1):마법반사フラグ && (ARG:3 > 3 && ARG:3 != 17)) || CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "웨이트") == 2
+;	PRINT BLOCK
+;	RETURN 0
+;ENDIF
+;---- EDIT 002 DEL END   ---------------------------
+
+IF CSTR:(ARG:0):장비강화 != "" && ABL:(ARG:0):공격상성 == ARG:3
+	CALL 장비강화_전개, (ARG:0), EQUIP:(ARG:0):검, "공격상성", "속성부여"
+	IF RESULT == 1
+		CALL 장비강화_전개, (ARG:0), EQUIP:(ARG:0):검, "공격상성", "부여相性"
+		IF RESULT > -1
+			IF CHECK_WEAKNESS(MAXBASE:(ARG:1):GET_TYPE(ARG:3)) <= CHECK_WEAKNESS(MAXBASE:(ARG:1):GET_TYPE(RESULT))
+				ARG:3	= RESULT
+				PRINTFORM 〈속성부여:%GET_TYPE(ARG:3)%〉 
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+
+;---- EDIT 002 ADD START ---------------------------
+;- BTL計算:ダメージブロック (1:物理)
+IF (BTL_CALC_DAMAGE_BLOCK(ARG:0, ARG:1, ARG:3, 1) )
+	PRINT BLOCK
+	RETURN 0
+ENDIF
+;---- EDIT 002 ADD END   ---------------------------
+
+;---- EDIT 002 DEL START ---------------------------
+;LOCAL:10 = ARG:5
+;
+;LOCAL = (100+MAXBASE:ARG:LV)*(ARG:2)*(MAXBASE:ARG:공격)*(10+MAXBASE:ARG:공격/12)
+;LOCAL /= (MAXBASE:(ARG:1):방어)*100*100
+;;LOCAL = POWER(MAX(1,MAXBASE:ARG:(GET_BATTLESTATUS(0)) + (ARG:2 - 100)/5),2) / MAXBASE:(ARG:1):(GET_BATTLESTATUS(2))
+;
+;;乱数
+;SIF LOCAL > 0
+;	LOCAL += RAND:3
+;LOCAL *= (9500+RAND:1000)
+;LOCAL /= 10000
+;---- EDIT 002 DEL END   ---------------------------
+;---- EDIT 002 ADD START ---------------------------
+;- BTL計算:基礎ダメージ
+CALL BTL_CALC_BASE_DAMAGE(ARG:0, ARG:1, ARG:2, "물리")
+LOCAL = RESULT
+;---- EDIT 002 ADD END   ---------------------------
+
+SIF GET_STATE(CFLAG:ARG:ステート) == "POISON"
+	LOCAL /= 2
+;---- EDIT 002 DEL START ---------------------------
+;LOCAL *= (32 + CFLAG:ARG:공격강화)
+;LOCAL /= (32 + CFLAG:(ARG:1):방어강화)
+;SIF CFLAG:ARG:기합フラグ
+;	TIMES LOCAL , 2.5
+;	;LOCALS = %GET_TYPE(ARG:3)%무효화횟수
+;	;드레인상태
+;	IF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "웨이트") == 3 
+;		LOCAL *= -50
+;	ELSEIF (HAVE_SKILL(ARG,[[스킬:관통]]) || HAVE_SKILL(ARG,[[스킬:영세라이도우]])) && RANGE(MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) , 0 , 99)
+;		;관통持ちは내성と無効を無視
+;		LOCAL *= MAX(100,MAXBASE:(ARG:1):(GET_TYPE(ARG:3)))
+;		;벨・데르は관통でも0ダメージに
+;		SIF NO:(ARG:1) == [[キャラ:벨・데르]]
+;			LOCAL = 0
+;	ELSEIF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "가드킬") && (MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) < 100 || MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 999)
+;		;가드킬効果：내성以上を完全に無視
+;		LOCAL *= 100
+;		;LOCAL *= MAX(100,MAXBASE:(ARG:1):(GET_TYPE(ARG:3)))
+;		;벨・데르は관통でも0ダメージに
+;		SIF NO:(ARG:1) == [[キャラ:벨・데르]]
+;			LOCAL = 0
+;	ELSE
+;		LOCAL *= MAXBASE:(ARG:1):(GET_TYPE(ARG:3))
+;	ENDIF
+;	LOCAL /= 100
+;	IF HAVE_SKILL(ARG,[[스킬:영세라이도우]]) == 0
+;		IF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "무효화횟수")
+;			LOCAL = 0
+;			CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "被弾") = 1
+;		ENDIF
+;		;◯◯브레이크
+;		SIF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "웨이트") == 1
+;			LOCAL = 0
+;	ENDIF
+;	;後列のキャラにはダメージ減少
+;	SIF (CFLAG:(ARG:1):포지션 > 3 && CFLAG:(ARG:1):포지션 < 7) || CFLAG:(ARG:1):포지션 > 11
+;		TIMES LOCAL,0.70
+;	;방어中のキャラにはダメージ減少
+;	SIF CFLAG:(ARG:1):방어フラグ
+;		LOCAL /= 2
+;	IF CFLAG:(ARG:1):PTフラグ > 0
+;		SELECTCASE FLAG:전투난이도
+;			CASE 1
+;				TIMES LOCAL,0.75
+;			CASE 3,4
+;				TIMES LOCAL , 1.5
+;			CASE 5
+;				TIMES LOCAL , 2
+;			CASE 6
+;				TIMES LOCAL , 3
+;		ENDSELECT
+;	ENDIF
+;	SIF CFLAG:(ARG:1):PTフラグ == 0 && FLAG:전투난이도 == 1
+;		TIMES LOCAL , 1.40
+;	;眠っていたらダメージ大
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("SLEEP")
+;		TIMES LOCAL,1.5
+;	;自身がオルギアでダメージ上昇
+;	SIF CFLAG:ARG:ステート == GET_STATE_NUM("ORGY")
+;		TIMES LOCAL,1.25
+;	;FREEZE時は전격、SHOCK時は빙결のダメージが倍化
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("FREEZE") && GET_TYPE(ARG:3) == "전격" || CFLAG:(ARG:1):ステート == GET_STATE_NUM("SHOCK") && GET_TYPE(ARG:3) == "빙결"
+;		TIMES LOCAL,2.0
+;	;추격의심득持ち+1more中は威힘が1.5倍
+;	SIF CFLAG:ARG:１moreフラグ == 2 && HAVE_SKILL(ARG,[[스킬:추격의심득]])
+;		TIMES LOCAL,1.5 
+;	;진・전문내성(만능以外반감・만능倍化)
+;	SIF HAVE_SKILL(ARG:1, [[스킬:진・전문내성]])
+;		LOCAL = ARG:3 == 17 ? LOCAL * 2 # LOCAL / 2
+;	;特殊ダメージ보정
+;	LOCAL = LOCAL * (CFLAG:(ARG:1):물리被데미지보정 +100) / 100
+;---- EDIT 002 DEL END   ---------------------------
+;---- EDIT 002 ADD START ---------------------------
+	;- BTL計算:ダメージ調整 (1:物理)
+	CALL BTL_CALC_DAMAGE_ADJUSTMENT(ARG:0, ARG:1, LOCAL, ARG:3, 1)
+	LOCAL = RESULT
+;---- EDIT 002 ADD END   ---------------------------
+
+;---- EDIT 002 DEL START -------------------------
+;	;クリティカル판정
+;	IF RAND:100 < ARG:4 * (10 + MAXBASE:ARG:운) / (10 + MAXBASE:(ARG:1):운)*(CFLAG:(ARG):クリティカル강화+8)/((HAVE_SKILL(ARG:1,2418) > 0)+1)*((HAVE_SKILL(ARG,2419)>0)+2)/8 * (CFLAG:ARG:베어내기フラグ*20+CFLAG:ARG:クリティカル보정+100) / 100
+;		TIMES LOCAL , 1.50
+;		PRINTFORM 《CRITICAL》 
+;		LOCAL:1 += 2
+;	ELSEIF HAVE_SKILL(ARG,[[스킬:황천의회심]]) && FLAG:月齢 == 8 || HAVE_SKILL(ARG,[[스킬:정천의회심]]) && FLAG:月齢 == 0
+;		TIMES LOCAL , 1.50
+;		PRINTFORM 《CRITICAL》 
+;		LOCAL:1 += 2
+;	ELSE
+;		SELECTCASE GET_STATE(CFLAG:(ARG:1):ステート)
+;			CASE "SLEEP","SHOCK","FREEZE"
+;				TIMES LOCAL , 1.50
+;				PRINTFORM 《CRITICAL》 
+;				LOCAL:1 += 2
+;		ENDSELECT
+;	ENDIF
+;	;とりあえず1.2倍しといてみる
+;	IF LOCAL >= BASE:(ARG:1):ＨＰ && (HAVE_SKILL(ARG:1,2407) || (EQUIP:(ARG:1):바・벨 && FLAG:벨신撃破 & 8)) && CFLAG:(ARG:1):이악물기フラグ == 0
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,2
+;		CFLAG:(ARG:1):이악물기フラグ = 1
+;	ELSEIF  LOCAL >= BASE:(ARG:1):ＨＰ && HAVE_SKILL(ARG:1,[[스킬:네버기브업]]) && CFLAG:(ARG:1):이악물기フラグ == 0
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,5
+;		CFLAG:(ARG:1):이악물기フラグ = 1
+;	ELSEIF  LOCAL >= BASE:(ARG:1):ＨＰ && HAVE_SKILL(ARG:1,2406) && CFLAG:(ARG:1):이악물기フラグ == 0
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,1
+;		CFLAG:(ARG:1):이악물기フラグ = 1
+;	ELSEIF  LOCAL >= BASE:(ARG:1):ＨＰ && HAVE_SKILL(ARG:1,2434)
+;		;아르카나시프트を持ってる限り이악물기ます。
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,4
+;		CFLAG:(ARG:1):이악물기フラグ = 1
+;	ELSEIF LOCAL >= 0
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,0
+;	ELSE
+;		PRINTFORM {-LOCAL}회복
+;		CALL VAR_HP,ARG:1,-LOCAL,3
+;		;わざわざ스내피の為に何をしているんだ俺は
+;		CFLAG:(ARG:1):데미지흡수量 -= LOCAL
+;	ENDIF
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("SLEEP")
+;		CFLAG:(ARG:1):ステート = 0
+;---- EDIT 002 DEL END ---------------------------
+;---- EDIT 002 ADD START -------------------------
+
+	;- BTL計算:ダメージ実行 (1:物理)
+	CALL BTL_CALC_DAMAGE_EXE(ARG:0, ARG:1, LOCAL, ARG:3, 1, ARG:4,ARG:5)
+	LOCAL	= RESULT:0
+	LOCAL:1	= RESULT:1
+
+;---- EDIT 002 ADD END ---------------------------
+	CALL RECEIVE_SET,ARG:1,ARG:3,1,LOCAL,LOCAL:1
+
+
+	;구상用にフラグ保存
+	CALL BATTLE_EVENT_ATTACK, ARG , ARG:1, LOCAL, 1
+	
+	SIF LOCAL < 1
+		RETURN 0
+
+;---- EDIT 002 DEL START -------------------------
+;	;COOP or 1moreのフラグ立て
+;	SIF MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) > 100 && MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) != 999
+;		LOCAL:1 += 1
+;	;弱点を付かれ、방어しておらず、ダメージを受けており、瀕死になっていなければＣＯＯＰの대상に
+;	;行動者が적なら、
+;	IF CFLAG:(ARG:1):ステート != GET_STATE_NUM("DYING") && LOCAL > 0 && CFLAG:(ARG:1):방어フラグ == 0 && LOCAL:1
+;		IF CFLAG:ARG:PTフラグ > 0
+;			SIF LOCAL:1 & 1
+;				CFLAG:(ARG:1):ＣＯＯＰフラグ += ARG:2
+;			SIF LOCAL:1 & 2
+;				CFLAG:(ARG:1):ＣＯＯＰフラグ += ARG:2/2
+;		ELSEIF CFLAG:ARG:PTフラグ != CFLAG:(ARG:1):PTフラグ && CFLAG:ARG:１moreフラグ == 0
+;			CFLAG:ARG:１moreフラグ = 1
+;		ENDIF
+;	ENDIF
+;---- EDIT 002 DEL END ---------------------------
+;---- EDIT 002 ADD START -------------------------
+
+	;- BTL計算:COOP (1:物理)
+	SIF !FLAG:カウンター中
+		CALL BTL_CALC_DAMAGE_COOP(ARG:0, ARG:1, LOCAL, ARG:3, 1, LOCAL:1, ARG:2)
+
+;---- EDIT 002 ADD END ---------------------------
+	;ダメージを受け、死亡しており、ハント스킬を使われていた場合は被ハントフラグを立てておく
+	IF LOCAL > 0 && CFLAG:(ARG:1):ステート == GET_STATE_NUM("DYING")
+		TRYCCALLFORM ハント스킬_{CFLAG:ARG:입력行動}
+			CFLAG:(ARG:1):被ハント = ARG + 1
+		CATCH
+		ENDCATCH
+	ENDIF
+	RETURN 1
+
+;=================================================
+;   sub DAMAGE_2
+;=================================================
+;   BTL計算:ダメージ(魔法)
+;-------------------------------------------------
+;   기본的な魔法공격のダメージ処理
+;-------------------------------------------------
+; Input:
+;  ARG:0				공격者
+;  ARG:1				被공격者
+;  ARG:2				威힘
+;  ARG:3				공격상성
+;  ARG:4				クリティカル率(%)
+;  ARG:5				흡수率
+;-------------------------------------------------
+@DAMAGE_2,ARG,ARG:1,ARG:2,ARG:3,ARG:4 = 5,ARG:5 = 0
+;LOCAL ダメージ
+;LOCAL:1　1moreとCO-OPのフラグていうかクリフラグ
+LOCAL:1 = 0;more系
+
+;---- EDIT 002 DEL START ---------------------------
+;;링케이지の場合、能力参照者を指定できる
+;IF CFLAG:ARG:링케이지발동 && !CFLAG:ARG:단독링케이지
+;	;PRINTFORMW %CALLNAME:ARG%の공격힘は{MAXBASE:ARG:마법위력}
+;	TRYCCALLFORM 링케이지能力参照者_{CFLAG:ARG:사용링케이지}, ARG
+;		TRYCALLFORM 링케이지能力参照者_{CFLAG:ARG:사용링케이지}, ARG
+;		SIF RESULT
+;			ARG = CFLAG:ARG:@"링케이지참가자{RESULT}"
+;	CATCH
+;	ENDCATCH
+;ENDIF
+;---- EDIT 002 DEL END   ---------------------------
+;---- EDIT 002 ADD START ---------------------------
+;- BTL:링케이지체크
+CALL BTL_CHK_링케이지(ARG)
+ARG = RESULT
+;---- EDIT 002 ADD END   ---------------------------
+CALL RECEIVE_SET,ARG:1,ARG:3,2
+SIF !FLAG:カウンター中
+	CFLAG:(ARG:1):회피실패 = 1
+
+;---- EDIT 002 DEL START ---------------------------
+;IF (!CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "가드킬") && (MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 0 || MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 999)) || (CFLAG:(ARG:1):물리반사フラグ && ARG:3 < 4) || (CFLAG:(ARG:1):마법반사フラグ && (ARG:3 > 3 && ARG:3 != 17)) || CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "웨이트") == 2
+;	PRINT BLOCK
+;	RETURN 0
+;ENDIF
+;---- EDIT 002 DEL END   ---------------------------
+;---- EDIT 002 ADD START ---------------------------
+;- BTL計算:ダメージブロック (2:魔法)
+IF (BTL_CALC_DAMAGE_BLOCK(ARG:0, ARG:1, ARG:3, 2) )
+	PRINT BLOCK
+	RETURN 0
+ENDIF
+;---- EDIT 002 ADD END   ---------------------------
+
+;---- EDIT 002 DEL START ---------------------------
+;;LOCAL = ((MAXBASE:ARG:(GET_BATTLESTATUS(4)) * 2 * (MAXBASE:ARG:(GET_BATTLESTATUS(4))/8+1))/16+MAXBASE:ARG:(GET_BATTLESTATUS(4))+8) * (ARG:2 + MAXBASE:ARG:(GET_BATTLESTATUS(4))/4+1) / (MAXBASE:(ARG:1):마법효과 + MAXBASE:(ARG:1):방어/2 + MAXBASE:(ARG:1):마법위력/4)
+;;LOCAL = ((MAXBASE:ARG:(GET_BATTLESTATUS(4)) * 2 * (MAXBASE:ARG:(GET_BATTLESTATUS(4))*3/8+1))/16+MAXBASE:ARG:(GET_BATTLESTATUS(4))+8) * (ARG:2) / (MAXBASE:(ARG:1):마법효과 + MAXBASE:(ARG:1):방어/2 + MAXBASE:(ARG:1):마법위력/4)
+;
+;LOCAL = (100+MAXBASE:ARG:LV)*(ARG:2)*(MAXBASE:ARG:마법위력)*(10+MAXBASE:ARG:마법위력/12)
+;LOCAL /= ((MAXBASE:(ARG:1):마법효과*2+MAXBASE:(ARG:1):방어)/3)*100*100
+;;乱数
+;SIF LOCAL > 0
+;	LOCAL += RAND:3
+;	LOCAL *= (9500+RAND:1000)
+;	LOCAL /= 10000
+;---- EDIT 002 DEL END   ---------------------------
+;---- EDIT 002 ADD START ---------------------------
+;- BTL計算:基礎ダメージ
+CALL BTL_CALC_BASE_DAMAGE(ARG:0, ARG:1, ARG:2, "마법")
+LOCAL = RESULT
+;---- EDIT 002 ADD END   ---------------------------
+
+
+;---- EDIT 002 DEL START ---------------------------
+;LOCAL *= (32 + CFLAG:ARG:마법위력강화)
+;LOCAL /= (32 + CFLAG:(ARG:1):방어강화)
+;SIF CFLAG:ARG:集中フラグ
+;	TIMES LOCAL , 2.5
+;	;LOCALS = %GET_TYPE(ARG:3)%무효화횟수
+;	;드레인상태
+;	IF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "웨이트") == 3
+;		LOCAL *= -50
+;	ELSEIF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "가드킬") && (MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) < 100 || MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 999)
+;		;가드킬効果：내성以上を完全に無視
+;		LOCAL *= 100
+;		;LOCAL *= MAX(100,MAXBASE:(ARG:1):(GET_TYPE(ARG:3)))
+;		;벨・데르は관통でも0ダメージに
+;		SIF NO:(ARG:1) == [[キャラ:벨・데르]]
+;			LOCAL = 0
+;	ELSE
+;		LOCAL *= MAXBASE:(ARG:1):(GET_TYPE(ARG:3))
+;	ENDIF
+;	LOCAL /= 100
+;	IF HAVE_SKILL(ARG,[[스킬:영세라이도우]]) == 0
+;		IF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "무효화횟수")
+;			LOCAL = 0
+;			CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "被弾") = 1
+;		ENDIF
+;		;◯◯브레이크
+;		SIF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "웨이트") == 1
+;			LOCAL = 0
+;	ENDIF
+;	;後列のキャラにはダメージ減少
+;	SIF (CFLAG:(ARG:1):포지션 > 3 && CFLAG:(ARG:1):포지션 < 7) || CFLAG:(ARG:1):포지션 > 11
+;		TIMES LOCAL,0.70
+;	SIF CFLAG:(ARG:1):방어フラグ
+;		LOCAL /= 2
+;	;難易度修正
+;	IF CFLAG:(ARG:1):PTフラグ > 0
+;		SELECTCASE FLAG:전투난이도
+;			CASE 1
+;				TIMES LOCAL,0.75
+;			CASE 3,4
+;				TIMES LOCAL , 1.5
+;			CASE 5
+;				TIMES LOCAL , 2
+;			CASE 6
+;				TIMES LOCAL , 3
+;		ENDSELECT
+;	ENDIF
+;	SIF CFLAG:(ARG:1):PTフラグ == 0 && FLAG:전투난이도 == 1
+;		TIMES LOCAL , 1.40
+;	;眠っていたらダメージ大
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("SLEEP")
+;		TIMES LOCAL,1.5
+;	;自身がオルギアでダメージ上昇
+;	SIF CFLAG:ARG:ステート == GET_STATE_NUM("ORGY")
+;		TIMES LOCAL,1.25
+;	;FREEZE時は전격、SHOCK時は빙결のダメージが倍化
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("FREEZE") && GET_TYPE(ARG:3) == "전격" || CFLAG:(ARG:1):ステート == GET_STATE_NUM("SHOCK") && GET_TYPE(ARG:3) == "빙결"
+;		TIMES LOCAL,2.0
+;	;추격의심득持ち+1more中は威힘が1.5倍
+;	SIF CFLAG:ARG:１moreフラグ == 2 && HAVE_SKILL(ARG,[[스킬:추격의심득]])
+;		TIMES LOCAL,1.5 
+;	;진・전문내성(만능以外반감・만능倍化)
+;	SIF HAVE_SKILL(ARG:1, [[스킬:진・전문내성]])
+;		LOCAL = ARG:3 == 17 ? LOCAL * 2 # LOCAL / 2
+;	LOCAL = LOCAL * (CFLAG:(ARG:1):마법被데미지보정 +100) / 100
+;---- EDIT 002 DEL END   ---------------------------
+;---- EDIT 002 ADD START ---------------------------
+	;- BTL計算:ダメージ調整 (2:魔法)
+	CALL BTL_CALC_DAMAGE_ADJUSTMENT(ARG:0, ARG:1, LOCAL, ARG:3, 2)
+	LOCAL = RESULT
+;---- EDIT 002 ADD END   ---------------------------
+
+
+;---- EDIT 002 DEL START -------------------------
+;	;試験的にダメージを減らす
+;	;TIMES LOCAL , 0.70
+;	IF LOCAL >= BASE:(ARG:1):ＨＰ && (HAVE_SKILL(ARG:1,2407) || (EQUIP:(ARG:1):바・벨 && FLAG:벨신撃破 & 8)) && CFLAG:(ARG:1):이악물기フラグ == 0
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,2
+;		CFLAG:(ARG:1):이악물기フラグ = 1
+;	ELSEIF  LOCAL >= BASE:(ARG:1):ＨＰ && HAVE_SKILL(ARG:1,[[스킬:네버기브업]]) && CFLAG:(ARG:1):이악물기フラグ == 0
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,5
+;		CFLAG:(ARG:1):이악물기フラグ = 1
+;	ELSEIF  LOCAL >= BASE:(ARG:1):ＨＰ && HAVE_SKILL(ARG:1,2406) && CFLAG:(ARG:1):이악물기フラグ == 0
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,1
+;		CFLAG:(ARG:1):이악물기フラグ = 1
+;	ELSEIF  LOCAL >= BASE:(ARG:1):ＨＰ && HAVE_SKILL(ARG:1,2434)
+;		;아르카나시프트を持ってる限り이악물기ます。
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,4
+;		CFLAG:(ARG:1):이악물기フラグ = 1
+;	ELSEIF LOCAL >= 0
+;		PRINTFORM {LOCAL}ダメージ
+;		CALL VAR_HP,ARG:1,-LOCAL,0
+;	ELSE
+;		PRINTFORM {-LOCAL}회복
+;		CALL VAR_HP,ARG:1,-LOCAL,3
+;		;わざわざ스내피の為に何をしているんだ俺は
+;		CFLAG:(ARG:1):데미지흡수量 -= LOCAL
+;	ENDIF
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("SLEEP") && LOCAL > 0
+;		CFLAG:(ARG:1):ステート = 0
+;---- EDIT 002 DEL END ---------------------------
+;---- EDIT 002 ADD START -------------------------
+
+	;- BTL計算:ダメージ実行 (2:魔法)
+	CALL BTL_CALC_DAMAGE_EXE(ARG:0, ARG:1, LOCAL, ARG:3, 2, ARG:4,ARG:5)
+	LOCAL	= RESULT:0
+	LOCAL:1	= RESULT:1
+
+;---- EDIT 002 ADD END ---------------------------
+CALL RECEIVE_SET,ARG:1,ARG:3,2,LOCAL,LOCAL:1
+
+	;구상用にフラグ保存
+	CALL BATTLE_EVENT_ATTACK, ARG , ARG:1, LOCAL, 1
+	
+	SIF LOCAL < 1
+		RETURN 0
+;---- EDIT 002 DEL START -------------------------
+;	;COOP or 1moreのフラグ立て
+;	SIF MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) > 100 && MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) != 999
+;		LOCAL:1 += 1
+;	;弱点を付かれ、방어しておらず、ダメージを受けており、瀕死になっていなければＣＯＯＰの대상に
+;	;行動者が적なら、
+;	IF CFLAG:(ARG:1):ステート != GET_STATE_NUM("DYING") && LOCAL > 0 && CFLAG:(ARG:1):방어フラグ == 0 && LOCAL:1 == 1
+;		IF CFLAG:ARG:PTフラグ > 0
+;			CFLAG:(ARG:1):ＣＯＯＰフラグ += ARG:2
+;		ELSEIF CFLAG:ARG:PTフラグ != CFLAG:(ARG:1):PTフラグ && CFLAG:ARG:１moreフラグ == 0
+;			CFLAG:ARG:１moreフラグ = 1
+;		ENDIF
+;	ENDIF
+;---- EDIT 002 DEL END ---------------------------
+;---- EDIT 002 ADD START -------------------------
+
+	;- BTL計算:COOP (2:魔法)
+	SIF !FLAG:カウンター中
+		CALL BTL_CALC_DAMAGE_COOP(ARG:0, ARG:1, LOCAL, ARG:3, 2, LOCAL:1, ARG:2)
+
+;---- EDIT 002 ADD END ---------------------------
+
+
+
+RETURN 1
+
+;---- EDIT 002 DEL START --------------------------- 사용されるまでコメントアウト
+;
+;@ダメージ試算,ARG,ARG:1,ARG:2
+;CALLFORM SKILL_DAMAGETYPE_{ARG:2}
+;CALLFORM ダメージ試算_{RESULT},ARG,ARG:1,ARG:2
+;
+;@ダメージ試算_1,ARG,ARG:1,ARG:2
+;#DIM ＣＯＯＰ횟수 , 1
+;;ARG 공격者
+;;ARG:1 被공격者
+;;ARG:2 威힘
+;;ARG:3 相性
+;;LOCAL ダメージ
+;;LOCAL:1　1moreとCO-OPのフラグていうかクリフラグ
+;LOCAL:1 = 0
+;IF !CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "가드킬") && ((MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 0 && ((HAVE_SKILL(ARG,2420) || HAVE_SKILL(ARG,2421))) == 0) || MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 999 || (CFLAG:(ARG:1):물리반사フラグ && ARG:3 < 4) || (CFLAG:(ARG:1):마법반사フラグ && (ARG:3 > 3 && ARG:3 != 17)))
+;	RETURN 0
+;ENDIF
+;;링케이지の場合、能力参照者を指定できる
+;IF CFLAG:ARG:링케이지발동 && !CFLAG:ARG:단독링케이지
+;	TRYCCALLFORM GET_STATUS_LINKAGE{CFLAG:ARG:사용링케이지}, ARG
+;		TRYCALLFORM GET_STATUS_LINKAGE{CFLAG:ARG:사용링케이지}, ARG
+;		LOCALS = 링케이지참가자{RESULT}
+;		SIF RESULT
+;			ARG = CFLAG:ARG:LOCALS
+;	CATCH
+;	ENDCATCH
+;ENDIF
+;
+;LOCAL = (100+MAXBASE:ARG:LV)*(ARG:2)*(MAXBASE:ARG:공격)*(10+MAXBASE:ARG:공격/12)
+;LOCAL /= (MAXBASE:(ARG:1):방어)*100*100
+;;LOCAL = POWER(MAX(1,MAXBASE:ARG:(GET_BATTLESTATUS(0)) + (ARG:2 - 100)/5),2) / MAXBASE:(ARG:1):(GET_BATTLESTATUS(2))
+;
+;LOCAL *= (32 + CFLAG:ARG:공격강화)
+;LOCAL /= (32 + CFLAG:(ARG:1):방어강화)
+;SIF GET_STATE(CFLAG:ARG:ステート) == "POISON"
+;	LOCAL /= 2
+;SIF CFLAG:ARG:기합フラグ
+;	TIMES LOCAL , 2.5
+;;乱数
+;SIF LOCAL > 0
+;	LOCAL += RAND:3
+;LOCAL *= (9500+RAND:1000)
+;LOCAL /= 10000
+;	IF (HAVE_SKILL(ARG,2420) || HAVE_SKILL(ARG,2421)) && RANGE(MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) , 0 , 99) 
+;		;관통持ちは내성と無効を無視
+;		LOCAL *= MAX(100,MAXBASE:(ARG:1):(GET_TYPE(ARG:3)))
+;		;벨・데르は관통でも0ダメージに
+;		SIF NO:(ARG:1) == [[キャラ:벨・데르]]
+;			LOCAL = 0
+;	ELSEIF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "가드킬") && (MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) < 100 || MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 999)
+;		;가드킬効果：내성以上を完全に無視
+;		LOCAL *= 100
+;		;LOCAL *= MAX(100,MAXBASE:(ARG:1):(GET_TYPE(ARG:3)))
+;		;벨・데르は관통でも0ダメージに
+;		SIF NO:(ARG:1) == [[キャラ:벨・데르]]
+;			LOCAL = 0
+;	ELSE
+;		LOCAL *= MAXBASE:(ARG:1):(GET_TYPE(ARG:3))
+;	ENDIF
+;	LOCAL /= 100
+;	;방어中のキャラにはダメージ減少
+;	SIF CFLAG:(ARG:1):방어フラグ
+;		LOCAL /= 2
+;	;後列のキャラにはダメージ減少
+;	SIF (CFLAG:(ARG:1):포지션 > 3 && CFLAG:(ARG:1):포지션 < 7) || CFLAG:(ARG:1):포지션 > 11
+;		TIMES LOCAL,0.70
+;	LOCALS = %GET_TYPE(ARG:3)%무효화횟수
+;	IF CFLAG:(ARG:1):LOCALS && HAVE_SKILL(ARG,2421) == 0
+;		RETURN 0
+;	ENDIF
+;	IF CFLAG:(ARG:1):PTフラグ > 0
+;		SELECTCASE FLAG:전투난이도
+;			CASE 1
+;				TIMES LOCAL,0.75
+;			CASE 3,4
+;				TIMES LOCAL , 1.5
+;			CASE 5
+;				TIMES LOCAL , 2
+;			CASE 6
+;				TIMES LOCAL , 3
+;		ENDSELECT
+;	ENDIF
+;	SIF CFLAG:(ARG:1):PTフラグ == 0 && FLAG:전투난이도 == 1
+;		TIMES LOCAL , 1.40
+;	
+;	;眠っていたらダメージ大
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("SLEEP")
+;		TIMES LOCAL,1.5
+;	;自身がオルギアでダメージ上昇
+;	SIF CFLAG:ARG:ステート == GET_STATE_NUM("ORGY")
+;		TIMES LOCAL,1.25
+;	;FREEZE時は전격、SHOCK時は빙결のダメージが倍化
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("FREEZE") && GET_TYPE(ARG:3) == "전격" || CFLAG:(ARG:1):ステート == GET_STATE_NUM("SHOCK") && GET_TYPE(ARG:3) == "빙결"
+;		TIMES LOCAL,2.0
+;	;추격의심득持ち+1more中は威힘が1.5倍
+;	SIF CFLAG:ARG:１moreフラグ == 2 && HAVE_SKILL(ARG,[[스킬:추격의심득]])
+;		TIMES LOCAL,1.5 
+;	SELECTCASE GET_STATE(CFLAG:(ARG:1):ステート)
+;		CASE "SLEEP","SHOCK","FREEZE"
+;			TIMES LOCAL , 1.50
+;			LOCAL:1 += 2
+;	ENDSELECT
+;	;特殊ダメージ보정
+;	LOCAL = LOCAL * (CFLAG:(ARG:1):물리被데미지보정 +100) / 100
+;	;진・전문내성(만능以外반감・만능倍化)
+;	SIF HAVE_SKILL(ARG:1, [[스킬:진・전문내성]])
+;		LOCAL = ARG:3 == 17 ? LOCAL * 2 # LOCAL / 2
+;	;とりあえず1.2倍しといてみる
+;RETURN LOCAL
+;
+;@ダメージ試算_2,ARG,ARG:1,ARG:2
+;;ARG 공격者
+;;ARG:1 被공격者
+;;ARG:2 威힘
+;;ARG:3 相性
+;;LOCAL ダメージ
+;;링케이지の場合、能力参照者を指定できる
+;IF CFLAG:ARG:링케이지발동 && !CFLAG:ARG:단독링케이지
+;	;PRINTFORMW %CALLNAME:ARG%の공격힘は{MAXBASE:ARG:마법위력}
+;	TRYCCALLFORM 링케이지能力参照者_{CFLAG:ARG:사용링케이지}, ARG
+;		TRYCALLFORM 링케이지能力参照者_{CFLAG:ARG:사용링케이지}, ARG
+;		LOCALS = 링케이지참가자{RESULT}
+;		SIF RESULT
+;			ARG = CFLAG:ARG:LOCALS
+;	CATCH
+;	ENDCATCH
+;ENDIF
+;LOCAL:1 = 0
+;IF !CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "가드킬") && (MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 0 || MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 999 || (CFLAG:(ARG:1):물리반사フラグ && ARG:3 < 4) || (CFLAG:(ARG:1):마법반사フラグ && (ARG:3 > 3 && ARG:3 != 17)))
+;	RETURN 0
+;ENDIF
+;;LOCAL = ((MAXBASE:ARG:(GET_BATTLESTATUS(4)) * 2 * (MAXBASE:ARG:(GET_BATTLESTATUS(4))/8+1))/16+MAXBASE:ARG:(GET_BATTLESTATUS(4))+8) * (ARG:2 + MAXBASE:ARG:(GET_BATTLESTATUS(4))/4+1) / (MAXBASE:(ARG:1):마법효과 + MAXBASE:(ARG:1):방어/2 + MAXBASE:(ARG:1):마법위력/4)
+;;LOCAL = ((MAXBASE:ARG:(GET_BATTLESTATUS(4)) * 2 * (MAXBASE:ARG:(GET_BATTLESTATUS(4))*3/8+1))/16+MAXBASE:ARG:(GET_BATTLESTATUS(4))+8) * (ARG:2) / (MAXBASE:(ARG:1):마법효과 + MAXBASE:(ARG:1):방어/2 + MAXBASE:(ARG:1):마법위력/4)
+;
+;LOCAL = (100+MAXBASE:ARG:LV)*(ARG:2)*(MAXBASE:ARG:마법위력)*(10+MAXBASE:ARG:마법위력/12)
+;LOCAL /= ((MAXBASE:(ARG:1):마법효과*2+MAXBASE:(ARG:1):방어)/3)*100*100
+;
+;;乱数
+;SIF LOCAL > 0
+;	LOCAL += RAND:3
+;LOCAL *= (32 + CFLAG:ARG:마법위력강화)
+;LOCAL /= (32 + CFLAG:(ARG:1):방어강화)
+;SIF CFLAG:ARG:集中フラグ
+;	TIMES LOCAL , 2.5
+;LOCAL *= (9500+RAND:1000)
+;LOCAL /= 10000
+;	LOCALS = %GET_TYPE(ARG:3)%무효화횟수
+;	IF CFLAG:(ARG:1):LOCALS && HAVE_SKILL(ARG,2421) == 0
+;		LOCAL = 0
+;	ENDIF
+;	IF CFLAG:(ARG:1):(GET_TYPE(ARG:3) + "가드킬") && (MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) < 100 || MAXBASE:(ARG:1):(GET_TYPE(ARG:3)) == 999)
+;		;가드킬効果：내성以上を完全に無視
+;		LOCAL *= 100
+;		;LOCAL *= MAX(100,MAXBASE:(ARG:1):(GET_TYPE(ARG:3)))
+;		;벨・데르は관통でも0ダメージに
+;		SIF NO:(ARG:1) == [[キャラ:벨・데르]]
+;			LOCAL = 0
+;	ELSE
+;		LOCAL *= MAXBASE:(ARG:1):(GET_TYPE(ARG:3))
+;	ENDIF
+;	LOCAL /= 100
+;	SIF CFLAG:(ARG:1):방어フラグ
+;		LOCAL /= 2
+;	;後列のキャラにはダメージ減少
+;	SIF (CFLAG:(ARG:1):포지션 > 3 && CFLAG:(ARG:1):포지션 < 7) || CFLAG:(ARG:1):포지션 > 11
+;		TIMES LOCAL,0.70
+;	;難易度修正
+;	IF CFLAG:(ARG:1):PTフラグ > 0
+;		SELECTCASE FLAG:전투난이도
+;			CASE 1
+;				TIMES LOCAL,0.75
+;			CASE 3,4
+;				TIMES LOCAL , 1.5
+;			CASE 5
+;				TIMES LOCAL , 2
+;			CASE 6
+;				TIMES LOCAL , 3
+;		ENDSELECT
+;	ENDIF
+;	SIF CFLAG:(ARG:1):PTフラグ == 0 && FLAG:전투난이도 == 1
+;		TIMES LOCAL , 1.40
+;	;眠っていたらダメージ大
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("SLEEP")
+;		TIMES LOCAL,1.5
+;	;自身がオルギアでダメージ上昇
+;	SIF CFLAG:ARG:ステート == GET_STATE_NUM("ORGY")
+;		TIMES LOCAL,1.25
+;	;FREEZE時は전격、SHOCK時は빙결のダメージが倍化
+;	SIF CFLAG:(ARG:1):ステート == GET_STATE_NUM("FREEZE") && GET_TYPE(ARG:3) == "전격" || CFLAG:(ARG:1):ステート == GET_STATE_NUM("SHOCK") && GET_TYPE(ARG:3) == "빙결"
+;		TIMES LOCAL,2.0
+;	;추격의심득持ち+1more中は威힘が1.5倍
+;	SIF CFLAG:ARG:１moreフラグ == 2 && HAVE_SKILL(ARG,[[스킬:추격의심득]])
+;		TIMES LOCAL,1.5 
+;	LOCAL = LOCAL * (CFLAG:(ARG:1):마법被데미지보정 +100) / 100
+;	;진・전문내성(만능以外반감・만능倍化)
+;	SIF HAVE_SKILL(ARG:1, [[스킬:진・전문내성]])
+;		LOCAL = ARG:3 == 17 ? LOCAL * 2 # LOCAL / 2
+;RETURN LOCAL
+;---- EDIT 002 DEL END   ---------------------------
+
+
+
+;=================================================
+;   sub BTL_CHK_링케이지
+;=================================================
+;   BTL:링케이지체크
+;-------------------------------------------------
+; Input:
+;  ARG:0				대상者
+; Output:
+;  RETURN				체크結果のキャラ
+;-------------------------------------------------
+@BTL_CHK_링케이지(ARG:0)
+#DIM L_P
+L_P = ARG:0
+
+;링케이지の場合、能力参照者を指定できる
+IF CFLAG:L_P:링케이지발동 && !CFLAG:L_P:단독링케이지
+	TRYCCALLFORM 링케이지能力参照者_{CFLAG:L_P:사용링케이지}, L_P
+		TRYCALLFORM 링케이지能力参照者_{CFLAG:L_P:사용링케이지}, L_P
+		SIF RESULT
+			L_P = CFLAG:L_P:@"링케이지참가자{RESULT}"
+	CATCH
+	ENDCATCH
+ENDIF
+
+RETURN L_P
+
+;=================================================
+;   sub BTL_CHK_SKILL_관통
+;=================================================
+;   BTL:스킬체크(관통)
+;-------------------------------------------------
+; Input:
+;  ARG:0				대상者
+; Output:
+;  RETURNF				真偽値
+;-------------------------------------------------
+@BTL_CHK_SKILL_관통(ARG:0)
+#FUNCTION
+#DIM L_P
+L_P = ARG:0
+
+;관통스킬有りの場合
+;東方ＭＯＤEX・아나키불릿헬
+IF (HAVE_SKILL(L_P,[[스킬:관통]]) || HAVE_SKILL(L_P,[[스킬:영세라이도우]]) || HAVE_SKILL(L_P,2989)|| HAVE_SKILL(L_P,2947))
+	RETURNF 1
+ELSE
+	RETURNF 0
+ENDIF
+
+
+;=================================================
+;   sub BTL_CALC_DAMAGE_BLOCK
+;=================================================
+;   BTL計算:ダメージブロック
+;-------------------------------------------------
+; Input:
+;  ARG:0				공격者
+;  ARG:1				被공격者
+;  ARG:3				공격상성
+;  ARG:4				ダメージ타입(1:物理 2:魔法)
+; Output:
+;  RETURNF				真偽値
+;-------------------------------------------------
+@BTL_CALC_DAMAGE_BLOCK(ARG:0, ARG:1, ARG:3, ARG:4)
+#FUNCTION
+#DIM L_P
+#DIM L_T
+#DIMS L_相性名
+#DIM L_相性번호
+#DIM L_相性치
+#DIM L_BLOCK
+#DIM L_데미지타입
+#DIM L_가드킬
+#DIM L_물리관통フラグ
+
+;-----------------------------
+;- 초기処理
+;-----------------------------
+
+L_P		= ARG:0
+L_T		= ARG:1
+L_데미지타입 = ARG:4
+
+L_相性번호	= ARG:3
+L_相性名	= %GET_TYPE(L_相性번호)%
+L_相性치	= MAXBASE:L_T:L_相性名
+
+;-----------------------------
+;- 前処理
+;-----------------------------
+L_BLOCK=0
+L_가드킬=CFLAG:L_T:(L_相性名 + "가드킬")
+
+;物理ダメージで관통스킬有りの場合
+IF (L_데미지타입 == 1) && BTL_CHK_SKILL_관통(L_P)
+	L_물리관통フラグ = 1
+ELSE
+	L_물리관통フラグ = 0
+ENDIF
+
+
+;-----------------------------
+;- ブロック판정
+;-----------------------------
+
+;인간불가침&인간からの공격
+IF HAVE_SKILL(L_T,2506) && ABL:L_P:종족 == 0 && NO:L_P != [[キャラ:코로마루]] && (!CFLAG:L_P:악마변신 || TALENT:L_P:이능자 || TALENT:L_P:이능자 || TALENT:L_P:서머너 || TALENT:L_P:페르소나구사자)
+	L_BLOCK=1
+;가드킬未発動 且つ 반사
+ELSEIF !L_가드킬 && (L_相性치 == 999)
+	L_BLOCK=1
+;가드킬未発動 且つ 無効で관통無し
+ELSEIF !L_가드킬 && ( (L_相性치 == 0) && !L_물리관통フラグ )
+	L_BLOCK=1
+;物理반사
+ELSEIF (CFLAG:L_T:물리반사フラグ && L_相性번호 < 4)
+	L_BLOCK=1
+;魔法반사
+ELSEIF (CFLAG:L_T:마법반사フラグ && (L_相性번호 > 3 && L_相性번호 != 17) )
+	L_BLOCK=1
+ELSEIF (CFLAG:L_T:무효フラグ && L_相性번호 != 17)
+	L_BLOCK=1
+;웨이트
+ELSEIF (CFLAG:L_T:(L_相性名 + "웨이트") == 2)
+	L_BLOCK=1
+ENDIF
+
+RETURNF L_BLOCK
+
+
+;=================================================
+;   sub BTL_CALC_BASE_DAMAGE
+;=================================================
+;   BTL計算:基礎ダメージ
+;-------------------------------------------------
+; Input:
+;  ARG:0				공격者
+;  ARG:1				被공격者
+;  ARG:2				威힘
+;  ARGS					計算타입(物理/魔法/총)
+; Output:
+;  RETURN				ダメージ
+;-------------------------------------------------
+@BTL_CALC_BASE_DAMAGE(ARG:0, ARG:1, ARG:2, ARGS)
+#DIM L_P
+#DIM L_T
+#DIM L_위력
+#DIM L_DMG
+#DIM L_공격値
+#DIM L_방어値
+
+L_P		= ARG:0
+L_T		= ARG:1
+L_위력	= ARG:2
+L_DMG=0
+
+;-----------------------------
+;- 計算타입別체크
+;-----------------------------
+SELECTCASE ARGS
+	CASE "물리"
+		L_DMG = (100+MAXBASE:L_P:LV)*(L_위력)*(MAXBASE:L_P:공격)*(10+MAXBASE:L_P:공격/12)
+		;父の名に誓って持ちはダメージが1.5倍
+		SIF HAVE_SKILL(L_P,[[스킬:아버지의이름에맹세코]])
+			TIMES L_DMG,1.5
+		L_DMG /= (MAXBASE:L_T:방어)*100*100
+
+	CASE "마법"
+		L_DMG = (100+MAXBASE:L_P:LV)*(L_위력)*(MAXBASE:L_P:마법위력)*(10+MAXBASE:L_P:마법위력/12)
+		;父の名に誓って持ちはダメージが1.5倍
+		SIF HAVE_SKILL(L_P,[[스킬:아버지의이름에맹세코]])
+			TIMES L_DMG,1.5
+		;아나키불릿헬・1.25倍   ;마법스킬강화 메사이어
+		SIF HAVE_SKILL(L_P,2947) || HAVE_SKILL(L_P,[[스킬:마법스킬강화]])
+			TIMES L_DMG,1.25
+		L_DMG /= ((MAXBASE:L_T:마법효과*2+MAXBASE:L_T:방어)/3)*100*100
+
+	CASE "총"
+		L_DMG = (100+MAXBASE:L_P:LV)*(L_위력)*(MAXBASE:L_P:총공격)*(10+MAXBASE:L_P:총공격/12)
+		;父の名に誓って持ちはダメージが1.5倍
+		SIF HAVE_SKILL(L_P,[[스킬:아버지의이름에맹세코]])
+			TIMES L_DMG,1.5
+		L_DMG /= (MAXBASE:L_T:방어)*100*100
+
+	CASEELSE
+		;엘라ー
+		RETURN 0
+ENDSELECT
+
+;-----------------------------
+;- 기본調整
+;-----------------------------
+
+;乱数
+SIF L_DMG > 0
+	L_DMG += RAND:3
+L_DMG *= (9500+RAND:1000)
+L_DMG /= 10000
+
+;-----------------------------
+;- 終了
+;-----------------------------
+RETURN L_DMG
+
+
+
+;=================================================
+;   sub BTL_CALC_DAMAGE_ADJUSTMENT
+;=================================================
+;   BTL計算:ダメージ調整
+;-------------------------------------------------
+;   입력されたダメージを、필요に応じて調整する
+;-------------------------------------------------
+; Input:
+;  ARG:0				공격者
+;  ARG:1				被공격者
+;  ARG:2				ダメージ値
+;  ARG:3				공격상성
+;  ARG:4				ダメージ타입(1:物理 2:魔法)
+; Output:
+;  RETURN				ダメージ値
+;-------------------------------------------------
+@BTL_CALC_DAMAGE_ADJUSTMENT(ARG:0, ARG:1, ARG:2, ARG:3, ARG:4)
+#DIM L_P
+#DIM L_T
+#DIM L_DMG
+#DIMS L_相性名
+#DIM L_相性치
+#DIM L_물리관통フラグ
+#DIM L_데미지타입
+;---- EDIT 012 ADD ------
+#DIM L_무기素質P
+
+;-----------------------------
+;- 초기処理
+;-----------------------------
+
+L_P		= ARG:0
+L_T		= ARG:1
+L_DMG	= ARG:2
+L_데미지타입 = ARG:4
+
+L_相性名	= %GET_TYPE(ARG:3)%
+L_相性치	= MAXBASE:L_T:L_相性名
+
+;---- EDIT 012 ADD START ---------------------------
+CALL MATCHING_WEAPON_CHECK(L_P)
+L_무기素質P = RESULT
+CALL WEAPON_STYLE_CHECK(L_P,RESULT)
+;3ケタ以降は型
+L_무기素質P += RESULT * 100
+;---- EDIT 012 ADD END   ---------------------------
+
+;-----------------------------
+;- ダメージ타입別체크
+;-----------------------------
+
+;- 物理ダメージ타입
+IF (L_데미지타입 == 1)
+	SIF CFLAG:L_P:방어반감フラグ == 1
+		L_DMG *= 2
+	IF CFLAG:L_P:기합フラグ && !FLAG:カウンター中
+		IF CFLAG:L_P:기합フラグ == 2
+			TIMES L_DMG , 3.0
+		ELSE
+			TIMES L_DMG , 2.5
+		ENDIF
+	ENDIF
+	;特殊ダメージ보정
+	L_DMG = L_DMG * (CFLAG:L_T:물리被데미지보정 +100) / 100
+
+	L_DMG *= (32 + CFLAG:L_P:공격강화)
+	L_DMG /= (32 + CFLAG:L_T:방어강화)
+
+
+;- 魔法ダメージ타입
+ELSE
+	SIF CFLAG:L_P:마법효과반감フラグ == 1
+		L_DMG *= 2
+	SIF CFLAG:L_P:集中フラグ && !FLAG:カウンター中
+		TIMES L_DMG , 2.5
+
+	;特殊ダメージ보정
+	L_DMG = L_DMG * (CFLAG:L_T:마법被데미지보정 +100) / 100
+
+	L_DMG *= (32 + CFLAG:L_P:마법위력강화)
+	L_DMG /= (32 + CFLAG:L_T:마법효과강화)
+ENDIF
+
+
+
+;-----------------------------
+;- 내성処理
+;-----------------------------
+
+;物理ダメージで관통스킬有りの場合
+IF (L_데미지타입 == 1) && BTL_CHK_SKILL_관통(L_P)
+	L_물리관통フラグ = 1
+ELSE
+	L_물리관통フラグ = 0
+ENDIF
+
+
+;드레인상태
+IF CFLAG:L_T:(L_相性名 + "웨이트") == 3 
+	L_DMG *= -50
+;物理ダメージ타입で관통
+ELSEIF L_물리관통フラグ && L_相性치 >= 0
+	;관통持ちは내성と無効を無視
+	L_DMG *= MAX(100, L_相性치)
+	;벨・데르は관통でも0ダメージに
+	SIF NO:L_T == [[キャラ:벨・데르]]
+		L_DMG = 0
+;가드킬
+ELSEIF CFLAG:L_T:(L_相性名 + "가드킬") && (L_相性치 < 100 || L_相性치 == 999)
+	;가드킬効果：내성以上を完全に無視
+	L_DMG *= 100
+	;벨・데르は관통でも0ダメージに
+	SIF NO:L_T == [[キャラ:벨・데르]]
+		L_DMG = 0
+ELSE
+	L_DMG *= L_相性치
+ENDIF
+L_DMG /= 100
+
+
+;-----------------------------
+;- 無効系処理
+;-----------------------------
+;東方ＭＯＤEX・아나키불릿헬。
+IF (HAVE_SKILL(L_P,[[스킬:영세라이도우]]) ||HAVE_SKILL(L_P,2947)) == 0
+	IF CFLAG:L_T:(L_相性名 + "무효화횟수")
+		L_DMG = 0
+		CFLAG:L_T:(L_相性名 + "被弾") = 1
+	ENDIF
+	;◯◯브레이크
+	SIF CFLAG:L_T:(L_相性名 + "웨이트") == 1
+		L_DMG = 0
+ENDIF
+
+
+;-----------------------------
+;- 共通체크
+;-----------------------------
+
+;방어中のキャラにはダメージ減少
+SIF CFLAG:L_T:방어フラグ
+	L_DMG /= 2
+
+;---- EDIT 012 ADD ------
+;槍、投具の二ノ型の場合後列への공격減少なし
+IF !FLAG:총공격中 && ((L_무기素質P == 205 && L_데미지타입 == 1) || (L_무기素質P == 208 && L_데미지타입 == 2))
+;後列のキャラにはダメージ減少
+ELSEIF (CFLAG:L_T:포지션 > 3 && CFLAG:L_T:포지션 < 7) || CFLAG:L_T:포지션 > 11
+	TIMES L_DMG,0.70
+ENDIF
+
+;自身が幸せだとダメージ減少
+SIF CFLAG:L_P:ステート == GET_STATE_NUM("HAPPY")
+	TIMES L_DMG,0.70
+
+;自身が蝿でダメージ減少
+SIF CFLAG:L_P:ステート == GET_STATE_NUM("FLY")
+	TIMES L_DMG,0.50
+
+IF CFLAG:L_T:PTフラグ > 0
+	SELECTCASE FLAG:전투난이도
+		CASE 1
+			TIMES L_DMG,0.75
+		CASE 3,4
+			TIMES L_DMG , 1.5
+		CASE 5
+			TIMES L_DMG , 2
+		CASE 6
+			TIMES L_DMG , 3
+	ENDSELECT
+ENDIF
+
+;難易度EASYなら적へのダメージ大
+SIF CFLAG:L_T:PTフラグ == 0 && FLAG:전투난이도 == 1
+	TIMES L_DMG , 1.40
+;幸せだとダメージ大
+SIF CFLAG:L_T:ステート == GET_STATE_NUM("HAPPY")
+	TIMES L_DMG,1.25
+;眠っていたらダメージ大
+SIF CFLAG:L_T:ステート == GET_STATE_NUM("SLEEP")
+	TIMES L_DMG,1.5
+;蝿상태ならダメージ大
+SIF CFLAG:L_T:ステート == GET_STATE_NUM("FLY")
+	TIMES L_DMG,1.5
+;自身がオルギアでダメージ上昇
+SIF CFLAG:L_P:ステート == GET_STATE_NUM("ORGY")
+	TIMES L_DMG,1.25
+;이능자はダメージ上昇しない
+IF !TALENT:L_P:이능자 && BATTLE_SETTING_IS_TALENT()
+	;自身が달인持ちでダメージ上昇
+	IF TALENT:L_P:달인
+		TIMES L_DMG,1.25
+	ELSE
+		;自身が素質持ちでダメージ上昇
+		CALL 相性소질체크, L_P, ARG:3, 1
+		SIF RESULT == 1
+			TIMES L_DMG,1.15
+	ENDIF
+ENDIF
+;인수라ならダメージ上昇、전투時の素質影響설정 ON 1.3倍、OFF 1.1倍。
+IF TALENT:L_P:인수라 && BATTLE_SETTING_IS_TALENT()
+	TIMES L_DMG,1.3
+ELSEIF TALENT:L_P:인수라
+	TIMES L_DMG,1.1
+ENDIF
+
+;검격ブースタ・1.25倍
+IF L_相性名 == "검격" && HAVE_SKILL(L_P,2450)
+ TIMES L_DMG,1.25
+ ;비구부스터・1.25倍
+ELSEIF L_相性名 == "비구" && HAVE_SKILL(L_P,2451)
+ TIMES L_DMG,1.25
+  ;타격부스터・1.25倍
+ELSEIF L_相性名 == "타격" && HAVE_SKILL(L_P,2452)
+ TIMES L_DMG,1.25
+   ;전술부스터・1.25倍
+ELSEIF L_相性名 == "전술" && HAVE_SKILL(L_P,2453)
+ TIMES L_DMG,1.25
+   ;화염부스터・1.25倍
+ELSEIF L_相性名 == "화염" && HAVE_SKILL(L_P,2454)
+ TIMES L_DMG,1.25
+   ;빙결부스터・1.25倍
+ELSEIF L_相性名 == "빙결" && HAVE_SKILL(L_P,2455)
+ TIMES L_DMG,1.25
+   ;전격부스터・1.25倍
+ELSEIF L_相性名 == "전격" && HAVE_SKILL(L_P,2456)
+ TIMES L_DMG,1.25
+   ;충격부스터・1.25倍
+ELSEIF L_相性名 == "충격" && HAVE_SKILL(L_P,2457)
+ TIMES L_DMG,1.25
+   ;신경부스터・1.25倍
+ELSEIF L_相性名 == "신경" && HAVE_SKILL(L_P,2458)
+ TIMES L_DMG,1.25
+   ;정신부스터・1.25倍
+ELSEIF L_相性名 == "정신" && HAVE_SKILL(L_P,2459)
+ TIMES L_DMG,1.25
+   ;파마부스터・1.25倍
+ELSEIF L_相性名 == "파마" && HAVE_SKILL(L_P,2460)
+ TIMES L_DMG,1.25
+   ;주살부스터・1.25倍
+ELSEIF L_相性名 == "주살" && HAVE_SKILL(L_P,2461)
+ TIMES L_DMG,1.25
+    ;지변부스터・1.25倍
+ELSEIF L_相性名 == "지변" && HAVE_SKILL(L_P,2462)
+ TIMES L_DMG,1.25
+    ;수격부스터・1.25倍
+ELSEIF L_相性名 == "수격" && HAVE_SKILL(L_P,2463)
+ TIMES L_DMG,1.25
+    ;질풍부스터・1.25倍
+ELSEIF L_相性名 == "질풍" && HAVE_SKILL(L_P,2464)
+ TIMES L_DMG,1.25
+    ;중력부스터・1.25倍
+ELSEIF L_相性名 == "중력" && HAVE_SKILL(L_P,2465)
+ TIMES L_DMG,1.25
+     ;핵열부스터・1.25倍
+ELSEIF L_相性名 == "핵열" && HAVE_SKILL(L_P,2466)
+ TIMES L_DMG,1.25
+ ENDIF
+
+;- 特定の상태이상時、ダメージが倍化
+SELECTCASE GET_STATE(CFLAG:L_T:ステート)
+	;- FREEZE時は전격、지변
+	CASE "FREEZE"
+		SIF L_相性名 == "전격" || L_相性名 == "지변"
+			TIMES L_DMG,2.0
+			
+	;- SHOCK時は빙결、수격
+	CASE "SHOCK"
+		SIF L_相性名 == "빙결" || L_相性名 == "수격"
+			TIMES L_DMG,2.0
+			
+	;- SLIP時は중력、물리
+	CASE "SLIP"
+		IF L_相性名 == "중력" || L_相性名 == "검격" || L_相性名 == "타격" || L_相性名 == "비구" || L_相性名 == "전술"
+			TIMES L_DMG,1.7
+			SIF L_相性名 == "중력"
+				CFLAG:L_T:SLIP中중력被弾フラグ = 1
+		ENDIF
+		
+	;- FLAME時は질풍、핵열
+	CASE "FLAME"
+		SIF L_相性名 == "질풍" || L_相性名 == "핵열"
+			TIMES L_DMG,1.5
+			
+ENDSELECT
+;more系
+;추격의심득持ち+1more中は威힘が1.5倍
+;1more動作변경설정が有効
+IF BATTLE_SETTING_IS_1MORE()
+	SIF CFLAG:L_T:１moreフラグ > 900 && HAVE_SKILL(L_T,[[스킬:추격의심득]])
+		TIMES L_DMG,1.5 
+;1more動作변경설정が無効(バニラ)
+ELSE
+	SIF CFLAG:L_T:１moreフラグ == 2 && HAVE_SKILL(L_T,[[스킬:추격의심득]])
+		TIMES L_DMG,1.5 
+ENDIF
+
+;진・전문내성(만능以外반감・만능倍化)
+SIF HAVE_SKILL(L_T, [[스킬:진・전문내성]])
+	L_DMG = (L_相性名 == "만능") ? L_DMG * 2 # L_DMG / 2
+
+
+
+;-----------------------------
+;- 終了
+;-----------------------------
+RETURN L_DMG
+
+
+;=================================================
+;   sub BTL_CALC_DAMAGE_EXE
+;=================================================
+;   BTL計算:ダメージ実行
+;-------------------------------------------------
+;   입력されたダメージ値を基に、ダメージを反映する
+;-------------------------------------------------
+; Input:
+;  ARG:0				공격者
+;  ARG:1				被공격者
+;  ARG:2				ダメージ値
+;  ARG:3				공격상성
+;  ARG:4				ダメージ타입(1:物理 2:魔法)
+;  ARG:5				クリティカル率(%)
+;  ARG:6				흡수率(%)
+; Output:
+;  RESULT:0				ダメージ値
+;  RESULT:1				クリティカルフラグ
+;-------------------------------------------------
+@BTL_CALC_DAMAGE_EXE(ARG:0, ARG:1, ARG:2, ARG:3, ARG:4, ARG:5, ARG:6)
+#DIM L_P
+#DIM L_T
+#DIM L_DMG
+#DIMS L_相性名
+#DIM L_相性치
+#DIM L_물리관통フラグ
+#DIM L_데미지타입
+#DIM L_CRT
+#DIM L_ABS
+#DIM L_흡수量
+;---- EDIT 012 ADD ------
+#DIM L_무기素質P
+#DIM L_무기素質T
+
+;-----------------------------
+;- 초기処理
+;-----------------------------
+
+L_P		= ARG:0
+L_T		= ARG:1
+L_DMG	= ARG:2
+L_데미지타입 = ARG:4
+L_CRT=0
+L_ABS	= ARG:6
+
+L_相性名	= %GET_TYPE(ARG:3)%
+L_相性치	= MAXBASE:L_T:L_相性名
+;---- EDIT 012 ADD START ---------------------------
+CALL MATCHING_WEAPON_CHECK(L_P)
+L_무기素質P = RESULT
+CALL WEAPON_STYLE_CHECK(L_P,RESULT)
+;3ケタ以降は型
+L_무기素質P += RESULT * 100
+
+CALL MATCHING_WEAPON_CHECK(L_T)
+L_무기素質T = RESULT
+CALL WEAPON_STYLE_CHECK(L_T,RESULT)
+;3ケタ以降は型
+L_무기素質T += RESULT * 100
+;---- EDIT 012 ADD END   ---------------------------
+;-----------------------------
+;- ダメージ타입別체크
+;-----------------------------
+
+;自分か相손が푸린키피아を持っているのならCRITICALはキャンセルされる
+IF HAVE_SKILL(L_P, [[스킬:푸린키피아]]) || HAVE_SKILL(L_T, [[스킬:푸린키피아]]) || (!CFLAG:L_T:PTフラグ && CFLAG:L_T:クリティカル무효フラグ)
+	L_CRT = 0
+;- 物理ダメージ타입
+ELSEIF (L_데미지타입 == 1)
+
+	;物理クリティカル판정
+	IF RAND:100 < ARG:5 * (10 + MAXBASE:L_P:운) / (10 + MAXBASE:L_T:운)*(CFLAG:L_P:クリティカル강화+8)/(((HAVE_SKILL(L_T,[[스킬:코칭]]) > 0 + HAVE_SKILL(L_P,[[스킬:서드아이]])>0))+1)*((HAVE_SKILL(L_P,[[스킬:어드바이스]])>0 + HAVE_SKILL(L_P,[[스킬:서드아이]])>0)+2)/8 * (CFLAG:L_P:베어내기フラグ*20+CFLAG:L_P:クリティカル보정+100) / 100
+		TIMES L_DMG , 1.50
+		PRINTFORM 《CRITICAL》 
+		SETBIT L_CRT, 2
+;---- EDIT 003 ADD START ---------------------------
+	ELSEIF (HAVE_SKILL(L_P, [[스킬:황천의회심]]) && FLAG:月齢 == 8) || (HAVE_SKILL(L_P, [[스킬:정천의회심]]) && FLAG:月齢 == 0)
+;---- EDIT 003 ADD END   ---------------------------
+		TIMES L_DMG , 1.50
+		PRINTFORM 《CRITICAL》 
+		SETBIT L_CRT, 2
+	ELSE
+		SELECTCASE GET_STATE(CFLAG:L_T:ステート)
+			CASE "SLEEP","SHOCK","FREEZE"
+				TIMES L_DMG , 1.50
+				PRINTFORM 《CRITICAL》 
+				SETBIT L_CRT, 2
+		ENDSELECT
+	ENDIF
+;- 魔法ダメージ타입
+ELSE
+
+	;物理クリティカルは無し
+	L_CRT=0
+
+ENDIF
+;독각処理
+IF CFLAG:L_T:독각フラグ == 2 && L_相性치 > 100 && L_相性치 != 999 && L_DMG > 0
+	L_DMG *= -1
+ENDIF
+;-----------------------------
+;- 共通체크
+;-----------------------------
+;---- EDIT 012 ADD START ---------------------------
+;무기素質によるダメージの増減
+IF !FLAG:총공격中
+	IF L_CRT > 0
+		;팬서　二ノ型でクリティカルダメージアップ
+		SIF L_무기素質P == 202
+			TIMES L_DMG , 1.10
+		;검술　二ノ型でクリティカルダメージアップ
+		SIF L_무기素質P == 204
+			TIMES L_DMG , 1.07
+	ENDIF
+	IF L_相性치 > 100 && L_相性치 != 999
+		;궁술　二ノ型で弱点ダメージアップ
+		SIF L_무기素質P == 203
+			TIMES L_DMG , 1.10
+		;검술　二ノ型で弱点ダメージアップ
+		SIF L_무기素質P == 204
+			TIMES L_DMG , 1.07
+	ENDIF
+ENDIF
+;채찍術　二ノ型で魔法被ダメージダウン
+SIF L_무기素質T == 207 && L_데미지타입 == 2
+	TIMES L_DMG , 0.85
+;마샬아츠　二ノ型で物理被ダメージダウン
+SIF L_무기素質T == 211 && L_데미지타입 == 1
+	TIMES L_DMG , 0.85
+;봉술　二ノ型で被ダメージダウン
+SIF L_무기素質T == 210
+	TIMES L_DMG , 0.91
+;---- EDIT 012 ADD END   ---------------------------
+;헬ズゲート処理
+SIF EQUIP:MASTER:헬즈게이트 && GET_SUMMONER_LV2() && CFLAG:L_T:PTフラグ && !HAVE_SKILL(L_P, [[스킬:엑스트라원]] ) && !CFLAG:L_P:ボスフラグ && (L_CRT || (L_相性치 > 100 && L_相性치 != 999)) && L_DMG > 0
+	L_DMG *= 2
+
+IF L_DMG >= BASE:L_T:ＨＰ && (HAVE_SKILL(L_T, [[스킬:불굴의투지]]) || (EQUIP:L_T:바・벨 && FLAG:벨신撃破 & 8)) && CFLAG:L_T:이악물기フラグ == 0
+	PRINTFORM {L_DMG}데미지
+	CALL VAR_HP(L_T, -L_DMG, 2)
+	CFLAG:L_T:이악물기フラグ = 1
+ELSEIF  L_DMG >= BASE:L_T:ＨＰ && HAVE_SKILL(L_T, [[스킬:네버기브업]]) && CFLAG:L_T:이악물기フラグ == 0
+	PRINTFORM {L_DMG}데미지
+	CALL VAR_HP(L_T, -L_DMG, 5)
+	CFLAG:L_T:이악물기フラグ = 1
+ELSEIF  L_DMG >= BASE:L_T:ＨＰ && HAVE_SKILL(L_T, [[스킬:이악물기]]) && CFLAG:L_T:이악물기フラグ == 0
+	PRINTFORM {L_DMG}데미지
+	CALL VAR_HP(L_T, -L_DMG, 1)
+	CFLAG:L_T:이악물기フラグ = 1
+ELSEIF L_DMG >= 0
+	PRINTFORM {L_DMG}데미지
+	CALL VAR_HP(L_T, -L_DMG, 0)
+ELSE
+	PRINTFORM {-L_DMG}회복
+	CALL VAR_HP(L_T, -L_DMG, 3)
+	;わざわざ스내피の為に何をしているんだ俺は
+	CFLAG:L_T:데미지흡수量 -= L_DMG
+ENDIF
+;独善の禊処理
+IF HAVE_SKILL(L_T,2467) && L_DMG > 0 && L_相性치 > 100 && L_相性치 != 999
+	IF CFLAG:(ARG:1):PTフラグ < 1
+		FOR LOCAL,0,6
+			CFLAG:(ARG:1):(GET_BATTLESTATUS(LOCAL) + "강화") = MIN(32, CFLAG:(ARG:1):(GET_BATTLESTATUS(LOCAL) + "강화") + 4)
+		NEXT
+		PRINTFORM  & 전능력상승
+	ELSE
+		CFLAG:(ARG:1):방어강화 = MIN(32, CFLAG:POS(LOCAL):방어강화 + 4)
+		CFLAG:(ARG:1):마법효과강화 = MIN(32, CFLAG:POS(LOCAL):마법효과강화 + 4)
+		PRINTFORM  & 방어、마법효과 상승
+	ENDIF
+ENDIF
+;독각処理
+IF CFLAG:L_T:독각フラグ == 2 && L_相性치 > 100 && L_相性치 != 999 && L_DMG < 0
+	IF CFLAG:(ARG:1):PTフラグ < 1
+		FOR LOCAL,0,6
+			CFLAG:(ARG:1):(GET_BATTLESTATUS(LOCAL) + "강화") = MIN(32, CFLAG:(ARG:1):(GET_BATTLESTATUS(LOCAL) + "강화") + 4)
+		NEXT
+		PRINTFORM  & 전능력상승
+	ENDIF
+	IF CFLAG:(ARG:1):기합フラグ == 0 || CFLAG:(ARG:1):集中フラグ == 0 || CFLAG:(ARG:1):PTフラグ < 1
+		PRINTL
+	ENDIF
+	IF CFLAG:(ARG:1):기합フラグ == 0 || CFLAG:(ARG:1):集中フラグ == 0
+		CFLAG:(ARG:1):기합フラグ = 1
+		CFLAG:(ARG:1):集中フラグ = 1
+		PRINTFORML 　　%CALLNAME:(ARG:1)%는 씩 웃었다…
+	ENDIF
+ENDIF
+;흡수処理
+IF L_DMG > 0 && L_T != L_P && L_ABS != 0
+	L_흡수量 = L_DMG * L_ABS/100
+	CFLAG:L_P:HP흡수量 += L_흡수量
+;	PRINTL
+;	PRINTFORM 　ATTACKER:[{CPOS(L_P),2}] %CALLNAME:L_P,20,LEFT%
+;	IF L_흡수量 > 0
+;		PRINTFORM 　흡수>>　{L_흡수量}회복
+;		CALL VAR_HP(L_P, L_흡수量, 3)
+;	ELSE
+;		IF -L_흡수量 >= BASE:L_P:ＨＰ && (HAVE_SKILL(L_P, [[스킬:불굴의투지]]) || (EQUIP:L_P:바・벨 && FLAG:벨신撃破 & 8)) && CFLAG:L_P:이악물기フラグ == 0
+;			PRINTFORM 　反動>>　{-L_흡수量}ダメージ
+;			CALL VAR_HP(L_P, L_흡수量, 2)
+;			CFLAG:L_P:이악물기フラグ = 1
+;		ELSEIF -L_흡수量 >= BASE:L_P:ＨＰ && HAVE_SKILL(L_P, [[스킬:네버기브업]]) && CFLAG:L_P:이악물기フラグ == 0
+;			PRINTFORM 　反動>>　{-L_흡수量}ダメージ
+;			CALL VAR_HP(L_P, L_흡수量, 5)
+;			CFLAG:L_P:이악물기フラグ = 1
+;		ELSEIF -L_흡수量 >= BASE:L_P:ＨＰ && HAVE_SKILL(L_P, [[스킬:이악물기]]) && CFLAG:L_P:이악물기フラグ == 0
+;			PRINTFORM 　反動>>　{-L_흡수量}ダメージ
+;			CALL VAR_HP(L_P, L_흡수量, 1)
+;			CFLAG:L_P:이악물기フラグ = 1
+;		ELSEIF -L_흡수量 >= 0
+;			PRINTFORM 　反動>>　{-L_흡수量}ダメージ
+;			CALL VAR_HP(L_P, L_흡수量, 0)
+;		ENDIF
+;	ENDIF
+ENDIF
+;寝てたら起きる
+SIF CFLAG:L_T:ステート == GET_STATE_NUM("SLEEP") && L_DMG > 0
+	CFLAG:L_T:ステート = 0
+	
+;被弾者がBOMB상태かつ화염・핵열相性のダメージを受けた場合
+IF CFLAG:L_T:ステート == GET_STATE_NUM("BOMB") && L_DMG > 0 && ( L_相性名 == "화염" || L_相性名 == "핵열" )
+	CFLAG:L_T:ステート = 0
+	CFLAG:L_T:BOMB引火フラグ = 1
+ENDIF
+;-----------------------------
+;- 終了
+;-----------------------------
+VARSET RESULT
+RESULT:0=L_DMG
+RESULT:1=L_CRT
+
+RETURN RESULT
+
+;=================================================
+;   sub BTL_CALC_DAMAGE_COOP
+;=================================================
+;   BTL計算:COOP
+;-------------------------------------------------
+;   입력されたダメージ値を基に、ＣＯＯＰ可能か체크をする
+;-------------------------------------------------
+; Input:
+;  ARG:0				공격者
+;  ARG:1				被공격者
+;  ARG:2				ダメージ値
+;  ARG:3				공격상성
+;  ARG:4				ダメージ타입(1:物理 2:魔法)
+;  ARG:5				クリティカルフラグ(ビット1:相性 ビット2:物理)
+;  ARG:6				威힘
+;-------------------------------------------------
+@BTL_CALC_DAMAGE_COOP(ARG:0, ARG:1, ARG:2, ARG:3, ARG:4, ARG:5, ARG:6)
+#DIM L_P
+#DIM L_T
+#DIM L_DMG
+#DIMS L_相性名
+#DIM L_相性치
+#DIM L_물리관통フラグ
+#DIM L_데미지타입
+#DIM L_CRT
+#DIM L_위력
+#DIM 대상リスト , 16
+#DIM 대상人数
+
+;-----------------------------
+;- 초기処理
+;-----------------------------
+
+L_P		= ARG:0
+L_T		= ARG:1
+L_DMG	= ARG:2
+L_데미지타입 = ARG:4
+L_CRT	=ARG:5
+L_위력	=ARG:6
+
+L_相性名	= %GET_TYPE(ARG:3)%
+L_相性치	= MAXBASE:L_T:L_相性名
+
+
+;-----------------------------
+;- COOP체크
+;-----------------------------
+;more系
+;헬ズゲート処理
+SIF EQUIP:MASTER:헬즈게이트 && GET_SUMMONER_LV2() && CFLAG:L_P:PTフラグ < 1 && !HAVE_SKILL(L_P, [[스킬:엑스트라원]] ) && !CFLAG:L_P:ボスフラグ
+	RETURN 0
+;COOP or 1moreのフラグ立て
+SIF L_相性치 > 100 && L_相性치 != 999
+	SETBIT L_CRT, 1
+
+;弱点を付かれ、방어しておらず、ダメージを受けており、瀕死になっていなければＣＯＯＰの대상に
+;1more動作변경설정が有効
+IF BATTLE_SETTING_IS_1MORE()
+	IF ((EQUIP:MASTER:ＣＯ－ＯＰ강화R && GET_SUMMONER_LV2() > 2) || CFLAG:L_T:ステート != GET_STATE_NUM("DYING")) && L_DMG > 0 && CFLAG:L_T:방어フラグ == 0 && L_CRT
+		IF CFLAG:L_P:PTフラグ > 0
+			;相性クリティカル(1ビット눈)
+			SIF GETBIT(L_CRT,1)
+				CFLAG:L_T:ＣＯＯＰフラグ += L_위력
+			;物理クリティカル(2ビット눈)
+			SIF GETBIT(L_CRT,2)
+				CFLAG:L_T:ＣＯＯＰフラグ += L_위력/2
+		ELSEIF CFLAG:L_P:PTフラグ != CFLAG:L_T:PTフラグ
+			CFLAG:L_P:１moreフラグ += 1
+			SIF CFLAG:L_P:ボスフラグ
+				CFLAG:L_P:１moreフラグ += 1
+		ENDIF
+	ENDIF
+	;無効、흡수されたら１more値が下がる
+	IF CFLAG:L_P:PTフラグ != CFLAG:L_T:PTフラグ && L_DMG == 0
+		SIF !HAVE_SKILL(L_P, [[스킬:엑스트라원]] )
+			CFLAG:L_P:１moreフラグ -= 1
+	ELSEIF CFLAG:L_P:PTフラグ != CFLAG:L_T:PTフラグ && L_DMG < 0
+		SIF !HAVE_SKILL(L_P, [[스킬:엑스트라원]] )
+			CALL ONE_MORE_POINT_DOWN,ARG,2
+	ENDIF
+;1more動作변경설정が無効(バニラ)
+ELSE
+	IF ((EQUIP:MASTER:ＣＯ－ＯＰ강화R && GET_SUMMONER_LV2() > 2) || CFLAG:L_T:ステート != GET_STATE_NUM("DYING")) && L_DMG > 0 && CFLAG:L_T:방어フラグ == 0 && L_CRT
+		IF CFLAG:L_P:PTフラグ > 0
+			;相性クリティカル(1ビット눈)
+			SIF GETBIT(L_CRT,1)
+				CFLAG:L_T:ＣＯＯＰフラグ += L_위력
+			;物理クリティカル(2ビット눈)
+			SIF GETBIT(L_CRT,2)
+				CFLAG:L_T:ＣＯＯＰフラグ += L_위력/2
+		ELSEIF CFLAG:L_P:PTフラグ != CFLAG:L_T:PTフラグ && CFLAG:L_P:１moreフラグ == 0
+			CFLAG:L_P:１moreフラグ = 1
+		ENDIF
+	ENDIF
+ENDIF
+
+IF EQUIP:MASTER:ＣＯ－ＯＰ강화R && GET_SUMMONER_LV2() > 2 && (BASE:L_T:ＨＰ < 1 || CFLAG:L_T:ステート == GET_STATE_NUM("DYING"))
+	VARSET 대상リスト , 0
+	대상人数 = 0
+    FOR LOCAL , 7 , 17
+    	SIF POS(LOCAL) == -1
+    		CONTINUE
+    	SIF BASE:POS(LOCAL):ＨＰ < 1
+    		CONTINUE
+    	SIF GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"
+    		CONTINUE
+    	대상リスト:대상人数 = LOCAL
+    	대상人数 ++
+    NEXT
+    SIF 대상人数 > 0
+    	CFLAG:POS(대상リスト:(RAND:대상人数)):ＣＯＯＰフラグ = CFLAG:L_T:ＣＯＯＰフラグ
+ENDIF

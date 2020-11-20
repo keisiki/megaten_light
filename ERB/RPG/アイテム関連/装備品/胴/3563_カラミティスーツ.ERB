@@ -1,0 +1,60 @@
+﻿
+;======================================================
+;장비品の데이터
+;캘러미티수트
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_3563,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "인내력"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3563,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 6
+	CASE "회피"
+		RETURN 11
+	CASE "마법효과"
+		RETURN 9
+ENDSELECT
+RETURN 0
+
+@방어상성_3563,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "비구","충격"
+		RETURN 80
+	CASE "전격"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@장비箇所_3563
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3563
+RETURN 21
+
+@장비조건_3563,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 21
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3563
+PRINTL 장비조건：♀ LV21～
+
+@장비해설_3563
+PRINTL カラミティ「災厄」の意、某虚言癖のガンマンが愛用していた。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3563
+RETURN 1
+
+@引継ぎ可不可_3563
+RETURN 0

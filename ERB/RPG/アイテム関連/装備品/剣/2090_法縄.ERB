@@ -1,0 +1,72 @@
+﻿
+;======================================================
+;장비品の데이터
+;법승(ふあっそお)
+;======================================================
+
+
+@기본능력수정_2090,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+
+@전투능력수정_2090,ARG,ARG:1 = -1
+SELECTCASE ARG
+	CASE 0
+		RETURN 3
+	CASE 1
+		RETURN 5
+ENDSELECT
+RETURN 0
+
+@방어상성_2090,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2090, ARG = -1
+RETURN 0
+
+@최저공격횟수_2090, ARG = -1
+RETURN 1
+
+@최대공격횟수_2090, ARG = -1
+RETURN 1
+
+@사거리_2090, ARG = -1
+RETURN 2
+
+@공격범위_2090, ARG = -1
+RETURN 2
+
+@장비箇所_2090
+RETURN GET_EQUIPNUM("검")
+
+;-----------------------------
+;- SHOP
+;-----------------------------
+@구입조건_2090
+RETURN 0
+
+@필요레벨_2090
+RETURN 1
+
+@장비조건_2090,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+RETURN 1
+
+@장비조건설명_2090
+PRINTL 장비조건：♀
+
+@장비해설_2090
+PRINTL 풍수에 따라 마귀를 쫒는 도구。본래는 잡은 것을 묶는 밧줄이다。
+PRINTL 채찍처럼 휘둘러 사용하는 것은 아마 틀린 방법。
+
+RETURN 0
+
+@검타입_2090
+;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
+;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+RETURN 9

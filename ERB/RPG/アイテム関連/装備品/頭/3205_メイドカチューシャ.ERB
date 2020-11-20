@@ -1,0 +1,57 @@
+﻿
+;======================================================
+;장비品の데이터
+;메이드카츄샤
+;======================================================
+
+@기본능력수정_3205,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "마력"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3205,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 3
+	CASE "회피"
+		RETURN 7
+ENDSELECT
+RETURN 0
+
+@방어상성_3205,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "화염"
+		RETURN 75
+	CASE "타격","충격"
+		RETURN 95
+	CASE "질풍"
+		RETURN 115
+ENDSELECT
+RETURN 100
+
+@장비箇所_3205
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3205
+RETURN 1
+
+@장비조건_3205,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3205
+PRINTL 장비조건：♀
+
+@장비해설_3205
+PRINTL 빅토리아식 정통파 메이드 카츄샤
+PRINTL 　　　　　　　　격식 높은 분위기와 함게 부지런하고 헌신적인 분위기를 자아낸다
+
+
+@구입조건_3205
+RETURN 0
+
+@引継ぎ可不可_3205
+RETURN 1

@@ -1,0 +1,69 @@
+﻿;======================================================
+;장비品の데이터
+;서바이벌베스트
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_3500,ARG,ARG:1 = -1
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	SELECTCASE GET_BASESTATUS(ARG)
+		CASE "인내력"
+			RETURN 1
+	ENDSELECT
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+ENDIF
+RETURN 0
+
+@전투능력수정_3500,ARG,ARG:1 = -1
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	SELECTCASE GET_BATTLESTATUS(ARG)
+		CASE "방어"
+			RETURN 4
+		CASE "회피"
+			RETURN 9
+	ENDSELECT
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+	SELECTCASE ARG
+		CASE 2
+			RETURN 9
+		CASE 3
+			RETURN 4
+	ENDSELECT
+ENDIF
+RETURN 0
+
+@방어상성_3500,ARG,ARG:1 = -1
+;장비내성・効果변경설정が有効
+IF BATTLE_SETTING_IS_EQUIP_EFFECT() == 1
+	SELECTCASE GET_TYPE(ARG)
+		CASE "검격","타격","화염","지변","수격"
+			RETURN 95
+	ENDSELECT
+;장비내성・効果변경설정が무효(バニラ)
+ELSE
+ENDIF
+RETURN 100
+
+@장비箇所_3500
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3500
+RETURN 1
+
+@장비조건_3500,ARG
+RETURN 1
+
+@장비해설_3500
+PRINTL 야외 활동용 베스트。전투용이 아니라 방어력은 기대하기 어렵다。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3500
+RETURN 1
+
+@引継ぎ可不可_3500
+RETURN 0

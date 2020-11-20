@@ -1,0 +1,174 @@
+﻿;通常공격
+;스킬のテンプレートになっています
+
+;스킬名
+@SKILL_NAME_511,ARG
+;IF ARG > 0 && NO:ARG == [[キャラ:카타나코]]
+IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카타나코]]) == 1
+	RESULTS = 부동의자세
+ELSE
+	RESULTS = 기합
+ENDIF
+
+;　명중
+@SKILL_HITRATE_511, ARG
+RETURN 100
+
+;　威힘
+@SKILL_POWER_511, ARG
+RETURN 0
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_511,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_511,ARG
+RETURN 1
+
+;　ＨＰ2を支払うかＭＰ3を支払うか
+@SKILL_COSTTYPE_511, ARG
+RETURN 3
+;소비なし＝1
+
+;　コストの量
+@SKILL_COST_511,ARG
+RETURN 15
+
+;　相性
+@SKILL_TYPE_511,ARG
+RETURN 0
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_511
+RETURN 1
+;特技
+
+;　1物理ダメージで計算するか2魔法ダメージで計算するか
+@SKILL_DAMAGETYPE_511
+RETURN 0
+
+
+;　대상が1적か2아군か3場전체か4特殊か
+@SKILL_TARGET_511
+RETURN 4
+
+;　사거리
+@SKILL_RANGE_511,ARG
+RETURN 1
+
+;　範囲　11체　21열　3전체　4　적아군전체
+@SKILL_SPHERE_511,ARG
+RETURN 4
+
+;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+@SKILL_EFECT_511
+RETURN 4
+
+;　 特殊処理の有無、及び処理内容
+@SKILL_SPECIALEFECT_511,ARG
+;ARG = 1だった場合は処理の有無を返します
+SIF ARG == 1
+	RETURN 0
+;以下に特殊な処理を記述します
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_511
+RETURN 5
+@継承조건無視_511
+RETURN 1
+;何でも
+
+;속도보정
+@SKILL_SPEED_511, ARG = -1
+RETURN 0
+
+;　구상の표시とその타입
+@SKILL_MESSAGE_511,ARG
+
+;전투時以外に사용できるか
+@SKILL_ACTIONABLE_FIELD_511
+RETURN 0
+
+;스킬変化？用랭크
+@SKILL_RANK_511
+RETURN 5
+
+
+
+;テンプレート用、추가효과シリーズ
+;추가효과스테이터스
+@SKILL_ADDTIONAL_STATE_511,ARG
+RETURN 0
+
+;추가효과상성
+@SKILL_ADDTIONAL_TYPE_511,ARG
+RETURN 0
+
+;추가효과기본부여확률
+@SKILL_ADDTIONAL_BASE_RATE_511,ARG
+RETURN 0
+
+;추가효과부여확률上限
+@SKILL_ADDTIONAL_MAX_RATE_511,ARG
+RETURN 0
+
+;====================================================
+;스킬及び行動の実行
+;====================================================
+@ACTION_511,ARG,ARG:1
+#LOCALSIZE 3
+
+;コストを支払う
+;CALL PAY_COST,ARG,511
+IF CFLAG:(ARG):PTフラグ == 0
+	LOCAL:1 = 7
+	LOCAL:2 = 17
+ELSE
+	LOCAL:1 = 1
+	LOCAL:2 = 7
+ENDIF
+
+CFLAG:ARG:기합フラグ = 1
+FOR LOCAL,LOCAL:1,LOCAL:2
+	SIF POS(LOCAL) < 0
+		CONTINUE
+	SIF HAVE_SKILL(POS(LOCAL),2480)
+		CFLAG:ARG:기합フラグ = 2
+NEXT
+
+
+PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 다음 공격을 위해 힘을 모았다!
+
+
+
+
+
+
+;====================================================
+;実行内容ここまで
+;====================================================
+
+;====================================================
+;전투中以外での実行
+;====================================================
+
+
+;====================================================
+;実行内容ここまで
+;====================================================
+
+
+;　 説明文の표시
+@SKILL_EXPLAIN_511
+PRINTL [특수] 다음에 사용하는 물리공격의 위력이 2.5배가 된다.
+
+;継承に필요な部位
+@継承部位_511,ARG
+RETURN 1
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_511,ARG
+RETURN 1
+;とくにない
+

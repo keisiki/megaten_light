@@ -1,0 +1,160 @@
+﻿;스킬名
+@SKILL_NAME_3529,ARG
+IF ARG > 0 && NO:ARG == [[キャラ:지고와트]]
+	RESULTS = 초전하차지
+ELSEIF ARG > 0 && NO:ARG == [[キャラ:트리니트로]]
+	RESULTS = 히트차지
+ELSE
+	RESULTS = 힘모으기
+ENDIF
+
+;　명중
+@SKILL_HITRATE_3529, ARG
+RETURN 100
+
+;　威힘
+@SKILL_POWER_3529, ARG
+RETURN 0
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_3529,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_3529,ARG
+RETURN 1
+
+;　ＨＰ2を支払うかＭＰ3を支払うか
+@SKILL_COSTTYPE_3529, ARG
+RETURN 3
+;소비なし＝1
+
+;　コストの量
+@SKILL_COST_3529,ARG
+RETURN 15
+
+;　相性
+@SKILL_TYPE_3529,ARG
+RETURN 0
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_3529
+RETURN 1
+;特技
+
+;　1物理ダメージで計算するか2魔法ダメージで計算するか
+@SKILL_DAMAGETYPE_3529
+RETURN 0
+
+;　대상が1적か2아군か3場전체か4特殊か
+@SKILL_TARGET_3529
+RETURN 4
+
+;　사거리
+@SKILL_RANGE_3529,ARG
+RETURN 1
+
+;　範囲　11체　21열　3전체　4　적아군전체
+@SKILL_SPHERE_3529,ARG
+RETURN 4
+
+;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+@SKILL_EFECT_3529
+RETURN 4
+
+;　 特殊処理の有無、及び処理内容
+@SKILL_SPECIALEFECT_3529,ARG
+;ARG = 1だった場合は処理の有無を返します
+SIF ARG == 1
+	RETURN 0
+;以下に特殊な処理を記述します
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_3529
+RETURN 5
+
+;속도보정
+@SKILL_SPEED_3529, ARG = -1
+RETURN 0
+
+;　구상の표시とその타입
+@SKILL_MESSAGE_3529,ARG
+
+;전투時以外に사용できるか
+@SKILL_ACTIONABLE_FIELD_3529
+RETURN 0
+
+;스킬変化？用랭크
+@SKILL_RANK_3529
+RETURN 16
+
+@継承不能_3529
+RETURN 1
+
+;テンプレート用、추가효과シリーズ
+;추가효과스테이터스
+@SKILL_ADDTIONAL_STATE_3529,ARG
+RETURN 0
+
+;추가효과상성
+@SKILL_ADDTIONAL_TYPE_3529,ARG
+RETURN 0
+
+;추가효과기본부여확률
+@SKILL_ADDTIONAL_BASE_RATE_3529,ARG
+RETURN 0
+
+;추가효과부여확률上限
+@SKILL_ADDTIONAL_MAX_RATE_3529,ARG
+RETURN 0
+
+;====================================================
+;스킬及び行動の実行
+;====================================================
+@ACTION_3529,ARG,ARG:1
+;コストを支払う
+;CALL PAY_COST,ARG,3529
+LOCAL:1 = 7
+LOCAL:2 = 17
+
+FOR LOCAL,LOCAL:1,LOCAL:2
+	SIF POS(LOCAL) < 0
+		CONTINUE
+	IF ARG > 0
+		IF NO:ARG == [[キャラ:지고와트]] || NO:ARG == [[キャラ:트리니트로]] || NO:ARG == [[キャラ:미즈치]]
+			CFLAG:POS(LOCAL):마법위력강화 = MIN(32, CFLAG:POS(LOCAL):마법위력강화 + 4)
+		ELSE
+			CFLAG:POS(LOCAL):공격강화 = MIN(32, CFLAG:POS(LOCAL):공격강화 + 4)
+		ENDIF
+	ENDIF
+
+NEXT
+
+IF NO:ARG == [[キャラ:지고와트]] || NO:ARG == [[キャラ:트리니트로]] || NO:ARG == [[キャラ:미즈치]]
+	PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@의 마법위력이 올라갔다！
+	CFLAG:ARG:集中フラグ = 1
+	PRINTFORMW %조사처리(CALLNAME:ARG, "는")% 다음 공격을 위해 집중해、행동이 빨라진다！
+ELSE
+	PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@의 공격력이 올라갔다！
+	CFLAG:ARG:기합フラグ = 1
+	PRINTFORMW %조사처리(CALLNAME:ARG, "는")%는 다음 공격을 위해 힘을 모아、행동이 빨라진다！
+ENDIF
+
+;====================================================
+;実行内容ここまで
+;====================================================
+
+;　 説明文の표시
+@SKILL_EXPLAIN_3529
+PRINTL [특수] 다음에 사용하는 물리공격의 위력이 2.5배가 되고, 아군의 공격력을 상승시킨다.
+PRINTL 사용자가 지고와트, 트리니트로, 미즈치일 경우 마법공격의 위력이 상승한다.
+
+;継承に필요な部位
+@継承部位_3529,ARG
+RETURN 1
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_3529,ARG
+RETURN 1
+;とくにない
+

@@ -1,0 +1,62 @@
+﻿
+;======================================================
+;장비品の데이터
+;바람의날개
+;충격질풍にやや強く、전격지변중력に弱くなる
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4028,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "속도"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4028,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "회피"
+		RETURN 10
+	CASE "마법효과"
+		RETURN 7
+ENDSELECT
+RETURN 0
+
+@방어상성_4028,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "충격","질풍"
+		RETURN 75
+	CASE "중력"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@장비箇所_4028
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4028
+RETURN 12
+
+@장비조건_4028,ARG
+SIF BASE:ARG:LV < 12
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4028
+PRINTL 장비조건：LV12～
+
+;각성編を参考に
+@장비해설_4028
+PRINTL 회피능력に重点を置いた、風の呪文付の翼
+PRINTL 　　　　　　　　
+
+
+@구입조건_4028
+RETURN 0
+
+;마카교환가능か
+@EQUIP_EXCHANGE_4028
+RETURN 1
+
+@引継ぎ可不可_4028
+RETURN 0

@@ -1,0 +1,62 @@
+﻿
+;======================================================
+;장비品の데이터
+;재밍암
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4003,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4003,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 4
+	CASE "회피"
+		RETURN 6
+	CASE "마법효과"
+		RETURN 9
+ENDSELECT
+RETURN 0
+
+@방어상성_4003,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "중력"
+		RETURN 75
+	CASE "정신"
+		RETURN 0
+	CASE "전격"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@장비箇所_4003
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4003
+RETURN 15
+
+@장비조건_4003,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 15
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4003
+PRINTL 장비조건：♂ LV15～
+
+@장비해설_4003
+PRINTL 妨害電波を発して、적からの정신공격などを防ぐことができる팔部装甲。
+PRINTL 　　　　　　　　周波数を調節して付近の携오비電話を圏外にするという小技もある。
+
+
+@구입조건_4003
+RETURN 1
+
+@引継ぎ可不可_4003
+RETURN 0

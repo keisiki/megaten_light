@@ -1,0 +1,439 @@
+﻿;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_01
+PRINTFORML 
+PRINTFORML 순조롭게 일을 해내고、이 업계에도 이름을 날리는 %CALLNAME:MASTER%의 앞에、
+PRINTFORML "무라쿠모기관"이라는 조직으로부터의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 내용은 곧 있을 "신인선발"의 감독역이다。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥35000
+PRINTFORML （ 주의：이 의뢰를 받으면、시간이 경과합니다 ）
+;====================
+;内容
+;====================
+@REQUEST_99_01
+PRINTFORMW ――ムラクモ機関。
+PRINTFORMW 政府直属の악마討伐組織。
+PRINTFORMW 国防が主たる任務である点はヤタガラスやジプスと同様だが、
+PRINTFORMW 彼らは独自の基準で랭크付けした『Ｓ級』の이능자を民間人からスカウトしているのだとか。
+SIF CFLAG:MASTER:당신の専攻分野 == 3 || CFLAG:MASTER:당신の専攻分野 == 6;이능자か달인なら
+	PRINTFORMW %CALLNAME:MASTER%に対しアプローチをかけたのはこうした関係もあるのかもしれない。
+
+CALL REQUEST_TITLE_99("0")
+
+PRINTFORMW 東京 ― 신주쿠・東京도청　도청前広場
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW メールで指定された集合場所へ到着すると、自衛隊が既に전개していた。
+PRINTFORMW 傍には戦車すら控えており、物々しい雰囲気を醸し出している。
+PRINTFORMW その中央には、この雰囲気には似合わない男女が一名ずつ立っている。
+PRINTFORMW 高級そうな恰好に身を包んでいる女と、백의姿でやや不健康そうな男だ。
+PRINTFORML 
+PRINTFORML 女：
+PRINTFORMW 「まずは、의뢰を受けてくれて感謝するわ」
+PRINTFORMW 「私はムラクモ機関総長の日暈棗（ヒカサ・ナツメ）よ」
+PRINTFORML 男：
+PRINTFORMW 「補佐を勤めています、研究員の桐野礼文（キリノ・アヤ후미）です」
+PRINTFORML 
+PRINTFORMW 挨拶もそこそこに済ませ、早速의뢰の詳細について質問を行う。
+PRINTFORMW ここに呼び出したということは、ここで"新人選抜"を行うのだろうか？
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 「はい。本日、東京도청で악마の出現が報告されました。とは言っても先の一件ほどではありません」
+PRINTFORMW 「위험도も高くないということで、新人選抜に利用することになりました」
+PRINTFORML ナツメ：
+PRINTFORML 「武装した自衛隊で封じ込められる程度のものだし、各エリアには自衛隊員を派遣しているけれど。
+PRINTFORMW 　それでも念には念を入れておきたかったのよ」
+PRINTFORML キリノ：
+PRINTFORML 「%CALLNAME:MASTER%さんはまずここで待機していただきます。
+PRINTFORMW 　我々が介入が필요な事態であると判断した場合、도청へ出動していただく形です」
+PRINTFORML ナツメ：
+PRINTFORMW 「仮にアナタが動くほどの事態にならなかったとしても報酬は全額支払うことも約束するわ」
+PRINTFORML 
+PRINTFORMW 成程。악마を相손にするならば「こちら側」の인간の方が確実だろう。
+PRINTFORMW 低級악마の相손だけで報酬が貰えるならば楽な仕事だ……。
+PRINTFORMW 続々と集まる참가者を値踏みしながら、%CALLNAME:MASTER%は時間を潰した。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 試験開始から数時間が経過した。
+PRINTFORMW 曲がりなりにも国家機関が눈を付けた逸材と言うべきか、%CALLNAME:MASTER%が出るほどの事態はまだ起きていない。
+PRINTFORMW このまま試験終了を待つだけか、と欠伸混じりに、空を見上げた、세츠나――
+PRINTFORMW 쾌晴だったはずの空が、紫紺に染まっていた。雲は도청を中心に渦を巻き、異界と思しき禍々しさを放つ。
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 「観測班からの報告です、도청屋上に巨大な反応が確認されました！」
+PRINTFORML ナツメ：
+PRINTFORMW 「まずは10班、ガトウたちの隊を回して。アナタも今すぐ向かってちょうだい」
+PRINTFORMW 屋上……確か、選抜を終了した者の集合地点だったはずである。
+PRINTFORMW %CALLNAME:MASTER%は首肯し、直ちに도청へと突入した。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠・東京도청　屋上
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 참가者に討伐されたであろう악마の死骸と、赤い不気味な花が散見している도청を駆け抜け、
+PRINTFORMW %CALLNAME:MASTER%は屋上へと辿り着いた。
+PRINTFORMW そこには既に倒れ伏した巨大な「竜」と、周囲に横たわる참가者だったものたち。
+PRINTFORMW そしてたった一名、しかも満身創痍だが、辛うじて息はある참가者の姿があった。
+PRINTFORMW ……どうやら最悪の事態は避けられたが、それでも損失は大きいだろう。
+PRINTFORMW 応急処置を施してナツメたちへ連絡を取ろうとした瞬間――屋上に、人外の影が差した。
+PRINTFORMW 弾かれるように空を見上げれば、空には幾十で済まない「竜」の群れが降下してくるのが見える。
+PRINTFORMW そしてその内の幾つかは、こちらへと向かってきた――！
+PRINTFORML 
+PRINTFORMW 始まりの翼竜の群れが現れた！
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	CALL SET_ENEMY,7, [[キャラ:타라스크]], 35, 0
+	NAME:(CHARANUM-1) = 始まりの翼竜
+	CALLNAME:(CHARANUM-1) = 始まりの翼竜
+;本家だと通常공격(噛みつき)と파이어브레스しかなかったから少し盛ってあげる
+	ABL:(CHARANUM-1):스킬1 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:테일]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:파이어브레스]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:루이나플레임]]
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = その中でも本個体は侵略の先駆けを務めることが多い。
+	CSTR:(CHARANUM-1):32 = 
+	CSTR:(CHARANUM-1):33 = ムラクモ機関による呼称は"Ｄ１"および"Ｄ２"。
+	CSTR:(CHARANUM-1):34 = 第一次東京侵蝕時には東京도청に出現が確認されている。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = なお、この呼称は『セブンスドラゴン』における同種の個体のものであり、
+	CSTR:(CHARANUM-1):37 = 『セブンスドラゴン2020』では用いられない。
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,9, [[キャラ:타라스크]], 35, 0
+	NAME:(CHARANUM-1) = 始まりの翼竜
+	CALLNAME:(CHARANUM-1) = 始まりの翼竜
+	ABL:(CHARANUM-1):스킬1 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:테일]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:파이어브레스]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:루이나플레임]]
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = その中でも本個体は侵略の先駆けを務めることが多い。
+	CSTR:(CHARANUM-1):32 = 
+	CSTR:(CHARANUM-1):33 = ムラクモ機関による呼称は"Ｄ１"および"Ｄ２"。
+	CSTR:(CHARANUM-1):34 = 第一次東京侵蝕時には東京도청に出現が確認されている。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = なお、この呼称は『セブンスドラゴン』における同種の個体のものであり、
+	CSTR:(CHARANUM-1):37 = 『セブンスドラゴン2020』では用いられない。
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL SET_ENEMY,11, [[キャラ:타라스크]], 35, 0
+	NAME:(CHARANUM-1) = 始まりの翼竜
+	CALLNAME:(CHARANUM-1) = 始まりの翼竜
+	ABL:(CHARANUM-1):스킬1 = [[스킬:더블바이스]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:테일]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:파이어브레스]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:루이나플레임]]
+	MAXBASE:(CHARANUM-1):파마 = 0
+	BASE:(CHARANUM-1):파마 = 0
+	MAXBASE:(CHARANUM-1):주살 = 0
+	BASE:(CHARANUM-1):주살 = 0
+	MAXBASE:(CHARANUM-1):지변 = 100
+	BASE:(CHARANUM-1):지변 = 100
+	CSTR:(CHARANUM-1):종족명 = ドラゴン
+	CSTR:(CHARANUM-1):30 = 星の海を駆け、惑星の文明ごと生命を喰らう地球外生命体「ドラゴン」の一種。
+	CSTR:(CHARANUM-1):31 = その中でも本個体は侵略の先駆けを務めることが多い。
+	CSTR:(CHARANUM-1):32 = 
+	CSTR:(CHARANUM-1):33 = ムラクモ機関による呼称は"Ｄ１"および"Ｄ２"。
+	CSTR:(CHARANUM-1):34 = 第一次東京侵蝕時には東京도청に出現が確認されている。
+	CSTR:(CHARANUM-1):35 = 
+	CSTR:(CHARANUM-1):36 = なお、この呼称は『セブンスドラゴン』における同種の個体のものであり、
+	CSTR:(CHARANUM-1):37 = 『セブンスドラゴン2020』では用いられない。
+	CSTR:(CHARANUM-1):38 = 
+	CSTR:(CHARANUM-1):39 = 
+	CSTR:(CHARANUM-1):40 = 
+	CSTR:(CHARANUM-1):49 = 登場作品：『セブンスドラゴン』シリーズ
+	CALL SYNC_STATUS,(CHARANUM-1)
+	CALL HEALTH_CHARA,(CHARANUM-1)
+	
+	CALL BATTLE_START
+	
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	
+PRINTFORMW 竜型存在の群れの撃破に성공したようだ……。
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 『緊急事態発生、도청内から탈출せよ！　繰り返す……』
+PRINTFORMW 『……聞こえ…か？　ただちに……撤退……！』
+PRINTFORMW 端末から届く音声は次第にノイズが混じり、やがて意味のある音は聞こえなくなった。
+PRINTFORMW あの竜共が再び襲ってきては面倒だ、と撤退の準備を始めた%CALLNAME:MASTER%の背後に、竜の群れのボスと思しき個体が降り立つ。
+PRINTFORMW 炎を思わせる赤の体躯、雄々しく反り立つ四本の角、何物をも切り裂くであろう巨大な爪。
+PRINTFORMW その威圧感は%CALLNAME:MASTER%一人ならまだしも、重傷者を庇いながらでは苦戦を強いられるに違いない。
+PRINTFORML 
+PRINTFORML 女：
+PRINTFORMW 「ん〜？　アレ、生きてる人いるじゃん。ど〜する？　助けるギリもないけど」
+PRINTFORML 男：
+PRINTFORMW 「눈の前で死なれるのは寝깨달음めが悪い…ネコ、援護しろ」
+PRINTFORML ネコと呼ばれた女：
+PRINTFORMW 「はいはい…ダイゴならそう言うと思ったけどさ〜」
+PRINTFORMW 「ねえ、ソコの人。囮になってあげるよ」
+PRINTFORMW 階段から회화しながら現れた一組の男女から声が掛かった。
+PRINTFORMW ネコ、と呼ばれた안경の女に見깨달음えはない。ダイゴ、と呼ばれた厳つい風貌の男も同様だ。
+PRINTFORML ダイゴと呼ばれた男：
+PRINTFORMW 「そこで倒れているヤツを死なせたくないならば早く逃げろ」
+PRINTFORMW 見ず知らずの人物が助け舟を出す理由は불명瞭だが、この機に乗らない손はない。
+PRINTFORMW 生存者を背負って%CALLNAME:MASTER%は도청から탈출した……。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW その後、%CALLNAME:MASTER%は生存者をムラクモ機関に受け渡した。
+PRINTFORMW 彼らは今回の功績を高く評価しており、今後の作戦にも協힘を求めてきた。
+PRINTFORMW 政府直属の組織とコネを築くことは組織内の評価にも繋がる。
+PRINTFORMW 了承し、拠点へと帰還した……。
+PRINTFORML 
+IF FINDCHARA_B([[キャラ:마요네]]) >= 1
+	PRINTFORMW 竜型存在の接触、ムラクモ機関との協힘等を組織へ連絡し終えたところで、ファントムからメールが届いた。
+	PRINTFORMW 『%CALLNAME:MASTER%が遭遇した竜型存在――『ドラゴン』は東京のみならず세계各地に侵略を始めた』
+	PRINTFORMW 『この侵略にファントムも決して少なくない被害を被っている』
+	PRINTFORMW 『%CALLNAME:MASTER%は協힘関係を取り付けた組織と共に東京の竜討伐に勤しむこと』
+	PRINTFORMW 想定していた以上に事態は深刻なようだ……。
+	PRINTFORMW しかし、ここで成果を見せればその分のし上がるチャンスを得られるのも間違いない。
+	PRINTFORMW 今後、ムラクモからの의뢰が来た場合は、受けてもいいかもしれない……。
+ELSE
+	PRINTFORML 마요네：
+	PRINTFORMW 『大変なことになったものですわね』
+	PRINTFORMW 竜型存在の接触、ムラクモ機関との協힘――
+	PRINTFORMW それらの報告を終えたところで、마요네から連絡が入った。
+	PRINTFORML 마요네：
+	PRINTFORMW 『アレらは東京、いや日本のみならず세계各国にも出現、侵略を開始したとのこと』
+	PRINTFORMW 『ファントムも決して少なくない被害を受け、エージェントを各地に回していますの』
+	PRINTFORMW 『……フフフ、운が良かったわね。ムラクモとのコネクションがなければ、당신も세계中を飛び回る날개눈でしたのよ？』
+	PRINTFORMW 『とにかく、당신はムラクモと共同で東京の竜討伐に勤しみなさいな』
+	PRINTFORMW 『そうそう、ムラクモの発表によればアレらは『ドラゴン』と呼ぶことになったそうよ。では、ご機嫌よう』
+	PRINTFORMW 伝えたいことだけを一方的に伝え、連絡は終了した……。
+ENDIF
+PRINTFORML 
+PRINTFORMW 입座に報酬￥35000が支払われ、名声30を得た。
+MONEY += 35000
+FLAG:名声 += 30
+
+FOR LOCAL,0,CHARANUM
+	CALL HEALTH_CHARA,LOCAL
+NEXT
+
+FLAG:ナナドラ의뢰進行度 = 1
+RESULTS = 의뢰【(세븐스 드래곤 MOD)카운트、제로 -Time Count,Zero-(2)】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+CALL REQUEST_99_TURN_END
+
+;====================
+;説明
+;====================
+@EXPLAIN_REQUEST_99_02
+PRINTFORML 
+PRINTFORML 무라쿠모기관에서의 의뢰가 도착했다。
+PRINTFORML 
+PRINTFORML 이전에 전달받은 생존자가 눈을 뜬 듯 하며、
+PRINTFORML %CALLNAME:MASTER%에게 앞으로의 설명을 하고 싶다는 것이다。
+PRINTFORML 
+PRINTFORML 의뢰인：무라쿠모기관
+PRINTFORML 보수：￥0
+;====================
+;内容
+;====================
+@REQUEST_99_02
+PRINTFORMW 東京 ― 신주쿠御苑・地下シェルター
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 警備の自衛隊員に見送られながら、도청から程近い位置にあるシェルターへと入る。
+PRINTFORMW これ一つが丸々ムラクモ機関の所有物というのだから、政府への影響힘もそれなりのものなのだろう。
+PRINTFORMW 突如として現れたドラゴンによる被害者もそれなりに収容していると聞くが、やはり인기は少なかった。
+PRINTFORML 
+PRINTFORML ナツメ：
+PRINTFORMW 「待っていたわ。すぐにでも始めたいの、突き当たりの部屋へ来て」
+PRINTFORMW 出迎えに現れたナツメは%CALLNAME:MASTER%を見るなりそう告げて、すぐに奥の部屋へ入っていった。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 東京 ― 신주쿠御苑・地下シェルター　作戦司令室
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORMW 通された部屋には、ナツメ、キリノ、一部政治関係者、そしてこの場の雰囲気に似合わない――
+PRINTFORML 
+PRINTFORML [0] 세일러복姿の소녀が立っていた。
+PRINTFORML [1] ゴスロリ姿の소녀が立っていた。
+PRINTFORML [2] 説明
+PRINTFORML 
+$NANADORA_LOOP
+INPUT
+IF RESULT == 0
+	PRINTFORMW ――세일러복姿の소녀が立っていた。
+	PRINTFORML ナツメ：
+	PRINTFORMW 「まずはアナタに紹介しておくわ。彼女が――」
+	CALL ADD_NEW_COMPANION,[[キャラ:카타나코]],0
+	CFLAG:(CHARANUM - 1):전투참가불가능 = -1
+	LOCAL = GETCHARA([[キャラ:카타나코]])
+	$INPUT_SAMURAI_LOOP
+		PRINTFORML ナナドラ主人公の名前を입력してください（何も입력しない場合디폴트名が설정されます）
+		INPUTS
+		IF RESULTS == ""
+			RESULTS = 카타나코
+			PRINTFORML 입력されなかったため디폴트名（카타나코）になります
+		ENDIF
+		NAME:LOCAL = %RESULTS%
+		PRINTFORML ナナドラ主人公の愛称を입력してください（何も입력しない場合디폴트名が설정されます）
+		INPUTS
+		IF RESULTS == ""
+			RESULTS = 카타나코
+			PRINTFORML 입력されなかったため디폴트名（카타나코）になります
+		ENDIF
+		CALLNAME:LOCAL = %RESULTS%
+		PRINTFORML 名前　%NAME:LOCAL%
+		PRINTFORML 愛称　%CALLNAME:LOCAL%
+		PRINTFORML これでよろしいですか？
+		CALL INPUT_YN
+		SIF RESULT == 1
+			GOTO INPUT_SAMURAI_LOOP
+	PRINTFORMW 「合格者の%CALLNAME:LOCAL%よ。機動１３班として今後참가してもらうわ」
+	PRINTFORMW そう言えば、確かに名前を聞くのを忘れていた。
+	PRINTFORMW 緊張しているのか、やや表情が硬いが顔立ち自体は悪くない。
+	PRINTFORMW 少々体つきは貧相ではあるが、それはそれで好む層もいるだろう。
+	PRINTFORMW 何故こんな時まで교복？の세일러복なのかは分からないが。
+ELSEIF RESULT == 1
+	PRINTFORMW ――ゴスロリ姿の소녀が立っていた。
+	PRINTFORML ナツメ：
+	PRINTFORMW 「まずはアナタに紹介しておくわ。彼女が――」
+	CALL ADD_NEW_COMPANION,[[キャラ:첼시]],0
+	CFLAG:(CHARANUM - 1):전투참가불가능 = -1
+	LOCAL = GETCHARA([[キャラ:첼시]])
+	$INPUT_HACKER_LOOP
+		PRINTFORML ナナドラ主人公の名前を입력してください（何も입력しない場合디폴트名が설정されます）
+		INPUTS
+		IF RESULTS == ""
+			RESULTS = 첼시
+			PRINTFORML 입력されなかったため디폴트名（첼시）になります
+		ENDIF
+		NAME:LOCAL = %RESULTS%
+		PRINTFORML 
+		PRINTFORML ナナドラ主人公の愛称を입력してください（何も입력しない場合디폴트名が설정されます）
+		INPUTS
+		IF RESULTS == ""
+			RESULTS = 첼시
+			PRINTFORML 입력されなかったため디폴트名（첼시）になります
+		ENDIF
+		CALLNAME:LOCAL = %RESULTS%
+		PRINTFORML 
+		PRINTFORML 名前　%NAME:LOCAL%
+		PRINTFORML 愛称　%CALLNAME:LOCAL%
+		PRINTFORML これでよろしいですか？
+		CALL INPUT_YN
+		SIF RESULT == 1
+			GOTO INPUT_HACKER_LOOP
+	PRINTFORMW 「合格者の%CALLNAME:LOCAL%よ。機動１３班として今後참가してもらうわ」
+	PRINTFORMW そう言えば、確かに名前を聞くのを忘れていた。
+	PRINTFORMW 緊張していないのか、この場に関心がないのか――乏しい表情から感情は読み取れない。
+	PRINTFORMW 体つきは全くもって貧相ではあるが、好む層もいるだろう。
+	PRINTFORMW こんなところまでぬいぐるみを持ち込む割には片발で踏み潰しているあたり、大事にしているとは言い難い。
+	;첼시加入상태
+	의뢰フラグ:99:1 = 1
+ELSEIF RESULT == 2
+	PRINTFORML 『ナナドラ主人公』として加入するキャラクターを選択します。
+	PRINTFORML 「세일러복姿の소녀」を選ぶと、검격相性스킬を多く깨달음える이능자キャラが、
+	PRINTFORML 「ゴスロリ姿の소녀」を選ぶと、独特の스킬を깨달음える달인キャラが加入します。
+	PRINTFORMW （※どちらを選んでも本MODの전개に変化はありません）
+	GOTO NANADORA_LOOP
+ELSE
+	GOTO NANADORA_LOOP
+ENDIF
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 「それではメンバーも集まりましたので、早速ブリーフィングを始めましょう」
+;原作だと９８％だったけどこの세계には서머너やら악마やらがいるので
+PRINTFORMW 「まず、残念なことから言うと……日本全土の７割は、既にドラゴンの支配下にあります」
+PRINTFORMW 「圧倒的かつ未知の戦힘相손に、人類の지혜や武装はほとんど……役に立ちませんでした」
+PRINTFORMW 「まさに一瞬にして、日本…いや세계は、ドラゴンの領土に塗り替えられてしまったんです」
+PRINTFORML ナツメ：
+PRINTFORMW 「そこで、我々ムラクモは少数精鋭による局地戦を始めようと思っています」
+PRINTFORML 「少しずつ、ドラゴンの領土を狩り取り…人類の손に取り戻していくの。
+PRINTFORMW 　たとえ、何十年かかったとしてもね」
+PRINTFORML 
+PRINTFORMW キリノの状況説明に付け발すように、ナツメがこれからの展望を語る。
+PRINTFORMW ドラゴンに対して악마や이능자が有効であるとはいえ、実힘はピンキリだ。
+PRINTFORMW 並べないほどの物量で攻めてくるならば、こちらは質で応戦するしかないのは道理である。
+PRINTFORML 
+PRINTFORML キリノ：
+PRINTFORMW 「現在、ガトウたち先遣隊は始まりの地である、東京도청を攻略中です」
+PRINTFORMW 「도청に住むドラゴンを一掃し、人類の拠点として取り戻すという作戦です」
+PRINTFORMW 「作戦は既に７０％の段階まで来ていて、あとは最上階に巣食うボス『帝竜』の討伐が최대の難関です」
+PRINTFORMW 도청に巣食うボス、というのはもしや――
+PRINTFORML キリノ：
+PRINTFORMW 「はい、%CALLNAME:MASTER%が遭遇した、巨大な赤いドラゴンです」
+PRINTFORML ナツメ：
+PRINTFORMW 「%CALLNAME:LOCAL%と%CALLNAME:MASTER%にはムラクモ１３班としてその作戦に참가して欲しいの」
+PRINTFORMW 「ただ、帝竜との実戦に、いきなり%CALLNAME:LOCAL%を投入するのはリスクが高すぎる」
+PRINTFORMW 「まずは、体を慣らしながらガトウたち先遣隊の後方지원を。%CALLNAME:MASTER%にはその護衛をお願い」
+PRINTFORMW 「アナタたちと自衛隊が万全の後方지원を行いながら…ガトウ隊が帝竜を討伐する」
+PRINTFORMW %CALLNAME:LOCAL%の任務は納得できるが、自分はその護衛？
+PRINTFORMW 討伐に協힘する方がよっぽどいいと思うが……。
+PRINTFORML ナツメ：
+PRINTFORMW 「もちろん、アナタの戦힘を軽視している訳じゃないわ。寧ろ신뢰しているからこそよ」
+PRINTFORMW 「Ｓ級の才能の持ち主は貴重なの。後方지원とはいえ不測の事態が起こらないとは限らない」
+PRINTFORMW ……そのための戦힘ということか。
+PRINTFORML ナツメ：
+PRINTFORML 「納得していただけたかしら？
+PRINTFORMW 　それではこの作戦で、現状の도청奪還ミッションを遂行します……いいわね？」
+PRINTFORMW %CALLNAME:LOCAL%の了解、という返答でブリーフィングは終了した。
+PRINTFORML 
+PRINTFORMW 指令室を出た%CALLNAME:MASTER%の元に、ナツメが近づいてくる……。
+PRINTFORML ナツメ：
+PRINTFORMW 「アナタのことは事前に一通り調べさせてもらったわ。どういう生業をしている인간かもね」
+PRINTFORMW 「その上で私たちはアナタを신뢰していることを忘れないで」
+PRINTFORMW ……それは脅迫のつもりだろうか？
+PRINTFORML ナツメ：
+PRINTFORMW 「いいえ？　言ったでしょう、신뢰していると」
+PRINTFORMW 「%CALLNAME:LOCAL%をアナタに同行させます。의뢰でも전투でも使って鍛えてちょうだい」
+PRINTFORMW それだけを伝えると、ナツメは去っていった……。
+PRINTFORML 
+PRINTFORML %CALLNAME:LOCAL%をパーティに編成できるようになった。
+PRINTFORMW （※以後、ナナドラ系의뢰は%CALLNAME:LOCAL%が전투참가可能でないと進行できません）
+
+FLAG:ナナドラ의뢰進行度 = 2
+RESULTS = 의뢰【(세븐스 드래곤 MOD)전장의 포효 -The Warcry-(1)】가 출현！
+CALL MESSAGE_B(1, RESULTS)
+
+
+

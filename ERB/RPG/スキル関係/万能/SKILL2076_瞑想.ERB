@@ -1,0 +1,174 @@
+﻿;-------------------------------------------------------------------------------
+;명상
+;-------------------------------------------------------------------------------
+;흡수禁止令出されているので、代わりに마법위력下げます
+;MPダメージの方だけは考えたけど、ありません
+
+
+;스킬名
+@SKILL_NAME_2076,ARG
+IF SKILL_CHANGE_CHECK(ARG, 5423) == 1
+	RESULTS = 토모비키
+ELSE
+	RESULTS = 명상
+ENDIF
+
+;　명중
+@SKILL_HITRATE_2076, ARG
+RETURN 95
+
+;　위력
+@SKILL_POWER_2076, ARG
+RETURN 150
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_2076,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_2076,ARG
+RETURN 1
+
+;　ＨＰ2を支払うかＭＰ3を支払うか
+@SKILL_COSTTYPE_2076, ARG
+RETURN 3
+;소비なし＝1
+
+;　コストの量
+@SKILL_COST_2076,ARG
+RETURN 22
+
+;　相性
+@SKILL_TYPE_2076,ARG
+RETURN GET_TYPE_NUM("만능")
+
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_2076
+RETURN 1
+;EXTRA
+
+;　1물리데미지で計算するか2마법데미지で計算するか
+@SKILL_DAMAGETYPE_2076
+RETURN 1
+
+
+;　대상が1적か2아군か3場전체か4特殊か
+@SKILL_TARGET_2076
+RETURN 1
+
+;　사거리
+@SKILL_RANGE_2076,ARG
+SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
+	RETURN 1
+RETURN 4
+
+;　범위　11명　2１열　3전체　4　적아군전체
+@SKILL_SPHERE_2076,ARG
+RETURN 1
+
+;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복
+@SKILL_EFECT_2076
+RETURN 1
+
+;　 特殊処理の有無、及び処理内容
+@SKILL_SPECIALEFECT_2076,ARG
+;ARG = 1だった場合は処理の有無を返します
+SIF ARG == 1
+	RETURN 0
+;以下に特殊な処理を記述します
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_2076
+RETURN GET_SUCCESSION_NUM("만능")
+
+@継承不能_2076
+RETURN 1
+;不可
+
+;속도보정
+@SKILL_SPEED_2076, ARG = -1
+RETURN 0
+
+;　구상の표시とその타입
+@SKILL_MESSAGE_2076,ARG
+
+
+;전투時以外に사용できるか
+@SKILL_ACTIONABLE_FIELD_2076
+RETURN 0
+
+;스킬변화？用랭크
+@SKILL_RANK_2076
+RETURN 10
+
+
+;テン플레이트用、추가효과シリーズ
+;추가효과스테이터스
+@SKILL_ADDTIONAL_STATE_2076,ARG
+RETURN 0
+
+;추가효과상성
+@SKILL_ADDTIONAL_TYPE_2076,ARG
+RETURN 0
+
+;추가효과기본부여확률
+@SKILL_ADDTIONAL_BASE_RATE_2076,ARG
+RETURN 0
+
+;추가효과부여확률上限
+@SKILL_ADDTIONAL_MAX_RATE_2076,ARG
+RETURN 0
+
+;====================================================
+;스킬及び行動の実行
+;====================================================
+@ACTION_2076,ARG,ARG:1
+#LOCALSIZE 2
+LOCAL:1 = BASE:POS(ARG:1):ＨＰ
+CALL ATTACK_SINGLE, ARG, POS(ARG:1), 1037, 1
+
+IF POS(ARG:1) >= 0 && LOCAL:1 > BASE:POS(ARG:1):ＨＰ && GET_STATE(CFLAG:POS(ARG:1):ステート) != "DYING"
+	IF SKILL_CHANGE_CHECK(ARG, 5423) == 1
+			LOCAL = 3
+			SIF CFLAG:ARG:PTフラグ == 0
+				LOCAL += 2
+			CFLAG:POS(ARG:1):검격무효화횟수 -= LOCAL
+			IF CFLAG:POS(ARG:1):검격무효화횟수 < 0
+				CFLAG:POS(ARG:1):검격가드킬 += -(CFLAG:POS(ARG:1):검격무효화횟수)
+				CFLAG:POS(ARG:1):검격무효화횟수 = 0
+				PRINTFORML 　　TARGET:[{ARG:1,2}]%CALLNAME:POS(ARG:1),20% >>>>> {CFLAG:POS(ARG:1):검격가드킬}턴、검격에의 내성을 무효화！
+			ELSE
+				PRINTFORML 　　TARGET:[{ARG:1,2}]%CALLNAME:POS(ARG:1),20% >>>>> 검격무효화횟수 감소！
+			ENDIF
+			CFLAG:POS(ARG:1):방어フラグ = 0
+	ELSE
+		CFLAG:POS(ARG:1):마법위력강화 = MAX(-16, CFLAG:POS(ARG:1):마법위력강화 - 4)
+		PRINTFORML 　　TARGET:[{ARG:1,2}] %CALLNAME:POS(ARG:1),20,LEFT%　>>>>>>　마법위력이 내려갔다！
+	ENDIF
+ENDIF
+
+
+
+;====================================================
+;実行内容ここまで
+;====================================================
+
+;　 説明文の표시
+@SKILL_EXPLAIN_2076
+IF U > 0 && U < CHARANUM && NO:U == 5423
+	PRINTL [전열] 적 1체에 만능속성 소 물리데미지. 검격내성을 무효화한다.
+	PRINTL 붙잡은 상대를 자신의 그림자로 끌어들여 공격한다.
+ELSE
+	PRINTL [전열] 적 1체에 만능속성 중 물리데미지. 적의 마법위력을 감소시킨다.
+ENDIF
+
+;継承に필요な部位
+@継承部位_2076,ARG
+RETURN 1
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_2076,ARG
+RETURN 1
+;とくにない
+

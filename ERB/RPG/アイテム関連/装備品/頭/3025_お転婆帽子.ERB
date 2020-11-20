@@ -1,0 +1,59 @@
+﻿
+;======================================================
+;장비品の데이터
+;말괄량이모자
+;======================================================
+
+@기본능력수정_3025,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3025,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "공격"
+		RETURN 2
+	CASE "방어"
+		RETURN 3
+	CASE "회피"
+		RETURN 11
+	CASE "마법효과"
+		RETURN 13
+ENDSELECT
+RETURN 0
+
+@방어상성_3025,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "타격","전술"
+		RETURN 75
+	CASE "정신"
+		RETURN 115
+ENDSELECT
+RETURN 100
+
+@장비箇所_3025
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3025
+RETURN 26
+
+@장비조건_3025,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 26
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3025
+PRINTL 장비조건：♀ LV26～
+
+@장비해설_3025
+PRINTL 뒤를 생각하지 않는 말괄량이를 위한 모자로、
+PRINTL 　　　　　　　　積極的に前に出ていくお転婆にオススメとのこと
+
+
+@구입조건_3025
+RETURN 0
+
+@引継ぎ可不可_3025
+RETURN 0

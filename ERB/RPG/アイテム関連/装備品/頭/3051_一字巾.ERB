@@ -1,0 +1,69 @@
+﻿
+;======================================================
+;장비品の데이터
+;일자건
+;Lv50장비までは반사まで　기본능력に합계+6まで
+;======================================================
+
+@기본능력수정_3051,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		RETURN 1
+	CASE "운"
+		RETURN 4
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3051,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 12
+	CASE "회피"
+		RETURN 11
+	CASE "마법효과"
+		RETURN 22
+ENDSELECT
+RETURN 0
+
+@방어상성_3051,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "주살"
+		RETURN 50
+	CASE "정신"
+		RETURN 999
+	CASE "화염","핵열"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@バステ내성_3051,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "CLOSE"
+		RETURN -50
+ENDSELECT
+RETURN 0
+
+@장비箇所_3051
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3051
+RETURN 38
+
+@장비조건_3051,ARG
+SIF BASE:ARG:LV < 38
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3051
+PRINTL 장비조건：LV38～
+
+@장비해설_3051
+PRINTL 「忍」の一文字が縫い込まれた손拭い。머리に巻きつける衣類장비。
+PRINTL 　　　　　　　　心の乱れを受け付けない。
+
+
+@구입조건_3051
+RETURN 1
+
+@引継ぎ可不可_3051
+RETURN 0

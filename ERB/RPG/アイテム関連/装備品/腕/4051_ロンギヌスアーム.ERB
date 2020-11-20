@@ -1,0 +1,57 @@
+﻿
+;======================================================
+;장비品の데이터
+;롱기누스암
+;======================================================
+
+@기본능력수정_4051,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4051,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "공격"
+		RETURN 29
+	CASE "명중"
+		RETURN 12
+	CASE "마법위력"
+		RETURN 24
+ENDSELECT
+RETURN 0
+
+@방어상성_4051,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "검격"
+		RETURN 80
+	CASE "화염"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@장비箇所_4051
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4051
+RETURN 1
+
+@장비조건_4051,ARG
+SIF CSTR:ARG:종족명 == "성창기사"
+	RETURN 1
+SIF BASE:ARG:LV < 40
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4051
+PRINTL 장비조건：성창기사or레벨40이상
+
+@장비해설_4051
+PRINTL 聖堂騎士団の파워ド수트
+PRINTL 　　　　　　　　「ヒンメル・フォイアー」の両팔部を復元したもの。방어を捨てた。
+
+
+@구입조건_4051
+RETURN 0
+
+@引継ぎ可不可_4051
+RETURN 1

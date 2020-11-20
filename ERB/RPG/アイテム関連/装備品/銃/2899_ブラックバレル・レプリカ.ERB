@@ -1,0 +1,84 @@
+﻿
+;======================================================
+;장비品の데이터
+;2899	블랙배럴・레플리카
+;======================================================
+
+
+@기본능력수정_2899,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@장비추가스킬_2899,ARG,ARG:1 = -1
+SELECTCASE ARG
+	CASE 0
+		RETURN 2970
+ENDSELECT
+RETURN 0
+
+@전투능력수정_2899,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_2899,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2899, ARG = -1
+RETURN 7
+
+@최저공격횟수_2899, ARG = -1
+RETURN 1
+
+@최대공격횟수_2899, ARG = -1
+RETURN 1
+
+@사거리_2899, ARG = -1
+RETURN 3
+
+@공격범위_2899, ARG = -1
+RETURN 1
+
+@장비해설_2899
+PRINTL アトラス院における七大兵器の一つ「黒い총身」のレプ리카
+PRINTL 「天寿」の概念武装。대상の寿命に比例した공격력を発揮する。
+PRINTL 来訪者　시온・エルトナムの수태아이템
+RESETCOLOR
+
+@장비箇所_2899
+RETURN GET_EQUIPNUM("총")
+
+@필요레벨_2899
+RETURN 50
+
+@장비조건_2899,ARG
+SIF BASE:ARG:LV < 50
+	RETURN 0
+RETURN 1
+
+@장비조건설명_2899
+PRINTL 장비조건：LV50～
+
+@구입조건_2899
+RETURN 0
+
+@引継ぎ可不可_2899
+RETURN 1
+
+@총공격_2899, ARG = -1
+RETURN 245
+
+@총명중_2899, ARG = -1
+RETURN 128
+
+@특수탄창_2899, ARG = -1
+RETURN 2
+
+@총타입_2899
+;1 = 핸드건 2 = 샷건 3 = アサルト라이플、머신건 4 = 狙撃라이플 5 = 그외
+RETURN 1
+@속도보정_2899
+RETURN 0

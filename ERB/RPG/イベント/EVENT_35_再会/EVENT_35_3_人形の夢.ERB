@@ -1,0 +1,493 @@
+﻿;ライセンスフリー
+;2話の続き
+;2020/03/25 作成者：92473/나나미の人
+;====================
+;内容
+;====================
+@EVENT_35_3
+LOCAL = CHARANUM
+
+;導入開始
+CUSTOMDRAWLINE =
+PRINTFORML ＴＲＰＧリプ레이 再会 第３話
+PRINTFORML 
+PRINTFORMW ＞ボルテクス界に行こうか？
+PRINTFORML  （ 注意：この이벤트を進めると時間が経過します）
+PRINTFORML 
+CALL INPUT_YN("ボルテクス界に行く", "また今度")
+IF RESULT == 0
+	PRINTFORML 
+	PRINTFORML ＞まずは사교의관に顔を出そう。
+	PRINTFORMW 
+ELSE
+	PRINTFORMW ＞準備を整えたら、またここへ来よう。
+	PRINTFORMW ………
+	PRINTFORMW ……
+	PRINTFORMW …
+	RETURN
+ENDIF
+PRINTFORML 
+PRINTFORMW 　　＞＞사교의관＜＜
+PRINTFORML 
+PRINTFORMW ＞사교의관に行くと픽시の横に見慣れない紙人形、シキガミが浮いている。
+PRINTFORML 
+PRINTFORML シキガミ：
+PRINTFORMW 「あ、ボルテクス界に行くならボクもついて行くですよ～」
+PRINTFORML 声が変わっているがこの喋り方は知っている、まさか小枝…？。
+PRINTFORML 小枝：
+PRINTFORML 「そうでした、악마合体でシキガミになったですよ～」
+PRINTFORMW 「사교의관のオヤジとの계약があるのでボルテクス界탐색にはついて行くのですよ」
+PRINTFORML 나나미：
+PRINTFORMW 「わー、ホントに紙になってます！破れたりしないんですか？」
+PRINTFORML 小枝：
+PRINTFORMW 「ちょ、ちょっと나나미ちゃん止めるですよ～！　ホントに破れちゃったらどうするですか～！」
+PRINTFORML 行く前からドタバタだ……とにかくボルテクス界に向かうとしよう。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+;導入終了
+;Aパート開始
+SETCOLOR COLOR("PASTEL-GREEN")
+PRINTFORML 
+PRINTFORML TRPGリプ레이 再会_第３話 人形の夢 ～ Dolly's Dreaming ～
+PRINTFORMW 
+RESETCOLOR
+SETCOLOR COLOR("PASTEL-RED")
+PRINTFORMW 
+PRINTFORMW ――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+PRINTFORMW 
+RESETCOLOR
+PRINTFORML 
+PRINTFORMW 　　＞＞ボルテクス界＜＜
+PRINTFORML 
+PRINTFORML ＞전회同様、代々木公園からボルテクス界に渡ってきた。
+PRINTFORMW ＞鶴来達との合流をすべくエビスにあるマネカタの集落へ向かうと、鶴来がこちらに駆けてくる。
+PRINTFORML 
+PRINTFORML 鶴来：
+PRINTFORML 「나나미ちゃん、ギンザにあるマネカタの集落に『무녀』って呼ばれてる人がいるらしいんだ」
+PRINTFORMW 「東京수태の時に沙耶が무녀の恰好をしていたから、もしかしたら？って思うんだ」
+PRINTFORML 野分：
+PRINTFORMW 「それでギンザに行く方法を確認していたんだ」
+PRINTFORML 
+PRINTFORML ＞ここで分かったのは、ボルテクス界は大きく６つのエリアに分かれていてそれぞれが断崖や壁で区切られている。
+PRINTFORMW ＞기본的に通常の方法での往来は出来ないが、通行する方法が無いわけではない。
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORMW 「それがアマラ経路…ボルテクス界の外側を走るマガツヒの流れで、それに乗ればシブヤからギンザへ行けるんですね」
+PRINTFORML 正直ターミナルは無いのかと思っていた所で都合が良いが、使い方は？
+PRINTFORML 野分：
+PRINTFORML 「もちろん確認してある、通信塔にあったアマラ車が起点になるそうだ」
+PRINTFORML 「同じものがギンザの地下にもあるって話だ。僕の知り合い、聖というんだが、シブヤに来ていてそういう怪しげなモノに詳しいんだ」
+;月刊アヤカシで『特集・ガイア教とミロク教典』なんて記事を書いている。
+PRINTFORMW 「もう話を付けて調べに行ってもらってるから使えるかどうか行ってみよう」
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+PRINTFORML 
+PRINTFORMW 　　＞＞シブヤ・ターミナル＜＜
+PRINTFORML 
+PRINTFORML 히지리：
+PRINTFORMW 「よう野分、見てくれ。面白いぞこれは」
+PRINTFORML 
+PRINTFORML ＞アマラ車の横にいた男は、こちらに気付くなり挨拶も無しに話始めた。
+;メンバーに인수라がいるかで分岐したい 당신の所に連れてこられたのはどのタイミングか？
+;인수라化した時点？アマラ経路に落ちる前のはずだからココのはず。
+;인수라加入を이벤트発生トリガーにする気は無いので추가しても当面はフレーバーだけ。
+;パーティー内に인수라がいる場合
+;「……おまえ……まさか、公園で会った 小僧or小娘 か?その姿はいったい……」
+;「…そうか。おまえさんも野分と同じで……とりあえず、意識は元のままらしいな」
+;「おまえさん、そこの にいちゃんorねえちゃん には話してないのか」
+;「シンジュク衛生病院で何があったのか……」
+;「ま、簡가운に言えばこの東京수태ってのは氷川ってクソ野郎がそこの 小僧or小娘 の先生と共謀して引き起こしたって事だ」
+;「俺もそこの 小僧or小娘 もそれに巻き込まれたクチで…その結果、俺はココにいる」
+;「おまえさんは…俺とはまた違った巻き込まれ方をしてるようだが、それはいいさ」
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORMW 「それで、そのドラム缶みたいなのでギンザに行けると聞いたのですが……」
+;聖は説明要員
+PRINTFORML 히지리：
+PRINTFORMW 「そうだ、これは『アマラ車』と呼ばれる儀式装置でただのオブジェじゃねえ。トンデモねえ기능を秘めた装置だ」
+PRINTFORMW 「1つ1つが回路のような不思議な空間でつながってるんだ」
+PRINTFORMW 「その回廊……『アマラ経路』を使えば、何でも一瞬で離れた場所へ飛ばせる」
+PRINTFORMW 「……恐らくこの装置はまだ幾つもあって、巨大なネットワークになってる」
+PRINTFORMW 「今ニヒロ機構の指令をやってる氷川って男の秘蔵品だったはずだ」
+PRINTFORMW 「ニヒロ機構ってのは『創世』とやらを掲げる組織でギンザにあるそうだ」
+PRINTFORML 鶴来：
+PRINTFORMW 「それで、これを使えばギンザに行けるんですか？」
+PRINTFORML 히지리：
+PRINTFORML 「ちょうど今、ギンザにつながるようにセットしたんだ」
+PRINTFORMW 「ギンザに行くためには、これをこう合わせて、ここをこう回せば……」
+PRINTFORML 
+PRINTFORML ＞ぽちっ　……ぎゅーーーん
+PRINTFORML 
+PRINTFORML ……この男、勝손に起動しやがった。
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+;真Ⅲではアマラ経路に落ちてその中で喪옷の淑女から『왕국의메노라』を託される
+;メノラーの話はアマラ深界に任せるよ…。
+PRINTFORML 
+PRINTFORMW 　　＞＞ニヒロ機構が支配する街、ギンザ＜＜
+PRINTFORML 
+PRINTFORML ＞壁の中にいる！なんてこともなく。見回すと先程とは違う部屋に見える。
+PRINTFORML ＞アマラ車は눈の前にあるが聖もいない、発端はともあれ移動自体は出来たようだ。
+PRINTFORMW ＞部屋から出ると噴水があり、その横に타천사：엘리고르が立っている。
+PRINTFORML 
+PRINTFORML 엘리고르：
+PRINTFORML 「ここはニヒロ機構統治下の街、ギンザである。法に従う限りは自由に行動してよい」
+PRINTFORML 「ニヒロ機構は、静寂な세계の創世を눈指している。そこには感情に支配されず、ゆえに、苦しみの無い기능的な세계」
+PRINTFORMW 「今のトウキョウのように、無秩序で混沌とした세계とは違うのだ。」
+PRINTFORML 「ヒトを捜しているのか、それが인간なら、나이트메어・システムの中に放り込まれているか」
+PRINTFORML 「만트라軍に捕まったならマガツヒを搾り取られているか」
+PRINTFORMW 「나이트메어・システムはマガツヒを集める装置だ。赤い光が集まるのが見えるからそれとわかるだろう」
+PRINTFORML どっちにしてもマガツヒを搾られるわけだ…
+PRINTFORML 鶴来：
+PRINTFORMW 「彼女は俺にとって、とても大切な人なんだ」
+PRINTFORML 엘리고르：
+PRINTFORMW 「我々は個体識別が苦손でのぉ…。まあその名は気に留めておこう、期待はせぬように」
+PRINTFORML 
+PRINTFORML ＞見た눈の厳つさの割に案外友好的な엘리고르から情報が欲しいならＢＡＲマダムという店があると聞き移動した。
+PRINTFORML 
+PRINTFORMW 　　＞＞ＢＡＲマダム＜＜
+PRINTFORML 
+PRINTFORML ＞ＢＡＲマダムは야마：뉵스が경영する店で、思念体や악마が集ってくる。
+PRINTFORML ＞常連客には마왕：로키がいたり珍しい発掘品が持ち込まれることもある。
+PRINTFORMW ＞見回すと雑多な악마が酒を飲む奥に一際눈立つ威風を漂わせる악마がいる、あれが로키だろうか。
+PRINTFORML 
+PRINTFORMW ……まぁ로키には用が無いのだが。
+PRINTFORML 
+PRINTFORML マダム：
+PRINTFORML 「いらっしゃい。ここはＢＡＲマダム」
+PRINTFORMW 「당신たち、初めてね」
+PRINTFORML 鶴来：
+PRINTFORMW 「沙耶っていう女の子を捜してるんだけど。これこれこういう容姿で」
+PRINTFORML マダム：
+PRINTFORML 「ひとつ思い当たるところがあるわ。可能性があるってだけだけど」
+PRINTFORML 「地下道のどこかにマネカタの集落があるらしいの。もしも인간が生き延びているとしたら、そこにいる可能性はあるかもしれないわ」
+PRINTFORMW 「行き方は教えてあげる。またいらっしゃいな、若い子を見るのは楽しいわ」
+PRINTFORML 
+PRINTFORMW 　　＞＞ギンザ表通り＜＜
+PRINTFORML 
+PRINTFORML ＞ＢＡＲマダムを出て地下道への道を歩いているとドーム状の建物が見える。
+PRINTFORML ＞周囲から赤いマガツヒが集まってきて、その中に吸い込まれていくのが分かる。
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORML 「あれが나이트메어・システム……」
+PRINTFORML 
+PRINTFORML ＞나나미のような外見純인간が近づくには問題がありそうな施設だ。
+PRINTFORML ＞近づかない様に遠巻きに歩いていると、몸통長の犬のような악마と、날개の生えた소녀ような악마が向かってきた。
+;나나미ちゃんの看破！名前くらいはいいよね…でも今回の本質はそこじゃない
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORML 「あの犬っぽいのは신수：마카미、女の子は흉조：모・쇼보です。どちらも질풍속성を弱点としているはず、です」
+PRINTFORML 「…この感じ、通信塔で出てきた슬라임みたいに普通とは違う気がします」
+PRINTFORML 「이벤트戦ではままある事なんですが通常より레벨が高かったり깨달음えない系統の스킬まで습득している악마も存在します」
+PRINTFORMW 「当然の様に即死も効かないようになっているので、던전で出会った악마と同じ気持ちで戦うと危険かもしれませんよ！」
+PRINTFORML 마카미：
+PRINTFORML 「アオーン！ヒモロギノ ニオイ スルゾ」
+PRINTFORMW 「ヒモロギ ヨコセ！ ツイデニ ソコノ オンナモ ヨコセ！」
+PRINTFORML 鶴来：
+PRINTFORML 「なるほど、言いたいことは分かった。だが断る！」
+PRINTFORML 마카미：
+PRINTFORML 「ヌウ！ ダッタラ オレサマ ニンゲン コロシテ ゴウダツ！」
+PRINTFORML 
+PRINTFORML ＞마수の群れが現れた
+PRINTFORML 
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	CUSTOMDRAWLINE =
+	WAIT
+	CALL SET_ENEMY, 8, 902, 30, 1, 1
+		BASE:LOCAL:파마 = 0
+		BASE:LOCAL:주살 = 0
+		CSTR:(CHARANUM-1):사고패턴 = 爆弾魔
+		CALL SYNC_STATUS,LOCAL
+		CALL HEALTH_CHARA,LOCAL
+	CALL SET_ENEMY, 9, 902, 30, 1, 1
+		BASE:LOCAL:파마 = 0
+		BASE:LOCAL:주살 = 0
+		CSTR:(CHARANUM-1):사고패턴 = 壁役
+		CALL SYNC_STATUS,LOCAL
+		CALL HEALTH_CHARA,LOCAL
+	CALL SET_ENEMY, 10, 902, 30, 1, 1
+		BASE:LOCAL:파마 = 0
+		BASE:LOCAL:주살 = 0
+		CSTR:(CHARANUM-1):사고패턴 = 爆弾魔
+		CALL SYNC_STATUS,LOCAL
+		CALL HEALTH_CHARA,LOCAL
+	CALL SET_ENEMY, 14, 894, 30, 1, 1
+		BASE:LOCAL:주살 = 0
+		CSTR:(CHARANUM-1):사고패턴 = 蘇生役
+		CALL SYNC_STATUS,LOCAL
+		CALL HEALTH_CHARA,LOCAL
+		CFLAG:LOCAL:行動횟수 = 3
+	CALL BATTLE_START
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	WAIT
+PRINTFORML 
+PRINTFORML ＞마수の群れを倒した
+PRINTFORML 
+PRINTFORML 小枝：
+PRINTFORMW 「えらい눈に아이ましたよ～」
+PRINTFORML 나나미：
+PRINTFORMW 「まさか자폭と蘇生を繰り返すとは思ってませんでしたね…」
+PRINTFORML 鶴来達も同じ組み合わせの相손と戦っていたようだ。
+PRINTFORML 나나미：
+PRINTFORML 「ちょっと自分だけズルいですが회복しておきますね」
+CALL HEALTH_CHARA,(GETCHARA(4640))
+;Aパート終了
+;Bパート開始
+PRINTFORML 나나미：
+PRINTFORML 「さて、눈的の大地下道の入り입を見つけましょう」
+PRINTFORMW 「나나미サバイバル術を駆使すれば……そこの穴にある梯子って怪しくないですか？」
+PRINTFORML 
+PRINTFORML ＞梯子を下りた先には電車一両分くらいの大きさの通路が地下に向かって斜めに続いている。
+PRINTFORML ＞元は何のための通路だったのかと思っていると、かすかに声が聞こえて人影らしきものが逃げていくのが見えた。
+PRINTFORMW ＞追っていくと扉の向こうに消えていった。
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORML 「今のは눈的のマネカタのような予感がするんですけど……」
+PRINTFORMW 「とりあえず聞いてみましょう、わたしたちは당신たちに用事があってきたんですけど～」
+PRINTFORML 
+PRINTFORML ＞나나미がノックしながら話しかけると警戒しつつもマネカタが顔を出してきた。
+PRINTFORML 
+PRINTFORML 鶴来：
+PRINTFORML 「俺たちは、ここに塚森沙耶っていう、무녀の女の子らしい人がいる소문を聞いてやってきたんだ」
+PRINTFORMW 「ええと무녀っていうのは、これこれこういう格好で、こんな感じの……」
+PRINTFORML 
+PRINTFORML ＞どうにも要領を得ない上に警戒されている鶴来を横にどけて、나나미が絵日記（いつの間に描いていたのか）を見せて説明する。
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORML 「こんな感じの人です。似た娘がいるですか、長老に聞いたら良い、と。ありがとうございます」
+PRINTFORML 
+PRINTFORMW 　　＞＞マネカタの集落＜＜
+PRINTFORML 
+PRINTFORML ＞マネカタ達の集落に入ると、マネカタ達の長老、長老マネカタが出てくる。
+PRINTFORML 
+PRINTFORML 長老マネカタ：
+PRINTFORML 「なんだね、君たちは。ここはマネカタの隠れ里。ワシらは、악마達が色々辛い事をさせるから、ここに隠れ住んでいるんだ」
+PRINTFORMW 「人を捜してきたのか……その恰好なら我らが癒し손だ。そちらの部屋にいる、勝손に行くがよい」
+PRINTFORML 
+PRINTFORML ＞言われた部屋の扉を開けるとマネカタの옷を着た女性が一人座っていた。
+PRINTFORML ＞鶴来が声を掛けながら駆け寄るが、傍から見ているとわかる。
+PRINTFORMW ＞彼女はマネカタだ。外見上は沙耶に瓜二つのようだが…。
+PRINTFORML 
+PRINTFORML 癒し손マネカタ：
+PRINTFORMW 「わたしはマネカタです。당신は、わたしのことを知っておられるのですか？」
+PRINTFORML 
+PRINTFORML ＞抑揚のない声で問いかけるマネカタに鶴来は悲痛な声をあげる。
+PRINTFORML 
+PRINTFORML 野分：
+PRINTFORMW 「どうやら人違いのようだな」
+PRINTFORML 鶴来：
+PRINTFORML 「人違い……人違いなのか。君によく似た娘を知ってるんだ」
+PRINTFORML 癒し손マネカタ：
+PRINTFORMW 「わたしたちマネカタは、アサクサの泥から型にはめられて造られた人形です」
+PRINTFORMW 「もしかしたら、わたしと同じ型のマネカタに会ったのかもしれませんね」
+PRINTFORML 「型がどのように作られているかは存じませんが……」
+PRINTFORMW 「わたしに似た方は인간ですか。인간ならわたしたちマネカタのようにマガツヒを吸い取られずに済むのでしょうか？」
+PRINTFORML 나나미：
+PRINTFORMW 「당신、いつ生まれたの？」
+PRINTFORML 癒し손マネカタ：
+PRINTFORMW 「気がついたら、この姿かたちをしていました」
+PRINTFORML 「만트라軍のところから、みんなで好きを見て逃げ出したあと、ここに逃れてきたのです」
+PRINTFORML 「わたしが泥から造られた時に、一緒にコレが出てきたそうなのですが…」
+PRINTFORML 
+PRINTFORMW ＞癒し손マネカタの손には携오비電話が握られていた。
+PRINTFORML ＞それを見た鶴来は声もなく立ち尽くしている、見깨달음えがあるようだ。
+PRINTFORMW ＞沙耶が持っていた物なのだろう、それをこのマネカタが持っている意味は……。
+PRINTFORML ＞そんな時、外が急に騒がしくなった。重いものを叩きつける音や悲鳴が聞こえる。
+PRINTFORML ＞部屋を出て様子を伺うと、風を切る音と共に丸い物が飛んで来た。
+PRINTFORMW ＞水っぽい音を立てて발元に転がったそれは集落で最初に会ったマネカタの首だ。
+PRINTFORMW ＞首が飛んで来た方には、鼻の辺りから下腹部までが縦に裂けた巨大な입を持つ악마達両손を朱に染めて立っている。
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORMW 「ひどい……あの姿は악령：피샤차です、악령らしく炎を弱点とする악마です」
+PRINTFORML 피샤차：
+PRINTFORML 「ミツケタ マガツヒ ウ마소ウ」
+PRINTFORML 鶴来：
+PRINTFORML 「……これがマガツヒ狩りってやつか」
+PRINTFORML 
+PRINTFORML ＞피샤차が現れた
+PRINTFORML 
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	CUSTOMDRAWLINE =
+	WAIT
+	CALL SET_ENEMY, 8, 1033, 30, 1, 1
+		BASE:LOCAL:파마 = 0
+		CSTR:(CHARANUM-1):사고패턴 = 흡혈귀
+		CALL SYNC_STATUS,LOCAL
+		CALL HEALTH_CHARA,LOCAL
+	CALL SET_ENEMY, 9, 1033, 30, 1, 1
+		BASE:LOCAL:파마 = 0
+		CSTR:(CHARANUM-1):사고패턴 = 흡혈귀
+		CALL SYNC_STATUS,LOCAL
+		CALL HEALTH_CHARA,LOCAL
+	CALL SET_ENEMY, 10, 1033, 30, 1, 1
+		BASE:LOCAL:파마 = 0
+		CSTR:(CHARANUM-1):사고패턴 = 흡혈귀
+		CALL SYNC_STATUS,LOCAL
+		CALL HEALTH_CHARA,LOCAL
+	CALL BATTLE_START
+	FLAG:도주불가フラグ = 0
+	FLAG:회화불능フラグ = 0
+	FLAG:선제기습취소 = 0
+	WAIT
+PRINTFORML 
+PRINTFORML ＞피샤차を倒した
+PRINTFORML 
+PRINTFORML ＞癒し손マネカタは【디아】を唱えて怪我をしたマネカタたちを癒して回っている。
+PRINTFORMW ＞小枝も飛び回って癒し손マネカタの손が回らないところをフォローしているようだ。
+PRINTFORML 
+PRINTFORML 野分：
+PRINTFORML 「どうも僕たちがつけられていたようだ、謝罪させてほしい」
+PRINTFORML 「%CALLNAME:MASTER%たちはそろそろ一旦引き上げる時間だろう」
+PRINTFORMW 「僕らは少しここに留まって、後続がいないか責任をもって確認しておこう」
+PRINTFORML 鶴来：
+PRINTFORMW 「そうだな、また악마がやってくるかもしれないし……癒し손マネカタ、君の名は？」
+PRINTFORML 癒し손マネカタ：
+PRINTFORMW 「わたしたちに名前というものは特に……。呼びづらいのであれば、お好きな呼び方をしてください」
+PRINTFORML 鶴来：
+PRINTFORMW 「……そうか。いや、いいんだ」
+PRINTFORML 「この子がホントに沙耶なのか、沙耶に似た別の人なのか、よく分からない」
+PRINTFORMW 「でも彼女が沙耶の携오비を持っていたんだから何か関係はあるのかもしれない……」
+PRINTFORML 
+PRINTFORML ＞눈をグルグルさせながら煮え切らない鶴来を放って長老に何か知らないか尋ねる나나미。
+PRINTFORML 
+PRINTFORML 長老マネカタ：
+PRINTFORMW 「なぜ彼女がそれを持って生まれてきたか、ワシにも分からないな」
+PRINTFORML 「しかし、我々マネカタの指導者で、후토미미様という方がいる」
+PRINTFORML 「我々マネカタたちを導いて下さるお方だ」
+PRINTFORMW 「彼はさまざまなものを見通す힘を持っている……후토미미様なら、君たちの知りたいことも知っているかもしれない」
+PRINTFORML 나나미：
+PRINTFORMW 「その후토미미様はどこにおられるんですか？」
+PRINTFORML 長老マネカタ：
+PRINTFORMW 「후토미미様は만트라軍のカブキチョウ捕囚所に監禁されている」
+PRINTFORML 捕囚所とはすなわち監獄だ、만트라軍の支配域にある監獄に会いに行くとなると軍との正面衝突は避けられないが…。
+PRINTFORML どうするかは考えておくとして一旦引き上げさせてもらおう。
+PRINTFORML 만트라軍の戦힘を間引くことも出来たしこちらの情勢も知ることが出来た。
+PRINTFORML 픽시への報告内容としては上出来だろう。
+PRINTFORMW 
+;帰還
+PRINTFORML 鶴来：
+PRINTFORML 「俺はどうしたらいいんだ……」
+PRINTFORMW まだグダグダと悩んでいる소년を横눈に野分と今回は小枝も残るというので今回も二손に別れることにする。
+PRINTFORML 今回はアマラ車というターミナルを使えるため割と気軽に移動できるのが助かる。
+SETCOLOR COLOR("PASTEL-RED")
+PRINTFORMW 
+PRINTFORMW ――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+PRINTFORMW 
+RESETCOLOR
+PRINTFORML ＞アマラ車を経由して慣れ始めた代々木公園の세계線を渡った。
+PRINTFORML 
+PRINTFORMW 　　＞＞사교의관＜＜
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORMW 「斯々然々で大変だったんですよ～」
+PRINTFORMW 픽시：
+PRINTFORMW 「うわぁ…자폭蘇生とかアホじゃないの…？」
+PRINTFORML 「それはそれとしてアマラ車だっけ、ターミナルになるものが見つかったのは良かったね」
+PRINTFORMW 「話からすると東京界隈だけで構成されてるみたいだけど、歩いて移動ってわけにはいかないからね」
+PRINTFORML 「さてと、随分頑張ってくれたみたいだから報酬を渡さないとね。まずはお金」
+PRINTFORMW 報酬30000円を得た。
+MONEY += 30000
+PRINTFORMW 「で、戦힘강화に今回は도리・카드몬を渡しちゃうよ。使い方は…나나미ちゃんに聞いてね！」
+CALL GET_ITEMS("도리・카드몬", 1)
+PRINTFORMW 도리・카드몬を손に入れた。
+;나나미ちゃんの해설再び！조마合体…みんな知ってるよね？
+PRINTFORML 
+PRINTFORML 나나미：
+PRINTFORML 「はーい、これまた今更かもしれませんが一応説明しますね」
+PRINTFORML 「도리・카드몬は조마と呼ばれる人造악마の素体です。악마と合体させることで조마になりますよ」
+PRINTFORMW 「合体させる악마次第で強さが変わるのはもちろんですが、何よりマグネタイト소비が無いのが大きな利点です」
+PRINTFORMW 「また、特定の악마と合体させることで영웅と呼ばれる他の손段では生み出せない악마になりますよ」
+PRINTFORMW 픽시：
+PRINTFORMW 「今回はこんなもんかな、また成果が上がったら来てよ。相応の報酬は用意するからさ！」
+PRINTFORML 
+PRINTFORMW 次の準備の為にも一先ず帰って休むことにしよう。
+PRINTFORML 
+;나나미ちゃんの해설、オマケ！納金について？
+PRINTFORML 나나미：
+PRINTFORMW 「そういえば組織に脳筋、もとい納金ってしてます？」
+PRINTFORML 「마요네さんから聞いた話ですが、アレって가운に上前撥ねられるわけじゃなくて組織への貢献具合を示すものらいです」
+PRINTFORML 「納金の際に提示される눈標額を달성すると정크숍、무기や防具を売ってくれる店ですね」
+PRINTFORMW 「そこで売ってくれる상품が増えるそうですよ」
+PRINTFORML 「元々상품としてはあるけど組織に貢献しない＝裏切るかもしれない子分に強い장비は売ってくれないって事みたいですね」
+PRINTFORMW 「それ以外にも何か便宜を図ってくれるらしいので、お金に余裕があるようなら納金するのもアリかもです」
+PRINTFORML 「시아크、でしたっけ。そこには解析度50％を越えた악마と会えるシステムが組まれてるとかで」
+PRINTFORMW 「레벨上げや勧誘にはもってこいだとか？」
+PRINTFORML 「言わされてる感が強くなってきたので今回はここまで！です」
+;こっそり나나미ちゃんの의존도、충성도を上限付きでアップ
+LOCAL = GETCHARA([[キャラ:나나미]])
+SIF	CFLAG:LOCAL:의존도 <= 700
+	CFLAG:LOCAL:의존도 = CFLAG:LOCAL:의존도 + 150
+SIF	BASE:LOCAL:충성도 <= 7000
+	BASE:LOCAL:충성도 = BASE:LOCAL:충성도 + 1500
+PRINTFORMW ………
+PRINTFORMW ……
+PRINTFORMW …
+;Bパート終了
+;エン디무ング
+PRINTFORML ＞沙耶に瓜二つのマネカタ、彼女は沙耶なのか、それとも？
+PRINTFORML ＞マネカタの秘密を知るため、マネカタの指導者후토미미に会うべく만트라軍の捕囚所へと向かう。
+PRINTFORMW ＞후토미미は何を語るのか……。
+PRINTFORML 
+PRINTFORML 次回 第４話 蜃気楼の龍 ～ Prisoner in Mirage ～
+PRINTFORMW 
+PRINTFORML 鶴来：
+PRINTFORMW 「俺が望む세계……」
+PRINTFORML 
+;まだ作ってねーです 作成後フラグを35:0 == 4に변경する。
+이벤트フラグ:35:0 = 4
+CUSTOMDRAWLINE =
+;- 1ターン経過
+FLAG:휴식フラグ = 1
+BEGIN TURNEND
+RETURN
+
+;マカミの行動パターン
+@SET_ACTION_蘇生役,ARG
+;ひたすら리캄、HP500を切ったら自分に디아라마
+IF BASE:ARG:ＨＰ < 500
+	CFLAG:ARG:입력行動 = 402
+	CALL RANDOM_TARGET,ARG,417
+ELSE
+	CFLAG:ARG:입력行動 = 417
+	CALL RANDOM_TARGET,ARG,417
+ENDIF
+
+;モーショボーの行動パターン(両側)
+@SET_ACTION_爆弾魔, ARG
+;1/3で바이널스트라이크、2/3で옥쇄파
+IF RAND:3 == 0
+	CFLAG:ARG:입력行動 = 2007
+	CALL RANDOM_TARGET,ARG,2007
+ELSE
+	CFLAG:ARG:입력行動 = 2006
+	CALL RANDOM_TARGET,ARG,2006
+ENDIF
+
+;モーショボーの行動パターン(中央)
+@SET_ACTION_壁役, ARG
+;1/2でマハ잔、1/2で랜덤
+IF RAND:2 == 0
+	CFLAG:ARG:입력行動 = 1004
+	CALL RANDOM_TARGET,ARG,1004
+ELSE
+	CALL 랜덤행동 , ARG
+ENDIF
+
+;피샤차の行動パターン
+@SET_ACTION_흡혈귀, ARG
+;1/2で흡혈、1/2で랜덤
+IF RAND:2 == 0
+	CFLAG:ARG:입력行動 = 2013
+	CALL RANDOM_TARGET,ARG,2013
+ELSE
+	CALL 랜덤행동 , ARG
+ENDIF

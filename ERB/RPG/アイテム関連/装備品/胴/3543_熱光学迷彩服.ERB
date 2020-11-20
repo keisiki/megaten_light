@@ -1,0 +1,72 @@
+﻿
+;======================================================
+;장비品の데이터
+;열광학미채옷
+;Lv50장비までは반사まで　기본능력に합계+6まで
+;======================================================
+
+@기본능력수정_3543,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "인내력"
+		RETURN -2
+	CASE "속도"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3543,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 27
+	CASE "회피"
+		RETURN 40
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_3543,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "검격","전술"
+		RETURN 75
+ENDSELECT
+RETURN 100
+
+@장비추가스킬_3543, ARG, ARG:1 = -1
+SELECTCASE ARG
+	CASE 0
+		;스쿠카쟈오토
+		RETURN 2417
+ENDSELECT
+RETURN 0
+
+@장비箇所_3543
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3543
+RETURN 43
+
+@장비조건_3543,ARG
+SIF BASE:ARG:LV < 43
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3543
+PRINTL 장비조건：LV43～
+
+@장비해설_3543
+PRINTL 周囲の情景を옷表面にホログラムでリアルタイムに映し周囲に溶け込む迷彩장비。회피性能に優れる
+PRINTL 　　　　　　　　また熱を発さないため熱探知できない、音・熱をカモフラージュする。
+
+
+@구입조건_3543
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 210000
+	RETURN 0
+RETURN 1
+
+;마카교환가능か
+@EQUIP_EXCHANGE_3543
+RETURN 0
+
+@引継ぎ可不可_3543
+RETURN 0

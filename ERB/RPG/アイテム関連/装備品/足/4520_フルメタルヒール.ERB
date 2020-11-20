@@ -1,0 +1,64 @@
+﻿
+;======================================================
+;장비品の데이터
+;풀메탈힐
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_4520,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "인내력"
+		RETURN 2
+	CASE "속도"
+		RETURN -2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4520,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 27
+	CASE "회피"
+		RETURN -3
+	CASE "마법효과"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_4520,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "검격","비구"
+		RETURN 75
+	CASE "지변"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@장비箇所_4520
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4520
+RETURN 25
+
+@장비조건_4520,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 25
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4520
+PRINTL 장비조건：♀ LV25～
+
+@장비해설_4520
+PRINTL 풀메탈이라는 이름에 걸맞는 초합금 하이힐
+PRINTL 　　　　　　　　見た눈の光沢は美しいが발には尋常ではない負担がかかる一品
+
+
+@구입조건_4520
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 35000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_4520
+RETURN 0

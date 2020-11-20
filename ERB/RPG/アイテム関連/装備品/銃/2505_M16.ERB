@@ -1,0 +1,82 @@
+﻿
+;======================================================
+;장비品の데이터
+;======================================================
+
+
+@기본능력수정_2505,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+
+@전투능력수정_2505,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_2505,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2505, ARG = -1
+RETURN 1
+
+@최저공격횟수_2505, ARG = -1
+RETURN 2
+
+@최대공격횟수_2505, ARG = -1
+RETURN 4
+
+@사거리_2505, ARG = -1
+RETURN 3
+
+@공격범위_2505, ARG = -1
+RETURN 3
+
+@장비해설_2505
+PRINTL アメ리카製アサルト라이플。コルトAR-15のアメ리카軍採用モデル。戦時急造された最초기型なため신뢰性に難あり
+;PRINTL 各国軍で採用されているアメ리카製アサルト라이플
+;당신ならM16A1해설漫画のマガジンちゃんも難なく孕ませるんやろなぁ…
+RESETCOLOR
+
+@장비箇所_2505
+RETURN GET_EQUIPNUM("총")
+
+@필요레벨_2505
+RETURN 1
+
+@장비조건_2505,ARG
+SIF BASE:ARG:LV > 29
+	RETURN 1
+SIF BASE:ARG:LV > 24 && TALENT:ARG:건슬링거 == 1
+	RETURN 1
+RETURN 0
+
+@장비조건설명_2505
+PRINTL 장비조건：LV30～　[건슬링거]소지時はLV25～
+
+
+@구입조건_2505
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 460000
+	RETURN 0
+RETURN 1
+
+@총공격_2505, ARG = -1
+RETURN 72
+
+@총명중_2505, ARG = -1
+RETURN 62
+
+@특수탄창_2505, ARG = -1
+RETURN 2
+
+@GUN_RANDOMTARGET_2505
+RETURN 1
+
+@총타입_2505
+;1 = 핸드건 2 = 샷건 3 = アサルト라이플、머신건 4 = 狙撃라이플 5 = 그외
+RETURN 3
+@속도보정_2505
+RETURN 0

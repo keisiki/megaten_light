@@ -1,0 +1,550 @@
+﻿
+;이벤트フラグ:19:0 を参照する部分
+;32個(CASE 31)まで作成可能
+@EVENT_19_LIST_0(ARG,ARG:1)
+;ARG:1 0 = タイトル
+;　　　1 = 出現체크
+;　　　2 = 이벤트
+;
+SELECTCASE ARG
+CASE 0
+	IF ARG:1 == 0
+		RESULTS = Cendrillon de La Foi
+	ELSEIF ARG:1 == 1
+		;로카파라(地下街)クリア以降（P5勢との面識持ってからってことで）
+		SIF 던전フラグ:13:1 >= 1
+			RETURN 1
+	ELSEIF ARG:1 == 2
+		PRINTFORML ――最近、東京の学生を中心にして拡散する都市伝説があった。
+		PRINTFORML 曰く、『お台場の競技場建設予定地』に、淡く光を放つ建築物が見えるのだという。
+		PRINTFORML 更に、いつでも誰にでも見えるものではないとか、特別なアプリが필요なのだとか、
+		PRINTFORML 聞く者によって細部が付け발される始末。
+		PRINTFORML それだけならば無責任に広がる流言飛語の類に過ぎなかったが――
+		PRINTFORML その建物に악마が出没するというエピソードが加われば、話は別だった。
+		PRINTFORML 
+		PRINTFORML そして今、%CALLNAME:MASTER%の元に、その異界と思しき建築物への調査의뢰が届いている。
+		PRINTFORML 調査へ向かいますか？
+		CALL INPUT_YN
+		IF RESULT == 0
+			PRINTFORMW 소문の現場までやってきたが、見えるのは建築途中の競技場ぐらいである。
+			PRINTFORMW 工事現場内も探ってみたものの、特に異界と繋がっている様子もなかった。
+			PRINTFORMW 一旦引き返そうとした時、赤い머리카락の소녀――あの교복は秀尽学園のものだ――が建設予定地の前に立っているのが見えた。
+			PRINTFORMW もしかしたら彼女もこの소문を追ってきたのかもしれない。であれば%CALLNAME:MASTER%の知らない손掛かりを握っている可能性がある。
+			PRINTFORMW そう結論付け、近づいたところで――
+			PRINTFORML 
+			PRINTFORMW すれ違った男女の声が聞こえてきて。
+			PRINTFORML 「絶対、道間違えたでしょー。こんなとこ見たことないし。あれとか何の建物なわけ？」
+			PRINTFORMW 「あー、なんだったっけか。展示場だか研究所だかが建つんだっけな」
+			PRINTFORML 
+			PRINTFORMW よくは聞こえなかったが、それに反応して赤い머리카락の소녀が独り言を呟いて。
+			PRINTFORMW 「……研究所じゃなくて競技場ですよ……」
+			PRINTFORML 
+			PRINTFORMW 彼女のスマートフォンから、音声が流れて。
+			PRINTFORMW 『ナビゲーションを開始します』
+			PRINTFORML 
+			PRINTFORMW 一瞬の眩暈の後、%CALLNAME:MASTER%の前にあったのは建築途中の競技場――ではなく。
+			PRINTFORMW いくつもレンズが並ぶ、物理法則を無視したような形状の建物だった。
+			PRINTFORMW 淡く光っている訳ではないが、恐らくこれが소문の正体だろう。
+			PRINTFORMW ともかく、眺めていても始まらない。調査を始めよう……。
+			PRINTFORML 
+			PRINTFORMW ………
+			PRINTFORMW ……
+			PRINTFORMW …
+			PRINTFORML 
+			PRINTFORMW 調査を始めて数分が経過したが、この異界には何もいない。
+			PRINTFORMW 「악마が出る」という소문は가운なるデタラメではないのかと思わせるほどに、動くものが存在しないのだ。
+			PRINTFORMW エントランスと思しきこのエリアは白を基調とした内装で統一されており、清潔さを超えて潔癖ささえ感じさせる。
+			PRINTFORMW この無機質さは、病院というより研究所という方が正しいかもしれない。
+			PRINTFORML 
+			PRINTFORMW 「え、誰！？」
+			PRINTFORML 
+			PRINTFORMW 扉の向こう側から소녀の声がする。十中八九、直前に見た赤い머리카락の소녀のものだろう。
+			PRINTFORMW 本来ならば聞こえないような小さな声だったが、あまりに静かなこの部屋ではよく響く。
+			PRINTFORMW この状況について、彼女が何か知っている可能性が高い。
+			PRINTFORMW %CALLNAME:MASTER%は警戒しつつ彼女の元へと向かった。
+			PRINTFORML 
+			PRINTFORMW 「なんで…どうしてここに…！」
+			PRINTFORMW 赤い머리카락の소녀の前には、彼女と瓜二つの姿をした人物が立っている。
+			PRINTFORMW 違う要素があるとすれば안경を掛けていること、머리카락型を下ろしていること、恰好が何故か레오타드なことか。
+			PRINTFORMW 『私が……私のせいで……』
+			PRINTFORMW 『카스미……代わりに……』
+			PRINTFORMW 「やめて！　やめてよっ！」
+			PRINTFORMW 레오타드の소녀の発言を遮るように、突如として머리を抱え、呻き始める赤い머리카락の소녀。
+			PRINTFORMW 一体どういうことか、%CALLNAME:MASTER%が近寄ろうとした時、突如として現れた악마が레오타드の소녀を襲った。
+			PRINTFORMW 인간が악마に襲い掛かられて無事でいられる訳がない。ましてやそれが背後からの奇襲であれば尚更だ。
+			PRINTFORML ・・・・・・・・・・・
+			PRINTFORMW 血を一滴も流さないまま、倒れ伏した레오타드の소녀は塵となって掻き消えた。
+			PRINTFORMW あのままでは赤い머리카락の소녀まで殺されてしまいかねない、%CALLNAME:MASTER%は소녀に駆け寄った。
+			PRINTFORMW 「え、당신は……？」
+			PRINTFORMW ――通りすがりの探偵だ。
+			PRINTFORMW 少々強引だが、余計な反論は許さずに押し通す。
+			PRINTFORMW 『受け入れよ……主は嘆いている。自ら아픔に寄る愚かさを……』
+			PRINTFORMW 「一体、何を……」
+			PRINTFORML 
+			PRINTFORMW 　　　　　　――学校が試験の時期ズラしたって。いいよねぇ、特別扱い――
+			PRINTFORML 
+			PRINTFORMW ――『私、気にしてません』って感じがほんとムカつくんだよね――
+			PRINTFORML 
+			PRINTFORMW 　　　　　　　　　　　　　　――特待だか知らないけどチヤホヤされてさ、ほんとに結果出せてんの？――
+			PRINTFORML 
+			PRINTFORMW 突然鳴り響いた音は、陰입だろうか？　妙に질투しているような女生徒の声が聞こえてくる。
+			PRINTFORML 
+			PRINTFORMW 　　――気持ちは分かりますが、やはり、そのぉ……三位ではねえ。やっぱり、優勝してくれないと――
+			PRINTFORML 
+			PRINTFORMW 　　　　　　　　――『片方』が亡くなった上に、結果も出ない。これでは価値が……――
+			PRINTFORML 
+			PRINTFORMW 次いで、中年男性のような声。小馬鹿にしたような感情が音だけで伝わってくる。
+			PRINTFORMW これらは彼女が学校で浴びせられた言葉だろうか？
+			PRINTFORMW 「黙って聞いてれば……結果が出てない？　そんなの言われなくても分かってる……！」
+			PRINTFORMW 「……だけど！」
+			PRINTFORMW 「『私』だけじゃない……『私たち』の夢まで悪く言うのは、許せない……！」
+			PRINTFORMW 「自分の都合を押し付けて……勝손な期待をして…勝손な結果を求めて……」
+			PRINTFORMW 「私じゃ無理だって言うんですか……？　私を、誰だと思ってるんです？　私は……」
+			PRINTFORMW 「私は……『芳澤카스미』です！」
+			ALIGNMENT CENTER
+			PRINTFORML 
+			PRINTFORMW ――不器用な子……――
+			PRINTFORMW ――灰を被ったままよりも……仮初の栄華を選ぶ……そういうことだね？――
+			PRINTFORMW ――けど、それが貴方の決めたことだというのなら……最後まで、付き合うよ――
+			PRINTFORMW ――我は汝、汝は我……――
+			PRINTFORMW ――계약という名の魔法……受け入れなさい――
+			PRINTFORML 
+			ALIGNMENT LEFT
+			PRINTFORMW いつの間にか現れた、顔を覆う仮面を勢い良く引き剥がし、蒼い炎が彼女を包む。
+			PRINTFORMW 炎柱が消えると同時、現れたのは변신した소녀と、それに寄り添う악마――いや、페르소나の姿。
+			FOR LOCAL, 1, 7
+				LOCALS = 포지션{LOCAL}
+				SIF FLAG:LOCALS < 0
+					BREAK
+				SIF ABL:(FLAG:LOCALS):종족 > 0
+					BREAK
+				SIF LOCAL == 6
+					LOCAL:1 = 1
+			NEXT
+			;パーティ全部인간で埋まってる→카스미加入不可
+			IF LOCAL:1 == 1
+				;あんだけ페르소나が喋っときながら戦えないって正直ダサいな
+				PRINTFORMW 「仕切り直しを――ぐっ……！」
+				PRINTFORMW 彼女は페르소나の각성で心身を消耗している。この상태で전투するのは却って발손まといだ。
+				PRINTFORMW こちらの戦힘は十分であり、素人に손伝ってもらう필요はない。
+			;パーティが埋まり切ってないor埋まってるけど악마がいる→카스미加入可
+			ELSE
+				PRINTFORMW 初めての각성により、自分の限界が分かっていないのか、힘量を超えて페르소나を전개している。
+				PRINTFORMW 次からは本来の힘で전개することになるだろう。
+				PRINTFORMW 「仕切り直しをお願いします。今度は……『상드리용』と一緒ですっ！」
+				
+				CALL ADD_GUEST_COMPANION([[キャラ:카스미]], 100, 1)
+				SIF RESULT:1 >= 0
+					PRINTFORMW ※%CALLNAME:(RESULT:1)%をパーティから外したので注意してください
+				;新規加入ならRESULT:2は1、引継ぎキャラならRESULT:2は0
+				IF RESULT:2 == 1
+					;초기레벨だとワンパンで死ぬのでゲスト参戦時は레벨上げとく
+					LOCAL = GETCHARA([[キャラ:카스미]])
+					LOCAL:2 = 1
+					BASE:LOCAL:LV = 30
+					BASE:LOCAL:힘 = 15
+					BASE:LOCAL:지혜 = 9
+					BASE:LOCAL:마력 = 11
+					BASE:LOCAL:인내력 = 7
+					BASE:LOCAL:속도 = 13
+					BASE:LOCAL:운 = 8
+				ENDIF
+				CALL SYNC_STATUS, LOCAL
+				CALL HEALTH_CHARA, LOCAL
+			ENDIF
+			
+			PRINTFORML 
+			PRINTFORMW 邪を拝する合成体が現れた！
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			
+			;P5R仕様の名前に변경
+			CALL SET_ENEMY,9, [[キャラ:비야키]], 38, 0
+			NAME:(CHARANUM-1) = 邪を拝する合成体
+			CALLNAME:(CHARANUM-1) = 邪を拝する合成体
+			;P5R仕様の祝福弱点。さっそく코우하で弱点をついてやろう
+			MAXBASE:(CHARANUM-1):파마 = 200
+			BASE:(CHARANUM-1):파마 = 200
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			
+			CALL BATTLE_START
+			
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			
+			;ゲスト参戦なら消す
+			IF LOCAL:2 == 1
+				LOCAL = GETCHARA([[キャラ:카스미]])
+				CALL DEL_GUEST, LOCAL
+			ENDIF
+			PRINTFORMW 「ふぅ……ありがとうございました。詳しく聞きそびれましたが、당신は一体……？」
+			PRINTFORMW %CALLNAME:MASTER%は探偵として競技場建設予定地に訪れ、ここに辿り着いたことを説明した。
+			PRINTFORMW 最初はこちらを警戒していた소녀も、どうやら原因が己のアプリにあるらしいと察すると、警戒心を解いた。
+			PRINTFORMW 「申し遅れました。私、芳澤카스미と言います。秀尽学園高校、一年生です」
+			PRINTFORMW 体操でもやっているのだろうか、感心するほど綺麗な姿勢で一礼をした。
+			PRINTFORMW 起伏は少々乏しいが、スレンダーなフォルムは、それはそれで価値がつくだろう。
+			PRINTFORMW 「それで……私、なんでこんな格好になってるんでしょう？」
+			PRINTFORMW 黒い레오타드に黒い겉옷を날개織り、黒いマスクを着けた女――確かに今の彼女の복장は珍妙である。
+			PRINTFORMW 페르소나の発現と同時に姿が変わるのは、ローカパーラで出会った真や竜司らと変わらない。
+			PRINTFORMW 加えて、彼らは秀尽学園の生徒だった。
+			PRINTFORMW ……であれば、彼女も『心の怪盗団』の一人なのだろうか？
+			;P5勢はシナリオ完結상태からローカパーラで참가するので別세계扱いすることにした
+			PRINTFORMW 「心の…怪盗、団？　いえ、聞いたことがないですね。その方が私と似た힘を持っているんですか？」
+			PRINTFORML 
+			PRINTFORMW 遠くから악마の포효が聞こえてくる。恐らく仲間が消えたことを察知したのだろう。
+			PRINTFORMW こちらへと近づいてくる気配をいくつか感じる。
+			PRINTFORMW 「詳しい話はここから出てからの方が良さそうですね」
+			PRINTFORML 
+			PRINTFORMW 카스미と一緒に異界から탈출した……。
+			PRINTFORML 
+			PRINTFORMW ………
+			PRINTFORMW ……
+			PRINTFORMW …
+			PRINTFORML 
+			PRINTFORMW 「ここなら落ち着いて話、できますね。自分に何が起きたのか、ちゃんと知っておきたいです」
+			PRINTFORMW 異界に入り込み、페르소나に각성した挙句、악마と戦ったとあれば、何も伝えない方が却って危険だ。
+			PRINTFORMW 自分に何ができて、何ができないのか。そして彼女の身に起きたことを説明した。
+			PRINTFORML 
+			PRINTFORMW 「악마……페르소나に、異界。そんなものがあるなんて……でも実際に見てしまった以上、부정できませんね」
+			PRINTFORMW 「……決めました。もしよろしければ、今後악마と戦う時に呼んで下さい」
+			PRINTFORMW 「악마との戦いは新体操の特訓にもなると思うんです」
+			PRINTFORMW 「よろしくお願いしますね、%CALLNAME:MASTER%先輩！」
+			IF CFLAG:MASTER:당신の表の職業 == 2
+				PRINTFORMW 別の学校の生徒なのだから、先輩呼びする필요などないと思うが。
+			ELSE
+				PRINTFORMW 「先輩」と呼ばれるような年ではないのだが。
+			ENDIF
+			PRINTFORMW 「大丈남편です、악마討伐の先輩という意味ですので！」
+			PRINTFORMW ……体育会系とはこういう上下関係を築きたがるものなのだろうか？
+			PRINTFORML 
+			PRINTFORMW 以後、芳澤카스미が協힘してくれるようになった。
+			CALL ADD_NEW_COMPANION,[[キャラ:카스미]],0
+			CFLAG:(CHARANUM - 1):전투참가불가능 = -1
+			LOCAL = GETCHARA([[キャラ:카스미]])
+			CSTR:LOCAL:二人称 = %CALLNAME:MASTER%先輩
+			PRINTFORML 
+			PRINTFORMW ――%CALLNAME:MASTER%たちが탈출した日から、競技場建設予定地の소문は途端に止んだ。
+			PRINTFORMW 学生の소문など暇つぶしの戯れに過ぎず、真偽に関心を持つ者など大していない。
+			PRINTFORMW もうこの소문のことなど忘れて次の소문を喜々として広げている頃だろう。
+			PRINTFORMW 카스미のスマートフォンに入っていたアプリケーションもいつの間にか消えており、
+			PRINTFORMW 入るための손段を喪失したため、これ以上の調査はできなくなった。
+			;P5Rシナリオはこれ以上やりませぬ
+			PRINTFORMW 何とも消化不良な終わりではあるが、文句を言っても仕方がない。
+			PRINTFORMW %CALLNAME:MASTER%は調査結果を提出した。
+			PRINTFORML 
+			MONEY += 30000
+			PRINTFORMW ￥30,000を손に入れた。
+			RETURN 1
+		ENDIF
+	ENDIF
+CASEELSE
+	RETURN 0
+ENDSELECT
+RETURN 0
+
+
+;이벤트フラグ:10:1を参照する部分(現在は未사용なのでコメントアウト)
+;以降は末꼬리の数字を増やしていく事で対応可能
+;@EVENT_19_LIST_1(ARG,ARG:1)
+;SELECTCASE ARG
+;CASEELSE
+;	RETURN 0
+;ENDSELECT
+;RETURN 0
+
+;이벤트フラグ:10:19 を参照する部分
+;32個(CASE 31)まで作成可能
+;EX枠なので数字の一番大きいのから
+@EVENT_19_LIST_19(ARG,ARG:1)
+;ARG:1 0 = タイトル
+;　　　1 = 出現체크
+;　　　2 = 이벤트
+SELECTCASE ARG
+CASE 0
+	IF ARG:1 == 0
+		RESULTS = 愛と광기の刃
+	ELSEIF ARG:1 == 1
+		;EXTRA이벤트OFFの場合は出ない
+		SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0
+			RETURN 0
+		;貢献度860000以上だと出現
+		SIF FLAG:組織貢献度 + FLAG:名声 * 100 >= 860000
+			RETURN 1
+	ELSEIF ARG:1 == 2
+		PRINTFORMW 서머너や악마を殺しまくってる악마の話を聞いた
+		PRINTFORMW とても強く様々な서머너も返り討ちに合っている소문も聞く
+		PRINTFORMW 返り討ちに合って殺されたものは首を狩られていた話も聞いた
+		PRINTFORMW ファントムの서머너の死体が何体かあったらしい
+		PRINTFORMW その악마には懸賞金もかけられている
+		PRINTFORMW やつを倒せば相応な賞金と名声が得られるだろう
+		PRINTFORML 倒しに行きますか？
+		CALL INPUT_YN
+		IF RESULT == 0
+			PRINTFORMW その악마がいる所についた
+			PRINTFORMW すると向こうから痛々しい悲鳴が聞こえた
+			PRINTFORMW その方向に行ってみると악마と首のない死体がいた
+			PRINTFORMW その악마は生首を持っており、발があり人の形をしている
+			PRINTFORMW 下半身は赤い하카마を着ており、上半身は裸だが肌は精気が無いように白い
+			PRINTFORMW 動く死体のようだがただならない雰囲気を出している
+			PRINTFORMW 「フフ……また向こうから来てくれたようだ…」
+			PRINTFORMW どうやら自分に気が付いてしまったようだ
+			PRINTFORMW 「次はこれを狩ればいいんだね…篝火…
+			PRINTFORMW 　フフ…광기の闇に包んであげるよ…
+			PRINTFORMW 　フハハハハ…宴だよ！宴の始まりだよ！一緒に悪夢を見ようよ！」
+			PRINTFORMW 악마はいきなり襲い掛かってきた
+			
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			
+			CALL SET_ENEMY,9,5423,60,1,4
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 50000
+			CFLAG:(CHARANUM-1):行動횟수 = 3
+			CFLAG:(CHARANUM-1):COOP被데미지보정 = -50
+			CFLAG:(CHARANUM-1):クリティカル보정 = 50
+			CSTR:(CHARANUM-1):사고패턴 = E19破沙羅
+				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+			BASE:(CHARANUM-1):31 += 10
+			BASE:(CHARANUM-1):32 += 10
+			BASE:(CHARANUM-1):33 += 10
+			BASE:(CHARANUM-1):34 += 10
+			BASE:(CHARANUM-1):35 += 10
+			BASE:(CHARANUM-1):36 += 10
+			
+		ABL:(CHARANUM-1):스킬1 = 2419
+		ABL:(CHARANUM-1):스킬2 = 2420
+		ABL:(CHARANUM-1):스킬3 = 2422
+		ABL:(CHARANUM-1):스킬4 = 2436
+		ABL:(CHARANUM-1):스킬5 = 2449
+		ABL:(CHARANUM-1):스킬6 = 2448
+		ABL:(CHARANUM-1):스킬7 = 2447
+		ABL:(CHARANUM-1):스킬8 = 2510
+				ABL:(CHARANUM-1):입수확률1 = 100
+		
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			CALL BATTLE_START
+					FLAG:도주불가フラグ = 0
+					FLAG:회화불능フラグ = 0
+					FLAG:선제기습취소 = 0
+			
+				FLAG:(10000+5423) = 1
+			PRINTFORMW 「素晴らしい悪夢だあぁぁぁぁぁ……」
+			PRINTFORMW 악마を倒した
+			PRINTFORMW 발元にメモが落ちている
+			CALL MESSAGE_WINDOW, "", "殺戮に復讐する/影は/赤酒をまき散らす "
+			PRINTFORMW 악마合体のヒントだろうか？
+			
+			FLAG:名声 += 200
+			MONEY += 100000
+			PRINTFORML 
+			PRINTFORML 
+			PRINTFORML 名声200を손に入れた
+			PRINTFORML ￥100.000손に入れた
+			PRINTFORMW 쿠비키리 바사라が合体解禁された
+			
+			RETURN 1
+		ENDIF
+	ENDIF
+CASEELSE
+	RETURN 0
+ENDSELECT
+RETURN 0
+
+
+@SET_ACTION_E19破沙羅,ARG
+	BASE:ARG:ＭＰ = MAXBASE:ARG:ＭＰ
+	MAXBASE:ARG:공격 += 1
+	MAXBASE:ARG:명중 += 1
+	CFLAG:ARG:공격보정 += 1
+	CFLAG:ARG:명중보정 += 1
+	IF FLAG:経過ターン数 > 0
+		SIF POS(CFLAG:ARG:820) < 0 || GET_STATE(CFLAG:POS(CFLAG:ARG:820):ステート) == "DYING" || GET_STATE(CFLAG:POS(CFLAG:ARG:820):ステート) == "STONE"
+			CFLAG:ARG:820 = 0
+	ENDIF
+	$LP2
+	IF CFLAG:ARG:820 < 1
+		CALL RANDOM_TARGET,ARG,3520
+		SIF CFLAG:ARG:ターゲット < 1
+			CALL RANDOM_TARGET,ARG,3517
+		CFLAG:ARG:820 = CFLAG:ARG:ターゲット
+	ELSE
+		CFLAG:ARG:ターゲット = CFLAG:ARG:820
+	ENDIF
+	SIF CFLAG:ARG:ターゲット < 1
+		GOTO LP2
+	;SIF CFLAG:ARG:ターゲット == -1
+	;	GOTO DECIDE_ACTION
+	IF CFLAG:ARG:行動した횟수 == 0
+		$LP
+		CALL RANDOM_TARGET,ARG,3520
+		SIF CFLAG:ARG:ターゲット < 1
+			CALL RANDOM_TARGET,ARG,3517
+		CFLAG:ARG:820 = CFLAG:ARG:ターゲット
+		SIF CFLAG:ARG:ターゲット < 1
+			GOTO LP
+		IF !RAND:4 && CFLAG:ARG:ターゲット > 0 && CFLAG:POS(CFLAG:ARG:ターゲット):방어강화 > -16
+			CFLAG:ARG:입력行動 = 561
+			CALL RANDOM_TARGET,ARG,561
+		ELSEIF !RAND:3 && CFLAG:ARG:ターゲット > 0 && (CFLAG:ARG:회피강화 < 32 || CFLAG:POS(CFLAG:ARG:ターゲット):회피강화 > -16)
+			CFLAG:ARG:입력行動 = 3518
+			IF CFLAG:ARG:ターゲット < 1
+				CALL RANDOM_TARGET,ARG,3518
+				CFLAG:ARG:820 = CFLAG:ARG:ターゲット
+			ENDIF
+			SIF CFLAG:ARG:ターゲット < 1
+				GOTO LP
+		ELSEIF !RAND:2 &&( CFLAG:ARG:회피강화 < 32 || CFLAG:ARG:공격강화 < 32)
+			CFLAG:ARG:입력行動 = 524
+			CALL RANDOM_TARGET,ARG,524
+		ELSE
+			CFLAG:ARG:입력行動 = 534
+			CALL RANDOM_TARGET,ARG,534
+		ENDIF
+		RETURN 1
+	ELSEIF !RAND:8 && CFLAG:ARG:１moreフラグ > 0 && !CFLAG:ARG:베어내기フラグ
+		CFLAG:ARG:입력行動 = 534
+		CALL RANDOM_TARGET,ARG,534
+		RETURN 1
+	ELSEIF CFLAG:ARG:ターゲット < 4 && CFLAG:ARG:ターゲット > 0
+		LOCAL = (CFLAG:POS(CFLAG:ARG:ターゲット):검격가드킬 || (MAXBASE:POS(CFLAG:ARG:ターゲット):검격 >= 0 && MAXBASE:POS(CFLAG:ARG:ターゲット):검격 != 999)) && !CFLAG:POS(CFLAG:ARG:ターゲット):검격무효화횟수 && !CFLAG:POS(CFLAG:ARG:ターゲット):물리반사フラグ && !CFLAG:POS(CFLAG:ARG:ターゲット):검격웨이트
+		LOCAL:1 = MAXBASE:POS(CFLAG:ARG:ターゲット):비구 >= 0 && MAXBASE:POS(CFLAG:ARG:ターゲット):비구 != 999 && !CFLAG:POS(CFLAG:ARG:ターゲット):비구무효화횟수 && !CFLAG:POS(CFLAG:ARG:ターゲット):물리반사フラグ && !CFLAG:POS(CFLAG:ARG:ターゲット):비구웨이트
+		LOCAL:2 = MAXBASE:POS(CFLAG:ARG:ターゲット):주살 >= 0 && MAXBASE:POS(CFLAG:ARG:ターゲット):주살 != 999 && !CFLAG:POS(CFLAG:ARG:ターゲット):주살무효화횟수 && !CFLAG:POS(CFLAG:ARG:ターゲット):마법반사フラグ && !CFLAG:POS(CFLAG:ARG:ターゲット):주살웨이트
+		LOCAL:3 = (CFLAG:POS(CFLAG:ARG:ターゲット):검격가드킬 || (MAXBASE:POS(CFLAG:ARG:ターゲット):검격 >= 0 && MAXBASE:POS(CFLAG:ARG:ターゲット):검격 != 999))
+		LOCAL:4 = (現HP割合(ARG)/10+1) * (現HP割合(ARG)/10+1) + 1
+		IF CFLAG:POS(CFLAG:ARG:ターゲット):무효フラグ > 0
+			IF !RAND:3 && LOCAL:1
+				CFLAG:ARG:입력行動 = 127;오절절우
+				RETURN 1
+			ELSEIF !RAND:2 && LOCAL
+				CFLAG:ARG:입력行動 = 49;夜桜の舞（影舞・酬）
+				CALL RANDOM_TARGET,ARG,49
+				RETURN 1
+			ELSEIF LOCAL
+				CFLAG:ARG:입력行動 = 47;브레이브재퍼
+				RETURN 1
+			ENDIF
+		ELSE 
+			IF 現HP割合(ARG) < 15 && CFLAG:ARG:베어내기フラグ && LOCAL
+				CFLAG:ARG:입력行動 = 3520;옥문
+				RETURN 1
+			ELSEIF !RAND:(LOCAL:4) && LOCAL
+				CFLAG:ARG:입력行動 = 3520;옥문
+				RETURN 1
+			ELSEIF !RAND:9 && LOCAL:1 && 現HP割合(ARG) > 50
+				CFLAG:ARG:입력行動 = 144;타슬람샷
+				RETURN 1
+			ELSEIF !RAND:8 && LOCAL:2 && 現HP割合(ARG) > 50
+				CFLAG:ARG:입력行動 = 1424;저주의언령（원혼）
+				RETURN 1
+			ELSEIF !RAND:7 && LOCAL:1
+				CFLAG:ARG:입력行動 = 126;암흑쌍비조
+				CALL RANDOM_TARGET,ARG,126
+				RETURN 1
+			ELSEIF !RAND:6 && (LOCAL:1 || LOCAL:2)
+				CFLAG:ARG:입력行動 = 3517;그림자겉옷
+				RETURN 1
+			ELSEIF !RAND:5 && LOCAL:1
+				CFLAG:ARG:입력行動 = 127;오절절우
+				RETURN 1
+			ELSEIF !RAND:4 && LOCAL:3
+				CFLAG:ARG:입력行動 = 3519;영출
+				RETURN 1
+			ELSEIF !RAND:3 && LOCAL
+				CFLAG:ARG:입력行動 = 49;夜桜の舞（影舞・酬）
+				CALL RANDOM_TARGET,ARG,49
+				RETURN 1
+			ELSEIF !RAND:2 && LOCAL
+				CFLAG:ARG:입력行動 = 47;브레이브재퍼
+				RETURN 1
+			ELSEIF LOCAL
+				CFLAG:ARG:입력行動 = 3520;옥문
+				RETURN 1
+			ENDIF
+		ENDIF
+		IF !RAND:2 && LOCAL:3
+			CFLAG:ARG:입력行動 = 3519;영출
+			RETURN 1
+		ELSE
+			CFLAG:ARG:입력行動 = 2076;명상（토모비키）
+			RETURN 1
+		ENDIF
+	ELSE
+		LOCAL = (CFLAG:POS(CFLAG:ARG:ターゲット):검격가드킬 || (MAXBASE:POS(CFLAG:ARG:ターゲット):검격 >= 0 && MAXBASE:POS(CFLAG:ARG:ターゲット):검격 != 999)) && !CFLAG:POS(CFLAG:ARG:ターゲット):검격무효화횟수 && !CFLAG:POS(CFLAG:ARG:ターゲット):물리반사フラグ && !CFLAG:POS(CFLAG:ARG:ターゲット):검격웨이트
+		LOCAL:1 = MAXBASE:POS(CFLAG:ARG:ターゲット):비구 >= 0 && MAXBASE:POS(CFLAG:ARG:ターゲット):비구 != 999 && !CFLAG:POS(CFLAG:ARG:ターゲット):비구무효화횟수 && !CFLAG:POS(CFLAG:ARG:ターゲット):물리반사フラグ && !CFLAG:POS(CFLAG:ARG:ターゲット):비구웨이트
+		LOCAL:2 = MAXBASE:POS(CFLAG:ARG:ターゲット):주살 >= 0 && MAXBASE:POS(CFLAG:ARG:ターゲット):주살 != 999 && !CFLAG:POS(CFLAG:ARG:ターゲット):주살무효화횟수 && !CFLAG:POS(CFLAG:ARG:ターゲット):마법반사フラグ && !CFLAG:POS(CFLAG:ARG:ターゲット):주살웨이트
+		LOCAL:3 = (CFLAG:POS(CFLAG:ARG:ターゲット):검격가드킬 || (MAXBASE:POS(CFLAG:ARG:ターゲット):검격 >= 0 && MAXBASE:POS(CFLAG:ARG:ターゲット):검격 != 999))
+		LOCAL:4 = (現HP割合(ARG)/10+1) * (現HP割合(ARG)/10+1) + 1
+		IF CFLAG:POS(CFLAG:ARG:ターゲット):무효フラグ > 0
+			IF !RAND:3 && LOCAL:1
+				CFLAG:ARG:입력行動 = 127;오절절우
+				RETURN 1
+			ELSEIF !RAND:2 && LOCAL
+				CFLAG:ARG:입력行動 = 49;夜桜の舞（影舞・酬）
+				CALL RANDOM_TARGET,ARG,49
+				RETURN 1
+			ELSEIF LOCAL:3
+				CFLAG:ARG:입력行動 = 2062
+				RETURN 1
+			ELSE
+				CFLAG:ARG:입력行動 = 31
+				CALL RANDOM_TARGET,ARG,31
+				RETURN 1
+			ENDIF
+		ELSE 
+			IF !RAND:7 && LOCAL:1 && 現HP割合(ARG) > 50
+				CFLAG:ARG:입력行動 = 144;타슬람샷
+				RETURN 1
+			ELSEIF !RAND:6 && LOCAL:2 && 現HP割合(ARG) > 50
+				CFLAG:ARG:입력行動 = 1424;저주의언령（원혼）
+				RETURN 1
+			ELSEIF !RAND:5 && LOCAL:1
+				CFLAG:ARG:입력行動 = 126;암흑쌍비조
+				CALL RANDOM_TARGET,ARG,126
+				RETURN 1
+			ELSEIF !RAND:4 && (LOCAL:1 || LOCAL:2)
+				CFLAG:ARG:입력行動 = 3517;그림자겉옷
+				RETURN 1
+			ELSEIF !RAND:3 && LOCAL:1
+				CFLAG:ARG:입력行動 = 127;오절절우
+				RETURN 1
+			ELSEIF !RAND:2 && LOCAL
+				CFLAG:ARG:입력行動 = 49;夜桜の舞（影舞・酬）
+				CALL RANDOM_TARGET,ARG,49
+				RETURN 1
+			ELSEIF LOCAL:3
+				CFLAG:ARG:입력行動 = 2062
+				RETURN 1
+			ELSE
+				CFLAG:ARG:입력行動 = 31
+				CALL RANDOM_TARGET,ARG,31
+				RETURN 1
+			ENDIF
+		ENDIF
+	ENDIF
+		$DECIDE_ACTION
+		CALL SEARCH_ACT,ARG
+		IF RESULT == 0
+			CFLAG:ARG:입력行動 = -1
+			CFLAG:ARG:방어フラグ = 1
+			RETURN 0
+		ENDIF
+;		PRINTFORML [{CFLAG:ARG:5}]の스킬数 {RESULT}
+		LOCAL = RAND:RESULT
+		;스킬番号決定
+		LOCAL:1 = S:(10+LOCAL)
+;		PRINTFORML [{CFLAG:ARG:5}]の스킬 {LOCAL:1}
+		$TARGET_LOOP
+		
+		CALL RANDOM_TARGET,ARG,LOCAL:1
+		CALLFORM SKILL_TARGET_{LOCAL:1}
+		;ここで스킬番号を行動内容に代入
+		SIF CFLAG:ARG:ターゲット == -1
+			GOTO DECIDE_ACTION
+		CFLAG:ARG:입력行動 = LOCAL:1
+
+

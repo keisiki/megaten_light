@@ -1,0 +1,51 @@
+﻿
+;======================================================
+;장비品の데이터
+;리벳너클
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_4002,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4002,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "공격"
+		RETURN 2
+	CASE "방어"
+		RETURN 4
+	CASE "회피"
+		RETURN 3
+	CASE "마법효과"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@방어상성_4002,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_4002
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4002
+RETURN 1
+
+@장비조건_4002,ARG
+RETURN 1
+
+@장비해설_4002
+PRINTL 革製の장갑に鋲が植え込んであり、多少공격に役立つ。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4002
+RETURN 1
+
+@引継ぎ可不可_4002
+RETURN 0

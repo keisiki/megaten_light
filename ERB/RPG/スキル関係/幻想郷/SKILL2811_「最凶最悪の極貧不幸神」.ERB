@@ -1,0 +1,39 @@
+﻿;통상공격
+;스킬のテン플레이트になっています
+
+;스킬名
+@SKILL_NAME_2811,ARG
+RESULTS = 「최흉최악의극빈불행신」
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_2811
+RETURN 0
+;どちらでもない
+
+;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복、6자동효과
+@SKILL_EFECT_2811
+RETURN 6
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_2811
+RETURN 16
+
+@継承不能_2811
+RETURN 1
+
+;스킬변화？用랭크
+@SKILL_RANK_2811
+RETURN 0
+;변화
+
+@SKILL_RANKUP_2811
+RETURN 0
+
+;　 설명문の표시
+@SKILL_EXPLAIN_2811
+PRINTL パッシブ：전투開始時に랜덤で적아군전체の능력저하・必殺率上昇。
+PRINTL 存在するだけで金운・幸운を奪い貯め込む紫苑の体質の一端。しかし稀に…。
+PRINTL 빈곤신　요리가미 시온のスペルカード（専用）
+
+@SKILL_ACTIONABLE_BATTLE_2811
+RETURN 0

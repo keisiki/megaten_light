@@ -1,0 +1,626 @@
+﻿@EVENT_93_4
+#DIMS わたしたちは舞台소녀
+わたしたちは舞台소녀 = %EVENT93_出席確認()%
+
+;FOR LOCAL, 0, CHARANUM
+;	SIF GROUPMATCH(NO:LOCAL, [[キャラ:카렌（무대소녀）]], [[キャラ:히카리]], [[キャラ:마히루]], [[キャラ:쥰나]], [[キャラ:후타바（무대소녀）]], [[キャラ:카오루코]], [[キャラ:나나]], [[キャラ:마야（무대소녀）]], [[キャラ:클로딘]]) && CFLAG:LOCAL:전투참가불가능 < 1 && TALENT:LOCAL:비전투원 < 1
+;		わたしたちは舞台소녀 += @"%CSVCALLNAME(NO:LOCAL)%_"
+;NEXT
+
+CUSTOMDRAWLINE =
+
+	PRINTL
+	SETCOLOR 0x56b78e
+	PRINTW 「キラめく舞台が大好きだけど、キラめく당신はもっと好き！
+	PRINTW 　まわるまわるデュエットで、ずっと二人で踊れたら。
+	PRINTW 　９９期生、露崎まひる。
+	PRINTW 　ずっとそばにいたのは 私なんだよ……？」
+	RESETCOLOR
+	PRINTL
+	PRINTW 気弱そうな垂れ눈と、촉각のように小さなツーサイドアップが特徴的な소녀である。
+	PRINTW その눈はこちらを見ていない。
+	PRINTW 당신の立ち位置に本来居た“誰か”に向かって話しかけている。
+	PRINTL
+	PRINTW 「“ああ、緊張してドキドキが止まらないよぉ。”
+	PRINTW 　“大丈남편だよ、まひるちゃん。私が傍に居てあげる。”
+	PRINTW 　“華恋ちゃん……。”
+	PRINTW 　あぁ〜っ！　華恋ちゃぁぁぁぁ〜ん！」
+	
+	;華恋ちゃん
+	IF STRCOUNT(わたしたちは舞台소녀, "카렌（무대소녀）")
+		PRINTL
+		PRINTW 華恋が苦笑いをしている。
+		PRINTL
+		PRINTW 「ううっ、何だか見깨달음えが……
+		PRINTW 　まひるちゃーん！　私はここだよー！　おーい！
+		PRINTW 　だめだぁ、聴こえてないよお」
+		
+		;まひる個別이벤트用フラグ：最初に華恋に出会った
+		SETBIT 이벤트フラグ:93:4, 20
+		
+		;ひかりちゃん
+		IF STRCOUNT(わたしたちは舞台소녀, "히카리")
+		PRINTL
+		PRINTW ひかりが顎に손を当てて考える。
+		PRINTL
+			PRINTW 「このまひる、出会ったばかりの頃みたい。時間軸がズレてるの？
+			PRINTW 　……うん。
+			PRINTW 　早く正気に戻して、華恋に会わせてあげましょう」
+		ENDIF
+		
+	ELSE
+		PRINTL
+		PRINTW ……공포を感じるほどにテンションが高い。
+		PRINTW 気弱そうというのは撤回するべきかもしれない。
+		
+	ENDIF
+	
+	PRINTL
+	PRINTW 무대소녀 露崎まひる が現れた！
+	PRINTL
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	
+	;※方바늘　타격・지변・주살・파마
+	;共通：최면파を垂れ流すクソUFOからブチ殺せ。마하・지오か마하・아쿠아でCOOP取り放題だぞ
+	;最初：即死が飛んでくる前に範囲공격で薙ぎ倒してしまえ
+	;中盤：即死も속성공격もだらだら飛んでくるしまひるが蘇生しまくる
+	;最後：まひるちゃんから片づけないとHP全開で蘇生しまくる＋めっちゃ動く描き割り華恋
+	
+	;まひるﾁｬｿだけ何のギミックも無いけれど
+	;このスズダルキャットまみれの布陣こそが
+	;まあ、ギミックだと思ってもらえれば
+	;6戦눈　★★★★★
+	IF 이벤트フラグ:93:0 > 6
+		LOCAL:99 = 3
+	;5戦눈　★★★★☆
+	ELSEIF 이벤트フラグ:93:0 > 5
+		LOCAL:99 = 3
+	;4戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 4
+		LOCAL:99 = 2
+	;3戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 3
+		LOCAL:99 = 2
+	;2戦눈　★★☆☆☆
+	ELSEIF 이벤트フラグ:93:0 > 2
+		LOCAL:99 = 1
+	;1戦눈　★☆☆☆☆
+	ELSEIF 이벤트フラグ:93:0 > 1
+		LOCAL:99 = 1
+	ENDIF
+	
+	
+	;레벨は自軍최대値（최저値15）
+	LOCAL:1 = 0
+	FOR LOCAL , 0 , CHARANUM
+		SIF CFLAG:LOCAL:PTフラグ == 0 || TALENT:LOCAL:비전투원
+			CONTINUE
+		LOCAL:98 = MAX(LOCAL:98 , BASE:LOCAL:LV)
+	NEXT
+	SIF LOCAL:98 < 10
+		LOCAL:98 = 10
+	
+	;- SET:마히루
+		;지변と파마
+		CALL SET_ENEMY,7,[[キャラ:바스테트]],LOCAL:98,1,(LOCAL:99 - 1)
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		ABL:(CHARANUM-1):스킬1 = [[스킬:마그나]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:마한마]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:마하・마그나]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		CALL SYNC_STATUS,(CHARANUM-1)
+		NAME:(CHARANUM-1) = スズダル바스테트
+		CALLNAME:(CHARANUM-1) = スズダル바스테트
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+
+		;전술と주살
+		CALL SET_ENEMY,8,[[キャラ:네코마타]],LOCAL:98,1,(LOCAL:99 - 1)
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		CALL SYNC_STATUS,(CHARANUM-1)
+		ABL:(CHARANUM-1):스킬1 = [[스킬:무도]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:타룬・다]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		NAME:(CHARANUM-1) = スズダル네코마타
+		CALLNAME:(CHARANUM-1) = スズダル네코마타
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+
+		;타격と
+		CALL SET_ENEMY,9,[[キャラ:고양이의날것]],LOCAL:98,1,LOCAL:99
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*3
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		CALL SYNC_STATUS,(CHARANUM-1)
+		NAME:(CHARANUM-1) = スズダルキャット
+		CALLNAME:(CHARANUM-1) = スズダルキャット
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+		CSTR:(CHARANUM-1):30 = どこを見てるのか分からない、何を考えているのか分からない
+		CSTR:(CHARANUM-1):31 = 宇宙からの使者、8つがいの猫、その名はスズダルキャット。
+		CSTR:(CHARANUM-1):33 = 見た눈は白猫、その実態は、えっと、なんだこれ。
+		CSTR:(CHARANUM-1):34 = たまに野球とかする。
+		CSTR:(CHARANUM-1):35 = 負けると砂を持って帰る。
+		CSTR:(CHARANUM-1):36 = 泣くな、泣くんじゃない、お前たちは頑張ったんだ……！　そんなひと夏の思い出。
+		CSTR:(CHARANUM-1):37 = 謎の白熊・Mr.ホワイトは永遠のライバル。
+		ABL:(CHARANUM-1):스킬1 = [[스킬:돌격]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:몸통박치기]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:수비무너뜨리기]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+
+		CALL SET_ENEMY,10,[[キャラ:네코마타]],LOCAL:98,1,(LOCAL:99 - 1)
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		ABL:(CHARANUM-1):스킬1 = [[스킬:무도]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:타룬・다]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		NAME:(CHARANUM-1) = スズダル네코마타
+		CALLNAME:(CHARANUM-1) = スズダル네코마타
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+
+		CALL SET_ENEMY,11,[[キャラ:바스테트]],LOCAL:98,1,(LOCAL:99 - 1)
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		NAME:(CHARANUM-1) = スズダル바스테트
+		CALLNAME:(CHARANUM-1) = スズダル바스테트
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+		ABL:(CHARANUM-1):스킬1 = [[스킬:마그나]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:마한마]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:마하・마그나]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+
+		CALL SET_ENEMY,12,[[キャラ:비트볼]],(LOCAL:98 - 1),1,0
+		;HP보정は無し
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		NAME:(CHARANUM-1) = スズダルUFO
+		CALLNAME:(CHARANUM-1) = スズダルUFO
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+		ABL:(CHARANUM-1):스킬1 = [[스킬:최면파]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:최면파]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:하피루마]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:던지는키스]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+
+		;決戦時は도플갱어でも置いておこう
+		IF LOCAL:99 > 5
+			CALL SET_ENEMY,13,[[キャラ:마히루]],LOCAL:98,1,(LOCAL:99 - 1)
+		ELSE
+			CALL SET_ENEMY,13,[[キャラ:네코마타]],LOCAL:98,1,(LOCAL:99 - 1)
+		ENDIF
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		ABL:(CHARANUM-1):스킬1 = [[스킬:무도]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:타룬・다]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		ABL:(CHARANUM-1):스킬9 = 0
+		ABL:(CHARANUM-1):스킬10 = 0
+		ABL:(CHARANUM-1):스킬11 = 0
+		ABL:(CHARANUM-1):스킬12 = 0
+		NAME:(CHARANUM-1) = スズダル네코마타
+		CALLNAME:(CHARANUM-1) = スズダル네코마타
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+
+		CALL SET_ENEMY,14,[[キャラ:마히루]],(LOCAL:98),1,LOCAL:99
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 2
+		ABL:(CHARANUM-1):스킬1 = [[스킬:브레인쉐이크]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:리캄]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:메・디아]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:난동부리기]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		;초인扱いに
+		ABL:(CHARANUM-1):종족 = 43
+		CSTR:(CHARANUM-1):종족명 = 무대소녀
+		LOCAL = CHARANUM-1
+
+		;決戦時は華恋っぽいものが
+		IF LOCAL:99 > 5
+			CALL SET_ENEMY,15,[[キャラ:카렌（무대소녀）]],LOCAL:98,1,(LOCAL:99 - 1)
+		ELSE
+			CALL SET_ENEMY,15,[[キャラ:네코마타]],LOCAL:98,1,(LOCAL:99 - 1)
+		ENDIF
+		;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		ABL:(CHARANUM-1):스킬1 = [[스킬:무도]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:타룬・다]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:숏잽]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+		ABL:(CHARANUM-1):스킬9 = 0
+		ABL:(CHARANUM-1):스킬10 = 0
+		ABL:(CHARANUM-1):스킬11 = 0
+		ABL:(CHARANUM-1):스킬12 = 0
+		NAME:(CHARANUM-1) = スズダル네코마타
+		CALLNAME:(CHARANUM-1) = スズダル네코마타
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+
+		CALL SET_ENEMY,16,[[キャラ:비트볼]],(LOCAL:98 - 1),1,0
+		;HP보정は無し
+		CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+		CFLAG:(CHARANUM-1):行動횟수 = 1
+		NAME:(CHARANUM-1) = スズダルUFO
+		CALLNAME:(CHARANUM-1) = スズダルUFO
+		CSTR:(CHARANUM-1):종족명 = ゆるキャラ
+		LOCAL = CHARANUM-1
+		ABL:(CHARANUM-1):스킬1 = [[스킬:최면파]]
+		ABL:(CHARANUM-1):스킬2 = [[스킬:최면파]]
+		ABL:(CHARANUM-1):스킬3 = [[스킬:하피루마]]
+		ABL:(CHARANUM-1):스킬4 = [[스킬:던지는키스]]
+		ABL:(CHARANUM-1):스킬5 = 0
+		ABL:(CHARANUM-1):스킬6 = 0
+		ABL:(CHARANUM-1):스킬7 = 0
+		ABL:(CHARANUM-1):스킬8 = 0
+
+
+		;6戦눈　★★★★★
+		;まひるちゃんから片づけないと終わらない
+		;各員が専門化して無駄な行動が無くなる
+		;よく動く描き割りが湧いて来る。しかも3回行動x2
+		IF LOCAL:99 > 5
+			;後衛からでも暴れ回るまひるﾁｬｿ
+			CFLAG:(CHARANUM-3):行動횟수 = 1
+			ABL:(CHARANUM-3):스킬1 = [[스킬:돌격]]
+			ABL:(CHARANUM-3):스킬2 = [[스킬:난동부리기]]
+			ABL:(CHARANUM-3):스킬3 = [[스킬:사마리캄]]
+			ABL:(CHARANUM-3):스킬4 = 0
+			ABL:(CHARANUM-3):스킬5 = 0
+			ABL:(CHARANUM-3):스킬6 = 0
+			
+			;바스테트はとにかく지변で殴り付けてくる
+			ABL:(CHARANUM-6):스킬1 = [[스킬:마하・마그나스]]
+			ABL:(CHARANUM-6):스킬2 = [[스킬:마그나스]]
+			ABL:(CHARANUM-6):스킬3 = 0
+			ABL:(CHARANUM-6):스킬4 = 0
+			;바스테트はとにかく지변で殴り付けてくる
+			ABL:(CHARANUM-10):스킬1 = [[스킬:마하・마그나스]]
+			ABL:(CHARANUM-10):스킬2 = [[스킬:마그나스]]
+			ABL:(CHARANUM-10):스킬3 = 0
+			ABL:(CHARANUM-10):스킬4 = 0
+			
+			;素キャットはめっちゃパンチしてくる
+			ABL:(CHARANUM-8):스킬3 = [[스킬:소닉펀치]]
+			ABL:(CHARANUM-8):스킬4 = [[스킬:마구날뛰기]]
+			
+			;도플갱어
+			NAME:(CHARANUM-4) = とびだしまひる
+			CALLNAME:(CHARANUM-4) = とびだしまひる
+			CFLAG:(CHARANUM-4):行動횟수 = 3
+			ABL:(CHARANUM-4):스킬1 = [[스킬:난동부리기]]
+			ABL:(CHARANUM-4):스킬2 = [[스킬:타루・카쟈]]
+			ABL:(CHARANUM-4):스킬3 = [[스킬:디아라마]]
+			ABL:(CHARANUM-4):스킬4 = 0
+			ABL:(CHARANUM-4):스킬5 = 0
+			ABL:(CHARANUM-4):스킬6 = 0
+			;초인扱いに
+			ABL:(CHARANUM-4):종족 = 43
+			CSTR:(CHARANUM-4):종족명 = 舞台装置
+			
+			;華恋ちゃんぽいやつ
+			NAME:(CHARANUM-2) = とびだし華恋
+			CALLNAME:(CHARANUM-2) = とびだし華恋
+			CFLAG:(CHARANUM-2):行動횟수 = 3
+			ABL:(CHARANUM-2):스킬1 = [[스킬:번개찌르기]]
+			ABL:(CHARANUM-2):스킬2 = [[스킬:타루・카쟈]]
+			ABL:(CHARANUM-2):스킬3 = [[스킬:아기라오]]
+			ABL:(CHARANUM-2):스킬4 = [[스킬:히트웨이브]]
+			;초인扱いに
+			ABL:(CHARANUM-2):종족 = 43
+			CSTR:(CHARANUM-2):종족명 = 舞台装置
+			
+		;5戦눈　★★★★☆
+		ELSEIF LOCAL:99 > 4
+			;바스테트はとにかく지변で殴り付けてくる
+			ABL:(CHARANUM-6):스킬2 = [[스킬:마하・마그나스]]
+			ABL:(CHARANUM-6):스킬3 = [[스킬:마그나스]]
+			;바스테트はとにかく지변で殴り付けてくる
+			ABL:(CHARANUM-10):스킬2 = [[스킬:마하・마그나스]]
+			ABL:(CHARANUM-10):스킬3 = [[스킬:마그나스]]
+			
+			;마히루
+			ABL:(CHARANUM-3):스킬2 = [[스킬:메・디아라마]]
+		;4戦눈　★★★☆☆
+		ELSEIF LOCAL:99 > 3
+			;바스테트からマハを消す
+			ABL:(CHARANUM-6):스킬1 = [[스킬:한마]]
+			ABL:(CHARANUM-6):스킬2 = 0
+			ABL:(CHARANUM-6):스킬1 = [[스킬:한마]]
+			ABL:(CHARANUM-10):스킬2 = 0
+
+		;3戦눈　★★☆☆☆
+		ELSEIF LOCAL:99 > 2
+			;바스테트からマハを消す
+			ABL:(CHARANUM-6):스킬1 = [[스킬:한마]]
+			ABL:(CHARANUM-6):스킬2 = 0
+			ABL:(CHARANUM-6):스킬1 = [[스킬:한마]]
+			ABL:(CHARANUM-10):스킬2 = 0
+
+			;UFOは하피루마だけ撒いとけ
+			ABL:(CHARANUM-1):스킬1 = [[스킬:하피루마]]
+			ABL:(CHARANUM-1):스킬2 = 0
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+
+			ABL:(CHARANUM-5):스킬1 = [[스킬:하피루마]]
+			ABL:(CHARANUM-5):스킬2 = 0
+			ABL:(CHARANUM-5):스킬3 = 0
+			ABL:(CHARANUM-5):스킬4 = 0
+			
+			;네코마타の무도、テメーはダメだ
+			ABL:(CHARANUM-2):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-4):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-7):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-9):스킬1 = [[스킬:숏잽]]
+
+			;마히루：브레인쉐이크と리캄なし
+			ABL:(CHARANUM-3):스킬1 = [[스킬:마구날뛰기]]
+			ABL:(CHARANUM-3):스킬2 = [[스킬:마구날뛰기]]
+			ABL:(CHARANUM-3):스킬4 = 0
+
+		;2戦눈　★★☆☆☆
+		ELSEIF LOCAL:99 > 1
+			;바스테트からマハを消す
+			ABL:(CHARANUM-6):스킬1 = [[스킬:한마]]
+			ABL:(CHARANUM-6):스킬2 = 0
+			ABL:(CHARANUM-6):스킬1 = [[스킬:한마]]
+			ABL:(CHARANUM-10):스킬2 = 0
+
+			;UFOは하피루마だけ撒いとけ
+			ABL:(CHARANUM-1):스킬1 = [[스킬:하피루마]]
+			ABL:(CHARANUM-1):스킬2 = 0
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+
+			ABL:(CHARANUM-5):스킬1 = [[스킬:하피루마]]
+			ABL:(CHARANUM-5):스킬2 = 0
+			ABL:(CHARANUM-5):스킬3 = 0
+			ABL:(CHARANUM-5):스킬4 = 0
+
+			;네코마타の무도、テメーはダメだ
+			ABL:(CHARANUM-2):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-4):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-7):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-9):스킬1 = [[스킬:숏잽]]
+
+			;마히루：브레인쉐이크と리캄なし
+			ABL:(CHARANUM-3):스킬1 = [[스킬:마구날뛰기]]
+			ABL:(CHARANUM-3):스킬2 = [[스킬:마구날뛰기]]
+			ABL:(CHARANUM-3):스킬4 = 0
+		;1戦눈　★★☆☆☆
+		ELSEIF LOCAL:99 > 0
+			;마히루：브레인쉐이크と리캄なし
+			ABL:(CHARANUM-3):스킬1 = [[스킬:마구날뛰기]]
+			ABL:(CHARANUM-3):스킬2 = [[스킬:마구날뛰기]]
+			ABL:(CHARANUM-3):스킬4 = 0
+			
+			;바스테트からマハを消す
+			ABL:(CHARANUM-6):스킬1 = [[스킬:한마]]
+			ABL:(CHARANUM-6):스킬2 = 0
+			ABL:(CHARANUM-6):스킬1 = [[스킬:한마]]
+			ABL:(CHARANUM-10):스킬2 = 0
+
+			;네코마타の무도、テメーはダメだ
+			ABL:(CHARANUM-2):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-4):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-7):스킬1 = [[스킬:숏잽]]
+			ABL:(CHARANUM-9):스킬1 = [[스킬:숏잽]]
+
+
+			;UFOは하피루마だけ撒いとけ
+			ABL:(CHARANUM-1):스킬1 = [[스킬:하피루마]]
+			ABL:(CHARANUM-1):스킬2 = 0
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+
+			ABL:(CHARANUM-5):스킬1 = [[스킬:하피루마]]
+			ABL:(CHARANUM-5):스킬2 = 0
+			ABL:(CHARANUM-5):스킬3 = 0
+			ABL:(CHARANUM-5):스킬4 = 0
+			
+		ENDIF
+
+		;forでやれと言われると何も言えねえ
+		CALL SYNC_STATUS,(CHARANUM-10)
+		CALL SYNC_STATUS,(CHARANUM-9)
+		CALL SYNC_STATUS,(CHARANUM-8)
+		CALL SYNC_STATUS,(CHARANUM-7)
+		CALL SYNC_STATUS,(CHARANUM-6)
+		CALL SYNC_STATUS,(CHARANUM-5)
+		CALL SYNC_STATUS,(CHARANUM-4)
+		CALL SYNC_STATUS,(CHARANUM-3)
+		CALL SYNC_STATUS,(CHARANUM-2)
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-10)
+		CALL HEALTH_CHARA,(CHARANUM-9)
+		CALL HEALTH_CHARA,(CHARANUM-8)
+		CALL HEALTH_CHARA,(CHARANUM-7)
+		CALL HEALTH_CHARA,(CHARANUM-6)
+		CALL HEALTH_CHARA,(CHARANUM-5)
+		CALL HEALTH_CHARA,(CHARANUM-4)
+		CALL HEALTH_CHARA,(CHARANUM-3)
+		CALL HEALTH_CHARA,(CHARANUM-2)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		;解析度MAX処理
+		CALL INCREASE_ANALYZE([[キャラ:마히루]],1000)
+		
+	CALL BATTLE_START
+
+	CUSTOMDRAWLINE =
+
+
+		PRINTL
+		PRINTW 「うひゃーっ！？」
+		PRINTL
+		PRINTW リプ레이から解き放たれたまひるがビックリしてメイスをぶん投げてきた。
+		PRINTW 당신はそれを躱しつつ、
+	;華恋ちゃん
+	IF STRCOUNT(わたしたちは舞台소녀, "카렌（무대소녀）")
+		PRINTW 成り行きを見ていた愛城華恋を、まひるの前へと差し出した。
+		PRINTL
+		PRINTW 「華恋ちゃん！？」
+		PRINTW 「ど……どーも、あはは」
+		PRINTW 「なんで華恋ちゃんがそこに！？　じゃあ、私の戦ってた相손は……
+		PRINTW 　ひえっ！？　あ、당신、誰ぇ！？」
+		PRINTL
+		PRINTW 눈を白黒させている露崎まひるに、당신は事情を説明する。
+		PRINTW ここは異세계で、
+		PRINTW 舞台소녀たちはみな、本物からコピーされた贋作。
+		PRINTW 악마退治に協힘してくれるなら、衣食住の面倒を見る……と。
+		PRINTL
+		PRINTW 当たり前だが、소녀は青ざめた顔で何度も首を横に振った。
+		PRINTL
+		PRINTW 「そんな……急に言われても」
+		PRINTW 「大丈남편だよ、まひるちゃん！
+		PRINTW 　確かに怖いことも多いけど、毎日が新鮮だし、この人も優しいし！
+		PRINTW 　それに、この세계に来てから、いくら食べても太らないっ！
+		PRINTW 　夜中にラーメン食べても罪悪感ノンノンだよー？」
+		PRINTL
+		PRINTW 恐らく励まそうとしているのだろうが、随分と焦点のズレたことを言う華恋である。
+		;ひかりちゃん
+		IF STRCOUNT(わたしたちは舞台소녀, "히카리")
+			PRINTW これには神楽ひかりも肩をすくめて呆れるのみ。
+		ENDIF
+		PRINTL
+		PRINTW まひるは潤んだ눈で華恋を見る。
+		PRINTL
+		PRINTW 「華恋ちゃんはいいの？
+		PRINTW 　いっしょにスタァライト……出来なくなっちゃうかもしれないんだよ」
+		PRINTL
+		PRINTW 華恋は、一瞬だけ心細げな仕草をしたが、
+		PRINTL
+		PRINTW 「心配ご無用！」
+		PRINTL
+		PRINTW まひるの손を取り華奢な가슴を張ると、ぽん、と薄い가슴板を叩いて笑顔を見せた。
+		PRINTL
+		PRINTW 「今はちょっと忙しいけど、
+		PRINTW 　たぶんそのうち余裕ができるよ！
+		PRINTW 　学校に通えなくなっちゃったのはすごく残念だけど……
+		PRINTW 　다리本と、私たちが揃っていれば、
+		PRINTW 　いつでもどこでも、舞台になる！」
+		PRINTL
+		PRINTW 私たち、という가운語で、まひるの顔は少しだけ明るくなった。
+		IF STRCOUNT(わたしたちは舞台소녀, "히카리")
+			PRINTW しかし、華恋の視線が、神楽ひかりに向いていることに気づくと、
+		ELSE
+			PRINTW しかし、華恋の視線が、どこか遠くを見ていることに気づくと、、
+		ENDIF
+		PRINTW その表情は눈に見えて暗く落ち込んだ。
+		PRINTL
+		PRINTW 「……華恋ちゃん、私、やっぱり」
+		PRINTW 「あと、その、えっとね、ものすごーく言いにくいんだけど、
+		PRINTW 　このままだと、まひるちゃん、
+		PRINTW 　消えちゃうの」
+		PRINTL
+		PRINTW 華恋に促され、己の身体に視線を落とした露崎まひるは、
+		PRINTW まるで幽霊のように半토오루明になっている自分自身に気づいて悲鳴を上げた。
+		PRINTL
+		PRINTW 무대소녀　露崎まひるが仲間になった。
+		PRINTL
+		PRINTW 「どうしてそういうことを先に言わないのー！？」
+		PRINTW 「ご、ごめんね！　わたしも混乱してて！」
+		PRINTW 「あっあっ、そうだよねごめんね！？　私、わたっ、ぐすっ」
+		PRINTW 「まひるちゃん泣かないで！　そ、そんな顔されると私まで、私までえ……」
+		PRINTL
+		PRINTW 華恋とまひるは、しばらく揃って錯乱していたが、
+		PRINTW ５分ぐらいするとそれも落ち着いて、
+		PRINTW 黙って손をつないで舞台を降りた。
+		PRINTL
+		PRINTW 「……でも、華恋ちゃんが、居てくれてよかった。
+		PRINTW 　私一人だったら、きっと、ひどいことになってた」
+		PRINTL
+		PRINTW まひるが、はにかみながらそう言うと、
+		PRINTW 華恋はキリッと表情を整え、まひるの顔を、正面から見つめた。
+		PRINTL
+		PRINTW 「まひるちゃん、一緒に、頑張ろうね」
+		PRINTL
+		PRINTW まひるは、少し固まった後、
+		PRINTW ぽう、と顔を赤くして、
+		PRINTL
+		PRINTW 「うん！」
+		PRINTL
+		PRINTW 大きく、深く、頷いた……
+		PRINTL
+		
+	ELSE
+		PRINTW 事情を説明し、악마退治の손伝いをするように持ち掛けた。
+		PRINTL
+		PRINTW 「正直、ショックで、考えたくないです……。
+		PRINTW 　でも、このまま消えるのもイヤ。一人なんて絶対イヤ。
+		PRINTW 　계약します。
+		PRINTW 　華恋ちゃんに会えるかもしれないのなら」
+		PRINTL
+		PRINTW 무대소녀　露崎まひるが仲間になった。
+		PRINTL
+		PRINTW 「……
+		PRINTW 　な、なんですか？　なんでこっちを見てるんですか？
+		PRINTW 　あんまり見ないでくださいっ。
+		PRINTW 　わ、わたし、安い女じゃないんですっ！」
+		PRINTL
+		PRINTW 당신は挙動不審なまひるを連れて事務所へと戻った……。
+		PRINTL
+	ENDIF
+	
+
+
+	CALL ADD_NEW_COMPANION,5315,200
+	LOCAL = GETCHARA(5315)
+	CFLAG:LOCAL:전투참가불가능 = -1
+
+	이벤트フラグ:93:0 += 1
+	SETBIT 이벤트フラグ:93:4, 1
+	CALL EVENT_93_TURN_END

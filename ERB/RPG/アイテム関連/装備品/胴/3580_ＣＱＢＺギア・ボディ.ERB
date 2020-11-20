@@ -1,0 +1,95 @@
+﻿
+;======================================================
+;장비品の데이터
+;ＣＱＢＺ기어・보디
+;2019/03/22　　(ﾟдﾟ)　　　	LV30の防具として調整、테트라재머の親戚程度に
+;2019/03/26　　(ﾟдﾟ)　　　	장비可能레벨を15へ。実質이벤트報酬なので速攻クリアできた場合のumamiが欲しい
+;						   	値段を700마카→1200마카へ。（item.csv）
+;2019/06/08　　名無し		방어상성調整。即死無効じゃなくて주살無効にする。物理내성は검격のみ。弱点無し。
+;							基礎性能調整。魔法関連を削る。
+;======================================================
+
+@기본능력수정_3580,ARG,ARG:1 = -1
+
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3580,ARG,ARG:1 = -1
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 25
+	CASE 3
+		RETURN 10
+ENDSELECT
+RETURN 0
+
+@방어상성_3580,ARG,ARG:1 = -1
+
+SELECTCASE ARG
+;화염내성＆주살無効＆弱点無し
+	CASE 4
+		RETURN 50
+	CASE 11
+		RETURN 0
+ENDSELECT
+RETURN 100
+
+
+;@バステ내성_3580,ARG,ARG:1 = -1
+;SELECTCASE ARG
+;	CASE GET_STATE_NUM("DYING")
+;		RETURN -100
+;ENDSELECT
+;RETURN 0
+
+@공격상성_3580, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3580, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3580, ARG = -1
+
+RETURN 1
+
+@사거리_3580, ARG = -1
+
+RETURN 1
+
+@공격범위_3580, ARG = -1
+
+RETURN 1
+
+@장비箇所_3580
+
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3580
+RETURN 15
+
+@장비조건_3580,ARG
+SIF BASE:ARG:LV < 15
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3580
+PRINTL 장비조건：LV15～
+RETURN 1
+
+@구입조건_3580
+RETURN 0
+
+@EQUIP_EXCHANGE_3580
+;장비支給이벤트未実行の場合
+SIF 이벤트フラグ:42:0 < 1
+	RETURN 0
+RETURN 1
+
+@장비해설_3580
+PRINTL 対좀비用전투術「CQBZ」用に改修されたタクティカルギアの몸통部分。
+PRINTL 背部に対좀비用ステルス装置"좀비ジャマー"が備えられているが、コレを応用し주살への내성を得た。
+PRINTL 그외、防火性能を有し、눈立った弱点のない優良な장비である。

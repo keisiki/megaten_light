@@ -1,0 +1,62 @@
+﻿
+;======================================================
+;장비品の데이터
+;복숭아나무신발
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_4540,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "운"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4540,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 9
+	CASE "회피"
+		RETURN 11
+	CASE "마법효과"
+		RETURN 5
+ENDSELECT
+RETURN 0
+
+@방어상성_4540,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "주살"
+		RETURN 75
+	CASE "지변"
+		RETURN 65
+	CASE "파마"
+		RETURN 135
+ENDSELECT
+RETURN 100
+
+@장비箇所_4540
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4540
+RETURN 23
+
+@장비조건_4540,ARG
+SIF BASE:ARG:LV < 23
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4540
+PRINTL 장비조건：LV23～
+
+@장비해설_4540
+PRINTL 高い霊힘を持つとされる桃の木から道士たちの履く신발「雲履」を削りだしたもの。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4540
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 35000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_4540
+RETURN 0

@@ -1,0 +1,380 @@
+﻿@EVENT_93_6
+#DIMS わたしたちは舞台소녀
+わたしたちは舞台소녀 = %EVENT93_出席確認()%
+
+;FOR LOCAL, 0, CHARANUM
+;	SIF GROUPMATCH(NO:LOCAL, [[キャラ:카렌（무대소녀）]], [[キャラ:히카리]], [[キャラ:마히루]], [[キャラ:쥰나]], [[キャラ:후타바（무대소녀）]], [[キャラ:카오루코]], [[キャラ:나나]], [[キャラ:마야（무대소녀）]], [[キャラ:클로딘]]) && CFLAG:LOCAL:전투참가불가능 < 1 && TALENT:LOCAL:비전투원 < 1
+;		わたしたちは舞台소녀 += @"%CSVCALLNAME(NO:LOCAL)%_"
+;NEXT
+
+LOADGLOBAL
+IF 大場ななの記憶:0:1 > 0
+	CUSTOMDRAWLINE =
+		PRINTL
+		PRINTW ――そのステージは、ただひたすらに、眩しい。
+		PRINTL
+		PRINTFORMW 「また、ここに、戻って来ちゃったんだね……
+		PRINTFORMW 　%大場ななの二人称%、今度の、당신は、どんな人かな。
+		PRINTW 　叶うなら……その素顔を、あの子たちには見せないで」
+		PRINTL
+		PRINTW 무대소녀　大場ななが仲間になった。
+		PRINTL
+		CALL ADD_NEW_COMPANION,5317,200
+		CFLAG:LOCAL:전투참가불가능 = -1
+		CSTR:LOCAL:二人称 = %大場ななの二人称%
+
+		이벤트フラグ:93:0 += 1
+		SETBIT 이벤트フラグ:93:7, 1
+		CALL EVENT_93_TURN_END
+
+ELSEIF 大場ななの記憶:0:0 > 0
+	CUSTOMDRAWLINE =
+		PRINTL
+		PRINTW ――そのステージは、ただひたすらに、眩しい。
+		PRINTL
+		PRINTW 「あれ……？」
+		PRINTL
+		PRINTW 身長の高い소녀だった。
+		PRINTW 머리카락を左右で、バナナみたいに括った소녀だった。
+		PRINTW その瞳は、怯え、驚いたみたいに、大きく開かれていた。
+		PRINTL
+		PRINTFORMW 「%大場ななの二人称%、私、どうしてここに……？」
+		PRINTL
+		PRINTW ？　何その입ぶり。
+		PRINTW 당신が警戒しながら무기を構えると、
+		PRINTW 彼女は、知らない人を見るような눈で――だから何よその顔は――こちらを見つめた。
+		PRINTL
+		PRINTW 「知らない、人だ」
+		PRINTL
+		PRINTW ……ああ、うん、そうだね。
+		PRINTW 당신は、相손が意思疎通できることを確かめると、事の詳細を語った。
+		PRINTL
+		PRINTW 聖翔が既に無い세계。
+		PRINTW 세계を악마が跋扈している세계。
+		PRINTW そして、そんな세계に流れ着いた、大場ななのキラめきの残り香……。
+		PRINTL
+		PRINTW 「あ、うん、分かりました。
+		PRINTW 　協힘しまーす♪」
+		PRINTL
+		PRINTW とことんこちらのタイミングを外してくるねキミぃ？
+		PRINTW ななはあっさりと무기をしまい込むと、ニコニコと笑ってお辞儀をした。
+		PRINTL
+		PRINTFORMW 「よろしくね、%大場ななの二人称%♪」
+		PRINTL
+		PRINTW 무대소녀　大場ななが仲間になった。
+		PRINTL
+		CALL ADD_NEW_COMPANION,5317,200
+		CFLAG:LOCAL:전투참가불가능 = -1
+		CSTR:LOCAL:二人称 = %大場ななの二人称%
+		
+		이벤트フラグ:93:0 += 1
+		SETBIT 이벤트フラグ:93:7, 1
+		CALL EVENT_93_TURN_END
+		
+ELSE
+	CUSTOMDRAWLINE =
+
+		PRINTL
+		PRINTW ――そのステージは、ただひたすらに、眩しい。
+		PRINTL
+		SETCOLOR 0xfdca57
+		PRINTW 「舞台に実った、たわわな果実
+		PRINTW 　だけど、みんな柔らかだから、誰かが守ってあげなくちゃ。
+		PRINTW 　９９期生、大場なな。
+		PRINTW 　私が守るの。
+		PRINTW 　ずっと。
+		PRINTW 　何度でも」
+		RESETCOLOR
+		PRINTL
+		PRINTW 身長の高い소녀だった。
+		PRINTW その両손には、大小の日本刀が、握られていた。
+		PRINTL
+		PRINTW 「당신は、誰。
+		PRINTW 　華恋ちゃんは、どこ。
+		PRINTW 　答えによっては、許さない」
+		PRINTL
+		;華恋ちゃん
+		IF STRCOUNT(わたしたちは舞台소녀, "카렌（무대소녀）")
+			PRINTW 「ばなな！　私、ここだよ！　ばななってば！
+			PRINTW 　……ダメ、聞こえてないよ、こっちに来る！」
+			PRINTL
+		ENDIF
+		;純那ちゃん
+		IF STRCOUNT(わたしたちは舞台소녀, "쥰나")
+			PRINTW 鬼気迫るななの顔に、純那は渋い顔をした。
+			PRINTL
+			PRINTW 「これはリ・プ레이。私なんて눈に入ってない、か。
+			PRINTW 　分かってたけど……なんだか、悔しいわね。
+	;		SETCOLOR 0x8ac4ec
+			PRINTW 　――９９期生、星見純那！
+			PRINTW 　こっちを見なさい、大場なな！」
+	;		RESETCOLOR
+			PRINTL
+		ENDIF
+		PRINTW 무대소녀 大場なな が現れた！
+		PRINTL
+
+		FLAG:도주불가フラグ = 1
+		FLAG:회화불능フラグ = 1
+		FLAG:선제기습취소 = 1
+		
+		
+		;※方바늘　검격・전술・중력。いつ挑んでも同じ。バフは무효화される。
+		
+		;6戦눈　★★★★☆
+		IF 이벤트フラグ:93:0 > 6
+			LOCAL:99 = 3
+		;5戦눈　★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 5
+			LOCAL:99 = 3
+		;4戦눈　★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 4
+			LOCAL:99 = 2
+		;3戦눈　★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 3
+			LOCAL:99 = 2
+		;2戦눈　★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 2
+			LOCAL:99 = 1
+		;1戦눈　★★★★☆
+		ELSEIF 이벤트フラグ:93:0 > 1
+			LOCAL:99 = 1
+		ENDIF
+		
+		;레벨は自軍최대値（최저値10）
+		LOCAL:1 = 0
+		FOR LOCAL , 0 , CHARANUM
+			SIF CFLAG:LOCAL:PTフラグ == 0 || TALENT:LOCAL:비전투원
+				CONTINUE
+			LOCAL:98 = MAX(LOCAL:98 , BASE:LOCAL:LV)
+		NEXT
+		SIF LOCAL:98 < 10
+			LOCAL:98 = 10
+		
+		;- SET:나나
+			CALL SET_ENEMY,9,[[キャラ:나나]],LOCAL:98,1,(LOCAL:99)
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):ＨＰ보정 = (MAXBASE:(CHARANUM-1):ＨＰ / 2)
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+			ABL:(CHARANUM-1):공격상성 = 0
+			ABL:(CHARANUM-1):스킬1 = [[스킬:데스바운드]]
+			ABL:(CHARANUM-1):스킬2 = [[스킬:악셀클로]]
+			ABL:(CHARANUM-1):스킬3 = [[스킬:일문자베기]]
+			ABL:(CHARANUM-1):스킬4 = [[스킬:마카라칸]]
+			ABL:(CHARANUM-1):스킬5 = [[스킬:그라비티마인]]
+			ABL:(CHARANUM-1):스킬6 = [[스킬:이신의 흔적]]
+			ABL:(CHARANUM-1):스킬7 = [[스킬:안개베기]]
+			ABL:(CHARANUM-1):스킬8 = [[스킬:트윈슬래시]]
+			ABL:(CHARANUM-1):스킬9 = 0
+			ABL:(CHARANUM-1):스킬10 = 0
+			ABL:(CHARANUM-1):스킬11 = 0
+			ABL:(CHARANUM-1):스킬12 = 0
+			;초인扱いに
+			ABL:(CHARANUM-1):종족 = 43
+			CSTR:(CHARANUM-1):종족명 = 무대소녀
+			LOCAL = CHARANUM-1
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			CALL INCREASE_ANALYZE([[キャラ:나나]],1000)
+
+		;ななの이니셜라이즈フラグON
+		SETBIT 이벤트フラグ:93:17, 1
+		CALL BATTLE_START
+		;ななの이니셜라이즈フラグOFF
+		CLEARBIT 이벤트フラグ:93:17, 1
+
+		CUSTOMDRAWLINE =
+
+		PRINTW 「聖翔音楽学園が……存在しない세계……？」
+		PRINTL
+		PRINTW 精魂尽き果て、座り込んだ大場ななに、당신は事の詳細を語った。
+		PRINTW 聖翔が既に無い세계。
+		PRINTW 세계を악마が跋扈している세계。
+		PRINTW そして、そんな세계に流れ着いた、大場ななのキラめきの残り香……。
+		PRINTL
+		PRINTW 「そんなの、信じられない、信じたくない。
+		PRINTW 　だって……私、まだ、
+		PRINTW 　あの、みんなで作った、最高の舞台に届いてない。
+		PRINTW 　私が、偽物なら。
+		PRINTW 　もう二度と、あの眩しさに、届かないのなら」
+		PRINTL
+		PRINTW ななは、もう一度、小太刀を握った。
+		PRINTW 押し当てたのは――上掛けのボタン。
+		PRINTW 止める間もなかった。
+		PRINTW 刃は何のためらいもなく、ボタンの根元に、食い込んだ。
+		PRINTL
+		
+		;純那ちゃん
+		IF STRCOUNT(わたしたちは舞台소녀, "쥰나")
+			PRINTW 「나나、待ってッ！」
+			PRINTL
+			PRINTW そんな彼女を、押し倒すように飛びつく影があった。
+			PRINTW 星見純那。
+			PRINTW 純那は、唇を結び、メガネの下の눈を大きく開いて、ななの小太刀を押し留めていた。
+			PRINTL
+			PRINTW 「離して。
+			PRINTW 　당신も、純那ちゃんの、偽物なんだ。
+			PRINTW 　居てもしょうがないよ、私たちは、私たちじゃない！
+			PRINTW 　これ以上変えたくないの！　私も、純那ちゃんも！」
+			PRINTL
+			PRINTW ななはしばらく純那を押しのけようとしていたが、
+			PRINTW ぽたぽたと音がして、
+			PRINTW 純那の손の平が、小太刀でざっくりと切れているのに気づいて、
+			PRINTL
+			PRINTW しゃっくりを上げて、泣いてしまった。
+			PRINTL
+			PRINTW 「나나……」
+			PRINTL
+			PRINTW 純那は、そんな彼女を優しく抱き起こすと、
+			PRINTW 彼女の、白のレヴュー옷に血が付かないよう、
+			PRINTW 恐る恐る、片손で抱きしめた。
+			PRINTL
+			PRINTW 「私たちは舞台소녀だけど、
+			PRINTW 　スタァになるのが、夢だけれど。
+			PRINTW 　……私たちは偽物で、二度と、同じ舞台には立てないけど」
+			PRINTL
+			PRINTW 言葉を区切る。
+			PRINTW 純那はしばらく눈を泳がせたあと、
+			PRINTW 決心するように、ななの頬に손を這わせた。
+			PRINTL
+			PRINTW 「私は、消えたくない。
+			PRINTW 　私は、輝きたい。
+			PRINTW 　どんな形になろうとも、私は私。
+			PRINTW 　私の星は、今も遥か空の上にある。
+			PRINTW 　당신は違うの？　大場なな。
+			PRINTW 　당신の心は、どこにあるの」
+			PRINTL
+			PRINTW しばらく、鼻をすする音がしていた。
+			PRINTW ななは、少し肩を震わせたあと、
+			PRINTW 顔を伏せ、純那の、決して広くはない가슴に머리をうずめた。
+			PRINTL
+			PRINTW 「みんなに、会いたい。
+			PRINTW 　華恋ちゃん、まひるちゃん、
+			PRINTW 　双葉ちゃん、香子ちゃん、
+			PRINTW 　クロちゃん、真矢ちゃん、
+			PRINTW 　今度はひかりちゃんも一緒に……
+			PRINTW 　Ａ組のみんな、Ｂ組のみんな、みんなとまた、
+			PRINTW 　もう一度、あの聖翔祭の、舞台に立ちたい」
+			PRINTW 「ん……そっか」
+			PRINTL
+			PRINTW 二人は抱きしめあったまま、思い出話を重ねた。
+			PRINTW 純那の出血が止まるころには、
+			PRINTW ななの心は、落ち着きをすっかり取り戻していた。
+			PRINTL
+			PRINTW 무대소녀　大場ななが仲間になった。
+			PRINTL
+			PRINTW 「ええと、デビル・서머너さん、だったかな。
+			PRINTW 　恥ずかしいところを見せてしまいました、ごめんなさい。
+			PRINTW 　……純那ちゃんも、本当に、ごめん」
+			PRINTW 「大丈남편よ、この人……というかこの세계、だいぶ머리がおかしいから。
+			PRINTW 　見てよ、さっきのケガ、もう治ってるのよ？
+			PRINTW 　我ながらゾッとするわ。それに――」
+			PRINTL
+			PRINTW 悲しげに眉をひそめるななに対し、
+			PRINTW 純那は、わざとおどけるように、格好つけたポーズでメガネの位置を直して見せた。
+			PRINTL
+			PRINTW 「それに、“『これが最悪だ』などと言えるうちは、まだ最悪ではない証拠”。
+			PRINTW 　自分に出来ることをコツコツ重ねていきましょう」
+			PRINTW 「……シェイクスピア？」
+			PRINTW 「正解」
+			PRINTL
+			PRINTW 당신は、ようやくクスクス笑い始めた二人を眺めながら、
+			PRINTW 地上へのエレベータに乗り、事務所へと帰還したのであった。
+			PRINTL
+			
+			;0なら純那ルートを通ったこととする
+			CLEARBIT 이벤트フラグ:93:7, 20
+			CALL ADD_NEW_COMPANION,5317,200
+			CFLAG:LOCAL:전투참가불가능 = -1
+		;華恋ちゃん
+		ELSEIF STRCOUNT(わたしたちは舞台소녀, "카렌（무대소녀）")
+			PRINTW 「ダメーッ！」
+			PRINTL
+			PRINTW 半ば、몸통박치기するように。
+			PRINTW 小さな影が、ななの小太刀を弾き飛ばした。
+			PRINTL
+			PRINTW 「消えないで！　お願いだよ！
+			PRINTW 　優しいばなな、可愛いばなな、
+			PRINTW 　요리もおいしい、素적なばなな！
+			PRINTW 　一人で消えるなんてノンノンだよ！
+			PRINTW 　私もみんなも、ばななのこと、大好きなんだよ！？
+			PRINTW 　いっしょにまた、
+			PRINTW 　スタァライト、やろうよ！」
+			PRINTL
+			PRINTW ななは、しばらくキョトンとしていたが、
+			PRINTW 号泣する華恋に毒気を抜かれてしまったのか、
+			PRINTW 困ったように笑って、彼女の머리を、よしよしと撫でていた。
+			PRINTL
+			PRINTW 「大丈남편、そこまで言うなら、もうどこにも行かないわ」
+			PRINTW 「本当？　ホントに本当？」
+			PRINTW 「ほんとにほんとーです。よしよし」
+			PRINTW 「ふえええ」
+			PRINTL
+			PRINTL 苦笑するななを眺めながら、
+			PRINTW 당신は地上へのエレベータに乗り、事務所へと帰還したのであった。
+			PRINTL
+			PRINTW 무대소녀　大場ななが仲間になった。
+			PRINTL
+			PRINTW ――ちなみに『だい“ば”　“나나”』でバナナということらしい。
+			PRINTW また一つ要らない知識が増えてしまった――
+			PRINTL
+			;1なら華恋ルートを通ったこととする
+			SETBIT 이벤트フラグ:93:7, 20
+			
+			CALL ADD_NEW_COMPANION,5317,200
+			CALLNAME:LOCAL = ばなな
+			CFLAG:LOCAL:전투참가불가능 = -1
+		ELSE
+			PRINTL
+			PRINTW ふぁさっ……。
+			PRINTL
+			PRINTW ボタンが切り飛ばされ、前掛けが舞台へと落ちたとき、
+			PRINTW 大場ななの姿は、もうどこにも無かった。
+			PRINTL
+			PRINTW 黄金色の照明がバツンと消えた。
+			PRINTL
+			PRINTW ＞무대소녀　大場ななは消滅しました。
+			PRINTL
+		ENDIF
+		
+		이벤트フラグ:93:0 += 1
+		SETBIT 이벤트フラグ:93:7, 1
+		CALL EVENT_93_TURN_END
+ENDIF
+
+@EVENT_BATTLE_ACTEND_EVENT_93_6
+;最終戦かつHP25％未満
+;まさかの파워アップ拒否
+IF 이벤트フラグ:93:0 > 6 && 現HP割合(CHARANUM-1) < 25 && 이벤트フラグ:93:7 == 0
+	PRINTFORML 
+SETCOLOR 0xfdca57
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORMW ┃守らなくちゃいけない、私の再演で　　　　　　　　　┃
+	PRINTFORMW ┃당신を倒さないと、私の再演が途切れちゃう　　　　┃
+	PRINTFORMW ┃――華恋ちゃんが変わった理由も分からないのに！　　┃
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞……ななの周囲に、キラめきが集まっていく
+	PRINTFORMW ＞どこかの세계のリ・プ레이でしかない彼女が、輝き、押し上げられ、トップ・スタァへと――
+SETCOLOR 0xfdca57
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORML ┃　　　　　　　　　　　　　　　　　　　　　　　　　┃
+	PRINTFORML ┃　　　　　　　　　邪魔ぁぁっ！　　　　　　　　　　┃
+	PRINTFORML ┃　　　　　　　　　　　　　　　　　　　　　　　　　┃
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞ななは自分を変えようとするキラめきを切り払うとその刃を握り直した。
+
+	SETBIT 이벤트フラグ:93:7, 1
+ENDIF
+
+@EVENT_BATTLE_TURNEND_EVENT_93_6_0
+FOR LOCAL,1, 17
+	SIF POS(LOCAL) == -1
+		CONTINUE
+	FOR LOCAL:1, GETNUM(CFLAG,"공격강화"), GETNUM(CFLAG,"마법효과강화")+1
+		CFLAG:POS(LOCAL):(LOCAL:1) = 0
+	NEXT
+NEXT
+PRINTFORML ＞이니셜라이즈！
+PRINTFORMW ＞ななの殺気で、적아군全てのカジャ系・ンダ系効果が해제された。

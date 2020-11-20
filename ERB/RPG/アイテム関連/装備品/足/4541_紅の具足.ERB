@@ -1,0 +1,70 @@
+﻿
+;======================================================
+;장비品の데이터
+;붉은구족
+;Lv50장비までは반사まで　기본능력に합계+6まで
+;======================================================
+
+@기본능력수정_4541,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "마력"
+		RETURN 2
+	CASE "속도"
+		RETURN 2
+	CASE "운"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4541,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 25
+	CASE "회피"
+		RETURN 18
+	CASE "마법효과"
+		RETURN 19
+	CASE "마법위력"
+		RETURN 3
+ENDSELECT
+RETURN 0
+
+@방어상성_4541,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "빙결"
+		RETURN 50
+	CASE "검격","타격"
+		RETURN 80
+	CASE "전술"
+		RETURN 135
+ENDSELECT
+RETURN 100
+
+@장비箇所_4541
+RETURN GET_EQUIPNUM("발")
+
+@필요레벨_4541
+RETURN 48
+
+@장비조건_4541,ARG
+SIF IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 48
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4541
+PRINTL 장비조건：♀ LV48～
+
+@장비해설_4541
+PRINTL 祈祷師から助言を受けて作成された女性用具발。
+PRINTL 　　　　　　　　祈祷の効果を上げる工남편がされている。
+
+
+@구입조건_4541
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 750000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_4541
+RETURN 0

@@ -1,0 +1,52 @@
+﻿
+;======================================================
+;장비品の데이터
+;플레이트반다나
+;Lv20장비までは내성が기본　기본능력に합계+2まで
+;======================================================
+
+@기본능력수정_3046,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3046,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 8
+	CASE "회피"
+		RETURN 6
+	CASE "마법효과"
+		RETURN 4
+ENDSELECT
+RETURN 0
+
+@방어상성_3046,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@장비箇所_3046
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3046
+RETURN 12
+
+@장비조건_3046,ARG
+SIF BASE:ARG:LV < 12
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3046
+PRINTL 장비조건：LV12～
+
+@장비해설_3046
+PRINTL 반다나の額部分に鉄板を仕込んだ簡易ギア。
+PRINTL 　　　　　　　　
+
+
+@구입조건_3046
+RETURN 1
+
+@引継ぎ可不可_3046
+RETURN 0

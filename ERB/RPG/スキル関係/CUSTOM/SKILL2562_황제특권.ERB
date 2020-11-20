@@ -1,0 +1,36 @@
+﻿;스킬名
+@SKILL_NAME_2562,ARG
+RESULTS = 황제특권
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_2562
+RETURN 0
+;どちらでもない
+
+;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복、6자동효과
+@SKILL_EFECT_2562
+RETURN 6
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_2562
+RETURN 22
+
+@継承不能_2562
+RETURN 1
+
+;스킬변화？用랭크
+@SKILL_RANK_2562
+RETURN 25
+;변화
+
+@SKILL_RANKUP_2562
+RETURN 0
+
+;　 설명文の표시
+@SKILL_EXPLAIN_2562
+PRINTL 공격, 명중, 방어, 회피, 마법위력, 마법효과에 레벨을 더한다.
+PRINTL 아이템 습득 확률이 올라간다.
+PRINTL 매턴 MP를 1 소비한다.
+
+@SKILL_ACTIONABLE_BATTLE_2562
+RETURN 0

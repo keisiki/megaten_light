@@ -1,0 +1,93 @@
+﻿;======================================================
+;장비品の데이터
+;Ｋ프로스트로드
+;공격력的には鍛えた마정무기に負けるけど、凍結率が高いというデザインに
+;速知운キャラで組むと強すぎるかなぁ
+;======================================================
+@기본능력수정_2062,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 3
+	CASE "지혜"
+		RETURN 1
+	CASE "인내력"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+
+@전투능력수정_2062,ARG,ARG:1 = -1
+SELECTCASE ARG
+	CASE 0
+		RETURN 116
+	CASE 1
+		RETURN 117
+	CASE 4
+		RETURN 116
+	CASE 5
+		RETURN 51
+ENDSELECT
+RETURN 0
+
+@방어상성_2062,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_2062, ARG = -1
+RETURN GET_TYPE_NUM("빙결")
+
+@최저공격횟수_2062, ARG = -1
+RETURN 1
+
+@최대공격횟수_2062, ARG = -1
+RETURN 1
+
+@사거리_2062, ARG = -1
+RETURN 1
+
+@공격범위_2062, ARG = -1
+RETURN 2
+
+@추가효과_2062, ARG = -1
+RETURN GET_STATE_NUM("FREEZE")
+
+@추가효과상성_2062, ARG = -1
+RETURN GET_TYPE_NUM("빙결")
+
+@추가효과명중률_2062, ARG = -1
+RETURN 40
+
+@추가효과최대명중률_2062, ARG = -1
+RETURN 80
+
+@장비箇所_2062
+RETURN GET_EQUIPNUM("검")
+
+;-----------------------------
+;- SHOP
+;-----------------------------
+@구입조건_2062
+RETURN 0
+
+@필요레벨_2062
+RETURN 1
+
+@장비조건_2062,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+RETURN 1
+
+@장비조건설명_2062
+PRINTL 장비조건：♂
+
+@장비해설_2062
+PRINTL 킹프로스트 시리즈 중 하나、빙결속성이 깃든 지팡이。
+PRINTL 지팡이의 머리 부분에는 노란색 스마일 딱지와 모피가 달려있다。
+
+RETURN 0
+
+@검타입_2062
+;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
+;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+RETURN 9

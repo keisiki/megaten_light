@@ -1,0 +1,144 @@
+﻿
+;======================================================
+;장비品の데이터
+;롱기누스아머
+;======================================================
+
+@기본능력수정_3612,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3612,ARG,ARG:1 = -1
+
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "공격"
+		SIF ARG:1 == -1
+			RETURN 30
+		IF EQUIP:(ARG:1):팔 == 4051
+			LOCAL = BASE:(ARG:1):LV * 1 / 4 +50
+			RETURN LOCAL
+		ELSE
+			RETURN 0
+		ENDIF
+	CASE "명중"
+		SIF ARG:1 == -1
+			RETURN 30
+		IF EQUIP:(ARG:1):팔 == 4051
+			LOCAL = BASE:(ARG:1):LV * 1 / 4 +50
+			RETURN LOCAL
+		ELSE
+			RETURN 0
+		ENDIF
+	CASE "방어"
+		SIF ARG:1 == -1
+			RETURN 30
+		IF EQUIP:(ARG:1):머리 == 3207
+			LOCAL = BASE:(ARG:1):LV * 1 / 4 +50
+			RETURN LOCAL
+		ELSE
+			RETURN 0
+		ENDIF
+	CASE "회피"
+		SIF ARG:1 == -1
+			RETURN 30
+		IF EQUIP:(ARG:1):발 == 4604
+			LOCAL = BASE:(ARG:1):LV * 1 / 4 +50
+			RETURN LOCAL
+		ELSE
+			RETURN 0
+		ENDIF
+	CASE "마법효과"
+		SIF ARG:1 == -1
+			RETURN 30
+		IF EQUIP:(ARG:1):머리 == 3207
+			LOCAL = BASE:(ARG:1):LV * 1 / 4 +50
+			RETURN LOCAL
+		ELSE
+			RETURN 0
+		ENDIF
+ENDSELECT
+RETURN 0
+
+@방어상성_3612,ARG,ARG:1 = -1
+SELECTCASE ARG
+;0,검격
+;1,비구
+;2,타격
+;3,전술
+;4,화염
+;5,빙결
+;6,전격
+;7,충격
+;8,신경
+;9,정신
+;10,파마
+;11,주살
+;一応
+;12,지변
+;13,수격
+;14,질풍
+;15,중력
+;16,핵열
+;17,만능
+;18,사이코
+	CASE 3
+		RETURN 80
+	CASE 4
+		RETURN 125	
+	CASE 12
+		RETURN 125	
+	CASE 13
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@공격상성_3612, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3612, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3612, ARG = -1
+
+RETURN 1
+
+@사거리_3612, ARG = -1
+
+RETURN 1
+
+@공격범위_3612, ARG = -1
+
+RETURN 1
+
+@장비箇所_3612
+
+RETURN GET_EQUIPNUM("몸통")
+
+@필요레벨_3612
+RETURN 1
+
+@장비해설_3612
+PRINTFORML 聖堂騎士団の파워ド수트「ヒンメル・フォイアー」を復元したもの
+PRINTFORML 復元した他パーツを사용することで真価を発揮する
+SETCOLOR 0x87ceeb
+PRINTL 《롱기누스헤드》《롱기누스암》《롱기누스레그》
+RESETCOLOR
+
+@장비조건_3612,ARG
+SIF CSTR:ARG:종족명 == "성창기사"
+	RETURN 1
+SIF BASE:ARG:LV < 40
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3612
+PRINTL 장비조건：성창기사or레벨40이상
+
+@구입조건_3612
+RETURN 0
+
+@引継ぎ可不可_3612
+RETURN 1

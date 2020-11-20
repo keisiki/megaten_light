@@ -1,0 +1,49 @@
+﻿
+;이벤트フラグ:80:0 = 이벤트閲覧체크（未体験=0体験済=1）
+
+;====================
+;조건
+;====================
+@PLAYABLE_EVENT_80
+;メガテン系이벤트以外불허가の場合
+SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 || GETBIT(FLAG:EXTRA이벤트필터, 9) == 1
+	RETURN 0
+
+;ノルマ3回달성後
+IF FLAG:組織貢献度 >= 350000 && 이벤트フラグ:80:0 == 0 && BASE:MASTER:LV > 50
+	RESULTS = 寺生まれのＴさん
+	RETURN 1
+ENDIF
+RETURN 0
+
+
+;====================
+;内容
+;====================
+@SHOPCOM_EVENT_80
+IF 이벤트フラグ:80:0 == 0
+	PRINTFORMW 어느날 악령을 퇴치하러온 당신은
+	PRINTW 이래저래 핀치가 되어버렸다
+	PRINTW 이대로는 귀신과 에로 동인지 같은 것을 만들어 버린다。。！
+	PRINTW 그곳에 한 남자가 뛰어들었다！
+	PRINTW 「파앗！」
+	PRINTW 이렇게 말하자 귀신이 연기같이 사라져버린다！
+	PRINTW 「이정도도 감지할 수 없다니 나는 할아버지에 비해 한참 뒤떨어졌군」
+	PRINTW 「헤에、너는 이런 놈들을 처치하고 다니는 건가。」
+	PRINTW 「괜찮으면 협력해도 좋을까？」
+	PRINTW 절에서 자라서 굉장하네
+	PRINTW
+	PRINTW 인간　절 태생의 T씨가 동료가 되었다！
+		CALL ADD_NEW_COMPANION,4990,1000
+		IF CFLAG:GETCHARA(4990):引継ぎ횟수
+		TARGET = GETCHARA(4990)
+		ELSE
+			LOCAL = GETCHARA(4990)
+			ABL:LOCAL:순종 = 1
+			TARGET = LOCAL
+			CFLAG:전투참가불가능 = 0
+		ENDIF
+	이벤트フラグ:80:0 = 1
+ENDIF
+
+

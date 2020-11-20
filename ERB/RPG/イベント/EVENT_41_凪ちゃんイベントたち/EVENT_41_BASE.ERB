@@ -1,0 +1,51 @@
+﻿;이벤트フラグ:41:0 リスト
+;0:開始前 1:仲魔に 2:拒否 3:奴隷に
+
+;이벤트フラグ:41:1 リスト
+;0:開始前 1:종료
+
+;이벤트フラグ:41:2 リスト
+;0:開始前 1:종료
+;====================
+;조건
+;====================
+@PLAYABLE_EVENT_41
+
+CALLF FINDCHARA_B([[キャラ:나기]])
+LOCAL = RESULT:1
+IF FLAG:名声 >= 1000 && 이벤트フラグ:41:0 == 0 && BASE:MASTER:LV >= 35
+	RESULTS = 셀프 수행의 프로세스를 희망합니다
+	RETURN 1
+;凪ちゃん出撃なら이벤트出てこない
+ELSEIF (GETCHARA(4768) > 0 && CFLAG:GETCHARA(4768):전투참가불가능 < 1) == 0
+	RETURN 0
+ELSEIF BASE:LOCAL:LV > 24 && 이벤트フラグ:41:1 == 0
+	RESULTS = 다크서머너를 퇴치하는 프로세스입니다
+	RETURN 1
+;ELSEIF BASE:LOCAL:LV > 44 && 이벤트フラグ:41:2 == 0
+;	RESULTS = 야타가라스 시험의 시어리입니다
+;	RETURN 1
+;ELSEIF FINDCHARA_B(4762,0) == 2 && BASE:GETCHARA(4768):LV > 74
+;	RESULTS = 게이린 습명 시험의 시어리입니다
+;	RETURN 1
+ENDIF
+RETURN 0
+
+;====================
+;内容
+;====================
+@SHOPCOM_EVENT_41
+
+IF 이벤트フラグ:41:0 == 0
+	CALL EVENT_41_1
+ELSEIF 이벤트フラグ:41:1 == 0
+	CALL EVENT_41_2
+;ELSEIF 이벤트フラグ:41:2 == 0
+;	CALL EVENT_41_3
+;ELSEIF
+;	CALL EVENT_41_
+ENDIF
+
+@EVENT_41_FLAG_RESET
+
+CALL FLAG_RESET,41,2

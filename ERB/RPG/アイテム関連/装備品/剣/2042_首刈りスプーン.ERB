@@ -1,0 +1,94 @@
+﻿
+;======================================================
+;장비品の데이터
+;헤드헌팅스푼
+;======================================================
+
+@기본능력수정_2042,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 2
+ENDSELECT
+RETURN 0
+
+@전투능력수정_2042,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "공격"
+		RETURN 160
+	CASE "명중"
+		RETURN 60
+	CASE "회피"
+		RETURN -10
+	CASE "마법위력"
+		RETURN 64
+	CASE "마법효과"
+		RETURN 21
+ENDSELECT
+RETURN 0
+
+@방어상성_2042,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+ENDSELECT
+RETURN 100
+
+@공격상성_2042, ARG = -1
+RETURN GET_TYPE_NUM("주살")
+
+@최저공격횟수_2042, ARG = -1
+RETURN 0
+
+@최대공격횟수_2042, ARG = -1
+RETURN 1
+
+@사거리_2042, ARG = -1
+RETURN 1
+
+@공격범위_2042, ARG = -1
+RETURN 1
+
+@장비箇所_2042
+RETURN GET_EQUIPNUM("검")
+
+;마하무도
+@장비추가스킬_2042,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 1402
+	ENDSELECT
+ENDIF
+RETURN 0
+
+;-----------------------------
+;- 조건・설명処理
+;-----------------------------
+@필요레벨_2042
+RETURN 40
+
+@장비조건_2042,ARG
+SIF BASE:ARG:LV < 40
+	RETURN 0
+RETURN 1
+
+@장비조건설명_2042
+PRINTL 장비조건：LV40～
+
+@장비해설_2042
+PRINTL 숟가락을 그대로 크게 한 칼날이 달린 자루가 긴 대낫
+PRINTL 이것으로 상대의 목을 도려내면 잘린 살아있는 머리가 그릇에 남겨진다
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬존재
+RESETCOLOR
+;-----------------------------
+;- 구입・引き継ぎ
+;-----------------------------
+@구입조건_2042
+RETURN 0
+
+@引継ぎ可不可_2042
+RETURN 1
+
+@검타입_2042
+;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
+;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+RETURN 0

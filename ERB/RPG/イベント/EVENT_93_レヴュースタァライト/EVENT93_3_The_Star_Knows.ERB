@@ -1,0 +1,307 @@
+﻿@EVENT_93_3
+
+CUSTOMDRAWLINE =
+
+	PRINTL
+	SETCOLOR 0x8ac4ec
+	PRINTW 「人には운命《さだめ》の星がある。綺羅星、明け星、流れ星……
+	PRINTW 　己の星は見えずとも、見上げる私は今日限り。
+	PRINTW 　９９期生、星見純那！
+	PRINTW 　――掴んでみせます、自分星ッ！」
+	RESETCOLOR
+	PRINTL
+	PRINTW 今回の相손は、最初のレヴューで弓矢を握りしめていた소녀だ。
+	PRINTW 特徴的な太い黒縁のメガネをかけ、머리카락を後ろで、キッと一つに縛っている。
+	PRINTL
+	PRINTW 「一度負けたら、終わりかと思ってた」
+	PRINTL
+	PRINTW その눈はこちらを見ていない。
+	PRINTW 당신の立ち位置に本来居た“誰か”に向かって話しかけている。
+	PRINTL
+	PRINTW 「トップスタァになれば、私が……
+	PRINTW 　私の운命の主役になれる？
+	PRINTW 　リベンジよ、愛城さん！」
+	PRINTL
+	PRINTW 무대소녀 星見純那 が現れた！
+	PRINTL
+
+	FLAG:도주불가フラグ = 1
+	FLAG:회화불능フラグ = 1
+	FLAG:선제기습취소 = 1
+	
+	;※方바늘　비구＋정신、たまに신경
+	;最初：상태이상さえ気を付ければOK
+	;中盤：패닉보이스連打してくる＆理不尽만능即死（테트라쟈持ってこい）
+	;最後：신경내성とデカジャは必須ぐらいで
+	
+	;6戦눈　★★★★★
+	IF 이벤트フラグ:93:0 > 6
+		LOCAL:99 = 3
+	;5戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 5
+		LOCAL:99 = 3
+	;4戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 4
+		LOCAL:99 = 2
+	;3戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 3
+		LOCAL:99 = 2
+	;2戦눈　★★★☆☆
+	ELSEIF 이벤트フラグ:93:0 > 2
+		LOCAL:99 = 1
+	;1戦눈　★★☆☆☆
+	ELSEIF 이벤트フラグ:93:0 > 1
+		LOCAL:99 = 1
+	ENDIF
+	
+	;레벨は自軍최대値（최저値15）
+	LOCAL:1 = 0
+	FOR LOCAL , 0 , CHARANUM
+		SIF CFLAG:LOCAL:PTフラグ == 0 || TALENT:LOCAL:비전투원
+			CONTINUE
+		LOCAL:98 = MAX(LOCAL:98 , BASE:LOCAL:LV)
+	NEXT
+	SIF LOCAL:98 < 10
+		LOCAL:98 = 10
+	
+	;- SET:쥰나
+		;メガネ
+		;最終戦は出ない
+		IF LOCAL:99 < 6
+			CALL SET_ENEMY,8,[[キャラ:쥰나]],LOCAL:98,1,(LOCAL:99 - 1)
+			NAME:(CHARANUM-1) = メガネ（勉強用）
+			CALLNAME:(CHARANUM-1) = メガネ（勉強用）
+			;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+			ABL:(CHARANUM-1):공격상성 = 1
+			ABL:(CHARANUM-1):사거리 = 3
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			CALL SYNC_STATUS,(CHARANUM-1)
+			ABL:(CHARANUM-1):스킬1 = [[스킬:타루・카쟈]]
+			ABL:(CHARANUM-1):스킬2 = [[스킬:스쿠・카쟈]]
+			ABL:(CHARANUM-1):스킬3 = [[스킬:리벨리온]]
+			ABL:(CHARANUM-1):스킬4 = [[스킬:패닉보이스]]
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			;초인扱いに
+			ABL:(CHARANUM-1):종족 = 43
+			CSTR:(CHARANUM-1):종족명 = 무대소녀
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+		ENDIF
+
+		;本体
+		;6戦눈　★★★★★
+		IF LOCAL:99 > 5
+			CALL SET_ENEMY,9,[[キャラ:쥰나]],LOCAL:98,1,LOCAL:99
+			CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+			ABL:(CHARANUM-1):공격상성 = 1
+			ABL:(CHARANUM-1):사거리 = 3
+			CFLAG:(CHARANUM-1):行動횟수 = 3
+			CALL SYNC_STATUS,(CHARANUM-1)
+			ABL:(CHARANUM-2):가창기능 = 5
+			ABL:(CHARANUM-2):스킬1 = [[스킬:천발천중]]
+			ABL:(CHARANUM-2):스킬2 = [[스킬:산탄사격]]
+			ABL:(CHARANUM-2):스킬3 = [[스킬:찰나장대비쏘기]]
+			ABL:(CHARANUM-2):스킬4 = [[스킬:비구가드브레이크]]
+			ABL:(CHARANUM-2):스킬5 = [[스킬:천사의스마일]]
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			ABL:(CHARANUM-1):스킬9 = 0
+			ABL:(CHARANUM-1):스킬10 = 0
+			ABL:(CHARANUM-1):스킬11 = 0
+			ABL:(CHARANUM-1):스킬12 = 0
+		;1～5戦눈（素体。下でメガネと一緒に弄る）
+		ELSE
+			CALL SET_ENEMY,9,[[キャラ:쥰나]],LOCAL:98,1,LOCAL:99
+			;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+			ABL:(CHARANUM-1):공격상성 = 1
+			ABL:(CHARANUM-1):사거리 = 3
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			CALL SYNC_STATUS,(CHARANUM-1)
+			ABL:(CHARANUM-1):스킬1 = [[스킬:산탄사격]]
+			ABL:(CHARANUM-1):스킬2 = [[스킬:산탄사격]]
+			ABL:(CHARANUM-1):스킬3 = [[스킬:마비침]]
+			ABL:(CHARANUM-1):스킬4 = [[스킬:연속사격]]
+			ABL:(CHARANUM-1):스킬5 = [[스킬:퀵드로]]
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			ABL:(CHARANUM-1):스킬9 = 0
+			ABL:(CHARANUM-1):스킬10 = 0
+			ABL:(CHARANUM-1):스킬11 = 0
+			ABL:(CHARANUM-1):스킬12 = 0
+		ENDIF
+		;초인扱いに
+		ABL:(CHARANUM-1):종족 = 43
+		CSTR:(CHARANUM-1):종족명 = 무대소녀
+		CALL SYNC_STATUS,(CHARANUM-1)
+		CALL HEALTH_CHARA,(CHARANUM-1)
+
+		;メガネ
+		;最終戦は出ない
+		IF LOCAL:99 < 6
+			CALL SET_ENEMY,10,[[キャラ:쥰나]],LOCAL:98,1,(LOCAL:99 - 1)
+			NAME:(CHARANUM-1) = メガネ（普段用）
+			CALLNAME:(CHARANUM-1) = メガネ（普段用）
+			;CFLAG:(CHARANUM-1):ＨＰ보정 = MAXBASE:(CHARANUM-1):ＨＰ*2
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+			ABL:(CHARANUM-1):공격상성 = 1
+			ABL:(CHARANUM-1):사거리 = 3
+			CFLAG:(CHARANUM-1):行動횟수 = 1
+			CALL SYNC_STATUS,(CHARANUM-1)
+			ABL:(CHARANUM-1):스킬1 = [[스킬:해피스텝]]
+			ABL:(CHARANUM-1):스킬2 = [[스킬:무거운공기]]
+			ABL:(CHARANUM-1):스킬3 = [[스킬:패닉보이스]]
+			ABL:(CHARANUM-1):스킬4 = [[스킬:프린파]]
+			ABL:(CHARANUM-1):스킬5 = 0
+			ABL:(CHARANUM-1):스킬6 = 0
+			ABL:(CHARANUM-1):스킬7 = 0
+			ABL:(CHARANUM-1):스킬8 = 0
+			ABL:(CHARANUM-1):스킬9 = 0
+			ABL:(CHARANUM-1):스킬10 = 0
+			ABL:(CHARANUM-1):스킬11 = 0
+			ABL:(CHARANUM-1):스킬12 = 0
+			;초인扱いに
+			ABL:(CHARANUM-1):종족 = 43
+			CSTR:(CHARANUM-1):종족명 = 무대소녀
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+		ENDIF
+
+		;解析度MAX処理
+		CALL INCREASE_ANALYZE([[キャラ:쥰나]],1000)
+		
+		;6戦눈　★★★★★★
+		IF LOCAL:99 > 5
+		;↑とギミックで対応
+		;5戦눈　★★★★☆
+		ELSEIF LOCAL:99 > 4
+			CFLAG:(CHARANUM-3):行動횟수 = 2
+			CFLAG:(CHARANUM-2):行動횟수 = 2
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			;翡翠弓추가
+			ABL:(CHARANUM-2):스킬6 = [[스킬:안타까움난사]]
+		;4戦눈　★★★☆☆
+		ELSEIF LOCAL:99 > 3
+			;翡翠弓추가
+			ABL:(CHARANUM-2):스킬6 = [[스킬:안타까움난사]]
+			
+			;行動횟수1
+			CFLAG:(CHARANUM-2):行動횟수 = 2
+		;3戦눈　★★★☆☆
+		ELSEIF LOCAL:99 > 2
+			;翡翠弓추가
+			ABL:(CHARANUM-2):스킬6 = [[스킬:안타까움난사]]
+			
+			;行動횟수1
+			CFLAG:(CHARANUM-2):行動횟수 = 2
+		;2戦눈　★★☆☆☆
+		ELSEIF LOCAL:99 > 1
+			;바인드보이스⇒시바브
+			ABL:(CHARANUM-3):스킬4 = [[스킬:시바브]]
+		
+			;行動횟수1・연속사격削除
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			ABL:(CHARANUM-2):스킬4 = 0
+
+			;패닉보이스削除
+			ABL:(CHARANUM-1):스킬3 = 0
+		;1戦눈　★☆☆☆☆
+		ELSEIF LOCAL:99 > 0
+			;カジャ削除・패닉보이스⇒시바브に
+			ABL:(CHARANUM-3):스킬1 = 0
+			ABL:(CHARANUM-3):스킬2 = 0
+			ABL:(CHARANUM-3):스킬4 = [[스킬:시바브]]
+
+			;行動횟수1・마비침・연속사격削除
+			CFLAG:(CHARANUM-2):行動횟수 = 1
+			ABL:(CHARANUM-2):스킬3 = 0
+			ABL:(CHARANUM-2):스킬4 = 0
+			
+			;패닉보이스・프린파削除
+			ABL:(CHARANUM-1):스킬3 = 0
+			ABL:(CHARANUM-1):스킬4 = 0
+		ENDIF
+		
+
+	;自分星フラグ
+	SETBIT 이벤트フラグ:93:13, 1
+	CALL BATTLE_START
+	CLEARBIT 이벤트フラグ:93:13, 1
+
+	CUSTOMDRAWLINE =
+
+	PRINTW 「うーっ、気分最悪、ここどこよ？
+	PRINTW 　私、たしか、レヴューで……ひゃああ！？
+	PRINTW 　あ、당신、だれ！？」
+	PRINTL
+	PRINTW 당신は事情を説明し、純那に악마退治の손伝いをするように求めた。
+	PRINTL
+	PRINTW 「そんなバカな……って言いたいところだけど。
+	PRINTW 　実際に、손が토오루けてるのよね。
+	PRINTW 　今ここに居る私が幻かどうかはともかく、
+	PRINTW 　……確かに、힘が、抜けてきているのも事実。
+	PRINTW 　分かりました、계약します。
+	PRINTW 　訳の分からないまま消えちゃうなんて、絶対に御免だから」
+	PRINTL
+	PRINTW 무대소녀　星見純那が仲間になった。
+	PRINTL
+	PRINTW 「あっ、しまった、勝負メガネしか持ってない……！
+	PRINTW 　お金も無いし、着替えも無いし、これからどうしたらいいのよ。
+	PRINTW 　夢なら깨달음めてよ、何が악마よ……」
+	PRINTL
+	PRINTW 당신は머리を抱えている純那を促しつつ事務所へと戻った……。
+	PRINTL
+
+	CALL ADD_NEW_COMPANION,5316,200
+	LOCAL = GETCHARA(5316)
+	CFLAG:LOCAL:전투참가불가능 = -1
+
+	이벤트フラグ:93:0 += 1
+	SETBIT 이벤트フラグ:93:3, 1
+	CALL EVENT_93_TURN_END
+
+
+@EVENT_BATTLE_ACTEND_EVENT_93_3
+;最終戦かつHP25％未満
+;イメージとしては、将来の自分を先取りする、つまりゴンさんみたいなもので
+;すなわち　めっちゃ毛が伸びる　星見純那
+IF 이벤트フラグ:93:0 > 6 && 現HP割合(CHARANUM-1) < 25 && 이벤트フラグ:93:3 == 0
+	PRINTFORML 
+SETCOLOR 0x8ac4ec
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORMW ┃あの日見た星の輝きは、今はもう、地平線の向こう側。┃
+	PRINTFORMW ┃だけど私は、あの日、あの舞台で、引火して、　　　　┃
+	PRINTFORMW ┃身も心も燃え上がった……まるで、火だるまのように。┃
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞純那の顔が、酷く大人びていく。
+	PRINTFORMW ＞まるで自身の人生の終焉を見たかのように後光が射しはじめる。
+SETCOLOR 0x8ac4ec
+	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━━━━┓
+	PRINTFORMW ┃辛かったわ。苦しかった。　　　　　　　　　　　　　┃
+SETCOLOR 0xd1e1ec
+	PRINTFORMW ┃だけど眩しかった。　　　　　　　　　　　　　　　　┃
+SETCOLOR 0xebf7ff
+	PRINTFORMW ┃……私も、スタァに、成れたかな？　　　　　　　　　┃
+SETCOLOR 0xffffff
+	PRINTFORML ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+	PRINTFORMW ＞……気配が一変した。
+			CFLAG:(CHARANUM-1):行動횟수 = 3
+			ABL:(CHARANUM-1):가창기능 = 5
+			ABL:(CHARANUM-1):스킬2 = [[스킬:기가온]]
+			ABL:(CHARANUM-1):스킬3 = [[스킬:갓애로우]]
+			ABL:(CHARANUM-1):스킬4 = [[스킬:플래시봄]]
+			ABL:(CHARANUM-1):스킬5 = [[스킬:Burn my Dread]]
+			ABL:(CHARANUM-1):스킬6 = [[스킬:기가온]]
+			ABL:(CHARANUM-1):스킬7 = [[스킬:찰나장대비쏘기]]
+	SETBIT 이벤트フラグ:93:3, 1
+ENDIF
+

@@ -1,0 +1,175 @@
+﻿;
+
+;스킬名
+@SKILL_NAME_1226,ARG
+;京都人が사용する場合水仙花に
+;IF ARG > 0 && NO:ARG == [[キャラ:카오루코]]
+IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카오루코]]) == 1
+	RESULTS = 수선화／우아하게
+ELSE
+	RESULTS = 텐타라후
+ENDIF
+
+;　명중
+@SKILL_HITRATE_1226, ARG
+RETURN 90
+
+;　威힘
+@SKILL_POWER_1226, ARG
+;京都人が사용する場合、레벨で威힘が変わる
+;IF ARG > 0 && NO:ARG == [[キャラ:카오루코]]
+IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카오루코]]) == 1
+	SIF ARG == -1
+	      RETURN 40
+	IF BASE:ARG:LV < 10
+	      RETURN 20
+	ELSEIF BASE:ARG:LV < 20
+	      RETURN 60
+	ELSEIF BASE:ARG:LV < 30
+	      RETURN 100
+	ELSEIF BASE:ARG:LV < 40
+	      RETURN 160
+	ELSEIF BASE:ARG:LV < 50
+	      RETURN 180
+	ELSEIF BASE:ARG:LV < 60
+	      RETURN 200
+	ELSEIF BASE:ARG:LV < 70
+	      RETURN 210
+	ELSEIF BASE:ARG:LV < 80
+	      RETURN 215
+	ELSE
+	      RETURN 220
+	ENDIF
+      RETURN 1
+ELSE
+	RETURN 175
+ENDIF
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_1226,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_1226,ARG
+RETURN 1
+
+;　ＨＰ2を支払うかＭＰ3を支払うか
+@SKILL_COSTTYPE_1226, ARG
+RETURN 3
+;소비なし＝1
+
+;　コストの量
+@SKILL_COST_1226,ARG
+RETURN 16
+
+;　상성
+@SKILL_TYPE_1226,ARG
+RETURN 9
+;정신
+
+;　1EXTRAか2MAGICか
+@SKILL_DECIDE_TYPE_1226
+RETURN 2
+;魔法
+
+;　1物理ダメージで計算するか2魔法ダメージで計算するか
+@SKILL_DAMAGETYPE_1226
+RETURN 2
+
+
+;　대상が1적か2아군か3場전체か4特殊か
+@SKILL_TARGET_1226
+RETURN 1
+
+;　사거리
+@SKILL_RANGE_1226,ARG
+RETURN 3
+
+;　範囲　11체　21열　3전체　4　적아군전체
+@SKILL_SPHERE_1226,ARG
+RETURN 3
+
+;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+@SKILL_EFECT_1226
+RETURN 1
+
+;　 特殊処理の有無、及び処理内容
+@SKILL_SPECIALEFECT_1226,ARG
+;ARG = 1だった場合は処理の有無を返します
+SIF ARG == 1
+	RETURN 0
+;以下に特殊な処理を記述します
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_1226
+RETURN 12
+;정신
+
+;속도보정
+@SKILL_SPEED_1226, ARG = -1
+RETURN 0
+
+;　구상の표시とその타입
+@SKILL_MESSAGE_1226,ARG
+
+
+;전투時以外に사용できるか
+@SKILL_ACTIONABLE_FIELD_1226
+RETURN 0
+
+;스킬変化？用랭크
+@SKILL_RANK_1226
+RETURN 8
+
+
+;テンプレート用、추가효과シリーズ
+;추가효과스테이터스
+@SKILL_ADDTIONAL_STATE_1226,ARG
+RETURN GET_STATE_NUM("PANIC")
+
+;추가효과상성
+@SKILL_ADDTIONAL_TYPE_1226,ARG
+RETURN 9
+
+;추가효과기본부여확률
+@SKILL_ADDTIONAL_BASE_RATE_1226,ARG
+RETURN 40
+
+;추가효과부여확률上限
+@SKILL_ADDTIONAL_MAX_RATE_1226,ARG
+RETURN 70
+;====================================================
+;스킬及び行動の実行
+;====================================================
+@ACTION_1226,ARG,ARG:1
+CALL ATTACK_FIELD,ARG,ARG:1,1226
+
+
+
+
+
+
+
+;====================================================
+;実行内容ここまで
+;====================================================
+
+;　 説明文の표시
+@SKILL_EXPLAIN_1226
+;京都人
+IF U > 0 && U < CHARANUM && NO:U == [[キャラ:카오루코]]
+	PRINTL 소녀のキラめきにより鋳造された薙刀。優미야비な발取りで적전체にダメージ＋PANIC
+	PRINTL ただし威힘はLvの10の位に比例する
+ELSE
+	PRINTL [후열] 적 전체에 정신속성 중 마법데미지. (보통 확률로 PANIC)
+ENDIF
+
+;継承に필요な部位
+@継承部位_1226,ARG
+RETURN 1
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_1226,ARG
+RETURN 1
+;とくにない
+

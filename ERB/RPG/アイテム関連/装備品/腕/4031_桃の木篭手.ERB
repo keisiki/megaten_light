@@ -1,0 +1,64 @@
+﻿
+;======================================================
+;장비品の데이터
+;복숭아나무토시
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_4031,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "운"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4031,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 9
+	CASE "회피"
+		RETURN 12
+	CASE "마법효과"
+		RETURN 9
+ENDSELECT
+RETURN 0
+
+@방어상성_4031,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "주살"
+		RETURN 25
+	CASE "파마"
+		RETURN 75
+	CASE "화염"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@장비箇所_4031
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4031
+RETURN 28
+
+@장비조건_4031,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 28
+	RETURN 0
+RETURN 1
+
+@장비조건설명_4031
+PRINTL 장비조건：♂ LV28～
+
+@장비해설_4031
+PRINTL 桃の木には邪気を払う힘がある、抗주살토시。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4031
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 560000
+	RETURN 0
+RETURN 1
+
+@引継ぎ可不可_4031
+RETURN 0

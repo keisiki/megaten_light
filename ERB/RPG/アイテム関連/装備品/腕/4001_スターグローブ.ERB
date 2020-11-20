@@ -1,0 +1,67 @@
+﻿
+;======================================================
+;장비品の데이터
+;스타글러브
+;======================================================
+
+@기본능력수정_4001,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "마력"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_4001,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 1
+	CASE "회피"
+		RETURN 2
+	CASE "마법위력"
+		RETURN 2
+	CASE "마법효과"
+		RETURN 4
+ENDSELECT
+RETURN 0
+
+@방어상성_4001,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "주살"
+		RETURN 75
+	CASE "전격"
+		RETURN 0
+	CASE "충격","핵열"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@バステ내성_4001,ARG,ARG:1 = -1
+SELECTCASE ARG
+	CASE GET_STATE_NUM("SHOCK")
+		RETURN -100
+ENDSELECT
+RETURN 0
+
+@장비箇所_4001
+RETURN GET_EQUIPNUM("팔")
+
+@필요레벨_4001
+RETURN 1
+
+@장비조건_4001,ARG
+RETURN 1
+
+@장비해설_4001
+PRINTL 金色で五芒星のマークが描かれた黒いグ로브。
+PRINTL 　　　　　　　　
+
+
+@구입조건_4001
+RETURN 0
+
+;마카교환가능か
+@EQUIP_EXCHANGE_4001
+RETURN 1
+
+@引継ぎ可不可_4001
+RETURN 0

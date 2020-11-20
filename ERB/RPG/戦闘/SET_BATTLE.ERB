@@ -1,0 +1,585 @@
+﻿;
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:SET_BATTLE.ERB
+;	Facility	:전투するための前準備を行う処理群
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX		----					新規作成
+;	002		2011/01/14		Ｎ鳥					REPEATをセットする際の조건分岐を一部변경し、可読性の向上を図る
+;	003		2013/03/15		ネトリス				야생악마소질랜덤설정の処理を추가
+;	005		2019/04/17		名無					적강화옵션を추가
+;	006		2019/11/03		名無					고유게이지処理を추가
+;	007		2019/11/27		名無					熱り弱点処理を추가
+;	008		2019/12/30		Jガン					蓄積데미지を추가
+;
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+;===================================
+;적の설정
+;===================================
+@SET_ENEMY,ARG,ARG:1,ARG:2,ARG:3,ARG:4 = 0
+;ARG:0 セットする포지션　ARG:1　セットする악마　ARG:2 セットする악마の레벨　ARG:3　死体残存フラグの有無 ARG:4ボスフラグ
+;1-6指定してたら面倒なので帰る
+;LOCAL:4 레벨アップによる能力の증가치합계
+
+IF ARG < 7
+	RETURN 0
+ENDIF
+;LOCALに現在のキャラ数＝次に加えるキャラの番号を代入
+LOCAL = CHARANUM
+LOCAL:1 = TARGET
+
+ADDCHARA ARG:1
+
+
+;解析度が0(または마인드시커장비)でボスじゃない場合名前が分からず、アンノウンフラグが立つ
+IF (FLAG:(20000+ARG:1) == 0 || EQUIP:MASTER:마인드시커) && ARG:4 == 0
+	NAME:LOCAL = ？？？？
+	CALLNAME:LOCAL = ？？？？
+	CFLAG:LOCAL:アンノウンフラグ = 1
+ENDIF
+
+CFLAG:LOCAL:行動횟수 = 1
+CFLAG:LOCAL:キャラ固有の번호 = -2
+
+CFLAG:LOCAL:死体残存 = ARG:3
+;공격힘と마법위력に게다
+CFLAG:LOCAL:공격보정 = (ARG:2)
+CFLAG:LOCAL:마법위력보정 = (ARG:2)
+
+;레벨変化
+BASE:LOCAL:LV = ARG:2
+;강화랭크を一応セットしておく
+CFLAG:LOCAL:강화랭크 = ARG:2 - CSVBASE(NO:LOCAL,GETNUM(BASE,"LV"),0) 
+;ボスフラグセット
+CFLAG:LOCAL:ボスフラグ = ARG:4
+;能力値の합계を計算
+SELECTCASE FLAG:전투난이도
+	CASE 4
+		LOCAL:4 = (18 + BASE:LOCAL:LV * 3 / 2)
+		IF ARG:2 >= 6
+			LOCAL:4 = (18 + BASE:LOCAL:LV * 2)
+		ENDIF
+	CASE 5
+		LOCAL:4 = (18 + BASE:LOCAL:LV * 3 / 2)
+		IF ARG:2 >= 6
+			LOCAL:4 = (18 + BASE:LOCAL:LV * 4)
+		ENDIF
+	CASE IS >= 6
+		LOCAL:4 = (18 + BASE:LOCAL:LV * 6)
+	CASEELSE
+		LOCAL:4 = (18 + BASE:LOCAL:LV * 3 / 2)
+ENDSELECT
+
+FOR LOCAL:2,0,6
+	;레벨に応じて能力値増減
+	BASE:LOCAL:(GET_BASESTATUS(1+LOCAL:2)) *= LOCAL:4
+	BASE:LOCAL:(GET_BASESTATUS(1+LOCAL:2)) /= (18 + CSVBASE(NO:LOCAL,GETNUM(BASE,"LV"),0) * 3 / 2)
+	SIF CFLAG:LOCAL:ボスフラグ
+		BASE:LOCAL:(GET_BASESTATUS(1+LOCAL:2)) += 1
+NEXT
+FOR LOCAL:2,1,21
+	IF ABL:LOCAL:("습득스킬"+TOSTR(LOCAL:2)) > 0
+		TRYCCALLFORM 아군専用_{ABL:LOCAL:("습득스킬"+TOSTR(LOCAL:2))}
+			IF RESULT == 0
+				IF ABL:LOCAL:("습득LV"+TOSTR(LOCAL:2)) <= BASE:LOCAL:LV
+					CALL LEARN_SKILL_ENEMY,LOCAL,ABL:LOCAL:("습득스킬"+TOSTR(LOCAL:2))
+					ABL:LOCAL:("습득스킬"+TOSTR(LOCAL:2)) = 0
+					ABL:LOCAL:("습득LV"+TOSTR(LOCAL:2)) = 0
+				ENDIF
+			ENDIF
+		CATCH
+			IF ABL:LOCAL:("습득LV"+TOSTR(LOCAL:2)) <= BASE:LOCAL:LV
+				CALL LEARN_SKILL_ENEMY,LOCAL,ABL:LOCAL:("습득스킬"+TOSTR(LOCAL:2))
+				ABL:LOCAL:("습득스킬"+TOSTR(LOCAL:2)) = 0
+				ABL:LOCAL:("습득LV"+TOSTR(LOCAL:2)) = 0
+			ENDIF
+		ENDCATCH
+	ENDIF
+NEXT
+
+
+;---- EDIT 005 ADD START -------------------------
+IF FLAG:적강화옵션 > 0
+	;강화値１０を超えると、１あたり１０％の확률で行動횟수が増えてる
+	SIF CFLAG:LOCAL:行動횟수 < 2 && RAND:10 < (FLAG:적강화옵션 - 10)
+		CFLAG:(CHARANUM-1):行動횟수 += 1
+	BASE:LOCAL:LV += FLAG:적강화옵션*(5+BASE:LOCAL:LV)/10
+	;강화値×３の최저레벨保証。
+	SIF BASE:LOCAL:LV < FLAG:적강화옵션*3
+		BASE:LOCAL:LV = FLAG:적강화옵션*3
+	FOR LOCAL:2,0,6
+		BASE:LOCAL:(GET_BASESTATUS(1+LOCAL:2)) += FLAG:적강화옵션*(5+BASE:LOCAL:(GET_BASESTATUS(1+LOCAL:2)))/15
+		SIF CFLAG:LOCAL:ボスフラグ
+			BASE:LOCAL:(GET_BASESTATUS(1+LOCAL:2)) += FLAG:적강화옵션
+	NEXT
+	FOR LOCAL:3,0,FLAG:적강화옵션
+		FOR LOCAL:2,1,9
+			LOCALS = 스킬{LOCAL:2}
+			IF ABL:LOCAL:LOCALS > 0
+				VARSET D,-1
+				TRYCALLFORM SKILL_RANKUP_{ABL:LOCAL:LOCALS}
+				IF RESULT > 0
+					LOCAL:4 = RAND:RESULT
+					SIF D:(LOCAL:4) > 0
+						ABL:LOCAL:LOCALS = D:(LOCAL:4)
+				ENDIF
+			ELSEIF FLAG:적강화옵션 > 2 && ABL:LOCAL:LOCALS <= 0
+				;변이と同様の仕様で、空き스킬枠に스킬生成
+				VARSET D,-1
+				LOCAL:4 = 0
+				;ただし３分の１で자동효과以外は除外
+				LOCAL:6 = RAND:3
+				FOR LOCAL:5,1,3000
+					RESULT = 0
+					TRYCALLFORM SKILL_RANK_{LOCAL:5}
+					SIF RESULT <= 0 || RESULT > FLAG:적강화옵션 -1
+						CONTINUE
+					;継承不能스킬は추가候補に入らないようにする
+					CALLFORM SKILL_SUCCESSION_TYPE_{LOCAL:5}
+					SIF RESULT == 23
+						CONTINUE
+					SIF CHECK_SKILL(LOCAL,LOCAL:5) == 1
+						CONTINUE
+					;難易度7以下では、적専用스킬は추가候補に入らないようにする
+					TRYCALLFORM 적専用_{LOCAL:5}
+					SIF RESULT > 0 && FLAG:적강화옵션 <= 7
+						CONTINUE
+					;３分の１で자동효과以外は除外の具体的処理
+					TRYCALLFORM SKILL_ACTIONABLE_BATTLE_{LOCAL:5}
+					SIF LOCAL:6 == 2 && RESULT == 0
+					;아군専用스킬も추가候補に入らないようにする
+					TRYCALLFORM 아군専用_{LOCAL:5}
+					SIF RESULT > 0
+						CONTINUE
+					;既に持ってる스킬も除外
+					SIF HAVE_SKILL(LOCAL, LOCAL:5)
+						CONTINUE
+;					SIF FLAG:DEBUG
+;						PRINTFORML ``%CALLNAME:LOCAL%스킬추가{LOCAL:5}`` 
+					D:(LOCAL:4) = LOCAL:5
+					LOCAL:4 += 1
+				NEXT
+				SIF LOCAL:4 > 0
+					ABL:LOCAL:LOCALS = D:(RAND:(LOCAL:4))
+			ENDIF
+		NEXT
+	NEXT
+	;相性操作、弱点を３で通常、４で내성、５で無効、６で흡수、７以上で반사に
+	IF FLAG:적강화옵션 > 2
+		;相性１つを
+		VARSET D,-1
+		LOCAL:4 = 0
+		FOR LOCAL:5, 0, FLAG:相性数 - 1
+			SIF MAXBASE:LOCAL:GET_TYPE(LOCAL:5) == 999 || MAXBASE:LOCAL:GET_TYPE(LOCAL:5) < 100
+				CONTINUE
+			D:(LOCAL:4) = LOCAL:5
+			LOCAL:4 += 1
+		NEXT
+		IF LOCAL:4 > 0
+			CFLAG:LOCAL:변경相性1 = D:(RAND:(LOCAL:4))
+			CFLAG:LOCAL:변경相性치1 = 250-(50*FLAG:적강화옵션)
+			SIF FLAG:적강화옵션 >= 7
+				CFLAG:LOCAL:변경相性치1 = 999
+;			SIF FLAG:DEBUG
+;				PRINTFORML ``%CALLNAME:LOCAL%相性{CFLAG:LOCAL:변경相性1}`` 
+		ENDIF
+		;更に弱点でない相性１つも、강화値６で通常、７で내성、８で無効、９で흡수、１０以上で반사に
+		IF FLAG:적강화옵션 > 5
+			VARSET D,-1
+			LOCAL:4 = 0
+			FOR LOCAL:5, 0, FLAG:相性数 - 1
+				SIF MAXBASE:LOCAL:GET_TYPE(LOCAL:5) == 999
+					CONTINUE
+				SIF MAXBASE:LOCAL:GET_TYPE(LOCAL:5) <= 100 && FLAG:적강화옵션 < 7
+					CONTINUE
+				SIF MAXBASE:LOCAL:GET_TYPE(LOCAL:5) <= 0 && FLAG:적강화옵션 < 8
+					CONTINUE
+				SIF MAXBASE:LOCAL:GET_TYPE(LOCAL:5) < 0 && FLAG:적강화옵션 < 9
+					CONTINUE
+				D:(LOCAL:4) = LOCAL:5
+				LOCAL:4 += 1
+			NEXT
+			IF LOCAL:4 > 0
+				CFLAG:LOCAL:변경相性2 = D:(RAND:(LOCAL:4))
+				CFLAG:LOCAL:변경相性치2 = 400-(50*FLAG:적강화옵션)
+				SIF FLAG:적강화옵션 >= 10
+					CFLAG:LOCAL:변경相性치2 = 999
+	;			SIF FLAG:DEBUG
+	;				PRINTFORML ``%CALLNAME:LOCAL%相性{CFLAG:LOCAL:변경相性2}`` 
+			ENDIF
+		ENDIF
+	ENDIF
+	;강화値９以上から공격상성を만능相性に
+	SIF FLAG:적강화옵션 > 8
+		ABL:LOCAL:공격상성 = 17
+	;강화値１３以上から최대공격횟수が２回に
+	SIF FLAG:적강화옵션 > 12 && ABL:LOCAL:최대공격횟수 < 2
+		ABL:LOCAL:최대공격횟수 += 1
+	;강화値１５以上から최저공격횟수が２回に
+	SIF FLAG:적강화옵션 > 12 && ABL:LOCAL:최저공격횟수 < 2
+		ABL:LOCAL:최저공격횟수 += 1
+	;강화値１５を超える１あたり최대공격횟수が＋１回
+	SIF FLAG:적강화옵션 > 15 && ABL:LOCAL:최대공격횟수 < (FLAG:적강화옵션 - 13)
+		ABL:LOCAL:최대공격횟수 += (FLAG:적강화옵션 - 15)
+ENDIF
+;---- EDIT 005 ADD END ---------------------------
+
+;아군専用스킬を削除
+FOR LOCAL:3,1,FLAG:스킬数+1
+	LOCALS = 스킬{LOCAL:3}
+	TRYCCALLFORM 아군専用_{ABL:LOCAL:LOCALS}
+		SIF RESULT == 1
+			ABL:LOCAL:LOCALS = 0
+	CATCH
+	ENDCATCH
+NEXT
+;二人称を変換する
+CALL CONVERT_SECOND_PERSON, LOCAL
+;배우자랜덤부여
+;배우자が설정されている場合はスキップ
+IF CSVCSTR(NO:LOCAL , GETNUM(CSTR , "배우자") , 0) == "" && FLAG:배우자랜덤부여 && RAND:100 < FLAG:배우자랜덤부여
+	IF TALENT:LOCAL:남자
+		CSTR:LOCAL:배우자 = 아내
+	ELSE
+		CSTR:LOCAL:배우자 = 남편
+	ENDIF
+ENDIF
+;야생악마소질랜덤설정
+;とりあえず가슴のみ
+IF FLAG:야생악마소질랜덤설정 && RAND:100 < FLAG:야생악마소질랜덤설정
+	IF TALENT:LOCAL:남자 == 0
+		TALENT:LOCAL:빈유 = 0
+		TALENT:LOCAL:절벽 = 0
+		TALENT:LOCAL:거유 = 0
+		TALENT:LOCAL:폭유 = 0
+		SELECTCASE RAND:5
+			CASE 0
+				TALENT:LOCAL:빈유 = 1
+			CASE 1
+				TALENT:LOCAL:절벽 = 1
+			CASE 2
+				TALENT:LOCAL:거유 = 1
+			CASE 3
+				TALENT:LOCAL:폭유 = 1
+			;普乳
+			CASE 4
+
+		ENDSELECT
+	ENDIF
+ENDIF
+
+CALL ADJUST_CHARA_ALI,LOCAL
+CALL SYNC_STATUS,LOCAL
+CALL HEALTH_CHARA,LOCAL
+CALL INSERT_POSITION,ARG,LOCAL
+TARGET = LOCAL:1
+
+RETURN 1
+
+;二人称を変換する
+@CONVERT_SECOND_PERSON, ARG
+IF TALENT:MASTER:남자 == 0
+	SIF CSTR:ARG:二人称 == "お兄ちゃん"
+		CSTR:ARG:二人称 = お姉ちゃん
+	SIF CSTR:ARG:二人称 == "お兄さん"
+		CSTR:ARG:二人称 = お姉さん
+	SIF CSTR:ARG:二人称 == "お兄様"
+		CSTR:ARG:二人称 = お姉様
+ENDIF
+
+
+@LEARN_SKILL_ENEMY,ARG,ARG:1
+;ARG = 레벨アップしたキャラ
+;ARG:1 = 습득する스킬
+;まず空の스킬枠を探す
+LOCAL:1 = 0
+LOCALS:1 = 
+FOR LOCAL,1,FLAG:스킬数+1
+	LOCALS = 스킬{LOCAL}
+	;既に습득していたら関数を抜ける
+	SIF ABL:ARG:LOCALS == ARG:1
+		RETURN 0
+	IF ABL:ARG:LOCALS < 1
+		LOCAL:1 = 1
+		LOCALS:1 = %LOCALS%
+		BREAK
+	ENDIF
+NEXT
+
+IF LOCAL:1 > 0
+	;空の스킬枠があれば습득
+	ABL:ARG:(LOCALS:1) = ARG:1
+ENDIF
+
+
+;===============================
+;전투초기化
+;===============================
+@REFRESH_BATTLE
+#DIM LCOUNT
+FOR LOCAL:1,0,CHARANUM
+	CFLAG:(LOCAL:1):입력行動 = -1
+	CFLAG:(LOCAL:1):방어フラグ = 0
+	CFLAG:(LOCAL:1):입수경험치 = 0
+	CFLAG:(LOCAL:1):입수ＭＡＧ = 0
+	CFLAG:(LOCAL:1):입수AP = 0
+	TCVAR:(LOCAL:1):획득충성도 = 0
+	CFLAG:(LOCAL:1):行動した횟수 = 0
+	CFLAG:(LOCAL:1):ＣＨＡＮＧＥ대상フラグ = 0
+	CFLAG:(LOCAL:1):공격강화 = 0
+	CFLAG:(LOCAL:1):명중강화 = 0
+	CFLAG:(LOCAL:1):방어강화 = 0
+	CFLAG:(LOCAL:1):회피강화 = 0
+	CFLAG:(LOCAL:1):마법위력강화 = 0
+	CFLAG:(LOCAL:1):마법효과강화 = 0
+	CFLAG:(LOCAL:1):마법위력강화 = 0
+	CFLAG:(LOCAL:1):クリティカル강화 = 0
+	CFLAG:(LOCAL:1):BS付着率강화 = 0
+	CFLAG:(LOCAL:1):소환予定キャラ = -1
+	CFLAG:(LOCAL:1):ＣＯＯＰフラグ = 0
+	CFLAG:(LOCAL:1):ＣＯＯＰ참가フラグ = 0
+	CFLAG:(LOCAL:1):데미지흡수量 = 0
+	CFLAG:(LOCAL:1):롱기누스 = 0
+	CFLAG:(LOCAL:1):ハント횟수 = 0
+	VARSET TFLAG, 0, 300, 500
+	TFLAG:전투中 = 1
+	FOR LCOUNT, 0, 19
+		CFLAG:(LOCAL:1):(GET_TYPE(LCOUNT)+"무효화횟수") = 0
+		CFLAG:(LOCAL:1):(GET_TYPE(LCOUNT)+"가드킬") = 0
+		CFLAG:(LOCAL:1):(GET_TYPE(LCOUNT)+"웨이트") = 0
+	NEXT
+	FOR LCOUNT, 0, FLAG:ステート数
+		CFLAG:(LOCAL:1):(GET_STATE(LCOUNT)+"무효화횟수") = 0
+	NEXT
+	CFLAG:(LOCAL:1):1263 = 0;CFLAG:(LOCAL:1):잠재능력発動횟수 = 0
+	CFLAG:(LOCAL:1):バステ무효화횟수 = 0
+	CFLAG:(LOCAL:1):어택커 = -1
+	CFLAG:(LOCAL:1):물리반사フラグ = 0
+	CFLAG:(LOCAL:1):마법반사フラグ = 0
+	CFLAG:(LOCAL:1):무효フラグ = 0
+	CFLAG:(LOCAL:1):이악물기フラグ = 0
+	CFLAG:(LOCAL:1):기합フラグ = 0
+	CFLAG:(LOCAL:1):集中フラグ = 0
+	CFLAG:(LOCAL:1):링케이지참가 = 0
+	CFLAG:(LOCAL:1):링케이지발동 = 0
+	CFLAG:(LOCAL:1):DDS사용횟수 = 0
+	CFLAG:(LOCAL:1):방어반감フラグ = 0
+	CFLAG:(LOCAL:1):마법효과반감フラグ = 0
+	CFLAG:(LOCAL:1):회복不能フラグ = 0
+	CFLAG:(LOCAL:1):熱り弱点부여 = 0
+	FOR LCOUNT, 1, 21
+		CFLAG:(LOCAL:1):("고유게이지D"+ TOSTR(LCOUNT)) = 0
+		CFLAG:(LOCAL:1):("고유게이지H"+ TOSTR(LCOUNT)) = 0
+	NEXT
+	CFLAG:(LOCAL:1):蓄積데미지 = 0
+NEXT
+
+;입력行動をＲＥＰＥＡＴから呼び出して登録
+FOR LOCAL,0,6
+	LOCALS = 포지션{LOCAL+1}
+	SIF FLAG:LOCALS > -1
+	CALL COMMAND_REPEAT,FLAG:LOCALS
+NEXT
+
+
+
+
+
+FLAG:勝利フラグ = 0
+FLAG:敗北フラグ = 0
+FLAG:経過ターン数 = 0
+FLAG:交渉목적 = 0
+
+;===============================
+;전투キャラ초기化
+;===============================
+
+;===============================
+;REPEAT입력
+;===============================
+@COMMAND_REPEAT,ARG
+#DIM リンケ , 1
+#DIM 人数 , 1
+#LOCALSIZE 1
+#DIM 元참가者 , 5
+	IF ARG > -1
+		;行動입력可能でなければ行動不能にして飛ばす
+		CALL INPUTABLE_CHARA,ARG
+		IF RESULT == 0
+			CFLAG:(ARG):입력行動 = -1
+			RETURN 0
+		ENDIF
+		IF CFLAG:(ARG):ＲＥＰＥＡＴ行動 == -1
+			CFLAG:(ARG):입력行動 = -1
+			CFLAG:(ARG):방어フラグ = 1
+			RETURN 0
+		ENDIF
+		
+		;リピート스킬を습득していなかったら通常공격を입력 ただし、총스킬と아이템스킬に関しては持ってなくても通常공격にいかない
+		IF HAVE_SKILL(ARG,CFLAG:(ARG):ＲＥＰＥＡＴ行動) == 0
+			;通常공격になるところ
+			$通常공격にします
+			
+			;可読性のため、もっていなくても良い스킬はここへ
+			;총스킬は습득していなくてもおｋ
+			SIF CFLAG:(ARG):ＲＥＰＥＡＴ行動 / 100 == 21
+				GOTO 持ってなくて良い스킬はここ
+			;아이템스킬は습득していなくておｋ
+			SIF CFLAG:(ARG):ＲＥＰＥＡＴ行動 / 1000 == 3
+				GOTO 持ってなくて良い스킬はここ
+			;ＧＵＮ
+			SIF CFLAG:(ARG):ＲＥＰＥＡＴ行動 == 2101
+				GOTO 持ってなくて良い스킬はここ
+			;ＤＯＵＢＬＥ・ＴＡＰ
+			SIF CFLAG:(ARG):ＲＥＰＥＡＴ行動 == 138
+				GOTO 持ってなくて良い스킬はここ
+			;Hi-DAS
+			SIF (CFLAG:(ARG):ＲＥＰＥＡＴ行動 == 2306 && EQUIP:MASTER:Ｈｉ－ＤＡＳ)
+				GOTO 持ってなくて良い스킬はここ
+			
+			;リピート스킬が링케이지である場合、사용者と참가者全員を체크
+			IF RANGE(CFLAG:ARG:ＲＥＰＥＡＴ行動,4000,4999)
+				;전회사용したメンバーで사용できるか체크
+				VARSET 元참가者 , -1
+				FOR LOCAL , 0 , 5
+					IF CFLAG:ARG:("링케이지참가자"+ TOSTR(LOCAL+1)) > -1 && CFLAG:ARG:("링케이지참가자"+ TOSTR(LOCAL+1)) < CHARANUM
+						IF CFLAG:(CFLAG:ARG:("링케이지참가자"+ TOSTR(LOCAL+1))):PTフラグ == 2
+							元참가者:LOCAL = CFLAG:ARG:("링케이지참가자"+ TOSTR(LOCAL+1))
+						ENDIF
+					ENDIF
+				NEXT
+				リンケ = CFLAG:ARG:ＲＥＰＥＡＴ行動
+				CALL CHECK_ACTIONABLE,ARG,リンケ
+				SIF RESULT == 0
+					GOTO NOLINK
+				CALLFORM 참가人数_{リンケ}
+				人数 = RESULT
+				FOR LOCAL , 1 , 人数+1
+					SIF 元참가者:(LOCAL-1) < 0
+						GOTO NOLINK
+					;조건を満たせないキャラはダメ
+					CALLFORM 참가者조건_{リンケ}, 元참가者:(LOCAL-1) , LOCAL
+					SIF RESULT == 0
+						GOTO NOLINK
+					;動けないキャラは駄눈
+					CALL ACTIONABLE_CHARA,元참가者:(LOCAL-1)
+					SIF RESULT == 0
+						GOTO NOLINK
+					;전투に出てないキャラは駄눈
+					SIF CFLAG:(元참가者:(LOCAL-1)):PTフラグ < 2
+						GOTO NOLINK
+					;既に참가しているキャラはダメ
+					SIF CFLAG:(元참가者:(LOCAL-1)):링케이지참가 == 1
+						GOTO NOLINK
+				NEXT
+				;全員可能なら、行動입력
+				CFLAG:(ARG):입력行動 = リンケ
+				CFLAG:ARG:사용링케이지 = リンケ
+				CFLAG:ARG:링케이지발동 = 1
+				
+				FOR LOCAL,1,人数+1
+					CFLAG:ARG:("링케이지참가자"+ TOSTR(LOCAL)) = 元참가者:(LOCAL-1)
+					CFLAG:(元참가者:(LOCAL-1)):링케이지참가 = 1
+				NEXT
+				GOTO 持ってなくて良い스킬はここ
+				
+			ELSE
+				$NOLINK
+				CALL CHECK_ACTIONABLE,ARG,0
+				IF RESULT == 1
+					CFLAG:(ARG):입력行動 = 0
+					CFLAG:(ARG):ＲＥＰＥＡＴ行動 = 0
+					CALL RANDOM_TARGET,ARG,0
+					CFLAG:(ARG):ＲＥＰＥＡＴターゲット = CFLAG:(ARG):ターゲット
+				ELSE
+					CFLAG:(ARG):입력行動 = -1
+					CFLAG:(ARG):방어フラグ = 1
+				ENDIF
+				RETURN 0
+			ENDIF
+		ENDIF
+		
+		;REPEATしない스킬はここで処理
+		;사바트마と초래의무도
+		SIF CFLAG:(ARG):ＲＥＰＥＡＴ行動 == [[스킬:사바트마]] || CFLAG:(ARG):ＲＥＰＥＡＴ行動 == [[스킬:초래의무도]] 
+			GOTO 通常공격にします
+		;1체蘇生 리캄・사마리캄・トンリン芳香
+		IF CFLAG:(ARG):ＲＥＰＥＡＴ行動 == [[스킬:리캄]] || CFLAG:(ARG):ＲＥＰＥＡＴ行動 == [[스킬:사마리캄]] || CFLAG:(ARG):ＲＥＰＥＡＴ行動 == [[스킬:통령「통령요시카」]]
+			;1체蘇生대상が存在するか체크
+			CALL CHECK_TARGET_RESUSCITATION, ARG
+			SIF RESULT == -1
+				GOTO SET_GUARD
+		ENDIF
+		$持ってなくて良い스킬はここ
+		
+		;1체蘇生 道反玉・반혼향
+		IF CFLAG:(ARG):ＲＥＰＥＡＴ行動 == [[스킬:도반옥]] || CFLAG:(ARG):ＲＥＰＥＡＴ行動 == [[스킬:반혼향]]
+			;1체蘇生대상が存在するか체크
+			CALL CHECK_TARGET_RESUSCITATION, ARG
+			SIF RESULT == -1
+				GOTO SET_GUARD
+		ENDIF
+		
+		;스킬の대상と範囲が合ってなかったら修正
+		CALLFORM SKILL_SPHERE_{CFLAG:(ARG):ＲＥＰＥＡＴ行動} , ARG
+		IF RESULT == 1 && (CFLAG:(ARG):ＲＥＰＥＡＴターゲット > 16 || CFLAG:(ARG):ＲＥＰＥＡＴターゲット < 1)
+			CALL RANDOM_TARGET,ARG,CFLAG:(ARG):ＲＥＰＥＡＴ行動
+					CFLAG:(ARG):ＲＥＰＥＡＴターゲット = CFLAG:(ARG):ターゲット
+		ELSEIF RESULT == 2 && (CFLAG:(ARG):ＲＥＰＥＡＴターゲット != 17 && CFLAG:(ARG):ＲＥＰＥＡＴターゲット != 18 && CFLAG:(ARG):ＲＥＰＥＡＴターゲット != 20 && CFLAG:(ARG):ＲＥＰＥＡＴターゲット != 21)
+			CALL RANDOM_TARGET,ARG,CFLAG:(ARG):ＲＥＰＥＡＴ行動
+			CFLAG:(ARG):ＲＥＰＥＡＴターゲット = CFLAG:(ARG):ターゲット
+		ELSEIF RESULT == 3 && (CFLAG:(ARG):ＲＥＰＥＡＴターゲット != 19 && CFLAG:(ARG):ＲＥＰＥＡＴターゲット != 21)
+			CALL RANDOM_TARGET,ARG,CFLAG:(ARG):ＲＥＰＥＡＴ行動
+			CFLAG:(ARG):ＲＥＰＥＡＴターゲット = CFLAG:(ARG):ターゲット
+		ENDIF
+		CALL CHECK_ACTIONABLE,ARG,CFLAG:(ARG):ＲＥＰＥＡＴ行動
+		IF RESULT == 1
+			IF (CFLAG:(ARG):ＲＥＰＥＡＴターゲット < 17 && CFLAG:(ARG):ＲＥＰＥＡＴターゲット > 0)
+				IF POS(CFLAG:(ARG):ＲＥＰＥＡＴターゲット) > -1 && CFLAG:(POS(CFLAG:(ARG):ＲＥＰＥＡＴターゲット)):ステート < GET_STATE_NUM("STONE")
+					CFLAG:(ARG):입력行動 = CFLAG:(ARG):ＲＥＰＥＡＴ行動
+					CFLAG:(ARG):ターゲット = CFLAG:(ARG):ＲＥＰＥＡＴターゲット
+				ELSE
+					CFLAG:(ARG):입력行動 = CFLAG:(ARG):ＲＥＰＥＡＴ行動
+					CALL RANDOM_TARGET,ARG,CFLAG:(ARG):ＲＥＰＥＡＴ行動
+					CFLAG:(ARG):ＲＥＰＥＡＴターゲット = CFLAG:(ARG):ターゲット
+				ENDIF
+			ELSE
+				CFLAG:(ARG):입력行動 = CFLAG:(ARG):ＲＥＰＥＡＴ行動
+				IF CFLAG:(ARG):ＲＥＰＥＡＴターゲット == 0
+					CALL RANDOM_TARGET,ARG,CFLAG:(ARG):ＲＥＰＥＡＴ行動
+					CFLAG:(ARG):ＲＥＰＥＡＴターゲット = CFLAG:(ARG):ターゲット
+				ENDIF
+				CFLAG:(ARG):ターゲット = CFLAG:(ARG):ＲＥＰＥＡＴターゲット
+			ENDIF
+			
+			
+		ELSE
+			$SET_GUARD
+			CFLAG:(ARG):입력行動 = -1
+			CFLAG:(ARG):방어フラグ = 1
+		ENDIF
+	ENDIF
+
+;後衛を狙っている場合、後衛に誰も居ないと前衛にセット
+IF CFLAG:ARG:ターゲット == 21
+	CFLAG:ARG:ターゲット = 20
+	FOR LOCAL,12,17
+		IF POS(LOCAL) > -1
+			CFLAG:ARG:ターゲット = 21
+			BREAK
+		ENDIF
+	NEXT
+ELSEIF CFLAG:ARG:ターゲット == 18
+	FOR LOCAL,1,7
+		IF POS(LOCAL) > -1
+			CFLAG:ARG:ターゲット = 21
+			BREAK
+		ENDIF
+	NEXT
+ENDIF

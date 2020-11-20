@@ -1,0 +1,55 @@
+﻿
+;======================================================
+;장비品の데이터
+;롱기누스헤드
+;======================================================
+
+@기본능력수정_3207,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3207,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "마법위력"
+		RETURN 32
+	CASE "마법효과"
+		RETURN 28
+ENDSELECT
+RETURN 0
+
+@방어상성_3207,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "비구"
+		RETURN 80
+	CASE "지변"
+		RETURN 125
+ENDSELECT
+RETURN 100
+
+@장비箇所_3207
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3207
+RETURN 1
+
+@장비조건_3207,ARG
+SIF CSTR:ARG:종족명 == "성창기사"
+	RETURN 1
+SIF BASE:ARG:LV < 40
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3207
+PRINTL 장비조건：성창기사or레벨40이상
+
+@장비해설_3207
+PRINTL 성당 기사단의 파워드 슈트
+PRINTL 　　　　　　　　「ヒンメル・フォイアー」의 머리 파츠를 복원한 것。방어를 버렸다。
+
+
+@구입조건_3207
+RETURN 0
+
+@引継ぎ可不可_3207
+RETURN 1

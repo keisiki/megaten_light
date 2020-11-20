@@ -1,0 +1,367 @@
+﻿;=================================================
+;   sub REQUEST_TITLE_99
+;=================================================
+;   의뢰:章のタイトル
+;-------------------------------------------------
+; Input:
+;  ARGS:0				チャプター
+;  ARGS:1				2020/2020-Ⅱ切り替え
+;-------------------------------------------------
+@REQUEST_TITLE_99(ARGS:0,ARGS:1="-100")
+CUSTOMDRAWLINE =
+PRINTFORML
+PRINTFORML
+IF ARGS:1 == "2"
+	IF ARGS:0 == "0"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　　 202X년 도쿄
+	ELSEIF ARGS:0 == "1"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　新た
+		SETCOLOR 0x679AF6
+		PRINT な
+		RESETCOLOR
+		PRINT る
+		SETCOLOR 0x679AF6
+		PRINT 戦
+		RESETCOLOR
+		PRINTFORML 場
+	ELSEIF ARGS:0 == "I1"
+		PRINTFORML 　　　　　>>INTERMISSION
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　　　　11の面影
+	ELSEIF ARGS:0 == "2"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINT 　　　　　　　　　　　　　　　　　　　標高238
+		SETCOLOR 0x679AF6
+		PRINTFORML M
+		RESETCOLOR
+		PRINT からの
+		SETCOLOR 0x679AF6
+		PRINT 侵
+		RESETCOLOR
+		PRINT 略
+		SETCOLOR 0x679AF6
+		PRINTFORML 者
+		RESETCOLOR
+	ELSEIF ARGS:0 == "3"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　　　蘇る
+		SETCOLOR 0x679AF6
+		PRINT 狂
+		RESETCOLOR
+		PRINTFORML 気
+	ELSEIF ARGS:0 == "4"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINT 　　　　　　　　　　　　　　　　　　　ク
+		SETCOLOR 0x679AF6
+		PRINT リ
+		RESETCOLOR
+		PRINT ティカル
+		SETCOLOR 0x679AF6
+		PRINT ポ
+		RESETCOLOR
+		PRINTFORML イント
+	ELSEIF ARGS:0 == "I2"
+		PRINTFORML 　　　　　>>INTERMISSION
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　　　地の底から
+	ELSEIF ARGS:0 == "5"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　　
+		SETCOLOR 0x679AF6
+		PRINT 天
+		RESETCOLOR
+		PRINT 空の
+		SETCOLOR 0x679AF6
+		PRINT 戦
+		RESETCOLOR
+		PRINTFORML 場
+	ELSEIF ARGS:0 == "6"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　巨大
+		SETCOLOR 0x679AF6
+		PRINT 遺
+		RESETCOLOR
+		PRINT 跡の
+		SETCOLOR 0x679AF6
+		PRINTFORML 王
+		RESETCOLOR
+	ELSEIF ARGS:0 == "7"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINT 　　　　　　　　　　　　　　　　　　 首
+		SETCOLOR 0x679AF6
+		PRINT 都
+		RESETCOLOR
+		PRINT 高 深
+		SETCOLOR 0x679AF6
+		PRINT 淵
+		RESETCOLOR
+		PRINT へと下る
+		SETCOLOR 0x679AF6
+		PRINTFORML 道
+		RESETCOLOR
+	ELSEIF ARGS:0 == "X"
+		PRINT 　　　　　>>CHAPTER
+		SETCOLOR 0x679AF6
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINT 　　　　　　　　　　　　　　　　　　　神ＸＸＸヒト
+		SETCOLOR 0x679AF6
+		PRINT ＸＸ
+		RESETCOLOR
+		PRINT ＸＸ
+		SETCOLOR 0x679AF6
+		PRINT ＸＸ
+		RESETCOLOR
+		PRINTFORML Ｘヒト
+	ELSE
+		PRINTFORML 引数엘라ー
+	ENDIF
+ELSE
+	IF ARGS:0 == "0"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　 Time Count,Zero
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　카
+		SETCOLOR 0xA8F890
+		PRINT 운
+		RESETCOLOR
+		PRINT 트、
+		SETCOLOR 0xA8F890
+		PRINT 제
+		RESETCOLOR
+		PRINTFORML 로
+	ELSEIF ARGS:0 == "1"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　　　The Warcry
+		SETCOLOR 0xA8F890
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　전
+		RESETCOLOR
+		PRINT 장의 포
+		SETCOLOR 0xA8F890
+		PRINTFORML 효
+		RESETCOLOR
+	ELSEIF ARGS:0 == "1.5"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　SKY and The Others
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　　　　생존
+		SETCOLOR 0xA8F890
+		PRINTFORML 자
+		RESETCOLOR
+	ELSEIF ARGS:0 == "2"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　　The Jigowatt
+		SETCOLOR 0xA8F890
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　하늘
+		RESETCOLOR
+		PRINT 의 초
+		SETCOLOR 0xA8F890
+		PRINT 전
+		RESETCOLOR
+		PRINTFORML 자포
+	ELSEIF ARGS:0 == "3"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　The Lore-A-Lua
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　끝
+		SETCOLOR 0xA8F890
+		PRINT 나
+		RESETCOLOR
+		PRINT 지 않는 
+		SETCOLOR 0xA8F890
+		PRINT 월
+		RESETCOLOR
+		PRINTFORML 야
+	ELSEIF ARGS:0 == "4"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　 The Tri-Nitro
+		PRINT 　　　　　　　　　　　　　　　　　　　　　열
+		SETCOLOR 0xA8F890
+		PRINT 사
+		RESETCOLOR
+		PRINT 의 Ｄ
+		SETCOLOR 0xA8F890
+		PRINT 프
+		RESETCOLOR
+		PRINTFORML 론트
+	ELSEIF ARGS:0 == "5"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　 The Sleepy-Hollow
+		SETCOLOR 0xA8F890
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　눈
+		RESETCOLOR
+		PRINT 을 뜬
+		SETCOLOR 0xA8F890
+		PRINT 광
+		RESETCOLOR
+		PRINTFORML 기
+	ELSEIF ARGS:0 == "6"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　　　The Scaber
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　어
+		SETCOLOR 0xA8F890
+		PRINT 둠
+		RESETCOLOR
+		PRINT 과 대
+		SETCOLOR 0xA8F890
+		PRINT 동
+		RESETCOLOR
+		PRINT 의 
+		SETCOLOR 0xA8F890
+		PRINTFORML 왕
+		RESETCOLOR
+	ELSEIF ARGS:0 == "7"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　 The Zero-Blue
+		SETCOLOR 0xA8F890
+		PRINT 　　　　　　　　　　　　　　　　　　　　　　　　고요
+		RESETCOLOR
+		PRINT 요한 
+		SETCOLOR 0xA8F890
+		PRINTFORML 바다
+		RESETCOLOR
+	ELSEIF ARGS:0 == "X"
+		PRINT 　　　　　CHAPTER
+		SETCOLOR 0xA8F890
+		PRINTFORML %ARGS:0%
+		RESETCOLOR
+		PRINTFORML 　　　　　　　　　　　　　　　　　　　　　　 Nyarla of 7th
+		PRINT 　　　　　　　　　　　　　　　　　　　신
+		SETCOLOR 0xA8F890
+		PRINT ＸＸ
+		RESETCOLOR
+		PRINT ＸＸ
+		SETCOLOR 0xA8F890
+		PRINT ＸＸ
+		RESETCOLOR
+		PRINT Ｘ
+		PRINTFORML 히트
+	ELSE
+		PRINTFORML 引数엘라ー
+	ENDIF
+ENDIF
+PRINTFORML
+PRINTFORML
+CUSTOMDRAWLINE =
+WAIT
+;=================================================
+;   sub REQUEST_99_TURN_END
+;=================================================
+;   의뢰:ターンの終了
+;-------------------------------------------------
+@REQUEST_99_TURN_END
+;- 1ターン経過
+FLAG:휴식フラグ = 1
+BEGIN TURNEND
+RETURN
+;=================================================
+;   sub REQUEST_99_DAY_END
+;=================================================
+;   의뢰:一日の終了
+;-------------------------------------------------
+@REQUEST_99_DAY_END
+PRINTFORMW 하루가 종료됩니다。
+;- 朝になる処理
+FLAG:휴식フラグ = 3
+BEGIN TURNEND
+RETURN
+;=================================================
+;   sub EVENT_BATTLE_START_REQUEST99
+;=================================================
+;   전투開始時の메시지표시
+;   他の場面で使うことを考えてこうしたけど全然使わなかったな…
+;-------------------------------------------------
+@EVENT_BATTLE_START_REQUEST99
+IF FLAG:ナナドラ의뢰進行度 == 14
+	CALL EVENT_BATTLE_START_REQUEST99_1
+ENDIF
+RETURN
+;=================================================
+;   sub EVENT_BATTLE_START_REQUEST99_1
+;=================================================
+;   전투開始時の메시지표시
+;-------------------------------------------------
+@EVENT_BATTLE_START_REQUEST99_1
+;미즈치戦・開始
+SETCOLOR 0xff0033
+PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+PRINTFORML ┃来なさい――そして、絶望せよ！　　　　　　　┃
+PRINTFORML ┃神の힘を思い知るがいい！　　　　　　　　　　┃
+PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+FLAG:ナナドラ의뢰進行度 = 141
+;=================================================
+;   sub EVENT_BATTLE_ACTEND_REQUEST99
+;=================================================
+;   전투中の메시지표시
+;-------------------------------------------------
+@EVENT_BATTLE_ACTEND_REQUEST99
+IF FLAG:ナナドラ의뢰進行度 == 141 && 現HP割合(CHARANUM-1) < 60
+	CALL EVENT_BATTLE_ACTEND_REQUEST99_1
+ENDIF
+RETURN
+;=================================================
+;   sub EVENT_BATTLE_ACTEND_REQUEST99_1
+;=================================================
+;   전투中の메시지표시
+;-------------------------------------------------
+@EVENT_BATTLE_ACTEND_REQUEST99_1
+;미즈치戦・HP半分切ったら
+SETCOLOR 0xff0033
+PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
+PRINTFORML ┃その程度で勝つつもりか！　　　　　　　　　　┃
+PRINTFORML ┃身の程を弁えよ！　　　　　　　　　　　　　　┃
+PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
+RESETCOLOR
+FLAG:ナナドラ의뢰進行度 = 142
+
+
+

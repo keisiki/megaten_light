@@ -1,0 +1,86 @@
+﻿;======================================================
+;곡옥마사카두스(最上位)
+;======================================================
+@기본능력수정_8224,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘"
+		RETURN 4
+	CASE "지혜"
+		RETURN 4
+	CASE "마력"
+		RETURN 4
+	CASE "인내력"
+		RETURN 4
+	CASE "속도"
+		RETURN 4
+	CASE "운"
+		RETURN 0
+ENDSELECT
+RETURN 0
+
+@증가CP_8224
+RETURN 0
+
+@전투능력수정_8224,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@방어상성_8224,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "검격","화염","빙결","전격","충격","신경","정신","파마","주살"
+		RETURN 0
+	CASE "지변","중력"
+		RETURN 200
+	CASE "만능"
+		RETURN 150
+ENDSELECT
+RETURN 100
+
+@공격상성_8224, ARG = -1
+RETURN 0
+
+@최저공격횟수_8224, ARG = -1
+RETURN 1
+
+@최대공격횟수_8224, ARG = -1
+RETURN 1
+
+@사거리_8224, ARG = -1
+RETURN 1
+
+@공격범위_8224, ARG = -1
+RETURN 1
+
+@장비箇所_8224
+RETURN 0
+
+@필요레벨_8224
+RETURN 80
+
+@P습득스킬_8224,ARG
+LOCAL = 0
+LOCAL:1 = 0
+SELECTCASE ARG
+	CASE 0
+		LOCAL   = [[스킬:메기도라온]]
+		LOCAL:1 = 90
+	CASE 1
+		LOCAL   = [[스킬:티없는위광]]
+		LOCAL:1 = 95
+ENDSELECT
+RETURN LOCAL,LOCAL:1
+
+@장비조건_8224,ARG
+SIF TALENT:ARG:인수라
+	RETURN 1
+RETURN 0
+@장비조건설명_8224
+PRINTL 인수라만
+@구입조건_8224
+RETURN 0
+
+@장비해설_8224
+PRINTL 곡옥「마사카두스」。인수라만 장비할 수 있다.
+PRINTL 　・궁극의 힘을 감추고 있는 마가타마
+PRINTL 　・여러가지 相性을 무효、그 외에 약하다

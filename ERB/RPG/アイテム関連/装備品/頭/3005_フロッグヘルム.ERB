@@ -1,0 +1,62 @@
+﻿
+;======================================================
+;장비品の데이터
+;프로그헬름
+;Lv35장비までは무효まで　기본능력に합계+3まで
+;======================================================
+
+@기본능력수정_3005,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "인내력"
+		RETURN 1
+ENDSELECT
+RETURN 0
+
+@전투능력수정_3005,ARG,ARG:1 = -1
+SELECTCASE GET_BATTLESTATUS(ARG)
+	CASE "방어"
+		RETURN 25
+	CASE "회피"
+		RETURN -3
+	CASE "마법효과"
+		RETURN 4
+ENDSELECT
+RETURN 0
+
+@방어상성_3005,ARG,ARG:1 = -1
+SELECTCASE GET_TYPE(ARG)
+	CASE "전격"
+		RETURN 50
+	CASE "타격"
+		RETURN 75
+	CASE "지변"
+		RETURN 115
+ENDSELECT
+RETURN 100
+
+@장비箇所_3005
+RETURN GET_EQUIPNUM("머리")
+
+@필요레벨_3005
+RETURN 25
+
+@장비조건_3005,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 25
+	RETURN 0
+RETURN 1
+
+@장비조건설명_3005
+PRINTL 장비조건：♂ LV25～
+
+@장비해설_3005
+PRINTL カエルの입を模した覗き穴の투구。
+PRINTL 　　　　　　　　十五世紀の中世馬上槍試合で用いられた。
+
+
+@구입조건_3005
+RETURN 1
+
+@引継ぎ可不可_3005
+RETURN 0
