@@ -87,42 +87,7 @@ IF (FLAG:所属組織 == 0 && FLAG:組織貢献度 >= 3500000 && GETBIT(FLAG:취
 			PRINTFORMW 
 			PRINTFORMW 　　　　　　　　―― Ending No.000 (팬텀 간부 END)
 		ENDIF
-		;파트너選択
-		;;표시させるキャラを抽出（Q:*に표시するキャラの등록번호、LOCAL:2に人数）
-		;VARSET Q, -1
-		;A = 0
-		;FOR LCOUNT, 0, CHARANUM
-		;	SIF 계약(LCOUNT) == 0
-		;		CONTINUE
-		;	SIF CFLAG:LCOUNT:この場に居ないフラグ == 1
-		;		CONTINUE
-		;	Q:A = LCOUNT
-		;	A += 1
-		;NEXT
-		;CALL SELECT_PARTNER
-		;TARGET = RESULT
-		;;未完成
-		;PRINTW ＞...........
-		;PRINTW ＞.......
-		;PRINTW ＞...
-		;PRINTFORMW ＞%조사처리(CALLNAME:MASTER,"는")% 팬텀 소사이어티에 있어서 엄청난 권한을 갖는 간부 중 한 사람이 됐다
-		;IF TALENT:MASTER:남자 && TALENT:MASTER:오토코노코
-		;	PRINTFORMW 말단에 불과 했던 %CALLNAME:MASTER%이 간부로 출세했다는 성공 스토리는、
-		;	PRINTFORMW 초보부터 고수까지、다른 구성원들의 야심을 달궜다
-		;	PRINTL
-		;	PRINTFORMW 간부가 되면서 권한은 강해졌지만、
-		;ELSE
-		;	;女or오토코노코だと出自次第ですぐヤらせてくれる話の分かる上司
-		;	SELECTCASE FLAG:主人出自
-		;		CASE 0
-		;			;新米서머너出身だと男と同様か似たようなの
-		;		CASE 1
-		;			;元성욕처리담당の話の分かる幹部。新米서머너の筆卸とか소질のある청소년を篭絡してくるとかいいよね！
-		;		CASE 2
-		;			;元변기で변기정신が染み付いちゃってる幹部
-		;		
-		;	ENDSELECT
-		;ENDIF
+		
 		
 		FLAG:5 = 9
 		SETBIT FLAG:発見ED,0
@@ -130,68 +95,6 @@ IF (FLAG:所属組織 == 0 && FLAG:組織貢献度 >= 3500000 && GETBIT(FLAG:취
 		
 	ENDIF
 ENDIF
-
-;ファントム乗っ取りEND
-;IF 조건 > 0
-;	PRINTFORMW ＞마침내 팬텀 소사이어티의 총수인 그레고리의 타천사들의 위치를 파악하는데 성공했다
-;	PRINTFORMW ＞그들을 죽일 수 있다면、조직은 인간인 %CALLNAME:MASTER의 것이 될것이다
-;	PRINTFORMW ＞어떻게 할까？
-;	PRINTL
-;	CALL INPUT_YN,"반역을 일으킨다","타천사의 첨병으로 계속 있는다"
-;	;グレゴリ連中と전투、勝利するとEND;ファントム乗っ取りEND
-;
-;
-;	;당신이상경험+1
-;	PRINTFORMW ＞%조사처리(CALLNAME:MASTER,"는")% 그레고리의 타천사를 쓰러트렸다
-;	PRINTFORMW 「어리석은 인간…자신의 행동의 경솔함、그 몸으로 깨달을것이다」
-;	PRINTFORMW 악마는 무너져、지배자를 잃어 창백한 빛을 발하는 거대한 소용돌이의 기둥은 폭주하며 팽창하기 시작했다
-;	PRINTFORMW 기하학적 법칙성을 갖춘 거대한 현상은 순식간에 방안을 푸르스름한 빛으로 물들이고、%조사처리(CALLNAME:MASTER,"를")% 삼켜갔다
-;	PRINTFORML …
-;	PRINTFORML ……
-;	PRINTFORML ………
-;	PRINTFORMW %CALLNAME:MASTER%의 눈앞에는 싸움의 역사가 펼쳐졌다
-;	PRINTFORMW 그것은 인류의 역사이며、우주의 역사였다
-;	PRINTFORMW 수많은 세계에서…사람은……사람과 사람、사람과 악마、밖의 존재、모든것과 싸우고 싸우며 피를 흘리고 있었다
-;	PRINTFORMW 한 세계는 바다 속에 침몰하고、다른 세계에선 천사에 의해 통솔된 근 미래적인 도시의 반란과 신에 의한 숙청이 있었다
-;	PRINTFORMW 학원의 평화를 지키기 위해 싸운 학생들이 있었고、제도의 평화를 지키기 위해서 산하되는 생명이 있었다
-;	PRINTFORMW 또 어떤 세계에서는 일상을 지키기 위해 피를 흘리며、이상을 믿고 계속 싸우는 자들이 있었다
-;	PRINTFORMW 혼돈에 삼켜 멸망한 세계가 있었다、음욕과 고통의 연쇄のみが彩る 광기의 세계があった、신의 정적 통치 세계가 있었다
-;	PRINTFORMW 위대한 존재에 닿은 %조사처리(CALLNAME:MASTER,"는")% 이 세계가 우주에 존재하는 수많은 평행세계 중 하나에 불과하다고 이해했다
-;	PRINTFORML 
-;	;Ｍ禿化する당신
-;	IF ABL:84 == 1
-;		PRINTFORMW 세계를 안 %조사처리(CALLNAME:MASTER,"는")% 각성했다
-;		PRINTFORMW 사람을 통치하는건 신도 아니고、악마도 아니다
-;		PRINTFORMW 사람은 사람에 의해 지배되지 않으면 안된다
-;		PRINTFORMW 팬텀 소사이어티의 힘을 가지고 지상의 악마를 구축해、인류의 인류를 위한 인류에 의한 통치를 펼쳐
-;		PRINTFORMW 나는 그 때문에 힘이 주어진 것이다
-;		PRINTFORMW 위대한 존재에 닿은 %조사처리(CALLNAME:MASTER,"는")% 자신의 사명이 무엇인가를 깨닳았다
-;	;閣下「他の세계にもいたんだよなぁ、お前みたいなの。カツオって言ってさ、ファントム倒したから俺は日常に帰るぜーとか、ないだろ。常識的に考えて」
-;	;　　「あの偽キョウジだって、履いてないビッチだって非日常に生きてんだぜ？　どうでもいいなんか人柱だぜ？」
-;	;　　「もっとこうさぁ、ビッと기합入れて生きようや。ちんこついてんだろ？、男なら反逆してみせろな？」
-;	;　　「んじゃあ、次のルートでは一緒に四문자禿ぶっころそうな？、解ったな？　返事は？」
-;	ELSEIF ABL:84 == 2
-;		PRINTFORMW 『그레고리의 타천사를 쓰러트리고、팬텀을 탈취…그는 모든것을 버리고 일상으로 돌아갈까』
-;		PRINTFORMW 『참으로 인간이란 신이나 악마보다 더 혹독한 선택을 하는 것이구나』
-;		PRINTFORMW %조사처리(CALLNAME:MASTER,"가")% 뒤를 돌아보면 금발의 소년이 있었다
-;		PRINTFORMW 『뭐 됐나… 그것이 너의 이번 선택이며、나는 방관자에 불과하다』
-;		PRINTFORMW 『가거라、인간이여』
-;		PRINTFORMW 소년은 모든 것을 간파하는듯한 시선을 %CALLNAME:MASTER%에게 향하며 당돌하게 웃었다に笑った
-;	;俺は인간をやめるぞ、バリバリバリ
-;	ELSE
-;		PRINTFORMW %CALLNAME:MASTER%은 힘이야 말로、투쟁이야 말로 인간의 본질이라고 이해했다
-;		PRINTFORMW 사람도、신도 악마도 관계 없이
-;		PRINTFORMW 단지 강자만이 절대적이다
-;		PRINTFORMW 자신의 에고를 위해서는 힘이 필요하며、약자는 강자를 따르는것 외에는 방법이 없다
-;		PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 가슴에서 막강한 힘이 솟아나는 것을 느꼇다
-;		PRINTFORMW 팬텀 소사이어티가 모았던 막강한 생체 마그네이트와 융합한 %CALLNAME:MASTER%의 육체는 환생을 해
-;		PRINTFORMW 사람이면서 사람이 아닌자가 된것이다…
-;		PRINTFORMW 메시아교、가이아교、천사、악마、그리고 신들
-;		PRINTFORMW 이 세상에는 쓰러뜨려야 하는 숙적들이 차고 넘친다
-;		PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 투쟁의 시작을 알리는 포효를 울렸다
-;	ENDIF
-;ENDIF
-
 
 ;조교사 END
 IF FLAG:조교師名声 >= 400 && GETBIT(FLAG:취소된ED,2) == 0 && 이벤트フラグ:1:1 < 1

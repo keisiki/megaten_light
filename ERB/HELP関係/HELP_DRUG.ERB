@@ -42,8 +42,7 @@ IF RESULT == 1000
 ELSEIF RESULT < 0 || RESULT > 22
 	GOTO INPUT_LOOP
 ENDIF
-Q = RESULT
-TRYCALLFORM DICTIONARY_DRUG_{Q}
+TRYCALLFORM DICTIONARY_DRUG_{RESULT}
 GOTO PRINT_LIST
 
 ;--------------------------------------------------
@@ -162,46 +161,7 @@ PRINTW [임신중],[육아중]의 사람에게는 투여할 수 없습니다.
 ;=============================================================================
 ;用語辞典――OPTION
 ;=============================================================================
-;--------------------------------------------------
-;OPTION해설メインページ
-;--------------------------------------------------
-@DICTIONARY_CONFIG_MAIN
-P = 0
-$PRINT_LIST
-DRAWLINE
-PRINTL eraMegaten에 준비된 OPTION에 관한 대략의 설명입니다.
-PRINTFORML 내용을 알고 싶은 항목의 번호를 입력해 주세요. 
-DRAWLINE
-	;SHOP・이벤트확장
-	PRINTL [ 8] 출산 기능 변환
-DRAWLINE
-PRINTLC [1000]돌아온다
-$INPUT_LOOP
-INPUT
-IF RESULT == 1000
-	RETURN 0
-ELSEIF RESULT != 8
-	GOTO INPUT_LOOP
-ENDIF
-Q = RESULT
-TRYCALLFORM DICTIONARY_CONFIG_{Q}
-GOTO PRINT_LIST
 
-;--------------------------------------------------
-;CONFIG해설
-;--------------------------------------------------
-;………………………………………………
-;SHOP・이벤트확장
-;………………………………………………
-;출산기능바꾸기
-@DICTIONARY_CONFIG_8
-PRINTL ＜출산 기능 변환＞
-PRINTL 이 기능을 ON로 하면 아이가 태어나게 됩니다.
-PRINTL 태어난 아이가 어느 정도 성장하면 동료마가 되어,
-PRINTL 조교해 매각하거나 전투에 참가시킬 수 있게 됩니다.
-PRINTL 덧붙여 육아중인 캐릭터는 조교할 수 없게 됩니다.
-PRINTL 
-PRINTW 
 
 ;=============================================================================
 ;用語辞典――初心者Ｑ＆Ａ
