@@ -322,80 +322,112 @@ RETURN 0
 ;조교종료시のセリフ
 ;--------------------------------------------------
 DRAWLINE
+VARSET PLTEXT
 ;반발각인Lv3
 IF MARK:3 == 3 && (CFLAG:217 < 1 || FLAG:7 == 2)
-	PRINTFORMW 「%CSTR:12% 따위 정말 싫어요!」
-	PRINTFORMW 「이제 얼굴도 보고 싶지 않아요! 흥흥!」
+	{
+		PLTEXT '=
+		@"「%CSTR:12% 따위 정말 싫어요!」\t"+
+		"「이제 얼굴도 보고 싶지 않아요! 흥흥!」\t"
+	}
 	CFLAG:217 = 1
 ;굴복각인Lv1以下
 ELSEIF MARK:2 <= 1 && (CFLAG:219 < 1 || FLAG:7 == 2)
-	PRINTFORMW 「겨우 끝났어요오」
-	PRINTFORMW 「%CSTR:11% 이제 배고파요오」
+	{
+		PLTEXT '=
+		"「겨우 끝났어요오」\t"+
+		@"「%CSTR:11% 이제 배고파요오」\t"
+	}
 	CFLAG:219 = 1
 ;굴복각인Lv2
 ELSEIF MARK:2 == 2
-	PRINTFORMW 「아우우、벌써 끝이에요오?」
-	PRINTFORMW 「조금만 더… 아으、아무것도 아니에요」
+	{
+		PLTEXT '=
+		"「아우우、벌써 끝이에요오?」\t"+
+		"「조금만 더… 아으、아무것도 아니에요」\t"
+	}
 	CFLAG:219 = 2
 ;굴복각인Lv3＋함락소질無し
 ELSEIF MARK:2 == 3 && (TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0)
-	PRINTFORMW 「%CSTR:11%、기분 좋았어요오♪」
-	PRINTFORMW 「%조사처리(CSTR:12,"는")% 기분 좋았어요?」
+	{
+		PLTEXT '=
+		@"「%CSTR:11%、기분 좋았어요오♪」\t"+
+		@"「%조사처리(CSTR:12,"는")% 기분 좋았어요?」\t"
+	}
 	CFLAG:219 = 3
 ;함락済み＋체력500미만
 ELSEIF BASE:0 < 500 && (CFLAG:218 < 1 || FLAG:7 == 2)
 	;연모、친애
 	IF TALENT:3 || TALENT:6
-		PRINTFORMW 　아무래도 %조사처리(CALLNAME,"는")% 녹초가 되어있는 것 같다。
-		PRINTFORMW 　위로 향한 눈을 감으면서 호흡을 고르고 있다。거기에 색기를 느껴、입술을 무심코 바라보고 말았다。
-		PRINTFORMW 　그리고 충동적으로 %CALLNAME%의 입술을 자신의 입술로 막았다。
-		PRINTFORMW 「응！　으음、응、하음……츄……츄」
-		PRINTFORMW 　%조사처리(CALLNAME,"는")% 처음에는 놀랐지만、중간부터 이쪽의 머리를 팔로 누르며、적극적으로 타액을 교환 해왔다。
-		PRINTFORMW 「응 츄、하후으、에헤헤、웬일인가요오? 하음、아직 만족 못했나요오、하앙……츄……츄」
-		PRINTFORMW 　그 후、삼십분에 걸쳐 입맞춤을 나눴다。
+		{
+			PLTEXT '=
+			@"아무래도 %조사처리(CALLNAME,"는")% 녹초가 되어있는 것 같다。\t"+
+			@"위로 향한 눈을 감으면서 호흡을 고르고 있다。거기에 색기를 느껴、입술을 무심코 바라보고 말았다。\t"+
+			@"그리고 충동적으로 %CALLNAME%의 입술을 자신의 입술로 막았다。\t"+
+			@"「응！　으음、응、하음……츄……츄」\t"+
+			@"%조사처리(CALLNAME,"는")% 처음에는 놀랐지만、중간부터 이쪽의 머리를 팔로 누르며、적극적으로 타액을 교환 해왔다。\t"+
+			@"「응 츄、하후으、에헤헤、웬일인가요오? 하음、아직 만족 못했나요오、하앙……츄……츄」\t"+
+			@"그 후、삼십분에 걸쳐 입맞춤을 나눴다。\t"
+		}
 	;음란、창부
 	ELSEIF TALENT:4 || TALENT:7
-		PRINTFORMW 「하아하아하아、굉장해ー、%CSTR:11% 이제 몸에 힘이 없어요오」
-		PRINTFORMW 　%조사처리(CALLNAME,"는")% 만족한듯이 그렇게 말하며、%CALLNAME:MASTER%에게 안겨들고 얼굴을 비벼대었다。
-		PRINTFORMW 「에헤헤、%조사처리(CSTR:12,"는")% 어땠어요오？　%CSTR:11%의 몸으로 만족해 주셨나요오?」
-		PRINTFORMW 　그 질문에 %조사처리(CALLNAME:MASTER,"는")% 끄덕인다。그것을 본 %조사처리(CALLNAME,"는")% 기쁜듯이 미소를 지으며、
-		PRINTFORMW 「다행이에요오。에헤헤、역시 %조사처리(CSTR:11,"랑")% %조사처리(CSTR:12,"는")% 몸의 궁합이 좋아요오。
-		PRINTFORMW 이제부터는、더 좀ー더 %조사처리(CSTR:11,"랑")% 엣찌 해요오。그러면 서로 기분 좋아서 행복할 거예요오」
+		{
+			PLTEXT '=
+			@"「하아하아하아、굉장해ー、%CSTR:11% 이제 몸에 힘이 없어요오」\t"+
+			@"%조사처리(CALLNAME,"는")% 만족한듯이 그렇게 말하며、%CALLNAME:MASTER%에게 안겨들고 얼굴을 비벼대었다。\t"+
+			@"「에헤헤、%조사처리(CSTR:12,"는")% 어땠어요오？　%CSTR:11%의 몸으로 만족해 주셨나요오?」\t"+
+			@"그 질문에 %조사처리(CALLNAME:MASTER,"는")% 끄덕인다。그것을 본 %조사처리(CALLNAME,"는")% 기쁜듯이 미소를 지으며、\t"+
+			@"「다행이에요오。에헤헤、역시 %조사처리(CSTR:11,"랑")% %조사처리(CSTR:12,"는")% 몸의 궁합이 좋아요오。\t"+
+			@"이제부터는、더 좀ー더 %조사처리(CSTR:11,"랑")% 엣찌 해요오。그러면 서로 기분 좋아서 행복할 거예요오」\t"
+		}
 	;복종、예속
 	ELSEIF TALENT:5 || TALENT:8
-		PRINTFORMW 　%조사처리(CALLNAME:MASTER,"는")% 수건을 들고、%CALLNAME:MASTER%의 행위의 얼룩을 닦아내려고 다가오려고 한 %조사처리(CALLNAME,"를")% 제지했다。
-		PRINTFORMW 「하아하아、아으、죄송합니다에요오」
-		PRINTFORMW 　아무래도 기진맥진해서 봉사할 처지가 아닌 것 같다。%조사처리(CALLNAME:MASTER,"는")% 자신이 오버한 것을 깨달았지만 반성은 하지 않았다。
+		{
+			PLTEXT '=
+			@"%조사처리(CALLNAME:MASTER,"는")% 수건을 들고、%CALLNAME:MASTER%의 행위의 얼룩을 닦아내려고 다가오려고 한 %조사처리(CALLNAME,"를")% 제지했다。\t"+
+			@"「하아하아、아으、죄송합니다에요오」\t"+
+			@"아무래도 기진맥진해서 봉사할 처지가 아닌 것 같다。%조사처리(CALLNAME:MASTER,"는")% 자신이 오버한 것을 깨달았지만 반성은 하지 않았다。\t"
+		}
 	ENDIF
 	CFLAG:218 = 1
 ;함락済み
 ELSEIF CFLAG:219 < 4 || FLAG:7 == 2
 	;연모、친애
 	IF TALENT:3 || TALENT:6
-		PRINTFORMW  「에헤헤、%CSTR:12%」
-		PRINTFORMW 　자신을 부르는 목소리에、뭐냐、고 묻자、
-		PRINTFORMW 「아아무것도 아아니라구요ー。후후후」
-		PRINTFORMW 　라는 대답이 돌아왔다。일단 머리를 쓰다듬어 본다。
-		PRINTFORMW 「하후으。응ー、슥삭슥삭」
-		PRINTFORMW 　그러더니 %조사처리(CALLNAME,"는")% 이쪽의 팔을 잡아、거기에 자신의 얼굴을 파묻고 슥삭슥삭하기 시작했다。
-		PRINTFORMW 「에헤헤、사랑한다구요、%CSTR:12%」
-		PRINTFORMW 　작은 목소리로 말할 생각이었겠지만 확실히 들린다。
-		PRINTFORMW 　이쪽도、사랑해、라고 대답하자 얼굴을 새빨갛게 하며 안겨왔다。
+		{
+			PLTEXT '=
+			@"「에헤헤、%CSTR:12%」\t"+
+			@"자신을 부르는 목소리에、뭐냐、고 묻자、\t"+
+			@"「아아무것도 아아니라구요ー。후후후」\t"+
+			@"라는 대답이 돌아왔다。일단 머리를 쓰다듬어 본다。\t"+
+			@"「하후으。응ー、슥삭슥삭」\t"+
+			@"그러더니 %조사처리(CALLNAME,"는")% 이쪽의 팔을 잡아、거기에 자신의 얼굴을 파묻고 슥삭슥삭하기 시작했다。\t"+
+			@"「에헤헤、사랑한다구요、%CSTR:12%」\t"+
+			@"작은 목소리로 말할 생각이었겠지만 확실히 들린다。\t"+
+			@"이쪽도、사랑해、라고 대답하자 얼굴을 새빨갛게 하며 안겨왔다。\t"
+		}
 	;음란、창부
 	ELSEIF TALENT:4 || TALENT:7
-		PRINTFORMW 　끝임을 알리자 %조사처리(CALLNAME,"는")% 불만스럽게、뺨을 부풀리며、%CALLNAME:MASTER%에게 항의 해왔다。
-		PRINTFORMW 「에ー、벌써 끝인가요오？　%조사처리(CSTR:11,"는")% 아직도 가거나 하지 않았어요오」
-		PRINTFORMW 　잠시 투덜투덜 불만을 늘어놓고 있었지만、그것에도 질린 것인지、이번엔 자신의 몸을 만지작거리면서 이렇게 말했다。
-		PRINTFORMW 「우ー、너무 한심하고 변덕스럽습니다라구요오？　후후、오니의 고추라던가 더 지속력 있는 것 같아요오」
-		PRINTFORMW 　%조사처리(CALLNAME,"는")% %플레이어를()% 보는 것을 그만두고、다른 뭔가를 상상하면서 자위에 몰두하기 시작했다。
+		{
+			PLTEXT '=
+			@"끝임을 알리자 %조사처리(CALLNAME,"는")% 불만스럽게、뺨을 부풀리며、%CALLNAME:MASTER%에게 항의 해왔다。\t"+
+			@"「에ー、벌써 끝인가요오？　%조사처리(CSTR:11,"는")% 아직도 가거나 하지 않았어요오」\t"+
+			@"잠시 투덜투덜 불만을 늘어놓고 있었지만、그것에도 질린 것인지、이번엔 자신의 몸을 만지작거리면서 이렇게 말했다。\t"+
+			@"「우ー、너무 한심하고 변덕스럽습니다라구요오？　후후、오니의 고추라던가 더 지속력 있는 것 같아요오」\t"+
+			@"　%조사처리(CALLNAME,"는")% %플레이어를()% 보는 것을 그만두고、다른 뭔가를 상상하면서 자위에 몰두하기 시작했다。\t"
+		}
 	;복종、예속
 	ELSEIF TALENT:5 || TALENT:8
-		PRINTFORMW 「%CSTR:12%ー、몸을 닦아드릴게요오」
-		PRINTFORMW 　행위가 끝난 뒤、%조사처리(CALLNAME,"는")% 수건을 손에 집어 %CALLNAME:MASTER%의 몸의 더러움을 기쁜 듯이 닦기 시작했다。
-		PRINTFORMW 「쓱쓱, 에헤헤, %CSTR:12%, 안 아프세요오?」
+		{
+			PLTEXT '=
+			@"　%CSTR:12%ー、몸을 닦아드릴게요오」\t"+
+			@"　행위가 끝난 뒤、%조사처리(CALLNAME,"는")% 수건을 손에 집어 %CALLNAME:MASTER%의 몸의 더러움을 기쁜 듯이 닦기 시작했다。\t"+
+			@"　「쓱쓱, 에헤헤, %CSTR:12%, 안 아프세요오?」\t"
+		}
 	ENDIF
 	CFLAG:219 = 4
 ENDIF
+CALL PRINTER, PLTEXT
 RETURN 0
 
 ;--------------------------------------------------
@@ -447,10 +479,15 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:300 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「쪽…… 쪽…… 하앙」
-					PRINTFORMW 「좀 더、좀 더어。%CSTR:11%의 몸 쓰담쓰담해서어」
-					PRINTFORMW 「%CSTR:12%의 손으로、%CSTR:11%의 몸을 사랑해주세요오」
-					PRINTFORMW 　%조사처리(CALLNAME,"는")% 젖은 눈동자로 이쪽을 올려다보며、%CALLNAME:MASTER%의 몸에 전신을 문질러 온다。
+					VARSET PLTEXT
+					{
+					PLTEXT '=
+					"「쪽…… 쪽…… 하앙」\t"+
+					@"「좀 더、좀 더어。%CSTR:11%의 몸 쓰담쓰담해서어」\t"+
+					@"「%CSTR:12%의 손으로、%CSTR:11%의 몸을 사랑해주세요오」\t"+
+					@"%조사처리(CALLNAME,"는")% 젖은 눈동자로 이쪽을 올려다보며、%CALLNAME:MASTER%의 몸에 전신을 문질러 온다。\t"
+					}
+					CALL PRINTER, PLTEXT
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
 					PRINTFORMW 「아잉、너무 부끄러워요오。응、하앙、조、좋아요오、좀 더어」
