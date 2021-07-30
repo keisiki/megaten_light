@@ -1,10 +1,9 @@
 ﻿
 ;스킬名
 @SKILL_NAME_1622,ARG
-;ひかりが사용する場合Caliculus Brightに
-;IF ARG > 0 && NO:ARG == [[キャラ:히카리]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:히카리]]) == 1
-	RESULTS = C.Bright
+;露崎まひるかつ악마변신時は人魚姫の苦悩（名前だけ変更）
+IF SKILL_CHANGE(ARG, [[キャラ:마히루]]) && CFLAG:ARG:악마변신
+	RESULTS = 인어공주의고뇌
 ELSE
 	RESULTS = 부드러운파도
 ENDIF
@@ -45,12 +44,12 @@ RETURN 13
 ;수격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1622
+@SKILL_DECIDE_TYPE_1622, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1622
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1622, ARG
 RETURN 2
 
 
@@ -108,7 +107,7 @@ RETURN 5
 
 ;추가효과상성
 @SKILL_ADDTIONAL_TYPE_1622,ARG
-RETURN 13
+RETURN 5
 
 ;추가효과기본부여확률
 @SKILL_ADDTIONAL_BASE_RATE_1622,ARG
@@ -137,12 +136,7 @@ CALL ATTACK_SPREAD,ARG,ARG:1,1622
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1622
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:히카리]]
-	PRINTL Caliculus Bright、花開く短검。一度は閉ざされたつぼみがついに芽吹く。
-	PRINTL 대상とその周囲に１〜２回中魔法ダメージを与え、見るものを빙결させる。
-ELSE
-	PRINTL [후열] 적 1체와 주변의 적에게 1～2회 수격속성 중 마법데미지. (낮은 확률로 FREEZE)
-ENDIF
+PRINTL [후열] 적 1체와 주변의 적에게 1～2회 수격속성 중 마법데미지. (낮은 확률로 FREEZE)
 
 ;継承に필요な部位
 @継承部位_1622,ARG

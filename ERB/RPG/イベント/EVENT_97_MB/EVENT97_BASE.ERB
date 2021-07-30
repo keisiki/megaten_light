@@ -26,45 +26,45 @@ SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 || GETBIT(FLAG:EXTRA이벤트필�
 	RETURN 0
 
 IF 이벤트フラグ:97:0 == 0 && TIME == 3
-	RESULTS = （MB ＭＯＤ-1）그림자연극의 마을
+	RESULTS = （EX:MB ＭＯＤ-1）그림자연극의 마을
 	RETURN 1
 ELSEIF 이벤트フラグ:97:0 == 1 || 이벤트フラグ:97:0 == 2
-	RESULTS = （MB ＭＯＤ-2）유물수색
+	RESULTS = （EX:MB ＭＯＤ-2）유물수색
 	RETURN 1
 ELSEIF 이벤트フラグ:97:0 == 3
 	CALL CHECK_MELTY_BLOOD
 	IF RESULT > 0
-		RESULTS = （MB ＭＯＤ-3）폐가에서
+		RESULTS = （EX:MB ＭＯＤ-3）폐가에서
 		RETURN 1
 	ENDIF
 ELSEIF 이벤트フラグ:97:0 == 4
 	CALL CHECK_MELTY_BLOOD
 	IF RESULT > 0
-		RESULTS = （MB ＭＯＤ-4）짐승의 살육
+		RESULTS = （EX:MB ＭＯＤ-4）짐승의 살육
 		RETURN 1
 	ENDIF
 ELSEIF 이벤트フラグ:97:0 == 5
 	CALL CHECK_MELTY_BLOOD
 	IF RESULT > 0
-		RESULTS = （MB ＭＯＤ-5）왈라키아의밤
+		RESULTS = （EX:MB ＭＯＤ-5）왈라키아의밤
 		RETURN 1
 	ENDIF
 ELSEIF 이벤트フラグ:97:0 == 6 && TIME == 3
 	CALL CHECK_MELTY_BLOOD
 	IF RESULT > 0
-		RESULTS = （MB ＭＯＤ-6）마법사의 밤
+		RESULTS = （EX:MB ＭＯＤ-6）마법사의 밤
 		RETURN 1
 	ENDIF
 ELSEIF 이벤트フラグ:97:0 == 7 && TIME == 3
 	CALL CHECK_MELTY_BLOOD
 	IF RESULT > 0
-		RESULTS = （MB ＭＯＤ-7）진조의 공주
+		RESULTS = （EX:MB ＭＯＤ-7）진조의 공주
 		RETURN 1
 	ENDIF
 ELSEIF 이벤트フラグ:97:0 == 8
 	CALL CHECK_MELTY_BLOOD
 	IF RESULT > 0
-		RESULTS = （MB ＭＯＤ-8）오시리스의 모래
+		RESULTS = （EX:MB ＭＯＤ-8）오시리스의 모래
 		RETURN 1
 	ENDIF
 ENDIF
@@ -1008,7 +1008,7 @@ ELSEIF 이벤트フラグ:97:0 == 7
 	PRINTW 『우ー응、그럼 뭔가 알고 싶은 것은 있어？』
 	$INPUT_LOOP6
 	PRINTFORML [0] 오리시스가 있는 장소
-	PRINTFORML [1] 당신는 누구？
+	PRINTFORML [1] 당신은 누구？
 	PRINTFORML [2] 오리시스는 왜 그런 일을？
 	PRINTFORML [9] 이제 더는 없다
 	INPUT
@@ -1353,7 +1353,7 @@ ELSEIF 이벤트フラグ:97:0 == 8
 	PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 수중에 남은 새로운 동료마들과 함께 이 세계 나름의 시끄러운 일상으로 돌아갔다.
 	
 	SETCOLOR 0xff0033
-	PRINTFORMW 　　　　　　　　―― Ending No.065 (멜티 블러드 END “Melty Blood”)
+	PRINTFORMW 　　　　　　　　―― Ending No.064 (멜티 블러드 END “Melty Blood”)
 	RESETCOLOR
 	PRINTFORML 
 

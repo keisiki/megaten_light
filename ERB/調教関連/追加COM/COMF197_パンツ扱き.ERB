@@ -271,11 +271,23 @@ IF TEQUIP:주도권 || 함락()
 	PRINTFORM 감싸서、그 부드러운 천으로 
 	SIF TALENT:새드
 		PRINTFORM 감질나게 만들 듯이 
+	;카테터
+		SIF TEQUIP:43
+		PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+	;요도플러그
+		SIF TEQUIP:44
+		PRINTFORMW 尿道プラグが挿入された状態のまま、
 	PRINTFORMW 문지르기 시작했다……
 ELSE
 	PRINTFORM 을(를) %CALLNAME:PLAYER%의 페니스에 씌우고、
 	SIF TALENT:새드
 		PRINTFORM 감질나게 만들듯이 
+	;카테터
+		SIF TEQUIP:43
+		PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+	;요도플러그
+		SIF TEQUIP:44
+		PRINTFORMW 尿道プラグが挿入された状態のまま、
 	PRINTFORMW 문지르기 시작했다……
 ENDIF
 ;-------------------------------------------------

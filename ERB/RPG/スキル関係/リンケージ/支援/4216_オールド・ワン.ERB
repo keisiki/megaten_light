@@ -33,11 +33,11 @@ RETURN 16
 RETURN 0
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4216
+@SKILL_DECIDE_TYPE_4216, ARG
 RETURN 2
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_4216
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_4216, ARG
 RETURN 2
 
 
@@ -71,7 +71,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4216, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4216,ARG
@@ -123,14 +123,14 @@ FOR LOCAL,LOCAL:2,LOCAL:3
 		CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LOCAL:1) + "강화") = MAX(-16, CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LOCAL:1) + "강화") - 8)
 	NEXT
 NEXT
-PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 아군 # 적 \@の全能力が大幅に下がった！
+PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 아군 # 적 \@의 전 능력을 크게 떨어뜨렸다！
 ;====================================================
 ;実行内容ここまで
 ;====================================================
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_4216
-PRINTL 적の全能力を大幅に下げる。
+PRINTL 적의 전 능력을 대폭 떨어뜨린다。
 
 ;継承に필요な部位
 @継承部位_4216,ARG

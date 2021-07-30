@@ -86,12 +86,12 @@ RETURN GET_TYPE_NUM("지변")
 ;지변
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1537
+@SKILL_DECIDE_TYPE_1537, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1537
+@SKILL_DAMAGETYPE_1537, ARG
 RETURN 2
 
 
@@ -122,6 +122,9 @@ SIF ARG == 1
 @SKILL_SUCCESSION_TYPE_1537
 RETURN GET_SUCCESSION_NUM("지변")
 ;지변
+
+@継承不能_1537
+RETURN 1
 
 ;속도보정
 @SKILL_SPEED_1537, ARG = -1
@@ -171,7 +174,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,1537
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_1537
-PRINTL [후열] 적 전체에 지변속성 소 마법데미지. 요리기능이 높을수록 위력이 증가하며, 필요한 MP가 감소한다. (매우 높은 확률로 POISON)
+PRINTL [후열] 전설의 독약 '칸타렐라'를 듬뿍 사용한 사치스러운 요리를 적에게 대접한다.
+PRINTL 적 전체에 지변속성 소 마법데미지. 요리기능이 높을수록 위력이 증가하며, 필요한 MP가 감소한다. (매우 높은 확률로 POISON)
 
 ;継承に필요한部位
 @継承部位_1537,ARG

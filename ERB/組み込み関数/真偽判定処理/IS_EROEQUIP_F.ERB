@@ -9,6 +9,7 @@
 ;
 ;	Edit	Date			Author					Reason
 ;	001		2015/04/18		豚の娘の豚				新規作成
+;	002		2021/07/14		JK好き					エロ装備を追加しやすいように修正　該当胴防具追加
 ;
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=====================================================================
@@ -18,6 +19,20 @@
 #FUNCTION
 SIF ARG == -1
 	ARG = PLAYER
-SIF EQUIP:PLAYER:몸통 == 3501 || EQUIP:PLAYER:몸통 == 3532 || EQUIP:PLAYER:몸통 == 3535 || EQUIP:PLAYER:몸통 == 3545 || EQUIP:PLAYER:몸통 == 3546
+SIF EQUIP:ARG:몸통 == [[아이템:하이레그아머]]
 	RETURNF 1
+SIF EQUIP:ARG:몸통 == [[아이템:창부의옷]]
+	RETURNF 1
+SIF EQUIP:ARG:몸통 == [[아이템:배틀레오타드]]
+	RETURNF 1
+SIF EQUIP:ARG:몸통 == [[아이템:무적의미니]]
+	RETURNF 1
+SIF EQUIP:ARG:몸통 == [[아이템:스파이크브라]]
+	RETURNF 1
+SIF EQUIP:ARG:몸통 == [[아이템:배틀캐미솔]]
+	RETURNF 1
+SIF EQUIP:ARG:몸통 == [[아이템:하이레그속옷]]
+	RETURNF 1
+;SIF EQUIP:ARG:몸통 == [[アイテム:]]
+;	RETURNF 1
 RETURNF 0

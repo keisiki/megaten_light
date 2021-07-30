@@ -10,8 +10,8 @@
 ;	Edit	Date			Author					Reason
 ;	001		2014/09/17		----					ネトリス
 ;	002		2014/12/28		----					秩混치の変動が正しく行われていなかったのを修正、など
-;	003		2014/04/22								L教会の報酬に女性템플나이트추가
-
+;	003		2014/04/22								L教会の報酬に女性テンプルナイト追加
+;	004		2021/04/27		JK好き					協会で多胎OP時でも妊娠するように修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;教会
 ;それぞれの教会の対応したアライメント調整をする
@@ -371,15 +371,22 @@ FOR LOCAL, 0, CHARANUM
 				TCVAR:LOCAL:획득정액경험 += 입봉사횟수 / 2
 				敬拝値 += 입봉사횟수 / 2
 			ENDIF
-			;획득경험표시
+			;妊娠用, SHOW_ADD_EXPの前に置かないと獲得膣射経験が0になる
+			IF CFLAG:LOCAL:자궁내피임결계 == 0
+				CFLAG:LOCAL:信者の中出氏による임신판정 += TCVAR:LOCAL:획득질사경험*2
+				;子宮現在容量加算
+				IF TALENT:LOCAL:오토코노코
+					CFLAG:(LOCAL):子宮現在容量 += Ａ봉사횟수 * 5
+				ELSEIF !IS_MALE(LOCAL)
+					CFLAG:(LOCAL):子宮現在容量 += Ｖ봉사횟수  * 5
+				ENDIF
+				
+			ENDIF
+			;獲得経験表示
 			CALL SHOW_ADD_EXP, LOCAL
 			;체력の소비
 			PRINTFORML 체력 - {参拝人数*10}
 			BASE:LOCAL:체력 -= 参拝人数*10
-
-			;임신用
-			SIF CFLAG:LOCAL:자궁내피임결계 == 0
-				CFLAG:LOCAL:信者の中出氏による임신판정 = TCVAR:LOCAL:획득질사경험*2
 
 			;性봉사での変化は1～4(MAX1～9)
 			속성変動値 = 1 + RAND:(4+教会규모)
@@ -437,7 +444,7 @@ SELECTCASE 점포("종류",ARG)
 		SIF 점포("규모",ARG) > 2
 			PRINTFORML [3] 템플나이트　　　1000
 		SIF 점포("규모",ARG) > 3
-			PRINTFORML [4] 女性템플나이트　2000
+			PRINTFORML [4] 여성 템플나이트　2000
 
 	;ガイア教会
 	CASE 14

@@ -3,7 +3,7 @@
 @SKILL_NAME_2950,ARG
 RESULTS = 용부「드래곤즈그로울」
 SIF  GETBIT (FLAG:カスタムゲーム화면,1)
-	RESULTS = 용부「ドラゴンズグロウル」
+	RESULTS = 용부「드래곤즈그로울」
 
 ;　명중
 @SKILL_HITRATE_2950, ARG
@@ -14,7 +14,7 @@ RETURN 100
 RETURN 280
 
 ;　クリティカル
-@SKILL_CRITICAL_RATE_2950
+@SKILL_CRITICAL_RATE_2950, ARG
 RETURN 20
 
 ;　최저공격횟수
@@ -34,7 +34,7 @@ RETURN 3
 @SKILL_COST_2950,ARG
 RETURN 15
 
-;　相性 공격상성のうち、もっともダメージが高くなるものになる
+;　相性 공격상성のうち、もっとも데미지が高くなるものになる
 @SKILL_TYPE_2950, ARG
 #LOCALSSIZE 3
 #LOCALSIZE 4
@@ -65,11 +65,11 @@ NEXT
 RETURN GET_TYPE_NUM(LOCALS)
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2950
+@SKILL_DECIDE_TYPE_2950, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2950
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2950, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -147,9 +147,9 @@ CALL ATTACK_SINGLE,ARG,POS(ARG:1),2950
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2950
-PRINTL 적1체に타격＆만능で中위력の物理공격を行う。
-PRINTL 右팔の包오비と左손の気の同時공격。
-PRINTL 仙人　茨木華扇専用スペルカード
+PRINTL 적 1체에 타격＆만능으로 중 위력의 물리 공격을 한다。
+PRINTL 오른발의 붕대와 왼손의 기의 동시공격。
+PRINTL 선인 이바라키 카센의 전용 스펠카드
 
 ;継承に필요な部位
 @継承部位_2950,ARG

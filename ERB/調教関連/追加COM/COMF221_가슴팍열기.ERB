@@ -3,7 +3,7 @@
 ;-------------------------------------------------
 @CHECK_COM_ABLE221
 ;해제는 언제든 가능
-;웃옷을 안입고 있으면 능
+;웃옷을 안입고 있으면 불가능
 IF TEQUIP:옷 == 0 && TEQUIP:속옷（상） == 0 && TEQUIP:전신복 == 0 && TEQUIP:전신속옷 == 0 && TEQUIP:겉옷 == 0
 	RETURN 0
 ;가슴 구조에 따라선 옷을 찢어버림 - 커맨드로 다시 입을 수 없음
@@ -12,7 +12,6 @@ ELSEIF TEQUIP:TARGET:가슴앞열림 == 1 && (TEQUIP:가슴구조 == 0 || TEQUIP
 ELSE
 	RETURN 1
 ENDIF
-
 
 @COMNAME221,ARG
 #LOCALSSIZE 1
@@ -57,8 +56,8 @@ CALL 촉각체크(TARGET)
 ;ソース추가処理
 ;-------------------------------------------------
 ;소비체력、기력
-DOWNBASE:TARGET:체력 += 50
-DOWNBASE:TARGET:기력 += 90
+DOWNBASE:TARGET:체력 += 10
+DOWNBASE:TARGET:기력 += 10
 
 SOURCE:TARGET:달성 = 20
 SOURCE:TARGET:무서움 = 120

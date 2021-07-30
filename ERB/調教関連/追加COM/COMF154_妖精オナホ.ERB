@@ -80,8 +80,8 @@ TFLAG:19 = 1
 SIF (TALENT:3 || TALENT:6) && ASSIPLAY == 0 && EXP:0 == 0
 	TFLAG:20 = 1
 
-;처녀상실時のテ키스ト用処理
-SIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 61 || PREVCOM == 66 || PREVCOM == 68 || PREVCOM == 69 || PREVCOM == 76 || PREVCOM == 77 || PREVCOM == 72) && ((ASSIPLAY && TFLAG:50) || (ASSIPLAY == 0 && TFLAG:50 == 0)) && TFLAG:31
+;처녀상실時の텍스트用処理
+SIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 61 || PREVCOM == 66 || PREVCOM == 68 || PREVCOM == 69) && ((ASSIPLAY && TFLAG:50) || (ASSIPLAY == 0 && TFLAG:50 == 0)) && TFLAG:31
 	TFLAG:31 = 2
 ;-------------------------------------------------
 ;사정ゲージ체크
@@ -720,10 +720,10 @@ RETURN 1
 IF TFLAG:60 && PREVCOM == 154 && ((ASSIPLAY && TFLAG:50) || (ASSIPLAY == 0 && TFLAG:50 == 0))
 	;조교者が남자か반인반요か후타나리である
 	IF HAVE_PENIS(PLAYER)
-		PRINTFORMW %CALLNAME:TARGET%의 질내의 감촉을 맛보면서、다시 %CALLNAME:TARGET%(으)로 페니스를 훑기 시작했다……
+		PRINTFORMW %CALLNAME:TARGET%의 질내의 감촉을 맛보면서、다시 %조사처리(CALLNAME:TARGET,"로")% 페니스를 훑기 시작했다……
 	;페니스밴드を사용している場合
 	ELSE
-		PRINTFORMW %CALLNAME:TARGET%의 질내에서 뽑지 않고、다시 %CALLNAME:TARGET%(으)로 페니스를 훑기 시작했다……
+		PRINTFORMW %CALLNAME:TARGET%의 질내에서 뽑지 않고、다시 %조사처리(CALLNAME:TARGET,"로")% 페니스를 훑기 시작했다……
 	ENDIF
 ELSE
 	PRINTFORM %타겟을()% 움켜쥐고、그 

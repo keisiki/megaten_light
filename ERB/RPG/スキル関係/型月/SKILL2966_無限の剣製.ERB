@@ -13,7 +13,7 @@ RETURN 90
 @SKILL_POWER_2966, ARG
 RETURN 150
 
-@SKILL_CRITICAL_RATE_2966
+@SKILL_CRITICAL_RATE_2966, ARG
 RETURN 0
 
 ;　최저공격횟수
@@ -38,12 +38,12 @@ RETURN 90
 RETURN GET_TYPE_NUM("검격")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2966
+@SKILL_DECIDE_TYPE_2966, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2966
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2966, ARG
 RETURN 1
 
 
@@ -128,7 +128,7 @@ CALL ATTACK_RAND,ARG,ARG:1,2966
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2966
-PRINTL 周囲を一時的に無数の검が立ち並ぶ검の丘に変え、その검を雨のように降らせる。
+PRINTL 주위를 일시적으로 무수한 검이 즐비한 검의 언덕으로 바꾸고、그 검을 비오듯 내리게 한다。
 
 ;継承に필요な部位
 @継承部位_2966,ARG

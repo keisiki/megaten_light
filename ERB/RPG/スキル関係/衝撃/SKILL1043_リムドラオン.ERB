@@ -3,8 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_1043,ARG
-RESULTS = 림도라온
-
+IF SKILL_CHANGE(ARG, 3118)
+	RESULTS = 티타니아선풍
+ELSE
+	RESULTS = 림도라온
+ENDIF
 ;　명중
 @SKILL_HITRATE_1043, ARG
 RETURN 150
@@ -28,7 +31,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_1043,ARG
-RETURN 45
+RETURN 40
 
 ;　相性
 @SKILL_TYPE_1043,ARG
@@ -36,12 +39,12 @@ RETURN 7
 ;충격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1043
+@SKILL_DECIDE_TYPE_1043, ARG
 RETURN 2
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1043
+@SKILL_DAMAGETYPE_1043, ARG
 RETURN 2
 
 
@@ -124,8 +127,11 @@ CALL ATTACK_FIELD,ARG,ARG:1,1043
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_1043
-PRINTL [후열] 적 전체에 충격속성 특대 마법데미지. 명중률이 아주 높다.
-
+IF U > 0 && U < CHARANUM && NO:U == 3118
+	PRINTL 妖精ティターニアを召喚し、あらゆるものを吹き飛ばす衝撃波を放たせる。敵全体に特大데미지。
+ELSE
+	PRINTL [후열] 적 전체에 충격속성 특대 마법데미지. 명중률이 아주 높다.
+ENDIF
 ;継承に필요한部位
 @継承部位_1043,ARG
 RETURN 1

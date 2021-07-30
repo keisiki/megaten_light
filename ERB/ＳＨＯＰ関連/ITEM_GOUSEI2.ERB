@@ -1,12 +1,28 @@
-﻿@SHOP_COM_116_2
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:ENDING.ERB
+;	Facility	:ゲームの종료조건달성等の処理群
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX		Jガン					新規作成
+;	002		2020/08/19		Jガン					사룬가、흑선풍II추가
+;	002		2020/10/16		Jガン					마사카도의검・쿠리카라의검・天の御검추가、不具合対策
+;	003		2020/12/19		JK好き					표시を整理するため一部コメントアウト
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+@SHOP_COM_116_2
 #LOCALSIZE 14
 #LOCALSSIZE 13
 
 GETBGCOLOR
 C = RESULT
 
-VARSET DB
 $INPUT_LOOP
+VARSET DB
 
 DRAWLINE 
 PRINTL 무엇을 만드시겠습니까？
@@ -35,13 +51,70 @@ CALL ITEM_SYNTHESIS_표시(118,[[아이템:스킬카드【분노의정격】]],5
 CALL ITEM_SYNTHESIS_표시(119,[[아이템:스킬카드【분노의온격】]],5, ITEMNAME:12517, 1, "스킬카드【인페르노】", 1, "스킬카드【절대영도】", 1, "스킬카드【루나카미】", 1)
 CALL ITEM_SYNTHESIS_표시(120,[[아이템:스킬카드【분노의물마】]],5, ITEMNAME:12517, 1, "스킬카드【용권지옥】", 1, "스킬카드【마그네스톰】", 1, "스킬카드【히트카이저】", 1)
 CALL ITEM_SYNTHESIS_표시(121, 2180,7, ITEMNAME:2116  , 1, "메테오라이트s", 3, "비욘다이트", 3, "오리하르콘", 3, "스킬카드【선더볼】", 2)
+IF 던전フラグ:42:신주쿠フラグ("벨・데르進行度") == 4
+	CALL ITEM_SYNTHESIS_표시(122,[[아이템:미스틸테인]],0, "겨우살이", 1, "비욘다이트", 4, "오리하르콘", 2)
+	CALL ITEM_SYNTHESIS_표시(123,[[아이템:미스틸테인II]],7, "미스틸테인", 1, "히히이로카네", 3, "오리하르콘", 3, "메테오라이트s", 3, "스킬카드【지고의마탄】", 1)
+ENDIF
+CALL ITEM_SYNTHESIS_표시(124,[[아이템:요도니힐II]],0, "요도니힐", 1, "달의돌", 3, "비욘다이트", 1)
+CALL ITEM_SYNTHESIS_표시(125,[[아이템:요도니힐III]],0, "요도니힐II", 1, "히히이로카네", 4, "오리하르콘", 2)
+CALL ITEM_SYNTHESIS_표시(126,[[아이템:칠성검II]],0, "칠성검", 1, "메테오라이트s", 3, "오리하르콘", 3)
+CALL ITEM_SYNTHESIS_표시(127,[[아이템:칠성검III]],7, "칠성검II", 1, "히히이로카네", 3, "비욘다이트", 3, "오리하르콘", 3, "스킬카드【칠성강천】", 1)
+;------ 002 ADD --------
+CALL ITEM_SYNTHESIS_표시(128,[[아이템:사룬가]],7, "샤란가", 1, "메테오라이트s", 3, "비욘다이트", 3, "오리하르콘", 3, "스킬카드【아토믹플레어】", 1)
+CALL ITEM_SYNTHESIS_표시(129,[[아이템:흑선풍II]],7, "흑선풍", 1, "메테오라이트s", 3, "비욘다이트", 3, "히히이로카네", 3, "스킬카드【만물유전】", 1)
+;------ 003 ADD --------
+IF ITEM:[[아이템:마사카도의검]] > 0
+	CALL ITEM_SYNTHESIS_표시(130,[[아이템:마사카도의활]]  ,0, "마사카도의검", 1, "메테오라이트s", 2)
+	CALL ITEM_SYNTHESIS_표시(131,[[아이템:마사카도의철봉]],0, "마사카도의검", 1, "히히이로카네", 2)
+	CALL ITEM_SYNTHESIS_표시(132,[[아이템:마사카도의가시곤]],0, "마사카도의검", 1, "오리하르콘", 2)
+	CALL ITEM_SYNTHESIS_표시(133,[[아이템:구요문의보륜]],0, "마사카도의검", 1, "비욘다이트", 2)
+ENDIF
+SIF ITEM:[[아이템:마사카도의활]] > 0
+	CALL ITEM_SYNTHESIS_표시(134,[[아이템:마사카도의검]],0, "마사카도의활", 1, "메테오라이트s", 1)
+SIF ITEM:[[아이템:마사카도의철봉]] > 0
+	CALL ITEM_SYNTHESIS_표시(135,[[아이템:마사카도의검]],0, "마사카도의철봉", 1, "히히이로카네", 1)
+SIF ITEM:[[아이템:마사카도의가시곤]] > 0
+	CALL ITEM_SYNTHESIS_표시(136,[[아이템:마사카도의검]],0, "마사카도의가시곤", 1, "오리하르콘", 1)
+SIF ITEM:[[아이템:구요문의보륜]] > 0
+	CALL ITEM_SYNTHESIS_표시(137,[[아이템:마사카도의검]],0, "구요문의보륜", 1, "비욘다이트", 1)
+	
+IF ITEM:[[아이템:천어검]] > 0
+	CALL ITEM_SYNTHESIS_표시(138,[[아이템:라스트저지먼트]]  ,0, "천어검", 1, "메테오라이트s", 2)
+	CALL ITEM_SYNTHESIS_표시(139,[[아이템:시나이의신검]],0, "천어검", 1, "히히이로카네", 2)
+	CALL ITEM_SYNTHESIS_표시(140,[[아이템:알베니스]],0, "천어검", 1, "오리하르콘", 2)
+	CALL ITEM_SYNTHESIS_표시(141,[[아이템:크루세이더]],0, "천어검", 1, "비욘다이트", 2)
+ENDIF
+SIF ITEM:[[아이템:라스트저지먼트]] > 0
+	CALL ITEM_SYNTHESIS_표시(142,[[아이템:천어검]],0, "라스트저지먼트", 1, "메테오라이트s", 1)
+SIF ITEM:[[아이템:시나이의신검]] > 0
+	CALL ITEM_SYNTHESIS_표시(143,[[아이템:천어검]],0, "시나이의신검", 1, "히히이로카네", 1)
+SIF ITEM:[[아이템:알베니스]] > 0
+	CALL ITEM_SYNTHESIS_표시(144,[[아이템:천어검]],0, "알베니스", 1, "오리하르콘", 1)
+SIF ITEM:[[아이템:크루세이더]] > 0
+	CALL ITEM_SYNTHESIS_표시(145,[[아이템:천어검]],0, "크루세이더", 1, "비욘다이트", 1)
+	
+IF ITEM:[[아이템:쿠리카라의검]] > 0
+	CALL ITEM_SYNTHESIS_표시(146,[[아이템:부동견삭]],0, "쿠리카라의검", 1, "메테오라이트s", 2)
+	CALL ITEM_SYNTHESIS_표시(147,[[아이템:천궁애염]],0, "쿠리카라의검", 1, "히히이로카네", 2)
+	CALL ITEM_SYNTHESIS_표시(148,[[아이템:전륜성왕]],0, "쿠리카라의검", 1, "오리하르콘", 2)
+	CALL ITEM_SYNTHESIS_표시(149,[[아이템:옥부천왕]],0, "쿠리카라의검", 1, "비욘다이트", 2)
+ENDIF
+SIF ITEM:[[아이템:부동견삭]] > 0
+	CALL ITEM_SYNTHESIS_표시(150,[[아이템:쿠리카라의검]],0, "부동견삭", 1, "메테오라이트s", 1)
+SIF ITEM:[[아이템:천궁애염]] > 0
+	CALL ITEM_SYNTHESIS_표시(151,[[아이템:쿠리카라의검]],0, "천궁애염", 1, "히히이로카네", 1)
+SIF ITEM:[[아이템:전륜성왕]] > 0
+	CALL ITEM_SYNTHESIS_표시(152,[[아이템:쿠리카라의검]],0, "전륜성왕", 1, "오리하르콘", 1)
+SIF ITEM:[[아이템:옥부천왕]] > 0
+	CALL ITEM_SYNTHESIS_표시(153,[[아이템:쿠리카라의검]],0, "옥부천왕", 1, "비욘다이트", 1)
 
 IF GETBIT(FLAG:EXTRA이벤트설정, 0)
 	IF GETBIT(이벤트フラグ:19:19,0)
 		CALL ITEM_SYNTHESIS_표시(200,[[아이템:토가비토고로시・弐]],3, "토가비토고로시", 1, "스킬카드【브레이브재퍼】", 1, "비욘다이트", 4)
-		CALL ITEM_SYNTHESIS_표시(201,[[아이템:토가비토고로시・参]],5, "토가비토고로시・弐", 1, "스킬카드【옥문】", 1, "비욘다이트", 7, "히히이로카네", 7)
+		CALL ITEM_SYNTHESIS_표시(201,[[아이템:토가비토고로시・参]],5, "토가비토고로시・弐", 1, ITEMNAME:13520, 1, "비욘다이트", 7, "히히이로카네", 7)
 	ENDIF
 ENDIF
+DRAWLINE 
 PRINTFORML [999] 돌아간다
 SIF ITEM:[[아이템:합성가이드북]] > 0
 	PRINTL [1000] 합성가이드북2(해설)
@@ -145,7 +218,7 @@ FOR LOCAL, 1, 13
 		LOCAL:1 = 아이템소지数:LOCAL / 아이템필요数:LOCAL
 NEXT
 
-TRYCCALLFORM 최대소지수_{ARG}
+TRYCCALLFORM 최대소지수_{COUNT_ITEMMAX(ARG)}
 	SIF LOCAL:1 > (RESULT - ITEM:ARG)
 		LOCAL:1 = RESULT - ITEM:ARG
 CATCH
@@ -169,7 +242,7 @@ INPUT
 IF RESULT < 1
 	RETURN 0
 ELSEIF RESULT > LOCAL:1
-	PRINTFORML 正しい数値を입력してください
+	PRINTFORML 올바른 수치를 입력하세요
 	PRINTFORML
 	PRINTFORML
 	PRINTFORMW
@@ -183,11 +256,11 @@ FOR LOCAL, 1, 13
 		BREAK
 	PRINTFORML %ITEMNAME:(아이템종류:LOCAL),18,LEFT%　소지수:{아이템소지数:LOCAL,2} → {(아이템소지数:LOCAL-아이템필요数:LOCAL*교환수),2}
 NEXT
-CALL INPUT_YN("はい", "いいえ")
+CALL INPUT_YN("네", "아니오")
 SIF RESULT == 1
 	RETURN 0
 	
-	PRINTFORMW ＞%ITEMNAME:ARG%を{교환수}개 입수했다
+	PRINTFORMW ＞%ITEMNAME:ARG%를(을) {교환수}개 입수했다
 	ITEM:ARG += 교환수
 	FOR LOCAL, 1, 13
 		SIF 아이템종류:LOCAL == 0
@@ -248,25 +321,33 @@ FOR LOCAL:2, 1, 13
 		IF LOCAL:1 < RESULT
 			LOCAL:1 = RESULT
 			LOCAL:3 = LOCAL
+		ELSEIF LOCAL:1 == 0 && RESULT < 1
+			;存在しない아이템名だと클리캡10個に(作成불可能)
+			LOCAL:1 = 2
+			LOCAL:3 = LOCAL
 		ENDIF
 	NEXT
 	SIF LOCAL:1 == 0
 		BREAK
+	SIF LOCAL:1 == 2
+		ARG:(LOCAL:3) = 10
 	IF LOCAL:1 > 0
 		IF LOCAL:1 == 아이템종류:(LOCAL:2-1)
 			LOCAL:2 --
 			아이템필요数:(LOCAL:2) += ARG:(LOCAL:3)
-			아이템소지数:(LOCAL:2) += ITEM:(ARGS:(LOCAL:3))
+			;아이템소지数:(LOCAL:2) += ITEM:(ARGS:(LOCAL:3))
+			아이템소지数:(LOCAL:2) = ITEM:(LOCAL:1)
 		ELSE
 			아이템종류:(LOCAL:2) = LOCAL:1
 			아이템필요数:(LOCAL:2) = ARG:(LOCAL:3)
-			아이템소지数:(LOCAL:2) = ITEM:(ARGS:(LOCAL:3))
+			;아이템소지数:(LOCAL:2) = ITEM:(ARGS:(LOCAL:3))
+			아이템소지数:(LOCAL:2) = ITEM:(LOCAL:1)
 		ENDIF
-		ARGS:(LOCAL:3) = ""
+		ARGS:(LOCAL:3) =
 	ENDIF
 NEXT
 CALL SET_PICTURE , "필요한 아이템:" , 0 , , LCOUNT
-LCOUNT += 11
+LCOUNT += 12
 LOCAL:3 = LCOUNT
 LOCAL:4 = 0
 FOR LOCAL, 1, 13
@@ -370,7 +451,7 @@ LOCAL = ARG
 		PRINTFORM 명중:{RESULT,4}　
 		RESULT = 0
 		TRYCALLFORM SKILL_POWER_{LOCAL}
-		PRINTFORM 威힘:{RESULT,4}　
+		PRINTFORM 위력:{RESULT,4}　
 		RESULT = 0
 		TRYCALLFORM SKILL_COSTTYPE_{LOCAL}
 		LOCAL:1 = RESULT
@@ -409,7 +490,7 @@ LOCAL = ARG
 				PRINT 없음　　
 		ENDSELECT
 		TRYCALLFORM SKILL_EFECT_{LOCAL}
-		PRINT 種別:
+		PRINT 종별:
 		SELECTCASE RESULT
 			CASE 1
 				PRINTFORM 공격　　　　

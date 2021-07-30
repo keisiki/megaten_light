@@ -8,17 +8,17 @@
 SELECTCASE FLAG:現M
 	CASE 35
 		IF ARG == 16 && ARG:1 == 9 && 던전フラグ:13:15 < 7
-			CALL MESSAGE_WINDOW_D, "", "＞０５のマークの扉は閉ざされている"
+			CALL MESSAGE_WINDOW_D, "", "＞05의 마크의 문은 닫혀 있다"
 			RETURN 0
 		ENDIF
 	CASE 49
 		IF ARG:1 == 25 && !(GETBIT(던전フラグ:13:20,8) && GETBIT(던전フラグ:13:20,9))
-			CALL MESSAGE_WINDOW_D, "", "＞扉は閉ざされている"
+			CALL MESSAGE_WINDOW_D, "", "＞문은 닫혀 있다"
 			RETURN 0
 		ENDIF
 	CASE 53
 		IF ARG:1 == 1 && 던전フラグ:13:19 == 9
-			CALL MESSAGE_WINDOW_D, "", "＞早く탈출しないといけない"
+			CALL MESSAGE_WINDOW_D, "", "＞빨리 탈출해야 한다"
 			RETURN 0
 		ENDIF
 		
@@ -60,11 +60,26 @@ ENDSELECT
 ;仮想空間調べ이벤트(4)
 ;=======================================================================
 @kasou_event_sw
+#DIM LX
+#DIM LY
 
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 4600
-		CALL MESSAGE_WINDOW_D, "후타바", "準備できた？/仮想空間に行く？ "
-		CALL INPUT_SELECT_D, "[1]行く/[0]行かない "
+		IF !GETBIT(던전フラグ:13:20,21)
+			CALL MESSAGE_WINDOW_D, "双葉", "仮想空間に行く前にこれを受け取ってくれ/COMPからカルマ端末の一部の機能が使えるようになるぜ "
+			CALL MESSAGE_WINDOW_D, "", "＞インストールソフト「우파니샤드」を手に入れた "
+			IF ITEM:우파니샤드
+				MONEY:1 += ITEMPRICE:우파니샤드
+				LOCALS = {ITEMPRICE:우파니샤드}
+				CALL MESSAGE_WINDOW_D, "", "＞すでに持っていたため" + LOCALS + "マッカを手に入れた "
+			ELSE
+				ITEM:우파니샤드 = 1
+				ITEMSALES:우파니샤드 = 0
+			ENDIF
+			SETBIT 던전フラグ:13:20,21
+		ENDIF
+		CALL MESSAGE_WINDOW_D, "후타바", "준비됐어？/가상공간에 갈까？ "
+		CALL INPUT_SELECT_D, "[1]간다/[0]가지 않는다 "
 		IF RESULT == 1
 			SIF 던전フラグ:13:19 == 0
 				CALL DUNGEON_WORP,47,1,9
@@ -78,20 +93,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CALL DUNGEON_WORP,53,1,3
 		ENDIF
 	CASE 4601
-		CALL MESSAGE_WINDOW_D, "게일", "あのフタバという소녀　かなりハッキングに長けている/ "
-		CALL MESSAGE_WINDOW_D, "게일", "俺たちもハッキングはしていたが　ここまでできる者はジャンクヤードにも/いなかったな "
-		CALL INPUT_SELECT_D, "[1]仲間を入れ替える/[0]何でもない "
+		CALL MESSAGE_WINDOW_D, "게일", "저 후타바라는 소녀 상당히 해킹에 능해/ "
+		CALL MESSAGE_WINDOW_D, "게일", "우리도 해킹은 하고 있었지만 이렇게 까지 할 수 있는 사람은 정크야드에도/없었지 "
+		CALL INPUT_SELECT_D, "[1]동료를 교체한다/[0]아무것도 아니다 "
 		SIF RESULT == 1
 			CALL RECONSTRUCTION
 	CASE 4602
-		CALL MESSAGE_WINDOW_D, "로알드", "まさか　その機械/仮想空間にまではいれるとは意外だな/いつも驚かされるよ "
-		CALL MESSAGE_WINDOW_D, "로알드", "とにかく　仮想空間に入ってやつらを倒そう "
+		CALL MESSAGE_WINDOW_D, "로알드", "설마 그 기계/가상공간까지 들어갈줄은 의외인데/언제나 놀래켜 "
+		CALL MESSAGE_WINDOW_D, "로알드", "어쨌든 가상공간으로 들어가서 놈들을 쓰러뜨리자 "
 		IF !GETBIT(던전フラグ:13:20,0) || !GETBIT(던전フラグ:13:20,1)
-			CALL MESSAGE_WINDOW_D, "로알드", "ところで　회복していくか？/道具は僅かしかないから　何度も使えないが "
+			CALL MESSAGE_WINDOW_D, "로알드", "근데 회복하고 갈까？/도구는 조금밖에 없어서 무작정 사용은 못하지만 "
 			LOCALS = {(!GETBIT(던전フラグ:13:20,0) + !GETBIT(던전フラグ:13:20,1))}
-			CALL INPUT_SELECT_D, "[0]はい(残り" + LOCALS + "回)/[1]いいえ "
+			CALL INPUT_SELECT_D, "[0]네(나머지" + LOCALS + "회)/[1]아니오 "
 			IF RESULT == 0
-				PRINTFORMW %CALLNAME:MASTER%達は회복した
+				PRINTFORMW %CALLNAME:MASTER%들은 회복했다
 				FOR LOCAL, 1, 7
 					SIF POS(LOCAL) > -1
 						CALL HEALTH_CHARA, POS(LOCAL)
@@ -103,16 +118,16 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		ENDIF
 	CASE 4801
 		IF 던전フラグ:13:19 < 2
-			CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+			CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 			IF RESULT == 1
 				던전フラグ:13:19 = 2
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "すでに押してある "
+			CALL MESSAGE_WINDOW_D, "", "이미 눌려 있다 "
 		ENDIF
 	CASE 4901
-		CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+		CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 		IF RESULT == 1
 				CLEARBIT 던전フラグ:13:20,2
 				CLEARBIT 던전フラグ:13:20,3
@@ -124,7 +139,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		ELSE
 		ENDIF
 	CASE 4902
-		CALL MESSAGE_WINDOW_D, "", "スイッチを押した "
+		CALL MESSAGE_WINDOW_D, "", "스위치를 눌렀다 "
 			IF !GETBIT(던전フラグ:13:20,2) && !GETBIT(던전フラグ:13:20,3)
 				SETBIT 던전フラグ:13:20,2
 			ELSEIF GETBIT(던전フラグ:13:20,2) && !GETBIT(던전フラグ:13:20,3)
@@ -135,7 +150,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			ENDIF
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 	CASE 4903
-		CALL MESSAGE_WINDOW_D, "", "スイッチを押した "
+		CALL MESSAGE_WINDOW_D, "", "스위치를 눌렀다 "
 			IF !GETBIT(던전フラグ:13:20,4) && !GETBIT(던전フラグ:13:20,5)
 				SETBIT 던전フラグ:13:20,4
 			ELSEIF GETBIT(던전フラグ:13:20,4) && !GETBIT(던전フラグ:13:20,5)
@@ -146,7 +161,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			ENDIF
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 	CASE 4904
-		CALL MESSAGE_WINDOW_D, "", "スイッチを押した "
+		CALL MESSAGE_WINDOW_D, "", "스위치를 눌렀다 "
 			IF !GETBIT(던전フラグ:13:20,6) && !GETBIT(던전フラグ:13:20,7)
 				SETBIT 던전フラグ:13:20,6
 			ELSEIF GETBIT(던전フラグ:13:20,6) && !GETBIT(던전フラグ:13:20,7)
@@ -158,49 +173,49 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 	CASE 4905
 		IF !GETBIT(던전フラグ:13:20,8)
-			CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+			CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 			IF RESULT == 1
 				SETBIT 던전フラグ:13:20,8
 				SIF GETBIT(던전フラグ:13:20,8) && GETBIT(던전フラグ:13:20,9)
-					CALL MESSAGE_WINDOW_D, "", "どこかの扉の鍵が開く音がした "
+					CALL MESSAGE_WINDOW_D, "", "어딘가에서 문이 열리는 소리가 났다 "
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "すでに押してある "
+			CALL MESSAGE_WINDOW_D, "", "이미 눌려 있다 "
 		ENDIF
 	CASE 4906
 		IF !GETBIT(던전フラグ:13:20,9)
-			CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+			CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 			IF RESULT == 1
 				SETBIT 던전フラグ:13:20,9
 				SIF GETBIT(던전フラグ:13:20,8) && GETBIT(던전フラグ:13:20,9)
-					CALL MESSAGE_WINDOW_D, "", "どこかの扉の鍵が開く音がした "
+					CALL MESSAGE_WINDOW_D, "", "어딘가에서 문이 열리는 소리가 났다 "
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "すでに押してある "
+			CALL MESSAGE_WINDOW_D, "", "이미 눌려 있다 "
 		ENDIF
 	CASE 5001
 		IF 던전フラグ:13:19 < 5
-			CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+			CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 			IF RESULT == 1
 				던전フラグ:13:19 = 5
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "すでに押してある "
+			CALL MESSAGE_WINDOW_D, "", "이미 눌려 있다 "
 		ENDIF
 	CASE 5002
 		IF !GETBIT(던전フラグ:13:20,16)
-			CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+			CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 			IF RESULT == 1
 				SETBIT 던전フラグ:13:20,16
 				SIF GETBIT(던전フラグ:13:20,16) && GETBIT(던전フラグ:13:20,17) && GETBIT(던전フラグ:13:20,18)
-					CALL MESSAGE_WINDOW_D, "", "どこかの扉の鍵が開く音がした "
+					CALL MESSAGE_WINDOW_D, "", "어딘가에서 문이 열리는 소리가 났다 "
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "すでに押してある "
+			CALL MESSAGE_WINDOW_D, "", "이미 눌려 있다 "
 		ENDIF
 	CASE 5003
-		CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+		CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 		IF RESULT == 1
 				CLEARBIT 던전フラグ:13:20,10
 				CLEARBIT 던전フラグ:13:20,11
@@ -212,7 +227,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		ELSE
 		ENDIF
 	CASE 5004
-		CALL MESSAGE_WINDOW_D, "", "スイッチを押した "
+		CALL MESSAGE_WINDOW_D, "", "스위치를 눌렀다 "
 			IF !GETBIT(던전フラグ:13:20,10) && !GETBIT(던전フラグ:13:20,11)
 				SETBIT 던전フラグ:13:20,10
 			ELSEIF GETBIT(던전フラグ:13:20,10) && !GETBIT(던전フラグ:13:20,11)
@@ -224,7 +239,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			ENDIF
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 	CASE 5005
-		CALL MESSAGE_WINDOW_D, "", "スイッチを押した "
+		CALL MESSAGE_WINDOW_D, "", "스위치를 눌렀다 "
 			IF !GETBIT(던전フラグ:13:20,12) && !GETBIT(던전フラグ:13:20,13)
 				SETBIT 던전フラグ:13:20,12
 			ELSEIF GETBIT(던전フラグ:13:20,12) && !GETBIT(던전フラグ:13:20,13)
@@ -236,7 +251,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			ENDIF
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 	CASE 5006
-		CALL MESSAGE_WINDOW_D, "", "スイッチを押した "
+		CALL MESSAGE_WINDOW_D, "", "스위치를 눌렀다 "
 			IF !GETBIT(던전フラグ:13:20,14) && !GETBIT(던전フラグ:13:20,15)
 				SETBIT 던전フラグ:13:20,14
 			ELSEIF GETBIT(던전フラグ:13:20,14) && !GETBIT(던전フラグ:13:20,15)
@@ -249,32 +264,72 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 	CASE 5007
 		IF !GETBIT(던전フラグ:13:20,17)
-			CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+			CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 			IF RESULT == 1
 				SETBIT 던전フラグ:13:20,17
 				SIF GETBIT(던전フラグ:13:20,16) && GETBIT(던전フラグ:13:20,17) && GETBIT(던전フラグ:13:20,18)
-					CALL MESSAGE_WINDOW_D, "", "どこかの扉の鍵が開く音がした "
+					CALL MESSAGE_WINDOW_D, "", "어딘가에서 문이 열리는 소리가 났다 "
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "すでに押してある "
+			CALL MESSAGE_WINDOW_D, "", "이미 눌려 있다 "
 		ENDIF
 	CASE 5008
 		IF !GETBIT(던전フラグ:13:20,18)
-			CALL INPUT_SELECT_D, "[1]スイッチを押す/[0]スイッチを押さない "
+			CALL INPUT_SELECT_D, "[1]스위치를 누른다/[0]스위치를 누르지 않는다 "
 			IF RESULT == 1
 				SETBIT 던전フラグ:13:20,18
 				SIF GETBIT(던전フラグ:13:20,16) && GETBIT(던전フラグ:13:20,17) && GETBIT(던전フラグ:13:20,18)
-					CALL MESSAGE_WINDOW_D, "", "どこかの扉の鍵が開く音がした "
+					CALL MESSAGE_WINDOW_D, "", "어딘가에서 문이 열리는 소리가 났다 "
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "すでに押してある "
+			CALL MESSAGE_WINDOW_D, "", "이미 눌려 있다 "
 		ENDIF
+	CASE 5101,5201
+		IF !GETBIT(던전フラグ:13:20,20)
+			CALL MESSAGE_WINDOW_D, "악마", "우~웅...다시 돌아와버렸네 / 지도를 다시 확인하지않으면 "
+			CALL MESSAGE_WINDOW_D, "악마", "오딘님에게 가려면.../어? "
+			CALL MESSAGE_WINDOW_D, "악마", "놈들이 왔다! 모두! 덤벼라!"
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			FOR LOCAL, 8, 11
+				CALL SET_ENEMY,LOCAL,408,66,0,0
+				CALL SYNC_STATUS,(CHARANUM-1)
+				CALL HEALTH_CHARA,(CHARANUM-1)
+			NEXT
+			FOR LOCAL, 13, 16
+				CALL SET_ENEMY,LOCAL,436,66,0,0
+				NAME:(CHARANUM-1) = 발키리
+				CALLNAME:(CHARANUM-1) = 발키리
+				CALL SYNC_STATUS,(CHARANUM-1)
+				CALL HEALTH_CHARA,(CHARANUM-1)
+			NEXT
+			CALL BATTLE_START
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
+			CALL MESSAGE_WINDOW_D, "", "악마는 지도를 떨궜다 "
+			SETBIT 던전フラグ:13:20,20
+		ELSE
+			CALL MESSAGE_WINDOW_D, "", "여기서 다시 지도를 확인하기로 했다"
+		ENDIF
+		FOR LX, 0, 19
+			FOR LY, 2, 21
+				;SETBIT 던전13:(LM):(LX):(LY) , 1
+				SIF GET_FLOOR_ANALYZE_T(LX,LY) < 1
+					CALL SET_FLOOR_ANALYZE(1, FLAG:現던전, FLAG:現M,LX,LY)
+			NEXT
+		NEXT
+		CALL MESSAGE_WINDOW_D, "", "지도 아래에는/”×두 방향을 뛸 수 있는 장소”/라고 쓰여져 있다."
 	
 	CASEELSE
 		IF 4700 < DA:(FLAG:現X):(FLAG:現Y) / 10 && (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100 == 0
 			
-			CALL MESSAGE_WINDOW_D, "후타바", "こっちに帰るか？ "
-			CALL INPUT_SELECT_D, "[1]帰る/[0]帰らない "
+			CALL MESSAGE_WINDOW_D, "후타바", "이쪽으로 돌아갈까？ "
+			CALL INPUT_SELECT_D, "[1]돌아간다/[0]돌아가지 않는다 "
 			IF RESULT == 1
 					CALL DUNGEON_WORP,46,4,3
 			ENDIF
@@ -295,10 +350,10 @@ ENDSELECT
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 4800
 		IF 던전フラグ:13:19 == 0
-			CALL MESSAGE_WINDOW_D, "", "スマホから連絡がかかった/電話に出るとフタバの声がする "
-			CALL MESSAGE_WINDOW_D, "双葉の声", "聞こえるか？/どうやらこのアプリを入れていると/想空間をまたいで通信できるみたいなんだ "
-			CALL MESSAGE_WINDOW_D, "双葉の声", "どこでもできるわけじゃないらしい/でも　できるところではそこから帰ったり送ったりすることができるよ "
-			CALL MESSAGE_WINDOW_D, "双葉の声", "とりあえず　そっちに送るときは一番奥に送るようにするよ "
+			CALL MESSAGE_WINDOW_D, "", "스마트폰으로 연락이 왔다/전화를 받으니 후타바 목소리가 났다 "
+			CALL MESSAGE_WINDOW_D, "후타바의 목소리", "들려？/아무래도 이 앱을 다운받으면/상공간을 넘어 통신할 수 있는 것 같아 "
+			CALL MESSAGE_WINDOW_D, "후타바의 목소리", "아무데서나 할 수 있는 건 아닌 것 같아/하지만 할 수 있는 곳에서는 거기에서 돌아가거나 보내거나 할 수 있어 "
+			CALL MESSAGE_WINDOW_D, "후타바의 목소리", "일단 그쪽으로 보낼때는 가장안쪽으로 보내도록할께 "
 			던전フラグ:13:19 = 1
 		ENDIF
 	CASE 4900
@@ -311,10 +366,10 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		SIF 던전フラグ:13:19 < 8
 			던전フラグ:13:19 = 8
 		IF 던전フラグ:13:19 == 9
-			CALL MESSAGE_WINDOW_D, "声", "待てっ！// "
-			CALL MESSAGE_WINDOW_D, "", "声の方を見ると倒したはずのブリュンヒルデと/발키리の軍勢がいる/ "
-			CALL MESSAGE_WINDOW_D, "ブリュンヒルド", "이난나により復活したのは/ミロクだけではないぞ！/ "
-			CALL MESSAGE_WINDOW_D, "ブリュンヒルド", "多神連合の野望の実現のため…/そして　我らの父오딘の仇！/貴様らを討たせてもらうぞ "
+			CALL MESSAGE_WINDOW_D, "목소리", "기다려！// "
+			CALL MESSAGE_WINDOW_D, "", "목소리 쪽을 보니 쓰러뜨렸을 브륀힐드와/발키리의 군대가 있다/ "
+			CALL MESSAGE_WINDOW_D, "브륀힐드", "이난나 덕분에 부활한 것은/미륵만이 아니다！/ "
+			CALL MESSAGE_WINDOW_D, "브륀힐드", "다신연합의 야망 실현을 위하여…/그리고 우리 아버지 오딘의 원수！/네 놈들을 쳐죽이겠다 "
 					FLAG:도주불가フラグ = 1
 					FLAG:회화불능フラグ = 1
 					FLAG:선제기습취소 = 1
@@ -327,13 +382,13 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			
 			FOR LOCAL, 7, 17
 				CALL SET_ENEMY,LOCAL,436,66,0,0
-				NAME:(CHARANUM-1) = ワルキューレ
-				CALLNAME:(CHARANUM-1) = ワルキューレ
+				NAME:(CHARANUM-1) = 발키리
+				CALLNAME:(CHARANUM-1) = 발키리
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
 			NEXT
 			CALL BATTLE_START
-			CALL MESSAGE_WINDOW_D, "ブリュンヒルド", "ほう　さすがは我が父오딘を倒しただけのことはある/我ら발키리隊をここまで突破するとは/ "
+			CALL MESSAGE_WINDOW_D, "브륀힐드", "호오 역시 우리 아버지 오딘을 쓰러뜨린 만큼의 힘이 있어/우리 발키리부대를 여기까지 돌파하다니/ "
 			
 				CALL SET_ENEMY,9,[[キャラ:브륀힐드(영웅)]],72,0,1
 				NAME:(CHARANUM-1) = 브륀힐드
@@ -367,45 +422,45 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CALL HEALTH_CHARA,(CHARANUM-1)			
 				
 				CALL SET_ENEMY,10,436,66,0,0
-				NAME:(CHARANUM-1) = ワルキューレ
-				CALLNAME:(CHARANUM-1) = ワルキューレ
+				NAME:(CHARANUM-1) = 발키리
+				CALLNAME:(CHARANUM-1) = 발키리
 				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
 				
 				CALL SET_ENEMY,11,436,66,0,0
-				NAME:(CHARANUM-1) = ワルキューレ
-				CALLNAME:(CHARANUM-1) = ワルキューレ
+				NAME:(CHARANUM-1) = 발키리
+				CALLNAME:(CHARANUM-1) = 발키리
 				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
 				
 				CALL SET_ENEMY,15,436,66,0,0
-				NAME:(CHARANUM-1) = ワルキューレ
-				CALLNAME:(CHARANUM-1) = ワルキューレ
+				NAME:(CHARANUM-1) = 발키리
+				CALLNAME:(CHARANUM-1) = 발키리
 				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
 				
 				CALL SET_ENEMY,16,436,66,0,0
-				NAME:(CHARANUM-1) = ワルキューレ
-				CALLNAME:(CHARANUM-1) = ワルキューレ
+				NAME:(CHARANUM-1) = 발키리
+				CALLNAME:(CHARANUM-1) = 발키리
 				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
 			
 			CALL BATTLE_START
-		CALL MESSAGE_WINDOW_D, "ブリュンヒルド", "ぐはっ……　バカな……/またしても…"
-		CALL MESSAGE_WINDOW_D, "", "악마は힘尽きた"
-		CALL MESSAGE_WINDOW_D, "", "いつの間にか周りの風景がかなり崩れている// "
-		CALL MESSAGE_WINDOW_D, "시에로", "おいおい　いよいよヤバくなってんじゃねえの！？// "
-		CALL MESSAGE_WINDOW_D, "서프", "早くここから탈출しよう/フタバ　頼むぞ/ "
-		CALL MESSAGE_WINDOW_D, "후타바", "了解// "
+		CALL MESSAGE_WINDOW_D, "브륀힐드", "크핫……　바보같은……/또다시…"
+		CALL MESSAGE_WINDOW_D, "", "악마는 힘이 다했다"
+		CALL MESSAGE_WINDOW_D, "", "어느새 주변 풍경이 많이 허물어져 있다// "
+		CALL MESSAGE_WINDOW_D, "시에로", "어이어이 점점 더 위험해졌잖아！？// "
+		CALL MESSAGE_WINDOW_D, "서프", "빨리 여기서 탈출하자/후타바 부탁한다/ "
+		CALL MESSAGE_WINDOW_D, "후타바", "알았어// "
 		CALL DUNGEON_WORP,46,4,3
-		CALL MESSAGE_WINDOW_D, "", "당신達は元の場所に戻った"
-		CALL MESSAGE_WINDOW_D, "서프", "これでクリシュナの所に行けるだろうな// "
-		CALL MESSAGE_WINDOW_D, "서프", "だが　結界はすぐに解けないらしいな/結界が落ち着くまで待とう/ "
-				CALL MESSAGE_WINDOW_D, "", @"＞名声350を得た"
+		CALL MESSAGE_WINDOW_D, "", "당신은 원래 세계로 돌아왔다"
+		CALL MESSAGE_WINDOW_D, "서프", "이것으로 크리슈나에게 갈 수 있겠지// "
+		CALL MESSAGE_WINDOW_D, "서프", "하지만 결계는 바로 풀리지 않는 모양이야/결계가 사라질 때까지 기다리자/ "
+				CALL MESSAGE_WINDOW_D, "", @"＞명성 350을 얻었다"
 				FLAG:名声 += 350
 			던전フラグ:13:1 = 13
 				CALL DUNGEON_WORP,0,14,18
@@ -420,7 +475,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 4602
 	CASE 405
 		IF 던전フラグ:13:2 < 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "頼む！/助けてやってくれよ… "
+			CALL MESSAGE_WINDOW_D, "프레드", "부탁해！/도와줘… "
 			;この命令で이벤트は破壊され、ただの床になる
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 			던전フラグ:13:2 = 7
@@ -433,11 +488,11 @@ ENDSELECT
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 4800
 		IF 던전フラグ:13:19 < 3
-			CALL MESSAGE_WINDOW_D, "", "向こうから気配を感じる "
-			CALL INPUT_SELECT_D, "[1]奥に行く/[0]行かない "
+			CALL MESSAGE_WINDOW_D, "", "저쪽에서 낌새를 느꼈다 "
+			CALL INPUT_SELECT_D, "[1]안으로 들어간다/[0]가지 않는다 "
 			IF RESULT == 1
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)+2
-				CALL MESSAGE_WINDOW_D, "", "적が現れた "
+				CALL MESSAGE_WINDOW_D, "", "적이 나타났다 "
 					FLAG:도주불가フラグ = 1
 					FLAG:회화불능フラグ = 1
 					FLAG:선제기습취소 = 1
@@ -471,11 +526,11 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 5000
 		IF GETBIT(던전フラグ:13:20,16) && GETBIT(던전フラグ:13:20,17) && GETBIT(던전フラグ:13:20,18)
 			IF 던전フラグ:13:19 < 6
-				CALL MESSAGE_WINDOW_D, "", "向こうから気配を感じる "
-				CALL INPUT_SELECT_D, "[1]奥に行く/[0]行かない "
+				CALL MESSAGE_WINDOW_D, "", "저쪽에서 낌새를 느꼈다 "
+				CALL INPUT_SELECT_D, "[1]안으로 들어간다/[0]가지 않는다 "
 				IF RESULT == 1
 					CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)+2
-				CALL MESSAGE_WINDOW_D, "", "적が現れた "
+				CALL MESSAGE_WINDOW_D, "", "적이 나타났다 "
 						FLAG:도주불가フラグ = 1
 						FLAG:회화불능フラグ = 1
 						FLAG:선제기습취소 = 1
@@ -507,25 +562,25 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				ENDIF
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "扉は固く閉じられている "
+			CALL MESSAGE_WINDOW_D, "", "문은 굳게 닫혀 있다 "
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)-1
 		ENDIF
 	CASE 5300
 		IF 던전フラグ:13:19 < 9
-			CALL MESSAGE_WINDOW_D, "", "向こうから凄まじい気配を感じる "
-			CALL INPUT_SELECT_D, "[1]奥に行く/[0]行かない "
+			CALL MESSAGE_WINDOW_D, "", "저편에서 무시무시한 낌새를 느꼈다 "
+			CALL INPUT_SELECT_D, "[1]안으로 들어간다/[0]가지 않는다 "
 			IF RESULT == 1
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)+2
 				
-				CALL MESSAGE_WINDOW_D, "", "そこには　見たことのある槍持ちの악마がいた// "
-				CALL MESSAGE_WINDOW_D, "槍持ちの악마", "ふむ　ここまでやってくるとは/인간もやるのもだな/ "
-				CALL MESSAGE_WINDOW_D, "오딘", "我が名は오딘/北米の神々を束ねている/ "
-				CALL MESSAGE_WINDOW_D, "서프", "ここに来れたのはフタバのおかげだ/彼女のおかげでここに来ることができた/ "
-				CALL MESSAGE_WINDOW_D, "오딘", "なるほど…　あの小娘の知識でここまで来たか…/やはりあそこで殺しておくべきだったな/ "
+				CALL MESSAGE_WINDOW_D, "", "거기에는 본 적이 있는 창잡이 악마가 있었다// "
+				CALL MESSAGE_WINDOW_D, "창을 쥔 악마", "흠 여기까지 오다니/인간도 꽤나 하는구나/ "
+				CALL MESSAGE_WINDOW_D, "오딘", "내 이름은 오딘/북미의 신들을 거느리고 있다/ "
+				CALL MESSAGE_WINDOW_D, "서프", "여기에 올 수 있었던 건 후타바 덕분이야/그녀 덕분에 여기에 올 수 있었어/ "
+				CALL MESSAGE_WINDOW_D, "오딘", "과연… 그 계집애의 지식으로 여기까지 왔구나…/역시 거기서 죽였어야 했어/ "
 
-				CALL MESSAGE_WINDOW_D, "류지", "うるせえ！/お前　なんかに仲間を殺させるかよ！/ "
-				CALL MESSAGE_WINDOW_D, "히트", "そうだな　俺達は세라を救いに来たんだ/さっさと　喰わせろ/ "
-				CALL MESSAGE_WINDOW_D, "오딘", "面白い　やって見せよ "
+				CALL MESSAGE_WINDOW_D, "류지", "시끄러워！/너따위에게 동료를 죽게두지 않아！/ "
+				CALL MESSAGE_WINDOW_D, "히트", "그래 우리는 세라를 구하러 왔어/얼른 불어라/ "
+				CALL MESSAGE_WINDOW_D, "오딘", "재미있구나 한번 해보자 "
 					FLAG:도주불가フラグ = 1
 					FLAG:회화불능フラグ = 1
 					FLAG:선제기습취소 = 1
@@ -565,8 +620,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CALL HEALTH_CHARA,(CHARANUM-1)
 			
 				CALL SET_ENEMY,7,436,70,1,0
-				NAME:(CHARANUM-1) = ワルキューレ
-				CALLNAME:(CHARANUM-1) = ワルキューレ
+				NAME:(CHARANUM-1) = 발키리
+				CALLNAME:(CHARANUM-1) = 발키리
 				CFLAG:(CHARANUM-1):行動횟수 = 1
 				CFLAG:(CHARANUM-1):ＨＰ보정 = 500
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 500
@@ -612,35 +667,30 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				
 				CALL BATTLE_START
 				FLAG:(10000+[[キャラ:오딘]]) = 1
-				CALL MESSAGE_WINDOW_D, "", "오딘の合体が解禁された "
-				FLAG:도주불가フラグ = 0
-				FLAG:회화불능フラグ = 0
-				FLAG:선제기습취소 = 0
-				FLAG:エンカウント率 = 0
-				FLAG:未遭遇歩数 = 0
+				CALL MESSAGE_WINDOW_D, "", "오딘의 합체가 해금되었다 "
 				
-				CALL MESSAGE_WINDOW_D, "오딘", "ぐぬ…まさか/인간に我が負けるなど…あり得ぬ…ッ/　 "
-				CALL MESSAGE_WINDOW_D, "오딘", "グああああぁぁぁぁ…！//　 "
-				CALL MESSAGE_WINDOW_D, "", "오딘を倒した//　 "
-				CALL MESSAGE_WINDOW_D, "마코토", "あとは　ミトラを倒すだけですね// "
-				CALL MESSAGE_WINDOW_D, "서프", "ああ　奴もここに来ているからな/ミトラを倒せば結界が消えるはずだ/ "
-				CALL MESSAGE_WINDOW_D, "", "突如　けたたましい破壊音が鳴り響く// "
-				CALL MESSAGE_WINDOW_D, "春", "きゃあ！// "
-				CALL MESSAGE_WINDOW_D, "알지라", "な…何？// "
-				CALL MESSAGE_WINDOW_D, "", "鳴動の中心にはミトラ菩薩が立っていた// "
-				CALL MESSAGE_WINDOW_D, "시에로", "くそっ/見計らったタイミングで　出てきやがった/ "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "よくここまで来た…私はミトラ/現世利益をもたらす계약の神/ "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "私は이난나の힘で輪廻し/真の姿──仏陀となった/ "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "今の私ならば　汝らを無我の境地へと導き/解脱を成さしめることもできよう/ "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "汝ら魂が輪廻し続け　縁を保つ限り/我らは인간に≪救済≫をもたらせぬ/ "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "故に　私は汝らが輪廻の縁を断ち切り/汝らを円環する転生の理から解き放とう/ "
-				CALL MESSAGE_WINDOW_D, "히트", "下らねえ　言いてえことはそれだけか？/お前をぶちのめすのに言葉なんていらねえ/ "
-				CALL MESSAGE_WINDOW_D, "안", "そうよ！/一회복活したからって　いい気にならないで！/ "
-				CALL MESSAGE_WINDOW_D, "게일", "だな　ミロク…いやミトラといったか// "
-				CALL MESSAGE_WINDOW_D, "게일", "そのような詭弁で惑わそうとしているのならば/何度蘇ろうと俺達には勝てん/ "
+				CALL MESSAGE_WINDOW_D, "오딘", "크윽…설마/인간에게 내가 지다니…있을수 없다…앗/　 "
+				CALL MESSAGE_WINDOW_D, "오딘", "구아아아아아아아아…！//　 "
+				CALL MESSAGE_WINDOW_D, "", "오딘을 쓰러뜨렸다//　 "
+				CALL MESSAGE_WINDOW_D, "마코토", "이제 미트라를 쓰러뜨리는 일만 남았네요// "
+				CALL MESSAGE_WINDOW_D, "서프", "아아 녀석도 여기에 와있으니까/미트라를 쓰러뜨리면 결계가 사라질거야/ "
+				CALL MESSAGE_WINDOW_D, "", "별안간 요란한 파괴음이 울려 퍼졌다// "
+				CALL MESSAGE_WINDOW_D, "하루", "꺄아！// "
+				CALL MESSAGE_WINDOW_D, "알지라", "뭐…뭐야？// "
+				CALL MESSAGE_WINDOW_D, "", "명동의 중심에는 미트라보살이 서 있었다// "
+				CALL MESSAGE_WINDOW_D, "시에로", "젠장/적절한 타이밍에 나왔다/ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "잘도 왔구나…난 미트라/현세이익을 계약하는 신/ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "나는 이난나의 힘으로 윤회해/진정한 모습──부처가 되었다/ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "지금의 나라면 그대들을 무아의 경지로 이끌고/해탈을 이루게 할 수도 있으리라/ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "그대들의 영혼이 계속 윤회하며 인연을 유지하는 한/우리는 인간의≪구제≫를 가져올 수 없다/ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "고로 나는 그대들의 윤회의 인연을 끊고 /그대들을 원환하는 환생의 이치로부터 해방시키리라/ "
+				CALL MESSAGE_WINDOW_D, "히트", "쓸데없는 말은 그것뿐이야？/너를 때려눕히는데 말은 필요없어/ "
+				CALL MESSAGE_WINDOW_D, "안", "그래！/한번 부활했다고 우쭐하지 말라고！/ "
+				CALL MESSAGE_WINDOW_D, "게일", "글쎄 미륵…아니 미트라라고 할까// "
+				CALL MESSAGE_WINDOW_D, "게일", "그런 궤변으로 현혹하려 한다면/몇 번을 되살아나더라도 우리를 이길 수 없다/ "
 				
-				CALL MESSAGE_WINDOW_D, "미트라보살", "心外無別法…すべては汝らが心の現れ/輪廻もまた心に縁を繋ぎ故なり/ "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "輪廻を断つは即ち心を断つことと知れ…/さあ　前のようには行かぬぞ…깨달음悟せよ/ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "심외무별법…모든 것은 그대들이 마음의 나타나/윤회 또한 마음에 인연을 이어주었으니/ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "윤회를 끊는다는 것은 곧 마음을 끊는 것으로 알라…/자 전과 같이는 안 될거다…깨달음을 깨우쳐라/ "
 				
 				CALL SET_ENEMY,9,1438,75,0,2
 				CFLAG:(CHARANUM-1):行動횟수 = 4
@@ -674,20 +724,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CALL BATTLE_START
 				FLAG:(10000+[[キャラ:미트라보살]]) = 1
 				FLAG:(10000+[[キャラ:미륵보살]]) = 1
-				CALL MESSAGE_WINDOW_D, "", "미륵보살、ミトラ菩薩の合体が解禁された "
+				CALL MESSAGE_WINDOW_D, "", "미륵보살、미트라보살의 합체가 해금되었다 "
 				FLAG:도주불가フラグ = 0
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
 				FLAG:エンカウント率 = 0
 				FLAG:未遭遇歩数 = 0
 				
-				CALL MESSAGE_WINDOW_D, "미트라보살", "인간の힘が…かくも恐ろしいものとは…/あとは　奴にすべてを託すとしよう…/ "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "結界は解かれる　クリシュナはその中にいる// "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "我らの救済と　貴様らの縁…/どちらが正しいか…試してみるがよい/ "
-				CALL MESSAGE_WINDOW_D, "", "ミトラ菩薩を倒した// "
-				CALL MESSAGE_WINDOW_D, "", "すると　周りが揺れ始めた// "
-				CALL MESSAGE_WINDOW_D, "시에로", "うおっ　こ…この揺れは！// "
-				CALL MESSAGE_WINDOW_D, "서프", "まずい　すぐにここから탈출するぞ！// "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "인간의 힘이…이토록 무서운 것이라곤…/나머지는 놈에게 모든 것을 맡기기로 하지…/ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "결계는 풀렸다 크리슈나는 그 안에 있다// "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "우리의 구제와 네놈의 인연/어느 쪽이 옳은지 시험해 보는 것이 좋겠지/ "
+				CALL MESSAGE_WINDOW_D, "", "미트라보살을 쓰러뜨렸다// "
+				CALL MESSAGE_WINDOW_D, "", "그러자 주위가 흔들리기 시작했다// "
+				CALL MESSAGE_WINDOW_D, "시에로", "우옷 이…이 흔들림은！// "
+				CALL MESSAGE_WINDOW_D, "서프", "안좋아 여기서 바로 탈출하자！// "
 				
 				던전フラグ:13:19 = 9
 			ELSE
@@ -855,8 +905,8 @@ SIF FLAG:現M > 45
 	RETURN 0
 SELECTCASE NO:ARG
 	CASE [[キャラ:브륀힐드]]
-		NAME:(CHARANUM-1) = ワルキューレ
-		CALLNAME:(CHARANUM-1) = ワルキューレ
+		NAME:(CHARANUM-1) = 발키리
+		CALLNAME:(CHARANUM-1) = 발키리
 ENDSELECT
 
 @床崩れ
@@ -890,7 +940,7 @@ LOCAL = 0
 		
 	ENDIF
 	IF LOCAL == 1
-		CALL MESSAGE_WINDOW_D, "", "突然床が崩れた！ "
+		CALL MESSAGE_WINDOW_D, "", "갑자기 마루가 무너졌다！ "
 		DA:(FLAG:現X):(FLAG:現Y) = 1
 	ENDIF
 
@@ -918,8 +968,8 @@ IF FINDCHARA_ENEMY([[キャラ:오딘]])
 		ENDIF
 	ENDIF
 	IF CFLAG:LOCAL:800 == 0 && 現HP割合(LOCAL) <= 66
-		CALL MESSAGE_WINDOW_D, "오딘", "少しはやるようだな…/だが　本当の戦いはこれからだッ "
-		CALL MESSAGE_WINDOW_D, "오딘", "我が槍　궁니르は必殺必中の魔槍/…卿らに耐えられるか？ "
+		CALL MESSAGE_WINDOW_D, "오딘", "조금은 하는거 같구나…/하지만 진짜 싸움은 이제부터다 "
+		CALL MESSAGE_WINDOW_D, "오딘", "내 창 궁니르는 필살 필중의 마창/…경들은 견딜 수 있을까?？ "
 		CFLAG:LOCAL:명중강화 = MIN(32, CFLAG:LOCAL:명중강화 + 12)
 		CFLAG:LOCAL:800 = 1
 	ENDIF
@@ -929,18 +979,18 @@ ELSEIF FINDCHARA_ENEMY(1438)
 	IF CFLAG:LOCAL:行動횟수 == 3
 			SETCOLOR 0xff0033
 			PRINTFORML ┏>CHARA━━━━━━━━━━┓　┏>ACT━━━━━━━━━━━━━━━━━━┓
-			PRINTFORML ┃[ 9] 미트라보살           ┃　┃不合理な否決　　　　　　　　　　　　　　┃
+			PRINTFORML ┃[ 9] 미트라보살           ┃　┃불합리한 부결　　　　　　　　　　　　　　┃
 			PRINTFORMW ┗━━━━━━━━━━━━━┛　┗━━━━━━━━━━━━━━━━━━━━┛
 			RESETCOLOR
 			CFLAG:LOCAL:能力変化封印フラグ = 3
-			PRINTFORMW 3ターン能力を下げられなくなった
+			PRINTFORMW 3턴간 능력을 떨어뜨릴 수 없게 되었다
 			
 		CFLAG:LOCAL:行動횟수 = 4
 	ENDIF
 ELSEIF 던전フラグ:13:19 == 9 && FLAG:도주불가フラグ == 1
 			던전フラグ:13:21++
 			SETCOLOR 0xff0033
-			PRINTFORMW 残り{20 - 던전フラグ:13:21}ターン
+			PRINTFORMW 나머지{20 - 던전フラグ:13:21}턴
 			RESETCOLOR
 			
 			SIF 던전フラグ:13:21 > 19

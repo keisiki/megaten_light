@@ -8,15 +8,15 @@
 ;====================
 @PLAYABLE_REQUEST_80
 #DIM L_INDEX
-;メガテン系이벤트以外불허가の場合
+;메가텐계 이벤트이외 불허가의 경우
 SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 || GETBIT(FLAG:EXTRA이벤트필터, 7) == 1
 	RETURN 0
 
 VARSET LOCAL
-;インデックスを参照
-;参照する配列とBIT値を得る為二重ループ
-;現在は10×32の320個まで作成できる計算。
-;増やしたい場合は↓の行の"LOCAL,0,10"の最後の10を増やせばOK(최대100)
+;인덱스 참조
+;참조하는 배열과 BIT값을 얻기 위해 이중 루프
+;현재는 20×32의 640개까지 작성할 수 있는 계산
+;늘리고 싶을 때는 ↓ 행의 "LOCAL,0,10"의 최후의 10을 늘리면 OK(최대100)
 FOR L_INDEX,0,20
 	FOR LOCAL,0,32
 		SIF GETBIT(의뢰フラグ:80:L_INDEX,LOCAL)
@@ -33,7 +33,7 @@ FOR L_INDEX,0,20
 			LOCALS = 의뢰 【신데렐라걸【%RESULTS%】】%조사만처리(RESULTS,"가")% 출현！
 			CALL MESSAGE_B(1, LOCALS)
 		ENDIF
-		;まだ見てない이벤트の数をカウント
+		;아직 못 본 이벤트의 수를 카운트
 		SIF !GETBIT(의뢰フラグ:80:L_INDEX,LOCAL)
 			LOCAL:1++
 		LOCAL:2++
@@ -82,6 +82,7 @@ $INPUT_LOOP
 INPUT
 SIF RESULT == 9999
 	RETURN
+TFLAG:0 = RESULT
 LOCAL:3 = RESULT / 100
 LOCAL:4 = RESULT % 100
 TRYCCALLFORM REQUEST_80_PLAYABLE_{LOCAL:3} , LOCAL:4
@@ -89,8 +90,10 @@ TRYCCALLFORM REQUEST_80_PLAYABLE_{LOCAL:3} , LOCAL:4
 		GOTO END_EVENT
 	SIF !RESULT && !GETBIT(의뢰フラグ:80:L_INDEX,LOCAL)
 		GOTO END_EVENT
+	의뢰フラグ:80:(L_INDEX+1)=LOCAL:4;現在実行中のイベントのタイトル番号を依頼フラグ80:(L_INDEX+1)に記録する。
 	CALLFORM REQUEST_80_TITLELIST_{LOCAL:3} , LOCAL:4
 	CALLFORM REQUEST_80_%RESULTS%
+	의뢰フラグ:80:(L_INDEX+1)=0;タイトル番号の記録を初期化。
 	PRINTL
 	PRINTL
 	;既読にする

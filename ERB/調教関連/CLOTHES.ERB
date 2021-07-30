@@ -33,6 +33,7 @@ ENDIF
 #FUNCTIONS
 SIF ARG == -99
 	ARG = TARGET
+;그외 확장패치
 IF ARG:1 < 0 || ARG:1 > 16
 	PRINTFORM %CALLNAME:ARG%번의 의상명을 참조할 때에 부정한 번호 {ARG:1}이 의상의 부위로서 지정되었습니다
 	PRINTFORM 의도하지 않은 동작・오류일 가능성이 높으므로 보고를 부탁드립니다
@@ -643,9 +644,22 @@ SIF ASSI >= 0
 #DIM 유방노출상태, 3
 #DIM 구상체크可, 1
 #DIM LCOUNT
+#DIM DYNAMIC COMPARE1 ;비교 변수1
+#DIM DYNAMIC COMPARE2 ;비교 변수2
+#DIM DYNAMIC COMPARE3 ;비교 변수3
+#DIM DYNAMIC COMPARE4 ;비교 변수4
+#DIM DYNAMIC COMPARE5 ;비교 변수5
+#DIM DYNAMIC COMPARE6 ;비교 변수6
 #LOCALSIZE 3
 LINE = LINECOUNT
 $START
+;비교 변수 초기화
+COMPARE1 = 0
+COMPARE2 = 0
+COMPARE3 = 0
+COMPARE4 = 0
+COMPARE5 = 0
+COMPARE6 = 0
 CLEARLINE LINECOUNT - LINE
 PRINTL 의상에 대해서 설정합니다
 ;特殊な착의상태を표시
@@ -695,30 +709,290 @@ FOR LOCAL:1, 0 , (ARG:1 == 1 ? 1 # 3)
 		SIF !CFLAG:CHARA:(GET_CLOTHESNAME(LOCAL))
 			CONTINUE
 		TRYCCALLFORM CLOTHES_NAME_{CFLAG:CHARA:(GET_CLOTHESNAME(LOCAL))}
-			PRINTFORM %"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
-			SIF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
-				SETCOLOR COLOR("aqua")
-			PRINTBUTTON @"[{LOCAL+LOCAL:1*100,3}] 착의　", LOCAL+LOCAL:1*100
-			RESETCOLOR
-			SIF !TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
-				SETCOLOR COLOR("aqua")
-			PRINTFORM [{LOCAL+20+LOCAL:1*100,3}] 탈의
-			RESETCOLOR
-			SIF STAIN:CHARA:(LOCAL+10) & 1
-				PRINT <애액>
-			SIF STAIN:CHARA:(LOCAL+10) & 2
-				PRINT <페니스>
-			SIF STAIN:CHARA:(LOCAL+10) & 4
-				PRINT <정액>
-			SIF STAIN:CHARA:(LOCAL+10) & 8
-				PRINT <애널>
-			SIF STAIN:CHARA:(LOCAL+10) & 16
-				PRINT <모유>
-			SIF STAIN:CHARA:(LOCAL+10) & 32
-				PRINT <점액>
-			SIF STAIN:CHARA:(LOCAL+10) & 64
-				PRINT <파과혈>
-			PRINTL 
+			SELECTCASE GET_CLOTHESNAME(LOCAL)
+				CASE "옷"
+					IF TEQUIP:CHARA:겉옷 == 0
+					;겉옷을 벗은 상태면 → 옷을 탈의할 수 있다
+						PRINTFORM %"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SIF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+							SETCOLOR COLOR("aqua")
+						PRINTBUTTON @"[{LOCAL+LOCAL:1*100,3}] 착의　", LOCAL+LOCAL:1*100
+						RESETCOLOR
+						SIF !TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+							SETCOLOR COLOR("aqua")
+						PRINTFORM [{LOCAL+20+LOCAL:1*100,3}] 탈의
+						RESETCOLOR
+					ELSE
+					;옷을 탈의할 수 없다
+						PRINTFORM %"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SETCOLOR 0x1c1c1c
+						PRINTFORM [  x] 착의  
+						PRINTFORM [  x] 탈의
+						RESETCOLOR
+					ENDIF
+					SIF STAIN:CHARA:(LOCAL+10) & 1
+						PRINT <애액>
+					SIF STAIN:CHARA:(LOCAL+10) & 2
+						PRINT <페니스>
+					SIF STAIN:CHARA:(LOCAL+10) & 4
+						PRINT <정액>
+					SIF STAIN:CHARA:(LOCAL+10) & 8
+						PRINT <애널>
+					SIF STAIN:CHARA:(LOCAL+10) & 16
+						PRINT <모유>
+					SIF STAIN:CHARA:(LOCAL+10) & 32
+						PRINT <점액>
+					SIF STAIN:CHARA:(LOCAL+10) & 64
+						PRINT <파과혈>
+					IF TEQUIP:CHARA:겉옷 > 0
+						SETCOLOR 0x01dfd7
+						PRINT  《겉옷 착의중이라 착/탈의불가》
+						RESETCOLOR
+					ENDIF
+					PRINTL 
+				CASE "속옷（상）"
+				;브래지어
+					IF (TEQUIP:CHARA:옷 == 0 && TEQUIP:CHARA:전신복 == 0 && TEQUIP:CHARA:겉옷 == 0) || TEQUIP:CHARA:가슴앞열림 == 1
+					;브래지어를 덮는 옷이 없거나 가슴팍이 드러났다 → 브래지어를 탈의할 수 있다
+						PRINTFORM   └%"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SIF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+							SETCOLOR COLOR("aqua")
+						PRINTBUTTON @"[{LOCAL+LOCAL:1*100,3}] 착의　", LOCAL+LOCAL:1*100
+						RESETCOLOR
+						SIF !TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+							SETCOLOR COLOR("aqua")
+						PRINTFORM [{LOCAL+20+LOCAL:1*100,3}] 탈의
+						RESETCOLOR
+					ELSE
+					;브래지어를 탈의할 수 없다
+						PRINTFORM   └%"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SETCOLOR 0x1c1c1c
+						PRINTFORM [  x] 착의  
+						PRINTFORM [  x] 탈의
+						RESETCOLOR
+					ENDIF
+					SIF STAIN:CHARA:(LOCAL+10) & 1
+						PRINT <애액>
+					SIF STAIN:CHARA:(LOCAL+10) & 2
+						PRINT <페니스>
+					SIF STAIN:CHARA:(LOCAL+10) & 4
+						PRINT <정액>
+					SIF STAIN:CHARA:(LOCAL+10) & 8
+						PRINT <애널>
+					SIF STAIN:CHARA:(LOCAL+10) & 16
+						PRINT <모유>
+					SIF STAIN:CHARA:(LOCAL+10) & 32
+						PRINT <점액>
+					SIF STAIN:CHARA:(LOCAL+10) & 64
+						PRINT <파과혈>
+					IF !((TEQUIP:CHARA:옷 == 0 && TEQUIP:CHARA:전신복 == 0 && TEQUIP:CHARA:겉옷 == 0) || TEQUIP:CHARA:가슴앞열림 == 1)	
+						SETCOLOR 0xd7df01
+						PRINT  《가슴 비노출이라 착/탈의불가》
+						RESETCOLOR
+					ENDIF
+					PRINTL 
+				CASE "속옷（하）"
+				;팬티
+					;착용하고 있는 옷들의 가랑이 유형 조사
+					;참고 - 스커트 유형 리턴값(3), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+					TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:CHARA:하의}
+					COMPARE1 = RESULT
+					TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:CHARA:전신복}
+					COMPARE2 = RESULT
+					;참고 - 바지 유형 리턴값(1), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+					TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:CHARA:양말}
+					COMPARE5 = RESULT
+					IF (TFLAG:60 > 0 && (TCVAR:CHARA:페니스사용대상 == TARGET || CHARA == TARGET)) || (TFLAG:62 > 0 && (TCVAR:CHARA:페니스사용대상 == ASSI || CHARA == ASSI)) || !((COMPARE1 == 0 || COMPARE1 == 3 || COMPARE1 == 5) && (COMPARE2 == 0 || COMPARE2 == 3 || COMPARE2 == 5)) || (COMPARE5 == 1 || COMPARE5 == 2 || COMPARE5 == 4)
+					;삽입 상태(TFLAG:60 > 0)에서, 캐릭의 페니스 사용대상이 조교대상이거나, 캐릭이 조교대상 자체인 경우
+					;혹은 전신복이나 하의가, 없거나 탈의됐거나(0), 스커트 형식이거나(3), 앞열림 형식일 경우(5)...의 NOT 결과값일 경우
+					;--> 팬티를 탈의할 수 없다
+						PRINTFORM   └%"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SETCOLOR 0x1c1c1c
+						PRINTFORM [  x] 착의  
+						PRINTFORM [  x] 탈의
+						RESETCOLOR
+					ELSE
+					;팬티를 탈의할 수 있다
+						PRINTFORM   └%"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SIF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+							SETCOLOR COLOR("aqua")
+						PRINTBUTTON @"[{LOCAL+LOCAL:1*100,3}] 착의　", LOCAL+LOCAL:1*100
+						RESETCOLOR
+						SIF !TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+							SETCOLOR COLOR("aqua")
+						PRINTFORM [{LOCAL+20+LOCAL:1*100,3}] 탈의
+						RESETCOLOR
+					ENDIF
+					SIF STAIN:CHARA:(LOCAL+10) & 1
+						PRINT <애액>
+					SIF STAIN:CHARA:(LOCAL+10) & 2
+						PRINT <페니스>
+					SIF STAIN:CHARA:(LOCAL+10) & 4
+						PRINT <정액>
+					SIF STAIN:CHARA:(LOCAL+10) & 8
+						PRINT <애널>
+					SIF STAIN:CHARA:(LOCAL+10) & 16
+						PRINT <모유>
+					SIF STAIN:CHARA:(LOCAL+10) & 32
+						PRINT <점액>
+					SIF STAIN:CHARA:(LOCAL+10) & 64
+						PRINT <파과혈>
+					IF !((COMPARE1 == 0 || COMPARE1 == 3 || COMPARE1 == 5) && (COMPARE2 == 0 || COMPARE2 == 3 || COMPARE2 == 5))
+						SETCOLOR 0xd7df01
+						PRINT  《바지 탈의필요》
+						RESETCOLOR
+					ENDIF
+					IF COMPARE5 == 1 || COMPARE5 == 2 || COMPARE5 == 4
+						SETCOLOR 0x01dfd7
+						PRINT  《스타킹 착용중이라 착/탈의불가》
+						RESETCOLOR
+					ENDIF
+					IF (TFLAG:60 > 0 && (TCVAR:CHARA:페니스사용대상 == TARGET || CHARA == TARGET)) || (TFLAG:62 > 0 && (TCVAR:CHARA:페니스사용대상 == ASSI || CHARA == ASSI))
+					;삽입 상태(TFLAG:60 > 0)에서, 캐릭의 페니스 사용대상이 조교대상이거나, 캐릭이 조교대상 자체인 경우
+						SETCOLOR 0xff3399
+						PRINT  《삽입중이라 착/탈의불가》
+						RESETCOLOR
+					ENDIF
+					PRINTL 
+				CASE "전신속옷"
+				;수영복, 보디수트 등
+					IF TEQUIP:CHARA:옷 == 0 && TEQUIP:CHARA:하의 == 0 && TEQUIP:CHARA:전신복 == 0 && TEQUIP:CHARA:겉옷 == 0
+					;옷,하의,전신복,겉옷을 모두 벗은 상태면 → 전신속옷을 탈의할 수 있다
+						PRINTFORM   └%"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SIF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+							SETCOLOR COLOR("aqua")
+						PRINTBUTTON @"[{LOCAL+LOCAL:1*100,3}] 착의　", LOCAL+LOCAL:1*100
+						RESETCOLOR
+						SIF !TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+							SETCOLOR COLOR("aqua")
+						PRINTFORM [{LOCAL+20+LOCAL:1*100,3}] 탈의
+						RESETCOLOR
+					ELSE
+					;전신속옷을 탈의할 수 없다
+						PRINTFORM   └%"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SETCOLOR 0x1c1c1c
+						PRINTFORM [  x] 착의  
+						PRINTFORM [  x] 탈의
+						RESETCOLOR
+					ENDIF
+					SIF STAIN:CHARA:(LOCAL+10) & 1
+						PRINT <애액>
+					SIF STAIN:CHARA:(LOCAL+10) & 2
+						PRINT <페니스>
+					SIF STAIN:CHARA:(LOCAL+10) & 4
+						PRINT <정액>
+					SIF STAIN:CHARA:(LOCAL+10) & 8
+						PRINT <애널>
+					SIF STAIN:CHARA:(LOCAL+10) & 16
+						PRINT <모유>
+					SIF STAIN:CHARA:(LOCAL+10) & 32
+						PRINT <점액>
+					SIF STAIN:CHARA:(LOCAL+10) & 64
+						PRINT <파과혈>
+					IF !(TEQUIP:CHARA:옷 == 0 && TEQUIP:CHARA:하의 == 0 && TEQUIP:CHARA:전신복 == 0 && TEQUIP:CHARA:겉옷 == 0)
+						SETCOLOR 0xd7df01
+						PRINT  《옷,하의,전신복,겉옷을 모두 탈의필요》
+						RESETCOLOR
+					ENDIF
+					PRINTL 
+				CASE "양말"
+				;양말, 니삭스 등
+					;착용하고 있는 옷들의 가랑이 유형 조사 (하의)
+					;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+					TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:CHARA:하의}
+					COMPARE3 = RESULT
+					;착용하고 있는 옷들의 가랑이 유형 조사 (전신복)
+					;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+					TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:CHARA:전신복}
+					COMPARE4 = RESULT
+					;착용하고 있는 옷들의 가랑이 유형 조사 (양말)
+					;참고 - 해당 의복이 없거나 탈의됐거나 가랑이를 덮지 않는 경우 리턴값(0)
+					;TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:CHARA:양말}
+					;COMPARE6 = RESULT
+					;설정된 기본 옷의 가랑이 유형 조사 (양말)
+					;참고 - 옷의 착/탈의 상태에 관계없이 절대적인 결과값이 도출된다
+					TRYCALLFORM CLOTHES_CROTCH_{CFLAG:CHARA:양말}
+					COMPARE6 = RESULT
+					IF TEQUIP:CHARA:신발 == 0
+					;신발을 벗었다는 걸 전제로, 바지 유형을 입지 않았거나 / 바지 유형을 입은 상태여도 양말이 가랑이를 덮지 않는 구조인 경우 → 양말을 탈의할 수 있다
+						IF ((COMPARE3 == 0 || COMPARE3 == 3 || COMPARE3 == 5) && (COMPARE4 == 0 || COMPARE4 == 3 || COMPARE4 == 5)) || (!((COMPARE3 == 0 || COMPARE3 == 3 || COMPARE3 == 5) && (COMPARE4 == 0 || COMPARE4 == 3 || COMPARE4 == 5)) && (COMPARE6 < 1 && CFLAG:CHARA:양말 != 805))
+							PRINTFORM %"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+							SIF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+								SETCOLOR COLOR("aqua")
+							PRINTBUTTON @"[{LOCAL+LOCAL:1*100,3}] 착의　", LOCAL+LOCAL:1*100
+							RESETCOLOR
+							SIF !TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+								SETCOLOR COLOR("aqua")
+							PRINTFORM [{LOCAL+20+LOCAL:1*100,3}] 탈의
+							RESETCOLOR
+						ELSE
+						;양말을 탈의할 수 없다
+							PRINTFORM %"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+							SETCOLOR 0x1c1c1c
+							PRINTFORM [  x] 착의  
+							PRINTFORM [  x] 탈의
+							RESETCOLOR
+						ENDIF
+					ELSE
+					;양말을 탈의할 수 없다
+						PRINTFORM %"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+						SETCOLOR 0x1c1c1c
+						PRINTFORM [  x] 착의  
+						PRINTFORM [  x] 탈의
+						RESETCOLOR
+					ENDIF
+					SIF STAIN:CHARA:(LOCAL+10) & 1
+						PRINT <애액>
+					SIF STAIN:CHARA:(LOCAL+10) & 2
+						PRINT <페니스>
+					SIF STAIN:CHARA:(LOCAL+10) & 4
+						PRINT <정액>
+					SIF STAIN:CHARA:(LOCAL+10) & 8
+						PRINT <애널>
+					SIF STAIN:CHARA:(LOCAL+10) & 16
+						PRINT <모유>
+					SIF STAIN:CHARA:(LOCAL+10) & 32
+						PRINT <점액>
+					SIF STAIN:CHARA:(LOCAL+10) & 64
+						PRINT <파과혈>
+					IF TEQUIP:CHARA:신발 > 0
+						SETCOLOR 0x01dfd7
+						PRINT  《신발 착의중이라 착/탈의불가》
+						RESETCOLOR
+					ENDIF
+					IF !((COMPARE3 == 0 || COMPARE3 == 3 || COMPARE3 == 5) && (COMPARE4 == 0 || COMPARE4 == 3 || COMPARE4 == 5)) && (COMPARE6 > 0 || CFLAG:CHARA:양말 == 805)
+						SETCOLOR 0xd7df01
+						PRINT  《바지 탈의필요》
+						RESETCOLOR
+					ENDIF
+					PRINTL 
+				CASEELSE
+				;그외의 옷
+					PRINTFORM %"【"+GET_CLOTHESNAME(LOCAL)+"】",14,LEFT% %RESULTS,20,LEFT% 
+					SIF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+						SETCOLOR COLOR("aqua")
+					PRINTBUTTON @"[{LOCAL+LOCAL:1*100,3}] 착의　", LOCAL+LOCAL:1*100
+					RESETCOLOR
+					SIF !TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL))
+						SETCOLOR COLOR("aqua")
+					PRINTFORM [{LOCAL+20+LOCAL:1*100,3}] 탈의
+					RESETCOLOR
+					SIF STAIN:CHARA:(LOCAL+10) & 1
+						PRINT <애액>
+					SIF STAIN:CHARA:(LOCAL+10) & 2
+						PRINT <페니스>
+					SIF STAIN:CHARA:(LOCAL+10) & 4
+						PRINT <정액>
+					SIF STAIN:CHARA:(LOCAL+10) & 8
+						PRINT <애널>
+					SIF STAIN:CHARA:(LOCAL+10) & 16
+						PRINT <모유>
+					SIF STAIN:CHARA:(LOCAL+10) & 32
+						PRINT <점액>
+					SIF STAIN:CHARA:(LOCAL+10) & 64
+						PRINT <파과혈>
+					PRINTL 
+			ENDSELECT
 		CATCH
 		ENDCATCH
 	NEXT
@@ -886,17 +1160,17 @@ ELSEIF (LOCAL == 60 || LOCAL == 61) && (TEQUIP:CHARA:가슴앞열림 == LOCAL % 
 	CALL KOJO_MESSAGE_EVENT
 	SWAP TARGET , CHARA
 	구상체크可 = 0
-;すべて脱がせる
+;모두 벗긴다
 ELSEIF LOCAL == 51
 	FOR LCOUNT, 0, 17
 		TEQUIP:CHARA:(GET_CLOTHESNAME(LCOUNT)) = 0
 	NEXT
-;すべて着せる
+;모두 입힌다
 ELSEIF LOCAL == 50
 	FOR LCOUNT, 0, 17
 		TEQUIP:CHARA:(GET_CLOTHESNAME(LCOUNT)) = CFLAG:CHARA:(GET_CLOTHESNAME(LCOUNT))
 	NEXT
-;옷を着せる場合
+;옷을 입히는 경우
 ELSEIF LOCAL < 20
 	IF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL)) == 0 && CFLAG:CHARA:(GET_CLOTHESNAME(LOCAL))
 		IF LOCAL == 3
@@ -914,18 +1188,18 @@ ELSEIF LOCAL < 20
 	ELSE
 		GOTO INPUT_LOOP
 	ENDIF
-	;着せる処理の後に텍스트を呼ぶ
+	;입히는 처리 후에 텍스트를 부른다
 	TRYCCALLFORM CLOTHES_MESSAGE_{NO:CHARA}, LOCAL, 1, CHARA
 	CATCH
 		CALL CLOTHES_MESSAGE,LOCAL,1,CHARA
 	ENDCATCH
-;옷を脱がせる場合
+;옷을 벗기는 경우
 ELSEIF LOCAL < 40
 	LOCAL -= 20
-	;着ていない場合は再입력
+	;입지 않은 경우 재입력
 	SIF TEQUIP:CHARA:(GET_CLOTHESNAME(LOCAL)) == 0
 		GOTO INPUT_LOOP
-	;脱がせる処理の前に텍스트を呼ぶ
+	;벗기는 처리 전에 텍스트를 부른다
 	TRYCCALLFORM CLOTHES_MESSAGE_K{NO:CHARA}, LOCAL, 0, CHARA
 	CATCH
 		CALL CLOTHES_MESSAGE,LOCAL, 0, CHARA

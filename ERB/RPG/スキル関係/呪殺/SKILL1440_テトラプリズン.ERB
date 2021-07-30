@@ -3,13 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_1440,ARG
-;ひかりちゃんが사용する場合塔が生えてくる
-;IF ARG > 0 && NO:ARG == [[キャラ:히카리]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:히카리]]) == 1
-	RESULTS = 성죄의레뷰
-ELSE
-	RESULTS = 테트라프리즌
-ENDIF
+RESULTS = 테트라프리즌
 
 ;　명중
 @SKILL_HITRATE_1440, ARG
@@ -41,12 +35,12 @@ RETURN 45
 RETURN GET_TYPE_NUM("주살")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1440
+@SKILL_DECIDE_TYPE_1440, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1440
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1440, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -126,13 +120,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,1440
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1440
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:히카리]]
-	PRINTL 星を눈指した罪、その象徴たる星積みの塔。
-	PRINTL かつて소녀がたどり着いてしまった운命の舞台に、적１体を引きずり込む。
-	PRINTL 주살속성大ダメージ＋PANIC
-ELSE
-	PRINTL [후열] 적 1체에 주살속성 특대 마법데미지. (보통 확률로 PANIC)
-ENDIF
+PRINTL [후열] 적 1체에 주살속성 특대 마법데미지. (보통 확률로 PANIC)
 
 ;継承に필요な部位
 @継承部位_1440,ARG

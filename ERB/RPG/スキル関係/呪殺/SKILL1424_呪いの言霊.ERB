@@ -3,29 +3,19 @@
 
 ;스킬名
 @SKILL_NAME_1424,ARG
-;京都人が사용する場合京ことばに
-;IF ARG > 0 && NO:ARG == [[キャラ:카오루코]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카오루코]]) == 1
-	RESULTS = 죽으면어때요
-;ELSEIF ARG > 0 && NO:ARG == 5423
-ELSEIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
-	RESULTS = 원혼
+
+IF SKILL_CHANGE(ARG, [[キャラ:카오루코]])
+	RESULTS = 뒈져아이가
 ELSE
 	RESULTS = 저주의언령
 ENDIF
 
 ;　명중
 @SKILL_HITRATE_1424, ARG
-;SIF ARG > 0 && NO:ARG == 5423
-SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
-	RETURN 150
 RETURN 100
 
 ;　威힘
 @SKILL_POWER_1424, ARG
-;SIF ARG > 0 && NO:ARG == 5423
-SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
-	RETURN 300
 RETURN 200
 
 ;　최저공격횟수
@@ -43,9 +33,6 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_1424,ARG
-;SIF ARG > 0 && NO:ARG == 5423
-SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
-	RETURN 20
 RETURN 15
 
 ;　相性
@@ -54,15 +41,12 @@ RETURN 11
 ;주살
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1424
+@SKILL_DECIDE_TYPE_1424, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1424
-;(U > 0 && U < CHARANUM && NO:U == 5423) || ((FLAG:行動順1) > 0 && NO:(FLAG:行動順1) == 5423)
-SIF SKILL_CHANGE_CHECK(U, 5423) == 1 || SKILL_CHANGE_CHECK(FLAG:行動順1, 5423) == 1
-	RETURN 1
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1424, ARG
 RETURN 2
 
 
@@ -152,18 +136,16 @@ CALL ATTACK_SINGLE,ARG,LOCAL,1424
 IF U > 0 && U < CHARANUM && NO:U == [[キャラ:카오루코]]
 	SELECTCASE RAND:4
 		CASE 0
-			PRINTL えらい元気そうにしてはりますなぁ？
+			PRINTL 꽤 건강해보이는디？
 		CASE 1
-			PRINTL あの人なんでまだ生きたはんのやろ？
+			PRINTL 와 저 인간 아직도 살아있노？
 		CASE 2
-			PRINTL この世から居なくならはったらよろしいのに。
+			PRINTL 이 세상에서 사라져삐면 좋겠는디 말이다.
 		CASE 3
 			;無言
 			PRINTL 　
 	ENDSELECT
 	PRINTL [후열] 적 1체에 주살속성 중 마법데미지. (보통 확률로 CURSE)
-ELSEIF U > 0 && U < CHARANUM && NO:U == 5423
-	PRINTL ぬえだま [후열] 적 1체에 주살속성 대 물리데미지. 명중률이 아주 높다. (보통 확률로 CURSE)
 ELSE
 	PRINTL [후열] 적 1체에 주살속성 중 마법데미지. (보통 확률로 CURSE)
 ENDIF

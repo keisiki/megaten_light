@@ -10,8 +10,10 @@
 ;	Edit	Date			Author					Reason
 ;	001		20XX/XX/XX		----					新規作成
 ;	002		2011/01/10		Ｎ鳥					TALK_COMMONを사용するように변경。
-;	003		2012/02/09		ネトリス				매료상태時の処理추가
+;	003		2012/02/09		ネトリス				魅了상태時の処理추가
 ;	004		2013/03/12		ネトリス				命乞い処理を추가
+;	005		2020/05/05		がめら					セカンドハロー対応。「ヤラせてもらう」「犯してもらう」の판정をTALK PLAYERの素質・能力で緩和するように。
+;	005		2021/04/23		JK好き					主人以外TALKでの分岐条件不足を解消
 ;
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=====================================================================
@@ -26,7 +28,7 @@
 
 SIF GETBIT(FLAG:命乞いフラグ, 1) || GETBIT(FLAG:命乞いフラグ, 2)
 	GOTO 命乞い
-	
+
 PLAYER = MASTER
 
 
@@ -52,9 +54,10 @@ IF ABL:ARG:회화타입 == 331
 	RETURN 0
 ENDIF
 
+
 ;簡易処理
-IF FLAG:主人以外TALK가능 && CFLAG:(FINDCHARA(NO,NO:ARG)):PTフラグ == 0
-	;매료상태の仲間がいる場合、10％の확률로勝손に회화をする
+IF FLAG:主人以外TALK가능 && (CFLAG:(FINDCHARA(NO,NO:ARG)):PTフラグ == 0 || SOFT_ON("세컨드헬로") || (CFLAG:(FINDCHARA(NO,NO:ARG)):PTフラグ == 1 && CFLAG:(FINDCHARA(NO,NO:ARG)):所属ＣＯＭＰ == -1))
+	;魅了상태の仲間がいる場合、10％の확률で勝손に회화をする
 	IF FLAG:ムフフ전개
 		FOR LCOUNT, 1, 6
 			SIF POS(LCOUNT) == -1
@@ -107,7 +110,7 @@ SELECTCASE RESULT
 		RETURN 2
 	CASEELSE
 		RETURN 0
-	
+
 ENDSELECT
 
 
@@ -120,11 +123,11 @@ ENDSELECT
 ;=====================================================================
 @GIFT_PUBLIC,ARG
 $GIFT
-	SIF RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2) + CFLAG:ARG:友好度 < 50
-		GOTO GET_DAMAGE
-	SIF RAND:2 == 0
-		GOTO GETMONEY
-	GOTO GETMAG
+SIF RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2) + CFLAG:ARG:友好度 < 50
+	GOTO GET_DAMAGE
+SIF RAND:2 == 0
+	GOTO GETMONEY
+GOTO GETMAG
 
 
 $GETMONEY

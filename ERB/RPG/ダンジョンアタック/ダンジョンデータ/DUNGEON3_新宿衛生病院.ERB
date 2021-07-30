@@ -1095,7 +1095,7 @@ ENDIF
 ;포르네우스の사고패턴
 @SET_ACTION_1709,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF CFLAG:ARG:화염무효화횟수 == 0
 		CALL CHECK_ACTIONABLE,ARG,807
 		SIF RESULT == 0

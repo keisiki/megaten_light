@@ -46,7 +46,7 @@
 SIF ARG == 1
 	RETURN 0
 ;구상名
-PRINTFORML 汎用男・シニカル구상
+PRINTFORML 범용남・냉소 구상
 ;구상설명文
 PRINTFORML 　
 
@@ -106,7 +106,7 @@ DRAWLINE
 ;初조교時
 IF CFLAG:201 == 0 && TALENT:연모 == 0
 	PRINTFORMW 「불렀어、서머너？　……헤에、조교。」
-	PRINTFORMW 「악마인 %CSTR:11%를、그런식으로 생각하면」
+	PRINTFORMW 「악마인 %조사처리(CSTR:11,"를")%、그런식으로 생각하면」
 	PRINTFORMW 「그 머리、진심으로 걱정 된다… 요즘 많이 심심한가？」
 	PRINTFORMW 「…뭐、노력은 해봐？　어차피、무리겠지만.」
 	CFLAG:201 = 1
@@ -115,25 +115,25 @@ IF CFLAG:201 == 0 && TALENT:연모 == 0
 ELSEIF CFLAG:201 < 2 && MARK:2 == 1
 	PRINTFORMW 「아ー아。이 정도 가지고、우습기 짝이 없네」
 	PRINTFORMW 「대개、조교라고 하는 말이 맘에 들지 않아.」
-	PRINTFORMW 「%CSTR:11%를 마치 동물이라 생각하는거 같아 %조사처리(CSTR:12,"는")% 」
+	PRINTFORMW 「%조사처리(CSTR:11,"를")% 마치 동물이라 생각하는거 같아 %조사처리(CSTR:12,"는")% 」
 	PRINTFORMW 「그거 악마를 조롱하는거지? 진심으로.」
-	PRINTFORMW %CALLNAME:TARGET%는 아직 완전히 굴복하고 있는 모습을 보여주지 않는다.
+	PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 아직 완전히 굴복하고 있는 모습을 보여주지 않는다.
 	PRINTFORMW 완전히 공략하기에는、많은 시간이 필요할 것 같다…
 	CFLAG:201 = 2
 	RETURN 0
 ;굴복각인Lv2
 ELSEIF CFLAG:201 < 3 && MARK:2 == 2
 	PRINTFORMW 「…전혀、질리지 않는가 보네」
-	PRINTFORMW 「그、그런것으로 %CSTR:11%을 굴복시킬수 있다고 생각하면 큰 오산이야」
+	PRINTFORMW 「그、그런것으로 %조사처리(CSTR:11,"를")% 굴복시킬수 있다고 생각하면 큰 오산이야」
 	PRINTFORMW 「아니、진심으로.」
 	PRINTFORMW 「…자、자。지금 하겠다면、냉큼 시작하라고.」
-	PRINTFORMW 「착각、하지 말라고 %CSTR:12%이 불쌍한 머리를 소유하고 있어 말하지만」
+	PRINTFORMW 「착각、하지 말라고 %조사처리(CSTR:12,"가")% 불쌍한 머리를 소유하고 있어 말하지만」
 	PRINTFORMW 「빨리 해줬으면 좋겠다는것、아니야……」
 	CFLAG:201 = 3
 	RETURN 0
 ;굴복각인Lv3
 ELSEIF CFLAG:201 < 4 && MARK:2 == 3 && (TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0)
-	PRINTFORMW 「…설마、이 %CSTR:11%가 이렇게 되리라고는」
+	PRINTFORMW 「…설마、이 %조사처리(CSTR:11,"가")% 이렇게 되리라고는」
 	PRINTFORMW 「솔직히、지금까지는 %CSTR:12%의 일을 우습게 생각했지만」
 	PRINTFORMW 「그건 이제 여기까지.」
 	PRINTFORMW 「…서머너. %CSTR:11%의 신체、많이 좋아하는구나.」
@@ -145,24 +145,24 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 	IF TALENT:3
 		IF CFLAG:未조교함락 == 1
 			;조교せずに연모をつけた場合
-			PRINTFORMW 「%CSTR:11%은 %CSTR:12%것.」
+			PRINTFORMW 「%조사처리(CSTR:11,"는")% %CSTR:12%것.」
 			PRINTFORMW 「%CSTR:11%의 모든 권한은、이미 %CSTR:12%의 손에 달렸다.」
-			PRINTFORMW 「사랑하는 %CSTR:12%이니까、%CSTR:11%에게 무엇이든 시켜도 괜찮아.」
+			PRINTFORMW 「사랑하는 %조사처리(CSTR:12,"가")%니까、%CSTR:11%에게 무엇이든 시켜도 괜찮아.」
 			PRINTFORMW 「%ANATANAME("서머너" , "")% …사랑해.」
-			PRINTFORMW %CALLNAME:TARGET%는、%CALLNAME:MASTER%에게 심취해 버린것 같다.
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")%、%CALLNAME:MASTER%에게 심취해 버린것 같다.
 		ELSE
 			PRINTFORMW 「%ANATANAME("서머너" , "")%……」
-			PRINTFORMW %CALLNAME:TARGET%는、도취한듯한 표정을 지으며 %CALLNAME:MASTER%에게 접근했다.
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")%、도취한듯한 표정을 지으며 %CALLNAME:MASTER%에게 접근했다.
 			PRINTFORM 부드럽게、%CALLNAME:MASTER%의
 				IF TALENT:유아체형 || TALENT:소인체형
 					PRINTFORMW 가슴에、얼굴을 가득 품었다.
 				ELSE
 					PRINTFORMW 몸을 껴안았다.
 				ENDIF
-			PRINTFORMW 「오늘부터、%CSTR:11%는 %CSTR:12%것.」
+			PRINTFORMW 「오늘부터、%조사처리(CSTR:11,"는")% %CSTR:12%것.」
 			PRINTFORMW 「%CSTR:11%의 모든 권한은、이미 %CSTR:12%의 손에 달렸다.」
 			PRINTFORMW 「전부터 가지고 싶었어… 사랑해.」
-			PRINTFORMW %CALLNAME:TARGET%는、%CALLNAME:MASTER%에게 심취해 버린것 같다.
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")%、%CALLNAME:MASTER%에게 심취해 버린것 같다.
 		ENDIF
 	;음란
 	ELSEIF TALENT:4
@@ -238,8 +238,8 @@ ELSEIF MARK:2 == 2 && (CFLAG:202 < 3 || FLAG:7 == 2)
 	CFLAG:202 = 3
 ;굴복각인Lv3＋함락소질無し
 ELSEIF MARK:2 == 3 && (TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0) && (CFLAG:202 < 4 || FLAG:7 == 2)
-	PRINTFORMW 「왔네. %CSTR:11%는 언제든지 가까이 있어、진심으로.」
-	PRINTFORMW %CALLNAME:TARGET%는 %CALLNAME:MASTER%에게 몸을 맡겼다.
+	PRINTFORMW 「왔네. %조사처리(CSTR:11,"는")% 언제든지 가까이 있어、진심으로.」
+	PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% %CALLNAME:MASTER%에게 몸을 맡겼다.
 	CFLAG:202 = 4
 ;함락済み
 ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
@@ -249,7 +249,7 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 		K:1 = RAND:3
 		IF K:1 == 0
 			PRINTFORMW 「%ANATANAME("서머너" , "")%… 기다렸어.」
-			PRINTFORM %CALLNAME:TARGET%는 %CALLNAME:MASTER%
+			PRINTFORM %조사처리(CALLNAME:TARGET,"는")% %CALLNAME:MASTER%
 				IF TALENT:유아체형 || TALENT:소인체형
 					PRINTFORMW 의 팔속에서、행복한 표정을 짓고있다.
 				ELSE
@@ -261,7 +261,7 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 		ELSE
 			PRINTFORMW 「아ー아. 또 이런다、%CSTR:11%。」
 			PRINTFORMW 「%CSTR:12% 탓에、처음부터 끝까지 바보가 됐어.」
-			PRINTFORMW 「이제 %CSTR:12%이 없으면 살아갈수 없어…」
+			PRINTFORMW 「이제 %조사처리(CSTR:12,"가")% 없으면 살아갈수 없어…」
 			PRINTFORMW 「책임을 지고、평생 %CSTR:11%、소중히 해줘.」
 		ENDIF
 	;음란、창부
@@ -314,7 +314,7 @@ RETURN 0
 DRAWLINE
 ;반발각인Lv3
 IF MARK:3 == 3 && (CFLAG:217 < 1 || FLAG:7 == 2)
-	PRINTFORMW 「이 다음부터、%CSTR:11%를 학대할 경우」
+	PRINTFORMW 「이 다음부터、%조사처리(CSTR:11,"를")% 학대할 경우」
 	PRINTFORMW 「나중에 반드시 죽일 거야. 아니、진심으로」
 	CFLAG:217 = 1
 ;굴복각인Lv1以下
@@ -325,7 +325,7 @@ ELSEIF MARK:2 <= 1 && (CFLAG:219 < 1 || FLAG:7 == 2)
 ;굴복각인Lv2
 ELSEIF MARK:2 == 2
 	PRINTFORMW 「…으、으으. 이제야 끝나는건가――」
-	PRINTFORMW 「응？　뭘、보고있어. %CSTR:11%는、아무 말도 안했는데…」
+	PRINTFORMW 「응？　뭘、보고있어. %조사처리(CSTR:11,"는")%、아무 말도 안했는데…」
 	PRINTFORMW 「뭐、진심으로」
 	CFLAG:219 = 2
 ;굴복각인Lv3＋함락소질無し
@@ -341,8 +341,8 @@ ELSEIF BASE:0 < 500 && (CFLAG:218 < 1 || FLAG:7 == 2)
 		IF RAND:2 == 0
 			PRINTFORMW 「하악、하악…하고、곧 있으면 죽을수 있다고 생각했다. 진심으로.」
 		ELSE
-			PRINTFORMW 「%CSTR:12%을 사랑해서、최소 악마 한명을 죽일 수 있다는걸 잊지마」
-			PRINTFORMW 「…%CSTR:11%은、언제든지 환영이다. 정면에서 그 사랑 받아줄게」
+			PRINTFORMW 「%조사처리(CSTR:12,"를")% 사랑해서、최소 악마 한명을 죽일 수 있다는걸 잊지마」
+			PRINTFORMW 「…%조사처리(CSTR:11,"는")%、언제든지 환영이다. 정면에서 그 사랑 받아줄게」
 			PRINTFORMW 「아니、진심으로」
 		ENDIF
 	;음란、창부
@@ -358,14 +358,14 @@ ELSEIF CFLAG:219 < 4 || FLAG:7 == 2
 	;연모、친애
 	IF TALENT:3 || TALENT:6
 		PRINTFORMW 「잠시만 작별 하는것…？」
-		PRINTFORM 「외로운 것 말하지마. %CSTR:11%은、
+		PRINTFORM 「외로운 것 말하지마. %조사처리(CSTR:11,"는")%、
 			IF TALENT:TARGET:남편 || TALENT:TARGET:아내
 				PRINTFORMW 남편 이겠지?」
 			ELSE
 				PRINTFORMW 연인 이겠지?」
 			ENDIF
 			PRINTFORMW 「그러니까、계속 함께하자구…」
-		PRINTFORMW %CALLNAME:TARGET%는 %CALLNAME:MASTER%의 손을 잡고、떼어 놓으려 하지 않는다…
+		PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% %CALLNAME:MASTER%의 손을 잡고、떼어 놓으려 하지 않는다…
 	;음란、창부
 	ELSEIF TALENT:4 || TALENT:7
 		PRINTFORMW 
@@ -624,7 +624,7 @@ SELECTCASE SELECTCOM
 		IF CFLAG:306 == 0
 			PRINTFORMW 「…응？　남자의 가슴 따위 주물러서 무엇이 즐거운거야？」
 			PRINTFORMW 「이해 할 수 없어. 진심으로」
-			PRINTFORMW %CALLNAME:TARGET%는 의아하다는 눈을 한 채、%CALLNAME:PLAYER%의 손을 바라보고 있다.
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 의아하다는 눈을 한 채、%CALLNAME:PLAYER%의 손을 바라보고 있다.
 			CFLAG:306 = 1
 		;二回눈以降
 		ELSE
@@ -645,7 +645,7 @@ SELECTCASE SELECTCOM
 			ELSEIF MARK:2 == 3 && (CFLAG:306 < 3 || FLAG:7 == 2)
 				IF ABL:6 >= 3
 					PRINTFORMW 「응、훗…」
-					PRINTFORMW %CALLNAME:TARGET%는 움찔거리며 %CALLNAME:PLAYER%의 손에 가슴을 들이 밀었다.
+					PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 움찔거리며 %CALLNAME:PLAYER%의 손에 가슴을 들이 밀었다.
 				ELSE
 					PRINTFORMW 
 				ENDIF
@@ -654,7 +654,7 @@ SELECTCASE SELECTCOM
 			ELSEIF CFLAG:306 < 2 || FLAG:7 == 2
 				IF ABL:6 >= 3
 					PRINTFORMW 「응、아…！？　에、이거 뭐야 이것은…웃」
-					PRINTFORMW %CALLNAME:TARGET%는、간지러운 것과는 다른 느낌에 당황했다
+					PRINTFORMW %조사처리(CALLNAME:TARGET,"는")%、간지러운 것과는 다른 느낌에 당황했다
 				ELSE
 					PRINTFORMW 「전에도 말했지만、즐거운거야？ 이거.」
 				ENDIF
@@ -742,7 +742,7 @@ SELECTCASE SELECTCOM
 				IF ABL:6 >= 3
 					PRINTFORMW 유두를 입술로 감싸고、그 끝을 혀로 희롱하면서 가슴을 끈적하게 어루만졌다.
 					PRINTFORMW 「응아앗、앙… 이、이걸로 느끼는 것은、아앙、후와앗」
-					PRINTFORMW %CALLNAME:TARGET%는 페니스의 끝으로 쿠퍼액을 흘리며、교성을 울리고 있다.
+					PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 페니스의 끝으로 쿠퍼액을 흘리며、교성을 울리고 있다.
 				ELSE
 					PRINTFORMW 「웃、후후、그、그만 간지러워」
 				ENDIF
@@ -1112,11 +1112,11 @@ CASE 14
 			IF NO == [[キャラ:나하트코볼트]]
 				PRINTFORMW 「%CSTR:11%도 코볼트족의 젓가락 줘.」
 				PRINTFORMW 「가사는、누워서 떡 먹기………미안.」
-				PRINTFORMW %CALLNAME:TARGET%는、젓가락으로 집던 음식을 떨어뜨리고 접시앞에 미안한듯 서있다.
+				PRINTFORMW %조사처리(CALLNAME:TARGET,"는")%、젓가락으로 집던 음식을 떨어뜨리고 접시앞에 미안한듯 서있다.
 			ELSE
 				PRINTFORMW 「이 %CSTR:11% 그런 잡일은 안해」
 				PRINTFORMW 「%조사처리(CSTR:12,"는")% 언제부터、그렇게 자만을 가지게 된거야？」
-				PRINTFORMW 「…거짓말이야 바보. %CSTR:12%을 위해서라면、어떠한 일이라도 할게. 아니、진심으로」
+				PRINTFORMW 「…거짓말이야 바보. %조사처리(CSTR:12,"를")% 위해서라면、어떠한 일이라도 할게. 아니、진심으로」
 			ENDIF
 			CFLAG:318 = 1
 		;二回눈以降
@@ -3082,7 +3082,7 @@ CASE 14
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:356 < 3 || FLAG:7 == 2)
 				PRINTFORMW 「하아잇！！　…구、구우읏…」
-				PRINTFORMW %CALLNAME:TARGET%은 쭈그리고 앉은채、신음소리만 울릴뿐 미동을 안한다.
+				PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 쭈그리고 앉은채、신음소리만 울릴뿐 미동을 안한다.
 				CFLAG:356 = 3
 			;それ以外
 			ELSEIF CFLAG:356 < 2 || FLAG:7 == 2
@@ -6449,7 +6449,7 @@ P = PALAM:7 + CUP:7
 IF P > PALAMLV:3 && CFLAG:252 == 0
 	CALL PALAM_MESSAGE_D
 	PRINTFORMW 「…！　흐、흥、…이정도로、우쭐대지마…」
-	PRINTFORMW %CALLNAME:TARGET%는、분한 듯이 얼굴을 외면하고 있다…
+	PRINTFORMW %조사처리(CALLNAME:TARGET,"는")%、분한 듯이 얼굴을 외면하고 있다…
 	CFLAG:252 = 1
 ENDIF
 
@@ -6565,7 +6565,7 @@ IF TFLAG:24 == 13 || TFLAG:24 == 23 || TFLAG:24 == 33
 	;굴복と복종による굴복
 	ELSEIF TFLAG:24 == 33
 		PRINTFORMW 「……꽤 하잖아」
-		PRINTFORMW %CALLNAME:TARGET%는 시선을 허공에 둔 채 나직히 중얼 거렸다.
+		PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 시선을 허공에 둔 채 나직히 중얼 거렸다.
 	ENDIF
 ENDIF
 
@@ -6578,8 +6578,8 @@ IF TFLAG:21 == 3
 	IF TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8
 		;연모、친애
 		IF TALENT:3 || TALENT:6
-			PRINTFORMW 「%CSTR:12%는、실망했어」
-			PRINTFORMW %CALLNAME:TARGET%는 쓰레기를 보는듯한 눈으로 %CALLNAME:MASTER%를 내려다 보면서 중얼거렸다.
+			PRINTFORMW 「%조사처리(CSTR:12,"는")%、실망했어」
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 쓰레기를 보는듯한 눈으로 %조사처리(CALLNAME:MASTER,"를")% 내려다 보면서 중얼거렸다.
 		;음란、창부
 		ELSEIF TALENT:4 || TALENT:7
 			PRINTFORMW 

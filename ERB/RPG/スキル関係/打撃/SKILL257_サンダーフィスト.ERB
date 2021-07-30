@@ -1,7 +1,19 @@
 ﻿
 ;스킬名
 @SKILL_NAME_257,ARG
-RESULTS = 썬더피스트
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]])
+	RESULTS = 제트・팬텀
+	SIF CFLAG:ARG:이벤트加入 == 2
+		RESULTS = 필살！게슈펜스트펀치
+ELSEIF FINDCHARA_M(U, [[キャラ:팬텀]])
+	RESULTS = 제트・팬텀
+	SIF CFLAG:U:이벤트加入 == 2
+		RESULTS = 필살！게슈펜스트펀치
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팻]])
+	RESULTS = 필살！게슈펜스트펀치
+ELSE
+	RESULTS = 썬더피스트
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_257, ARG
@@ -64,12 +76,12 @@ NEXT
 RETURN GET_TYPE_NUM(LOCALS)
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_257
+@SKILL_DECIDE_TYPE_257, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_257
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_257, ARG
 RETURN 1
 
 
@@ -154,7 +166,21 @@ CALL ATTACK_SINGLE,ARG,POS(ARG:1),257
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_257
-PRINTL [전열] 전열의 적 1체에 복합속성(타격+전격) 특대 물리데미지. (낮은 확률로 SHOCK)
+IF FINDCHARA_M(U, [[キャラ:팬텀]])
+	IF CFLAG:U:이벤트加入 == 2
+		PRINTFORML %CALLNAME:U%의 정의의 마음을 담은 필살의 주먹이、적 1체를 감전시키면서 분쇄한다。
+	ELSEIF 이벤트フラグ:43:1 == 0 && GETBIT(이벤트フラグ:43:3, 0)
+		PRINTL 오른팔의 플라즈마・스테이크를 오비전시켜 돌격시켜、모든 추진력이 담긴 주먹을 박는 것으로
+		PRINTL 적 일체를 대 위력으로 공격、감전시킨다。
+	ELSE
+		PRINTL 증설된 좌우팔의 팔의 프라즈마・스테이크 합계 6체를 오비전 시켜서 교대로 때리는 것으로
+		PRINTL 적 일체를 대 위력으로 공격、감전시킨다。
+	ENDIF
+ELSEIF FINDCHARA_M(U, [[キャラ:팻]])
+	PRINTFORML %CALLNAME:U%의 정의의 마음을 담은 필살의 주먹이、적 1체를 감전시키면서 분쇄한다。
+ELSE
+	PRINTL [전열] 전열의 적 1체에 복합속성(타격+전격) 특대 물리데미지. (낮은 확률로 SHOCK)
+ENDIF
 
 ;継承に필요な部位
 @継承部位_257,ARG

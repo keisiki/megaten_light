@@ -33,11 +33,11 @@ RETURN 16
 RETURN 0
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4206
+@SKILL_DECIDE_TYPE_4206, ARG
 RETURN 2
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_4206
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_4206, ARG
 RETURN 2
 
 
@@ -71,7 +71,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4206, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4206,ARG
@@ -123,14 +123,14 @@ FOR LOCAL,LOCAL:2,LOCAL:3
 		CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LOCAL:1) + "강화") = MAX(-16, CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LOCAL:1) + "강화") - 4)
 	NEXT
 NEXT
-PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 아군 # 적 \@の全能力が下がった！
+PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 아군 # 적 \@의 전 능력이 떨어졌다！
 ;====================================================
 ;実行内容ここまで
 ;====================================================
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_4206
-PRINTL 적の全能力を下げる。
+PRINTL 적의 전 능력을 떨어뜨린다。
 
 ;継承に필요な部位
 @継承部位_4206,ARG
@@ -157,9 +157,9 @@ RETURN 2
 @참가조건표시_4206,ARG
 SELECTCASE ARG
 	CASE 1
-		PRINTFORM ンダ系스킬
+		PRINTFORM 카쟈계스킬
 	CASE 2
-		PRINTFORM ンダ系스킬
+		PRINTFORM 카쟈계스킬
 	CASE 3
 		PRINTFORM 마계의조사
 ENDSELECT

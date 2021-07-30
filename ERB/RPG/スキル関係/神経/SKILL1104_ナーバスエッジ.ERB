@@ -35,12 +35,12 @@ RETURN GET_TYPE_NUM("신경")
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1104
+@SKILL_DECIDE_TYPE_1104, ARG
 RETURN 2
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1104
+@SKILL_DAMAGETYPE_1104, ARG
 RETURN 2
 
 
@@ -119,7 +119,8 @@ CALL ATTACK_SINGLE,ARG,LOCAL,1104
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_1104
-PRINTL [후열] 적 1체에 신경속성 특대 마법데미지. (낮은 확률로 BIND)
+PRINTL [후열] 불쾌한 기운을 발하는 마법
+PRINTL 적 1체에 신경속성 특대 마법데미지. (낮은 확률로 BIND)
 ;설명文と위력が合ってない気がするけど
 ;ＩＭＡＪＩＮで高레벨で깨달음える技だからまあ아이いか
 

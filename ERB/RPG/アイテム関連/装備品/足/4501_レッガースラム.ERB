@@ -2,53 +2,70 @@
 ;======================================================
 ;장비品の데이터
 ;렛거슬럼
-;Lv20장비までは내성が기본　기본능력に합계+2まで
 ;======================================================
 
 @기본능력수정_4501,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "속도"
-		RETURN 1
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_4501,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 4
-	CASE "회피"
+
+SELECTCASE ARG
+	CASE 2
 		RETURN 9
-	CASE "마법효과"
-		RETURN 1
+	CASE 3
+		RETURN 4
+	CASE 5
+		RETURN 2
 ENDSELECT
 RETURN 0
 
 @방어상성_4501,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@공격상성_4501, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_4501, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_4501, ARG = -1
+
+RETURN 1
+
+@사거리_4501, ARG = -1
+
+RETURN 1
+
+@공격범위_4501, ARG = -1
+
+RETURN 1
 
 @장비箇所_4501
 RETURN GET_EQUIPNUM("발")
 
 @필요레벨_4501
-RETURN 8
-
-@장비조건_4501,ARG
-SIF BASE:ARG:LV < 8
-	RETURN 0
 RETURN 1
 
-@장비조건설명_4501
-PRINTL 장비조건：♂ Lv8～
-
 @장비해설_4501
-PRINTL 충격흡수材が内蔵され、軽쾌に動ける발にやさしい슈즈。
-PRINTL 　　　　　　　　
+PRINTFORML 충격흡수재료가 내장된 슈즈
+
+@장비조건_4501,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+RETURN 1
 
 
 @구입조건_4501
 RETURN 1
 
-@引継ぎ可不可_4501
-RETURN 0
+
+@장비조건설명_4501
+PRINTL 장비조건：♂

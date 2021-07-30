@@ -2,7 +2,7 @@
 
 ;스킬名
 @SKILL_NAME_2701,ARG
-RESULTS = ピュプリレゲドン
+RESULTS = 퓨플리레게돈
 
 ;　명중
 @SKILL_HITRATE_2701, ARG
@@ -35,12 +35,12 @@ RETURN 4
 ;화염
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2701
+@SKILL_DECIDE_TYPE_2701, ARG
 RETURN 2
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2701
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2701, ARG
 RETURN 2
 
 
@@ -108,6 +108,10 @@ RETURN 30
 @SKILL_ADDTIONAL_MAX_RATE_2701,ARG
 RETURN 95
 
+;拡散攻撃用追加処理
+@SKILL_SPREAD_2701,ARG
+RETURN 1
+
 ;====================================================
 ;스킬及び行動の実行
 ;====================================================
@@ -126,8 +130,8 @@ CALL ATTACK_SPREAD,ARG,ARG:1,2701
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2701
-PRINTL 적一体と周囲に화염속성の超特大ダメージ+炎上
-PRINTL 게일、ルーパ専用
+PRINTL 적 1체와 그 주위에 화염속성의 초특대 데미지+화상
+PRINTL 게일、루퍼 전용
 
 ;継承に필요な部位
 @継承部位_2701,ARG

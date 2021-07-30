@@ -614,7 +614,6 @@ IF RESULT == 1
 					C = 1
 				ENDIF
 				
-				
 			;800종류
 			CASE 14
 				IF B >= 800
@@ -652,10 +651,68 @@ IF RESULT == 1
 			;850종류
 			CASE 15
 				IF B >= 850
-					PRINTL 「850종 이상의 분석을 끝마쳤군」
+					PRINTL 「850종류이상의 분석을 끝마쳤군」
+					PRINTW 「이번 보상은 아르센일세」
+					IF ITEM:아르센 == 0
+						ITEM:아르센 = 1
+						PRINTL
+						PRINTW ＞인스톨소프트, 아르센을 받았다.
+						PRINTL
+						PRINTL 엘리고르：
+						PRINTW 「그 인스톨소프트를 사용하면 보석을 얻을 수 있어」
+						PRINTW 「그리고 얻은 보석을 사용하여 악마와 교환할 수 있지」
+						PRINTW 「전서 완성에 도움이 되길 바라네」
+					ELSE
+						PRINTW 「……라고 생각했는데, 이미 소지한 모양이군」
+						PRINTW 「대신에 5000마카를 받아 주겠나」
+						PRINTL
+						PRINTW ＞5000마카를 받았다.
+						PRINTL
+						MONEY:1 += 5000
+					ENDIF
+					PRINTW 「다음엔 900종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
+					이벤트フラグ:39:0 ++
+					IF B >= 900
+						PRINTW 「이런？」
+					ELSE
+						C = 1
+					ENDIF
+				ELSE
+					PRINTL 「다음엔 850종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
+					CALL EVENT_39_Advice
+					C = 1
+				ENDIF
+				
+			;900종류
+			CASE 16
+				IF B >= 900
+					PRINTL 「900종 이상의 분석을 끝마쳤군」
+					PRINTW 「이번 보상은, 그렇군......」
+					FLAG:ＣＯＭＰ용량 += 10
+					PRINTL 엘리고르：
+					PRINTW 「ＣＯＭＰ용량을 늘려두었네」
+					PRINTW 「특수한 인스톨소프트가 없으면 눈에 띄지 않는 악마도 있는 것 같으니까 말이야」
+					PRINTW 「전서 완성에 도움이 되길 바라지」
+					PRINTW 「다음엔 950종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
+					이벤트フラグ:39:0 ++
+					IF B >= 950
+						PRINTW 「이런？」
+					ELSE
+						C = 1
+					ENDIF
+				ELSE
+					PRINTL 「다음엔 900종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
+					CALL EVENT_39_Advice
+					C = 1
+				ENDIF
+				
+			;950종류
+			CASE 17
+				IF B >= 950
+					PRINTL 「950종 이상의 분석을 끝마쳤군」
 					PRINTW 「이번 보상은 프라이데이일세」
-					IF ITEM:프라이데이 == 0
-						ITEM:프라이데이 = 1
+					IF ITEM:프라이데이	 == 0
+						ITEM:프라이데이	 = 1
 						PRINTL
 						PRINTW ＞인스톨 소프트, 프라이데이를 받았다.
 						PRINTL
@@ -670,22 +727,23 @@ IF RESULT == 1
 						PRINTL
 						MONEY:1 += 40000
 					ENDIF
-					PRINTW 「다음엔 900종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
+					PRINTW 「다음엔 1000종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
 					이벤트フラグ:39:0 ++
-					IF B >= 900
+					IF B >= 1000
 						PRINTW 「이런？」
 					ELSE
 						C = 1
 					ENDIF
 				ELSE
-					PRINTL 「다음엔 900종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
+					PRINTL 「다음엔 950종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
 					CALL EVENT_39_Advice
 					C = 1
 				ENDIF
-			;900종류
-			CASE 15
-				IF B >= 900
-					PRINTL 「900종 이상의 분석을 끝마쳤군」
+				
+			;1000종류
+			CASE 18
+				IF B >= 1000
+					PRINTL 「1000종 이상의 분석을 끝마쳤군」
 					PRINTW 「이번 보상은 스티븐일세」
 					IF ITEM:스티븐 == 0
 						ITEM:스티븐 = 1
@@ -714,11 +772,10 @@ IF RESULT == 1
 
 					ENDIF
 				ELSE
-					PRINTL 「다음엔 모든 해석을 끝마쳤을 때, 보수를 주도록 하지」
+					PRINTL 「다음엔 1000종 이상 해석을 끝마쳤을 때, 보수를 주도록 하지」
 					CALL EVENT_39_Advice
 					C = 1
 				ENDIF
-				
 			; ラスト。악마全書が完成
 			CASEELSE
 				IF B < (A - 1)
@@ -806,7 +863,7 @@ RETURN 0
 ; ここで체크する악마のリストも定めている
 ; 一応、여신転生シリーズに絞り、アナライズの대상外である조마も除外しておく
 
-FOR i,1,4390
+FOR i,1,4389
 	SIF !EXISTCSV(i, 0)
 	CONTINUE
 
@@ -819,6 +876,9 @@ FOR i,1,4390
 	;メリーさん除外
 	SIF i == 1082
 	CONTINUE
+	;팔척님 제외
+	SIF i == 1060
+	CONTINUE
 
 	;幻影の幽霊の머신除外
 	SIF i >= 1116 && i <= 1118
@@ -827,8 +887,12 @@ FOR i,1,4390
 	; 악마호무라除外
 	SIF i == 298
 	CONTINUE
-	; まどマギ괴이除外
+	;
 	SIF i >= 3380 && i <= 3399
+	CONTINUE
+	
+	; extra 바토리 제외
+	SIF i == 4377
 	CONTINUE
 
 	;디버그용、악마全書をすべて100%に

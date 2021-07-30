@@ -3,8 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_507,ARG
-RESULTS = 라쿤다
-
+IF SKILL_CHANGE(ARG, [[キャラ:코우메]])
+	RESULTS = 호러스크림
+ELSE
+	RESULTS = 라쿤・다
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_507, ARG
@@ -29,19 +32,23 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_507,ARG
-RETURN 16
+IF SKILL_CHANGE(ARG, [[キャラ:코우메]])
+	RETURN 13
+ELSE
+	RETURN 16
+ENDIF
 
 ;　相性
 @SKILL_TYPE_507,ARG
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_507
+@SKILL_DECIDE_TYPE_507, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_507
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_507, ARG
 RETURN 0
 
 
@@ -123,11 +130,25 @@ ENDIF
 FOR LOCAL,LOCAL:1,LOCAL:2
 	SIF POS(LOCAL) < 0
 		CONTINUE
+		
+	IF SKILL_CHANGE(ARG, [[キャラ:코우메]])
+		CFLAG:POS(LOCAL):방어강화 = MIN(32, CFLAG:POS(LOCAL):방어강화 - ((SKILLGAGE_H_GET(ARG,3622)/5)+1)*4)
+	ELSE
 	CFLAG:POS(LOCAL):방어강화 = MAX(-16, CFLAG:POS(LOCAL):방어강화 - 4)
+	ENDIF
 NEXT
-PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 방어력이 내려갔다!
 
-
+IF SKILL_CHANGE(ARG, 5611)
+	SELECTCASE SKILLGAGE_H_GET(ARG,[[キャラ:코우메]])
+	CASE 0 TO 4
+		PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 敵 # 味方 \@の防御力を下げた！
+	CASE 5 TO 10
+		PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 敵 # 味方 \@の防御力を大きく下げた！
+	ENDSELECT
+	CALL SKILLGAGE_H_ADD,ARG,3622,-3
+ELSE
+	PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 방어력이 내려갔다!
+ENDIF
 
 
 
@@ -148,14 +169,25 @@ PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 방어력�
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_507
-PRINTL [특수] 적 전체의 방어력을 감소시킨다.
 
+IF U > 0 && U < CHARANUM && NO:U == [[キャラ:코우메]]
+	PRINTL 敵の防御力を下げる。減少量は現在の自身の死霊カウンターの量によって変化する。
+	PRINTL 自身の死霊カウンターを3消費する。
+ELSE
+	PRINTL [특수] 적 전체의 방어력을 감소시킨다.
+ENDIF
 ;継承に필요な部位
 @継承部位_507,ARG
 RETURN 1
 
 ;사용조건
 @SKILL_SPECIAL_ACTIONABLE_507,ARG
-RETURN 1
+IF SKILL_CHANGE(ARG, [[キャラ:코우메]])
+;小梅が使用する場合は고유게이지が3以上ないと発動できない。
+	SIF SKILLGAGE_H_GET(ARG,3622) >= 3
+		RETURN 1
+	RETURN 0
+ELSE	
+	RETURN 1
 ;とくにない
-
+ENDIF

@@ -475,7 +475,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) % 10
 			CASE 600
 				;대장간
 				CALL MESSAGE_WINDOW_D , "" , "＞2인조 드워프가 대장장이 일을 하고 있다……"
-				  IF ITEM:4070 > 0
+				  IF ITEM:진・드라우프니르 >= 1
+				     CALL MESSAGE_WINDOW_D , "대장장이" , "여어、대장。살 만은 한가？"
+				  ELSEIF ITEM:드라우프니르 >= 1
 				     CALL MESSAGE_WINDOW_D , "" , "＞당신은 드워프들의 흥미를 끌 법한/낡은 보물을 가지고 있는 것을 떠올렸다"
 				     CALL MESSAGE_WINDOW_D , "대장장이" , "무슨 용건이지？　웃기지도 않는 물건이면…/음… 잠깐 기다려 그건…！"
 				     CALL MESSAGE_WINDOW_D , "" , "＞드워프들이 잡아먹을듯이 드라우프니르를 들여다보고 있다"
@@ -511,11 +513,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) % 10
 				     CALL MESSAGE_WINDOW_D , "우두머리" , "새로운 신화의 탄생이구먼/받아주게나。이것은 귀하를 위해 만들어진 것이다"
 				     CALL MESSAGE_WINDOW_D , "" , "＞공방은 환성에 둘러싸였다。식지 않는 열광 속에서、당신은 다시 여행길에 올랐다"
 				     CALL MESSAGE_WINDOW_D , "" , "＞진・드라우프니르를 얻었다"
-				          ITEM:4070 -= 1
-				            ITEM:4071 += 1
+				          ITEM:드라우프니르 -= 1
+				            ITEM:진・드라우프니르 += 1
 				                FLAG:名声 += 1000
-				  ELSEIF ITEM:4071 > 0
-				     CALL MESSAGE_WINDOW_D , "대장장이" , "여어、대장。살 만은 한가？"
 				  ELSE
 				     CALL MESSAGE_WINDOW_D , "대장장이" , "봐서 알겠지만 바쁘다/놀러 왔다면 돌아가 줘"
 				  ENDIF

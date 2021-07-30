@@ -35,12 +35,12 @@ RETURN GET_TYPE_NUM("신경")
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1103
+@SKILL_DECIDE_TYPE_1103, ARG
 RETURN 2
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1103
+@SKILL_DAMAGETYPE_1103, ARG
 RETURN 2
 
 
@@ -136,7 +136,8 @@ SIF A == 1
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_1103
-PRINTL [후열] 적 1체에 신경속성 대 마법데미지. 적의 내성을 관통한다.
+PRINTL [후열] 고요하고 잔잔한 증오를 적에게 부딪친다
+PRINTL 적 1체에 신경속성 대 마법데미지. 적의 내성을 관통한다.
 
 ;継承に필요한部位
 @継承部位_1103,ARG

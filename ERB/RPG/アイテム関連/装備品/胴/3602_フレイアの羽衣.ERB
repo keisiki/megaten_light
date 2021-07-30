@@ -36,7 +36,7 @@ SELECTCASE ARG
 			RETURN 8
 		IF TALENT:(ARG:1):거유
 			LOCAL = (BASE:(ARG:1):LV / 5) * (ABL:(ARG:1):Ｂ감각 / 3)
-		ELSEIF TALENT:(ARG:1):폭유
+		ELSEIF TALENT:(ARG:1):폭유 || TALENT:(ARG:1):魔乳
 			LOCAL = (BASE:(ARG:1):LV / 6) * (ABL:(ARG:1):Ｂ감각 / 2)
 		ELSE
 			LOCAL = BASE:(ARG:1):LV / 6
@@ -124,14 +124,14 @@ RETURN 0
 RETURN 1
 
 @장비해설_3602
-PRINTFORML 여신프레이아が소지する날개옷
-PRINTFORML これを身に着ければ、ブリリアントなレ디무へと변신できる？
-PRINTFORML 프레이아의헤어밴드と一緒に着けると、여신프레이아の힘を得られる
+PRINTFORML 여신프레이아가 소지한 날개옷
+PRINTFORML 이것을 몸에 익히면 브릴리언트한 힘으로 변신 할 수 있다.
+PRINTFORML 프레이아의헤어밴드와 함께 착용하면、여신프레이아의 힘을 얻을 수 있다
 SETCOLOR 0x87ceeb
 PRINTL 《프레이아의헤어밴드》
 RESETCOLOR
 SETCOLOR 0xdc143c
-PRINTL 半魔추가스킬あり(セット効果)
+PRINTL 반마인 추가스킬 있음(세트효과)
 PRINTL 《브리싱가멘》
 RESETCOLOR
 

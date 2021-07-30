@@ -32,7 +32,7 @@ RETURN 200
 RETURN 370
 
 ;　クリティカル率
-@SKILL_CRITICAL_RATE_2553,ARG
+@SKILL_CRITICAL_RATE_2553, ARG
 RETURN 40
 
 ;　최저공격횟수
@@ -58,12 +58,12 @@ RETURN GET_TYPE_NUM("만능")
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2553
+@SKILL_DECIDE_TYPE_2553, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2553
+@SKILL_DAMAGETYPE_2553, ARG
 RETURN 1
 
 
@@ -151,7 +151,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2553
 ;　 설명文の표시
 @SKILL_EXPLAIN_2553
 PRINTL 쿠・훌린이 만들어낸 대인용의 자돌기술. 인과 역전의 창
-PRINTL 만능 相性의 대데미지. 물리 의존. 높은 확률로 즉사. 명중・크리티컬율이 높다. 후열 사용 가능
+PRINTL 만능 상성의 대데미지. 물리 의존. 높은 확률로 즉사. 명중・크리티컬율이 높다. 후열 사용 가능
 
 ;継承に필요한部位
 @継承部位_2553,ARG

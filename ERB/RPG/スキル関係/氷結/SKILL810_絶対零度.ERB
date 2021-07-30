@@ -36,12 +36,12 @@ RETURN 5
 ;빙결
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_810
+@SKILL_DECIDE_TYPE_810, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_810
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_810, ARG
 RETURN 2
 
 
@@ -86,7 +86,12 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_810
-RETURN 11
+RETURN 7
+
+@SKILL_RANKUP_810
+D:1 = 817
+;랭크アップ先は二つ
+RETURN 1
 
 
 

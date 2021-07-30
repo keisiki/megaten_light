@@ -120,6 +120,8 @@ CSTR,タイトル,별의분신
 フラグ,１体のみ
 フラグ,合体조건有り
 
+フラグ,EXTRA出典,3
+
 ;wikiコピペ
 CSTR,30,알퀘이드・브륜스터드 (Archetype・Earth)　　167cm/52kg - B88/W55/H85
 CSTR,31,종족: 신령의 원형 (Archetype・Earth)

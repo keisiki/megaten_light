@@ -30,13 +30,6 @@ RETURN 0
 SELECTCASE GET_TYPE(ARG)
 	CASE "파마","주살"
 		RETURN 200
-	CASE "화염","빙결","전격","충격","비구","전술"
-		RETURN 50
-	CASE "신경","정신","질풍","핵열","검격"
-		RETURN 0
-	CASE "타격","중력","지변"
-		RETURN 200
-
 ENDSELECT
 RETURN 100
 

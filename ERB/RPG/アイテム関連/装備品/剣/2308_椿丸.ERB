@@ -47,7 +47,14 @@ RETURN 1
 @장비箇所_2308
 RETURN GET_EQUIPNUM("검")
 
+;양팔찍기
 @장비추가스킬_2308,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 4
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -71,6 +78,9 @@ PRINTL 장비조건：LV35～
 
 @장비해설_2308
 PRINTL 보통의 검보다 꽤나 긴 대태도。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：양팔찍기
+RESETCOLOR
 
 RETURN 0
 

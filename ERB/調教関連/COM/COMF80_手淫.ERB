@@ -2,13 +2,26 @@
 ;수음
 ;봉사계コマンド、레벨1
 ;-------------------------------------------------
-@ACT_COM80
-PRINTL 수음
+@COMNAME80,ARG
+#LOCALSSIZE 1
+;장갑(401), 엘보글러브(404), 레이스달린장갑(405), 육구글러브(407), 반장갑(409), 롱글로브(414), 드레스글로브(415)
+;위에 명시된 장갑을 낀 상태
+IF TEQUIP:손 == 401 || TEQUIP:손 == 404 || TEQUIP:손 == 405 || TEQUIP:손 == 407 || TEQUIP:손 == 409 || TEQUIP:손 == 414 || TEQUIP:손 == 415
+	RESULTS = 장갑훑기
+ELSE
+;맨손
+	RESULTS = 수음
+ENDIF
 
+@ACT_COM80
+#LOCALSSIZE 1
+CALL COMNAME80
+LOCALS = %RESULTS%
+PRINTFORML %LOCALS%
 ;-------------------------------------------------
 ;実行決定
 ;-------------------------------------------------
-TSTR:0 = 수음
+TSTR:0 = %LOCALS%
 ;CALL KOJO_MESSAGE_COM
 
 ;조교대상→조교者

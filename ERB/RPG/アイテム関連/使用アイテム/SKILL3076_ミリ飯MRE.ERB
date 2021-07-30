@@ -8,7 +8,7 @@ RESULTS = 전투식량MRE
 @SKILL_HITRATE_3076, ARG
 RETURN 100
 
-;　威힘
+;　위력
 @SKILL_POWER_3076, ARG
 RETURN 30
 
@@ -36,10 +36,10 @@ RETURN 0
 ;　1EXTRAか2MAGICか
 @SKILL_DECIDE_TYPE_3076
 RETURN 0
-;魔法
+;마법
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3076
+;　1물리데미지で計算するか2마법데미지で計算するか
+@SKILL_DAMAGETYPE_3076, ARG
 RETURN 1
 
 
@@ -51,11 +51,11 @@ RETURN 2
 @SKILL_RANGE_3076,ARG
 RETURN 1
 
-;　範囲　11체　21열　3전체　4　적아군전체
+;　범위　1１체　2１열　3전체　4　적아군전체
 @SKILL_SPHERE_3076,ARG
 RETURN 1
 
-;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복
 @SKILL_EFECT_3076
 RETURN 2
 
@@ -109,7 +109,7 @@ CALL VAR_HP,LOCAL,LOCAL:1,3
 @ACTION_FIELD_3076,ARG,ARG:1
 ITEM:1076 -= 1
 LOCAL = FIELD아이템関数(3,MAXBASE:(POS(ARG:1)):ＨＰ/4)
-PRINTFORML %ITEMNAME:1076%を使った。
+PRINTFORML %ITEMNAME:1076%를 사용했다。
 PRINTFORMW %CALLNAME:(POS(ARG:1))% >>>>> {LOCAL}회복
 CALL VAR_HP,(POS(ARG:1)),LOCAL,3
 
@@ -120,10 +120,10 @@ CALL VAR_HP,(POS(ARG:1)),LOCAL,3
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3076
-PRINTL 아군一人のＨＰを２５％회복するレトルトパウチ타입レーション。
-PRINTL 米軍の現用レーション。いつでも温かい食事が取れるが、味は不評。
-PRINTL 本作では메뉴は「ビーフ・パテ」を採用している。
-PRINTL なお전투中사용可能。
+PRINTL 아군 한 사람의 ＨＰ를 ２５％회복시키는 레토르트 파우치 타입의 레이션이다。
+PRINTL 미군이 현재 사용하고 있다。언제나 따뜻한 식사를 할 수 있지만, 맛은 좋지 않다。
+PRINTL 본작에서 메뉴는 「비프・퍼티」를 채용했다。
+PRINTL 또한 전투중 사용 가능。
 
 @최대소지수_3076
 RETURN 10

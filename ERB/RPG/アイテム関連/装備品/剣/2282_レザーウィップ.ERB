@@ -59,7 +59,14 @@ RETURN 0
 @장비箇所_2282
 RETURN GET_EQUIPNUM("검")
 
+;시바브
 @장비추가스킬_2282,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 1101
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -83,6 +90,9 @@ PRINTL 장비조건：LV15～
 
 @장비해설_2282
 PRINTL 가죽으로 만들어진 채찍
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：시바브
+RESETCOLOR
 
 RETURN 0
 

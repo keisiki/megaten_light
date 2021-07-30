@@ -1,20 +1,20 @@
-﻿@장비登録 , ARG
+﻿@장비등록 , ARG
 
 
 
 CUSTOMDRAWLINE =
-PRINTFORML どれに登録しますか？
+PRINTFORML 어느것으로 등록하시겠습니까？
 CUSTOMDRAWLINE -
 CALL SET_PICTURE , , , "소거"
-CALL SET_PICTURE , @"現在の장비　　　　　　　　　　" , 0 , , 0
+CALL SET_PICTURE , @"현재의장비　　　　　　　　　　" , 0 , , 0
 CALL SET_PICTURE , @"┏━━━━━━━━━━━━━┓" , 1 , , 0
-CALL SET_PICTURE , @"┃검：%장비の명칭(EQUIP:ARG:10),22,LEFT%┃" , 2 , , 0
-CALL SET_PICTURE , @"┃총：%장비の명칭(EQUIP:ARG:11),22,LEFT%┃" , 3 , , 0
-CALL SET_PICTURE , @"┃머리：%장비の명칭(EQUIP:ARG:12),22,LEFT%┃" , 4 , , 0
-CALL SET_PICTURE , @"┃몸통：%장비の명칭(EQUIP:ARG:13),22,LEFT%┃" , 5 , , 0
-CALL SET_PICTURE , @"┃팔：%장비の명칭(EQUIP:ARG:14),22,LEFT%┃" , 6 , , 0
-CALL SET_PICTURE , @"┃발：%장비の명칭(EQUIP:ARG:15),22,LEFT%┃" , 7 , , 0
-CALL SET_PICTURE , @"┃飾：%장비の명칭(EQUIP:ARG:16),22,LEFT%┃" , 8 , , 0
+CALL SET_PICTURE , @"┃검：%장비의명칭(EQUIP:ARG:10),22,LEFT%┃" , 2 , , 0
+CALL SET_PICTURE , @"┃총：%장비의명칭(EQUIP:ARG:11),22,LEFT%┃" , 3 , , 0
+CALL SET_PICTURE , @"┃머리：%장비의명칭(EQUIP:ARG:12),22,LEFT%┃" , 4 , , 0
+CALL SET_PICTURE , @"┃몸통：%장비의명칭(EQUIP:ARG:13),22,LEFT%┃" , 5 , , 0
+CALL SET_PICTURE , @"┃팔：%장비의명칭(EQUIP:ARG:14),22,LEFT%┃" , 6 , , 0
+CALL SET_PICTURE , @"┃발：%장비의명칭(EQUIP:ARG:15),22,LEFT%┃" , 7 , , 0
+CALL SET_PICTURE , @"┃飾：%장비의명칭(EQUIP:ARG:16),22,LEFT%┃" , 8 , , 0
 CALL SET_PICTURE , @"┗━━━━━━━━━━━━━┛" , 9 , , 0
 CALL SET_PICTURE ,  , 0 , "표시" , 10
 CUSTOMDRAWLINE -
@@ -24,20 +24,20 @@ CALL SET_PICTURE , , , "소거"
 
 LOCAL:1 = 3100
 FOR LOCAL , 1 , 7
-	CALL SET_PICTURE , @"[{LOCAL,2}]登録장비{LOCAL} 　　　　　　　　　" , (LOCAL - 1) / 3 * 10 + 0 , , (LOCAL - 1) % 3 * 30
+	CALL SET_PICTURE , @"[{LOCAL,2}]등록장비{LOCAL} 　　　　　　　　　" , (LOCAL - 1) / 3 * 10 + 0 , , (LOCAL - 1) % 3 * 30
 	CALL SET_PICTURE , @"┏━━━━━━━━━━━━━┓" , (LOCAL - 1) / 3 * 10 + 1 , , (LOCAL - 1) % 3 * 30
-	CALL SET_PICTURE , @"┃검：%장비の명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 2 , , (LOCAL - 1) % 3 * 30
-	CALL SET_PICTURE , @"┃총：%장비の명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 3 , , (LOCAL - 1) % 3 * 30
-	CALL SET_PICTURE , @"┃머리：%장비の명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 4 , , (LOCAL - 1) % 3 * 30
-	CALL SET_PICTURE , @"┃몸통：%장비の명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 5 , , (LOCAL - 1) % 3 * 30
-	CALL SET_PICTURE , @"┃팔：%장비の명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 6 , , (LOCAL - 1) % 3 * 30
-	CALL SET_PICTURE , @"┃발：%장비の명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 7 , , (LOCAL - 1) % 3 * 30
-	CALL SET_PICTURE , @"┃飾：%장비の명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 8 , , (LOCAL - 1) % 3 * 30
+	CALL SET_PICTURE , @"┃검：%장비의명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 2 , , (LOCAL - 1) % 3 * 30
+	CALL SET_PICTURE , @"┃총：%장비의명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 3 , , (LOCAL - 1) % 3 * 30
+	CALL SET_PICTURE , @"┃머리：%장비의명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 4 , , (LOCAL - 1) % 3 * 30
+	CALL SET_PICTURE , @"┃몸통：%장비의명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 5 , , (LOCAL - 1) % 3 * 30
+	CALL SET_PICTURE , @"┃팔：%장비의명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 6 , , (LOCAL - 1) % 3 * 30
+	CALL SET_PICTURE , @"┃발：%장비의명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 7 , , (LOCAL - 1) % 3 * 30
+	CALL SET_PICTURE , @"┃飾：%장비의명칭(CFLAG:ARG:(LOCAL:1++)),22,LEFT%┃" , (LOCAL - 1) / 3 * 10 + 8 , , (LOCAL - 1) % 3 * 30
 	CALL SET_PICTURE , @"┗━━━━━━━━━━━━━┛" , (LOCAL - 1) / 3 * 10 + 9 , , (LOCAL - 1) % 3 * 30
 NEXT
 CALL SET_PICTURE ,  , 0 , "표시" , 20
 CUSTOMDRAWLINE =
-PRINTFORML [100]登録しない
+PRINTFORML [100]등록하지 않는다
 INPUT
 LOCAL:1 = 3093 + RESULT * 7
 IF RESULT > 0 && RESULT < 7
@@ -50,13 +50,13 @@ IF RESULT > 0 && RESULT < 7
 	CFLAG:ARG:(LOCAL:1++) = EQUIP:ARG:16
 ENDIF
 ;PRINTFORML ┏━━━━━━━━━━━━━┓
-;PRINTFORML ┃검：%장비の명칭(),22,LEFT%┃
-;PRINTFORML ┃총：%장비の명칭(),22,LEFT%┃
-;PRINTFORML ┃머리：%장비の명칭(),22,LEFT%┃
-;PRINTFORML ┃몸통：%장비の명칭(),22,LEFT%┃
-;PRINTFORML ┃팔：%장비の명칭(),22,LEFT%┃
-;PRINTFORML ┃발：%장비の명칭(),22,LEFT%┃
-;PRINTFORML ┃飾：%장비の명칭(),22,LEFT%┃
+;PRINTFORML ┃검：%장비의명칭(),22,LEFT%┃
+;PRINTFORML ┃총：%장비의명칭(),22,LEFT%┃
+;PRINTFORML ┃머리：%장비의명칭(),22,LEFT%┃
+;PRINTFORML ┃몸통：%장비의명칭(),22,LEFT%┃
+;PRINTFORML ┃팔：%장비의명칭(),22,LEFT%┃
+;PRINTFORML ┃발：%장비의명칭(),22,LEFT%┃
+;PRINTFORML ┃飾：%장비의명칭(),22,LEFT%┃
 ;PRINTFORML ┗━━━━━━━━━━━━━┛
 ;CUSTOMDRAWLINE -
 
@@ -67,7 +67,7 @@ ENDIF
 
 
 ;01234567890123456789
-;%장비の명칭(),20,LEFT%
+;%장비의명칭(),20,LEFT%
 
 
 
@@ -83,9 +83,11 @@ ENDIF
 
 
 
-@장비の명칭(ARG)
+@장비의명칭(ARG,ARG:1 = -1)
 #FUNCTIONS
-
+LOCALS:1 = %PUEQ_NAME_GET(ARG:1,ARG)%
+SIF LOCALS:1 != ""
+	RETURNF LOCALS:1
 SIF 개조장비(ARG)
 	RETURNF 개조장비명칭(개조장비番号(ARG))
 IF ARG < 1

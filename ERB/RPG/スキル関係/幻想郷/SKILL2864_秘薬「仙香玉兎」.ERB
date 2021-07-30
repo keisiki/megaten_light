@@ -6,7 +6,7 @@
 RESULTS = 비약「선향옥토」
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2864
+@SKILL_DECIDE_TYPE_2864, ARG
 RETURN 0
 ;どちらでもない
 
@@ -51,7 +51,7 @@ FOR LOCAL:9,1,7
 	LOCAL = FLAG:LOCALS
 	CALL SKILL_CURE_STATE_2864,ARG,CFLAG:LOCAL:ステート
 	IF RESULT == 1
-		PRINTFORML 　　TARGET:[{LOCAL:9,2}] %CALLNAME:(LOCAL),20,LEFT%　>>>>>>　상태회복！
+		PRINTFORMW 　　TARGET:[{LOCAL:9,2}] %CALLNAME:(LOCAL),20,LEFT%　>>>>>>　상태회복！
 		CFLAG:LOCAL:ステート = 0
 		CFLAG:LOCAL:ステート経過ターン = 0
 	ENDIF
@@ -70,7 +70,7 @@ IF  EQUIP:U:악세사리 == 8053
 	PRINTL 자동：회복 스킬 （디아 계열）사용시、DYING을 제외한 상태 이상을 회복한다。
 ELSEIF TALENT:U:친애
 	PRINTL 자동：1명 회복 스킬 （디아 계열）사용시、DYING을 제외한 상태 이상을 회복한다。
-	PRINTL 　　　플러그인「솔로몬의 結婚반지」で전체회복にも適用
+	PRINTL 　　　플러그인「솔로몬의 결혼반지」시 전체회복에도 적용
 ELSE
 	PRINTL 자동：1명 회복 스킬 사용시（디아 계열）、PALYZE、HAPPY、BIND、PANIC、SLEEP、BOMB를 회복한다。
 	PRINTL 　　　친애가 되면 모든 상태이상을 회복

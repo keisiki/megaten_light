@@ -57,12 +57,12 @@ RETURN 4
 ;화염
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2889
+@SKILL_DECIDE_TYPE_2889, ARG
 RETURN 1
 ;EXTRA
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2889
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2889, ARG
 RETURN 2
 
 
@@ -144,8 +144,8 @@ FLAG:拡散フラグ = 0
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2889
-PRINTL 적１体を妬みの炎で공격する。체력が低くなるほど공격력が上がる。
-PRINTL 지모신　水橋 パルスィのスペルカード
+PRINTL 적 １체를 질투의 불로 공격한다。체력이 낮아질수록 공격력이 오른다。
+PRINTL 지모신　미즈하시 파르시의 스펠카드
 
 ;継承に필요な部位
 @継承部位_2889,ARG

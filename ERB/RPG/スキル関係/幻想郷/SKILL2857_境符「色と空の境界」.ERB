@@ -36,12 +36,12 @@ RETURN 30
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2857
+@SKILL_DECIDE_TYPE_2857, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2857
+@SKILL_DAMAGETYPE_2857, ARG
 RETURN 2
 
 
@@ -147,7 +147,7 @@ PRINTFORMW 정과 부의 경계를 만지작거려、적 아군 모두의 강화
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2857
-PRINTL 바름과 그릇의 경계를 다룸으로써 、 축복과 저주의 힘을 바로잡는다。
+PRINTL 바름과 그릇의 경계를 다룸으로써、 축복과 저주의 힘을 바로잡는다。
 PRINTL 강화는 약화로、약화는 강화로。
 PRINTL 요괴　야쿠모 유카리의 스펠카드
 

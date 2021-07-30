@@ -21,12 +21,12 @@ RETURN 0
 
 @전투능력수정_2351,ARG,ARG:1 = -1
 #LOCALSIZE 3
-LOCAL = GETCHARA([[キャラ:단테]])
+LOCAL = GETCHARA(4999)
 LOCAL:1 = 0
 LOCAL:2 = 40
-;검の레벨설정。ダンテが함락している場合、ダンテの레벨の半分が加算される
-SIF ARG:1 >=0 && LOCAL >= 0 && (NO:(ARG:1) == [[キャラ:단테]] || 함락(LOCAL, ARG:1))
-	LOCAL:2 += MIN(BASE:LOCAL:LV / 2, 40)
+;검の레벨설정。당신が함락している場合、당신の레벨の半分が加算される
+SIF ARG:1 >= 0 && (NO:(ARG:1) == 0 || NO:(ARG:1) == 4999 || (NO:(ARG:1) == 4998 && (CFLAG:(ARG:1):당신の専攻分野 == 7)) || (LOCAL >=0 && 함락(LOCAL, ARG:1)))
+	LOCAL:2 += MIN(BASE:(ARG:1):LV / 2, 40)
 LOCAL:2 += 5
 ;레벨による전투能力値
 SELECTCASE GET_BATTLESTATUS(ARG)
@@ -39,8 +39,8 @@ SELECTCASE GET_BATTLESTATUS(ARG)
 	CASE "마법효과"
 		LOCAL:1 = LOCAL:2
 ENDSELECT
-;STATUSによる能力値　당신함락で스테이터스によって性能が加算される
-IF ARG:1 >= 0 && (NO:(ARG:1) == 0 || NO:(ARG:1) == 4999 || (LOCAL >=0 && 함락(LOCAL, ARG:1)))
+;STATUSによる능력値　당신함락で스테이터스によって性能が加算される
+IF ARG:1 >= 0 && (NO:(ARG:1) == 0 || NO:(ARG:1) == 4999 || (NO:(ARG:1) == 4998 && (CFLAG:(ARG:1):당신の専攻分野 == 7)) || (LOCAL >=0 && 함락(LOCAL, ARG:1)))
 	SELECTCASE GET_BATTLESTATUS(ARG)
 		CASE "공격"
 			LOCAL:1 +=  BASE:(ARG:1):힘*3/2 + BASE:(ARG:1):인내력 / 2
@@ -98,6 +98,16 @@ RETURN 1
 @장비箇所_2351
 RETURN GET_EQUIPNUM("검")
 
+@장비추가스킬_2351,ARG,ARG:1 = -1
+;IF ARG:1 > -1
+;	SELECTCASE ARG
+;		CASE 0
+;			SIF (NO:ARG == 0 || NO:ARG == 4998 || NO:ARG == 4999) && (CFLAG:MASTER:당신の専攻分野 == 7)
+;				RETURN [[스킬:데빌트리거]]
+;	ENDSELECT
+;ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -105,6 +115,9 @@ RETURN GET_EQUIPNUM("검")
 RETURN 0
 
 @필요레벨_2351
+RETURN 1
+
+@최대소지수_2351
 RETURN 1
 
 @장비조건_2351,ARG
@@ -119,7 +132,7 @@ SIF TALENT:ARG:무기 == 0
 RETURN 1
 
 @장비조건설명_2351
-PRINTL 장비조건：악마사냥꾼 당신専用
+PRINTL 장비조건：악마사냥꾼 당신전용
 
 @장비해설_2351
 PRINTL 어떤 교단에 소속된 일반 검사용으로 양산된 대검。

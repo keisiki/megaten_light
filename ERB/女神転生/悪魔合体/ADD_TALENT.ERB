@@ -12,13 +12,8 @@ NEXT
 ;ARG:1から포인트を취득
 LOCAL = ARG:1/200
 PRINTFORML {LOCAL}포인트의 범위내로 소질을 바꿔넣을 수 있습니다。
-IF ABL:ARG:종족 != 45
+SIF ABL:ARG:종족 != 45
 	PRINTL ※사용한만큼 합체후에는 충성도가 저하됩니다
-ELSEIF CFLAG:MASTER:10 == 1
-	LOCAL = 50
-	CFLAG:MASTER:10 = 0
-ELSE
-ENDIF
 WAIT
 CUSTOMDRAWLINE =
 LOCAL:1 = 0
@@ -387,6 +382,22 @@ ELSEIF TALENT:ARG:젖기어려움 == 0 && TALENT:ARG:젖기쉬움 == 0
 	T:43 = -6
 ENDIF
 
+;20210328追加：フレーバーに近い素質なので、ちょっと重めに調整
+IF TALENT:ARG:임신하기쉬움
+	PRINTLC [ 44] 【임신하기쉬움】消去　　　(-6P)　　
+	T:44 = -10
+ELSEIF TALENT:ARG:임신하기쉬움 == 0 && TALENT:ARG:임신하기쉬움 == 0
+	PRINTLC [ 44] 【임신하기쉬움】追加　　　(16P)　　
+	T:44 = 20
+ENDIF
+IF TALENT:ARG:임신하기어려움
+	PRINTLC [ 45] 【임신하기어려움】消去　　　(16P)　　
+	T:45 = 16
+ELSEIF TALENT:ARG:회복느림 == 0 && TALENT:ARG:회복빠름 == 0
+	PRINTLC [ 45] 【임신하기어려움】追加　　　(-8P)　　
+	T:45 = -8
+ENDIF
+
 IF TALENT:ARG:습득빠름
 	PRINTLC [ 50] 【습득빠름】소거　　　(-7P)　　
 	T:50 = -7
@@ -630,30 +641,37 @@ ENDIF
 IF TALENT:ARG:빈유
 	PRINTLC [109] 【빈유】소거　　　　　( 1P)　　
 	T:109 = 1
-ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0
+ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0 && TALENT:ARG:魔乳 == 0
 	PRINTLC [109] 【빈유】추가　　　　　( 1P)　　
 	T:109 = 1
 ENDIF
 IF TALENT:ARG:절벽
 	PRINTLC [110] 【절벽】소거　　　　　( 1P)　　
 	T:110 = 1
-ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0
+ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0 && TALENT:ARG:魔乳 == 0
 	PRINTLC [110] 【절벽】추가　　　　　( 1P)　　
 	T:110 = 1
 ENDIF
 IF TALENT:ARG:거유
 	PRINTLC [111] 【거유】소거　　　　　( 1P)　　
 	T:111 = 1
-ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0
+ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0 && TALENT:ARG:魔乳 == 0
 	PRINTLC [111] 【거유】추가　　　　　( 3P)　　
 	T:111 = 3
 ENDIF
 IF TALENT:ARG:폭유
 	PRINTLC [112] 【폭유】소거　　　　　( 1P)　　
 	T:112 = 1
-ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0
+ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0 && TALENT:ARG:魔乳 == 0
 	PRINTLC [112] 【폭유】추가　　　　　( 2P)　　
 	T:112 = 2
+ENDIF
+IF TALENT:ARG:魔乳
+	PRINTLC [126] 【魔乳】소거　　　　　( 1P)　　
+	T:126 = 1
+ELSEIF TALENT:ARG:빈유 == 0 && TALENT:ARG:절벽 == 0 && TALENT:ARG:거유 == 0 && TALENT:ARG:폭유 == 0 && TALENT:ARG:魔乳 == 0
+	PRINTLC [126] 【魔乳】추가　　　　　( 2P)　　
+	T:126 = 2
 ENDIF
 
 	IF TALENT:ARG:큰체형
@@ -670,6 +688,43 @@ ENDIF
 		PRINTLC [114] 【거체】추가　　　　　(20P)　　
 		T:114 = 20
 	ENDIF
+
+IF TALENT:ARG:小尻
+	PRINTLC [121] 【小尻】소거　　　　　( 1P)　　
+	T:121 = 1
+ELSEIF TALENT:ARG:小尻 == 0 && TALENT:ARG:並尻 == 0 && TALENT:ARG:巨尻 == 0 && TALENT:ARG:爆尻 == 0 && TALENT:ARG:魔尻 == 0
+	PRINTLC [121] 【小尻】추가　　　　　( 1P)　　
+	T:121 = 1
+ENDIF
+IF TALENT:ARG:並尻
+	PRINTLC [122] 【並尻】소거　　　　　( 1P)　　
+	T:122 = 1
+ELSEIF TALENT:ARG:小尻 == 0 && TALENT:ARG:並尻 == 0 && TALENT:ARG:巨尻 == 0 && TALENT:ARG:爆尻 == 0 && TALENT:ARG:魔尻 == 0
+	PRINTLC [122] 【並尻】추가　　　　　( 1P)　　
+	T:122 = 1
+ENDIF
+IF TALENT:ARG:巨尻
+	PRINTLC [123] 【巨尻】소거　　　　　( 1P)　　
+	T:123 = 1
+ELSEIF TALENT:ARG:小尻 == 0 && TALENT:ARG:並尻 == 0 && TALENT:ARG:巨尻 == 0 && TALENT:ARG:爆尻 == 0 && TALENT:ARG:魔尻 == 0
+	PRINTLC [123] 【巨尻】추가　　　　　( 3P)　　
+	T:123 = 3
+ENDIF
+IF TALENT:ARG:爆尻
+	PRINTLC [124] 【爆尻】소거　　　　　( 1P)　　
+	T:124 = 1
+ELSEIF TALENT:ARG:小尻 == 0 && TALENT:ARG:並尻 == 0 && TALENT:ARG:巨尻 == 0 && TALENT:ARG:爆尻 == 0 && TALENT:ARG:魔尻 == 0
+	PRINTLC [124] 【爆尻】추가　　　　　( 2P)　　
+	T:124 = 2
+ENDIF
+IF TALENT:ARG:魔尻
+	PRINTLC [125] 【魔尻】소거　　　　　( 1P)　　
+	T:125 = 1
+ELSEIF TALENT:ARG:小尻 == 0 && TALENT:ARG:並尻 == 0 && TALENT:ARG:巨尻 == 0 && TALENT:ARG:爆尻 == 0 && TALENT:ARG:魔尻 == 0
+	PRINTLC [125] 【魔尻】추가　　　　　( 2P)　　
+	T:125 = 2
+
+ENDIF
 IF TALENT:ARG:회복빠름
 	PRINTLC [130] 【회복빠름】소거　　　(-6P)　　
 	T:130 = -6

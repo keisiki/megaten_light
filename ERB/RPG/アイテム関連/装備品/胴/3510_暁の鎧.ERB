@@ -60,8 +60,26 @@ RETURN 1
 
 RETURN GET_EQUIPNUM("몸통")
 
+;리프트마
+@장비추가스킬_3510,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36 && EQUIP:(ARG:1):머리 == 3010 && EQUIP:(ARG:1):팔 == 4010 && EQUIP:(ARG:1):발 == 4510
+	SELECTCASE ARG
+		CASE 0
+			RETURN 533
+	ENDSELECT
+ENDIF
+RETURN 0
+
 @필요레벨_3510
 RETURN 40
+
+@장비해설_3510
+PRINTFORML 여성용으로 만들어진 갑옷
+PRINTFORML 중량이 있기 때문에 초심자가 다루긴 어렵다
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：리프트마（セット装備）
+PRINTL 《새벽의투구　새벽의갑옷　새벽의구족》
+RESETCOLOR
 
 @장비조건_3510,ARG
 SIF IS_LOOKSLIKE_MALE(ARG)

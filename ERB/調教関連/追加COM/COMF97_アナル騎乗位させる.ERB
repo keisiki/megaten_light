@@ -1,4 +1,11 @@
-﻿
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		2021/02/14		J>s!UL@1				派生コマンドの処理、挿入継続時の分岐を追加
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
 @CHECK_COM_ABLE97
 ;애널기승위한다実行판정
 
@@ -25,6 +32,18 @@ IF TEQUIP:31
 ENDIF
 
 RETURN 1
+
+@JUMP_COM97
+;-------------------------------------------------
+;特殊派生処理
+;-------------------------------------------------
+;前のプレイがアナル騎乗位するかつ対象の技巧3以上の場合、挿入前立腺責めさせるへ派生
+IF PREVCOM == 97 && (ABL:TARGET:2 > 2)
+	CALL COM_ABLE_COMMON, 520
+	SIF RESULT == 1
+		RETURN 520
+ENDIF
+RETURN -1
 
 @ACT_COM97
 ;애널기승위한다
@@ -415,43 +434,58 @@ RETURN 1
 
 
 @MESSAGE_COM97
-IF TEQUIP:주도권
-	PRINTFORM %타겟은()% %CALLNAME:PLAYER%에게 자신의 몸에 걸터앉게 해서、
-	;「TARGETが真性の새드か」「새드끼持ちか」で分岐
-	IF (TALENT:새드 || ABL:새드끼 == 5 || TALENT:영맹) && RAND:3 == 0
-		PRINTFORM 허리를 덥썩 붙잡아 %CALLNAME:PLAYER%의 몸을 끌어당겨、
-	ELSEIF TALENT:새드 || (ABL:새드끼 >= 4 && RAND:2 == 0) || TALENT:영맹
-		PRINTFORM 허리를 붙잡아 %CALLNAME:PLAYER%의 몸을 끌어당겨
-	ELSEIF RAND:2 == 0
-		PRINTFORM 느긋이 %CALLNAME:PLAYER%의 몸을 끌어당겨
-	ENDIF
-	;「TARGETが真性の새드か」「새드끼持ちか」で分岐
-	IF (TALENT:새드 || ABL:새드끼 == 5 || TALENT:영맹) && RAND:3 == 0
-		PRINT 페니스로 꿰뚫듯이 찔러넣어、
-	ELSEIF ABL:새드끼 >= 3 && RAND:2 == 0 || TALENT:영맹
-		PRINT 단번에 주저앉게 해、
-	ELSE
-		PRINTFORM 페니스를 삽입해、
-	ENDIF
-	;연모で추가
-	SIF (TALENT:연모 || TALENT:친애) && RAND:3 >= 1
-		PRINTFORM %CALLNAME:PLAYER%의 이름을 몇번이나 외치면서
-	;「TARGETが真性の새드か」「새드끼持ちか」で分岐
-	IF (TALENT:새드 || ABL:새드끼 == 5 || TALENT:영맹) && RAND:3 == 0
-		PRINTFORMW 아래서부터 격렬하게 %CALLNAME:PLAYER%의 몸을 쳐올렸다…
-	ELSEIF TALENT:새드 || (ABL:새드끼 >= 3 && RAND:2 == 0) || TALENT:영맹
-		PRINTFORMW 자신도 허리를 쳐올렸다…
-	ELSE
-		PRINTFORMW %CALLNAME:PLAYER%의 고혈을 만끽했다…
-	ENDIF
-ELSE
-	PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %타겟을()% 바로눕혀서、스스로
-	;プ레이ヤーが음란
-	SIF TALENT:PLAYER:음란
-		PRINTFORM 과시하듯이 다리를 벌리고、
-	SIF ABL:PLAYER:Ａ감각 > 3
-		PRINT 갖고싶은 듯이 씰룩거리며
-	PRINTFORM 엉덩이에 페니스를 찔러넣어、허리를 흔들기 시작했다…
+;前回の調教がアナル騎乗位するであり、入れっぱなしの場合
+	IF TEQUIP:주도권 && TEQUIP:PLAYER:51 && (PREVCOM == 97 || PREVCOM == 520)
+		PRINTFORMW アヌスを貫いたまま%CALLNAME:TARGET%は%CALLNAME:PLAYER%の脚を押さえ、再び動くよう命じた……
+	;同様に前回の調教がアナル正常位かアナル後背位の場合
+	ELSEIF TEQUIP:주도권 && TEQUIP:PLAYER:51 && (PREVCOM == 95 || PREVCOM == 96)
+		PRINTFORMW %CALLNAME:TARGET%は挿入したまま%CALLNAME:PLAYER%を抱き上げ、仰向けになると下から腰を突き上げた……
+	;同様に前回の調教がアナル対面座位かアナル背面座位の場合
+	ELSEIF TEQUIP:주도권 && TEQUIP:PLAYER:51 && (PREVCOM == 902 || PREVCOM == 903)
+		PRINTFORMW %CALLNAME:TARGET%は挿入したまま仰向けに寝ると、%CALLNAME:PLAYER%を下から腰を突き上げた……	
+	ELSEIF TEQUIP:주도권
+			PRINTFORM %타겟은()% %CALLNAME:PLAYER%에게 자신의 몸에 걸터앉게 해서、
+		;「TARGETが真性の새드か」「새드끼持ちか」で分岐
+		IF (TALENT:새드 || ABL:새드끼 == 5 || TALENT:영맹) && RAND:3 == 0
+			PRINTFORM 허리를 덥썩 붙잡아 %CALLNAME:PLAYER%의 몸을 끌어당겨、
+		ELSEIF TALENT:새드 || (ABL:새드끼 >= 4 && RAND:2 == 0) || TALENT:영맹
+			PRINTFORM 허리를 붙잡아 %CALLNAME:PLAYER%의 몸을 끌어당겨
+		ELSEIF RAND:2 == 0
+			PRINTFORM 느긋이 %CALLNAME:PLAYER%의 몸을 끌어당겨
+		ENDIF
+		;「TARGETが真性の새드か」「새드끼持ちか」で分岐
+		IF (TALENT:새드 || ABL:새드끼 == 5 || TALENT:영맹) && RAND:3 == 0
+			PRINT 페니스로 꿰뚫듯이 찔러넣어、
+		ELSEIF ABL:새드끼 >= 3 && RAND:2 == 0 || TALENT:영맹
+			PRINT 단번에 주저앉게 해、
+		ELSE
+			PRINTFORM 페니스를 삽입해、
+		ENDIF
+		;연모で추가
+		SIF (TALENT:연모 || TALENT:친애) && RAND:3 >= 1
+			PRINTFORM %CALLNAME:PLAYER%의 이름을 몇번이나 외치면서
+		;「TARGETが真性の새드か」「새드끼持ちか」で分岐
+		IF (TALENT:새드 || ABL:새드끼 == 5 || TALENT:영맹) && RAND:3 == 0
+			PRINTFORMW 아래서부터 격렬하게 %CALLNAME:PLAYER%의 몸을 쳐올렸다…
+		ELSEIF TALENT:새드 || (ABL:새드끼 >= 3 && RAND:2 == 0) || TALENT:영맹
+			PRINTFORMW 자신도 허리를 쳐올렸다…
+		ELSE
+			PRINTFORMW %CALLNAME:PLAYER%의 고혈을 만끽했다…
+		ENDIF		
+	;前回の調教がアナル騎乗位するであり、抜かないフラグがある場合
+	ELSEIF TEQUIP:PLAYER:51 && (PREVCOM == 97 || PREVCOM == 520)
+		PRINTFORMW %CALLNAME:PLAYER%は挿入されたままのモノを締め付け、再び腰を動かし始めた……
+	;同様に前回の調教がアナル正常位かアナル後背位かアナル対面座位かアナル背面座位の場合
+	ELSEIF TEQUIP:PLAYER:51 && (PREVCOM == 95 || PREVCOM == 96 || PREVCOM == 902 || PREVCOM == 903)
+		PRINTFORMW %CALLNAME:TARGET%が挿入したまま仰向けに寝そべると、%CALLNAME:PLAYER%は再び腰を動かし始めた……
+	ELSE 
+		PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %타겟을()% 바로눕혀서、스스로
+		;プ레이ヤーが음란
+		SIF TALENT:PLAYER:음란
+			PRINTFORM 과시하듯이 다리를 벌리고、
+		SIF ABL:PLAYER:Ａ감각 > 3
+			PRINT 갖고싶은 듯이 씰룩거리며
+		PRINTFORM 엉덩이에 페니스를 찔러넣어、허리를 흔들기 시작했다…
 ENDIF
 
 ;===================================================

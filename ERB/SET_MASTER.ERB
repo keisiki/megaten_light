@@ -1,5 +1,4 @@
-﻿
-;========================================================================
+﻿;========================================================================
 ;主人をキャラメイク
 ;========================================================================
 @SET_MASTER
@@ -21,8 +20,6 @@ CALL SET_MASTER_FRAME
 CALL SET_MASTER_INVERT
 CALL SET_MASTER_SEXLIFE
 CALL SET_MASTER_BUST
-
-
 PRINTL 성적인 경험을 상세히 설정하겠습니까?
 CALL INPUT_YN,"Yes","No"
 IF RESULT == 0
@@ -31,7 +28,6 @@ IF RESULT == 0
 	CALL SET_MASTER_ANALSEX
 	CALL SET_MASTER_SLAVERY
 ENDIF
-
 ABL:MASTER:순종 = MIN(ABL:MASTER:순종, 10)
 ABL:MASTER:욕망 = MIN(ABL:MASTER:욕망, 10)
 ABL:MASTER:기교 = MIN(ABL:MASTER:기교, 10)
@@ -44,17 +40,6 @@ ABL:MASTER:섹스중독 = MIN(ABL:MASTER:섹스중독, 10)
 CALL MASTER_HUKUSO
 CALL CLOTHES_INITIALIZE,MASTER
 
-;FOR LOCAL,0,1200
-;	ITEM:(6000+LOCAL) = 1
-;NEXT
-;CALL CLOTHES_SETTING_USUALLY_A,MASTER
-;FOR LOCAL,0,1200
-;	ITEM:(6000+LOCAL) = 0
-;NEXT
-;FOR LOCAL,0,12
-;	LOCAL:1 = CFLAG:MASTER:(40+LOCAL)
-;	CALL GET_ITEM, (6000+LOCAL:1) , 1 ,
-;NEXT
 ;========================================================================
 ;主人の素質リセット
 ;========================================================================
@@ -147,6 +132,50 @@ SELECTCASE RESULT
 		TALENT:MASTER:촉수 = 1
 ENDSELECT
 
+;以下旧処理
+;IF RESULT == 0
+;	PRINTL
+;	RETURN
+;ENDIF
+;;인간の体に戻す
+;서머너から달인までの전투素質と非人型素質をCSV参照してリセット
+;FOR LOCAL,0,343
+;	TALENT:MASTER:(LOCAL) = CSVTALENT(NO:MASTER,LOCAL,0)
+;NEXT
+;CFLAG:MASTER:1201 = 0
+;;TALENT:MASTER:짐승 = 0
+;;TALENT:MASTER:새 = 0
+;;TALENT:MASTER:파충류 = 0
+;;TALENT:MASTER:부정형 = 0
+;;TALENT:MASTER:물고기 = 0
+;;TALENT:MASTER:인간화 = 0
+;;TALENT:MASTER:이형 = 0
+;;TALENT:MASTER:천사 = 0
+;;TALENT:MASTER:동물귀 = 0
+;;TALENT:MASTER:여우 = 0
+;;TALENT:MASTER:월광욕 = 0
+;;TALENT:MASTER:소인체형 = 0
+;;TALENT:MASTER:기계의처녀 = 0
+;
+;
+;;肉体部位素質・계승타입素質リセット
+;;FOR LOCAL,1,43
+;;	TALENT:MASTER:(300+LOCAL) = CSVTALENT(NO:MASTER,300+LOCAL,0)
+;;NEXT
+;;TALENT:MASTER:머리 = 1
+;;TALENT:MASTER:눈 = 1
+;;TALENT:MASTER:입 = 1
+;;TALENT:MASTER:팔 = 1
+;;TALENT:MASTER:발 = 1
+;;TALENT:MASTER:갈퀴 = 0
+;;TALENT:MASTER:날개 = 0
+;;TALENT:MASTER:갈퀴발 = 0
+;;TALENT:MASTER:꼬리 = 0
+;;TALENT:MASTER:모피 = 0
+;;TALENT:MASTER:무기 = 0
+;;TALENT:MASTER:사격무기 = 0
+;;TALENT:MASTER:촉수 = 0
+;;TALENT:MASTER:부리 = 0
 
 ;========================================================================
 ;主人の性別설정
@@ -249,6 +278,7 @@ SELECTCASE RESULT
 		CALL SET_초기衣装, "신발" , [[衣装:부츠]]
 		PRINTW [후타나리]로 시작합니다
 ENDSELECT
+
 ;무지개색사탕用処理
 IF TALENT:MASTER:남자
 	;CFLAG:MASTER:元性別 = 1
@@ -305,6 +335,7 @@ SELECTCASE RESULT
 	CASE 4, 5, 6, 7
 		TALENT:MASTER:거체 = 1
 ENDSELECT
+CALL 子宮最大容量初期設定,MASTER
 PRINTL
 RETURN
 
@@ -572,6 +603,14 @@ RETURN
 ;전투素質等のリセット
 CALL SET_MASTER_MAJORING_RESET
 
+;---- EDIT 025 CSTR:MASTER:해설3～20を초기化 ADD START ----
+;해설3～20を초기化
+;1～2は書き換えor引継ぎのためそのまま
+FOR LOCAL,32,49
+	CSTR:MASTER:LOCAL = 
+NEXT
+;---- EDIT 025 CSTR:MASTER:해설3～20を초기化 ADD END   ----
+
 PRINTL 당신은 결론적으로 정체가 무엇이지요?
 PRINTL ※이 게임은 기본적으로 당신이 서머너라는 것을 전제로 만들어졌습니다.
 PRINTL 　서머너 외로 할 때의 게임 난이도 및 정합성 등에 관해서는 일절 고려하지 않았습니다.
@@ -715,26 +754,20 @@ SELECTCASE RESULT
 		BASE:MASTER:핵열 = 125
 		BASE:MASTER:만능 = 100
 		BASE:MASTER:사이코 = 0
-		;
-		ABL:MASTER:스킬1 = 2951
-		ABL:MASTER:스킬2 = 515
-		ABL:MASTER:스킬3 = 2957
-		ABL:MASTER:스킬4 = 2958
-
-		ABL:MASTER:습득스킬1 = 2955
-		ABL:MASTER:습득LV1 = 7
-		ABL:MASTER:습득스킬2 = 2418
-		ABL:MASTER:습득LV2 = 13
-		ABL:MASTER:습득스킬3 = 2952
-		ABL:MASTER:습득LV3 = 17
-		ABL:MASTER:습득스킬4 = 129
-		ABL:MASTER:습득LV4 = 27
-		ABL:MASTER:습득스킬5 = 2953
-		ABL:MASTER:습득LV5 = 33
-		ABL:MASTER:습득스킬6 = 2954
-		ABL:MASTER:습득LV6 = 37
-		ABL:MASTER:습득스킬7 = 2956
-		ABL:MASTER:습득LV7 = 45
+		
+		;데빌트리거/투섬타임/도발/아버지의이름에맹세코/네버기브업
+		ABL:MASTER:스킬1 = 3600
+		ABL:MASTER:스킬2 = 2951
+		ABL:MASTER:스킬3 = 515
+		ABL:MASTER:스킬4 = 2957
+		ABL:MASTER:스킬5 = 2958
+		;홀리스타/추격의심득/쇼타임
+		ABL:MASTER:습득스킬1 = 2952
+		ABL:MASTER:습득LV1 = 13
+		ABL:MASTER:습득스킬2 = 2422
+		ABL:MASTER:습득LV2 = 27
+		ABL:MASTER:습득스킬3 = 2956
+		ABL:MASTER:습득LV3 = 45
 
 		TALENT:MASTER:석세서 = 1
 		TALENT:MASTER:도구지식 = 3
@@ -746,13 +779,15 @@ SELECTCASE RESULT
 		CFLAG:MASTER:合体불가 = 1
 		
 		ITEM:칼리번 += 1
-		ITEM:Ｌ＆Ｏ     += 1
-		;マスターの家系以外を選ぶと마스터의혈통を没収
+		ITEM:Ｗ＆Ｓ     += 1
+		ITEM:악마사냥꾼의코트 += 1
+		;마스터の家系이외を選ぶと마스터의혈통を没収
 		TALENT:MASTER:마스터의혈통 = 0
 
 	;데빌시프터
 	CASE 7
 		TALENT:MASTER:데빌시프터 = 1
+		TALENT:MASTER:도구지식 = 3
 		BASE:MASTER:ＭＰ = 25
 		ABL:MASTER:스킬9 = 2310
 		ABL:MASTER:스킬10 = 2311
@@ -1039,15 +1074,16 @@ PRINTFORML [113] % "잭프로스트",30,LEFT%(Neutral/Neutral)
 PRINTFORML [114] % "모코이",30,LEFT%(Neutral/  Chaos)
 PRINTFORML [115] % "모・쇼보",30,LEFT%(   Dark/    Law)
 PRINTFORML [116] % "좀비쨩",30,LEFT%(   Dark/Neutral)
-PRINTFORML [117] % "리림",30,LEFT%(   Dark/Neutral)
-PRINTFORML 당신の초기페르소나を選んでください。
-PRINTFORML 당신の페르소나相性は초기페르소나の相性とおなじになります
+PRINTFORML [117] % "리림",30,LEFT%(Neutral/  Chaos)
+PRINTFORML [118] % "맨이터",30,LEFT%(   Dark/  Chaos)
+PRINTFORML 당신의 초기페르소나를 선택하십시오。
+PRINTFORML 당신의 페르소나상성은 초기페르소나의 상성과 같아집니다。
 PRINTL
 ;---- EDIT 003 MOD END   -------------------------
 CFLAG:MASTER:PTフラグ = 2
 $INPUT_LOOP
 INPUT
-IF RESULT < 0 || RESULT > 117
+IF RESULT < 0 || RESULT > 118
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 100
 	ABL:MASTER:초기페르소나 = 5501
@@ -1200,7 +1236,7 @@ ELSEIF RESULT == 103
 		DITEMTYPE:LOCAL:페르소나("스킬1") = [[스킬:그라이]]
 		DITEMTYPE:LOCAL:페르소나("스킬2") = [[스킬:마하・부후]]
 		DITEMTYPE:LOCAL:페르소나("스킬3") = [[스킬:메・디아]]
-		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:파라라디]]
+		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:패럴라디]]
 		DITEMTYPE:LOCAL:페르소나("스킬5") = [[스킬:사바트마]]
 		DITEMTYPE:LOCAL:페르소나("습득스킬1") = [[스킬:그라이바]]
 		DITEMTYPE:LOCAL:페르소나("습득LV1") = 17
@@ -1243,7 +1279,7 @@ ELSEIF RESULT == 104
 		DITEMTYPE:LOCAL:페르소나("스킬1") = [[스킬:트윈슬래시]]
 		DITEMTYPE:LOCAL:페르소나("스킬2") = [[스킬:히트웨이브]]
 		DITEMTYPE:LOCAL:페르소나("스킬3") = [[스킬:스쿠・카쟈]]
-		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:파라라디]]
+		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:패럴라디]]
 		DITEMTYPE:LOCAL:페르소나("스킬5") = [[스킬:사바트마]]
 		DITEMTYPE:LOCAL:페르소나("습득스킬1") = [[스킬:이검난무]]
 		DITEMTYPE:LOCAL:페르소나("습득LV1") = 17
@@ -1286,7 +1322,7 @@ ELSEIF RESULT == 105
 		DITEMTYPE:LOCAL:페르소나("스킬1") = [[스킬:소닉펀치]]
 		DITEMTYPE:LOCAL:페르소나("스킬2") = [[스킬:마하・마그나]]
 		DITEMTYPE:LOCAL:페르소나("스킬3") = [[스킬:디아]]
-		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:파라라디]]
+		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:패럴라디]]
 		DITEMTYPE:LOCAL:페르소나("스킬5") = [[스킬:사바트마]]
 		DITEMTYPE:LOCAL:페르소나("습득스킬1") = [[스킬:히트웨이브]]
 		DITEMTYPE:LOCAL:페르소나("습득LV1") = 17
@@ -1620,7 +1656,7 @@ ELSEIF RESULT == 112
 		DITEMTYPE:LOCAL:페르소나("스킬1") = [[스킬:갈]]
 		DITEMTYPE:LOCAL:페르소나("스킬2") = [[스킬:한마]]
 		DITEMTYPE:LOCAL:페르소나("스킬3") = [[스킬:디아]]
-		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:파라라디]]
+		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:패럴라디]]
 		DITEMTYPE:LOCAL:페르소나("스킬5") = [[스킬:사바트마]]
 		DITEMTYPE:LOCAL:페르소나("습득스킬1") = [[스킬:메・디아]]
 		DITEMTYPE:LOCAL:페르소나("습득LV1") = 16
@@ -1862,7 +1898,7 @@ ELSEIF RESULT == 116
 		DITEMTYPE:LOCAL:페르소나("습득LV11") = 57
 		DITEMTYPE:LOCAL:페르소나("습득스킬12") = [[스킬:추격의심득]]
 		DITEMTYPE:LOCAL:페르소나("습득LV12") = 59
-		DITEMTYPE:LOCAL:페르소나("습득스킬13") = [[스킬:정수리나누기]]
+		DITEMTYPE:LOCAL:페르소나("습득스킬13") = [[스킬:머리깨기]]
 		DITEMTYPE:LOCAL:페르소나("습득LV13") = 61
 		DITEMTYPE:LOCAL:페르소나("습득스킬14") = [[스킬:고천열풍탄]]
 		DITEMTYPE:LOCAL:페르소나("습득LV14") = 63
@@ -1923,6 +1959,60 @@ ELSEIF RESULT == 117
 		DITEMTYPE:LOCAL:페르소나("습득스킬15") = [[스킬:루나카미]]
 		DITEMTYPE:LOCAL:페르소나("습득LV15") = 65
 		DITEMTYPE:LOCAL:페르소나("습득스킬16") = [[스킬:팔색뇌공]]
+		DITEMTYPE:LOCAL:페르소나("습득LV16") = 75
+	ENDIF
+ELSEIF RESULT == 118
+	ABL:MASTER:초기페르소나 = [[キャラ:맨이터]]
+	CALL SYNC_STATUS, MASTER
+	;新페르소나処理
+	IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+	
+	;旧페르소나処理
+	ELSE
+		LOCAL = CFLAG:MASTER:초기페르소나ナンバー
+		DITEMTYPE:LOCAL:페르소나("LV") = 15
+		DITEMTYPE:LOCAL:페르소나("힘") = 12
+		DITEMTYPE:LOCAL:페르소나("지혜") = 8
+		DITEMTYPE:LOCAL:페르소나("마력") = 6
+		DITEMTYPE:LOCAL:페르소나("인내력") = 6
+		DITEMTYPE:LOCAL:페르소나("속도") = 8
+		DITEMTYPE:LOCAL:페르소나("운") = 6
+		DITEMTYPE:LOCAL:페르소나("스킬1") = [[스킬:돌려차기]]
+		DITEMTYPE:LOCAL:페르소나("스킬2") = [[스킬:마비물어뜯기]]
+		DITEMTYPE:LOCAL:페르소나("스킬3") = [[스킬:섹시댄스]]
+		DITEMTYPE:LOCAL:페르소나("스킬4") = [[스킬:유혹]]
+		DITEMTYPE:LOCAL:페르소나("스킬5") = [[스킬:사바트마]]
+		DITEMTYPE:LOCAL:페르소나("습득스킬1") = [[스킬:던지는키스]]
+		DITEMTYPE:LOCAL:페르소나("습득LV1") = 16
+		DITEMTYPE:LOCAL:페르소나("습득스킬2") = [[스킬:일할의마맥]]
+		DITEMTYPE:LOCAL:페르소나("습득LV2") = 17
+		DITEMTYPE:LOCAL:페르소나("습득스킬3") = [[스킬:마칸・다]]
+		DITEMTYPE:LOCAL:페르소나("습득LV3") = 20
+		DITEMTYPE:LOCAL:페르소나("습득스킬4") = [[스킬:메가클로]]
+		DITEMTYPE:LOCAL:페르소나("습득LV4") = 22
+		DITEMTYPE:LOCAL:페르소나("습득스킬5") = [[스킬:마하에이하]]
+		DITEMTYPE:LOCAL:페르소나("습득LV5") = 24
+		DITEMTYPE:LOCAL:페르소나("습득스킬6") = [[스킬:데스샤워]]
+		DITEMTYPE:LOCAL:페르소나("습득LV6") = 28
+		DITEMTYPE:LOCAL:페르소나("습득스킬7") = [[스킬:지옥떨구기]]
+		DITEMTYPE:LOCAL:페르소나("습득LV7") = 30
+		DITEMTYPE:LOCAL:페르소나("습득스킬8") = [[스킬:아이언클로]]
+		DITEMTYPE:LOCAL:페르소나("습득LV8") = 36
+		DITEMTYPE:LOCAL:페르소나("습득스킬9") = [[스킬:파이널누드]]
+		DITEMTYPE:LOCAL:페르소나("습득LV9") = 40
+		DITEMTYPE:LOCAL:페르소나("습득스킬10") = [[스킬:극락떨구기]]
+		DITEMTYPE:LOCAL:페르소나("습득LV10") = 50
+		DITEMTYPE:LOCAL:페르소나("습득스킬11") = [[스킬:악셀클로]]
+		DITEMTYPE:LOCAL:페르소나("습득LV11") = 57
+		DITEMTYPE:LOCAL:페르소나("습득스킬12") = [[스킬:암흑의포옹]]
+		DITEMTYPE:LOCAL:페르소나("습득LV12") = 59
+		DITEMTYPE:LOCAL:페르소나("습득스킬13") = [[스킬:삼할의마맥]]
+		DITEMTYPE:LOCAL:페르소나("습득LV13") = 61
+		DITEMTYPE:LOCAL:페르소나("습득스킬14") = [[스킬:테트라칸]]
+		DITEMTYPE:LOCAL:페르소나("습득LV14") = 63
+		DITEMTYPE:LOCAL:페르소나("습득스킬15") = [[스킬:뇌진왕모의발차기]]
+		DITEMTYPE:LOCAL:페르소나("습득LV15") = 65
+		DITEMTYPE:LOCAL:페르소나("습득스킬16") = [[스킬:허공조격]]
 		DITEMTYPE:LOCAL:페르소나("습득LV16") = 75
 	ENDIF
 ELSEIF RESULT == CFLAG:MASTER:초기페르소나ナンバー
@@ -2328,7 +2418,7 @@ ELSE
 			ABL:MASTER:초기변신악마습득LV2 = 28
 			ABL:MASTER:초기변신악마습득스킬3 = [[스킬:다크브레스]]
 			ABL:MASTER:초기변신악마습득LV3 = 42
-			ABL:MASTER:초기변신악마습득스킬4 = [[스킬:뉴록런치]]
+			ABL:MASTER:초기변신악마습득스킬4 = [[스킬:뉴로크런치]]
 			ABL:MASTER:초기변신악마습득LV4 = 56
 			ABL:MASTER:초기변신악마습득스킬5 = [[스킬:용권지옥]]
 			ABL:MASTER:초기변신악마습득LV5 = 70
@@ -3088,7 +3178,7 @@ IF TALENT:MASTER:남자 == 1
 			ABL:MASTER:초기변신악마스킬2 = [[스킬:산바람]]
 			ABL:MASTER:초기변신악마스킬3 = [[스킬:돌격]]
 			ABL:MASTER:초기변신악마스킬4 = [[스킬:싱글샷]]
-			ABL:MASTER:초기변신악마습득스킬1 = [[스킬:어두운밤의검]]
+			ABL:MASTER:초기변신악마습득스킬1 = [[스킬:암야의검]]
 			ABL:MASTER:초기변신악마습득LV1 = 7
 			ABL:MASTER:초기변신악마습득스킬2 = [[스킬:마구날뛰기]]
 			ABL:MASTER:초기변신악마습득LV2 = 13
@@ -3495,7 +3585,7 @@ ENDIF
 			ABL:MASTER:초기변신악마스킬2 = [[스킬:일문자베기]]
 			ABL:MASTER:초기변신악마스킬3 = [[스킬:돌격]]
 			ABL:MASTER:초기변신악마스킬4 = [[스킬:스쿤・다]]
-			ABL:MASTER:초기변신악마습득스킬1 = [[스킬:어두운밤의검]]
+			ABL:MASTER:초기변신악마습득스킬1 = [[스킬:암야의검]]
 			ABL:MASTER:초기변신악마습득LV1 = 7
 			ABL:MASTER:초기변신악마습득스킬2 = [[스킬:마구날뛰기]]
 			ABL:MASTER:초기변신악마습득LV2 = 13
@@ -3548,7 +3638,7 @@ DRAWLINE
 	PRINTL
 	DRAWLINE
 	;相性を표시
-	PRINTL □相性
+	PRINTL □상성
 	FOR LCOUNT, 0, FLAG:相性数
 		CALL SET_AISYOU_COLOR, CSVBASE(CFLAG:MASTER:초기링크악마 , GETNUM(BASE , GET_TYPE(LCOUNT)) , 0)
 		;속성名の先머리１文字で表す
@@ -3714,6 +3804,34 @@ CALL PRESENT_PIXIE
 ;ここでしか使わないようなのでここで消す
 CFLAG:MASTER:童貞 = 0
 
+;---- EDIT 032 ADD START -------------------------
+
+;大場偽見滝原永住フラグが立っている場合、常に　이벤트フラグ:99:4 == 1（何も起きなくなる）
+IF GETBIT(大場ななの記憶:0:9, 4)
+	이벤트フラグ:99:4 = 1
+ELSE
+	;暁美よ暁美よあなたのことを思い出せ
+	LOADGLOBAL
+	;---- EDIT 031 ADD START -------------------------
+	;まどマギイベント許可＆エンディング発見済み＆大場なな自動加入ならば、悪魔ほむほむによる回収イベント実施
+	SIF (GETBIT(FLAG:EXTRA이벤트설정, 0) == 1 && GETBIT(FLAG:EXTRA이벤트필터, 5) == 0) && 暁美ほむらの記憶 == 1 && (大場ななの記憶:0:1 > 1)
+		CALL EVENT_99_98
+	IF 이벤트フラグ:99:4 == 1
+	ELSE
+		;---- EDIT 023 ADD START -------------------------
+		;ここで세이브데이터IDを作成／GETTIMEを用い疑似的なIDとする
+		;周回するとIDが変わる
+		GETTIME
+		セーブデータID = RESULT
+		CALL EVENT_93_大場なな_初日판정
+		;---- EDIT 023 ADD END ---------------------------
+			ENDIF
+	;---- EDIT 031 ADD END ---------------------------
+ENDIF
+
+;---- EDIT 032 ADD END ---------------------------
+
+
 SIF FLAG:20501 < 100
 	FLAG:20501 = 100
 SIF FLAG:21001 < 1
@@ -3731,6 +3849,19 @@ SIF FLAG:20951 < 1
 ;引っかかる人は居ないと思うけど罠。
 ITEM:벼랑끝분말 += 1
 
+;한글판 개조 XCOM2 : War of the Chosen 엔딩을 인계하고 있다면?
+IF GETBIT(FLAG:発見ED,23)
+	PRINTL
+	PRINTL ＞엘더를 무너뜨리고 지구를 해방한 그대.
+	PRINTW 그대에게 선택된 자들의 무기 5종과 사이오닉 리피터를 지급합니다.
+	ITEM:카타나 += 1
+	ITEM:아라시 += 1
+	ITEM:검은창 += 1
+	ITEM:검은손톱 += 1
+	ITEM:교란용소총 += 1
+	ITEM:사이오닉리피터 += 1
+ENDIF
+;한글판 개조 XCOM2 끝
 
 @OPENING_MESSAGE_0
 IF TALENT:MASTER:서머너 || TALENT:MASTER:페르소나구사자 || TALENT:MASTER:이능자 || TALENT:MASTER:식노 || TALENT:MASTER:달인 || TALENT:MASTER:데빌시프터
@@ -3857,20 +3988,35 @@ IF TALENT:MASTER:서머너 || TALENT:MASTER:페르소나구사자 || TALENT:MAST
 	;---- EDIT 006 ADD END ---------------------------
 
 ELSEIF CFLAG:MASTER:당신の専攻分野  == 7
-	IF RAND:2 == 0
-		PRINTFORMW ＞%조사처리(CALLNAME:MASTER,"는")% 데빌 헌터로 활동하고 있었지만
-		;PRINTFORMW ＞어떤 사건을 맡은 도중、사무소와 그 주위 수백 m가 이계화 하는 사건에 휘말려
-		;PRINTFORMW ＞사무실을 포함한 모든 건조물이 분리·붕괴하며 성공적인 폐허를 만들어 내는 결과가 된다
-		PRINTFORMW ＞황당한 수준의 빚을 떠안고 말았다.
-		PRINTFORMW ＞그럴 때, 데빌 헌터로서의 실력이 주목받은 %조사처리(CALLNAME:MASTER,"는")%
-		PRINTFORMW ＞빚을 전액 대신 갚아주는 반대급부로 팬텀 소사이어티에 고용되었다.
-		PRINTFORMW 　…………
-		PRINTFORMW 　……
-		PRINTFORMW 　…
-		PRINTFORMW 
-		PRINTFORMW ＞팬텀 소사이어티에 임시 고용 구성원이 된 %CALLNAME:MASTER%에게 세이프 하우스를 겸한 사무소가 마련되었다
-		PRINTFORMW ＞오늘부터 이곳이 %CALLNAME:MASTER%의 거점이 된다
-		PRINTFORMW ＞ 임시 고용이라고는 해도 %CALLNAME:MASTER%의 직속 상사가 된 마요네는 이렇게 말했다.
+	IF GETBIT(FLAG:発見ED2,2)
+		IF RAND:2 == 0
+			PRINTFORMW ＞%조사처리(CALLNAME:MASTER,"는")% 데빌 헌터로 활동하고 있었지만
+			;PRINTFORMW ＞어떤 사건을 맡은 도중、사무소와 그 주위 수백 m가 이계화 하는 사건에 휘말려
+			;PRINTFORMW ＞사무실을 포함한 모든 건조물이 분리·붕괴하며 성공적인 폐허를 만들어 내는 결과가 된다
+			PRINTFORMW ＞황당한 수준의 빚을 떠안고 말았다.
+			PRINTFORMW ＞그럴 때, 데빌 헌터로서의 실력이 주목받은 %조사처리(CALLNAME:MASTER,"는")%
+			PRINTFORMW ＞빚을 전액 대신 갚아주는 반대급부로 팬텀 소사이어티에 고용되었다.
+			PRINTFORMW 　…………
+			PRINTFORMW 　……
+			PRINTFORMW 　…
+			PRINTFORMW 
+			PRINTFORMW ＞팬텀 소사이어티에 임시 고용 구성원이 된 %CALLNAME:MASTER%에게 세이프 하우스를 겸한 사무소가 마련되었다
+			PRINTFORMW ＞오늘부터 이곳이 %CALLNAME:MASTER%의 거점이 된다
+			PRINTFORMW ＞ 임시 고용이라고는 해도 %CALLNAME:MASTER%의 직속 상사가 된 마요네는 이렇게 말했다.
+		ELSE
+			PRINTFORMW ＞악마 사냥꾼 단테와도 함께하여 부활한 마레트 섬을 다시 공략한 것으로 평가받는 데빌 헌터
+			PRINTFORMW ＞하지만 그 평판이 화가 되어, 많은 트러블을 거쳐 고액의 빚을 안게 되어 버린다.
+			PRINTFORMW ＞팬텀 소사이어티에 빚을 전액 대신 갚아, 자유로운 몸에서 일전 고용된다.
+			PRINTFORMW ＞악마사냥꾼들과의 인연도 이어지고, 앞으로도 질리지 않을 인생이 되리라는 예감을 되새기며
+			PRINTFORMW ＞%조사처리(CALLNAME:MASTER,"는")% 올리브가 빠진 피자를 한 손에 들고 새로운 사무소에 【Devil May Cry】의 간판을 걸고 문을 통과했다
+			PRINTFORMW 　…………
+			PRINTFORMW 　……
+			PRINTFORMW 　…
+			PRINTFORMW 
+			PRINTFORMW ＞%CALLNAME:MASTER%의 직속 상사 마요네가 사무소를 방문했다
+			PRINTFORMW ＞인사차 프리로서 움직이고 있던 자신에게 조직원으로서의 마음가짐을 말해 주는 것 같다
+			PRINTFORMW ＞순간 걔네 없을 때 와줘서 좋았어라는 생각이 머리를 스쳤다‥‥‥
+		ENDIF
 		PRINTL
 		PRINTFORMW 「이로써 당신은 팬텀의 구성원이 된 노릇인데」
 		PRINTFORMW 「우선은 돈을 버는 걸 목표로 해야 되겠지」
@@ -4091,10 +4237,10 @@ IF CFLAG:MASTER:童貞 == 2
 ELSE
 	PRINTW 「돈을 가득 모아야 한다니 힘들지도 모르겠지만」
 ENDIF
-	PRINTFORMW 「\@IS_LOOKSLIKE_MALE(MASTER) ? 누나 # 언니 \@가 도와줄 테니 꼭 괜찮을 거야」
-	PRINTW 「함께 힘내자!」
-	PRINTW ＞작은 동료마는 방긋 미소지었다.
-	PRINTL
+PRINTFORMW 「\@IS_LOOKSLIKE_MALE(MASTER) ? 누나 # 언니 \@가 도와줄 테니 꼭 괜찮을 거야」
+PRINTW 「함께 힘내자!」
+PRINTW ＞작은 동료마는 방긋 미소지었다.
+PRINTL
 
 ; 幹部エンド迎えてるなら幹部候補あつかいOP
 IF GETBIT(FLAG:発見ED,0)
@@ -4126,7 +4272,7 @@ ENDIF
 
 
 @OPENING_MESSAGE_1
-IF TALENT:MASTER:서머너 || TALENT:MASTER:페르소나구사자 || TALENT:MASTER:이능자 || TALENT:MASTER:식노 || TALENT:MASTER:달인 || TALENT:MASTER:데빌시프터
+IF TALENT:MASTER:서머너 || TALENT:MASTER:페르소나구사자 || TALENT:MASTER:이능자 || TALENT:MASTER:식노 || TALENT:MASTER:달인 || TALENT:MASTER:데빌시프터 || CFLAG:MASTER:당신の専攻分野  == 8
 	;---- EDIT 006 ADD START -------------------------
 	CALL PRESENT_SLAVE,0
 	;---- EDIT 006 ADD END ---------------------------
@@ -4194,9 +4340,9 @@ IF STRFLAG_NUM_CPD_FIND("NO", NO:(RESULT:1)) > -1
 		ENDIF
 	ELSE
 		IF TALENT:MASTER:남자 == 0 || TALENT:MASTER:오토코노코
-			CSTR:(RESULT:1):二人称 = %CALLNAME:MASTER%ちゃん
+			CSTR:(RESULT:1):二人称 = %CALLNAME:MASTER%짱
 		ELSE
-			CSTR:(RESULT:1):二人称 = %CALLNAME:MASTER%くん
+			CSTR:(RESULT:1):二人称 = %CALLNAME:MASTER%군
 		ENDIF
 		;경험豊富な픽시の場合
 		IF CFLAG:MASTER:童貞 == 2
@@ -4235,9 +4381,9 @@ IF STRFLAG_NUM_CPD_FIND("NO", NO:(RESULT:1)) > -1
 ELSE
 	IF CFLAG:MASTER:童貞 == 2
 		IF TALENT:MASTER:남자 == 0 || TALENT:MASTER:오토코노코
-			CSTR:(RESULT:1):二人称 = %CALLNAME:MASTER%ちゃん
+			CSTR:(RESULT:1):二人称 = %CALLNAME:MASTER%짱
 		ELSE
-			CSTR:(RESULT:1):二人称 = %CALLNAME:MASTER%くん
+			CSTR:(RESULT:1):二人称 = %CALLNAME:MASTER%군
 		ENDIF
 		TALENT:(RESULT:1):처녀 = 0
 		ABL:(RESULT:1):순종 = 2
@@ -4338,18 +4484,20 @@ ELSEIF ITEM:여우가면
 		PRINTL 
 		PRINTW ＞여우가면은 사라졌습니다
 		CALL ADD_NEW_COMPANION,[[キャラ:체페이(꼬리두개)]],200,1
-		BASE:(CHARANUM-1):LV = 5
-		BASE:(CHARANUM-1):힘 = 1
-		BASE:(CHARANUM-1):지혜 = 3
-		BASE:(CHARANUM-1):마력 = 4
-		BASE:(CHARANUM-1):인내력 = 4
-		BASE:(CHARANUM-1):속도 = 6
-		BASE:(CHARANUM-1):운 = 7
-		BASE:(CHARANUM-1):ＥＸＰ = 200
-		ABL:(CHARANUM-1):스킬4 = 1001
-		ABL:(CHARANUM-1):스킬5 = 401
-		CALL SYNC_STATUS,(GETCHARA(810))
-		CALL HEALTH_CHARA,(GETCHARA(810))
+		IF RESULT == 1
+			BASE:(CHARANUM-1):LV = 5
+			BASE:(CHARANUM-1):힘 = 1
+			BASE:(CHARANUM-1):지혜 = 3
+			BASE:(CHARANUM-1):마력 = 4
+			BASE:(CHARANUM-1):인내력 = 4
+			BASE:(CHARANUM-1):속도 = 6
+			BASE:(CHARANUM-1):운 = 7
+			BASE:(CHARANUM-1):ＥＸＰ = 200
+			ABL:(CHARANUM-1):스킬4 = 1001
+			ABL:(CHARANUM-1):스킬5 = 401
+			CALL SYNC_STATUS,(GETCHARA(810))
+			CALL HEALTH_CHARA,(GETCHARA(810))
+		ENDIF
 		FLAG:10810 = 1
 		ITEM:여우가면 = 0
 	ENDIF

@@ -12,13 +12,13 @@ RETURN 100
 ;　위력
 @SKILL_POWER_2971, ARG
 IF ARG == -1
- RETURN 300
+ RETURN 100
 ENDIF
 
 IF 現HP割合(ARG) < 33
-	RETURN 450
+	RETURN 150
 ELSE
-	RETURN 300
+	RETURN 100
 ENDIF
 
 ;　최저공격횟수
@@ -36,7 +36,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_2971,ARG
-RETURN 40
+RETURN 50
 
 ;　相性
 @SKILL_TYPE_2971,ARG
@@ -44,13 +44,13 @@ RETURN 11
 ;주살
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2971
+@SKILL_DECIDE_TYPE_2971, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2971
-RETURN 1
+@SKILL_DAMAGETYPE_2971, ARG
+RETURN 2
 
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -93,7 +93,7 @@ RETURN 0
 
 ;스킬변화？用랭크
 @SKILL_RANK_2971
-RETURN 0
+RETURN 23
 
 ;テン플레이트用、추가효과シリーズ
 ;추가효과스테이터스
@@ -145,7 +145,7 @@ CFLAG:ARG:ターゲット = CFLAG:ARG:포지션 < 7 ? 22 # 19
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2971
-PRINTL 적 아군 전체에 주살相性의 데미지를 주고、MP를 삭감한다
+PRINTL 적 아군 전체에 주살 상성의 데미지를 주고、MP를 삭감한다
 
 ;継承に필요한部位
 @継承部位_2971,ARG

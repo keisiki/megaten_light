@@ -496,7 +496,7 @@ CFLAG:ARG:ターゲット = -1
 SIF CFLAG:ARG:行動した횟수 == 0 && CFLAG:ARG:１moreフラグ == 0
 	CFLAG:ARG:行動횟수 = 2
 ;1more時
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	CFLAG:ARG:입력行動 = [[스킬:메기도]]
 ELSEIF CFLAG:ARG:行動した횟수 == 0
 	CFLAG:ARG:입력行動 = [[스킬:마카라칸]]

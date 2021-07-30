@@ -66,4 +66,238 @@ NEXT
 DRAWLINE
 RETURN
 
+;=================================================================================
+;マガタマによる레벨업時能力値ボーナス
+;=================================================================================
+@LVUP_BOOSTER_MAGATAMA,ARG,ARG:1
+
+;인수라이외は무효
+SIF TALENT:ARG:인수라 == 0
+	RETURN
+
+FOR LOCAL,0,ARG:1
+	;장비してる勾玉ごとに、내성が강화
+	SELECTCASE EQUIP:ARG:(GET_EQUIP(6))
+		;下位マガタマ(上限・물리75/속성50)
+		CASE 8200
+			;マロガレの場合
+			;隠し成長扱い。即死내성50まで成長する
+			IF BASE:ARG:DYING > -50
+				BASE:ARG:DYING = BASE:ARG:DYING - 5
+				;上限を超えた場合は上限に再설정
+				SIF BASE:ARG:DYING <= -50
+					BASE:ARG:DYING = -50
+			ENDIF
+		CASE 8201
+			;ワダツミの場合
+			IF BASE:ARG:빙결 > 50
+				BASE:ARG:빙결 = BASE:ARG:빙결 - 5
+				SIF BASE:ARG:빙결 <= 50
+					BASE:ARG:빙결 = 50
+			ENDIF
+		CASE 8202
+			;アンクの場合
+			IF BASE:ARG:파마 > 50
+				BASE:ARG:파마 = BASE:ARG:파마 - 5
+				SIF BASE:ARG:파마 <= 50
+					BASE:ARG:파마 = 50
+			ENDIF
+		CASE 8203
+			;イヨマンテの場合
+			IF BASE:ARG:정신 > 50
+				BASE:ARG:정신 = BASE:ARG:정신 - 5
+				SIF BASE:ARG:정신 <= 50
+					BASE:ARG:정신 = 50
+			ENDIF
+		CASE 8204
+			;シラヌイの場合
+			IF BASE:ARG:화염 > 50
+				BASE:ARG:화염 = BASE:ARG:화염 - 5
+				SIF BASE:ARG:화염 <= 50
+					BASE:ARG:화염 = 50
+			ENDIF
+		CASE 8205
+			;ヒ후미の場合
+			IF BASE:ARG:충격 > 50
+				BASE:ARG:충격 = BASE:ARG:충격 - 5
+				SIF BASE:ARG:충격 <= 50
+					BASE:ARG:충격 = 50
+			ENDIF
+		CASE 8206
+			;カ무도の場合
+			IF BASE:ARG:검격 > 75
+				BASE:ARG:검격 = BASE:ARG:검격 - 5
+				SIF BASE:ARG:검격 <= 75
+					BASE:ARG:검격 = 75
+			ENDIF
+			IF BASE:ARG:타격 > 75
+				BASE:ARG:타격 = BASE:ARG:타격 - 5
+				SIF BASE:ARG:타격 <= 75
+					BASE:ARG:타격 = 75
+			ENDIF
+		CASE 8207
+			;루나카미の場合
+			IF BASE:ARG:전격 > 50
+				BASE:ARG:전격 = BASE:ARG:전격 - 5
+				SIF BASE:ARG:전격 <= 50
+					BASE:ARG:전격 = 50
+			ENDIF
+		;中位マガタマ(上限・물리50/속성25)
+		CASE 8208
+			;アナテマの場合
+			IF BASE:ARG:주살 > 25
+				BASE:ARG:주살 = BASE:ARG:주살 - 5
+				SIF BASE:ARG:주살 <= 25
+					BASE:ARG:주살 = 25
+			ENDIF
+		CASE 8209
+			;ミアズマの場合
+			IF BASE:ARG:빙결 > 25
+				BASE:ARG:빙결 = BASE:ARG:빙결 - 5
+				SIF BASE:ARG:빙결 <= 25
+					BASE:ARG:빙결 = 25
+			ENDIF
+		CASE 8210
+			;열반の場合
+			IF BASE:ARG:파마 > 25
+				BASE:ARG:파마 = BASE:ARG:파마 - 5
+				SIF BASE:ARG:파마 <= 25
+					BASE:ARG:파마 = 25
+			ENDIF
+		CASE 8211
+			;ムラクモの場合
+			IF BASE:ARG:비구 > 50
+				BASE:ARG:비구 = BASE:ARG:비구 - 5
+				SIF BASE:ARG:비구 <= 50
+					BASE:ARG:비구 = 50
+			ENDIF
+			IF BASE:ARG:전술 > 50
+				BASE:ARG:전술 = BASE:ARG:전술 - 5
+				SIF BASE:ARG:전술 <= 50
+					BASE:ARG:전술 = 50
+			ENDIF
+		CASE 8212
+			;ゲッシュの場合
+			;アンクより成長率高い
+			IF BASE:ARG:파마 > 25
+				BASE:ARG:파마 = BASE:ARG:파마 - 10
+				SIF BASE:ARG:파마 <= 25
+					BASE:ARG:파마 = 25
+			ENDIF
+		CASE 8213
+			;ジェドの場合
+			IF BASE:ARG:신경 > 25
+				BASE:ARG:신경 = BASE:ARG:신경 - 5
+				SIF BASE:ARG:신경 <= 25
+					BASE:ARG:신경 = 25
+			ENDIF
+		CASE 8214
+			;ムスペルの場合
+			IF BASE:ARG:신경 > 25
+				BASE:ARG:신경 = BASE:ARG:신경 - 5
+				SIF BASE:ARG:신경 <= 25
+					BASE:ARG:신경 = 25
+			ENDIF
+			IF BASE:ARG:정신 > 25
+				BASE:ARG:정신 = BASE:ARG:정신 - 5
+				SIF BASE:ARG:정신 <= 25
+					BASE:ARG:정신 = 25
+			ENDIF
+		;上位マガタマ(上限・물리25/속성0)
+		CASE 8215
+			;ゲヘナの場合
+			IF BASE:ARG:화염 > 0
+				BASE:ARG:화염 = BASE:ARG:화염 - 10
+				SIF BASE:ARG:화염 <= 0
+					BASE:ARG:화염 = 0
+			ENDIF
+		CASE 8216
+			;カムロギの場合
+			IF BASE:ARG:검격 > 25
+				BASE:ARG:검격 = BASE:ARG:검격 - 5
+				SIF BASE:ARG:검격 <= 25
+					BASE:ARG:검격 = 25
+			ENDIF
+			IF BASE:ARG:비구 > 25
+				BASE:ARG:비구 = BASE:ARG:비구 - 5
+				SIF BASE:ARG:비구 <= 25
+					BASE:ARG:비구 = 25
+			ENDIF
+			IF BASE:ARG:타격 > 25
+				BASE:ARG:타격 = BASE:ARG:타격 - 5
+				SIF BASE:ARG:타격 <= 25
+					BASE:ARG:타격 = 25
+			ENDIF
+			IF BASE:ARG:전술 > 25
+				BASE:ARG:전술 = BASE:ARG:전술 - 5
+				SIF BASE:ARG:전술 <= 25
+					BASE:ARG:전술 = 25
+			ENDIF
+		CASE 8217
+			;사탄の場合
+			;アナテマより成長率高い
+			IF BASE:ARG:주살 > 0
+				BASE:ARG:주살 = BASE:ARG:주살 - 10
+				SIF BASE:ARG:주살 <= 0
+					BASE:ARG:주살 = 0
+			ENDIF
+		CASE 8218
+			;アダマの場合
+			IF BASE:ARG:전격 > 0
+				BASE:ARG:전격 = BASE:ARG:전격 - 10
+				SIF BASE:ARG:전격 <= 0
+					BASE:ARG:전격 = 0
+			ENDIF
+		CASE 8219
+			;ヴィマーナの場合
+			IF BASE:ARG:신경 > 0
+				BASE:ARG:신경 = BASE:ARG:신경 - 10
+				SIF BASE:ARG:신경 <= 0
+					BASE:ARG:신경 = 0
+			ENDIF
+		CASE 8220
+			;グンダリの場合
+			IF BASE:ARG:충격 > 0
+				BASE:ARG:충격 = BASE:ARG:충격 - 10
+				SIF BASE:ARG:충격 <= 0
+					BASE:ARG:충격 = 0
+			ENDIF
+		CASE 8221
+			;소피아の場合
+			IF BASE:ARG:파마 > 0
+				BASE:ARG:파마 = BASE:ARG:파마 - 10
+				SIF BASE:ARG:파마 <= 0
+					BASE:ARG:파마 = 0
+			ENDIF
+		CASE 8222
+			;가이아の場合
+			IF BASE:ARG:타격 > 25
+				BASE:ARG:타격 = BASE:ARG:타격 - 10
+				SIF BASE:ARG:타격 <= 25
+					BASE:ARG:타격 = 25
+			ENDIF
+			IF BASE:ARG:전술 > 0
+				BASE:ARG:전술 = BASE:ARG:전술 - 10
+				SIF BASE:ARG:전술 <= 25
+					BASE:ARG:전술 = 25
+			ENDIF
+		CASE 8223
+			;カイ라スの場合
+			IF BASE:ARG:DYING > -100
+				BASE:ARG:DYING = BASE:ARG:DYING - 10
+				SIF BASE:ARG:DYING <= -100
+					BASE:ARG:DYING = -100
+			ENDIF
+		CASE 8224
+			;마사카도ゥスの場合
+			;만능내성75まで成長する
+			IF BASE:ARG:만능 > 75
+				BASE:ARG:만능 = BASE:ARG:만능 - 5
+				SIF BASE:ARG:만능 <= 75
+					BASE:ARG:만능 = 75
+			ENDIF
+		CASEELSE
+			;マガタマ이외は강화されない
+	ENDSELECT
+NEXT
 

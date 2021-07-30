@@ -1,26 +1,54 @@
-﻿;乱交라이브
+﻿;乱交ライブ
+;=============================================================================
 ;奴隷をステージで歌わせて観客に襲わせます
-;客の数だけ収益が上がるため、욕망などが重要視されます
+;客の数だけ収益が上がるため、欲望などが重要視されます
+;
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;	Modification Data:
+;
+;	Edit	Date		Author	Reason
+;	001		20XX/XX/XX	----	新規作成　※Edit010より前は未整備です
+;	00x		2011/02/03	????	実行のY/N
+;	00x		2021/02/09	????	乱交ライブでMAG・EXP取得
+;	010		2021/05/28	ういろ	βver:乱交ライブ参加「あなた」参加の復活。制限箇所を一時的にコメントアウト。※制限の理由は何だったんろう？
+;	011		2021/05/28	ういろ	βver:乱交ライブ撮影制限緩和。カメラ向けるだけなら誰でも可能な為、特定の性格以外、촬영기능=0、売却不可でも可能にした。
+;===================================================
+
 @CASTING_SEX_LIVE(ARG)
-SIF ARG == MASTER
-	RETURN 0
+;「あなた」制限を解除(Edit:010)
+;SIF ARG == MASTER
+;	RETURN 0
+
 SIF CFLAG:ARG:노역フラグ > 0
 	RETURN 0
+
 SIF CFLAG:ARG:この場に居ないフラグ == 1
 	RETURN 0
-SIF ARG != MASTER && !(TALENT:ARG:음란 || TALENT:ARG:창부)
+
+;「あなた」制限を解除(Edit:010)
+;SIF ARG != MASTER && !(TALENT:ARG:음란 || TALENT:ARG:창부)
+SIF !(TALENT:ARG:음란 || TALENT:ARG:창부)
 	RETURN 0
-SIF CFLAG:ARG:매각가능 < 2
+
+;「あなた」制限を解除(Edit:010)
+;SIF CFLAG:ARG:매각가능 < 2
+SIF ARG != MASTER && CFLAG:ARG:매각가능 < 2
 	RETURN 0
+
 SIF BASE:ARG:체력 < 800
 	RETURN 0
+	
 RETURN 1
 
 @CASTING_Photographer(ARG)
+
+;「あなた」制限を解除(Edit:010)
 ;SIF ARG == MASTER
 ;	RETURN 0
+
 SIF CFLAG:ARG:노역フラグ > 0
 	RETURN 0
+
 SIF CFLAG:ARG:この場に居ないフラグ == 1
 	RETURN 0
 SIF CFLAG:ARG:매각가능 < 2 && ARG != MASTER
@@ -45,6 +73,7 @@ SELECTCASE ARG
 		RETURN ARG , 0
 ENDSELECT
 RETURN ARG , 1
+
 @Do_not_shoot, ARG
 SELECTCASE ARG
 	CASE -1
@@ -53,12 +82,14 @@ SELECTCASE ARG
 		RETURN ARG , 0
 ENDSELECT
 RETURN ARG , 1
+
 @PROMISCUOUS_SEX_LIVE
 ;#DIM LCOUNT
 #DIM 出演者
 #DIM 촬영者 = -1
 #DIM 総行為数
 #DIM 報酬
+#DIM EXP計算用
 
 $PRINT_LIST
 ;사용する一時変数の초기化
@@ -90,6 +121,7 @@ Z = 0
 ;乱交라이브で歌う奴隷を選択
 ;PRINTL 乱交라이브を行う奴隷を選択してください
 CALL INPUT_CHARA_LIST("난교 라이브를 실시할 노예를 선택해 주세요", "CASTING_SEX_LIVE", "", "", "MODECHANGE_SEX_LIVE")
+
 IF RESULT == 1000
 	RETURN 0
 ELSEIF RESULT == 999
@@ -117,6 +149,7 @@ ENDIF
 ;PRINTL [100] - 戻る
 ;$INPUT_LOOP_2
 ;INPUT
+
 IF RESULT == 1000
 	RETURN 0
 ;ELSEIF RESULT < 0 || RESULT >= CHARANUM
@@ -132,6 +165,7 @@ IF RESULT == 1000
 ;ELSE
 ;	A = RESULT
 ENDIF
+
 	出演者 = RESULT
 ;	PRINTFORML 出演者は%CALLNAME:出演者%です
 
@@ -167,8 +201,10 @@ ENDIF
 ;라이브촬영옵션
 $INPUT_LOOP_4
 촬영者 = -1
+
 IF (ITEM:비디오카메라 > 0 && ITEM:비디오테이프 > 0) || NOITEM != 0
 	CALL INPUT_CHARA_LIST("난교라이브를 촬영할 사람을 선택해 주세요", "CASTING_Photographer", "", "", "Do_not_shoot")
+
 ;	PRINTL 乱交라이브を촬영する者を選択してください
 ;	PRINTFORML [0] - %CALLNAME:MASTER%
 ;	FOR LCOUNT, 0, CHARANUM
@@ -195,6 +231,7 @@ IF (ITEM:비디오카메라 > 0 && ITEM:비디오테이프 > 0) || NOITEM != 0
 ;		PRINTFORML 촬영者は%CALLNAME:MASTER%です
 ;		PRINTFORML 라이브촬영 +{V}％
 ;		PRINTL 
+
 	IF RESULT == 1000
 		GOTO PRINT_LIST
 	ELSEIF RESULT == 999
@@ -215,6 +252,7 @@ PRINTFORML 출연자：%CALLNAME:出演者%
 IF 촬영者 > -1
 	PRINTFORML 촬영자：%CALLNAME:촬영者%
 ENDIF
+
 ;行為内容の算出。避妊処理はしないものの、バランスを取るために창관から流用
 ;ABL:순종をみる
 IF ABL:出演者:순종 == 0
@@ -241,7 +279,7 @@ ELSE
 	P = 12
 ENDIF
 SIF P > 0
-	PRINTFORML 순종{ABL:出演者:순종}LV 行為数+{P}
+	PRINTFORML 순종{ABL:出演者:순종}LV 행위수+{P}
 総行為数 += P
 
 ;ABL:욕망をみる
@@ -269,7 +307,7 @@ ELSE
 	P = 20
 ENDIF
 SIF P > 0
-	PRINTFORML 욕망{ABL:出演者:욕망}LV 行為数+{P}
+	PRINTFORML 욕망{ABL:出演者:욕망}LV 행위수+{P}
 総行為数 += P
 
 
@@ -298,7 +336,7 @@ ELSE
 	P = 6
 ENDIF
 SIF P > 0
-	PRINTFORML Ｖ감각{ABL:出演者:Ｖ감각}LV 行為数+{P}
+	PRINTFORML Ｖ감각{ABL:出演者:Ｖ감각}LV 행위수+{P}
 総行為数 += P
 
 
@@ -327,7 +365,7 @@ ELSE
 	P = 6
 ENDIF
 SIF P > 0
-	PRINTFORML Ａ감각{ABL:出演者:Ａ감각}LV 行為数+{P}
+	PRINTFORML Ａ감각{ABL:出演者:Ａ감각}LV 행위수+{P}
 総行為数 += P
 
 
@@ -356,7 +394,7 @@ ELSE
 	P = 12
 ENDIF
 SIF P > 0
-	PRINTFORML 봉사정신{ABL:出演者:봉사정신}LV 行為数+{P}
+	PRINTFORML 봉사정신{ABL:出演者:봉사정신}LV 행위수+{P}
 総行為数 += P
 
 
@@ -385,7 +423,7 @@ ELSE
 	P = 6
 ENDIF
 SIF P > 0
-	PRINTFORML 레즈끼{ABL:出演者:레즈끼}LV 行為数+{P}
+	PRINTFORML 레즈끼{ABL:出演者:레즈끼}LV 행위수+{P}
 総行為数 += P
 
 
@@ -414,7 +452,7 @@ ELSE
 	P = 12
 ENDIF
 SIF P > 0
-	PRINTFORML 정액중독{ABL:出演者:정액중독}LV 行為数+{P}
+	PRINTFORML 정액중독{ABL:出演者:정액중독}LV 행위수+{P}
 総行為数 += P
 
 ;ABL:레즈중독をみる
@@ -442,7 +480,7 @@ ELSE
 	P = 12
 ENDIF
 SIF P > 0
-	PRINTFORML 레즈중독{ABL:出演者:레즈중독}LV 行為数+{P}
+	PRINTFORML 레즈중독{ABL:出演者:레즈중독}LV 행위수+{P}
 総行為数 += P
 
 
@@ -471,7 +509,7 @@ ELSE
 	P = 12
 ENDIF
 SIF P > 0
-	PRINTFORML 섹스중독{ABL:出演者:섹스중독}LV 行為数+{P}
+	PRINTFORML 섹스중독{ABL:出演者:섹스중독}LV 행위수+{P}
 総行為数 += P
 
 
@@ -500,7 +538,7 @@ ELSE
 	P = 6
 ENDIF
 SIF P > 0
-	PRINTFORML ＢＬ끼{ABL:出演者:ＢＬ끼}LV 行為数+{P}
+	PRINTFORML ＢＬ끼{ABL:出演者:ＢＬ끼}LV 행위수+{P}
 総行為数 += P
 
 ;ABL:ＢＬ중독をみる
@@ -528,7 +566,7 @@ ELSE
 	P = 12
 ENDIF
 SIF P > 0
-	PRINTFORML ＢＬ중독{ABL:出演者:ＢＬ중독}LV 行為数+{P}
+	PRINTFORML ＢＬ중독{ABL:出演者:ＢＬ중독}LV 행위수+{P}
 総行為数 += P
 
 
@@ -552,6 +590,7 @@ IF TALENT:出演者:재생처녀
 	V += 20
 	PRINTFORML %TALENTNAME:1% ＋{F}％
 ENDIF
+
 ;素質による増減
 ;함락素質
 ;연모
@@ -967,10 +1006,31 @@ IF TALENT:出演者:거유
 	PRINTFORML %TALENTNAME:111% ＋{F}％
 ENDIF
 ;폭유
-IF TALENT:出演者:폭유
+IF TALENT:出演者:폭유 || TALENT:出演者:魔乳
 	F = 10
 	V += 10
 	PRINTFORML %TALENTNAME:112% ＋{F}％
+ENDIF
+;남자でないなら有効
+IF !TALENT:出演者:남자
+	;小尻
+	IF TALENT:出演者:小尻
+		F = 10
+		V -= 10
+		PRINTFORML %TALENTNAME:121% －{F}％
+	ENDIF
+	;巨尻
+	IF TALENT:出演者:巨尻
+		F = 20
+		V += 20
+		PRINTFORML %TALENTNAME:123% ＋{F}％
+	ENDIF
+	;爆尻
+	IF TALENT:出演者:爆尻
+		F = 10
+		V += 10
+		PRINTFORML %TALENTNAME:124% ＋{F}％
+	ENDIF
 ENDIF
 ;회복빠름
 IF TALENT:出演者:회복빠름
@@ -1045,6 +1105,9 @@ SIF V <= 0
 	V = 1
 
 PRINTFORML 최종배율 {V}％
+EXP計算用 = V
+SIF 촬영者 > -1
+	EXP計算用 -= 150+ABL:촬영者:촬영기능*10
 
 ;보정値の適用
 報酬 *= V
@@ -1076,6 +1139,7 @@ ELSE
 	RETURN 0
 ENDIF
 PRINTFORML %CALLNAME:A%의 난교 라이브를 실행하겠습니까?
+
 ;---- EDIT INPUT_YN추가対応(2011/02/03) MOD START -------------------------
 CALL INPUT_YN,"실행한다","그만둔다"
 IF RESULT == 1
@@ -1093,8 +1157,8 @@ IF J > 0 && CFLAG:出演者:자궁내피임결계 == 0
 	CFLAG:出演者:자궁내피임결계 = 1
 ENDIF
 
-
 PRINTFORML %CALLNAME:A%의 난교 라이브를 실시했습니다
+
 
 ;이벤트구상呼び出し
 U = 0
@@ -1113,8 +1177,10 @@ TFLAG:13 = 21
 CFLAG:被조교횟수 += 1
 CALL KOJO_MESSAGE_EVENT
 TARGET = T
+
 SIF U
 	ASSI = 出演者
+
 ;奴隷の경험、능력処理
 IF ABL:出演者:가창기능 == 0
 	R = 8
@@ -1216,11 +1282,11 @@ SIF ABL:出演者:마조끼 >= ABL:出演者:새드끼
 JUEL:出演者:부정 += (E+F+G)*100/(ABL:出演者:순종) + (CFLAG:出演者:스트레스치)*10
 
 IF 촬영者 >= 0
-	PRINTFORML %CALLNAME:촬영者%の촬영경험＋１０
+	PRINTFORML %CALLNAME:촬영者%의 촬영경험＋１０
 	EXP:촬영者:촬영경험 += 10
 ENDIF
 
-PRINTFORML 【%CALLNAME:出演者%の経験と珠】
+PRINTFORML 【%CALLNAME:出演者%의 경험과 구슬】
 
 ;経験표시は一括で行う
 ;Ｖ경험
@@ -1274,6 +1340,30 @@ SIF ABL:出演者:마조끼 >= ABL:出演者:새드끼
 ;스트레스で부정少量増加
 ;PRINTFORML %PALAMNAME:100%의 구슬＋{(E+F+G)*100/ABL:出演者:순종}
 PRINTFORML %PALAMNAME:100%의 구슬＋{(E+F+G)*100/(ABL:出演者:순종) + (CFLAG:出演者:스트레스치)*10}
+
+;子宮現在容量加算
+IF TALENT:出演者:오토코노코
+	CFLAG:(出演者):子宮現在容量 += F * 10
+ELSEIF !IS_MALE(出演者)
+	CFLAG:(出演者):子宮現在容量 += E * 10
+ENDIF
+
+;-------- EDIT 乱交ライブでMAG・EXP取得(2021/02/09) MOD START ----------------------
+;計算式は娼館のを流用
+;MAG加算（娼館と異なり奉仕系プレイを行わないので得られる量は減らし、体力が0を下回っても気絶しなかったので0.6倍化してみる）
+;娼館のように体力減少計算にLOSEBASE使っても同じだった
+IF E + F > 0
+	PRINTFORML ＭＡＧ＋{((E * 2 + F * 2) * MAXBASE:出演者:LV) * (1 + (出演者 == MASTER) * 4 + MAX(TALENT:出演者:영매체질 * 9 - !TALENT:出演者:비전투원 * 5, 0)) / 10 * 3 / 5}
+	CALL CONTROL_MAG, 出演者, ((E * 2 + F * 2) * MAXBASE:出演者:LV) * (1 + (出演者 == MASTER) * 4 + MAX(TALENT:出演者:영매체질 * 9 - !TALENT:出演者:비전투원 * 5, 0)) / 10 * 3 / 5
+ENDIF
+;経験値加算（当然非戦闘員のみ、同上の理由から0.6倍）
+IF TALENT:出演者:비전투원
+	PRINTFORML ＥＸＰ＋{EXP計算用 * (100 + 総行為数) / 100 * (1 + BASE:出演者:LV / 5) * 3 / 5}
+	BASE:出演者:ＥＸＰ += EXP計算用 * (100 + 総行為数) / 100 * (1 + BASE:出演者:LV / 5) * 3 / 5
+	;レベルアップ判定
+	CALL CHECK_LEVEL_UP, 出演者
+ENDIF
+;-------- EDIT 乱交ライブでMAG・EXP取得(2021/02/09) MOD END ------------------------
 
 ;最後に金額の加算
 PRINTFORMW %CALLNAME:出演者%의 난교라이브로￥{報酬}을 얻었습니다

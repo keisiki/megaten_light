@@ -12,7 +12,8 @@
 ;	002		2011/09/08		黒天					처녀(재생처녀)상실処理を関数を呼ぶように수정
 ;													ＮＴＲ이벤트で一部の処理の대상がACTORではなくLOCALになっていたのを수정
 ;	003		2013/11/24		ひみつ					リスト표시数설정
-;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;	004		2020/05/19		がめら					NTR好感度処理をCDFLAGに変更
+;	005		2021/04/27		JK好き					劇場で多胎OP時でも妊娠するように修正
 ;
 ;==========================================================
 ;@MANAGEMENT_STRIP_THEATER
@@ -51,7 +52,7 @@ NEXT
 ;演者がいない場合はここで종료
 IF MATCH(ACT, -1) == 10
 	PRINTFORML 
-	PRINTFORML 本日は休演です
+	PRINTFORML 오늘은 휴연입니다
 	PRINTFORML 유지비 ￥{점포("규모",ARG) * 500}
 	MONEY -= 점포("규모",ARG) * 500
 	PRINTL 
@@ -217,7 +218,7 @@ FOR LOCAL, 0, 점포("규모",ARG)
 		ENDIF
 		DIFFICULTY ++
 	LOOP PLAY_TOTAL < 10
-	
+
 	CALL 帳簿閲覧_노역, ACTOR, GUEST, 0, 5
 
 ;	IF FLAG:ストリップ劇場報告설정
@@ -292,154 +293,154 @@ FOR LOCAL, 0, 점포("규모",ARG)
 	;경험と球추가ここまで
 
 ;ＮＴＲ進行
-IF GETBIT(FLAG:ＮＴＲ기능 , 5)
-	;専有奴隷の개목걸이
-	IF (CFLAG:ACTOR:그외 == 1116 || CFLAG:ACTOR:그외2 == 1116 || CFLAG:ACTOR:그외3 == 1116)
-		GOTO SKIP_NTR
-	ENDIF
-	v = 0
-	SIF TALENT:ACTOR:ＮＴＲ == 2
-		x = 30
-	SIF CFLAG:ACTOR:現ＮＴＲ進行度 > 10
-		x = 30
-	SIF TALENT:ACTOR:10 || TALENT:ACTOR:14 || TALENT:ACTOR:111 || TALENT:ACTOR:112
-		z += 10
-	SIF TALENT:ACTOR:145
-		z += 10
-	y = CFLAG:ACTOR:放置日数
-	SIF y > 20
-		y = 20
-	SIF (CFLAG:ACTOR:그외 == 1117 || CFLAG:ACTOR:그외2 == 1117 || CFLAG:ACTOR:그외3 == 1117)
-		PRINTFORMW %CALLNAME:ACTOR%은(는) 뭐라고 할 수 없는 달콤한 향기를 풍기고 있다……
-
-	IF RAND:2 == 0
-		CFLAG:ACTOR:(2089) +=(ABL:ACTOR:욕망 + ABL:ACTOR:노출증 + ABL:ACTOR:섹스중독 + ABL:ACTOR:자위중독) * (2-CFLAG:ACTOR:構ったフラグ) + CFLAG:ACTOR:放置日数*10
-	ELSE
-		CFLAG:ACTOR:(2088) -=(ABL:ACTOR:욕망 + ABL:ACTOR:노출증 + ABL:ACTOR:섹스중독 + ABL:ACTOR:자위중독) * (2-CFLAG:ACTOR:構ったフラグ) + CFLAG:ACTOR:放置日数*10
-	ENDIF
-	CFLAG:ACTOR:음란度 += GUEST / 2
-	IF RAND:100 < 10 + y + x || RAND:100 < x || (CFLAG:ACTOR:그외 == 1117 || CFLAG:ACTOR:그외2 == 1117 || CFLAG:ACTOR:그외3 == 1117) || TALENT:ACTOR:73 == 1
-		IF TALENT:ACTOR:ＮＴＲ == 2
-			PRINTFORML %CALLNAME:ACTOR%은(는) 양아치들에게 권유를 받았다……
-		ELSE
-			PRINTFORML %CALLNAME:ACTOR%은(는) 극장의 팬에게 권유를 받았다……	
+	IF GETBIT(FLAG:ＮＴＲ기능 , 5)
+		;専有奴隷の개목걸이
+		IF (CFLAG:ACTOR:그외 == 1116 || CFLAG:ACTOR:그외2 == 1116 || CFLAG:ACTOR:그외3 == 1116 || CFLAG:ACTOR:그외4 == 1116 || CFLAG:ACTOR:그외5 == 1116 || CFLAG:ACTOR:그외6 == 1116)
+			GOTO SKIP_NTR
 		ENDIF
-		PRINTFORML ・
-		PRINTFORML ・・
-		PRINTFORMW ・・・
+		v = 0
+		SIF TALENT:ACTOR:ＮＴＲ == 2
+			x = 30
+		SIF CFLAG:ACTOR:現ＮＴＲ進行度 > 10
+			x = 30
+		SIF TALENT:ACTOR:10 || TALENT:ACTOR:14 || TALENT:ACTOR:111 || TALENT:ACTOR:112
+			z += 10
+		SIF TALENT:ACTOR:145
+			z += 10
+		y = CFLAG:ACTOR:放置日数
+		SIF y > 20
+			y = 20
+		SIF (CFLAG:ACTOR:그외 == 1117 || CFLAG:ACTOR:그외2 == 1117 || CFLAG:ACTOR:그외3 == 1117)
+			PRINTFORMW %CALLNAME:ACTOR%은(는) 뭐라고 할 수 없는 달콤한 향기를 풍기고 있다……
 
 		IF RAND:2 == 0
-			CFLAG:ACTOR:(2089) +=(ABL:ACTOR:욕망 + ABL:ACTOR:노출증 + ABL:ACTOR:섹스중독 + ABL:ACTOR:자위중독) * (2-CFLAG:ACTOR:構ったフラグ) + CFLAG:ACTOR:放置日数*10
+			CDFLAG:ACTOR:キャラ間好感度:(89) +=(ABL:ACTOR:욕망 + ABL:ACTOR:노출증 + ABL:ACTOR:섹스중독 + ABL:ACTOR:자위중독) * (2-CFLAG:ACTOR:構ったフラグ) + CFLAG:ACTOR:放置日数*10
 		ELSE
-			CFLAG:ACTOR:(2088) -=(ABL:ACTOR:욕망 + ABL:ACTOR:노출증 + ABL:ACTOR:섹스중독 + ABL:ACTOR:자위중독) * (2-CFLAG:ACTOR:構ったフラグ) + CFLAG:ACTOR:放置日数*10
+			CDFLAG:ACTOR:キャラ間好感度:(88) -=(ABL:ACTOR:욕망 + ABL:ACTOR:노출증 + ABL:ACTOR:섹스중독 + ABL:ACTOR:자위중독) * (2-CFLAG:ACTOR:構ったフラグ) + CFLAG:ACTOR:放置日数*10
 		ENDIF
+		CFLAG:ACTOR:음란度 += GUEST / 2
+		IF RAND:100 < 10 + y + x || RAND:100 < x || (CFLAG:ACTOR:그외 == 1117 || CFLAG:ACTOR:그외2 == 1117 || CFLAG:ACTOR:그외3 == 1117) || TALENT:ACTOR:73 == 1
+			IF TALENT:ACTOR:ＮＴＲ == 2
+				PRINTFORML %CALLNAME:ACTOR%은(는) 양아치들에게 권유를 받았다……
+			ELSE
+				PRINTFORML %CALLNAME:ACTOR%은(는) 극장의 팬에게 권유를 받았다……
+			ENDIF
+			PRINTFORML ・
+			PRINTFORML ・・
+			PRINTFORMW ・・・
+
+			IF RAND:2 == 0
+				CDFLAG:ACTOR:キャラ間好感度:(89) +=(ABL:ACTOR:욕망 + ABL:ACTOR:노출증 + ABL:ACTOR:섹스중독 + ABL:ACTOR:자위중독) * (2-CFLAG:ACTOR:構ったフラグ) + CFLAG:ACTOR:放置日数*10
+			ELSE
+				CDFLAG:ACTOR:キャラ間好感度:(88) -=(ABL:ACTOR:욕망 + ABL:ACTOR:노출증 + ABL:ACTOR:섹스중독 + ABL:ACTOR:자위중독) * (2-CFLAG:ACTOR:構ったフラグ) + CFLAG:ACTOR:放置日数*10
+			ENDIF
 			CFLAG:ACTOR:음란度 += GUEST / 2
 
-		IF RAND:100 < 10 + y + x - 10 || TALENT:ACTOR:ＮＴＲ == 2 || (CFLAG:ACTOR:그외 == 1117 || CFLAG:ACTOR:그외2 == 1117 || CFLAG:ACTOR:그외3 == 1117 || CFLAG:ACTOR:그외4 == 1117 || CFLAG:ACTOR:그외5 == 1117 || CFLAG:ACTOR:그외6 == 1117) || TALENT:ACTOR:73 == 1
+			IF RAND:100 < 10 + y + x - 10 || TALENT:ACTOR:ＮＴＲ == 2 || (CFLAG:ACTOR:그외 == 1117 || CFLAG:ACTOR:그외2 == 1117 || CFLAG:ACTOR:그외3 == 1117) || TALENT:ACTOR:73 == 1
 
-			CFLAG:ACTOR:음란度 +=  CFLAG:ACTOR:現ＮＴＲ進行度 * 10 + EXCITE * 5
+				CFLAG:ACTOR:음란度 +=  CFLAG:ACTOR:現ＮＴＲ進行度 * 10 + EXCITE * 5
 
-			IF CFLAG:ACTOR:淫ＮＴＲ進行度 == 0
-				CFLAG:ACTOR:淫ＮＴＲ進行度 ++
-				PRINTFORMW 흥분한 극장의 팬이 %CALLNAME:ACTOR%을(를)  골목 안으로 데려갔다……
+				IF CFLAG:ACTOR:淫ＮＴＲ進行度 == 0
+					CFLAG:ACTOR:淫ＮＴＲ進行度 ++
+					PRINTFORMW 흥분한 극장의 팬이 %CALLNAME:ACTOR%을(를)  골목 안으로 데려갔다……
 
-			ELSEIF RAND:120 < 10 + z + x + y - 10 || TALENT:ACTOR:ＮＴＲ == 2 || (CFLAG:ACTOR:그외 == 1117 || CFLAG:ACTOR:그외2 == 1117 || CFLAG:ACTOR:그외3 == 1117 || CFLAG:ACTOR:그외4 == 1117 || CFLAG:ACTOR:그외5 == 1117 || CFLAG:ACTOR:그외6 == 1117) || TALENT:ACTOR:73 == 1
-			CFLAG:ACTOR:음란度 += ( CFLAG:ACTOR:現ＮＴＲ進行度 * 10 + EXCITE * 5)*2
-				w = 1
-				IF TALENT:ACTOR:ＮＴＲ == 2
-					PRINTFORMW 양아치들은 %CALLNAME:ACTOR%을(를) 맨션의 방 안으로 데려갔다……
-				ELSE
-					PRINTFORMW %CALLNAME:ACTOR%(이)가 극장의 팬에 의해 안내된 곳에는 다수의 남자들이 기다리고 있었다……
-				ENDIF
-				
-				IF CFLAG:ACTOR:淫ＮＴＲ進行度 < 2 && ! TALENT:ACTOR:ＮＴＲ == 2
-					CFLAG:ACTOR:淫ＮＴＲ進行度 = 2
-				ENDIF
-				IF CFLAG:ACTOR:108 == 1
+				ELSEIF RAND:120 < 10 + z + x + y - 10 || TALENT:ACTOR:ＮＴＲ == 2 || (CFLAG:ACTOR:그외 == 1117 || CFLAG:ACTOR:그외2 == 1117 || CFLAG:ACTOR:그외3 == 1117) || TALENT:ACTOR:73 == 1
+					CFLAG:ACTOR:음란度 += ( CFLAG:ACTOR:現ＮＴＲ進行度 * 10 + EXCITE * 5)*2
+					w = 1
+					IF TALENT:ACTOR:ＮＴＲ == 2
+						PRINTFORMW 양아치들은 %CALLNAME:ACTOR%을(를) 맨션의 방 안으로 데려갔다……
+					ELSE
+						PRINTFORMW %CALLNAME:ACTOR%(이)가 극장의 팬에 의해 안내된 곳에는 다수의 남자들이 기다리고 있었다……
+					ENDIF
+
+					IF CFLAG:ACTOR:淫ＮＴＲ進行度 < 2 && ! TALENT:ACTOR:ＮＴＲ == 2
+						CFLAG:ACTOR:淫ＮＴＲ進行度 = 2
+					ENDIF
+					IF CFLAG:ACTOR:108 == 1
+						IF RAND:100 < CFLAG:ACTOR:現ＮＴＲ進行度 * 5
+							CFLAG:ACTOR:108 -= 1
+							PRINTFORML %CALLNAME:ACTOR%의 자궁내피임결계가 남자들 중 한 명에 의해 해제되어 버린 모양이다……
+						ENDIF
+					ENDIF
 					IF RAND:100 < CFLAG:ACTOR:現ＮＴＲ進行度 * 5
-						CFLAG:ACTOR:108 -= 1
-						PRINTFORML %CALLNAME:ACTOR%의 자궁내피임결계가 남자들 중 한 명에 의해 해제되어 버린 모양이다……
+						IF CFLAG:ACTOR:109 == 0
+							CFLAG:ACTOR:109 += 1
+							PRINTFORML 남자들 중 한명이 %CALLNAME:ACTOR%에게 배란유발제를 먹였다……
+						ENDIF
 					ENDIF
-				ENDIF
-				IF RAND:100 < CFLAG:ACTOR:現ＮＴＲ進行度 * 5
-					IF CFLAG:ACTOR:109 == 0
-						CFLAG:ACTOR:109 += 1
-						PRINTFORML 남자들 중 한명이 %CALLNAME:ACTOR%에게 배란유발제를 먹였다……
+					IF w == 1
+						v = x + y + z
+						SIF v > 40
+							v = 32
+						w = 0
 					ENDIF
-				ENDIF
-				IF w == 1					
-					v = x + y + z
-					SIF v > 40
-						v = 32
-					w = 0
-				ENDIF
-				IF TALENT:ACTOR:ＮＴＲ == 2
-					PRINTFORMW %CALLNAME:ACTOR%은(는) 양아치들에게 노리개 취급을 당하며 범해졌다……
-					PRINTFORMW 양아치들은 %CALLNAME:ACTOR%(이)가 질내사정 당하는 모습을 촬영해、불법 비디오로 유출한 것 같다
+					IF TALENT:ACTOR:ＮＴＲ == 2
+						PRINTFORMW %CALLNAME:ACTOR%은(는) 양아치들에게 노리개 취급을 당하며 범해졌다……
+						PRINTFORMW 양아치들은 %CALLNAME:ACTOR%(이)가 질내사정 당하는 모습을 촬영해、불법 비디오로 유출한 것 같다
+					ELSE
+						PRINTFORMW %CALLNAME:ACTOR%은(는) 주위를 둘러싼 남자들에게 윤간 당했다……
+						PRINTFORMW 윤간 당하고 있는 %CALLNAME:ACTOR%의 생생한 모습이 카메라에 촬영되고 있다……
+					ENDIF
+
+					EXP:ACTOR:63 +=((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + 1)
+					PRINTFORML %EXPNAME:63%＋{((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + 1)}
+
 				ELSE
-					PRINTFORMW %CALLNAME:ACTOR%은(는) 주위를 둘러싼 남자들에게 윤간 당했다……
-					PRINTFORMW 윤간 당하고 있는 %CALLNAME:ACTOR%의 생생한 모습이 카메라에 촬영되고 있다……
+					PRINTFORMW %CALLNAME:ACTOR%은(는) 흥분한 극장의 팬에게 골목 안에서 강간 당했다……
 				ENDIF
 
-				EXP:ACTOR:63 +=((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + 1)
-				PRINTFORML %EXPNAME:63%＋{((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + 1)}
+				EXP:ACTOR:0 += (EXCITE/10 + v) + 1
+				EXP:ACTOR:1 += (EXCITE/15 + v/2) + 1
+				EXP:ACTOR:2 += (((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2)/3) + 1)
+				EXP:ACTOR:키스경험 += (EXCITE/10 + v) + 1
+				;후타나리か남자
+				SIF TALENT:ACTOR:139 || TALENT:ACTOR:140
+					EXP:ACTOR:3 += (EXCITE/15 + v/2) + 1
+				;오토코노코はケツマンコで임신
+				SIF TALENT:ACTOR:오토코노코 && CFLAG:ACTOR:108 == 0
+					CFLAG:ACTOR:105 += (EXCITE/10 + v) + 1
+				EXP:ACTOR:4 += ((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + 1)
+				;질사경험
+				IF CFLAG:ACTOR:108 == 0
+					EXP:ACTOR:5 += (EXCITE/10 + v) + 1
+					CFLAG:ACTOR:105 += (EXCITE/10 + v) + 1
+				ENDIF
+				EXP:ACTOR:20 += ((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + (EXCITE/12 + v) + 1+ 1)
+				EXP:ACTOR:22 += (EXCITE/10 + v)/2+1
 
-			ELSE
-				PRINTFORMW %CALLNAME:ACTOR%은(는) 흥분한 극장의 팬에게 골목 안에서 강간 당했다……
-			ENDIF
+				PRINTFORML %EXPNAME:0%＋{(EXCITE/10 + v) + 1}
 
-			EXP:ACTOR:0 += (EXCITE/10 + v) + 1
-			EXP:ACTOR:1 += (EXCITE/15 + v/2) + 1
-			EXP:ACTOR:2 += (((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2)/3) + 1)
-			EXP:ACTOR:키스경험 += (EXCITE/10 + v) + 1
-			;후타나리か남자
-			SIF TALENT:ACTOR:139 || TALENT:ACTOR:140
-				EXP:ACTOR:3 += (EXCITE/15 + v/2) + 1
-			;오토코노코はケツマンコで임신
-			SIF TALENT:ACTOR:오토코노코 && CFLAG:ACTOR:108 == 0
-				CFLAG:ACTOR:105 += (EXCITE/10 + v) + 1
-			EXP:ACTOR:4 += ((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + 1)
-			;질사경험
-			IF CFLAG:ACTOR:108 == 0
-				EXP:ACTOR:5 += (EXCITE/10 + v) + 1
-				CFLAG:ACTOR:105 += (EXCITE/10 + v) + 1
-			ENDIF
-			EXP:ACTOR:20 += ((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + (EXCITE/12 + v) + 1+ 1)
-			EXP:ACTOR:22 += (EXCITE/10 + v)/2+1
+				PRINTFORML %EXPNAME:1%＋{(EXCITE/15 + v/2) + 1}
+				PRINTFORML %EXPNAME:2%＋{ (((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2)/3) + 1)}
+				PRINTFORML 키스경험＋{(EXCITE/10 + v) + 1}
+				SIF (TALENT:ACTOR:후타나리 || TALENT:ACTOR:남자)
+					PRINTFORML %EXPNAME:3%＋{(EXCITE/15 + v/2) + 1}
 
-			PRINTFORML %EXPNAME:0%＋{(EXCITE/10 + v) + 1}
+				PRINTFORML %EXPNAME:4%＋{ ((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + 1)}
 
-			PRINTFORML %EXPNAME:1%＋{(EXCITE/15 + v/2) + 1}
-			PRINTFORML %EXPNAME:2%＋{ (((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2)/3) + 1)}
-			PRINTFORML 키스경험＋{(EXCITE/10 + v) + 1}
-			SIF (TALENT:ACTOR:후타나리 || TALENT:ACTOR:남자)
-				PRINTFORML %EXPNAME:3%＋{(EXCITE/15 + v/2) + 1}
+				IF CFLAG:ACTOR:108 == 0
+					PRINTFORML %EXPNAME:5%＋{(EXCITE/10 + v) + 1}
+				ELSE
+					PRINTFORML <피임결계>
+				ENDIF
 
-			PRINTFORML %EXPNAME:4%＋{ ((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + 1)}
-
-			IF CFLAG:ACTOR:108 == 0
-				PRINTFORML %EXPNAME:5%＋{(EXCITE/10 + v) + 1}
-			ELSE
-				PRINTFORML <피임결계>
-			ENDIF
-
-			PRINTFORML %EXPNAME:20%＋{((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + (EXCITE/10 + v)/2 + 1+ 1)}
-			PRINTFORML %EXPNAME:22%＋{(EXCITE/10 + v)/2+1}
-			PRINTFORML 윤간경험 +{1}
-			EXP:ACTOR:윤간경험 += 1	
+				PRINTFORML %EXPNAME:20%＋{((EXCITE/10 + v) + 1) + ((EXCITE/15 + v/2) + (EXCITE/10 + v)/2 + 1+ 1)}
+				PRINTFORML %EXPNAME:22%＋{(EXCITE/10 + v)/2+1}
+				PRINTFORML 윤간경험 +{1}
+				EXP:ACTOR:윤간경험 += 1
 			;처녀/재생처녀상실
-			CALL 처녀상실, ACTOR
-			CALL 처녀상실이벤트, ACTOR
-			PRINTW
+				CALL 처녀상실, ACTOR
+				CALL 처녀상실이벤트, ACTOR
+				PRINTW
 
-		ELSE
-		PRINTFORMW %CALLNAME:ACTOR%은(는) 극장의 팬과 한동안 회화를 하고 있던 모양이다……
+			ELSE
+				PRINTFORMW %CALLNAME:ACTOR%은(는) 극장의 팬과 한동안 회화를 하고 있던 모양이다……
+
+			ENDIF
 
 		ENDIF
-
 	ENDIF
-ENDIF
-$SKIP_NTR
+	$SKIP_NTR
 
 NEXT
 SKIPDISP 0
@@ -512,7 +513,7 @@ ELSEIF RESULT < 0 || RESULT >= 점포("규모",ARG)
 ELSEIF ACT:RESULT >= 0
 	LOCAL = ACT:RESULT
 	PRINTFORML %CALLNAME:LOCAL%의 상연목록을 변경합니까？
-	CALL INPUT_SELECT(CFLAG:LOCAL:劇場상연목록 != 0, "ストリップに변경", (CFLAG:LOCAL:劇場상연목록 != 1) * 2, "ポールダンスに변경" ,(CFLAG:LOCAL:劇場상연목록 != 2) * 3, "オナニーショーに변경",4, "休演させる" , 9, "戻る")
+	CALL INPUT_SELECT(CFLAG:LOCAL:劇場상연목록 != 0, "스트립쇼로 변경", (CFLAG:LOCAL:劇場상연목록 != 1) * 2, "폴 댄스로 변경" ,(CFLAG:LOCAL:劇場상연목록 != 2) * 3, "자위쇼로 변경",4, "휴연시킨다" , 9, "돌아온다")
 	SELECTCASE RESULT
 		CASE 1, 2, 3
 			CFLAG:LOCAL:劇場상연목록=  RESULT - 1
@@ -915,7 +916,7 @@ SELECTCASE CFLAG:TARGET:劇場상연목록
 				PRINTFORM 손가락을 꽂아 넣어、
 				;長くなるので、ここで改行
 ;				IF TALENT:TARGET:처녀 || TALENT:TARGET:재생처녀
-					PRINTFORML 막을 다치지 않게 주의하면서、
+				PRINTFORML 막을 다치지 않게 주의하면서、
 ;				ENDIF
 				IF TALENT:TARGET:자위광 || TALENT:TARGET:섹스광 || ABL:TARGET:자위중독 >= 7
 					PRINTFORM 격렬하게 
@@ -928,25 +929,25 @@ SELECTCASE CFLAG:TARGET:劇場상연목록
 			ENDIF
 		;Ａ감각Lv5이상or애널광orＡ민감でアナニーに発展
 		ELSEIF (RAND:4 == 2) && ((ABL:TARGET:Ａ감각 >= 5) || TALENT:TARGET:애널광 || TALENT:TARGET:Ａ민감)
-				IF TALENT:TARGET:Ａ민감
-					PRINTFORM 보통보다 민감한 
-				ELSEIF TALENT:TARGET:애널광
-					PRINTFORM 개발되어 버린 
-				ENDIF
-				PRINTFORM 항문을 
-				;Ａ감각Lv2までは躊躇いがある感じで
-				SIF ABL:TARGET:Ａ감각 < 3
-					PRINTFORM 주저하면서 
-				PRINTFORM 손가락을 찔러 넣어、
+			IF TALENT:TARGET:Ａ민감
+				PRINTFORM 보통보다 민감한 
+			ELSEIF TALENT:TARGET:애널광
+				PRINTFORM 개발되어 버린 
+			ENDIF
+			PRINTFORM 항문을 
+			;Ａ감각Lv2までは躊躇いがある感じで
+			SIF ABL:TARGET:Ａ감각 < 3
+				PRINTFORM 주저하면서 
+			PRINTFORM 손가락을 찔러 넣어、
 				;Ａ감각Lv5以上で、자위광があるか、자위중독Lv5以上で躊躇がなくなる
-				IF (ABL:TARGET:Ａ감각 >= 5) && (TALENT:TARGET:자위광 || ABL:TARGET:자위중독 >= 5) 
-					PRINTFORM 격렬하게 
-				ELSEIF ABL:TARGET:Ａ감각 >= 3
-					PRINTFORM 천천히 
-				ELSE
-					PRINTFORM 조심조심 
-				ENDIF
-				PRINTFORM 넣다빼며 
+			IF (ABL:TARGET:Ａ감각 >= 5) && (TALENT:TARGET:자위광 || ABL:TARGET:자위중독 >= 5) 
+				PRINTFORM 격렬하게 
+			ELSEIF ABL:TARGET:Ａ감각 >= 3
+				PRINTFORM 천천히 
+			ELSE
+				PRINTFORM 조심조심 
+			ENDIF
+			PRINTFORM 넣다빼며 
 
 		ELSE
 			;棒の有無で内容分岐

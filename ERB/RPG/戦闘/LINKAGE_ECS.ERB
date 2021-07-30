@@ -1,7 +1,20 @@
 ﻿
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:LINKAGE_ECS.ERB
+;	Facility	:エクスリンケージ用関数置き場
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX		----					新規作成
+;	002		2021/04/22		Rsp暇人 				WAIT表示が誰のリンケージ参加中かわかるようにするための変更に対応
 
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=================================================
-;合体스킬用関数置き場
+;合体スキル用関数置き場
 ;================================================
 
 
@@ -103,8 +116,9 @@ IF RESULT == 1000
 		IF LOCAL:LOCAL > -1
 			;PRINTFORML LOCAL:{LOCAL} = {LOCAL:LOCAL}
 			CFLAG:ARG:("링케이지참가자"+ TOSTR(LOCAL-10)) = LOCAL:LOCAL
-			;CFLAG:(CFLAG:ARG:("링케이지참가자"+ TOSTR(LOCAL-10))):링케이지참가 = 1
-			CFLAG:(LOCAL:LOCAL):링케이지참가 = 1
+			;---- EDIT 002 MOD START ---------------------------
+			CFLAG:(LOCAL:LOCAL):링케이지참가 = ARG+1
+			;---- EDIT 002 MOD END ---------------------------
 		ENDIF
 		LOCAL:LOCAL = -1
 	NEXT
@@ -210,7 +224,9 @@ ELSEIF RESULT == 0
 		ELSE
 			;PRINTFORML %CALLNAME:(LOCAL:LOCAL)%が참가者 {LOCAL:LOCAL}
 			CFLAG:ARG:("링케이지참가자"+ TOSTR(LOCAL)) = LOCAL:LOCAL
-			CFLAG:(LOCAL:LOCAL):링케이지참가 = 1
+			;---- EDIT 002 MOD START ---------------------------
+			CFLAG:(LOCAL:LOCAL):링케이지참가 = ARG+1
+			;---- EDIT 002 MOD END ---------------------------
 		ENDIF
 	NEXT
 
@@ -268,7 +284,7 @@ ELSEIF RESULT == 0
 	;기합・集中フラグの終了
 	IF CFLAG:(ARG):입력行動 > -1
 		RESULT = 0
-		TRYCALLFORM SKILL_DAMAGETYPE_{CFLAG:(ARG):입력行動}
+		TRYCALLFORM SKILL_DAMAGETYPE_{CFLAG:(ARG):입력行動}, ARG
 		IF RESULT == 1
 			CFLAG:(ARG):기합フラグ = 0
 			CFLAG:(ARG):베어내기フラグ = 0
@@ -292,22 +308,9 @@ ELSEIF RESULT == 0
 			PRINTL
 			PRINTW
 		ELSE
-			IF -CFLAG:(ARG):HP흡수量 >= BASE:(ARG):ＨＰ && (HAVE_SKILL((ARG), [[스킬:불굴의투지]]) || (EQUIP:(ARG):바・벨 && FLAG:벨신撃破 & 8)) && CFLAG:(ARG):이악물기フラグ == 0
-				PRINTFORM 　반동>>　{-CFLAG:(ARG):HP흡수量}데미지
-				CALL VAR_HP((ARG), CFLAG:(ARG):HP흡수量, 2)
-				CFLAG:(ARG):이악물기フラグ = 1
-			ELSEIF -CFLAG:(ARG):HP흡수量 >= BASE:(ARG):ＨＰ && HAVE_SKILL((ARG), [[스킬:네버기브업]]) && CFLAG:(ARG):이악물기フラグ == 0
-				PRINTFORM 　반동>>　{-CFLAG:(ARG):HP흡수量}데미지
-				CALL VAR_HP((ARG), CFLAG:(ARG):HP흡수量, 5)
-				CFLAG:(ARG):이악물기フラグ = 1
-			ELSEIF -CFLAG:(ARG):HP흡수量 >= BASE:(ARG):ＨＰ && HAVE_SKILL((ARG), [[스킬:이악물기]]) && CFLAG:(ARG):이악물기フラグ == 0
-				PRINTFORM 　반동>>　{-CFLAG:(ARG):HP흡수量}데미지
-				CALL VAR_HP((ARG), CFLAG:(ARG):HP흡수量, 1)
-				CFLAG:(ARG):이악물기フラグ = 1
-			ELSEIF -CFLAG:(ARG):HP흡수量 >= 0
-				PRINTFORM 　반동>>　{-CFLAG:(ARG):HP흡수量}데미지
-				CALL VAR_HP((ARG), CFLAG:(ARG):HP흡수量, 0)
-			ENDIF
+			;2021/5/24
+			PRINTFORM 　반동>>　{-CFLAG:(ARG):HP흡수量}데미지
+			CALL VAR_HP((ARG), CFLAG:(ARG):HP흡수量, -1)
 			PRINTL
 			PRINTW
 		ENDIF

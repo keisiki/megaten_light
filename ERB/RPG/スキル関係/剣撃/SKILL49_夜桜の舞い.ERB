@@ -1,12 +1,7 @@
 ﻿;스킬名
 @SKILL_NAME_49,ARG
-;天堂真矢が사용する場合Odette the Marvericksに
-;IF ARG > 0 && NO:ARG == [[キャラ:마야（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:마야（무대소녀）]]) == 1
-	RESULTS = O.t.Marvericks
-;ELSEIF ARG > 0 && NO:ARG == 5423
-ELSEIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
-	RESULTS = 影舞・酬
+IF SKILL_CHANGE(ARG, 5071)
+	RESULTS = 갈채는 검극과 같이
 ELSE
 	RESULTS = 밤벚꽃의춤
 ENDIF
@@ -17,23 +12,15 @@ RETURN 100
 
 ;　威힘
 @SKILL_POWER_49, ARG
-;SIF ARG > 0 && NO:ARG == 5423
-SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
-	RETURN 85
 RETURN 200
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_49,ARG
-;SIF ARG > 0 && NO:ARG == 5423
-SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
-	RETURN 2
 RETURN 1
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_49,ARG
 ;SIF ARG > 0 && NO:ARG == 5423
-SIF SKILL_CHANGE_CHECK(ARG, 5423) == 1
-	RETURN 3
 RETURN 1
 
 ;　ＨＰ2を支払うかＭＰ3を支払うか
@@ -50,12 +37,12 @@ RETURN 20
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_49
+@SKILL_DECIDE_TYPE_49, ARG
 RETURN 1
 ;特技
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_49
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_49, ARG
 RETURN 1
 
 
@@ -65,10 +52,6 @@ RETURN 1
 
 ;　사거리
 @SKILL_RANGE_49,ARG
-;天堂真矢が사용する場合は사거리S
-;IF ARG > 0 && NO:ARG == [[キャラ:마야（무대소녀）]]
-SIF SKILL_CHANGE_CHECK(ARG, [[キャラ:마야（무대소녀）]]) == 1
-	RETURN 1
 RETURN 3
 
 ;　範囲　11체　49列　3전체　4　적아군전체
@@ -142,13 +125,12 @@ CALL ATTACK_FIELD,ARG,ARG:1,49
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_49
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:마야（무대소녀）]]
-	PRINTL Odette the Marvericks。舞台소녀のキラめきより鍛造されし白銀の레이피어。
-	PRINTL 天堂真矢を見上げる全ての적に中ダメージ＋魅了。사거리S
-ELSEIF U > 0 && U < CHARANUM && NO:U == 5423
-	PRINTL [후열] 적 전체에 2~3회 검격속성 소 물리데미지. (낮은 확률로 CHARM)
+IF U > 0 && U < CHARANUM && NO:U == 5071
+	PRINTL 그라디사누스・브라운세루。
+	PRINTL 적전체를 휘감는 듯한 화려한 삼연격。
+	PRINTL 적 전체에 중 데미지＋매료。후열 사용 가능。
 ELSE
-	PRINTL 舞い散る桜のごとき검舞で적전체に中ダメージ＋魅了。後列사용可。
+	PRINTL 흩날리는 벚꽃과도 같은 검무로 적 전체에게 중 데미지＋매료. 후열 사용 가능.
 ENDIF
 
 ;継承に필요な部位

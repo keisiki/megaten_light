@@ -5,34 +5,34 @@
 ;======================================================
 
 @기본능력수정_2042,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "힘"
+SELECTCASE ARG
+	CASE 0
 		RETURN 2
 ENDSELECT
 RETURN 0
 
 @전투능력수정_2042,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "공격"
+SELECTCASE ARG
+	CASE 0
 		RETURN 160
-	CASE "명중"
+	CASE 1
 		RETURN 60
-	CASE "회피"
+	CASE 3
 		RETURN -10
-	CASE "마법위력"
+	CASE 4
 		RETURN 64
-	CASE "마법효과"
+	CASE 5
 		RETURN 21
 ENDSELECT
 RETURN 0
 
 @방어상성_2042,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
 
 @공격상성_2042, ARG = -1
-RETURN GET_TYPE_NUM("주살")
+RETURN 11
 
 @최저공격횟수_2042, ARG = -1
 RETURN 0
@@ -60,8 +60,10 @@ ENDIF
 RETURN 0
 
 ;-----------------------------
-;- 조건・설명処理
+;- SHOP
 ;-----------------------------
+@구입조건_2042
+RETURN 0
 @필요레벨_2042
 RETURN 40
 
@@ -79,16 +81,11 @@ PRINTL 이것으로 상대의 목을 도려내면 잘린 살아있는 머리가 
 SETCOLOR 0xdc143c
 PRINTL 반마인 추가스킬존재
 RESETCOLOR
-;-----------------------------
-;- 구입・引き継ぎ
-;-----------------------------
-@구입조건_2042
-RETURN 0
 
 @引継ぎ可不可_2042
 RETURN 1
 
 @검타입_2042
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 RETURN 0

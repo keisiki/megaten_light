@@ -86,12 +86,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2832
+@SKILL_DECIDE_TYPE_2832, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2832
+@SKILL_DAMAGETYPE_2832, ARG
 RETURN 2
 
 
@@ -171,9 +171,9 @@ CALL ATTACK_FIELD,ARG,ARG:1,2832
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2832
-PRINTL 적 １열에게 万魔を爆砕する노래를 들려줘 타격을 준다。
+PRINTL 적 １열에게 만마를 부수는 노래를 들려줘 타격을 준다。
 PRINTL 사용자의 가창 기능에 따라 위력이 증가한다。
-PRINTL 아득히 먼 連ダコ행성에서 환상향에 전해진、 『 노래 무기 』라 불리는 뛰어난 힘.。
+PRINTL 아득히 먼 렌다코 행성에서 환상향에 전해진、 『 노래 무기 』라 불리는 뛰어난 힘。
 
 ;継承に필요한部位
 @継承部位_2832,ARG

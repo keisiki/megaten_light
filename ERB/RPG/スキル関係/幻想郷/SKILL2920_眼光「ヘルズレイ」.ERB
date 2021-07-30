@@ -36,12 +36,12 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2920
+@SKILL_DECIDE_TYPE_2920, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2920
+@SKILL_DAMAGETYPE_2920, ARG
 RETURN 1
 
 
@@ -142,7 +142,7 @@ FLAG:拡散フラグ = -1
 @SKILL_EXPLAIN_2920
 PRINTL 적 １열에게  비구속성으로 소위력의 물리공격을 7회한다. 명중률이 높다
 PRINTL 머리부분이 7개로 갈라져서 사방에서 레이저를 뿌려서 적을 공격한다
-PRINTL 용왕　세키반키의 스펠카드（専用）
+PRINTL 용왕　세키반키의 스펠카드（전용）
 
 ;継承に필요한部位
 @継承部位_2920,ARG

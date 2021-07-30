@@ -85,25 +85,34 @@ RETURN 1
 
 
 @MESSAGE_COM271
-PRINTL
-PRINTFORML %CALLNAME:TARGET%에게 보여주듯이 긴급 피임약을 꺼냈다.
-PRINTFORM 그것을 본 %조사선택(CALLNAME:TARGET, "는")% 
-IF TALENT:연모 || TALENT:친애
-    ;【연모】,【친애】,【상애】의 최악이어도 1개를 가진다
-    PRINTW 조금 아쉬운 표정을 짓고 있다.
-ELSEIF TALENT:복종 || TALENT:예속
-    ;【복종】,【낙인】의 어느 쪽인지
-    PRINTFORMW 다음에 무엇을 할지 이해한 듯, 가랑이를 열고 %CALLNAME:PLAYER%에게 범해지는 것을 기다리고 있다….
-ELSEIF (TALENT:음란 || TALENT:창부)
-    ;【음란】
-    PRINTW 질 내 사정을 기다릴 수 없다는 듯이 몸을 배배 꼬고 있다.
-ELSEIF ABL:순종 >= 5 && MARK:굴복각인 == 3 && MARK:반발각인 == 0
-    ;종속 Lv5 또한 굴복 각인 Lv3 또한 반발 각인 Lv0
-    PRINTW 조금 안심한 표정을 지었다….
+IF TEQUIP:주도권
+;여자주도
+	IF TALENT:연모 || TALENT:친애
+		PRINTFORML %조사처리(CALLNAME:TARGET,"는")% 요염하게 웃으면서 %CALLNAME:PLAYER%에게 보라는 듯이 긴급 피임약을 꺼내 마셨다.
+	ELSE
+		PRINTFORML %조사처리(CALLNAME:TARGET,"는")% %CALLNAME:PLAYER%에게 보라는 듯이 긴급 피임약을 꺼내 마셨다.
+	ENDIF
+	PRINTFORMW 그것을 본 %조사처리(CALLNAME:PLAYER,"는")% 안도의 한숨을 내쉬었다….
 ELSE
-    PRINTFORMW %조사선택(CALLNAME:PLAYER, "를")% 경멸하는 눈으로 쳐다보고 있다….
+;남자주도
+	PRINTFORML %CALLNAME:TARGET%에게 보여주듯이 긴급 피임약을 꺼냈다.
+	PRINTFORM 그것을 본 %조사처리(CALLNAME:TARGET,"는")% 
+	IF TALENT:연모 || TALENT:친애
+		;【연모】,【친애】,【상애】의 최악이어도 1개를 가진다
+		PRINTW 조금 아쉬운 표정을 짓고 있다.
+	ELSEIF TALENT:복종 || TALENT:예속
+		;【복종】,【낙인】의 어느 쪽인지
+		PRINTFORMW 다음에 무엇을 할지 이해한 듯, 가랑이를 열고 %CALLNAME:PLAYER%에게 범해지는 것을 기다리고 있다….
+	ELSEIF (TALENT:음란 || TALENT:창부)
+		;【음란】
+		PRINTW 질내사정을 기다릴 수 없다는 듯이 몸을 배배 꼬고 있다.
+	ELSEIF ABL:순종 >= 5 && MARK:굴복각인 == 3 && MARK:반발각인 == 0
+		;종속 Lv5 또한 굴복 각인 Lv3 또한 반발 각인 Lv0
+		PRINTW 조금 안심한 표정을 지었다….
+	ELSE
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"를")% 경멸하는 눈으로 쳐다보고 있다….
+	ENDIF
 ENDIF
-
 
 ;===================================================
 ;조교타입

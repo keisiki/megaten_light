@@ -23,9 +23,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2290,ARG,ARG:1 = -1
-RETURN 0
-
 @방어상성_2290,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -61,6 +58,16 @@ RETURN 0
 @장비箇所_2290
 RETURN GET_EQUIPNUM("검")
 
+;염군의춤
+@장비추가스킬_2290,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 743
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -82,6 +89,9 @@ PRINTL 장비조건：LV45～
 
 @장비해설_2290
 PRINTL 용신이 장식된 곤
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：염군의춤
+RESETCOLOR
 
 RETURN 0
 

@@ -36,12 +36,12 @@ RETURN 32
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3582
+@SKILL_DECIDE_TYPE_3582, ARG
 RETURN 1
 ;EXTRA
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3582
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3582, ARG
 RETURN 0
 
 
@@ -117,8 +117,9 @@ RETURN 0
 #LOCALSIZE 1
 ;コストを支払う
 ;CALL PAY_COST,ARG,3582
-CFLAG:ARG:고유게이지D2 = 7
-PRINTFORMW 6턴 동안 해킹능력이 올라갔다！
+;CFLAG:ARG:고유게이지D2 = 7
+CALL SKILLGAGE_D_SET,ARG,3582,7
+PRINTFORMW 7턴 동안 해킹능력이 올라갔다！
 
 @SPECIAL_ACTION_3582,ARG,ARG:1
 #LOCALSSIZE 1
@@ -153,11 +154,16 @@ CALLFORM ACTION_{LOCAL},ARG,ARG:1
 ;====================================================
 ;実行内容ここまで
 ;====================================================
+@SKILLGAGE_DISPLAY_3582,ARG
+SETCOLOR 0x33ffcc
+SIF SKILLGAGE_D_GET(ARG,3582) > 0
+	PRINTFORML 해킹리액트 {SKILLGAGE_D_GET(ARG,3582)} 턴 남음
+RESETCOLOR
 
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3582
-PRINTL [특수] 6턴 동안 자신의 데미지가 없는 해킹공격을 강화한다.
+PRINTL [특수] 7턴 동안 자신의 데미지가 없는 해킹공격을 강화한다.
 PRINTL 해킹이 반드시 성공하고, 다른 해킹공격이 발동한다.
 PRINTL 해킹공격 발동 시 50％의 확률로 다른 해킹공격이 발동한다.
 

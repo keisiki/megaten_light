@@ -7,8 +7,19 @@ RESULTS = 확장벌룬
 SIF TEQUIP:22
 	RESULTS = 확장벌룬해제
 @ACT_COM148
-PRINTL 확장벌룬
-TSTR:0 = 확장벌룬
+;---- EDIT 002 촉수系コマンドを수정 MOD START ----
+;-------------------------------------------------
+;特殊派生処理
+;-------------------------------------------------
+IF TEQUIP:25
+	PRINTL 애널극태촉수
+	TSTR:0 = 애널극태촉수
+	SELECTCOM = 176
+ELSE
+	PRINTL 확장벌룬
+	TSTR:0 = 확장벌룬
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 MOD END   ----
 ;CALL KOJO_MESSAGE_COM
 
 ;着脱の処理
@@ -122,7 +133,13 @@ RETURN 1
 @EQUIP_COM148
 ;확장벌룬
 
-PRINTL ＜확장벌룬삽입중＞
+;---- EDIT 002 촉수系コマンドを수정 MOD START ----
+IF TEQUIP:25
+	PRINTL ＜애널극태촉수중＞
+ELSE
+	PRINTL ＜확장벌룬삽입중＞
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 MOD END   ----
 
 DOWNBASE:TARGET:체력 += 75
 DOWNBASE:TARGET:기력 += 100

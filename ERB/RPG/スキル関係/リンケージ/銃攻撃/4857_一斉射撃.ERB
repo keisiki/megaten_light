@@ -37,11 +37,11 @@ RETURN 5
 RETURN GET_TYPE_NUM("비구")
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4857
+@SKILL_DECIDE_TYPE_4857, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_4857
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_4857, ARG
 RETURN 1
 
 
@@ -75,7 +75,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4857, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4857,ARG
@@ -188,7 +188,7 @@ MAXBASE:ARG:총공격 = LOCAL:1
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_4857
-PRINTL 三人の총の달인が적一体に一斉射撃する
+PRINTL 세 사람의 총의 달인이 적 1체에 일제히 사격한다
 
 ;継承に필요な部位
 @継承部位_4857,ARG

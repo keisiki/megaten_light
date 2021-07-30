@@ -40,7 +40,7 @@ RETURN 0
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_3122
+@SKILL_DAMAGETYPE_3122, ARG
 RETURN 2
 
 
@@ -52,7 +52,7 @@ RETURN 1
 @SKILL_RANGE_3122,ARG
 RETURN 3
 
-;　범위　11명　2１열　3전체　4　적아군전체
+;　범위　1１체　2１열　3전체　4　적아군전체
 @SKILL_SPHERE_3122,ARG
 RETURN 3
 
@@ -110,7 +110,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,3122
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_3122
-PRINTL 적 전체에게 중력 相性 데미지
+PRINTL 적 전체에게 중력 상성 데미지
 
 @최대소지수_3122
 RETURN 10

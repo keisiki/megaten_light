@@ -36,12 +36,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_611
+@SKILL_DECIDE_TYPE_611, ARG
 RETURN 2
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_611
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_611, ARG
 RETURN 0
 
 
@@ -127,7 +127,7 @@ PRINTFORMW 　　TARGET:\@ ARG:1 == 19  ? PARTY # ENEMY \@ >>>>>> 즉사공격�
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_611
-PRINTL [특수] 아군 전체에 즉사공격을 1회씩 막아주는 결계를 친다.
+PRINTL [특수] 존승다리니를 외워 원령을 피한다.아군 전체에 즉사공격을 1회씩 막아주는 결계를 친다.
 
 ;継承に필요な部位
 @継承部位_611,ARG

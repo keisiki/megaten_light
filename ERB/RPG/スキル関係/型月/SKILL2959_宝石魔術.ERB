@@ -35,12 +35,12 @@ RETURN 10
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2959
+@SKILL_DECIDE_TYPE_2959, ARG
 RETURN 1
 ;特技
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2959
+@SKILL_DAMAGETYPE_2959, ARG
 RETURN 0
 
 
@@ -112,47 +112,47 @@ RETURN 0
 @ACTION_2959,ARG,ARG:1
 IF CFLAG:ARG:PTフラグ > 0
 	IF ITEM:274 > 0
-		PRINTFORMW %CALLNAME:ARG%は 가넷을 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 가넷을 부숴서 마력을 해방했다！
 		ITEM:274 -= 1
 	ELSEIF ITEM:275 > 0
-		PRINTFORMW %CALLNAME:ARG%は 자수정을 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 자수정을 부숴서 마력을 해방했다！
 		ITEM:275 -= 1
 	ELSEIF ITEM:276 > 0
-		PRINTFORMW %CALLNAME:ARG%は 아쿠아마린을 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 아쿠아마린을 부숴서 마력을 해방했다！
 		ITEM:276 -= 1
 	ELSEIF ITEM:277 > 0
-		PRINTFORMW %CALLNAME:ARG%は 다이아몬드를 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 다이아몬드를 부숴서 마력을 해방했다！
 		ITEM:277 -= 1
 	ELSEIF ITEM:278 > 0
-		PRINTFORMW %CALLNAME:ARG%は 에메랄드를 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 에메랄드를 부숴서 마력을 해방했다！
 		ITEM:278 -= 1
 	ELSEIF ITEM:279 > 0
-		PRINTFORMW %CALLNAME:ARG%は 진주를 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 진주를 부숴서 마력을 해방했다！
 		ITEM:279 -= 1
 	ELSEIF ITEM:280 > 0
-		PRINTFORMW %CALLNAME:ARG%は 루비를 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 루비를 부숴서 마력을 해방했다！
 		ITEM:280 -= 1
 	ELSEIF ITEM:281 > 0
-		PRINTFORMW %CALLNAME:ARG%は 오닉스를 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 오닉스를 부숴서 마력을 해방했다！
 		ITEM:281 -= 1
 	ELSEIF ITEM:282 > 0
-		PRINTFORMW %CALLNAME:ARG%は 사파이어를 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 사파이어를 부숴서 마력을 해방했다！
 		ITEM:282 -= 1
 	ELSEIF ITEM:283 > 0
-		PRINTFORMW %CALLNAME:ARG%は 오팔을 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 오팔을 부숴서 마력을 해방했다！
 		ITEM:283 -= 1
 	ELSEIF ITEM:284 > 0
-		PRINTFORMW %CALLNAME:ARG%は 토파즈를 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 토파즈를 부숴서 마력을 해방했다！
 		ITEM:284 -= 1
 	ELSEIF ITEM:285 > 0
-		PRINTFORMW %CALLNAME:ARG%は 터쿼즈을 부숴서 마력을 해방했다！
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 터쿼즈을 부숴서 마력을 해방했다！
 		ITEM:285 -= 1
 	ENDIF
 ENDIF
 
 CFLAG:ARG:集中フラグ = 1
 CFLAG:ARG:마법위력강화 = MIN(32, CFLAG:ARG:마법위력강화 + 16)
-PRINTFORMW %CALLNAME:ARG%は 다음 공격을 위해 집중하고 있다！
+PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 다음 공격을 위해 집중하고 있다！
 
 
 

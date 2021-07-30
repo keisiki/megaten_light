@@ -46,9 +46,15 @@ RETURN 1
 @장비箇所_2310
 RETURN GET_EQUIPNUM("검")
 
+;싱글샷
 @장비추가스킬_2310,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 111
+	ENDSELECT
+ENDIF
 RETURN 0
-
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -70,6 +76,9 @@ PRINTL 장비조건：LV10～
 
 @장비해설_2310
 PRINTL 가벼워서 다루기 쉬운 활。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：싱글샷
+RESETCOLOR
 
 RETURN 0
 

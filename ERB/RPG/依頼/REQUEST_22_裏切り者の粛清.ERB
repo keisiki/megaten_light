@@ -159,7 +159,6 @@ IF 투기장フラグ:6:0 == 1
 			PRINTW 랴난시가 동료마가 되었다！
 			CALL ADD_NEW_COMPANION,403,0,1
 			CALL MESSAGE_COMP_OVER
-			CALL LIFTING_A_BAN([[キャラ:랴난시]])
 			;FLAG:10403 = 1
 		ENDIF
 	ELSEIF RESULT == 1
@@ -321,7 +320,6 @@ IF 투기장フラグ:6:0 == 1
 				EXP:LOCAL:이상경험 = 2
 			ENDIF
 			CALL MESSAGE_COMP_OVER
-			CALL LIFTING_A_BAN([[キャラ:랴난시]])
 			;FLAG:10403 = 1
 		ENDIF
 		CALL INCREASE_LD,-5

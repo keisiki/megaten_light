@@ -3,7 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_3506,ARG
-RESULTS = 에메랄드ソード
+RESULTS = 에메랄드소드
 
 ;　명중
 @SKILL_HITRATE_3506, ARG
@@ -11,7 +11,7 @@ RETURN 100
 
 ;　위력
 @SKILL_POWER_3506, ARG
-RETURN 350
+RETURN 700
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_3506,ARG
@@ -66,12 +66,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;빙결
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3506
+@SKILL_DECIDE_TYPE_3506, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3506
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3506, ARG
 RETURN 1
 
 
@@ -116,7 +116,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_3506
-RETURN 17
+RETURN 15
 
 @SKILL_RANKUP_3506
 RETURN 0
@@ -151,13 +151,16 @@ RETURN 1
 ;====================================================
 @ACTION_3506,ARG,ARG:1
 
-MAXBASE:ARG:공격 += MAXBASE:ARG:마법위력
+LOCAL:0 = MAXBASE:ARG:공격
+LOCAL:1 = CFLAG:ARG:공격강화
+
+MAXBASE:ARG:공격 = MAXBASE:ARG:마법위력
 CFLAG:ARG:공격강화 += CFLAG:ARG:마법위력강화
 
 CALL ATTACK_SPREAD,ARG,ARG:1,3506
 
-MAXBASE:ARG:공격 -= MAXBASE:ARG:마법위력
-CFLAG:ARG:공격강화 -= CFLAG:ARG:마법위력강화
+MAXBASE:ARG:공격 = LOCAL:0
+CFLAG:ARG:공격강화 = LOCAL:1
 
 ;====================================================
 ;実行内容ここまで
@@ -166,8 +169,8 @@ CFLAG:ARG:공격강화 -= CFLAG:ARG:마법위력강화
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3506
-PRINTL 巨大な에메랄드ソードで相손を叩き切る　빙결+타격相性
-PRINTL 공격력は마법위력＋공격で算出され、마카카쟈の効果も受ける
+PRINTL 거대한 에메랄드 소드로 상대를 내리치는 빙결+타격상성
+PRINTL 공격력은 마법위력으로 산출되며、마카카쟈의 효과도 받는다.
 
 ;継承に필요な部位
 @継承部位_3506,ARG

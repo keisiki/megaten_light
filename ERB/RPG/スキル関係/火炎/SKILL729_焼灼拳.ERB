@@ -2,8 +2,11 @@
 
 ;스킬名
 @SKILL_NAME_729,ARG
-RESULTS = 소작권
-
+IF SKILL_CHANGE(ARG, 5071)
+	RESULTS = 별이 빛나는 종막의 장미
+ELSE	
+	RESULTS = 소작권
+ENDIF
 ;　명중
 @SKILL_HITRATE_729, ARG
 RETURN 100
@@ -27,7 +30,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_729,ARG
-RETURN 14
+RETURN 18
 
 ;　相性
 @SKILL_TYPE_729,ARG
@@ -35,12 +38,12 @@ RETURN 4
 ;화염
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_729
+@SKILL_DECIDE_TYPE_729, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_729
+@SKILL_DAMAGETYPE_729, ARG
 RETURN 1
 
 
@@ -105,7 +108,7 @@ RETURN 4
 
 ;추가효과기본부여확률
 @SKILL_ADDTIONAL_BASE_RATE_729,ARG
-RETURN 40
+RETURN 30
 
 ;추가효과부여확률上限
 @SKILL_ADDTIONAL_MAX_RATE_729,ARG
@@ -129,8 +132,14 @@ CALL ATTACK_SINGLE,ARG,LOCAL,729
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_729
-PRINTL [전열] 전열의 적 1체에 화염속성 특대 물리데미지. (보통 확률로 FLAME)
-
+IF U > 0 && U < CHARANUM && NO:U == 5071
+	PRINTL 팩스・카에레스티스
+	PRINTL 불꽃을 두른 검으로 찌르기와 불꽃의 공격을 가한다。
+	PRINTL 적 전열 1체에 물리계 화염물리데미지＋화상。사거리가 짧다。
+ELSE
+	PRINTL 적 전열 1체에 화염물리데미지+FLAME。
+	PRINTL 사거리가 짧다
+ENDIF
 ;継承に필요한部位
 @継承部位_729,ARG
 RETURN 1

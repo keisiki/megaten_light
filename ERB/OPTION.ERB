@@ -38,6 +38,16 @@
 ;	028		2020/02/02		木綿豆腐 				데빌시프터/식노/악마憑きは악마변신時の화면の顔グラを설정できるように
 ;	029		2020/03/XX		リファクタリングと分割と표시の簡素化
 ;	030		2020/04/18		木綿豆腐 				전투勝利구상の呼び出し先を랜덤/最終行動者に변경できるように
+;	031		2020/04/26		名無し					好餌이벤트のON/OFF기능を추가
+;	032		2020/06/03		名無し					好餌이벤트に幸せのトイレを추가
+;	033		2020/06/19		なんとなくの人 			画像エ디무ットの설정を추가
+;	034		2020/06/19		スパロボガスキー 		벨벳룸での스테이터스アップ화면변경기능を추가
+;	035		2020/08/20		마리ーちゃんの中の人 	페르소나구사자추가ステ설정を試用版として実装
+;	036		2020/09/08		마리ーちゃんの中の人 	페르소나구사자소지페르소나EXP증가설정を試用版として実装
+;	037		2020/10/12		JK好き					@SAMENPLACE_SETTINGに랜덤にぶっかけ추가
+;	038		2021/01/29		Rsp暇人					도구명중/道具威力を新設し、使用するオプションを追加。EDIT035の記述ミスを修正。実装されておらずエラーが出る選択肢をコメントアウト
+;	039		2020/10/12		NEO						ボイコットを変更可能にした。むしろなぜできないのか意味不明すぎる……
+;	040		2021/02/25		NEO						ふたごちゃんパッチ用オプションの追加
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 @SHOPCOMABLE_400
@@ -118,11 +128,15 @@ CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "능력확인에서마지막에연페이�
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "커맨드수설정")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "리스트표시수설정")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "화상표시설정")
+CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "화상에디트설정", LIMIT(FLAG:画像エディット設定, 0, 1), "사용한다", "사용안한다")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "구상・정경텍스트표시설정")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "스테이터스화면타입설정")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "메시지윈도우설정")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "합체용소프트퀵설정")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "레벨업시인터페이스설정", LIMIT(FLAG:레벨アップ時インターフェース설정, 0, 3), "디폴트I/F", "신형I/F", "자동I/F", "자동I/F개")
+;---- EDIT 034 ADD START -------------------------
+CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "V・ROOM에서스테이터스업화면설정", GETBIT(FLAG:그외설정スイッチ, 2), "디폴트I/F", "신형I/F")
+;---- EDIT 034 ADD END   -------------------------
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "SHOP커맨드리네임", LIMIT(항목名설정, 0, 1), "하지 않는다", "한다")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "장부소거")
 L_TYPE '= "조교"
@@ -133,6 +147,7 @@ CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "촉수사역확장", GETBIT(FLAG:촉수�
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "노역실행확인생략", LIMIT(FLAG:노역実行확인생략설정, 0, 1), "생략하지 않는다", "생략한다")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "임신기능설정", LIMIT(FLAG:임신기능, 0, 2), "OFF", "ON(오토코노코도 포함)", "ON(오토코노코는 제외)")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "출산기능", LIMIT(FLAG:출산기능ONOFF, 0, 2), "OFF", "ON(아이조교ON)", "ON(아이조교OFF)")
+CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "다태임신기능", LIMIT(FLAG:ふたごちゃんフラグ, 0, 3), "OFF", "ON(드물게쌍둥이)", "ON(잉태희망)", "ON(태내합체마인)")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "대기멤버의조교선택시처리", LIMIT(FLAG:控え이용설정, 0, 2), "대상 변경", "조교 개시", "이용하지 않는다")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "대기멤버의스트레스치표시", GETBIT(FLAG:控え스트레스치표시설정, 0), "없음", "있음")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "신규캐릭터요바이불허가설정", 0, OPTION_요바이불허가性別표시())
@@ -140,6 +155,7 @@ CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "PALAM표시설정", LIMIT(FLAG:PALAM표�
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "사정부위설정")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "착의관련설정")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "ＮＴＲ기능설정", GETBIT(FLAG:ＮＴＲ기능, 0), "OFF", "ON")
+CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "미끼이벤트설정", GETBIT(FLAG:好餌フラグ, 0), "OFF", "ON")
 L_TYPE '= "탐색"
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "던전의권장레벨표시", GETBIT(FLAG:던전の권장레벨표시설정, 0), "보지 않는다", "본다")
 CALLF OPTION_SET_ITEM(ARG_COM, L_TYPE, "미조교시함락", LIMIT(FLAG:미조교시함락, 0, 2), "없음", "조교로 전투에 참가한 수 없는 인간만 유효", "인간악마가리지 않고 전원 유효")
@@ -181,7 +197,30 @@ CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "마카환율변동기능", SETTING_IS_M
 CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "소셜게임풍가챠", LIMIT(FLAG:악마가챠모드, 0, 2), "없음", "가챠 기동", "가챠 악마 전용")
 CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "데빌시프터스텟설정", LIMIT(FLAG:데빌시프터ステ설정, 0, 1), "변경하지 않는다(바닐라설정)", "변경한다")
 CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "장비효과설정", BATTLE_SETTING_IS_EQUIPTHEORY(), "변경하지 않는다", "변경한다")
+;---- EDIT 038 ADD START -------------------------
+; LIMIT(FLAG:～～, 0, 3)なので"デメリットを完全に無くす"を選んでも表示されないのを修正
 CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "페르소나구사자사양설정", LIMIT(FLAG:페르소나구사자仕様설정, 0, 2), "디폴트", "페르소나１・２의 사양 따름", "페르소나３ 이후의 사양 따름")
+;2020/08/20
+;---- EDIT 035 ADD START -------------------------
+CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "페르소나구사자추가스탯설정", LIMIT(FLAG:페르소나구사자추가ステ설정, 0, 1), "변경안한다(바닐라설정)", "변경한다")
+;---- EDIT 035 ADD END ---------------------------
+;---- EDIT 036 ADD START -------------------------
+CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "소지페르소나EXP증가설정", LIMIT(FLAG:소지페르소나EXP증가설정, 0, 1), "변경안한다(바닐라설정)", "변경한다")
+;---- EDIT 036 ADD END ---------------------------
+;---- EDIT 037' ADD START -------------------------
+;		FLAG:相性소질체크適用範囲変更設定を変更する処理が実装されていないようのでコメントアウト
+;		同様にFLAG.csvの702,相性소질체크適用範囲変更設定も確保だけされて使用されてないみたいです
+;		作成された人はFLAG.csvから
+;			021		2020/09/08		マリーちゃんの中の人	フラグ702:「相性소질체크適用범위변경설정」を追加
+;		なのでEDIT番号を37から変更
+; CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "相性소질체크適用범위변경설정", LIMIT(FLAG:相性소질체크適用범위변경설정, 0, 1), "変更しない(バニラ設定)", "変更する")
+;---- EDIT 037' ADD END ---------------------------
+CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "攻撃アイテムの計算式設定", BATTLE_SETTING_IS_ITEM_DAMAGE()+BATTLE_SETTING_IS_ITEM_HITRATE()*2, "디폴트", "위력계산만 변경한다", "ERROR", "위력・명중계산 모두 변경한다")
+;---- EDIT 038 ADD END -------------------------
+
+;위 주석 참조
+;CALLF OPTION_SET_ITEM(ARG_COM, "DEBUG", "상성소질체크적용범위변경설정", LIMIT(FLAG:相性소질체크適用범위변경설정, 0, 1), "변경안한다(바닐라설정)", "변경한다")
+
 
 ;----------------------------------------------------------
 ;항목표시
@@ -341,8 +380,12 @@ SELECTCASE ARG_COM:RESULT:1
 		CALL OPTION_임신기능설정
 	CASE "출산기능"
 		CALL OPTION_출산기능
+	CASE "다태임신기능"
+		CALL OPTION_多胎妊娠機能
 	CASE "ＮＴＲ기능설정"
 		CALL NTR_CONFIG
+	CASE "미끼이벤트설정"
+		CALL KOUJI_CONFIG
 	CASE "ＳＭ플레이확장"
 		INVERTBIT FLAG:SM기능확장, 0
 	CASE "야외플레이확장"
@@ -377,6 +420,12 @@ SELECTCASE ARG_COM:RESULT:1
 	CASE "승리구상"
 		INVERTBIT FLAG:勝利구상설정, 0
 ;---- EDIT 030 ADD END -------------------------
+	CASE "화상에디트설정"
+		FLAG:画像エディット設定 = OPTION_SWITCH(FLAG:画像エディット設定, 0, 1)
+;---- EDIT 034 ADD START -------------------------
+	CASE "V・ROOM에서스테이터스업화면설정"
+		CALL SETTING_INVERT_VELVET_STATUS_UP
+;---- EDIT 034 ADD END   -------------------------
 	CASEELSE
 		CALLFORM OPTION_%ARG_COM:RESULT:1%
 ENDSELECT
@@ -686,6 +735,40 @@ CASE 2
 ENDSELECT
 
 ;----------------------------------------------------------
+@OPTION_多胎妊娠機能
+#DIMS L_TEXT, 4 = "OFF", "ON(드물게쌍둥이)", "ON(잉태희망)", "ON(태내합체마인)"
+DRAWLINE
+PRINTFORML 현재의 다태 임신 설정은 [%L_TEXT:(FLAG:ふたごちゃんフラグ)%] 입니다
+PRINTFORML 다태 임신 기능의 설정을 선택해 주세요
+PRINTFORML ※임신 출산 기능이 켜져 있지 않으면 효과가 없습니다※
+DRAWLINE
+PRINTL
+PRINTL [0] OFF(바닐라 설정)
+PRINTL 　아이를 낳는 것은 한 사람뿐이며、[임신하기쉬움] 등의 효과가 없습니다。
+PRINTL [1] ON(드물게 쌍둥이)
+PRINTL 　체격 등의 소질에 따라、드물게 쌍둥이（이상）이 탄생합니다。최대 10% 정도。
+PRINTL 　임신 기간의 연장등은 없고、효과는 출산경험이 간혹 증가하는 정도입니다。
+PRINTL [2] ON(잉태희망)
+PRINTL 　쌍둥이 비율이 대폭 상승하나、임신 기간 연장 등도 발생합니다。
+PRINTL 　임신 인원은 체격에 따라 한계가 있습니다。
+PRINTL [3] ON(태내 합체 마인)
+PRINTL 　한계돌파。체격에 따른 상한선 풀겠습니다。
+PRINTL 　소인 체격이 열 명쯤 임신하여 낳습니다。
+PRINTL
+CALL INPUTINT,0,1,2,3
+FLAG:ふたごちゃんフラグ = RESULT
+IF FLAG:임신기능 == 0
+	PRINTFORMW 임신기능 설정을 ON 해주세요
+	FLAG:ふたごちゃんフラグ = 0
+ELSE
+	PRINTFORMW 임신기능 설정을 [%L_TEXT:(FLAG:ふたごちゃんフラグ)%] 로 변경했습니다
+ENDIF
+IF FLAG:ふたごちゃんフラグ == 0
+	CALL CLEAR_PREGNANCY_MULTI_BIRTHS
+	PRINTFORMW 임신 중인 모든 캐릭터의 임신 수를 1로 재설정했습니다
+ENDIF
+
+;----------------------------------------------------------
 @OPTION_므흣전개：밀려넘어짐
 INVERTBIT FLAG:押し倒され이벤트, 0
 SIF !INRANGE(FLAG:押し倒され이벤트発生率, 1, 10)
@@ -704,26 +787,26 @@ PRINTFORMW 이벤트 발생률을 {FLAG:押し倒され이벤트発生率}\%로 
 ;----------------------------------------------------------
 @OPTION_므흣전개：밀려넘어짐성별설정
 DRAWLINE
-PRINTL 押し倒され이벤트が発生する性別の組み合わせを설정します
+PRINTL 밀려 넘어지는 현상이 발생하는 성별 조합을 설정합니다
 PRINTL 　※대상→당신 男娘:오토코노코　双女:후타나리
 DRAWLINE
 PRINTL
-PRINTFORM [ 1]  女 → 男  :\@ GETBIT(FLAG:押し倒され이벤트,1) ? ○ # × \@ 
-PRINTFORM [ 2] 双女→ 男  :\@ GETBIT(FLAG:押し倒され이벤트,2) ? ○ # × \@ 
-PRINTFORM [ 3]  男 → 男  :\@ GETBIT(FLAG:押し倒され이벤트,3) ? ○ # × \@ 
-PRINTFORML [ 4] 男娘→ 男  :\@ GETBIT(FLAG:押し倒され이벤트,4) ? ○ # × \@ 
-PRINTFORM [ 5]  女 → 女  :\@ GETBIT(FLAG:押し倒され이벤트,5) ? ○ # × \@ 
-PRINTFORM [ 6] 双女→ 女  :\@ GETBIT(FLAG:押し倒され이벤트,6) ? ○ # × \@ 
-PRINTFORM [ 7]  男 → 女  :\@ GETBIT(FLAG:押し倒され이벤트,7) ? ○ # × \@ 
-PRINTFORML [ 8] 男娘→ 女  :\@ GETBIT(FLAG:押し倒され이벤트,8) ? ○ # × \@  
-PRINTFORM [ 9]  女 →男娘 :\@ GETBIT(FLAG:押し倒され이벤트,9) ? ○ # × \@ 
-PRINTFORM [10] 双女→男娘 :\@ GETBIT(FLAG:押し倒され이벤트,10) ? ○ # × \@ 
-PRINTFORM [11]  男 →男娘 :\@ GETBIT(FLAG:押し倒され이벤트,11) ? ○ # × \@ 
-PRINTFORML [12] 男娘→男娘 :\@ GETBIT(FLAG:押し倒され이벤트,12) ? ○ # × \@  
-PRINTFORM [13]  女 →双女 :\@ GETBIT(FLAG:押し倒され이벤트,13) ? ○ # × \@ 
-PRINTFORM [14] 双女→双女 :\@ GETBIT(FLAG:押し倒され이벤트,14) ? ○ # × \@ 
-PRINTFORM [15]  男 →双女 :\@ GETBIT(FLAG:押し倒され이벤트,15) ? ○ # × \@ 
-PRINTFORML [16] 男娘→双女 :\@ GETBIT(FLAG:押し倒され이벤트,16) ? ○ # × \@  
+PRINTFORM [ 1]  여 → 남  :\@ GETBIT(FLAG:押し倒され이벤트,1) ? ○ # × \@ 
+PRINTFORM [ 2] 후타나리→ 남  :\@ GETBIT(FLAG:押し倒され이벤트,2) ? ○ # × \@ 
+PRINTFORM [ 3]  남 → 남  :\@ GETBIT(FLAG:押し倒され이벤트,3) ? ○ # × \@ 
+PRINTFORML [ 4] 낭자애→ 남  :\@ GETBIT(FLAG:押し倒され이벤트,4) ? ○ # × \@ 
+PRINTFORM [ 5]  여 → 여  :\@ GETBIT(FLAG:押し倒され이벤트,5) ? ○ # × \@ 
+PRINTFORM [ 6] 후타나리→ 여  :\@ GETBIT(FLAG:押し倒され이벤트,6) ? ○ # × \@ 
+PRINTFORM [ 7]  남 → 여  :\@ GETBIT(FLAG:押し倒され이벤트,7) ? ○ # × \@ 
+PRINTFORML [ 8] 낭자애→ 여  :\@ GETBIT(FLAG:押し倒され이벤트,8) ? ○ # × \@  
+PRINTFORM [ 9]  여 →낭자애 :\@ GETBIT(FLAG:押し倒され이벤트,9) ? ○ # × \@ 
+PRINTFORM [10] 후타나리→낭자애 :\@ GETBIT(FLAG:押し倒され이벤트,10) ? ○ # × \@ 
+PRINTFORM [11]  남 →낭자애 :\@ GETBIT(FLAG:押し倒され이벤트,11) ? ○ # × \@ 
+PRINTFORML [12] 낭자애→낭자애 :\@ GETBIT(FLAG:押し倒され이벤트,12) ? ○ # × \@  
+PRINTFORM [13]  여 →후타나리 :\@ GETBIT(FLAG:押し倒され이벤트,13) ? ○ # × \@ 
+PRINTFORM [14] 후타나리→후타나리 :\@ GETBIT(FLAG:押し倒され이벤트,14) ? ○ # × \@ 
+PRINTFORM [15]  남 →후타나리 :\@ GETBIT(FLAG:押し倒され이벤트,15) ? ○ # × \@ 
+PRINTFORML [16] 낭자애→후타나리 :\@ GETBIT(FLAG:押し倒され이벤트,16) ? ○ # × \@  
 PRINTL
 PRINT [100] 모두 있음  
 PRINT [200] 모두 없음  
@@ -890,7 +973,7 @@ ENDIF
 ;----------------------------------------------------------
 @OPTION_EXTRA이벤트설정
 INVERTBIT FLAG:EXTRA이벤트설정, 0
-PRINTFORMW EXTRA이벤트の発生を\@ GETBIT(FLAG:EXTRA이벤트설정, 0) ? 있음 # 없음 \@으로 변경했습니다
+PRINTFORMW EXTRA 이벤트의 발생을 \@ GETBIT(FLAG:EXTRA이벤트설정, 0) ? 있음 # 없음 \@으로 변경했습니다
 SIF GETBIT(FLAG:EXTRA이벤트설정, 0)
 	CALL EXTRA_EVENT_FILTER
 
@@ -1053,18 +1136,104 @@ PRINTFORML [%L_TEXT:BATTLE_SETTING_IS_EQUIPTHEORY()%]로 되었습니다
 ;----------------------------------------------------------
 @OPTION_페르소나구사자사양설정
 #DIMS L_TEXT, 3 = "디폴트", "페르소나１・２ 캐릭터의 사양으로 통일", "페르소나３이후 캐릭터의 사양으로 통일"
-FLAG:페르소나구사자仕様설정 = LIMIT(FLAG:페르소나구사자仕様설정, 0, 1)
+;---- EDIT 038 ADD START -------------------------
+;		LIMITが0～1だったため呼び出すたびに数値が変更されるのを修正
+FLAG:페르소나구사자仕様설정 = LIMIT(FLAG:페르소나구사자仕様설정, 0, 4)
 DRAWLINE
 PRINTFORML 현재의 설정은 [%L_TEXT:(FLAG:페르소나구사자仕様설정)%] 로 되어있습니다
 DRAWLINE
-PRINTFORML 설정を選択してください
+PRINTFORML 설정을 선택해주세요
 PRINTL [0] 페르소나１・２ 캐릭터는 즉시 체인지 가능、３이후 캐릭터는 체인지에 １턴 걸리지만 페르소나성장이 빠르고 배드스텟 내성장비가 유효（디폴트）
 PRINTL [1] 모든 페르소나구사자를 페르소나１・２ 캐릭터의 사양으로 통일
 PRINTL [2] 모든 페르소나구사자를 페르소나３이후의 캐릭터의 사양으로 통일
-CALL INPUTINT,0,1,2
+PRINTL [3] 단점을 없앤다. (전 페르소나 사용을 즉시 체인지 가능, 페르소나의 성장이 빠르고 배드스텟 내성 장비가 유효하게 한다)
+;全部廃止しても데빌시프터相当になるだけ
+PRINTL [4] 디메리트를 완전하게 없앤다(전체 P사용 즉시 체인지, P의 성장이 빨라 BS 내성 유효. 내성 변경의 제한 완화.초기 P 얼라인먼트에 의한 EXP 보정 폐지)
+CALL INPUTINT(0, 1, 2, 3, 4)
 FLAG:페르소나구사자仕様설정 = RESULT
 PRINTFORML 설정 [%L_TEXT:(FLAG:페르소나구사자仕様설정)%] 로 변경했습니다
 
+;----------------------------------------------------------
+;---- EDIT 035 ADD START -------------------------
+@OPTION_페르소나구사자추가ステ설정
+#DIMS L_TEXT, 2 = "통상(바닐라설정)", "계산식변경"
+FLAG:페르소나구사자추가ステ설정 = LIMIT(FLAG:페르소나구사자추가ステ설정, 0, 1)
+DRAWLINE
+PRINTFORML 현재의 설정은 [%L_TEXT:(FLAG:페르소나구사자추가ステ설정)%]로 되어있습니다
+DRAWLINE
+PRINTL [0] 통상(바닐라설정)
+PRINTL 설명　：eraMegaten본래의 설정。
+PRINTL 　　　　초기 페르소나만 본체 능력의 합계를 나눈 후 스테이터스를 최대 1/10 더한다.
+PRINTL 　　　　초기 페르소나만 전투 능력에 1/400의 보정을 준다
+PRINTL 　　　　추가 페르소나는 초기 csv 스테이터스에 따라 계산한다.
+PRINTL [1] 계산식변경
+PRINTL 설명　：모든 페르소나는 각 스테이터스 최대 1/10을 본체에 더한다.
+PRINTL 　　　　모든 페르소나의 전투 능력에 1/400의 보정을 준다
+CALL INPUTINT( 0, 1)
+IF FLAG:페르소나구사자추가ステ설정 == RESULT
+	PRINTW 설정을 변경하지 않았습니다
+ELSE
+	FLAG:페르소나구사자추가ステ설정 = RESULT
+	PRINTFORMW  [%L_TEXT:(FLAG:페르소나구사자추가ステ설정)%] 로 변경했습니다.
+ENDIF
+;---- EDIT 035 ADD END -------------------------
+;---- EDIT 036 ADD START -------------------------
+@OPTION_소지페르소나EXP증가설정
+#DIMS L_TEXT, 2 = "통상(바닐라설정)", "계산식변경"
+FLAG:소지페르소나EXP증가설정 = LIMIT(FLAG:소지페르소나EXP증가설정, 0, 1)
+DRAWLINE
+PRINTFORML 현재의 설정은 [%L_TEXT:(FLAG:소지페르소나EXP증가설정)%]로 되어있습니다
+DRAWLINE
+PRINTL [0] 통상(바닐라설정)
+PRINTL 설명　：eraMegaten본래의 설정。
+PRINTL 장비하고 있는 페르소나만 경험치가 증가한다
+PRINTL [1] 계산식변경
+PRINTL 설명　：페르소나 구사자가 소지하고 있는 모든 페르소나의 경험치가 증가한다.
+CALL INPUTINT( 0, 1)
+IF FLAG:소지페르소나EXP증가설정 == RESULT
+	PRINTW 설정을 변경하지 않았습니다
+ELSE
+	FLAG:소지페르소나EXP증가설정 = RESULT
+	PRINTFORMW  [%L_TEXT:(FLAG:소지페르소나EXP증가설정)%] 로 변경했습니다.
+ENDIF
+;---- EDIT 036 ADD END -------------------------
+;----------------------------------------------------------
+
+
+@OPTION_攻撃アイテムの計算式設定
+#DIMS L_TEXT = "디폴트", "위력 계산만 변경한다", "ERROR", "위력・명중 계산 모두 변경한다"
+DRAWLINE
+PRINTFORML 공격아이템 사용 시 능력치의 영향을 선택해 주세요。
+PRINTFORML 현재의 설정은 [%L_TEXT:(BATTLE_SETTING_IS_ITEM_DAMAGE()+BATTLE_SETTING_IS_ITEM_HITRATE()*2)%]로 되어있습니다
+DRAWLINE
+PRINTFORML 설정을 선택해 주세요
+PRINTL [0] 바닐라 설정
+PRINTL 설명　：eraMegaten본래의 설정。
+PRINTL 　　　　데미지를 주는 공격아이템은 명중 판정에 마법효과를, 데미지 계산에 마법위력을 참조합니다。
+PRINTL 　　　　기본값은 낮지만, 장비품으로 보정할 수 있습니다。
+PRINTL 　　　　도구 지식을 갖춘 서머너보다 마법형 능자쪽이 효과적으로 아이템을 사용할 수 있게 될 것입니다。
+PRINTL [1] 위력 계산만 변경한다
+PRINTL 설명　：명중판정에 마법효과를 사용하는 상태로, 데미지 계산식을 변경합니다。
+PRINTL 　　　　레벨・지혜가 큰 영향을 주고, 운이 조금 영향을 줍니다。개인간의 능력차는 좁혀집니다。
+PRINTL 　　　　기본값은 높아지지만, 장비품으로 보정할 수 없게 됩니다。
+PRINTL [2] 위력・명중 계산을 모두 변경한다
+PRINTL 설명　：위력 계산뿐만 아니라 명중 판정의 계산식도 함께 변경합니다。
+PRINTL 　　　　명중 판정에는 레벨・속도가 큰 영향을 주고、마력이 조금 영향을 줍니다。개인간의 능력차는 더욱 좁혀집니다。
+PRINTL 　　　　이쪽도 기본값이 높아지지만, 장비품으로 보정할 수 없게 됩니다。
+CALL INPUTINT(0, 1, 2)
+SELECTCASE RESULT
+	CASE 1
+		CALL BATTLE_SETTING_SET_ITEM_DAMAGE(1)
+		CALL BATTLE_SETTING_SET_ITEM_HITRATE(0)
+	CASE 2
+		CALL BATTLE_SETTING_SET_ITEM_DAMAGE(1)
+		CALL BATTLE_SETTING_SET_ITEM_HITRATE(1)
+	CASEELSE
+		CALL BATTLE_SETTING_SET_ITEM_DAMAGE(0)
+		CALL BATTLE_SETTING_SET_ITEM_HITRATE(0)
+ENDSELECT
+PRINTFORML 設定を [%L_TEXT:(BATTLE_SETTING_IS_ITEM_DAMAGE()+BATTLE_SETTING_IS_ITEM_HITRATE()*2)%] に変更しました
+;---- EDIT 038 ADD END -------------------------
 
 ;================================================
 ;[1]사정位置설정
@@ -1084,6 +1253,7 @@ PRINTL [6] 「가랑이」
 PRINTL [7] 「엉덩이」
 PRINTL [8] 「그대로 사정」or「콘돔에 사정」
 PRINTL [9] 「그때마다 선택」
+PRINTL [10] 「랜덤부카게」
 PRINTL 
 INPUT
 FLAG:99 = LIMIT(RESULT, 0, 9)
@@ -1236,7 +1406,7 @@ LOCALS:0 = 외상약（HP+30）
 LOCALS:1 = 마석（HP+25\%）
 LOCALS:2 = 우황단（HP+200）
 LOCALS:3 = 보옥（HP+100\%）
-LOCALS:4 = 기질계 아이템
+LOCALS:4 = BS 회복계 아이템
 LOCALS:5 = 이와쿠라의물
 LOCALS:6 = 도반옥（HP25\%부활）
 LOCALS:7 = 반혼향（HP100\%부활）
@@ -1433,6 +1603,82 @@ SIF  (GETBIT(FLAG:ＮＴＲ기능 , 0) || ARG:1)
 	RESETCOLOR
 PRINTL ]
 
+;=====================================
+;好餌이벤트설정
+;=====================================
+@KOUJI_CONFIG
+#LOCALSIZE 1
+#DIM LCOUNT
+LOCAL = LINECOUNT
+
+REDRAW 0
+;표시
+PRINTFORML 미끼이벤트설정
+DRAWLINE
+PRINTFORM [ 0] %"好餌フラグ" , 20 , LEFT% 
+CALL KOUJI_SHOW_ONOFF , GETBIT(FLAG:好餌フラグ , 0) , 1
+SIF !GETBIT(FLAG:好餌フラグ , 0)
+	SETCOLOR COLOR("GRAY")
+PRINTFORM [ 1] %"함락자낚시자매 이벤트" , 28 , LEFT% 
+CALL KOUJI_SHOW_ONOFF , GETBIT(FLAG:好餌フラグ , 1)
+PRINTFORM [ 2] %"기승위이벤트" , 28 , LEFT% 
+CALL KOUJI_SHOW_ONOFF , GETBIT(FLAG:好餌フラグ , 2)
+PRINTFORM [ 3] %"행복의화장실이벤트" , 28 , LEFT% 
+CALL KOUJI_SHOW_ONOFF , GETBIT(FLAG:好餌フラグ , 3)
+RESETCOLOR
+PRINTL
+PRINTFORML [100]돌아간다
+REDRAW 1
+
+;입력と処理
+$INPUT_LOOP
+INPUT
+IF RESULT == 100
+	RETURN 1
+ELSEIF RESULT == 0
+	INVERTBIT FLAG:好餌フラグ , 0
+	IF GETBIT(FLAG:好餌フラグ , 0)
+		FOR LCOUNT, 0, 9
+			SETBIT FLAG:好餌フラグ , LCOUNT+1
+		NEXT
+	ELSE
+		FLAG:好餌フラグ = 0
+		FLAG:ＮＴＲハードモード = 0
+		FLAG:ＮＴＲ客の설정 = 0
+	ENDIF
+ELSEIF RANGE(RESULT , 1 , 63) && GETBIT(FLAG:好餌フラグ , 0)
+	INVERTBIT FLAG:好餌フラグ , RESULT
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+REDRAW 0
+CLEARLINE LINECOUNT - LOCAL
+RESTART
+
+@KOUJI_SHOW_ONOFF(ARG , ARG:1 = 0 ,  ARGS = "  ON" , ARGS:1 = " OFF")
+SIF  (GETBIT(FLAG:好餌フラグ , 0) || ARG:1)
+	RESETCOLOR
+PRINT [
+IF ARG && (GETBIT(FLAG:好餌フラグ , 0) || ARG:1)
+	SETCOLOR COLOR("AQUA")
+ELSE
+	SETCOLOR COLOR("GRAY")
+ENDIF
+PRINTFORM %ARGS%
+SIF  (GETBIT(FLAG:好餌フラグ , 0) || ARG:1)
+	RESETCOLOR
+PRINT  / 
+IF !ARG &&  (GETBIT(FLAG:好餌フラグ , 0) || ARG:1)
+	SETCOLOR COLOR("AQUA")
+ELSE
+	SETCOLOR COLOR("GRAY")
+ENDIF
+PRINTFORM  %ARGS:1%
+SIF  (GETBIT(FLAG:好餌フラグ , 0) || ARG:1)
+	RESETCOLOR
+PRINTL ]
+
 ;==============================================================
 ;던전내조작설정
 ;==============================================================
@@ -1451,7 +1697,6 @@ PRINTL [0] [디폴트] 타입으로 한다
 PRINTL [1] [ＦＰＳ] 타입으로 한다
 PRINTL [2] [디폴트]타입으로 한다(전세이브데이터공유)
 PRINTL [3] [ＦＰＳ]타입으로 한다(전세이브데이터공유)
-
 CALL INPUTINT,0,1,2,3
 SELECTCASE RESULT
 	CASE 0, 1
@@ -1476,7 +1721,6 @@ PRINTL 특정 성별의 캐릭터가 새로 동료마가 되었을 때, 요바�
 DRAWLINE
 PRINTFORML 현재의 불허가： [%OPTION_요바이불허가性別표시()%]
 PRINTL
-$PRINT
 PRINTFORML [0] 남자(오토코노코 제외) [\@ FLAG:요바이불허가성별 & 1 ? 불허가 # 허가\@]
 PRINTFORML [1] 오토코노코　         [\@ FLAG:요바이불허가성별 & 2 ? 불허가 # 허가\@]
 PRINTFORML [2] 여자               [\@ FLAG:요바이불허가성별 & 4 ? 불허가 # 허가\@]

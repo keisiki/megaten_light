@@ -12,7 +12,7 @@ RETURN 100
 RETURN 450
 
 ;高クリティカル
-@SKILL_CRITICAL_RATE_4326
+@SKILL_CRITICAL_RATE_4326, ARG
 RETURN 20
 
 ;　최저공격횟수
@@ -37,11 +37,11 @@ RETURN 32
 RETURN GET_TYPE_NUM("빙결")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_4326
+@SKILL_DECIDE_TYPE_4326, ARG
 RETURN 0
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_4326
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_4326, ARG
 SIF FLAG:拡散フラグ == 0
 	RETURN 1
 RETURN 2
@@ -78,7 +78,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4326, ARG = -1
-RETURN 7
+RETURN 27
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4326,ARG
@@ -127,7 +127,7 @@ NEXT
 IF POS(ARG:1) > 0 && LOCAL:1 > BASE:POS(ARG:1):ＨＰ && GET_STATE(CFLAG:POS(ARG:1):ステート) != "DYING"
 	CFLAG:POS(ARG:1):명중강화 = MAX(-16, CFLAG:POS(ARG:1):명중강화 - 4)
 	CFLAG:POS(ARG:1):회피강화 = MAX(-16, CFLAG:POS(ARG:1):회피강화 - 4)
-	PRINTFORML 　　TARGET:[{ARG:1,2}] %CALLNAME:POS(ARG:1),20,LEFT%　>>>>>>　명중・회피が下がった！
+	PRINTFORML 　　TARGET:[{ARG:1,2}] %CALLNAME:POS(ARG:1),20,LEFT%　>>>>>>　명중・회피가 저하했다！
 ENDIF
 FLAG:拡散フラグ = 0
 
@@ -140,7 +140,7 @@ FLAG:拡散フラグ = 0
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_4326
-PRINTL 적一体に빙결相性の物理+魔法特大ダメージ＆명중회피低下、高확률でFREEZE
+PRINTL 적 1체에 빙결상성의 물리+마법 특대 데미지＆명중회피저하、높은 확률로 FREEZE
 
 ;継承に필요な部位
 @継承部位_4326,ARG
@@ -167,9 +167,9 @@ RETURN 1
 @참가조건표시_4326,ARG
 SELECTCASE ARG
 	CASE 1
-		PRINTFORM 합계위력450以上の빙결系1체스킬
+		PRINTFORM 합계위력 450이상의 빙결계 1체 스킬
 	CASE 2
-		PRINTFORM 합계위력300以上の비구系1체스킬
+		PRINTFORM 합계위력 300이상의 비구계 1체 스킬
 ENDSELECT
 
 @発動者조건_4326 , ARG

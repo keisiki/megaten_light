@@ -1,5 +1,7 @@
 ﻿;-------------------------------------------------
 ;제모
+
+; 21/07/05			ADK			아이마스 패치 부분 주석처리
 ;-------------------------------------------------
 @CHECK_COM_ABLE281
 ;손 못쓰면 무리
@@ -222,10 +224,10 @@ INPUT
 
 IF RESULT == 0 || RESULT == 1
 	IF HAVE_PENIS(TARGET)
-		PRINTFORM %CALLNAME:PLAYER%는 %CALLNAME:TARGET%의 음모를
+		PRINTFORM %CALLNAME:PLAYER%는 %CALLNAME:TARGET%의 음모를 
 		PRINTFORMW \@ABL:PLAYER:기교>=4 ?  깨끗하게 # \@ 깎았다…
 	ELSE
-		PRINTFORM %CALLNAME:PLAYER%는 %CALLNAME:TARGET%의 음모를
+		PRINTFORM %CALLNAME:PLAYER%는 %CALLNAME:TARGET%의 음모를 
 		PRINTFORM \@ABL:PLAYER:기교>=4 ?  깨끗하게 # \@ 깎아내곤、
 		IF (TALENT:클리피어스 || TALENT:라비아피어스 || TEQUIP:속옷（하） == 620) &&RAND:3 == 0
 			IF TALENT:부끄럼쟁이 && RAND:3 == 0
@@ -264,7 +266,7 @@ IF RESULT == 0 || RESULT == 1
 			ELSE
 				IF TALENT:유아체형 || TALENT:소인체형
 					PRINT 작은 몸에 잘 어울리는 
-				ELSEIF TALENT:소년／소녀 || TALENT:중학생
+				ELSEIF TALENT:소년／소녀 ;|| TALENT:중학생
 					PRINT 곡선을 감상하기 쉬운 
 				ELSE
 					PRINT 성숙한 성기와의 불균형이 흥분을 불러일으키는 
@@ -272,7 +274,7 @@ IF RESULT == 0 || RESULT == 1
 				PRINTFORMW 매끈매끈한 상태로 만들었다…
 			ENDIF
 		ELSE
-			IF TALENT:소년／소녀 == 0 && TALENT:유아체형 == 0  && TALENT:소인체형 == 0 && TALENT:중학생 == 0 && TALENT:고등학생 == 0
+			IF TALENT:소년／소녀 == 0 && TALENT:유아체형 == 0  && TALENT:소인체형 == 0 ;&& TALENT:중학생 == 0 && TALENT:고등학생 == 0
 				IF EXP:Ｖ경험 >= 1000
 					PRINT 늘어진 소음순이 보이는 
 				ELSEIF EXP:Ｖ경험 >=300

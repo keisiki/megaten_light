@@ -59,7 +59,14 @@ RETURN 0
 @장비箇所_2287
 RETURN GET_EQUIPNUM("검")
 
+;지옥찌르기
 @장비추가스킬_2287,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 250
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -83,6 +90,9 @@ PRINTL 장비조건：LV15～
 
 @장비해설_2287
 PRINTL 봉술 등의 무술 전반에 사용되는 지팡이
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：지옥찌르기
+RESETCOLOR
 
 RETURN 0
 

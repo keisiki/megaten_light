@@ -113,8 +113,8 @@
 能力,회화타입,318;신사
 能力,속성LD,1;Light
 能力,속성LC,2;Neutral
-CSTR,11,私
-CSTR,12,キミ
+CSTR,11,나
+CSTR,12,너
 CSTR,종족명,환마
 
 ;복장

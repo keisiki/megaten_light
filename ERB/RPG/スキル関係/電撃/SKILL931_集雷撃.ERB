@@ -1,13 +1,7 @@
 ﻿
 ;스킬名
 @SKILL_NAME_931,ARG
-;クロちゃんが사용する場合Etincelle de Fierteに
-;IF ARG > 0 && NO:ARG == [[キャラ:클로딘]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:클로딘]]) == 1
-	RESULTS = E.de.Fierte
-ELSE
-	RESULTS = 집뢰격
-ENDIF
+RESULTS = 집뢰격
 
 ;　명중
 @SKILL_HITRATE_931, ARG
@@ -44,12 +38,12 @@ RETURN 6
 ;전격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_931
+@SKILL_DECIDE_TYPE_931, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_931
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_931, ARG
 RETURN 2
 
 
@@ -136,12 +130,7 @@ CALL ATTACK_SPREAD,ARG,ARG:1,931
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_931
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:클로딘]]
-	PRINTL Etincelle de Fierte。소녀のキラめきで鍛造されたロングソード
-	PRINTL 전격で、대상とその周囲に１〜２回中ダメージ＋感電。魔法공격
-ELSE
-	PRINTL [후열] 적 1체와 주변의 적에게 １～２회 전격속성 중 마법데미지. (낮은 확률로 SHOCK)
-ENDIF
+PRINTL [후열] 적 1체와 주변의 적에게 １～２회 전격속성 중 마법데미지. (낮은 확률로 SHOCK)
 
 ;継承に필요な部位
 @継承部位_931,ARG

@@ -18,6 +18,14 @@
 ;	007		2015/09/07		名無し					페르소나구사자の스테이터스方式を변경
 ;	008		2016/12/11		Jガン					1moreフラグ사용변경のため追記
 ;	009		2020/04/27		木綿豆腐				초기페르소나の랭크が上がらない不具合を修正
+;	010		2020/07/31		Jガン					1moreフラグ処理統一のため追記
+;	011		2020/08/16		마리ーちゃんの中の人	초기페르소나の랭크が上がらない不具合を수정
+;	012		2020/08/20		마리ーちゃんの中の人	EXP二倍処理が抜けていたので추가
+;	013		2020/08/20		마리ーちゃんの中の人	페르소나구사자추가ステ설정を試用版として実装
+;	014		2020/08/27		Jガン					스킬が変わったときの스킬ゲージ処理추가
+;	015		2020/09/06		Jガン					페르소나新型処理추가
+;	016		2020/09/08		마리ーちゃんの中の人	페르소나구사자が획득したEXPが소지している全페르소나に対して加算される様に변경
+;	017		2020/09/21		Jガン					페르소나변이時の不具合수정
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=================================================
 ;  ◇記載関数一覧(記載順)
@@ -173,12 +181,14 @@
 		;페르소나구사자の스테이터스＋페르소나のCSV스테이터스の10分の1
 		;초기페르소나は現在스테이터스の10分の1
 	;	MAXBASE:ARG:GET_BASESTATUS(1+LOCAL:2) += (DITEMTYPE:LOCAL:(페르소나("힘") + LOCAL:2)) * PRANK_COLLECTION_VALUE(ARG)/200
-		IF EQUIP:ARG:장비페르소나 == 0
+	;---- EDIT 013 ADD START -------------------------
+		IF EQUIP:ARG:장비페르소나 == 0 || FLAG:페르소나구사자추가ステ설정
 			MAXBASE:ARG:GET_BASESTATUS(1+LOCAL:2) += (DITEMTYPE:LOCAL:(페르소나("힘") + LOCAL:2)) * PRANK_COLLECTION_VALUE(ARG)/1000
 		ELSE
 			MAXBASE:ARG:GET_BASESTATUS(1+LOCAL:2) += CSVBASE((DITEMTYPE:LOCAL:(페르소나("NO"))), GETNUM(BASE, "힘") + LOCAL:2, 0) * PRANK_COLLECTION_VALUE(ARG)/1000
 		ENDIF
 	;---- EDIT 007 ADD END -------------------------
+	;---- EDIT 013 ADD END -------------------------
 		;場合によってここで0以下になるのでその場合は1にしとく
 		SIF MAXBASE:ARG:GET_BASESTATUS(1+LOCAL:2) <= 0
 			MAXBASE:ARG:GET_BASESTATUS(1+LOCAL:2) = 1
@@ -334,10 +344,14 @@
 	;기본係数설정開始
 	$RESERVE
 	PEXP = 0
-	;레벨差보정を加える(페르소나と대상の레벨差の1/4で切り捨て)
-	PEXP += (ELV - DITEMTYPE:(PERSONA):페르소나("LV")) / 4
-	;싱크로나이즈기어は기본係数 + 2
-	PEXP += (EQUIP:MASTER:싱크로나이즈기어 && NUM_SUMMONER()) * 2
+	;---- EDIT 016 ADD START -------------------------
+	IF FLAG:소지페르소나EXP증가설정 == 0
+		;레벨差보정を加える(페르소나と대상の레벨差の1/4で切り捨て)
+		PEXP += (ELV - DITEMTYPE:(PERSONA):페르소나("LV")) / 4
+	ENDIF
+	;---- EDIT 016 ADD END   -------------------------
+	;싱크로나이즈기어	は기본係数 + 2
+	PEXP += (EQUIP:MASTER:싱크로나이즈기어	 && NUM_SUMMONER()) * 2
 	;---- EDIT 003 ADD START -------------------------
 	;보정撤廃
 	;함락페르소나は기본係数추가(함락1で1、함락2で3)
@@ -350,8 +364,18 @@
 		SIF EQUIP:MASTER:어져스트먼트기어 && NUM_SUMMONER()
 			PEXP /= 2
 		;P3/4系페르소나구사자は倍速
-		SIF TALENT:ARG:페르소나구사자 == 2 || (FLAG:페르소나구사자仕様설정 == 2 && TALENT:ARG:페르소나구사자 >= 1)
+		;2020/08/20　추가
+		;FLAG:페르소나구사자仕様설정 == 4の場合はすべてのEXPボーナス二倍でも？
+		IF TALENT:ARG:페르소나구사자 == 2 || (FLAG:페르소나구사자仕様설정 == 2 && TALENT:ARG:페르소나구사자 >= 1) || (FLAG:페르소나구사자仕様설정 == 3 && TALENT:ARG:페르소나구사자 >= 1) || FLAG:페르소나구사자仕様설정 == 4 || TALENT:ARG:페르소나구사자 != 3
+		;---- EDIT 010 ADD END -------------------------
+		;---- EDIT 011 ADD END -------------------------
 			PEXP *= 2
+		;---- EDIT 013 ADD START -------------------------
+		;新型は경험치1/2
+		ELSEIF TALENT:ARG:페르소나구사자 == 3
+			PEXP /= 2
+		ENDIF
+		;---- EDIT 013 ADD END -------------------------
 	ENDIF
 	;---- EDIT 003 ADD START -------------------------
 	;보정撤廃
@@ -365,11 +389,22 @@
 	;経験値획득前の数値を保持しておく
 	LOCAL = DITEMTYPE:(PERSONA):페르소나("EXP")
 	;上限の式の변경
-	;획득の上限は100 + 함락*50(초기페르소나は＋소지者の함락を見る)に、비전투원の場合は最後に1.5倍
-	IF PERSONA < 50
+	;획득の上限は100 + 함락*50(초기페르소나は＋소지자の함락を見る)に、비전투원の場合は最後に1.5倍
+	;---- EDIT 016 ADD START -------------------------
+	;디폴트では적との레벨보정が마이ナスだった場合、負の数字を吐いて、大幅な발かせになっていたので是正
+	;個別に控えの페르소나にも레벨보정をかけた경험치が入る様に是正
+	IF PERSONA < 50 && FLAG:소지페르소나EXP증가설정 == 0
 		DITEMTYPE:(PERSONA):페르소나("EXP") += MIN(ARG:1 * PEXP, (100 + DITEMTYPE:(PERSONA):페르소나("함락") * 50) * (TALENT:ARG:비전투원 + 2) / 2)
 	ELSE
-		DITEMTYPE:(PERSONA):페르소나("EXP") += MIN(ARG:1 * PEXP, ((100 + 함락(ARG) * 50) * (TALENT:ARG:비전투원 + 1)) * (TALENT:ARG:비전투원 + 2) / 2)
+		DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("EXP") += MIN(ARG:1 * PEXP, ((100 + 함락(ARG) * 50 + MAX(0,((ELV - DITEMTYPE:(PERSONA):페르소나("LV")) / 4)) * (TALENT:ARG:비전투원 + 1)) * (TALENT:ARG:비전투원 + 2) / 2))
+		FOR LOCAL:2, 1, 4
+			LOCALS = 소지페르소나{LOCAL:2}
+			IF EQUIP:ARG:LOCALS
+				DITEMTYPE:(EQUIP:ARG:LOCALS):페르소나("EXP")+= MIN(ARG:1 * PEXP, ((100 + 함락(ARG) * 50 + MAX(0,((ELV - DITEMTYPE:(PERSONA):페르소나("LV")) / 4)) * (TALENT:ARG:비전투원 + 1)) * (TALENT:ARG:비전투원 + 2) / 2))
+			ELSE
+				BREAK
+			ENDIF
+		NEXT
 	ENDIF
 	;사용した技のコスト分페르소나経験値が추가で増える(COOP時は無効)
 	IF ARG:2 > 29
@@ -381,8 +416,21 @@
 			LOCAL:1 = 0
 		ENDCATCH
 	ENDIF
-	DITEMTYPE:(PERSONA):페르소나("EXP") += LOCAL:1
-
+	;---- EDIT 016 ADD START -------------------------
+	IF FLAG:소지페르소나EXP증가설정 == 0
+		DITEMTYPE:(PERSONA):페르소나("EXP") += LOCAL:1
+	ELSE
+		DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("EXP") += LOCAL:1
+		FOR LOCAL:2, 1, 4
+			LOCALS = 소지페르소나{LOCAL:2}
+			IF EQUIP:ARG:LOCALS
+				DITEMTYPE:(EQUIP:ARG:LOCALS):페르소나("EXP") += LOCAL:1
+			ELSE
+				BREAK
+			ENDIF
+		NEXT
+	ENDIF
+	;---- EDIT 016 ADD END   -------------------------
 	;---- EDIT 003 ADD START -------------------------
 	;DITEMTYPE:PEXP:페르소나("EXP") += ARG:1 * PALI_COLLECTION_VALUE(ARG, ARG:2)
 	IF DITEMTYPE:(PERSONA):페르소나("EXP") > 1000
@@ -479,6 +527,16 @@
 		LOCAL:1 = CSVABL(ABL:ARG:초기페르소나, GETNUM(ABL, "속성LD"), 0)
 		LOCAL:3 = CSVABL(ABL:ARG:초기페르소나, GETNUM(ABL, "속성LC"), 0)
 	ENDIF
+	;CSVに속성が未설정の場合も초기페르소나に依存する(念のため、초기페르소나もない場合はN扱いにする)
+	SIF LOCAL:1 == 0
+		LOCAL:1 = CSVABL(ABL:ARG:초기페르소나, GETNUM(ABL, "속성LD"), 0)
+	SIF LOCAL:1 == 0
+		LOCAL:1 =  2
+	SIF LOCAL:3 == 0
+		LOCAL:3 = CSVABL(ABL:ARG:초기페르소나, GETNUM(ABL, "속성LC"), 0)
+	SIF LOCAL:3 == 0
+		LOCAL:3 =  2
+	
 	SIF LOCAL == 0 || ((LOCAL:1 == LOCAL:2) && (LOCAL:3 == LOCAL:4))
 		RETURNF 3
 	IF LOCAL:1 == 2 || LOCAL:2 == 2
@@ -519,7 +577,9 @@
 ;余剰0として相性最良で1/64となり、最悪で1/256となる
 ;----------------------------
 @CHECK_PERSONA_MUTATION, ARG
+	#LOCALSSIZE 1
 	#LOCALSIZE 5
+	#DIM 前스킬, 8
 	#DIM PERSONA, 1
 	#DIM PROB, 1
 	#DIM LINE, 1
@@ -562,9 +622,10 @@
 			CUSTOMDRAWLINE ･
 			PRINTL 어떤 능력을 올리겠습니까？
 			LOCAL:1 = 0
-			FOR LOCAL, 페르소나("힘"), 페르소나("운") + 1
+;---- EDIT 017 (LOCAL → LOCAL:2) -------------------------
+			FOR LOCAL:2, 페르소나("힘"), 페르소나("운") + 1
 				LOCAL:1++
-				PRINTFORML [{LOCAL:1}]%GET_BASESTATUS(LOCAL:1),4% {DITEMTYPE:PERSONA:LOCAL,3}　
+				PRINTFORML [{LOCAL:1}]%GET_BASESTATUS(LOCAL:1),4% {DITEMTYPE:PERSONA:(LOCAL:2),3}　
 			NEXT
 			PRINTL [9] 취소
 			CALL INPUTINT(1,2,3,4,5,6,9)
@@ -580,7 +641,20 @@
 				BREAK
 			ENDIF
 		WEND
+;---- EDIT 014 ADD START -------------------------
+		FOR LOCAL:1 , 0 , 8
+			LOCALS = 스킬{LOCAL:1 + 1}
+			前스킬:(LOCAL:1) = DITEMTYPE:PERSONA:페르소나(LOCALS)
+		NEXT
+;---- EDIT 014 ADD END   -------------------------
 		CALL EVENT_LEVELUP_P, PERSONA
+;---- EDIT 014 ADD START -------------------------
+		FOR LOCAL:1 , 0 , 8
+			LOCALS = 스킬{LOCAL:1 + 1}
+			SIF 前스킬:(LOCAL:1) != DITEMTYPE:PERSONA:페르소나(LOCALS)
+				CALL SKILLGAGE_DIRECT_CLEAR,ARG,(LOCAL:1 + 1) + LOCAL * 8 
+		NEXT
+;---- EDIT 014 ADD END   -------------------------
 		CALL SYNC_STATUS, ARG
 	NEXT
 
@@ -681,8 +755,8 @@
 				SETCOLOR 0x66FFFF
 				PRINT 잠재방어
 				RESETCOLOR
-				SIF !HAVE_SKILL(ARG, [[스킬:엑스트라원]] ) && !CFLAG:ARG:PTフラグ && BATTLE_SETTING_IS_1MORE()
-					CALL ONE_MORE_POINT_DOWN,ARG,2
+;---- EDIT 010 ADD -------------------------
+				CALL ONE_MORE_POINT_ADD,ARG,-2
 				PRINTL 　아차 반사되었다
 				PRINTFORM 　　TARGET:[{CPOS(ARG),2}] %CALLNAME:ARG,20,LEFT%　>>>>>>　
 					CALLFORM DAMAGE_{ARG:2}, ARG, ARG, ARG:3, 17, 5, 1
@@ -693,8 +767,8 @@
 				SETCOLOR 0x66FFFF
 				PRINT 잠재방어
 				RESETCOLOR
-				SIF !HAVE_SKILL(ARG, [[스킬:엑스트라원]] ) && !CFLAG:ARG:PTフラグ && BATTLE_SETTING_IS_1MORE()
-					CFLAG:ARG:１moreフラグ -= 1
+;---- EDIT 010 ADD -------------------------
+				CALL ONE_MORE_POINT_ADD,ARG,-1
 				PRINTFORMW 　BLOCK
 				RETURN 1
 			ENDIF

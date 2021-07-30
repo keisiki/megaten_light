@@ -42,12 +42,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_610
+@SKILL_DECIDE_TYPE_610, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_610
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_610, ARG
 RETURN 0
 
 
@@ -105,7 +105,7 @@ RETURN 0
 
 IF EQUIP:ARG:악세사리 == [[아이템:플러그인／솔로몬의결혼반지]]
 	IF BASE:ARG:충성도+TCVAR:ARG:획득충성도 <= 9999
-		PRINTFORMW 충성도が발りない！
+		PRINTFORMW 충성도가 부족하다！
 	ELSE
 		;충성도を1000소비
 		TCVAR:ARG:획득충성도 = TCVAR:ARG:획득충성도-1000
@@ -152,6 +152,7 @@ ENDIF
 IF U == -1
 	PRINTL [특수] 아군 전체에 만능속성을 제외한 공격을 1회 막는다.
 ELSEIF EQUIP:U:악세사리 == [[아이템:플러그인／솔로몬의결혼반지]]
+	PRINTL [특수] MP대신 충성도을 소비하여 아군 전체에 만능이외의 공격을 １회 막는다.
 ELSE
 	PRINTL [특수] 아군 전체에 만능속성을 제외한 공격을 1회 막는다.
 ENDIF

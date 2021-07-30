@@ -27,7 +27,7 @@
 SIF ARG == 1
 	RETURN 0
 ;구상名
-PRINTFORML 汎用男・若者구상
+PRINTFORML 범용남・젊은이구상
 ;구상설명文
 PRINTFORML    
 
@@ -87,7 +87,7 @@ DRAWLINE
 ;初조교時
 IF CFLAG:201 == 0
 	PRINTFORMW 「여어、%CSTR:12%。뭔가 용건이 있어？」
-	PRINTFORMW 「아앙？　%CSTR:11%를 조교한다고오？」
+	PRINTFORMW 「아앙？　%조사처리(CSTR:11,"를")% 조교한다고오？」
 		IF TALENT:MASTER:오토코노코 == 1
 			PRINTFORMW 「아니、너、일단은 남자잖아……」
 			PRINTFORMW 「뭐、겉보기에는 거의 여자나 다름없으니까 범하기에는 별로 상관없으려나」
@@ -144,7 +144,7 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 				PRINTFORMW 「처음에는 남자 상대인가……라고 생각했지만、너는、그 나름대로 귀엽고」
 				PRINTFORMW 「뭐랄까、지켜주고 싶어진다고 할까、보호본능이 일어난다고 할까」
 				PRINTFORMW 「뭐、이런 것도 있을 수 있지、라고 생각해버려서」
-				PRINTFORMW 「%CSTR:12%은、내가 계속 지켜주겠어」
+				PRINTFORMW 「%조사처리(CSTR:12,"는")%、내가 계속 지켜주겠어」
 				PRINTFORMW 강하게 선언해、%타겟은()% %플레이어를()% 꽉 껴안았다.
 				PRINTFORMW 「보지가 없는 건 유감이지만……」
 				PRINTFORMW %타겟이()% 중얼거린 것을 %조사처리(CALLNAME:MASTER,"는")% 못 들은 체 하지 않았다.
@@ -152,7 +152,7 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 			ELSEIF TALENT:MASTER:남자 == 1
 				PRINTFORMW 「솔직히 남자한테 범해지는 것 따윈 진심으로 용서하지 않으려고 생각했는데」
 				PRINTFORMW 「뭐라고 할까、뭐……눈을 떠버린 거야」
-				PRINTFORMW 「지금의 %CSTR:11%는、%CSTR:12% 이외에는、생각할 수 없어……」
+				PRINTFORMW 「지금의 %조사처리(CSTR:11,"는")%、%CSTR:12% 이외에는、생각할 수 없어……」
 				PRINTFORMW 「책임져、달라고……？」
 			ELSE
 				PRINTFORMW 「처음 만났을 때부터 좋은 몸을 하고 있다고는 생각했지만」
@@ -260,7 +260,7 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 				PRINTFORMW %타겟은()% %플레이어가()% 방에 들어오자마자、%CALLNAME:MASTER%의 몸을 만지기 시작했다.
 				PRINTFORMW 난폭한 애무지만、이제는 이미 익숙해져있다. %CALLNAME:MASTER%도 반대로、%NAME:TARGET%의 단단한 육체를 애무한다.
 				PRINTFORMW 「처음에는 조금 저항감이 있었지만、지금은 신경 쓰이지 않는데」
-				PRINTFORMW 「%CSTR:12%은 틀림없이 최고의 여자、아니 남자……어느 쪽이야！？」
+				PRINTFORMW 「%조사처리(CSTR:12,"는")% 틀림없이 최고의 여자、아니 남자……어느 쪽이야！？」
 				PRINTFORMW %타겟은()% 어느 한 곳을 제외하고는 여자와 조금도 다를 바 없는 용모의 %플레이어를()% 응시해、혼란스러워하고 있다.
 				PRINTFORMW 「뭐 어느 쪽이든 상관없어！　하자고！」
 			ELSEIF K:1 == 2
@@ -268,13 +268,13 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 				PRINTFORMW %타겟이()% 물끄러미 %플레이어를()% 바라보고 있어서、왜 그러냐고 물었다.
 				PRINTFORMW 「아니……아무리 봐도 여자로밖에 안 보이는데、싶어서……」
 				PRINTFORMW 그렇게 여자를 좋아하면、제대로 된 여자를 찾아가면 되잖아、하고 %조사처리(CALLNAME:MASTER,"는")% 얼굴을 돌렸다.
-				PRINTFORMW 「아、아니！　별로 %CSTR:12%이 싫다던가 그런 게 아냐！　그、뭐냐……！　아～……」
+				PRINTFORMW 「아、아니！　별로 %조사처리(CSTR:12,"가")% 싫다던가 그런 게 아냐！　그、뭐냐……！　아～……」
 				PRINTFORMW 강대한 악마가 횡설수설하며 해명하고 있는 모습은 매우 익살스럽다.
 				PRINTFORMW 그 모습이 너무 유쾌해서、%조사처리(CALLNAME:MASTER,"는")% 화난듯한 분위기를 계속 가장하며、마음 속으로만 혀를 내밀었다……
 			ELSE
 				PRINTFORMW 「여어、잘 지냈어？　파트너」
 				PRINTFORMW 변함없다고 대답하고、%타겟은()% 어때？　하고 물어주자、%타겟은()% 기쁜 듯이 웃었다.
-				PRINTFORMW 「오우、고마워. %CSTR:11%는 엄청 상태가 좋아！」
+				PRINTFORMW 「오우、고마워. %조사처리(CSTR:11,"는")% 엄청 상태가 좋아！」
 				PRINTFORMW 「……뭐、악마가 병에 걸리는지 어떤지는 잘 모르는데」
 			ENDIF
 		ELSEIF TALENT:MASTER:남자 == 1
@@ -288,16 +288,16 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 				PRINTFORMW 「……」
 				PRINTFORMW %타겟이()% 물끄러미 %플레이어를()% 바라보고 있어서、왜 그러냐고 물었다.
 				PRINTFORMW 「아니……익숙해진다는 건 무섭다고 생각해서……」
-				PRINTFORMW 「남자끼리 하는 것도 의외로 나쁘지 않은데. 아니、%CSTR:12%과 하기 때문이야！」
+				PRINTFORMW 「남자끼리 하는 것도 의외로 나쁘지 않은데. 아니、%조사처리(CSTR:12,"와")% 하기 때문이야！」
 				PRINTFORMW 솔직한 말에、%조사처리(CALLNAME:MASTER,"는")% 무심코 얼굴을 붉혔다.
 			ELSEIF K:1 == 2
 				PRINTFORMW 「여、기다렸어」
-				PRINTFORMW 「오늘은 내가 공격해줄까？　아니면 %CSTR:12%이 봉사해줄래？」
+				PRINTFORMW 「오늘은 내가 공격해줄까？　아니면 %조사처리(CSTR:12,"가")% 봉사해줄래？」
 				PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 『어느 쪽을 원해？』 라고 웃으며、%타겟과()% 몸을 겹쳤다……
 			ELSE
 				PRINTFORMW 「여어、잘 지냈어？　파트너」
 				PRINTFORMW 변함없다고 대답하고、%타겟은()% 어때？　하고 물어주자、%타겟은()% 기쁜 듯이 웃었다.
-				PRINTFORMW 「오우、고마워. %CSTR:11%는 엄청 상태가 좋아！」
+				PRINTFORMW 「오우、고마워. %조사처리(CSTR:11,"는")% 엄청 상태가 좋아！」
 				PRINTFORMW 「……뭐、악마가 병에 걸리는지 어떤지는 잘 모르는데」
 			ENDIF
 		ELSE
@@ -326,7 +326,7 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 			ELSE
 				PRINTFORMW 「여어、잘 지냈어？　파트너」
 				PRINTFORMW 변함없다고 대답하고、%타겟은()% 어때？　하고 물어주자、%타겟은()% 기쁜 듯이 웃었다.
-				PRINTFORMW 「오우、고마워. %CSTR:11%는 엄청 상태가 좋아！」
+				PRINTFORMW 「오우、고마워. %조사처리(CSTR:11,"는")% 엄청 상태가 좋아！」
 				PRINTFORMW 「……뭐、악마가 병에 걸리는지 어떤지는 잘 모르는데」
 			ENDIF
 		ENDIF
@@ -385,7 +385,7 @@ IF MARK:3 == 3 && (CFLAG:217 < 1 || FLAG:7 == 2)
 	CFLAG:217 = 1
 ;굴복각인Lv1以下
 ELSEIF MARK:2 <= 1 && (CFLAG:219 < 1 || FLAG:7 == 2)
-	PRINTFORMW 「이 정도로 %CSTR:11%를 굴복시킬 수 있다고는 생각하지 마」
+	PRINTFORMW 「이 정도로 %조사처리(CSTR:11,"를")% 굴복시킬 수 있다고는 생각하지 마」
 	PRINTFORMW （의외로、나쁘지는 않았지만……）
 	CFLAG:219 = 1
 ;굴복각인Lv2
@@ -417,9 +417,9 @@ ELSEIF CFLAG:219 < 4 || FLAG:7 == 2
 	;연모、친애
 	IF TALENT:3 || TALENT:6
 		PRINTFORMW 「응、이제 끝이야？」
-		PRINTFORMW 「%CSTR:11%는 아직도 할 수 있다구、자、봐」
+		PRINTFORMW 「%조사처리(CSTR:11,"는")% 아직도 할 수 있다구、자、봐」
 		PRINTFORMW %NAME:TARGET%의 말대로、페니스는 전혀 수그러들지 않고、꿈틀꿈틀 움직이고 있다.
-		PRINTFORMW 「어이、좀 더 %CSTR:12%과 함께 하게 해줘、응……?」
+		PRINTFORMW 「어이、좀 더 %조사처리(CSTR:12,"와")% 함께 하게 해줘、응……?」
 	;음란、창부
 	ELSEIF TALENT:4 || TALENT:7
 		PRINTFORMW 
@@ -656,7 +656,7 @@ SELECTCASE SELECTCOM
 				;연모、친애
 				IF TALENT:3 || TALENT:6
 					IF RAND:2 == 0
-						PRINTFORMW 「그런 곳까지 빨고……%CSTR:12%은、정말、기특하다니까……」
+						PRINTFORMW 「그런 곳까지 빨고……%조사처리(CSTR:12,"는")%、정말、기특하다니까……」
 						PRINTFORMW %타겟은()% %CALLNAME:MASTER%의 봉사하는 모습에 감동하고 있는 것 같다.
 					ELSE
 						PRINTFORMW 「우、오오……항문 안에서、혀갓、우오옷！？」
@@ -934,7 +934,7 @@ SELECTCASE SELECTCOM
 			IF TALENT:MASTER:오토코노코 == 1
 				PRINTFORMW 「어쩔 수 없구만……해줄 테니 %CSTR:12%, 반찬이 되라」
 			ELSEIF TALENT:MASTER:남자 == 1
-				PRINTFORMW 「어이어이、%CSTR:12%을 반찬으로 하라는 거냐？」
+				PRINTFORMW 「어이어이、%조사처리(CSTR:12,"를")% 반찬으로 하라는 거냐？」
 				PRINTFORMW 「최악이야……」
 			ELSE
 				PRINTFORMW 「어쩔 수 없구만……해줄 테니 %CSTR:12%, 에로한 포즈라도 하나 취해봐」
@@ -1044,7 +1044,7 @@ SELECTCASE SELECTCOM
 		;初めて
 		IF CFLAG:313 == 0
 			PRINTFORMW 「아무것도 안 하는 건가……」
-			PRINTFORMW 「그럼、%CSTR:11%를 해방시켜줘. 안 돼？　칫……」
+			PRINTFORMW 「그럼、%조사처리(CSTR:11,"를")% 해방시켜줘. 안 돼？　칫……」
 			CFLAG:313 = 1
 		;二回눈以降
 		ELSE
@@ -1090,7 +1090,7 @@ SELECTCASE SELECTCOM
 		;初めて
 		IF CFLAG:314 == 0
 			PRINTFORMW 「저기、이것저것 얘기하자구」
-			PRINTFORMW 「%CSTR:12%이 올 때까지、이쪽은 지루했으니까」
+			PRINTFORMW 「%조사처리(CSTR:12,"가")% 올 때까지、이쪽은 지루했으니까」
 			CFLAG:314 = 1
 		;二回눈以降
 		ELSEIF CFLAG:314 < 2 || FLAG:7 == 2
@@ -1260,7 +1260,7 @@ SELECTCASE SELECTCOM
 				IF RAND:2 == 0
 					PRINTFORMW 「네놈……그 말、잊지 않을 테니까……！」
 				ELSE
-					PRINTFORMW 「%CSTR:11%는 엄청 화났다고！！」
+					PRINTFORMW 「%조사처리(CSTR:11,"는")% 엄청 화났다고！！」
 				ENDIF
 				CFLAG:320 = 2
 			ENDIF
@@ -1531,7 +1531,7 @@ SELECTCASE SELECTCOM
 				CFLAG:327 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:327 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「크、오오……%CSTR:11%는 악마라고、이 정도는 아무렇지도오오옷……！」
+				PRINTFORMW 「크、오오……%조사처리(CSTR:11,"는")% 악마라고、이 정도는 아무렇지도오오옷……！」
 				CFLAG:327 = 3
 			;それ以外
 			ELSEIF CFLAG:327 < 2 || FLAG:7 == 2
@@ -1721,19 +1721,19 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:332 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			;それ以外
@@ -1741,18 +1741,18 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:332 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			ENDIF
@@ -1763,25 +1763,25 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:332 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;복종、예속
 				ELSEIF TALENT:5 || TALENT:8
-					PRINTFORMW 「」
+					PRINTFORMW 
 				ENDIF
 				CFLAG:332 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:332 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「」
-				PRINTFORMW 「」
+				PRINTFORMW 
+				PRINTFORMW 
 				CFLAG:332 = 3
 			;それ以外
 			ELSEIF CFLAG:332 < 2 || FLAG:7 == 2
-				PRINTFORMW 「」
+				PRINTFORMW 
 				CFLAG:332 = 2
 			ENDIF
 		ENDIF
@@ -1798,19 +1798,19 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:333 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			;それ以外
@@ -1818,18 +1818,18 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:333 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			ENDIF
@@ -1840,25 +1840,25 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:333 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;복종、예속
 				ELSEIF TALENT:5 || TALENT:8
-					PRINTFORMW 「」
+					PRINTFORMW 
 				ENDIF
 				CFLAG:333 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:333 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「」
-				PRINTFORMW 「」
+				PRINTFORMW 
+				PRINTFORMW 
 				CFLAG:333 = 3
 			;それ以外
 			ELSEIF CFLAG:333 < 2 || FLAG:7 == 2
-				PRINTFORMW 「」
+				PRINTFORMW 
 				CFLAG:333 = 2
 			ENDIF
 		ENDIF
@@ -1893,7 +1893,7 @@ SELECTCASE SELECTCOM
 			ELSEIF ABL:5 >= 3 && (CFLAG:334 < 3 || FLAG:7 == 2)
 				PRINTFORMW 「오、오오오……들어오고 있어……！」
 				PRINTFORMW %타겟은()% 애널로 느끼고 있는 것에 곤혹스러워하고 있는 것 같다.
-				PRINTFORMW 「어、어째서 항문으로 느껴버리는 거야、%CSTR:11%는 앗……」
+				PRINTFORMW 「어、어째서 항문으로 느껴버리는 거야、%조사처리(CSTR:11,"는")% 앗……」
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:334 < 3 || FLAG:7 == 2)
 				PRINTFORMW 「벼, 별 수 없구만……너무 억지로 하진 마……」
@@ -1902,7 +1902,7 @@ SELECTCASE SELECTCOM
 			;それ以外
 			ELSEIF CFLAG:334 < 2 || FLAG:7 == 2
 				IF TALENT:MASTER:남자 == 1 || TALENT:MASTER:오토코노코 == 1
-					PRINTFORMW 「바、바보 자식아아앗、%CSTR:11%는 이렇게 보여도 노멀……우하아아아앗！」
+					PRINTFORMW 「바、바보 자식아아앗、%조사처리(CSTR:11,"는")% 이렇게 보여도 노멀……우하아아아앗！」
 				ELSE
 					PRINTFORMW 「빠、빨리 빼라……생각했던 것보다 아프다고！」
 					PRINTFORMW 「젠장、움직이지 마아！」
@@ -1987,7 +1987,7 @@ SELECTCASE SELECTCOM
 			;それ以外
 			ELSEIF CFLAG:336 < 2 || FLAG:7 == 2
 				PRINTFORMW 「범해지는 시추에이션도 나쁘진 않지만」
-				PRINTFORMW 「역시 %CSTR:11%는 범하는 편이 어울린다고」
+				PRINTFORMW 「역시 %조사처리(CSTR:11,"는")% 범하는 편이 어울린다고」
 				CFLAG:336 = 2
 			ENDIF
 		ENDIF
@@ -2039,19 +2039,19 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:338 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			;それ以外
@@ -2059,18 +2059,18 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:338 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			ENDIF
@@ -2081,25 +2081,25 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:338 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;복종、예속
 				ELSEIF TALENT:5 || TALENT:8
-					PRINTFORMW 「」
+					PRINTFORMW 
 				ENDIF
 				CFLAG:338 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:338 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「」
-				PRINTFORMW 「」
+				PRINTFORMW 
+				PRINTFORMW 
 				CFLAG:338 = 3
 			;それ以外
 			ELSEIF CFLAG:338 < 2 || FLAG:7 == 2
-				PRINTFORMW 「」
+				PRINTFORMW 
 				CFLAG:338 = 2
 			ENDIF
 		ENDIF
@@ -2157,19 +2157,19 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:340 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			;それ以外
@@ -2177,18 +2177,18 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:340 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			ENDIF
@@ -2199,25 +2199,25 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:340 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;복종、예속
 				ELSEIF TALENT:5 || TALENT:8
-					PRINTFORMW 「」
+					PRINTFORMW 
 				ENDIF
 				CFLAG:340 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:340 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「」
-				PRINTFORMW 「」
+				PRINTFORMW 
+				PRINTFORMW 
 				CFLAG:340 = 3
 			;それ以外
 			ELSEIF CFLAG:340 < 2 || FLAG:7 == 2
-				PRINTFORMW 「」
+				PRINTFORMW 
 				CFLAG:340 = 2
 			ENDIF
 		ENDIF
@@ -2234,19 +2234,19 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:341 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			;それ以外
@@ -2254,18 +2254,18 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:341 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			ENDIF
@@ -2276,25 +2276,25 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:341 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;복종、예속
 				ELSEIF TALENT:5 || TALENT:8
-					PRINTFORMW 「」
+					PRINTFORMW 
 				ENDIF
 				CFLAG:341 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:341 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「」
-				PRINTFORMW 「」
+				PRINTFORMW 
+				PRINTFORMW 
 				CFLAG:341 = 3
 			;それ以外
 			ELSEIF CFLAG:341 < 2 || FLAG:7 == 2
-				PRINTFORMW 「」
+				PRINTFORMW 
 				CFLAG:341 = 2
 			ENDIF
 		ENDIF
@@ -2380,19 +2380,19 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:420 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			;それ以外
@@ -2400,18 +2400,18 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:420 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
-						PRINTFORMW 「」
+						PRINTFORMW 
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ELSE
-						PRINTFORMW 「」
-						PRINTFORMW 「」
+						PRINTFORMW 
+						PRINTFORMW 
 					ENDIF
 				ENDIF
 			ENDIF
@@ -2422,25 +2422,25 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:420 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
-					PRINTFORMW 「」
-					PRINTFORMW 「」
+					PRINTFORMW 
+					PRINTFORMW 
 				;복종、예속
 				ELSEIF TALENT:5 || TALENT:8
-					PRINTFORMW 「」
+					PRINTFORMW 
 				ENDIF
 				CFLAG:420 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:420 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「」
-				PRINTFORMW 「」
+				PRINTFORMW 
+				PRINTFORMW 
 				CFLAG:420 = 3
 			;それ以外
 			ELSEIF CFLAG:420 < 2 || FLAG:7 == 2
-				PRINTFORMW 「」
+				PRINTFORMW 
 				CFLAG:420 = 2
 			ENDIF
 		ENDIF
@@ -2740,7 +2740,7 @@ SELECTCASE SELECTCOM
 		;初めて
 		IF CFLAG:350 == 0
 			PRINTFORMW 「발을 핥으라고오？」
-			PRINTFORMW 「%CSTR:11%는 누구한테도 아첨 따윈 안 하거든、이 자식！」
+			PRINTFORMW 「%조사처리(CSTR:11,"는")% 누구한테도 아첨 따윈 안 하거든、이 자식！」
 			PRINTFORMW 이러쿵저러쿵 시끄러운 %CALLNAME%의 입에 발가락을 꽉 눌러주었다.
 			CFLAG:350 = 1
 		;二回눈以降
@@ -2760,7 +2760,7 @@ SELECTCASE SELECTCOM
 				CFLAG:350 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:350 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「%CSTR:11%를 바보 취급 하다니……츄릅、츄웃……」
+				PRINTFORMW 「%조사처리(CSTR:11,"를")% 바보 취급 하다니……츄릅、츄웃……」
 				PRINTFORMW 입으로는 중얼중얼 불평하면서도、열심히 핥고 있다.
 				CFLAG:350 = 3
 			;それ以外
@@ -2992,7 +2992,7 @@ SELECTCASE SELECTCOM
 			IF TALENT:MASTER:빈유 == 1 || TALENT:MASTER:절벽 == 1
 				PRINTFORMW %타겟은()% %플레이어가()% 유두며 가슴 전체를 사용해 페니스를 문지르는 것을 물끄러미 바라보고 있다.
 				PRINTFORMW 「뭐랄까……」
-				PRINTFORMW 「악마인 내가 말하는 것도 그렇지만……%CSTR:12%는 기특하구만……」
+				PRINTFORMW 「악마인 내가 말하는 것도 그렇지만……%조사처리(CSTR:12,"는")% 기특하구만……」
 			ELSEIF TALENT:MASTER:거유 == 1 || TALENT:MASTER:폭유 == 1 
 				PRINTFORMW %타겟은()% 페니스를 부드러운 유방으로 감싸여、작게 허덕이고 있다.
 				PRINTFORMW 「파이즈리는 역시 큰 젖이라니까……우옷」
@@ -3032,7 +3032,7 @@ SELECTCASE SELECTCOM
 						PRINTFORMW %CALLNAME%의 한계가 가까워진 것을 감지한 %조사처리(CALLNAME:MASTER,"는")% %CALLNAME%의 허리에 양 다리를 감고、허리가 떨어지지 않게 했다.
 						PRINTFORMW 「조、좋앗、이대로、싼다앗！」
 					ELSE
-						PRINTFORMW 「어때？　%CSTR:12%은 여길 문질러지는 걸 좋아하지」
+						PRINTFORMW 「어때？　%조사처리(CSTR:12,"는")% 여길 문질러지는 걸 좋아하지」
 						PRINTFORMW %타겟은()% 끈질기게、질내의 한 부분을 귀두로 조금씩 문질러온다.
 						PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% %CALLNAME%의 목에 양손을 감고、한층 더 쾌락을 요구했다……
 					ENDIF
@@ -3142,7 +3142,7 @@ SELECTCASE SELECTCOM
 				CFLAG:427 = 3
 			;それ以外
 			ELSEIF CFLAG:414 < 2 || FLAG:7 == 2
-				PRINTFORMW 「핫하！　%CSTR:11%를 항복시키고 싶다면 이 정도로는 움직여줘야지！」
+				PRINTFORMW 「핫하！　%조사처리(CSTR:11,"를")% 항복시키고 싶다면 이 정도로는 움직여줘야지！」
 				PRINTFORMW %타겟은()% %CALLNAME:MASTER%의 허리를 양손으로 붙잡고、아래에서 몇 번이나 격렬하게 찔러올렸다.
 				CFLAG:427 = 2
 			ENDIF
@@ -3216,7 +3216,7 @@ SELECTCASE SELECTCOM
 				PRINTFORMW 「귀여운 엉덩이 하고 있잖아、사내놈이라곤 해도、범하는 보람이 있는 구멍이야……」
 				PRINTFORMW 「힘 빼、안 그러면 찢어질지도 몰라、갸하하핫！」
 			ELSE
-				PRINTFORMW 「%CSTR:11%로서는、보지에 쳐넣고 싶지만」
+				PRINTFORMW 「%조사처리(CSTR:11,"로")%서는、보지에 쳐넣고 싶지만」
 				PRINTFORMW 「좋아、짐승처럼 항문을 범하고 범하고 범해서 채워주겠어！」
 			ENDIF
 			CFLAG:429 = 1
@@ -3236,7 +3236,7 @@ SELECTCASE SELECTCOM
 						PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 마치 황홀한 암컷 같은 표정으로、자극에 견디고 있다.
 						PRINTFORMW 무의식 중에、%CALLNAME:MASTER%의 오른손은 스스로의 페니스로 뻗어간다……
 					ELSE
-						PRINTFORMW 「%CSTR:12%은 보지도 항문도 일품이야」
+						PRINTFORMW 「%조사처리(CSTR:12,"는")% 보지도 항문도 일품이야」
 						PRINTFORMW %타겟은()% 애널의 조임에 괴로워하며、%CALLNAME:MASTER%의 유방과 클리토리스를 등 뒤에서 잡아당기고 있다.
 						PRINTFORMW %플레이어가()% 뒤돌아보며 젖은 혀를 내밀면、%CALLNAME%도 혀를 내밀어、끈적끈적하게 서로 얽히기 시작한다……
 					ENDIF
@@ -3256,7 +3256,7 @@ SELECTCASE SELECTCOM
 			;それ以外
 			ELSEIF CFLAG:414 < 2 || FLAG:7 == 2
 				PRINTFORMW 「엉덩이 구멍、질퍽질퍽 범해지는 게 그렇게 기분 좋아？」
-				PRINTFORMW 「%CSTR:11%로서는 울며 소리치는 편이 더 불타오르지만」
+				PRINTFORMW 「%조사처리(CSTR:11,"로")%서는 울며 소리치는 편이 더 불타오르지만」
 				CFLAG:429 = 2
 			ENDIF
 		ENDIF
@@ -3337,7 +3337,7 @@ SELECTCASE SELECTCOM
 				CFLAG:354 = 3
 			;それ以外
 			ELSEIF CFLAG:354 < 2 || FLAG:7 == 2
-				PRINTFORMW 「엉덩이를 얻어맞는 정도로、%CSTR:11%는 누구도 따르지 않아！」
+				PRINTFORMW 「엉덩이를 얻어맞는 정도로、%조사처리(CSTR:11,"는")% 누구도 따르지 않아！」
 				CFLAG:354 = 2
 			ENDIF
 		ENDIF
@@ -4050,7 +4050,7 @@ SELECTCASE SELECTCOM
 				CFLAG:374 = 4
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:374 < 3 || FLAG:7 == 2)
-				PRINTFORMW 「%CSTR:12%은 여길 빨리는 걸 좋아하지」
+				PRINTFORMW 「%조사처리(CSTR:12,"는")% 여길 빨리는 걸 좋아하지」
 				PRINTFORMW 「엉덩이 구멍으로 가게 해줄게」
 				CFLAG:374 = 3
 			;それ以外
@@ -4651,7 +4651,7 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:392 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「이걸 바르고 %CSTR:12%과 몸을 서로 문지르면 기분 좋을 것 같네」
+					PRINTFORMW 「이걸 바르고 %조사처리(CSTR:12,"와")% 몸을 서로 문지르면 기분 좋을 것 같네」
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
 					PRINTFORMW 
@@ -4794,7 +4794,7 @@ SELECTCASE SELECTCOM
 			;初めて
 			IF CFLAG:396 == 0
 				PRINTFORMW 「오、밖에서 하는 건가」
-				PRINTFORMW 「%CSTR:12%이 범해지는 걸、차분히 보여주자구、가하핫！」
+				PRINTFORMW 「%조사처리(CSTR:12,"가")% 범해지는 걸、차분히 보여주자구、가하핫！」
 				CFLAG:396 = 1
 			;二回눈以降
 			ELSE
@@ -5009,7 +5009,7 @@ SELECTCASE SELECTCOM
 				CFLAG:401 = 1
 			;二回눈以降
 			ELSEIF CFLAG:401 < 2 || FLAG:7 == 2
-				PRINTFORMW 「%CSTR:12%이 제발 부탁、이라고 하니까 입을게……」
+				PRINTFORMW 「%조사처리(CSTR:12,"가")% 제발 부탁、이라고 하니까 입을게……」
 				CFLAG:401 = 2
 			ENDIF
 		ELSE
@@ -5356,7 +5356,7 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:408 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「%CSTR:12%은、여기가 약하지……헤헷」
+					PRINTFORMW 「%조사처리(CSTR:12,"는")%、여기가 약하지……헤헷」
 					PRINTFORMW 「왜 그래？　%CSTR:11%、입이 비어있어」
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7

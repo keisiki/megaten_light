@@ -31,16 +31,16 @@ RETURN 30
 
 ;　相性
 @SKILL_TYPE_2610,ARG
-RETURN 13
+RETURN 17
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2610
+@SKILL_DECIDE_TYPE_2610, ARG
 RETURN 1
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2610
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2610, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2610
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -115,7 +115,7 @@ RETURN 0
 CFLAG:ARG:공격강화 = MIN(32, CFLAG:ARG:공격강화 + 12)
 
 
-PRINTFORML %CALLNAME:ARG%の공격력が上がった！
+PRINTFORML %CALLNAME:ARG%의 공격력이 올라갔다！
 
 ;====================================================
 ;実行内容ここまで
@@ -123,8 +123,8 @@ PRINTFORML %CALLNAME:ARG%の공격력が上がった！
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2610
-PRINTL 명왕の힘を身に宿し공격력を大幅に上げる。
-PRINTL 귀신　Konngaraの技。
+PRINTL 명왕의 힘을 몸에 지니고 공격력을 크게 올린다。
+PRINTL 귀신　Konngara의 기술。
 
 ;継承に필요な部位
 @継承部位_2610,ARG

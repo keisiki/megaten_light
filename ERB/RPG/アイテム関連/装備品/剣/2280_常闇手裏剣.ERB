@@ -59,6 +59,16 @@ RETURN 0
 @장비箇所_2280
 RETURN GET_EQUIPNUM("검")
 
+;바이에이하
+@장비추가스킬_2280,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 1417
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -80,6 +90,9 @@ PRINTL 장비조건：LV35～
 
 @장비해설_2280
 PRINTL 어둠과 같은 칠흑의 수리검
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：바이에이하
+RESETCOLOR
 
 RETURN 0
 

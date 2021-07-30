@@ -32,9 +32,12 @@ SIF TEQUIP:볼재갈
 ;촉수 조교 중에는 
 SIF TEQUIP:촉수
     RETURN 0
-;야외플레이 중에는 
+;야외플레이 중에는
 SIF TEQUIP:야외플레이
     RETURN 0
+;여자주도일때 연모계 함락이 아닐 경우는 안됨
+SIF TEQUIP:주도권 && !(TALENT:연모 || TALENT:친애)
+	RETURN 0
 RETURN 1
 
 @ACT_COM273
@@ -141,33 +144,40 @@ RETURN 1
 
 
 @MESSAGE_COM273
-PRINTL
-PRINTFORM %CALLNAME:TARGET%에게 
-SIF ABL:PLAYER:기교 >= 3
-    PRINT 입으로 
-SIF ABL:순종 <= 2
-    PRINT 억지로 
-PRINTL 배란유도제를 먹였다.
-PRINTFORM \@ (EXP:출산경험 == 0) ? 먹인 약의 효능을 설명하자 # 무엇을 먹었는지 깨달은 \@ %조사선택(CALLNAME:TARGET, "는")% 
-;IF TALENT:135 || TALENT:136
-;    ;【난생】,【산란 체질】의 어느 쪽인지
-;    PRINTW 이상한 약을 먹인 것에 대한 반감을 숨길 수 없었다….
-IF TALENT:연모 || TALENT:친애
-    ;【연모】,【친애】,【상애】의 최악이어도 1개를 가진다
-    PRINTFORMW %CALLNAME:PLAYER%의 아기를 가지길 기대한 듯, 어리광을 피우듯이 다가오고 있다.
-ELSEIF TALENT:복종 || TALENT:예속
-    ;【복종】,【낙인】의 어느 쪽인지
-    PRINTW 질 내 사정을 황홀한 표정으로 기다리고 있다.
-ELSEIF TALENT:음란 || TALENT:창부
-    ;【예속】,【음란】의 어느 쪽인지
-    PRINTW 금방이라도 질 내 사정해 주었으면 하는 것처럼 보지를 손가락으로 열고 있다.
-ELSEIF ABL:순종 >= 5 && MARK:굴복각인 == 3 && MARK:반발각인 == 0
-    ;종속 Lv5 또한 굴복 각인 Lv3 또한 반발 각인 Lv0
-    PRINTW 포기했는지 다리를 벌리고 다음 행동을 기다리고 있다.
+IF TEQUIP:주도권
+;여자주도 -> 연모계 함락만 가능함
+	PRINTFORML %조사처리(CALLNAME:TARGET,"는")% 요염하게 웃으면서 %CALLNAME:PLAYER%에게 보라는 듯이 배란유도제를 꺼내 먹었다.
+	SETCOLOR 0xff0000
+	PRINTFORMW 그것을 본 %조사처리(CALLNAME:PLAYER,"는")% 순간적으로 공포를 느꼈다!
+	RESETCOLOR
 ELSE
-    PRINTFORMW %조사선택(CALLNAME:PLAYER, "를")% 심상치 않은 표정으로 째려보고 있다.
+;남자주도
+	PRINTFORM %CALLNAME:TARGET%에게 
+	SIF ABL:PLAYER:기교 >= 3
+		PRINT 입으로 
+	SIF ABL:순종 <= 2
+		PRINT 억지로 
+	PRINTL 배란유도제를 먹였다.
+	PRINTFORM \@ (EXP:출산경험 == 0) ? 먹인 약의 효능을 설명하자 # 무엇을 먹었는지 깨달은 \@ %조사선택(CALLNAME:TARGET, "는")% 
+	;IF TALENT:135 || TALENT:136
+	;    ;【난생】,【산란 체질】의 어느 쪽인지
+	;    PRINTW 이상한 약을 먹인 것에 대한 반감을 숨길 수 없었다….
+	IF TALENT:연모 || TALENT:친애
+		;【연모】,【친애】,【상애】의 최악이어도 1개를 가진다
+		PRINTFORMW %CALLNAME:PLAYER%의 아기를 가지길 기대한 듯, 어리광을 피우듯이 다가오고 있다.
+	ELSEIF TALENT:복종 || TALENT:예속
+		;【복종】,【낙인】의 어느 쪽인지
+		PRINTW 질 내 사정을 황홀한 표정으로 기다리고 있다.
+	ELSEIF TALENT:음란 || TALENT:창부
+		;【예속】,【음란】의 어느 쪽인지
+		PRINTW 금방이라도 질 내 사정해 주었으면 하는 것처럼 보지를 손가락으로 열고 있다.
+	ELSEIF ABL:순종 >= 5 && MARK:굴복각인 == 3 && MARK:반발각인 == 0
+		;종속 Lv5 또한 굴복 각인 Lv3 또한 반발 각인 Lv0
+		PRINTW 포기했는지 다리를 벌리고 다음 행동을 기다리고 있다.
+	ELSE
+		PRINTFORMW %조사선택(CALLNAME:PLAYER, "를")% 심상치 않은 표정으로 째려보고 있다.
+	ENDIF
 ENDIF
-
 
 ;===================================================
 ;조교타입

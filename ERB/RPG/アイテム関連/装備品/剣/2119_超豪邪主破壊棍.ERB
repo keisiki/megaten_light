@@ -28,11 +28,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2119,ARG,ARG:1 = -1
-SELECTCASE ARG
-ENDSELECT
-RETURN 0
-
 @방어상성_2119,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -56,6 +51,18 @@ RETURN 1
 @장비箇所_2119
 RETURN GET_EQUIPNUM("검")
 
+;최후의일격、삼할의활천
+@장비추가스킬_2119,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+			RETURN 243
+		CASE 1
+			RETURN 2402
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -76,6 +83,9 @@ PRINTL 장비조건： LV70〜
 @장비해설_2119
 PRINTL 화려한 외견과 이름의 곤봉
 PRINTL 이름에 지지 않는 힘을 가지고 있다
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬존재
+RESETCOLOR
 
 
 @引継ぎ可不可_2119

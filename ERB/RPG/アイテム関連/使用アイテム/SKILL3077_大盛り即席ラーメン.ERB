@@ -8,7 +8,7 @@ RESULTS = 곱빼기즉석라멘
 @SKILL_HITRATE_3077, ARG
 RETURN 100
 
-;　威힘
+;　위력
 @SKILL_POWER_3077, ARG
 RETURN 30
 
@@ -36,10 +36,10 @@ RETURN 0
 ;　1EXTRAか2MAGICか
 @SKILL_DECIDE_TYPE_3077
 RETURN 0
-;魔法
+;마법
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3077
+;　1물리데미지で計算するか2마법데미지で計算するか
+@SKILL_DAMAGETYPE_3077, ARG
 RETURN 2
 
 
@@ -51,11 +51,11 @@ RETURN 2
 @SKILL_RANGE_3077,ARG
 RETURN 1
 
-;　範囲　11체　21열　3전체　4　적아군전체
+;　범위　1１체　2１열　3전체　4　적아군전체
 @SKILL_SPHERE_3077,ARG
 RETURN 1
 
-;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복
 @SKILL_EFECT_3077
 RETURN 2
 
@@ -111,7 +111,7 @@ CALL VAR_HP,LOCAL,LOCAL:1,3
 @ACTION_FIELD_3077,ARG,ARG:1
 ITEM:1077 -= 1
 LOCAL = FIELD아이템関数(3,150,20)
-PRINTFORML %ITEMNAME:1077%を使った。
+PRINTFORML %ITEMNAME:1077%를 사용했다。
 PRINTFORMW %CALLNAME:(POS(ARG:1))% >>>>> {LOCAL}회복
 CALL VAR_HP,(POS(ARG:1)),LOCAL,3
 
@@ -122,9 +122,9 @@ CALL VAR_HP,(POS(ARG:1)),LOCAL,3
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3077
-PRINTL コクのあるスープと大盛りの具と麺が特徴のカップ入り即席ラーメン。
-PRINTL たとえ전투中でも食べたくなる、서머너の食事の強い아군。
-PRINTL 아군一人のＨＰを150회복する。
+PRINTL 진한 국물과 곱빼기 재료와 면이 특징인 컵에 담긴 즉석 라면이다。
+PRINTL 비록 전투중이라도 먹고 싶어지는、서머너의 한끼 식사의 강력한 아군。
+PRINTL 아군 1명의 ＨＰ를 150회복시킨다。
 
 @최대소지수_3077
 RETURN 10

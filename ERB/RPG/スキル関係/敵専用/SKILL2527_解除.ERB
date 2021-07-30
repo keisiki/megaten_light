@@ -3,9 +3,9 @@
 
 ;스킬名
 @SKILL_NAME_2527,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카마조츠]]) == 1 && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
+IF SKILL_CHANGE(ARG, [[キャラ:카마조츠]]) && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
 	RESULTS = 방어해제
-ELSEIF SKILL_CHANGE_CHECK(ARG, [[キャラ:라후]]) == 1 && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:라후]]) && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
 	IF BASE:ARG:ＨＰ < 2 || (CFLAG:ARG:803 - BASE:ARG:ＨＰ) > CFLAG:ARG:804 || (CFLAG:ARG:802 > 0 && BASE:POS(CFLAG:ARG:802):ＨＰ < 1) || CFLAG:ARG:804 == 0
 		RESULTS = 두부귀환
 	ELSE
@@ -48,12 +48,12 @@ RETURN ABL:ARG:공격상성
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2527
+@SKILL_DECIDE_TYPE_2527, ARG
 RETURN 0
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2527
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2527, ARG
 RETURN 1
 
 
@@ -124,7 +124,7 @@ RETURN 0
 ;カウンター発動조건
 ;====================================================
 @SKILL_COUNTER_ACTIONABLE_2527,ARG,ARG:1
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카마조츠]]) == 1 && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
+IF SKILL_CHANGE(ARG, [[キャラ:카마조츠]]) && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
 	SIF CFLAG:ARG:802 < 1 && CFLAG:(ARG:1):입력行動 == 1312
 		CFLAG:ARG:802 = 1
 	SIF MAXBASE:ARG:파마 > 100
@@ -133,7 +133,7 @@ IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카마조츠]]) == 1 && CFLAG:ARG:ボス�
 	;	RETURN 0
 	SIF !GETBIT(CFLAG:ARG:受けフラグ,22)
 		RETURN 0
-ELSEIF SKILL_CHANGE_CHECK(ARG, [[キャラ:라후]]) == 1 && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:라후]]) && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
 	SIF CFLAG:ARG:802 < 1
 		RETURN 0
 	;SIF (CFLAG:ARG:803 - BASE:ARG:ＨＰ) > CFLAG:ARG:804
@@ -162,7 +162,7 @@ RETURN 1
 ;====================================================
 
 @ACTION_2527,ARG,ARG:1
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카마조츠]]) == 1 && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
+IF SKILL_CHANGE(ARG, [[キャラ:카마조츠]]) && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
 				MAXBASE:ARG:검격 = 50
 				MAXBASE:ARG:타격 = 999
 				MAXBASE:ARG:비구 = 50
@@ -204,7 +204,7 @@ IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카마조츠]]) == 1 && CFLAG:ARG:ボス�
 				CFLAG:ARG:1291 = 0
 				;CFLAG:ARG:アナライズ不可 = 0
 				PRINTW ＞약점을 받아 내성이 원래대로 돌아갔다
-ELSEIF SKILL_CHANGE_CHECK(ARG, [[キャラ:라후]]) == 1 && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:라후]]) && CFLAG:ARG:ボスフラグ && FLAG:現던전 == 13
 		LOCAL = POS(CFLAG:ARG:802)
 		LOCAL:1 = MAXBASE:LOCAL:ＨＰ * 8/100
 		LOCAL:2 = MAXBASE:LOCAL:ＭＰ * 4/100

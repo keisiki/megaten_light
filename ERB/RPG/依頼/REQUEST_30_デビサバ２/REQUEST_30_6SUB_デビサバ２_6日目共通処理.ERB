@@ -476,7 +476,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		
 		;SET雑물고기
 		CALL SET_ENEMY,7,[[キャラ:아메노후토타마]],L_ENEMY_LV
-		CALL SET_ENEMY,8,[[キャラ:스사노오]],L_ENEMY_LV
+		CALL SET_ENEMY,8,[[キャラ:트리글라프]],L_ENEMY_LV
 		CALL SET_ENEMY,10,[[キャラ:아타파구]],L_ENEMY_LV
 		CALL SET_ENEMY,11,[[キャラ:란다]],L_ENEMY_LV
 
@@ -1491,7 +1491,7 @@ ENDIF
 ;前座ヤマトの사고패턴
 @SET_ACTION_前座ヤマト,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	;메기도라온
 	CALL CHECK_ACTIONABLE,ARG,[[스킬:메기도라온]]
 	SIF RESULT == 0

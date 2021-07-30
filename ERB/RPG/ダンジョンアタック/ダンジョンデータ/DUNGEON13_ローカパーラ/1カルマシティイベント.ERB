@@ -7,7 +7,7 @@ IF 던전フラグ:13:8 == 2
 		SIF RAND:12 == 0
 			RETURN [[아이템:스킬카드【천궁열파】]],1
 		SIF RAND:11 == 0
-			RETURN [[아이템:스킬카드【コーズニフェクト】]],1
+			RETURN [[아이템:스킬카드【코즈이펙트】]],1
 		SIF RAND:10 == 0
 			RETURN [[아이템:스킬카드【데몬레이브】]],1
 			
@@ -183,10 +183,10 @@ ENDSELECT
 					IF 던전フラグ:13:6 < 2 && MONEY < 500
 						CALL MESSAGE_WINDOW_D, "", "돈이 부족했다 "
 					ELSE
-						CALL MESSAGE_WINDOW_D, "", "何を占ってもらいますか？ "
+						CALL MESSAGE_WINDOW_D, "", "무엇을 점칠래요？ "
 						CALL INPUT_SELECT_D, "[0]오늘의 운세/[1]보물이 있는 장소/[2]역시 그만둔다 "
 						IF RESULT == 0 && 던전フラグ:13:8 > 0
-							CALL MESSAGE_WINDOW_D, "", "今日はもう占えない "
+							CALL MESSAGE_WINDOW_D, "", "오늘은 더 이상 점칠 수 없다 "
 						ELSEIF RESULT == 0
 							SIF 던전フラグ:13:6 < 2
 								MONEY -= 500

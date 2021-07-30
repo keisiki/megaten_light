@@ -47,12 +47,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_54
+@SKILL_DECIDE_TYPE_54, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_54
+@SKILL_DAMAGETYPE_54, ARG
 RETURN 1
 
 
@@ -265,7 +265,8 @@ FLAG:拡散フラグ = 0
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_54
-PRINTL [전열] 적 전열에 2～7회(1인 최대 2회) 검격속성 중 물리데미지. HIT한 적의 능력을 무작위로 감소시킨다. 검격 소질 보유 시 공격횟수가 증가한다.
+PRINTL [전열] 적 전열에 2～7회(1인 최대 2회、검격소질시 3회)
+PRINTL 검격속성 중 물리데미지. HIT한 적의 능력을 무작위로 감소시킨다.
 
 ;継承に필요한部位
 @継承部位_54,ARG

@@ -10,7 +10,7 @@ RETURN 30
 
 ;　위력
 @SKILL_POWER_2619, ARG
-RETURN 750
+RETURN 700
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_2619,ARG
@@ -34,12 +34,12 @@ RETURN 30
 RETURN 16
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2619
+@SKILL_DECIDE_TYPE_2619, ARG
 RETURN 1
 ;EXTRA
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2619
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2619, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -67,7 +67,7 @@ SIF ARG == 1
 
 ;계승타입
 @SKILL_SUCCESSION_TYPE_2619
-RETURN 16
+RETURN 20
 
 @継承不能_2619
 RETURN 1
@@ -86,7 +86,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2619
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -122,8 +122,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,2619
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2619
-PRINTL ICBMのミミちゃんを적に発射し焼き尽くす。破壊힘は高いが명중しにくい。
-PRINTL 머신　る～ことの技。
+PRINTL ICBM인 미미를 적에게 발사해 모두 태운다。파괴력은 높지만 명중하기 어렵다。
+PRINTL 머신　루～코토의 기술。
 
 ;継承に필요な部位
 @継承部位_2619,ARG

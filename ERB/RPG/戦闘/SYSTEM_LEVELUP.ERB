@@ -37,6 +37,10 @@
 ;	019		2019/11/16		JK好き					변이後にキャラが死ぬパターンが発見されたため변이後にHP회복する様に추가
 ;	020		2020/01/31		Jガン					레벨アップ時、구상を出せる処理を추가
 ;	021		2020/02/19		JK好き					オート레벨アップ時のPRINT_ALIGNMENTの引数설정を誤っていた問題を修正
+;	022		2020/06/19		JK好き					@LEARN_SKILLに一文字関数Uに레벨업したキャラを入れておく
+;	023		2020/08/27		Jガン					스킬취득時の스킬ゲージ処理추가
+;	024		2021/03/05		JK好き					@TRANSFORMに進化時に信頼・相棒の함락履歴を保存するように追加　上位함락を確認したら下位함락の함락履歴を埋めるように修正
+;	025		2021/04/07		Jガン					LEARN_SKILLにスキルロックの設定追加(「スキルロック」で検索すると変更場所がわかります)
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 @GET_NEXT_EXP, ARG, ARG:1, ARG:2
 #FUNCTION
@@ -158,6 +162,7 @@ RETURNF 5 * ARG * (ARG+1) * (ARG+2) / 3 * (ARG:1 ? 5 # 4) / 4
 		;新インターフェース側と同じ処理に변경
 		;インス토르ソフト・악세사리等の特殊ボーナス
 		CALL LVUP_BOOSTER(ARG,LOCAL:10)
+		CALL LVUP_BOOSTER_MAGATAMA(ARG,LOCAL:10)
 
 ;一応残す;LVUP_BOOSTERと中身がだいぶ違うような…
 ;		;---- EDIT 006 MOD START -------------------------
@@ -288,6 +293,7 @@ RETURNF 5 * ARG * (ARG+1) * (ARG+2) / 3 * (ARG:1 ? 5 # 4) / 4
 
 	;インス토르ソフト・악세사리等の特殊ボーナス
 	CALL LVUP_BOOSTER(ARG,ボーナス포인트)
+	CALL LVUP_BOOSTER_MAGATAMA(ARG,ボーナス포인트)
 
 	CALLFORM EVENT_LEVELUP,ARG,LOCAL:1
 	TRYCALLFORM EVENT_LEVELUP_{NO:ARG},LOCAL:1
@@ -602,6 +608,7 @@ RETURNF 5 * ARG * (ARG+1) * (ARG+2) / 3 * (ARG:1 ? 5 # 4) / 4
 		;新インターフェース側と同じ処理に변경
 		;インス토르ソフト・악세사리等の特殊ボーナス
 		CALL LVUP_BOOSTER(ARG,LOCAL:10)
+		CALL LVUP_BOOSTER_MAGATAMA(ARG,LOCAL:10)
 
 		FOR LCOUNT, 0, 7
 			BASE:ARG:(GET_BASESTATUS(1*LCOUNT)) += LOCAL:(1+LCOUNT)
@@ -724,6 +731,7 @@ VARSET LOCAL
 		;新インターフェース側と同じ処理に변경
 		;インス토르ソフト・악세사리等の特殊ボーナス
 		CALL LVUP_BOOSTER(ARG,LOCAL:10)
+		CALL LVUP_BOOSTER_MAGATAMA(ARG,LOCAL:10)
 
 		FOR LCOUNT, 0, 7
 			BASE:ARG:(GET_BASESTATUS(1*LCOUNT)) += LOCAL:(1+LCOUNT)
@@ -814,14 +822,23 @@ ENDIF
 ;스킬습득
 ;===============================
 @LEARN_SKILL,ARG,ARG:1,ARG:2
-#LOCALSIZE 4
+#LOCALSIZE 5
 #LOCALSSIZE 2
+#DIM LINE
+#DIMS LOCKS
 ;ARG = 레벨アップしたキャラ
 ;ARG:1 = 습득する스킬
 ;ARG:2 = 초기변신악마습득스킬の場合は真(1)
 ;まず空の스킬枠を探す
 LOCAL:1 = 0
 LOCALS:1 = 
+IF ARG:2
+	LOCKS = 悪魔変身スキルロック設定
+ELSE
+	LOCKS = スキルロック設定
+ENDIF
+;一文字関数Uにレベルアップしたキャラを入れておく
+U = ARG
 IF (TALENT:ARG:이능자 || TALENT:ARG:달인 || TALENT:ARG:인수라) && ARG:2 == 0
 	FOR LOCAL,1,FLAG:이능자스킬数+1
 		IF ARG:2
@@ -832,7 +849,7 @@ IF (TALENT:ARG:이능자 || TALENT:ARG:달인 || TALENT:ARG:인수라) && ARG:2 
 		;既に重複습득上限まで습득していたら関数を抜ける
 		IF ABL:ARG:LOCALS == ARG:1
 			RESULT = 1
-			TRYCALLFORM 重複습득数_{ARG:1}
+			TRYCALLFORM 重複習得数_{ARG:1}
 			LOCAL:2 = HAVE_SKILL_OVERLAP(ARG,ARG:1)
 			;#;PRINTFORML {LOCAL:2}/{RESULT}
 			SIF LOCAL:2 >= RESULT
@@ -859,7 +876,7 @@ ELSE
 		;既に重複습득上限まで습득していたら関数を抜ける
 		IF ABL:ARG:LOCALS == ARG:1
 			RESULT = 1
-			TRYCALLFORM 重複습득数_{ARG:1}
+			TRYCALLFORM 重複習得数_{ARG:1}
 			LOCAL:2 = HAVE_SKILL_OVERLAP(ARG,ARG:1)
 			;#;PRINTFORML {LOCAL:2}/{RESULT}
 			SIF LOCAL:2 >= RESULT
@@ -882,6 +899,11 @@ IF LOCAL:1 > 0
 	CALLFORM SKILL_NAME_{ARG:1},ARG
 	PRINTFORMW %조사처리(CALLNAME:ARG,"는")% %조사처리(RESULTS,"를")% 습득했다.
 	ABL:ARG:(LOCALS:1) = ARG:1
+	;特殊スキルロック
+	CALL SP_SKILL_CHECK,ARG:1
+	SIF RESULT
+		SETBIT CFLAG:ARG:LOCKS,LOCAL:1
+	RETURN
 ELSE
 	;無ければ스킬枠を選択して入れ替え
 	CALLFORM SKILL_NAME_{ARG:1},ARG
@@ -901,6 +923,10 @@ ELSE
 		CALL SKILL_EXPLAIN_PERFORMANCE, ARG:1, ARG
 	TRYCALLFORM SKILL_EXPLAIN_{ARG:1}
 	DRAWLINE
+ENDIF
+LINE = LINECOUNT
+$SKILL_LOOP
+CLEARLINE LINECOUNT - LINE
 IF (TALENT:ARG:이능자 || TALENT:ARG:달인 || TALENT:ARG:인수라) && ARG:2 == 0
 	FOR LOCAL,1,FLAG:이능자스킬数+1
 		IF ARG:2
@@ -910,7 +936,13 @@ IF (TALENT:ARG:이능자 || TALENT:ARG:달인 || TALENT:ARG:인수라) && ARG:2 
 		ENDIF
 		IF ABL:ARG:LOCALS > 0
 			CALLFORM SKILL_NAME_{ABL:ARG:LOCALS},ARG
-			PRINTFORML [{LOCAL}] %RESULTS%
+			IF GETBIT(CFLAG:ARG:LOCKS,LOCAL)
+				SETCOLOR COLOR("黄色")
+				PRINTFORML LOCK %RESULTS%
+			ELSE
+				PRINTFORML [{LOCAL}] %RESULTS%
+			ENDIF
+			RESETCOLOR
 		ENDIF
 	NEXT
 ELSE
@@ -922,7 +954,13 @@ ELSE
 		ENDIF
 		IF ABL:ARG:LOCALS > 0
 			CALLFORM SKILL_NAME_{ABL:ARG:LOCALS},ARG
-			PRINTFORML [{LOCAL}] %RESULTS%
+			IF GETBIT(CFLAG:ARG:LOCKS,LOCAL)
+				SETCOLOR COLOR("黄色")
+				PRINTFORML LOCK %RESULTS%
+			ELSE
+				PRINTFORML [{LOCAL}] %RESULTS%
+			ENDIF
+			RESETCOLOR
 		ENDIF
 	NEXT
 ENDIF
@@ -931,8 +969,22 @@ ENDIF
 	$INPUT_LOOP
 	INPUT
 	IF RESULT == 0
-		RETURN 0
+		PRINT 정말로 괜찮겠습니까？
+		CALL SP_SKILL_CHECK, ARG:1
+		SIF RESULT 
+			PRINTFORM ※%LOCALS:1%는 특별한 스킬입니다。
+		PRINTFORML \n[0] 아니오　[1] 네
+		INPUT
+		SIF RESULT == 1
+			RETURN 0
+		GOTO SKILL_LOOP
+	ELSEIF RESULT == 99
+		;スキルロック設定
+		CALL SKILL_ROCK_SETTING, ARG, ARG:2
+		GOTO SKILL_LOOP
 	ELSEIF RESULT >= 1 && RESULT <= FLAG:스킬数 || (RESULT <= FLAG:이능자스킬数 && (TALENT:ARG:이능자 || TALENT:ARG:달인 || TALENT:ARG:인수라))
+;---- EDIT 023 ADD -----------------------
+		LOCAL:4 = RESULT
 		IF ARG:2
 			LOCALS = 초기변신악마스킬{RESULT}
 		ELSE
@@ -948,6 +1000,11 @@ ENDIF
 			CALL SKILL_EXPLAIN_PERFORMANCE, ABL:ARG:LOCALS, ARG
 		TRYCALLFORM SKILL_EXPLAIN_{ABL:ARG:LOCALS}
 		DRAWLINE
+		;スキルロック
+		IF GETBIT(CFLAG:ARG:LOCKS,LOCAL:4)
+			PRINTFORML %RESULTS%はロックされていて忘れられません。
+			GOTO SKILL_LOOP
+		ENDIF
 		IF TALENT:ARG:식노 && ARG:2
 			PRINTFORML 정말로 %조사처리(RESULTS,"를")% 잊고, %조사처리(LOCALS:1,"를")% 습득해도 되겠습니까?
 		ELSE
@@ -959,7 +1016,12 @@ ENDIF
 		CALLFORM SKILL_NAME_{ARG:1},ARG
 		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% %조사처리(RESULTS,"를")% 습득했다.
 		ABL:ARG:LOCALS = ARG:1
-		
+		;特殊スキルロック
+		CALL SP_SKILL_CHECK,ARG:1
+		SIF RESULT
+			SETBIT CFLAG:ARG:LOCKS,LOCAL:4
+;---- EDIT 023 ADD -----------------------
+		CALL SKILLGAGE_DIRECT_CLEAR,ARG,LOCAL:4 + (ARG:2 != 0) * 12
 		IF TALENT:ARG:데빌시프터 || TALENT:ARG:식노 || TALENT:ARG:악마빙의자
 			IF CFLAG:ARG:악마변신 && CFLAG:ARG:링크악마 <= 0
 				FOR LOCAL, 1, FLAG:스킬数 + 1
@@ -975,9 +1037,9 @@ ENDIF
 		CALL SKILL_EQUIPTHEORY_DEL_SKILL, ARG, LOCAL:3
 		
 	ELSE
+		CLEARLINE 1
 		GOTO INPUT_LOOP
 	ENDIF
-ENDIF
 
 
 ;===============================
@@ -993,6 +1055,7 @@ IF RESULT == 1
 	ABL:ARG:변이레벨 = 0
 	ABL:ARG:변이 = 0
 ELSE
+	CALL CHECK_IMG_TRANSFORM,ARG,ARG:1
 	PRINTFORML %조사처리(CALLNAME:ARG,"는")% %조사처리(CSVNAME(ARG:1,0),"으로")% 다시 태어났다!
 	;명칭변경(변경されていない場合のみ)
 	NAME:ARG '= \@ NAME:ARG == CSVNAME(NO:ARG) ? %CSVNAME(ARG:1)% # %NAME:ARG% \@
@@ -1072,18 +1135,22 @@ ELSE
 	;함락履歴を記録
 	SIF GETBIT(FLAG:(50000+NO:ARG), 0)
 		SETBIT FLAG:(50000+ARG:1), 0
-	SIF TALENT:ARG:연모
+	SIF TALENT:ARG:연모 || TALENT:ARG:친애
 		SETBIT FLAG:(50000+ARG:1), 1
 	SIF TALENT:ARG:친애
 		SETBIT FLAG:(50000+ARG:1), 2
-	SIF TALENT:ARG:음란
+	SIF TALENT:ARG:음란 || TALENT:ARG:창부
 		SETBIT FLAG:(50000+ARG:1), 3
 	SIF TALENT:ARG:창부
 		SETBIT FLAG:(50000+ARG:1), 4
-	SIF TALENT:ARG:복종
+	SIF TALENT:ARG:복종 || TALENT:ARG:예속
 		SETBIT FLAG:(50000+ARG:1), 5
 	SIF TALENT:ARG:예속
 		SETBIT FLAG:(50000+ARG:1), 6
+	SIF TALENT:ARG:신뢰 || TALENT:ARG:동료
+		SETBIT FLAG:(50000+ARG:1), 8
+	SIF TALENT:ARG:동료
+		SETBIT FLAG:(50000+ARG:1), 9
 ;---- EDIT 018 ADD END   -------------------------
 
 	;最後にナンバー변경

@@ -59,7 +59,14 @@ RETURN 40
 @장비箇所_2301
 RETURN GET_EQUIPNUM("검")
 
+;퀵스피어
 @장비추가스킬_2301,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 44
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -84,6 +91,9 @@ PRINTL 장비조건：LV15～
 @장비해설_2301
 PRINTL 찌르기에 특화된 검。
 PRINTL 낮은 확률로 독을 부착시킨다。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：퀵스피어
+RESETCOLOR
 
 RETURN 0
 

@@ -10,13 +10,13 @@ SIF (TEQUIP:음순노출 != -1 && TALENT:오토코노코 == 0) || TEQUIP:둔부�
 SIF TALENT:남자 && TALENT:오토코노코 == 0
 	RETURN 0
 ;야외플레이中かつ야외플레이확장기능ありじゃないとダメ
-SIF TEQUIP:29 == 0 || FLAG:46 == 0
+SIF TEQUIP:야외플레이 == 0 || FLAG:야외노출강화 == 0
 	RETURN 0
 ;人が５人以上いないとダメ
-SIF TEQUIP:46 < 5
+SIF TEQUIP:구경꾼수 < 5
 	RETURN 0
 ;興奮度が60以上ないとダメ
-SIF TEQUIP:47 < 60
+SIF TEQUIP:구경꾼흥분도 < 60
 	RETURN 0
 RETURN 1
 
@@ -31,56 +31,58 @@ TSTR:0 = 윤간
 ;ソースの計算
 ;-------------------------------------------------
 ;소비체력、기력
-;윤간경험によって、소비체력、기력が変わる（최대30%減）
-LOCAL:42 = (100 - MIN(30, EXP:윤간경험/5))
-LOSEBASE:0 += (750 + (15 * TEQUIP:46 / 2)) * LOCAL:42 / 100
-LOSEBASE:1 += (1000 + (10 * TEQUIP:46)) * LOCAL:42 / 100
+;윤간중독によって、소비체력、기력が変わる（최대30%減）
+;LOCAL:42 = (100 - MIN(30, EXP:윤간경험/5))
+;LOSEBASE:체력 += (750 + (15 * TEQUIP:구경꾼수 / 2)) * LOCAL:42 / 100
+;LOSEBASE:기력 += (1000 + (10 * TEQUIP:구경꾼수)) * LOCAL:42 / 100
+LOSEBASE:체력 += (1500 + (30 * TEQUIP:구경꾼수 / 2)) / (2 * (1 + ABL:윤간중독))
+LOSEBASE:기력 += (2000 + (20 * TEQUIP:구경꾼수)) / (2 * (1 + ABL:윤간중독))
 
 
 ;-------------------------------------------------
 ;特殊ソース処理
 ;-------------------------------------------------
-;억압、저항持ちには、억울ソース추가
-SIF TALENT:32 || TALENT:34
+;억압、저항持ちには、억울소스추가
+SIF TALENT:억압 || TALENT:저항
 	SOURCE:울굴 += 20
 
-TFLAG:76 = 0
+TFLAG:야외노출確立変動 = 0
 LOCAL:35 = 0
 LOCAL:40 = 0
 ;奴隷C
-LOCAL:32 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+LOCAL:32 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;奴隷B
-LOCAL:33 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+LOCAL:33 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;奴隷A
-LOCAL:34 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+LOCAL:34 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;奴隷V
 SIF TALENT:오토코노코 == 0
-	LOCAL:35 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+	LOCAL:35 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;奴隷M
-LOCAL:36 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+LOCAL:36 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;조교者C
-LOCAL:37 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+LOCAL:37 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;조교者B
-LOCAL:38 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+LOCAL:38 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;조교者A
-LOCAL:39 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+LOCAL:39 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;조교者V
 SIF TALENT:PLAYER:오토코노코 ==0
-	LOCAL:40 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
+	LOCAL:40 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
 ;조교者M
-LOCAL:41 = RAND:(TEQUIP:46 * TEQUIP:47 / 100) + 1
-;取得金OR아이템
-TFLAG:77 = (LOCAL:32+LOCAL:33+LOCAL:34+LOCAL:35+LOCAL:36)
+LOCAL:41 = RAND:(TEQUIP:구경꾼수 * TEQUIP:구경꾼흥분도 / 50) + 1
+;취득金OR아이템
+TFLAG:야외노출儲け = (LOCAL:32+LOCAL:33+LOCAL:34+LOCAL:35+LOCAL:36)
 
 SIF (TEQUIP:PLAYER:음순노출 == -1 || TALENT:PLAYER:오토코노코) && TEQUIP:PLAYER:둔부노출 == -1 && (TALENT:PLAYER:남자 == 0 || TALENT:PLAYER:오토코노코)
-	TFLAG:76 = RAND:100
+	TFLAG:야외노출確立変動 = RAND:100
 ;당신が女性または오토코노코で尻とか出してる場合、7割の확률で당신も윤간に巻き込まれる
-SIF TFLAG:76 >= 70
-	TFLAG:77 += (LOCAL:37+LOCAL:38+LOCAL:39+LOCAL:40+LOCAL:41)
+SIF TFLAG:야외노출確立変動 >= 70
+	TFLAG:야외노출儲け += (LOCAL:37+LOCAL:38+LOCAL:39+LOCAL:40+LOCAL:41)
 	
 ;CALL KOJO_MESSAGE_COM
 
-CALL ADDS_EXP("윤간경험", ((TEQUIP:46 / 25)+1), TARGET)
+CALL ADDS_EXP("윤간경험", ((TEQUIP:구경꾼수 / 10)+1), TARGET)
 CALL ADDS_EXP("펠라경험", LOCAL:36, TARGET)
 CALL ADDS_EXP("Ａ경험", LOCAL:34, TARGET)
 CALL ADDS_EXP("키스경험", LOCAL:36/2, TARGET)
@@ -97,9 +99,9 @@ ENDIF
 TFLAG:19 = 1
 CALL ADDS_EXP("성교경험", LOCAL:35+34, TARGET)
 CALL ADDS_EXP("정액경험", (LOCAL:35+LOCAL:34+LOCAL:36)*2, TARGET)
-IF CFLAG:108 == 0 && TALENT:남자 == 0
+IF CFLAG:자궁내피임결계 == 0 && TALENT:남자 == 0
 	CALL ADDS_EXP("질사경험", LOCAL:35*2, TARGET)
-	CFLAG:105 += LOCAL:35*2
+	CFLAG:顧客の中出氏による임신판정 += LOCAL:35*2
 ELSE
 	PRINTFORML <피임결계>
 ENDIF
@@ -114,15 +116,17 @@ SOURCE:성행위 += (LOCAL:36*50+LOCAL:35*60+LOCAL:34*40+LOCAL:33*40)*10
 SOURCE:노출 += ((LOCAL:36*2+LOCAL:35+LOCAL:34+LOCAL:32*3)*10*(1+ABL:노출증))*10
 SOURCE:아픔 += (LOCAL:35*5*(10-ABL:Ｖ감각)+LOCAL:34*5*(10-ABL:Ａ감각))*10
 SOURCE:무서움 += (LOCAL:35*5*(10-ABL:Ｖ감각)+LOCAL:34*5*(10-ABL:Ａ감각))*10
-SOURCE:반감 += 100*(1+MARK:3)*(1+MARK:3)*10/MAX(1,ABL:순종)
+SOURCE:반감 += 100*(1+MARK:반발각인)*(1+MARK:반발각인)*10/MAX(1,ABL:순종)
 
 ;PRINTFORML ＭＡＧ +{(LOCAL:35*2+LOCAL:34*2+LOCAL:36*1)*BASE:LV}
 ;CALL CONTROL_MAG,TARGET,(LOCAL:35*2+LOCAL:34*2+LOCAL:36*1)*BASE:LV
 
-IF TFLAG:76 >= 70
+IF TFLAG:야외노출確立変動 >= 70
 	SOURCE:PLAYER:쾌Ｃ += LOCAL:37*500
 	SOURCE:PLAYER:쾌Ａ += LOCAL:39*500
 	SOURCE:PLAYER:쾌Ｂ += LOCAL:38*500
+	CALL ADDS_EXP("윤간경험", ((TEQUIP:구경꾼수 / 10)+1), PLAYER)
+	CALL ADDS_EXP("키스경험", LOCAL:41/2, PLAYER)
 	CALL ADDS_EXP("펠라경험", LOCAL:41, PLAYER)
 	CALL ADDS_EXP("Ａ경험", LOCAL:39, PLAYER)
 	IF LOCAL:40
@@ -139,9 +143,9 @@ IF TFLAG:76 >= 70
 	ENDIF
 	CALL ADDS_EXP("성교경험", LOCAL:40+LOCAL:39, PLAYER)
 	CALL ADDS_EXP("정액경험", (LOCAL:40+LOCAL:39+LOCAL:41)*2, PLAYER)
-	IF CFLAG:PLAYER:108 == 0
+	IF CFLAG:PLAYER:자궁내피임결계 == 0
 		CALL ADDS_EXP("질사경험", LOCAL:40*2, PLAYER)
-		CFLAG:PLAYER:105 += (LOCAL:40)*2
+		CFLAG:PLAYER:顧客の中出氏による임신판정 += (LOCAL:40)*2
 	ELSE
 		PRINTFORML <피임결계>(%CALLNAME:PLAYER%)
 	ENDIF
@@ -150,12 +154,12 @@ IF TFLAG:76 >= 70
 ENDIF
 PRINTFORML ＭＡＧ +{(LOCAL:35*2+LOCAL:34*2+LOCAL:36*1)*BASE:LV}
 CALL CONTROL_MAG,TARGET,(LOCAL:35*2+LOCAL:34*2+LOCAL:36*1)*BASE:LV
-IF TFLAG:76 >= 70
+IF TFLAG:야외노출確立変動 >= 70
 	PRINTFORML ＭＡＧ +{(LOCAL:40*2+LOCAL:39*2+LOCAL:41*1)*BASE:PLAYER:LV}(%CALLNAME:PLAYER%)
 	CALL CONTROL_MAG,PLAYER,(LOCAL:40*2+LOCAL:39*2+LOCAL:41*1)*BASE:PLAYER:LV
 ENDIF
-MONEY += TFLAG:77
-;PRINTFORMW 그들이 떠난 자리에는 ￥{TFLAG:77}이 남아있었다
+MONEY += TFLAG:야외노출儲け
+;PRINTFORMW 彼らが去った跡には￥{TFLAG:야외노출儲け}残されていた
 ;의존도ベクトル
 TFLAG:33 = 5
 
@@ -172,7 +176,7 @@ CALL SET_STAIN("애널", "페니스", TARGET)
 IF !TALENT:남자
 	CALL SET_STAIN("바기나", "정액", TARGET)
 	CALL SET_STAIN("바기나", "페니스", TARGET)
-	IF CFLAG:108 == 0
+	IF CFLAG:자궁내피임결계 == 0
 		CALL SET_STAIN("질내", "정액", TARGET)
 	ENDIF
 ENDIF
@@ -188,14 +192,14 @@ RETURN 1
 ;
 
 PRINTFORML %조사처리(CALLNAME:PLAYER,"는")% %타겟을()% 흥분한 사람들에게 밀어넣었다
-IF TALENT:0 || TALENT:1
+IF TALENT:처녀 || TALENT:재생처녀
 	PRINTFORML 흥분한 사람들의 시선은 실오라기하나 두르지 않고 넘어진 %CALLNAME:TARGET%에게 향한다。
 	PRINTFORML 아직 처녀인 것을 눈치챈 사람들은 앞다투어 %CALLNAME:TARGET%에게 몰려들어、
 	PRINTFORMW 위에서 덮치듯이 자신의 굵고 긴 장대로 %타겟을()% 꿰뚫었다。
 ELSE
 	PRINTFORMW 흥분한 사람들은 %CALLNAME:TARGET%의 몸에 쇄도했다
 ENDIF
-IF TFLAG:76 >= 70
+IF TFLAG:야외노출確立変動 >= 70
 	PRINTFORML 더욱 흥분한 사람들은 %CALLNAME:PLAYER%에게 덤벼들었다
 	IF TALENT:PLAYER:0 || TALENT:PLAYER:1
 		PRINTFORML %CALLNAME:PLAYER%(이)가 아직 처녀인 것을 눈치챈 사람들은 앞다투어 %CALLNAME:PLAYER%에게 몰려들어、
@@ -207,23 +211,23 @@ ENDIF
 ;ハード行為フラグOFF
 B = 0
 FOR LCOUNT,0,20
-	SIF TEQUIP:46 == 0
+	SIF TEQUIP:구경꾼수 == 0
 		BREAK
-	SIF TFLAG:76 >= 70
+	SIF TFLAG:야외노출確立変動 >= 70
 		BREAK
 	PRINTFORML  
 	DRAWLINE
 	PRINTFORML  
 	PRINTFORM [윤간중]
-	PRINTFORM [윤간인수{TEQUIP:46}인]
+	PRINTFORM [윤간인수{TEQUIP:구경꾼수}인]
 	PRINTFORM [흥분도：
-		IF TEQUIP:47 > 100
+		IF TEQUIP:구경꾼흥분도 > 100
 			PRINTFORML 　대흥분]
-		ELSEIF TEQUIP:47 > 60
+		ELSEIF TEQUIP:구경꾼흥분도 > 60
 			PRINTFORML 　흥분]
-		ELSEIF TEQUIP:47 > 40
+		ELSEIF TEQUIP:구경꾼흥분도 > 40
 			PRINTFORML 　약간흥분]
-		ELSEIF TEQUIP:47 > 20
+		ELSEIF TEQUIP:구경꾼흥분도 > 20
 			PRINTFORML 　보통]
 		ELSE
 			PRINTFORML 　냉정]
@@ -283,16 +287,16 @@ FOR LCOUNT,0,20
 	PRINTFORML 　
 	;こっから描写
 	PRINTFORM 남자들은 
-		IF TEQUIP:47 > 100
+		IF TEQUIP:구경꾼흥분도 > 100
 			PRINTFORM 폭주한 모습으로 
 			G = 6
-		ELSEIF TEQUIP:47 > 60
+		ELSEIF TEQUIP:구경꾼흥분도 > 60
 			PRINTFORM 거친 숨을 내쉬면서 
 			G = 5
-		ELSEIF TEQUIP:47 > 40
+		ELSEIF TEQUIP:구경꾼흥분도 > 40
 			PRINTFORM 콧김을 난폭하게 내뿜으면서 
 			G = 4
-		ELSEIF TEQUIP:47 > 20
+		ELSEIF TEQUIP:구경꾼흥분도 > 20
 			PRINTFORM 여유를 보이며
 			G = 3
 		ELSE
@@ -339,7 +343,7 @@ FOR LCOUNT,0,20
 				;IF RAND:3 == 0 && (TALENT:3 !| TALENT:4 !| TALENT:5 !| TALENT:6 !| TALENT:7 !| TALENT:8)
 					IF RAND:4 == 0
 						;거유、폭유もち
-						IF RAND:2 == 0 && (TALENT:111 || TALENT:112) && (TALENT:3 !| TALENT:4 !| TALENT:5 !| TALENT:6 !| TALENT:7 !| TALENT:8)
+						IF RAND:2 == 0 && (TALENT:거유 || TALENT:폭유 || TALENT:魔乳) && (TALENT:3 !| TALENT:4 !| TALENT:5 !| TALENT:6 !| TALENT:7 !| TALENT:8)
 							PRINTFORMW 전라의 %조사처리(CALLNAME:TARGET, "가")% 지면에 널브러져 있다
 							PRINTFORMW 한명의 %조사처리(LOCALS:1, "가")% %CALLNAME:TARGET%에게 다가가더니,
 							PRINTFORMW 더러운 발바닥으로 %CALLNAME:TARGET%의 풍만한 유방을 짓밟았다
@@ -372,7 +376,7 @@ FOR LCOUNT,0,20
 					;ELSEIF RAND:3 == 0 && (TALENT:3 !| TALENT:4 !| TALENT:5 !| TALENT:6 !| TALENT:7 !| TALENT:8)
 					ELSEIF RAND:4 == 0 
 						;暴힘を振るわれる
-						IF RAND:3 == 0 && (TALENT:111 || TALENT:112) && (TALENT:3 !| TALENT:4 !| TALENT:5 !| TALENT:6 !| TALENT:7 !| TALENT:8)
+						IF RAND:3 == 0 && (TALENT:거유 || TALENT:폭유 || TALENT:魔乳) && (TALENT:3 !| TALENT:4 !| TALENT:5 !| TALENT:6 !| TALENT:7 !| TALENT:8)
 							PRINTFORMW %LOCALS:1%에게 범해지는 %CALLNAME:TARGET%의 풍만한 가슴을 다른%LOCALS:1%가 난폭하게 움켜쥐었다
 							PRINTFORMW 아픔에 비명을 지르는 %CALLNAME:TARGET%
 							PRINTFORMW 경쾌한 소리와 함께 %조사처리(LOCALS:1, "가")% 유방을 손바닥으로 한번, 두번 후려친다
@@ -380,7 +384,7 @@ FOR LCOUNT,0,20
 							PRINTFORMW 남자들은 용서없이 더욱 고통을 계속 준다.
 						ELSE
 							PRINTFORM %조사처리(CALLNAME:TARGET, "는")% %LOCALS:1%에게 %조사처리(LOCALS:2, "로")% 범해지면서
-							IF (TALENT:111 || TALENT:112) && (TALENT:3 !| TALENT:4 !| TALENT:5 !| TALENT:6 !| TALENT:7 !| TALENT:8)
+							IF (TALENT:거유 || TALENT:폭유 || TALENT:魔乳) && (TALENT:3 !| TALENT:4 !| TALENT:5 !| TALENT:6 !| TALENT:7 !| TALENT:8)
 								PRINTW 울부짖고 있다
 							ELSE
 								PRINTW 교성을 올리고 있다
@@ -523,7 +527,7 @@ FOR LCOUNT,0,20
 						C = RAND:3
 						CALL KOJO_MESSAGE_RINKAN,8,0
 					;거유以上のキャラだと「その乳は飾りか？遊ばせてるんじゃねえ」とか罵られる
-					ELSEIF RAND:10 == 0 && (TALENT:거유 || TALENT:폭유)
+					ELSEIF RAND:10 == 0 && (TALENT:거유 || TALENT:폭유 || TALENT:魔乳)
 						PRINTFORMW 여러 남자들에게 둘러싸여 범해지는 %CALLNAME:TARGET%
 						PRINTFORMW 기승위로 필사적으로 허리를 흔드는 %CALLNAME:TARGET%에게 %LOCALS:1%들은
 						PRINTFORMW 그 가슴은 장식이냐고, 놀려두는게 아니라면서 매도하더니 섹스하면서 가슴으로 봉사하도록 명령했다
@@ -533,7 +537,7 @@ FOR LCOUNT,0,20
 						PRINTFORMW 삽입만은 하지 말아달라고 간청하는 %CALLNAME:TARGET%에게 %LOCALS:1%들은 입과 손으로 전원을 만족시키면 생각해보겠다고 조건을 제시했다
 						PRINTFORMW 명령받은대로 생면부지의 남자들의 노리개가 된 %CALLNAME:TARGET%
 						PRINT 혐오감을 드러내면서도
-						IF RAND:2 == 0 && (TALENT:거유 || TALENT:폭유)
+						IF RAND:2 == 0 && (TALENT:거유 || TALENT:폭유 || TALENT:魔乳)
 							PRINTFORMW 커다란 가슴을 써서 필사적으로 봉사하는 %CALLNAME:TARGET%
 						ELSE
 							PRINTFORMW 봉사하는%CALLNAME:TARGET%
@@ -612,10 +616,10 @@ FOR LCOUNT,0,20
 					ENDIF
 				ENDIF
 			ENDIF
-		TEQUIP:46 -= C
-		TEQUIP:47 -= C-D
-		IF TEQUIP:46 <=0
-			TEQUIP:46 = 0
+		TEQUIP:구경꾼수 -= C
+		TEQUIP:구경꾼흥분도 -= C-D
+		IF TEQUIP:구경꾼수 <=0
+			TEQUIP:구경꾼수 = 0
 			F = E
 		ELSE
 			F += C
@@ -640,12 +644,12 @@ DRAWLINE
 PRINTFORML  
 PRINTFORMW 그들이 떠난 자리에는 ￥{TFLAG:77}이 남아있었다
 
-TEQUIP:13 = 0
-TEQUIP:14 = 0
-TEQUIP:15 = 0
-TEQUIP:45 = 0
-TEQUIP:46 = 0
-TEQUIP:47 = 0
+TEQUIP:바이브 = 0
+TEQUIP:애널바이브 = 0
+TEQUIP:애널비즈 = 0
+TEQUIP:야외플레이위험도 = 0
+TEQUIP:구경꾼수 = 0
+TEQUIP:구경꾼흥분도 = 0
 ;===================================================
 ;조교타입
 ;===================================================

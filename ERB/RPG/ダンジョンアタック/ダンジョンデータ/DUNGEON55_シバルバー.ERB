@@ -659,7 +659,7 @@ ELSEIF LOCALS == "마카"
 ELSEIF LOCALS == "MAG" || LOCALS == "ＭＡＧ"
 	CALL GET_TREASURE_MAG, 0, LOCAL, FLAG:現던전, FLAG:現M + 75, (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100
 ELSEIF LOCALS == "ＨＰ" || LOCALS == "ＭＰ" || LOCALS == "POISON" || LOCALS == "PALYZE"
-	;LOCALS:1 종류 LOCAL ダメージ量or확률 LOCALS:2 相性
+	;LOCALS:1 종류 LOCAL 데미지量or확률 LOCALS:2 相性
 	CALL GET_TREASURE_TRAP, LOCALS, LOCAL, GET_TYPE_NUM(LOCALS:1), FLAG:現던전, FLAG:現M + 75, (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100
 ELSE
 	IF GETNUM(ITEM, LOCALS) == -1
@@ -691,7 +691,7 @@ ENDSELECT
 ;이벤트
 ;=======================================================================
 @EVENT_55
-#LOCALSIZE 3
+#LOCALSIZE 5
 CALL SHOW_PICTURE, "D"
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 	CASE 0
@@ -732,15 +732,30 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 				IF STRFLAG_NUM_EV("나치스의 미인 비밀 병사의 소문", , , , [[이벤트:소문]]) == 2 || STRFLAG_NUM_EV("나치스의 히든카드는 기계화 미녀 군단의 소문", , , , [[이벤트:소문]]) == 2
 					PRINTL ＞3명 중 어느것을 데리고 돌아갈까
 					PRINTW
-					PRINTL ＞[0]롱기누스７
-					PRINTL ＞[1]롱기누스６
-					PRINTL ＞[2]롱기누스５
+
+					VARSET LOCAL
+					LOCAL = 1
+					IF GETCHARA([[キャラ:롱기누스７]]) < 0
+						PRINTL ＞[1]롱기누스７
+						LOCAL:(LOCAL++) = 1
+					ENDIF
+					IF GETCHARA([[キャラ:롱기누스６]]) < 0
+						PRINTL ＞[2]롱기누스６
+						LOCAL:(LOCAL++) = 2
+					ENDIF
+					IF GETCHARA([[キャラ:롱기누스５]]) < 0
+						PRINTL ＞[3]롱기누스５
+						LOCAL:(LOCAL++) = 3
+					ENDIF
+					PRINTL ＞[0]데리고 돌아가지 않는다
 					PRINTL
-					CALL INPUTINT,0,1,2
+					CALL INPUTINT,0,LOCAL:1,LOCAL:2,LOCAL:3
+
+					
 					SELECTCASE RESULT
-					CASE 0
-					PRINTW ＞롱기누스７을 손에 넣었다
-						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스７]],0
+					CASE 1
+						PRINTW ＞롱기누스７을 손에 넣었다
+						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스７]],0,,,1
 						IF RESULT == 1
 							BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
 							ABL:(RESULT:1):종족 = 0
@@ -763,6 +778,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							BASE:(RESULT:1):핵열 = 100
 							BASE:(RESULT:1):만능 = 100
 							BASE:(RESULT:1):사이코 = 100
+							BASE:(RESULT:1):HAPPY = 0
+							BASE:(RESULT:1):SHOCK = 0
+							BASE:(RESULT:1):PANIC = 0
+							BASE:(RESULT:1):SLEEP = 0
+							BASE:(RESULT:1):FREEZE = 0
+							BASE:(RESULT:1):BIND = 0
+							BASE:(RESULT:1):CLOSE = 0
+							BASE:(RESULT:1):POISON = 0
+							BASE:(RESULT:1):CHARM = 0
+							BASE:(RESULT:1):PALYZE = 0
+							BASE:(RESULT:1):CURSE = 0
+							BASE:(RESULT:1):FLY = 0
+							BASE:(RESULT:1):STONE = 0
+							BASE:(RESULT:1):DYING = 0
 							MAXBASE:(RESULT:1):검격 = 100
 							MAXBASE:(RESULT:1):비구 = 100
 							MAXBASE:(RESULT:1):타격 = 100
@@ -781,7 +810,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							MAXBASE:(RESULT:1):중력 = 100
 							MAXBASE:(RESULT:1):핵열 = 100
 							MAXBASE:(RESULT:1):만능 = 100
-							MAXBASE:(RESULT:1):사이코 = 100	
+							MAXBASE:(RESULT:1):사이코 = 100
+							MAXBASE:(RESULT:1):HAPPY = 0
+							MAXBASE:(RESULT:1):SHOCK = 0
+							MAXBASE:(RESULT:1):PANIC = 0
+							MAXBASE:(RESULT:1):SLEEP = 0
+							MAXBASE:(RESULT:1):FREEZE = 0
+							MAXBASE:(RESULT:1):BIND = 0
+							MAXBASE:(RESULT:1):CLOSE = 0
+							MAXBASE:(RESULT:1):POISON = 0
+							MAXBASE:(RESULT:1):CHARM = 0
+							MAXBASE:(RESULT:1):PALYZE = 0
+							MAXBASE:(RESULT:1):CURSE = 0
+							MAXBASE:(RESULT:1):FLY = 0
+							MAXBASE:(RESULT:1):STONE = 0
+							MAXBASE:(RESULT:1):DYING = 0
 							ABL:(RESULT:1):공격범위 = 1	
 							TALENT:(RESULT:1):이능자 = 1
 							ABL:(RESULT:1):스킬1 = 0
@@ -865,9 +908,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							CSTR:(RESULT:1):종족명 = 성창기사
 							CSTR:(RESULT:1):タイトル = ドイツ軍人
 						ENDIF
-					CASE 1
-					PRINTW ＞롱기누스６을 손에 넣었다
-						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스６]],0
+					CASE 2
+						PRINTW ＞롱기누스６을 손에 넣었다
+						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스６]],0,,,1
 						IF RESULT == 1
 							BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
 							ABL:(RESULT:1):종족 = 0
@@ -890,6 +933,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							BASE:(RESULT:1):핵열 = 100
 							BASE:(RESULT:1):만능 = 100
 							BASE:(RESULT:1):사이코 = 100
+							BASE:(RESULT:1):HAPPY = 0
+							BASE:(RESULT:1):SHOCK = 0
+							BASE:(RESULT:1):PANIC = 0
+							BASE:(RESULT:1):SLEEP = 0
+							BASE:(RESULT:1):FREEZE = 0
+							BASE:(RESULT:1):BIND = 0
+							BASE:(RESULT:1):CLOSE = 0
+							BASE:(RESULT:1):POISON = 0
+							BASE:(RESULT:1):CHARM = 0
+							BASE:(RESULT:1):PALYZE = 0
+							BASE:(RESULT:1):CURSE = 0
+							BASE:(RESULT:1):FLY = 0
+							BASE:(RESULT:1):STONE = 0
+							BASE:(RESULT:1):DYING = 0
 							MAXBASE:(RESULT:1):검격 = 100
 							MAXBASE:(RESULT:1):비구 = 100
 							MAXBASE:(RESULT:1):타격 = 100
@@ -908,7 +965,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							MAXBASE:(RESULT:1):중력 = 100
 							MAXBASE:(RESULT:1):핵열 = 100
 							MAXBASE:(RESULT:1):만능 = 100
-							MAXBASE:(RESULT:1):사이코 = 100	
+							MAXBASE:(RESULT:1):사이코 = 100
+							MAXBASE:(RESULT:1):HAPPY = 0
+							MAXBASE:(RESULT:1):SHOCK = 0
+							MAXBASE:(RESULT:1):PANIC = 0
+							MAXBASE:(RESULT:1):SLEEP = 0
+							MAXBASE:(RESULT:1):FREEZE = 0
+							MAXBASE:(RESULT:1):BIND = 0
+							MAXBASE:(RESULT:1):CLOSE = 0
+							MAXBASE:(RESULT:1):POISON = 0
+							MAXBASE:(RESULT:1):CHARM = 0
+							MAXBASE:(RESULT:1):PALYZE = 0
+							MAXBASE:(RESULT:1):CURSE = 0
+							MAXBASE:(RESULT:1):FLY = 0
+							MAXBASE:(RESULT:1):STONE = 0
+							MAXBASE:(RESULT:1):DYING = 0
 							ABL:(RESULT:1):공격범위 = 1	
 							TALENT:(RESULT:1):이능자 = 1
 							ABL:(RESULT:1):스킬1 = 0
@@ -941,8 +1012,6 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							TALENT:(RESULT:1):약독내성 = 1
 							TALENT:(RESULT:1):도착적 = 1
 							TALENT:(RESULT:1):새드 = 1
-							TALENT:(RESULT:1):Ａ민감 = 1
-							TALENT:(RESULT:1):Ｂ민감 = 1
 							TALENT:(RESULT:1):거유 = 1
 							ABL:(RESULT:1):기교 = 1
 								IF STRFLAG_NUM_EV("나치스의 히든카드는 기계화 미녀 군단의 소문", , , , [[이벤트:소문]]) == 2
@@ -969,9 +1038,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							CSTR:(RESULT:1):종족명 = 성창기사
 							CSTR:(RESULT:1):タイトル = ドイツ軍人
 						ENDIF
-					CASE 2
-					PRINTW ＞롱기누스５를 손에 넣었다
-						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스５]],0
+					CASE 3
+						PRINTW ＞롱기누스５을 손에 넣었다
+						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스５]],0,,,1
 						IF RESULT == 1
 							BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
 							ABL:(RESULT:1):종족 = 0
@@ -994,6 +1063,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							BASE:(RESULT:1):핵열 = 100
 							BASE:(RESULT:1):만능 = 100
 							BASE:(RESULT:1):사이코 = 100
+							BASE:(RESULT:1):HAPPY = 0
+							BASE:(RESULT:1):SHOCK = 0
+							BASE:(RESULT:1):PANIC = 0
+							BASE:(RESULT:1):SLEEP = 0
+							BASE:(RESULT:1):FREEZE = 0
+							BASE:(RESULT:1):BIND = 0
+							BASE:(RESULT:1):CLOSE = 0
+							BASE:(RESULT:1):POISON = 0
+							BASE:(RESULT:1):CHARM = 0
+							BASE:(RESULT:1):PALYZE = 0
+							BASE:(RESULT:1):CURSE = 0
+							BASE:(RESULT:1):FLY = 0
+							BASE:(RESULT:1):STONE = 0
+							BASE:(RESULT:1):DYING = 0
 							MAXBASE:(RESULT:1):검격 = 100
 							MAXBASE:(RESULT:1):비구 = 100
 							MAXBASE:(RESULT:1):타격 = 100
@@ -1012,7 +1095,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							MAXBASE:(RESULT:1):중력 = 100
 							MAXBASE:(RESULT:1):핵열 = 100
 							MAXBASE:(RESULT:1):만능 = 100
-							MAXBASE:(RESULT:1):사이코 = 100	
+							MAXBASE:(RESULT:1):사이코 = 100
+							MAXBASE:(RESULT:1):HAPPY = 0
+							MAXBASE:(RESULT:1):SHOCK = 0
+							MAXBASE:(RESULT:1):PANIC = 0
+							MAXBASE:(RESULT:1):SLEEP = 0
+							MAXBASE:(RESULT:1):FREEZE = 0
+							MAXBASE:(RESULT:1):BIND = 0
+							MAXBASE:(RESULT:1):CLOSE = 0
+							MAXBASE:(RESULT:1):POISON = 0
+							MAXBASE:(RESULT:1):CHARM = 0
+							MAXBASE:(RESULT:1):PALYZE = 0
+							MAXBASE:(RESULT:1):CURSE = 0
+							MAXBASE:(RESULT:1):FLY = 0
+							MAXBASE:(RESULT:1):STONE = 0
+							MAXBASE:(RESULT:1):DYING = 0
 							ABL:(RESULT:1):공격범위 = 1	
 							TALENT:(RESULT:1):이능자 = 1
 							ABL:(RESULT:1):스킬1 = 0
@@ -1110,16 +1207,35 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 				IF STRFLAG_NUM_EV("나치스의 미인 비밀 병사의 소문", , , , [[이벤트:소문]]) == 2 || STRFLAG_NUM_EV("나치스의 히든카드는 기계화 미녀 군단의 소문", , , , [[이벤트:소문]]) == 2
 					PRINTL ＞4명 중 어느것을 데리고 돌아갈까
 					PRINTW
-					PRINTL ＞[0]롱기누스４
-					PRINTL ＞[1]롱기누스３
-					PRINTL ＞[2]롱기누스２
-					PRINTL ＞[3]롱기누스１
+					VARSET LOCAL
+					LOCAL = 1
+
+					IF GETCHARA([[キャラ:롱기누스４]]) < 0
+						PRINTL ＞[1]롱기누스４
+						LOCAL:(LOCAL++) = 1
+					ENDIF
+					IF GETCHARA([[キャラ:롱기누스３]]) < 0
+						PRINTL ＞[2]롱기누스３
+						LOCAL:(LOCAL++) = 2
+					ENDIF
+					IF GETCHARA([[キャラ:롱기누스２]]) < 0
+						PRINTL ＞[3]롱기누스２
+						LOCAL:(LOCAL++) = 3
+					ENDIF
+					IF GETCHARA([[キャラ:롱기누스１]]) < 0
+						PRINTL ＞[4]롱기누스１
+						LOCAL:(LOCAL++) = 4
+					ENDIF
+
 					PRINTL
-					CALL INPUTINT,0,1,2,3
+					PRINTL ＞[0]데리고 돌아가지 않는다
+					PRINTL
+					CALL INPUTINT,0,LOCAL:1,LOCAL:2,LOCAL:3,LOCAL:4
+
 					SELECTCASE RESULT
-					CASE 0
-					PRINTW ＞롱기누스４를 손에 넣었다
-						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스４]],0
+					CASE 1
+						PRINTW ＞롱기누스４을 손에 넣었다
+						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스４]],0,,,1
 						IF RESULT == 1
 							BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
 							ABL:(RESULT:1):종족 = 0
@@ -1142,6 +1258,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							BASE:(RESULT:1):핵열 = 100
 							BASE:(RESULT:1):만능 = 100
 							BASE:(RESULT:1):사이코 = 100
+							BASE:(RESULT:1):HAPPY = 0
+							BASE:(RESULT:1):SHOCK = 0
+							BASE:(RESULT:1):PANIC = 0
+							BASE:(RESULT:1):SLEEP = 0
+							BASE:(RESULT:1):FREEZE = 0
+							BASE:(RESULT:1):BIND = 0
+							BASE:(RESULT:1):CLOSE = 0
+							BASE:(RESULT:1):POISON = 0
+							BASE:(RESULT:1):CHARM = 0
+							BASE:(RESULT:1):PALYZE = 0
+							BASE:(RESULT:1):CURSE = 0
+							BASE:(RESULT:1):FLY = 0
+							BASE:(RESULT:1):STONE = 0
+							BASE:(RESULT:1):DYING = 0
 							MAXBASE:(RESULT:1):검격 = 100
 							MAXBASE:(RESULT:1):비구 = 100
 							MAXBASE:(RESULT:1):타격 = 100
@@ -1160,7 +1290,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							MAXBASE:(RESULT:1):중력 = 100
 							MAXBASE:(RESULT:1):핵열 = 100
 							MAXBASE:(RESULT:1):만능 = 100
-							MAXBASE:(RESULT:1):사이코 = 100	
+							MAXBASE:(RESULT:1):사이코 = 100
+							MAXBASE:(RESULT:1):HAPPY = 0
+							MAXBASE:(RESULT:1):SHOCK = 0
+							MAXBASE:(RESULT:1):PANIC = 0
+							MAXBASE:(RESULT:1):SLEEP = 0
+							MAXBASE:(RESULT:1):FREEZE = 0
+							MAXBASE:(RESULT:1):BIND = 0
+							MAXBASE:(RESULT:1):CLOSE = 0
+							MAXBASE:(RESULT:1):POISON = 0
+							MAXBASE:(RESULT:1):CHARM = 0
+							MAXBASE:(RESULT:1):PALYZE = 0
+							MAXBASE:(RESULT:1):CURSE = 0
+							MAXBASE:(RESULT:1):FLY = 0
+							MAXBASE:(RESULT:1):STONE = 0
+							MAXBASE:(RESULT:1):DYING = 0
 							ABL:(RESULT:1):공격범위 = 1	
 							TALENT:(RESULT:1):달인 = 1
 							TALENT:(RESULT:1):도구지식 = 1
@@ -1230,9 +1374,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							CSTR:(RESULT:1):종족명 = 성창기사
 							CSTR:(RESULT:1):タイトル = ドイツ軍人
 						ENDIF
-					CASE 1
+					CASE 2
 					PRINTW ＞롱기누스３을 손에 넣었다
-						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스３]],0
+						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스３]],0,,,1
 						IF RESULT == 1
 							BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
 							ABL:(RESULT:1):종족 = 0
@@ -1255,6 +1399,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							BASE:(RESULT:1):핵열 = 100
 							BASE:(RESULT:1):만능 = 100
 							BASE:(RESULT:1):사이코 = 100
+							BASE:(RESULT:1):HAPPY = 0
+							BASE:(RESULT:1):SHOCK = 0
+							BASE:(RESULT:1):PANIC = 0
+							BASE:(RESULT:1):SLEEP = 0
+							BASE:(RESULT:1):FREEZE = 0
+							BASE:(RESULT:1):BIND = 0
+							BASE:(RESULT:1):CLOSE = 0
+							BASE:(RESULT:1):POISON = 0
+							BASE:(RESULT:1):CHARM = 0
+							BASE:(RESULT:1):PALYZE = 0
+							BASE:(RESULT:1):CURSE = 0
+							BASE:(RESULT:1):FLY = 0
+							BASE:(RESULT:1):STONE = 0
+							BASE:(RESULT:1):DYING = 0
 							MAXBASE:(RESULT:1):검격 = 100
 							MAXBASE:(RESULT:1):비구 = 100
 							MAXBASE:(RESULT:1):타격 = 100
@@ -1273,7 +1431,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							MAXBASE:(RESULT:1):중력 = 100
 							MAXBASE:(RESULT:1):핵열 = 100
 							MAXBASE:(RESULT:1):만능 = 100
-							MAXBASE:(RESULT:1):사이코 = 100	
+							MAXBASE:(RESULT:1):사이코 = 100
+							MAXBASE:(RESULT:1):HAPPY = 0
+							MAXBASE:(RESULT:1):SHOCK = 0
+							MAXBASE:(RESULT:1):PANIC = 0
+							MAXBASE:(RESULT:1):SLEEP = 0
+							MAXBASE:(RESULT:1):FREEZE = 0
+							MAXBASE:(RESULT:1):BIND = 0
+							MAXBASE:(RESULT:1):CLOSE = 0
+							MAXBASE:(RESULT:1):POISON = 0
+							MAXBASE:(RESULT:1):CHARM = 0
+							MAXBASE:(RESULT:1):PALYZE = 0
+							MAXBASE:(RESULT:1):CURSE = 0
+							MAXBASE:(RESULT:1):FLY = 0
+							MAXBASE:(RESULT:1):STONE = 0
+							MAXBASE:(RESULT:1):DYING = 0
 							ABL:(RESULT:1):공격범위 = 1	
 							TALENT:(RESULT:1):이능자 = 1
 							ABL:(RESULT:1):스킬1 = 0
@@ -1337,9 +1509,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							CSTR:(RESULT:1):종족명 = 성창기사
 							CSTR:(RESULT:1):タイトル = ドイツ軍人
 						ENDIF
-					CASE 2
-					PRINTW ＞롱기누스２를 손에 넣었다
-						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스２]],0
+					CASE 3
+					PRINTW ＞롱기누스２을 손에 넣었다
+						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스２]],0,,,1
 						IF RESULT == 1
 							BASE:(RESULT:1):LV = 40
 							BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
@@ -1363,6 +1535,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							BASE:(RESULT:1):핵열 = 100
 							BASE:(RESULT:1):만능 = 100
 							BASE:(RESULT:1):사이코 = 100
+							BASE:(RESULT:1):HAPPY = 0
+							BASE:(RESULT:1):SHOCK = 0
+							BASE:(RESULT:1):PANIC = 0
+							BASE:(RESULT:1):SLEEP = 0
+							BASE:(RESULT:1):FREEZE = 0
+							BASE:(RESULT:1):BIND = 0
+							BASE:(RESULT:1):CLOSE = 0
+							BASE:(RESULT:1):POISON = 0
+							BASE:(RESULT:1):CHARM = 0
+							BASE:(RESULT:1):PALYZE = 0
+							BASE:(RESULT:1):CURSE = 0
+							BASE:(RESULT:1):FLY = 0
+							BASE:(RESULT:1):STONE = 0
+							BASE:(RESULT:1):DYING = 0
 							MAXBASE:(RESULT:1):검격 = 100
 							MAXBASE:(RESULT:1):비구 = 100
 							MAXBASE:(RESULT:1):타격 = 100
@@ -1381,7 +1567,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							MAXBASE:(RESULT:1):중력 = 100
 							MAXBASE:(RESULT:1):핵열 = 100
 							MAXBASE:(RESULT:1):만능 = 100
-							MAXBASE:(RESULT:1):사이코 = 100	
+							MAXBASE:(RESULT:1):사이코 = 100
+							MAXBASE:(RESULT:1):HAPPY = 0
+							MAXBASE:(RESULT:1):SHOCK = 0
+							MAXBASE:(RESULT:1):PANIC = 0
+							MAXBASE:(RESULT:1):SLEEP = 0
+							MAXBASE:(RESULT:1):FREEZE = 0
+							MAXBASE:(RESULT:1):BIND = 0
+							MAXBASE:(RESULT:1):CLOSE = 0
+							MAXBASE:(RESULT:1):POISON = 0
+							MAXBASE:(RESULT:1):CHARM = 0
+							MAXBASE:(RESULT:1):PALYZE = 0
+							MAXBASE:(RESULT:1):CURSE = 0
+							MAXBASE:(RESULT:1):FLY = 0
+							MAXBASE:(RESULT:1):STONE = 0
+							MAXBASE:(RESULT:1):DYING = 0
 							ABL:(RESULT:1):공격범위 = 1	
 							TALENT:(RESULT:1):달인 = 1
 							TALENT:(RESULT:1):건슬링거 = 1
@@ -1406,7 +1606,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							ABL:(RESULT:1):습득LV5 = 54
 							ABL:(RESULT:1):습득스킬6 = 127;오절절우
 							ABL:(RESULT:1):습득LV6 = 64
-							ABL:(RESULT:1):습득스킬7 = 130;무뢰콘체르토
+							;ABL:(RESULT:1):습득스킬7 = 130;무뢰콘체르토←적전용の為사용불가
+							ABL:(RESULT:1):습득스킬7 = 511;기합
 							ABL:(RESULT:1):습득LV7 = 72
 							ABL:(RESULT:1):습득스킬8 = 137;Make・My・Day
 							ABL:(RESULT:1):습득LV8 = 80
@@ -1433,13 +1634,13 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							CFLAG:(RESULT:1):양말 = 801;양말
 							CFLAG:(RESULT:1):신발 = 909;가죽구두
 							CFLAG:(RESULT:1):겉옷 = 1014;자켓
-							CFLAG:(RESULT:1):전투참가불가능 = -1
+							CFLAG:(RESULT:1):전투참가불가능 = 1
 							CSTR:(RESULT:1):종족명 = 성창기사
 							CSTR:(RESULT:1):タイトル = ドイツ軍人
 						ENDIF
-					CASE 3
+					CASE 4
 					PRINTW ＞롱기누스１을 손에 넣었다
-						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스１]],0
+						CALL ADD_NEW_COMPANION,[[キャラ:롱기누스１]],0,,,1
 						IF RESULT == 1
 							BASE:(RESULT:1):LV = 40
 							BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
@@ -1463,6 +1664,20 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							BASE:(RESULT:1):핵열 = 100
 							BASE:(RESULT:1):만능 = 100
 							BASE:(RESULT:1):사이코 = 100
+							BASE:(RESULT:1):HAPPY = 0
+							BASE:(RESULT:1):SHOCK = 0
+							BASE:(RESULT:1):PANIC = 0
+							BASE:(RESULT:1):SLEEP = 0
+							BASE:(RESULT:1):FREEZE = 0
+							BASE:(RESULT:1):BIND = 0
+							BASE:(RESULT:1):CLOSE = 0
+							BASE:(RESULT:1):POISON = 0
+							BASE:(RESULT:1):CHARM = 0
+							BASE:(RESULT:1):PALYZE = 0
+							BASE:(RESULT:1):CURSE = 0
+							BASE:(RESULT:1):FLY = 0
+							BASE:(RESULT:1):STONE = 0
+							BASE:(RESULT:1):DYING = 0
 							MAXBASE:(RESULT:1):검격 = 100
 							MAXBASE:(RESULT:1):비구 = 100
 							MAXBASE:(RESULT:1):타격 = 100
@@ -1481,7 +1696,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) /10
 							MAXBASE:(RESULT:1):중력 = 100
 							MAXBASE:(RESULT:1):핵열 = 100
 							MAXBASE:(RESULT:1):만능 = 100
-							MAXBASE:(RESULT:1):사이코 = 100	
+							MAXBASE:(RESULT:1):사이코 = 100
+							MAXBASE:(RESULT:1):HAPPY = 0
+							MAXBASE:(RESULT:1):SHOCK = 0
+							MAXBASE:(RESULT:1):PANIC = 0
+							MAXBASE:(RESULT:1):SLEEP = 0
+							MAXBASE:(RESULT:1):FREEZE = 0
+							MAXBASE:(RESULT:1):BIND = 0
+							MAXBASE:(RESULT:1):CLOSE = 0
+							MAXBASE:(RESULT:1):POISON = 0
+							MAXBASE:(RESULT:1):CHARM = 0
+							MAXBASE:(RESULT:1):PALYZE = 0
+							MAXBASE:(RESULT:1):CURSE = 0
+							MAXBASE:(RESULT:1):FLY = 0
+							MAXBASE:(RESULT:1):STONE = 0
+							MAXBASE:(RESULT:1):DYING = 0
 							ABL:(RESULT:1):공격범위 = 1	
 							TALENT:(RESULT:1):달인 = 1
 							TALENT:(RESULT:1):석세서 = 1
@@ -1961,7 +2190,7 @@ SIF 現HP割合(ARG) <= 25
 	CFLAG:ARG:行動횟수 = 3
 IF !TFLAG:적오메가클러스터
 	CFLAG:ARG:입력行動 = [[스킬:오메가클러스터]]
-ELSEIF CFLAG:ARG:１moreフラグ == 2
+ELSEIF CFLAG:ARG:１moreフラグ > 0
 	CFLAG:ARG:입력行動 = [[스킬:성궤]]
 ELSEIF CFLAG:ARG:行動した횟수 == 0
 	;성배の쿨制御

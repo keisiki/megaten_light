@@ -15,6 +15,19 @@ SIF FLAG:7 == 0
 	FLAG:7 = 2
 	
 @EVENTTRAIN
+;조교대상의 주도권 초기화
+TEQUIP:TARGET:주도권 = 0 
+;조수가 있다면 조수도 주도권 TEQUIP 초기화 및 그 외 초기화
+IF ASSI >= 0
+	TEQUIP:ASSI:주도권 = 0
+	TFLAG:61 = 0 ;조수3P참가여부 초기화
+	TFLAG:62 = 0 ;조수기승위유지 초기화
+ENDIF
+TFLAG:63 = 0 ;비디오 삭제모드 off
+TFLAG:64 = 0 ;비디오 시청중 플래그 OFF
+TFLAG:65 = 0 ;비디오 플레이 시간대 초기화
+TFLAG:66 = 0 ;비디오 상영슬롯번호 초기화
+	
 ;조교開始時구상呼び出し一括管理用
 ;옵션で구상비표시の場合スキップ
 SIF FLAG:7 < 0

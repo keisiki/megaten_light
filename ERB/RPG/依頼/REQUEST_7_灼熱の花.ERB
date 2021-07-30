@@ -22,10 +22,31 @@ IF FLAG:백합의꽃ルート == 4 && ABL:MASTER:속성LD < 3 && ABL:MASTER:속�
 	RESULTS = 작열의 꽃
 	RETURN 1
 ENDIF
+
 IF FLAG:直哉ルート == 4 && STRFLAG_NUM_D("대마궁進行", , , , [[던전:대마궁]]) >= 1
 	RESULTS = 작열의 꽃
 	RETURN 1
 ENDIF
+
+;EXシナリオ
+IF (GETBIT(FLAG:EXTRA이벤트설정, 0) == 1 || GETBIT(FLAG:EXTRA이벤트필터, 8) == 0)
+	IF FLAG:백합의꽃ルート == 6 && FINDCHARA_B([[キャラ:아마네]]) > 0
+		RESULTS = 翔門会
+		RETURN 1
+	ELSEIF FLAG:백합의꽃ルート == 8 && FINDCHARA_B([[キャラ:아마네]]) > 0
+		RESULTS = アマネの決意
+		RETURN 1
+	ELSEIF FLAG:백합의꽃ルート == 10 && FINDCHARA_B([[キャラ:아마네]]) > 0
+		RESULTS = ファクトリー開放作戦
+		RETURN 1
+	ELSEIF FLAG:백합의꽃ルート == 12 && FINDCHARA_B([[キャラ:아마네]]) > 0
+		RESULTS = 救援要請
+		RETURN 1
+	ELSE
+		RETURN 0
+	ENDIF
+ENDIF
+
 ;---- EDIT 002 ADD END -------------------------
 RETURN 0
 ;====================
@@ -37,6 +58,27 @@ IF FLAG:백합의꽃ルート
 	PRINTFORML 아마네로부터 %CALLNAME:MASTER%에게 부탁할 것이 있으니
 	PRINTFORML 사무소를 방문하고 싶다는 제의가 들어왔다
 	PRINTL
+
+ELSEIF FLAG:백합의꽃ルート == 6
+	PRINTL 
+	PRINTFORML アマネから%CALLNAME:MASTER%に頼みたいことがあるようだ
+	PRINTL 
+
+ELSEIF FLAG:백합의꽃ルート == 8
+	PRINTL 
+	PRINTFORML 父親を目の前で失ったことにアマネは傷ついている
+	PRINTL 
+
+ELSEIF FLAG:백합의꽃ルート == 10
+	PRINTL 
+	PRINTFORML 準備は整った、ファクトリーに囚われている翔門会の人々を開放しよう
+	PRINTL 
+
+ELSEIF FLAG:백합의꽃ルート == 12
+	PRINTL 
+	PRINTFORML 新宿大聖堂に攻撃を仕掛けたオベロンから救援要請が届いている
+	PRINTL 
+
 ELSE
 	PRINTL
 	PRINTFORML 나오야로부터 %CALLNAME:MASTER%에게 만나게 하고 싶은 인물이 있으니
@@ -48,6 +90,9 @@ ENDIF
 ;内容
 ;====================
 @REQUEST_7
+;===============================================================
+;アマネルート
+;================================================================
 CUSTOMDRAWLINE =
 IF FLAG:백합의꽃ルート
 	PRINTW ＞아마네가 찾아왔다
@@ -86,6 +131,175 @@ IF FLAG:백합의꽃ルート
 	PRINTW ＞레미엘의 의뢰를 받았다
 	PRINTW ＞정신세계로 향해 아마네의 정신에 자리잡고 있는 이자・벨을 쓰러뜨리자
 	FLAG:백합의꽃ルート = 5
+
+;===============================================================
+;アマネルート(EX)
+;================================================================
+
+ELSEIF FLAG:백합의꽃ルート == 6
+	PRINTL アマネ
+	PRINTW 「私の父、クズリュウは神の試練によって人々が滅ぼされるのを防ぐため、悪魔の力を借りることにしました」
+	PRINTW 「私も、当初はその考えに賛成し、翔門会の巫女として働いてきました」
+	PRINTL 
+	PRINTW 「そして、実はわが父が呼び出したのは、イザ・ベルだけではないのです」
+	PRINTW 「ベル・ベリト、最強のベル神を父は呼び出したのです」
+	PRINTL 
+	PRINTW 「翔門会はベリト様を主上として信仰し、信仰によって強くなったベリト様がベルの王になる」
+	PRINTW 「そして、ベルの王となったベリト様が神を打ち破ることで神の試練を乗り越えるのが父の考えです」
+	PRINTL 
+	CALL INPUT_YN("父親を止めたいのか", "向こうはこちらを敵視しているのか？")
+	IF RESULT == 0
+		PRINTL ＞父親を止めたいのか？
+		PRINTW 
+		PRINTL アマネ
+		PRINTW 「…はい」
+		PRINTW 「父のやり方は間違っていると思います、ですが、父が人々を本気で案じていたことは確かです」
+		PRINTL 
+		PRINTW 「ですから…もしかしたら、話せばわかってくれるのではないかと…」
+		PRINTW 「もっと別の方法が…レミエルが語ってくれたように別の方法があるのだと…示すことが出来れば…」
+		PRINTL 
+		PRINTW 「それにイザ・ベルが私の心からいなくなったせいかもしれませんが…」
+		PRINTW 「ベリト様、いえ、ベル・ベリトが本当に我々に力を貸してくれるのか？」
+		PRINTW 「実は、父は騙されているだけではないのか？とも思ってしまうのです」
+		PRINTL 
+		PRINTFORMW 「ですから、お願いです%CALLNAME:MASTER%様、私と一緒に父の元、翔門会本部へと来ていただけないでしょうか？」
+	ELSE
+		PRINTW ＞向こうはこちらを敵視しているのか？
+		PRINTL 
+		PRINTL アマネ
+		PRINTFORMW 「すでに%CALLNAME:MASTER%様はベル・デルとイザ・ベルを倒しました」
+		PRINTFORMW 「そんな%CALLNAME:MASTER%様をベリト様は放っておかないでしょう」
+		PRINTL 
+		PRINTFORMW 「遅かれ早かれ、戦いは必須」
+		PRINTFORMW 「そうであるならば、こちらから挑んだ方が良いと思います」
+	ENDIF
+	PRINTL 
+	PRINTW ＞アマネがパーティーメンバーに居る場合、六本木ヒルズに行けるようになった。
+	FLAG:백합의꽃ルート = 7
+
+ELSEIF FLAG:백합의꽃ルート == 8
+	PRINTL アマネ
+	PRINTW 「お父様…」
+	PRINTL 
+	PRINTW ＞アマネは覚悟していたとはいえ、父親を失ったことに悲しんでいる。
+	PRINTFORMW ＞そんなアマネに対し、%CALLNAME:MASTER%は…
+	PRINTL 
+	PRINTL [0] 何も言わずに、そっと抱きしめる
+	PRINTL [1] 何とか笑わせようと躍起になる
+	PRINTL [2] 全く違う話を始める
+	PRINTL [3] 悲しいので一緒に泣く
+	$INPUT_LOOP1
+	INPUT
+	IF RESULT == 0
+		PRINTL 
+		PRINTFORMW ＞%CALLNAME:MASTER%は何も言わずに、アマネをそっと抱きしめた
+		PRINTL 
+		PRINTL アマネ
+		PRINTFORMW 「%CALLNAME:MASTER%様…」
+		PRINTFORMW 「ありがとうございます…もう少しだけ…このまま…」
+		PRINTL ………………………
+		PRINTL ………………
+		PRINTW ………
+	ELSEIF RESULT == 1
+		PRINTL 
+		PRINTFORMW ＞%CALLNAME:MASTER%は何とかアマネを笑わせようと躍起になった。
+		PRINTL 
+		PRINTL アマネ
+		PRINTFORMW 「%CALLNAME:MASTER%様…」
+		PRINTFORMW 「ありがとうございます、お心遣い感謝いたします」
+	ELSEIF RESULT == 2
+		PRINTL 
+		PRINTFORMW ＞%CALLNAME:MASTER%は全く違う話を始めた。
+		PRINTL 
+		PRINTL アマネ
+		PRINTFORMW 「%CALLNAME:MASTER%様…」
+		PRINTFORMW 「そうですね…いつまでも悲しんではいられません、為すべき事をなさねば」
+	ELSEIF RESULT == 3
+		PRINTL 
+		PRINTFORMW ＞%CALLNAME:MASTER%は一緒に泣いた。
+		PRINTL 
+		PRINTL アマネ
+		PRINTFORMW 「%CALLNAME:MASTER%様…」
+		PRINTFORMW 「共に悲しんでくださるのですか…ありがとうございます」
+	ELSE
+		GOTO INPUT_LOOP1
+	ENDIF
+		PRINTL アマネ
+		PRINTW 「メシア教に連れ去られた、翔門会の皆さんを助けねばなりません。」
+		PRINTW 「しかし…どうすれば…」
+		PRINTL 
+		PRINTW ＞『ファクトリー』、メシア教が【捕虜】を連れて行くとしたら、あそこしかないだろう
+		PRINTW ＞しかし、一人二人ならともかく、大勢をファクトリーから連れ出すのは至難の業だ。
+		PRINTW ＞少なくとも何らかの組織の力を借りる必要があるだろう。
+		PRINTL 
+		PRINTL アマネ
+		PRINTW 「そういえば、父がオベロンに会えと…新宿に行けと言っていました…」
+		PRINTL 
+		PRINTW ＞妖精たちの王であるオベロン、彼の力を借りることができれば十分に可能性はあるだろう
+		PRINTW ＞そういえば新宿には妖精たちの集落があるという噂を聞いたことがある
+		PRINTL 
+		PRINTW ＞入り口は隠されているそうだが、インストールソフト【게이트서치】があれば見つけられるだろう
+		PRINTL 
+		PRINTL アマネ
+		PRINTW 「新宿に参りましょう、なんとしても翔門会の皆を助け出さないと」
+		PRINTL 
+		PRINTW ＞アマネと共に新宿（地下街）に行けるようになった。
+		FLAG:백합의꽃ルート = 9
+
+ELSEIF FLAG:백합의꽃ルート == 10
+	IF FLAG:트리슈조교 <= -1
+		PRINTW オベロンからの通信が入った
+		PRINTL 
+		PRINTL オベロン
+		PRINTW 『既に知っているかもしれないが、ファクトリーの人々は監視塔からの洗脳を受けている』
+		PRINTW 『人々を開放するには監視塔を襲撃して洗脳装置を破壊するのと同時に』
+		PRINTW 『洗脳から解放された人々を素早く先導する必要がある』
+	ELSE
+		PRINTL トリッシュ
+		PRINTW 「ファクトリーの人達って監視塔ってとこから洗脳されてるらしいよ～」
+		PRINTW 「だから、Destroy and Rescue！、二手に分かれることが必要なんだって～」
+	ENDIF
+	PRINTL 
+	PRINTL アマネ
+	PRINTL 「私は翔門会信徒の人たちをファクトリーから連れ出します」
+	PRINTFORMW 「%CALLNAME:MASTER%様は洗脳装置の破壊をお願いいします」
+	PRINTW 「別々の行動となりますが…どうか、ご無事で…」
+	PRINTL 
+	PRINTW ＞アマネと別行動で監視塔に行けるようになった
+	 FLAG:백합의꽃ルート = 11
+
+ELSEIF FLAG:백합의꽃ルート == 12
+	IF FLAG:트리슈조교 <= -1
+		PRINTW オベロンからの通信が入った
+		PRINTL 
+		PRINTL オベロン
+		PRINTW 『そちらは上手くいったか？』
+		PRINTW 『そうか、それならいい』
+		PRINTL 
+		PRINTW 『それでは、すまないがこちらを援護して欲しい、我々は追い詰められている』
+		PRINTW 『大聖堂を襲撃し、目標の【大司教】を倒すことには成功したのだが』
+		PRINTW 『【修道院】の連中、味方もろとも我々を吹き飛ばしてきた、このままでは全滅だ』
+		PRINTW 『新宿大聖堂で我々の脱出を援護してくれ』
+		PRINTL 
+	ELSE
+		PRINTL トリッシュ
+		PRINTW 「オベロンから連絡が入ってるよー」
+		PRINTW 「なんでも、大司教ってのは倒したけど、追い詰められてPinch！なんだって」
+		PRINTL 
+		PRINTW 「あれでも妖精のKingだし、助けてくれるとボクはHappy!かな～って」
+		PRINTL 
+	ENDIF
+	PRINTL アマネ
+	PRINTW 「行きましょう、彼らを見捨てるわけにはいきません」
+	PRINTW 「それに、【修道院】…彼らの意図をハッキリとさせておく必要があると思います」
+	PRINTL 
+	PRINTW ＞アマネと共に大聖堂（新宿）に行けるようになった。
+	 FLAG:백합의꽃ルート = 13
+
+
+;===============================================================
+;直哉ルート
+;================================================================
 ELSE
 	PRINTW ＞나오야와 만나기 위해 가이아 교단을 방문했다
 	PRINTW ＞가이아 교단은 한산해져서 나오야와 한 소녀밖에 없다

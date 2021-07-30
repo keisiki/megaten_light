@@ -1,6 +1,6 @@
 ﻿;======================================================
-;장비品の데이터
-;改造몸통장비30
+;장비품の데이터
+;개조몸통장비30
 ;======================================================
  
 @기본능력수정_3940,ARG,ARG:1 = -1
@@ -9,7 +9,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:30},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:30:ARG * 4
+LOCAL += パラメータ강화:30:ARG
 RETURN LOCAL
  
  
@@ -21,29 +21,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:30 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:30) / 100
-		ELSE
-			LOCAL += プラス数:30 / 4
-		ENDIF
+		LOCAL += プラス数:30
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:30 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:30) / 100
-		ELSE
-			LOCAL += プラス数:30 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:30 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:30) / 100
-		ENDIF
+		LOCAL += プラス数:30 / 2
 ENDSELECT
-LOCAL += 能力値강화:30:ARG * 10 * (100 + プラス数:30) / 100
+LOCAL += 能力値강화:30:ARG * 5
 RETURN LOCAL
  
 @방어상성_3940,ARG,ARG:1 = -1
@@ -171,9 +153,9 @@ IF 軽量化数(30)
 	SIF 장비パラ値軽量化:30
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:30 * 10}　
 	SIF 장비男女軽量化:30
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:30
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -182,7 +164,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:30}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:30)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:30)%
 RETURN 0
  
 @引継ぎ可不可_3940
@@ -192,8 +174,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비31
+;장비품の데이터
+;개조몸통장비31
 ;======================================================
  
 @기본능력수정_3941,ARG,ARG:1 = -1
@@ -202,7 +184,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:31},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:31:ARG * 4
+LOCAL += パラメータ강화:31:ARG
 RETURN LOCAL
  
  
@@ -214,29 +196,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:31 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:31) / 100
-		ELSE
-			LOCAL += プラス数:31 / 4
-		ENDIF
+		LOCAL += プラス数:31
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:31 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:31) / 100
-		ELSE
-			LOCAL += プラス数:31 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:31 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:31) / 100
-		ENDIF
+		LOCAL += プラス数:31 / 2
 ENDSELECT
-LOCAL += 能力値강화:31:ARG * 10 * (100 + プラス数:31) / 100
+LOCAL += 能力値강화:31:ARG * 5
 RETURN LOCAL
  
 @방어상성_3941,ARG,ARG:1 = -1
@@ -364,9 +328,9 @@ IF 軽量化数(31)
 	SIF 장비パラ値軽量化:31
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:31 * 10}　
 	SIF 장비男女軽量化:31
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:31
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -375,7 +339,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:31}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:31)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:31)%
 RETURN 0
  
 @引継ぎ可不可_3941
@@ -385,8 +349,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비32
+;장비품の데이터
+;개조몸통장비32
 ;======================================================
  
 @기본능력수정_3942,ARG,ARG:1 = -1
@@ -395,7 +359,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:32},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:32:ARG * 4
+LOCAL += パラメータ강화:32:ARG
 RETURN LOCAL
  
  
@@ -407,29 +371,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:32 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:32) / 100
-		ELSE
-			LOCAL += プラス数:32 / 4
-		ENDIF
+		LOCAL += プラス数:32
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:32 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:32) / 100
-		ELSE
-			LOCAL += プラス数:32 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:32 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:32) / 100
-		ENDIF
+		LOCAL += プラス数:32 / 2
 ENDSELECT
-LOCAL += 能力値강화:32:ARG * 10 * (100 + プラス数:32) / 100
+LOCAL += 能力値강화:32:ARG * 5
 RETURN LOCAL
  
 @방어상성_3942,ARG,ARG:1 = -1
@@ -557,9 +503,9 @@ IF 軽量化数(32)
 	SIF 장비パラ値軽量化:32
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:32 * 10}　
 	SIF 장비男女軽量化:32
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:32
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -568,7 +514,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:32}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:32)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:32)%
 RETURN 0
  
 @引継ぎ可不可_3942
@@ -578,8 +524,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비33
+;장비품の데이터
+;개조몸통장비33
 ;======================================================
  
 @기본능력수정_3943,ARG,ARG:1 = -1
@@ -588,7 +534,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:33},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:33:ARG * 4
+LOCAL += パラメータ강화:33:ARG
 RETURN LOCAL
  
  
@@ -600,29 +546,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:33 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:33) / 100
-		ELSE
-			LOCAL += プラス数:33 / 4
-		ENDIF
+		LOCAL += プラス数:33
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:33 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:33) / 100
-		ELSE
-			LOCAL += プラス数:33 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:33 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:33) / 100
-		ENDIF
+		LOCAL += プラス数:33 / 2
 ENDSELECT
-LOCAL += 能力値강화:33:ARG * 10 * (100 + プラス数:33) / 100
+LOCAL += 能力値강화:33:ARG * 5
 RETURN LOCAL
  
 @방어상성_3943,ARG,ARG:1 = -1
@@ -750,9 +678,9 @@ IF 軽量化数(33)
 	SIF 장비パラ値軽量化:33
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:33 * 10}　
 	SIF 장비男女軽量化:33
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:33
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -761,7 +689,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:33}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:33)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:33)%
 RETURN 0
  
 @引継ぎ可不可_3943
@@ -771,8 +699,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비34
+;장비품の데이터
+;개조몸통장비34
 ;======================================================
  
 @기본능력수정_3944,ARG,ARG:1 = -1
@@ -781,7 +709,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:34},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:34:ARG * 4
+LOCAL += パラメータ강화:34:ARG
 RETURN LOCAL
  
  
@@ -793,29 +721,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:34 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:34) / 100
-		ELSE
-			LOCAL += プラス数:34 / 4
-		ENDIF
+		LOCAL += プラス数:34
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:34 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:34) / 100
-		ELSE
-			LOCAL += プラス数:34 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:34 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:34) / 100
-		ENDIF
+		LOCAL += プラス数:34 / 2
 ENDSELECT
-LOCAL += 能力値강화:34:ARG * 10 * (100 + プラス数:34) / 100
+LOCAL += 能力値강화:34:ARG * 5
 RETURN LOCAL
  
 @방어상성_3944,ARG,ARG:1 = -1
@@ -943,9 +853,9 @@ IF 軽量化数(34)
 	SIF 장비パラ値軽量化:34
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:34 * 10}　
 	SIF 장비男女軽量化:34
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:34
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -954,7 +864,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:34}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:34)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:34)%
 RETURN 0
  
 @引継ぎ可不可_3944
@@ -964,8 +874,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비35
+;장비품の데이터
+;개조몸통장비35
 ;======================================================
  
 @기본능력수정_3945,ARG,ARG:1 = -1
@@ -974,7 +884,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:35},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:35:ARG * 4
+LOCAL += パラメータ강화:35:ARG
 RETURN LOCAL
  
  
@@ -986,29 +896,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:35 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:35) / 100
-		ELSE
-			LOCAL += プラス数:35 / 4
-		ENDIF
+		LOCAL += プラス数:35
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:35 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:35) / 100
-		ELSE
-			LOCAL += プラス数:35 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:35 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:35) / 100
-		ENDIF
+		LOCAL += プラス数:35 / 2
 ENDSELECT
-LOCAL += 能力値강화:35:ARG * 10 * (100 + プラス数:35) / 100
+LOCAL += 能力値강화:35:ARG * 5
 RETURN LOCAL
  
 @방어상성_3945,ARG,ARG:1 = -1
@@ -1136,9 +1028,9 @@ IF 軽量化数(35)
 	SIF 장비パラ値軽量化:35
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:35 * 10}　
 	SIF 장비男女軽量化:35
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:35
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1147,7 +1039,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:35}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:35)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:35)%
 RETURN 0
  
 @引継ぎ可不可_3945
@@ -1157,8 +1049,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비36
+;장비품の데이터
+;개조몸통장비36
 ;======================================================
  
 @기본능력수정_3946,ARG,ARG:1 = -1
@@ -1167,7 +1059,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:36},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:36:ARG * 4
+LOCAL += パラメータ강화:36:ARG
 RETURN LOCAL
  
  
@@ -1179,29 +1071,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:36 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:36) / 100
-		ELSE
-			LOCAL += プラス数:36 / 4
-		ENDIF
+		LOCAL += プラス数:36
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:36 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:36) / 100
-		ELSE
-			LOCAL += プラス数:36 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:36 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:36) / 100
-		ENDIF
+		LOCAL += プラス数:36 / 2
 ENDSELECT
-LOCAL += 能力値강화:36:ARG * 10 * (100 + プラス数:36) / 100
+LOCAL += 能力値강화:36:ARG * 5
 RETURN LOCAL
  
 @방어상성_3946,ARG,ARG:1 = -1
@@ -1329,9 +1203,9 @@ IF 軽量化数(36)
 	SIF 장비パラ値軽量化:36
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:36 * 10}　
 	SIF 장비男女軽量化:36
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:36
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1340,7 +1214,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:36}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:36)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:36)%
 RETURN 0
  
 @引継ぎ可不可_3946
@@ -1350,8 +1224,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비37
+;장비품の데이터
+;개조몸통장비37
 ;======================================================
  
 @기본능력수정_3947,ARG,ARG:1 = -1
@@ -1360,7 +1234,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:37},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:37:ARG * 4
+LOCAL += パラメータ강화:37:ARG
 RETURN LOCAL
  
  
@@ -1372,29 +1246,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:37 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:37) / 100
-		ELSE
-			LOCAL += プラス数:37 / 4
-		ENDIF
+		LOCAL += プラス数:37
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:37 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:37) / 100
-		ELSE
-			LOCAL += プラス数:37 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:37 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:37) / 100
-		ENDIF
+		LOCAL += プラス数:37 / 2
 ENDSELECT
-LOCAL += 能力値강화:37:ARG * 10 * (100 + プラス数:37) / 100
+LOCAL += 能力値강화:37:ARG * 5
 RETURN LOCAL
  
 @방어상성_3947,ARG,ARG:1 = -1
@@ -1522,9 +1378,9 @@ IF 軽量化数(37)
 	SIF 장비パラ値軽量化:37
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:37 * 10}　
 	SIF 장비男女軽量化:37
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:37
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1533,7 +1389,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:37}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:37)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:37)%
 RETURN 0
  
 @引継ぎ可不可_3947
@@ -1543,8 +1399,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비38
+;장비품の데이터
+;개조몸통장비38
 ;======================================================
  
 @기본능력수정_3948,ARG,ARG:1 = -1
@@ -1553,7 +1409,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:38},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:38:ARG * 4
+LOCAL += パラメータ강화:38:ARG
 RETURN LOCAL
  
  
@@ -1565,29 +1421,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:38 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:38) / 100
-		ELSE
-			LOCAL += プラス数:38 / 4
-		ENDIF
+		LOCAL += プラス数:38
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:38 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:38) / 100
-		ELSE
-			LOCAL += プラス数:38 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:38 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:38) / 100
-		ENDIF
+		LOCAL += プラス数:38 / 2
 ENDSELECT
-LOCAL += 能力値강화:38:ARG * 10 * (100 + プラス数:38) / 100
+LOCAL += 能力値강화:38:ARG * 5
 RETURN LOCAL
  
 @방어상성_3948,ARG,ARG:1 = -1
@@ -1715,9 +1553,9 @@ IF 軽量化数(38)
 	SIF 장비パラ値軽量化:38
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:38 * 10}　
 	SIF 장비男女軽量化:38
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:38
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1726,7 +1564,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:38}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:38)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:38)%
 RETURN 0
  
 @引継ぎ可不可_3948
@@ -1736,8 +1574,8 @@ RETURN 1
 RETURN 1
  
 ;======================================================
-;장비品の데이터
-;改造몸통장비39
+;장비품の데이터
+;개조몸통장비39
 ;======================================================
  
 @기본능력수정_3949,ARG,ARG:1 = -1
@@ -1746,7 +1584,7 @@ TRYCCALLFORM 기본능력수정_{ベース장비番号:39},ARG,ARG:1
 CATCH
 	LOCAL = 0
 ENDCATCH
-LOCAL += パラメータ강화:39:ARG * 4
+LOCAL += パラメータ강화:39:ARG
 RETURN LOCAL
  
  
@@ -1758,29 +1596,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 2,3
-		IF 200 < LOCAL
-			LOCAL += プラス数:39 * 2
-		ELSEIF 24 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:39) / 100
-		ELSE
-			LOCAL += プラス数:39 / 4
-		ENDIF
+		LOCAL += プラス数:39
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:39 * 2
-		ELSEIF 12 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:39) / 100
-		ELSE
-			LOCAL += プラス数:39 / 8
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:39 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:39) / 100
-		ENDIF
+		LOCAL += プラス数:39 / 2
 ENDSELECT
-LOCAL += 能力値강화:39:ARG * 10 * (100 + プラス数:39) / 100
+LOCAL += 能力値강화:39:ARG * 5
 RETURN LOCAL
  
 @방어상성_3949,ARG,ARG:1 = -1
@@ -1908,9 +1728,9 @@ IF 軽量化数(39)
 	SIF 장비パラ値軽量化:39
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:39 * 10}　
 	SIF 장비男女軽量化:39
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:39
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1919,7 +1739,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:39}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:39)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:39)%
 RETURN 0
  
 @引継ぎ可不可_3949

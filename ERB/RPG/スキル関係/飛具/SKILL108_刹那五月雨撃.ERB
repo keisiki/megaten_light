@@ -1,9 +1,8 @@
 ﻿
 ;스킬名
 @SKILL_NAME_108,ARG
-;ナハトが사용する場合 R・ク레이モアに
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+;나하트が사용する場合 R・ク레이モアに
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RESULTS =  R・클레이모어
 ELSE
 	RESULTS = 찰나장대비쏘기
@@ -11,8 +10,7 @@ ENDIF
 
 ;　명중
 @SKILL_HITRATE_108, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RETURN 135
 ELSE
 	RETURN 120
@@ -20,8 +18,7 @@ ENDIF
 
 ;　威힘
 @SKILL_POWER_108, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RETURN 125
 ELSE
 	RETURN 110
@@ -29,8 +26,7 @@ ENDIF
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_108,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RETURN 4
 ELSE
 	RETURN 3
@@ -38,8 +34,7 @@ ENDIF
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_108,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RETURN 4
 ELSE
 	RETURN 8
@@ -56,8 +51,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_108,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RETURN 8
 ELSE
 	RETURN 18
@@ -69,12 +63,12 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_108
+@SKILL_DECIDE_TYPE_108, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_108
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_108, ARG
 RETURN 1
 
 
@@ -84,8 +78,7 @@ RETURN 1
 
 ;　사거리
 @SKILL_RANGE_108,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RETURN 2
 ELSE
 	RETURN 3
@@ -93,8 +86,7 @@ ENDIF
 
 ;　範囲　11체　21열　3전체　4　적아군전체
 @SKILL_SPHERE_108,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RETURN 2
 ELSE
 	RETURN 3
@@ -172,7 +164,9 @@ CALL ATTACK_RAND,ARG,ARG:1,108
 ;　 説明文の표시
 @SKILL_EXPLAIN_108
 IF U > 0 && U < CHARANUM && NO:U == [[キャラ:나하트]]
-	PRINTL [후열] 적 전열에 4회(1인 최대 3회) 비구속성 소 물리데미지. 명중률이 높다. 정식명칭은 「레이어드・클레이모어」
+	PRINTL 적전열에 많은 양의 티타늄 베어링탄을 흩뿌린다。
+	PRINTL 발사되는 베어링탄의 수가 많고、다단 히트한다。
+	PRINTL 정식명칭 「레이어드・클레이모어」。어딘가의 지하 도시가 아니다。
 ELSE
 	PRINTL [후열] 적 전체 3～8회(1인 최대 3회) 비구속성 소 물리데미지. 명중률이 조금 높다.
 ENDIF

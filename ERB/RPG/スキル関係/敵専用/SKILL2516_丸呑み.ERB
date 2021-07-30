@@ -41,12 +41,12 @@ RETURN GET_TYPE_NUM("만능")
 ;전술
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2516
+@SKILL_DECIDE_TYPE_2516, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2516
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2516, ARG
 RETURN 1
 
 
@@ -124,7 +124,7 @@ PRINTFORM 　　TARGET:[{CPOS(LOCAL),2}] %CALLNAME:(LOCAL),20,LEFT%　>>>>>>　
 
 CALL JUDG_HIT_1,ARG,LOCAL,20
 IF RESULT == 1 || CFLAG:LOCAL:ステート == GET_STATE_NUM("SLIP")
-	CFLAG:ARG:HP흡수量 = BASE:LOCAL:ＨＰ
+	CFLAG:ARG:HP흡수量 = BASE:LOCAL:ＨＰ / 2
 	BASE:LOCAL:ＨＰ = 0
 	PRINTL DYING
 	CFLAG:LOCAL:ステート = GET_STATE_NUM("DYING")
@@ -148,7 +148,7 @@ ENDIF
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2516
-PRINTL [전열] 적 1체를 삼켜 즉사시키고 대상의 체력을 흡수한다. 반드시 명중한다.
+PRINTL [전열] 적 1체를 삼켜 즉사시키고 대상의 체력 1/2를 흡수한다. 넘어진 상대에겐 반드시 명중한다.
 
 ;継承に필요な部位
 @継承部位_2516,ARG

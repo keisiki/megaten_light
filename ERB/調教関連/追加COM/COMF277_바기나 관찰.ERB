@@ -1,5 +1,7 @@
 ﻿;-------------------------------------------------
 ;바기나 관찰
+
+; 21/07/05			ADK			아이마스 패치 부분 주석처리
 ;-------------------------------------------------
 @CHECK_COM_ABLE277
 
@@ -278,17 +280,17 @@ IF BASE:음모 == 0 && CFLAG:음모성장 == 0
 	IF TALENT:짐승 || TALENT:새
 		LOCAL:5 = MAX(RAND:500, 250)
 		BASE:음모 = LOCAL:5
-	;이식한 아이마스 캐릭중 어린애는 음모 없음을 삽입.
-	ELSEIF (BASE:연령 < 12 && BASE:연령 != 0 && TALENT:유아체형) || TALENT:유치원생
-		TALENT:음모없음 = 1
-		LOCAL:4 = 1
+	; ;이식한 아이마스 캐릭중 어린애는 음모 없음을 삽입.
+	; ELSEIF (BASE:연령 < 12 && BASE:연령 != 0 && TALENT:유아체형) || TALENT:유치원생
+	; 	TALENT:음모없음 = 1
+	; 	LOCAL:4 = 1
 	ELSEIF TALENT:유아체형 || TALENT:소인체형
 		BASE:음모 = LOCAL:1
 		LOCAL:4 = 2
-	ELSEIF TALENT:초등학생
-		BASE:음모 = LOCAL:1
-		LOCAL:4 = 3
-	ELSEIF TALENT:소년／소녀 || TALENT:중학생
+	; ELSEIF TALENT:초등학생
+	; 	BASE:음모 = LOCAL:1
+	; 	LOCAL:4 = 3
+	ELSEIF TALENT:소년／소녀 ;|| TALENT:중학생
 		BASE:음모 = LOCAL:2
 		LOCAL:4 = 4
 	ELSE
@@ -316,15 +318,15 @@ ELSEIF CFLAG:음모상태 == 1
 	PRINTFORM [%CSTR:음모모양%] 으로 깍인 음모가 성기를 장식하고있다.
 ;처음
 ELSEIF CFLAG:음모성장 == -1	
-	;어리거나 유치원생!
-	IF LOCAL:4 == 1
-		PRINT 나이에 걸맞게 작고 부드러워 보이는 성기가 숨어있었다
+	; ;어리거나 유치원생!
+	; IF LOCAL:4 == 1
+	; 	PRINT 나이에 걸맞게 작고 부드러워 보이는 성기가 숨어있었다
 	;작거나 소학생!
-	ELSEIF LOCAL:4 == 2 || LOCAL:4 == 3
+	IF LOCAL:4 == 2 ;|| LOCAL:4 == 3
 		SIF LOCAL:4 == 2
 			PRINT 작은 몸집에 걸맞게 
-		SIF LOCAL:4 == 2
-			PRINT 나이에 걸맞게 
+		; SIF LOCAL:4 == 3
+		; 	PRINT 나이에 걸맞게 
 		IF BASE:음모 <= 50 || TALENT:음모없음
 			BASE:음모 = 0
 			PRINT 터럭하나 없이 매끈한 모습을 하고 있다
@@ -358,7 +360,7 @@ ELSEIF CFLAG:음모성장 == -1
 ;제모 시
 ELSEIF TALENT:음모없음 && CFLAG:음모성장 == 2
 	;어린것들
-	IF LOCAL:4 == 2 || LOCAL:4 == 3 || LOCAL:4 == 1
+	IF LOCAL:4 == 2 ;|| LOCAL:4 == 3 || LOCAL:4 == 1
 		PRINT 마치 음모가 자란적 없는 듯 작고 부드러워보이는 성기가 그대로 보이고 있다
 	;그외
 	ELSE
@@ -367,7 +369,7 @@ ELSEIF TALENT:음모없음 && CFLAG:음모성장 == 2
 ;자라는중
 ELSEIF CFLAG:음모성장 && BASE:음모 > 50 && BASE:음모 < 251
 	;어린것들a
-	IF LOCAL:4 == 2 || LOCAL:4 == 3 || LOCAL:4 == 1
+	IF LOCAL:4 == 2 ;|| LOCAL:4 == 3 || LOCAL:4 == 1
 		PRINT 어린 둔덕에 귀여운 음모들이 자라고 있다
 	;그외
 	ELSE

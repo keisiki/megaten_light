@@ -46,7 +46,7 @@ ELSEIF FLAG:経過ターン数 % 4 == 3
 		강화랭크 = ( CFLAG:CHARA:공격강화 + CFLAG:CHARA:방어강화 + CFLAG:CHARA:명중강화 + CFLAG:CHARA:회피강화 + CFLAG:CHARA:마법위력강화 + CFLAG:CHARA:마법효과강화 ) / 6
 		;강화랭크平均が16(돌격의봉화2回分)に満たない場合、신의숨결(전체99999데미지)
 		IF 강화랭크 < 16
-			CALL CHECK_ACTIONABLE_AND_SET,ARG,DEF_SKILL_神の息吹
+			CALL CHECK_ACTIONABLE_AND_SET,ARG,DEF_SKILL_신의숨결
 			RETURN
 		ENDIF
 	NEXT
@@ -55,7 +55,7 @@ ELSEIF FLAG:経過ターン数 % 4 == 3
 ;4n+4ターン눈orHPが반감した時に유혹の果実を사용
 ELSEIF CFLAG:ARG:行動した횟수 == 0 && BASE:ARG:ＨＰ < 15000 && ( !유혹の果実  || GROUPMATCH(FLAG:経過ターン数%4,0) )
 	;PRINTW 유혹の果実
-	CALL CHECK_ACTIONABLE_AND_SET,ARG,DEF_SKILL_유혹の果実
+	CALL CHECK_ACTIONABLE_AND_SET,ARG,DEF_SKILL_유혹의과실
 	유혹の果実 = 1
 
 ;いずれかの능력が최저まで下がっている時랜덤に데・쿤다

@@ -2,46 +2,53 @@
 ;======================================================
 ;장비品の데이터
 ;훈도시
-;Lv20장비までは내성が기본　기본능력に합계+2まで
 ;======================================================
 
 @기본능력수정_3521,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "속도","운"
+
+SELECTCASE ARG
+	CASE 5,6
 		RETURN 1
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3521,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 2
-	CASE "회피"
-		RETURN 5
-	CASE "마법효과"
-		RETURN 5
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 3
+	CASE 3
+		RETURN 16
+	CASE 5
+		RETURN 0
 ENDSELECT
 RETURN 0
 
 @방어상성_3521,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "화염","빙결","전격"
-		RETURN 97
-	CASE "파마"
-		RETURN 60
-	CASE "검격","지변"
-		RETURN 125
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
 
-@バステ내성_3521,ARG,ARG:1 = -1
-SELECTCASE GET_STATE(ARG)
-	CASE "HEAT"
-		RETURN -25
-	CASE "ORGY"
-		RETURN 50
-ENDSELECT
-RETURN 0
+@공격상성_3521, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3521, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3521, ARG = -1
+
+RETURN 1
+
+@사거리_3521, ARG = -1
+
+RETURN 1
+
+@공격범위_3521, ARG = -1
+
+RETURN 1
 
 @장비箇所_3521
 RETURN GET_EQUIPNUM("몸통")
@@ -54,14 +61,6 @@ SIF !IS_LOOKSLIKE_MALE(ARG)
 	RETURN 0
 RETURN 1
 
-@장비조건설명_3521
-PRINTL 장비조건：♂
-
-@장비해설_3521
-PRINTL 神聖な行事などに着けられる急所隠し。
-PRINTL 　　　　　　　　
-
-
 @구입조건_3521
 RETURN 0
 
@@ -69,5 +68,5 @@ RETURN 0
 @EQUIP_EXCHANGE_3521
 RETURN 1
 
-@引継ぎ可不可_3521
-RETURN 0
+@장비조건설명_3521
+PRINTL 장비조건：♂

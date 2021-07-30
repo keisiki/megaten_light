@@ -66,6 +66,18 @@ RETURN 0
 @장비箇所_2223
 RETURN GET_EQUIPNUM("검")
 
+;メ디아라한、사마리캄
+@장비추가스킬_2223,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+			RETURN 406
+		CASE 1
+			RETURN 418
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -89,6 +101,9 @@ PRINTL 장비조건：♀　마력・운의 합계 60 이상
 @장비해설_2223
 PRINTL 여신의 힘이 머무는 신성한 빛의 활。파마 속성으로 적 전체를 공격한다。
 PRINTL 여신 베르단디의 수태아이템
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬존재
+RESETCOLOR
 
 @引継ぎ可不可_2223
 RETURN 1

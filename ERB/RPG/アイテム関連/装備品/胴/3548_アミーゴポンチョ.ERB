@@ -26,7 +26,8 @@ RETURN 0
 SELECTCASE GET_TYPE(ARG)
 	CASE "수격", "질풍", "중력", "지변", "핵열"
 		RETURN 50
-	CASE "화염", "빙결", "전격", "충격", "정신", "신경", "파마", "주살"
+		;, "정신", "신경", "파마", "주살"
+	CASE "화염", "빙결", "전격", "충격"
 		RETURN 125
 ENDSELECT
 RETURN 100
@@ -57,6 +58,11 @@ RETURN GET_EQUIPNUM("몸통")
 
 @필요레벨_3548
 RETURN 1
+
+@장비해설_3548
+PRINTFORML 명랑한 라틴계 아미고가 애용하는 천 모양의 합포
+PRINTFORML 착용자의 속성내성이 변화한다
+
 
 @장비조건_3548,ARG
 ;男であるこｔ

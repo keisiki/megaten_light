@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2320
 RETURN GET_EQUIPNUM("검")
 
+;몸통박치기
+@장비추가스킬_2320,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 235
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -68,6 +78,9 @@ PRINTL 장비조건：LV10～
 
 @장비해설_2320
 PRINTL 나무로 만들어진 하키 스틱。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：몸통박치기
+RESETCOLOR
 
 RETURN 0
 

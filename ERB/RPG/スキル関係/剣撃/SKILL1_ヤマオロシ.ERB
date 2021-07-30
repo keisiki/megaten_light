@@ -3,7 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_1,ARG
-RESULTS = 산바람
+IF SKILL_CHANGE(ARG, 5071)
+	RESULTS = 꽃지는 천막
+ELSE	
+	RESULTS = 산바람
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_1, ARG
@@ -36,12 +40,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1
+@SKILL_DECIDE_TYPE_1, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1
+@SKILL_DAMAGETYPE_1, ARG
 RETURN 1
 
 
@@ -125,7 +129,12 @@ CALL ATTACK_SINGLE,ARG,LOCAL,1
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_1
-PRINTL [전열] 전열의 적 1체에 검격속성 소 물리데미지.
+IF U > 0 && U < CHARANUM && NO:U == 5071
+	PRINTL 로사･익투스
+	PRINTL 적전열 1체를 향해 돌진하며 스치듯 베어낸다.
+ELSE
+	PRINTL [전열] 전열의 적 1체에 검격속성 소 물리데미지.
+ENDIF
 
 ;継承に필요한部位
 @継承部位_1,ARG

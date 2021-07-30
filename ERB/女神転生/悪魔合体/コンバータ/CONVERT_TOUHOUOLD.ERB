@@ -96,7 +96,10 @@ SELECTCASE LOCAL:3
 	;천사
 	CASE 4
 		;Sariel　LV50
+		SIF LOCAL:4 >= CSVBASE(6805,GETNUM(BASE,"LV"),0)
 			RETURN 6805
+		;리카(TH)
+		RETURN 6809
 	;요마
 	CASE 5
 		;유메코　ＬＶ40くらい
@@ -118,7 +121,10 @@ SELECTCASE LOCAL:3
 			RETURN 6823
 	;요정
 	CASE 6
-		;る〜こと　외도とはちとちがうかなということでここ、余ってたし
+		;치유리
+		SIF LOCAL:4 >= CSVBASE(6815,GETNUM(BASE,"LV"),0)
+			RETURN 6815
+		;루코토
 			RETURN 6817
 			
 	;요귀
@@ -160,6 +166,8 @@ SELECTCASE LOCAL:3
 		;Konngara lv50
 		SIF LOCAL:4 >= CSVBASE(6808,GETNUM(BASE,"LV"),0)
 			RETURN 6808
+		;めいらさん
+		RETURN 6810
 	;마신
 	CASE 16
 		;신키 lv50

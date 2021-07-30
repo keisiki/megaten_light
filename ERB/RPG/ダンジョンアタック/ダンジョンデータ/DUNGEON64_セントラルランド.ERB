@@ -1,4 +1,23 @@
-﻿
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:DUNGEON64_セントラルランド.ERB
+;	Facility	:ダンジョンナンバー64　セントラルランド
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		yyyy/mm/dd		？？？					新規作成
+;	002		2021/02/21		NEO						文章をちょっと修正。ホシガミ関連のバグ修正。50日制限の해제。
+;													エンカ率、せめて3歩は歩かせろ修正。
+;													URAボスの実装と、それをクリアすることでホシガミの合体解禁。
+;													また、ヘッダ部分新規書き込み。インデントが気に入らなかったので変更。
+;													フリーじゃなかったらスマン。
+;
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+
 ;=======================================================================
 ;
 ;=======================================================================
@@ -61,9 +80,8 @@ IF 던전フラグ:64:2 == 0
 	CALL MESSAGE_WINDOW_D, "", "＞마계의 중심지　센트럴랜드"
 	CALL MESSAGE_WINDOW_D, "", "＞도시에는 악마의 모습이 거의 보이지 않고、몇 안 되는 거리에 있던 악마에게 이야기를 들어보니 / 악마들은 대마왕이 있는 다크 팰리스에 있는 것 같다"
 	CALL MESSAGE_WINDOW_D, "", "＞대마왕 아젤은 그 곳에서 당신을 맞아 싸울 생각인 것 같다"
-	IF FINDCHARA_B([[キャラ:에레지]])== 2
-	CALL MESSAGE_WINDOW_D, "에레지", "여기에 있는 건가、아버지"
-	ENDIF
+	SIF FINDCHARA_B([[キャラ:에레지]])== 2
+		CALL MESSAGE_WINDOW_D, "에레지", "여기에 있는 건가、아버지"
 던전フラグ:64:2 = 1
 ENDIF
 ;=======================================================================
@@ -98,20 +116,22 @@ ENDSELECT
 @TILE_MARK_COMMON_64_4, ARG , ARG:1 , ARG:2
 SELECTCASE ARG / 10
 	CASE 100
-	SIF 던전フラグ:64:0 == 0
-		RESULTS = ！
+		SIF 던전フラグ:64:0 == 0
+			RESULTS = ！
 	CASE 200
-	SIF 던전フラグ:64:0 == 1
-		RESULTS = ！
+		SIF 던전フラグ:64:0 == 1
+			RESULTS = ！
 	CASE 300
-	SIF 던전フラグ:64:0 == 2
-		RESULTS = ！
+		SIF 던전フラグ:64:0 == 2
+			RESULTS = ！
 	CASE 400
-	SIF 던전フラグ:64:0 == 3
-		RESULTS = ！
+		SIF 던전フラグ:64:0 == 3
+			RESULTS = ！
 	CASE 500
-	SIF 던전フラグ:64:0 == 4
-		RESULTS = ！
+		SIF 던전フラグ:64:0 == 4
+			RESULTS = ！
+		SIF 던전フラグ:64:1 > 0
+			RESULTS = ！
 ENDSELECT
 
 
@@ -493,246 +513,252 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) % 10
 ;==========
 	CASE 2
 		CALL DUNGEON_DOOR,ARG
-		RETURN 1
+	RETURN 1
 ;========
 ;宝の処理
 ;========
-CASE 3
-CALL TREASURE_64
-RETURN 1
+	CASE 3
+		CALL TREASURE_64
+	RETURN 1
 
 ;=======
 ;階段
 ;=======
-CASE 6
-CALL UPSTAIRS_64
-RETURN RESULT
+	CASE 6
+		CALL UPSTAIRS_64
+	RETURN RESULT
 
-CASE 7
-CALL DOWNSTAIRS_64
-RETURN RESULT
+	CASE 7
+		CALL DOWNSTAIRS_64
+	RETURN RESULT
 ;==========
 ;이벤트
 ;==========
-CASE 4
-	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
+	CASE 4
+		SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE  100
-	IF 던전フラグ:64:0 == 0
-		CALL MESSAGE_WINDOW_D, "바수키", "너희들이 침입자인가！/아젤 님 곁으론 보내지 않겠다！"
-		CALL MESSAGE_WINDOW_D, "", "＞용왕　바수키가 １체 나타났다！" , , , , , , , , , "CENTER"
-		FLAG:도주불가フラグ = 1
-		FLAG:회화불능フラグ = 1
-		FLAG:선제기습취소 = 1
-		CALL SET_ENEMY,9,[[キャラ:바수키]], 53, 0, 1
-		CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
-		CFLAG:(CHARANUM-1):ＭＰ보정 = 500
-		CALL SYNC_STATUS,(CHARANUM-1)
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		CALL BATTLE_START
+		IF 던전フラグ:64:0 == 0
+			CALL MESSAGE_WINDOW_D, "바수키", "너희들이 침입자인가！/아젤 님 곁으론 보내지 않겠다！"
+			CALL MESSAGE_WINDOW_D, "", "＞용왕　바수키가 １체 나타났다！" , , , , , , , , , "CENTER"
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,9,[[キャラ:바수키]], 53, 0, 1
+			CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
+			CFLAG:(CHARANUM-1):ＭＰ보정 = 500
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+			CALL BATTLE_START
 
-		FLAG:도주불가フラグ = 0
-		FLAG:회화불능フラグ = 0
-		FLAG:선제기습취소 = 0
-		던전フラグ:64:0 = 1
-	ENDIF
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			던전フラグ:64:0 = 1
+		ENDIF
 	CASE  200
-	IF 던전フラグ:64:0 == 1
-			CALL MESSAGE_WINDOW_D, "목소리", "어서와라 이 아젤의 성에"
-			CALL MESSAGE_WINDOW_D, "", "＞소리와 함께 똑같은 얼굴에 슈트를 걸친 남자들이 나타났다"
-			CALL MESSAGE_WINDOW_D, "아젤？", "『『『『『『『『『『『무도회를 즐겨보자！』』』』』』』』』』"
-			CALL MESSAGE_WINDOW_D, "", "＞아젤들이 나타났다！" , , , , , , , , , "CENTER"
+		IF 던전フラグ:64:0 == 1
+				CALL MESSAGE_WINDOW_D, "목소리", "어서와라 이 아젤의 성에"
+				CALL MESSAGE_WINDOW_D, "", "＞소리와 함께 똑같은 얼굴에 슈트를 걸친 남자들이 나타났다"
+				CALL MESSAGE_WINDOW_D, "아젤？", "『『『『『『『『『『『무도회를 즐겨보자！』』』』』』』』』』"
+				CALL MESSAGE_WINDOW_D, "", "＞아젤들이 나타났다！" , , , , , , , , , "CENTER"
+					FLAG:도주불가フラグ = 1
+					FLAG:회화불능フラグ = 1
+					FLAG:선제기습취소 = 1
+
+					CALL SET_ENEMY,7,[[キャラ:트리글라프]], 55, 0, 0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,8,[[キャラ:스트리고이]], 55, 0, 1
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,9,[[キャラ:도플갱어]],55,0,0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,10,[[キャラ:섀도우]], 55, 0, 0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,11,[[キャラ:쿠드락]], 55, 0, 0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,12,[[キャラ:베르세르크]], 55, 0, 0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,13,[[キャラ:아마존]], 55, 0, 0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+
+					CALL SET_ENEMY,14,[[キャラ:오베론]], 55, 0, 0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,15,[[キャラ:티타니아]], 55, 0, 0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,16,[[キャラ:뱀파이어]], 55, 0, 0
+					NAME:(CHARANUM-1) = 아젤
+					CALLNAME:(CHARANUM-1) = 아젤
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+					CALL BATTLE_START
+
+					FLAG:도주불가フラグ = 0
+					FLAG:회화불능フラグ = 0
+					FLAG:선제기습취소 = 0
+				CALL MESSAGE_WINDOW_D, "목소리", "하하핫！"
+				CALL MESSAGE_WINDOW_D, "목소리", "즐길 수 있었는가？"
+				CALL MESSAGE_WINDOW_D, "", "＞목소리는 들리지 않게 되었다"
+			던전フラグ:64:0 = 2
+		ENDIF
+	CASE  300
+		IF 던전フラグ:64:0 == 2
+			IF 던전フラグ:61:1 == 1
+				CALL MESSAGE_WINDOW_D, "", "＞소녀가 데빌라이저를 가지고 기다리고 있었다"
+				CALL MESSAGE_WINDOW_D, "미라이", "아빠를 위해 당신을 쓰러뜨리겠습니다！"
+				IF FINDCHARA_B([[キャラ:세츠나]])== 2
+				CALL MESSAGE_WINDOW_D, "세츠나", "그만둬 미라이！"
+				CALL MESSAGE_WINDOW_D, "미라이", "세츠나… 미안해…"
+				ENDIF
+				CALL MESSAGE_WINDOW_D, "", "＞미라이는 데빌라이저를 이쪽으로 겨누었다！"
+				CALL MESSAGE_WINDOW_D, "미라이", "콜！"
+				CALL MESSAGE_WINDOW_D, "", "＞데빌칠드런 미라이가 １체, 그리고 동료마 ５체가 나타났다！" , , , , , , , , , "CENTER"
+
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
 
-				CALL SET_ENEMY,7,[[キャラ:트리글라프]], 55, 0, 0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+					CALL SET_ENEMY,14,[[キャラ:미라이]],58,0,1
+					CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
+					CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+					CSTR:(CHARANUM-1):사고패턴 = 데빌칠드런
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
 
-				CALL SET_ENEMY,8,[[キャラ:스트리고이]], 55, 0, 1
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+						CALL SET_ENEMY,9,[[キャラ:벨(킹)]],60,0,1
+					CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
+					CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+					NAME:(CHARANUM-1) = 벨
+					CALLNAME:(CHARANUM-1) = 벨
+					ABL:(CHARANUM-1):스킬2 = [[스킬:림도라]]
+					ABL:(CHARANUM-1):스킬3 = [[스킬:메・디아라한]]
+					ABL:(CHARANUM-1):스킬4 = [[스킬:킹스톰]]
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
 
-				CALL SET_ENEMY,9,[[キャラ:도플갱어]],55,0,0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+					CALL SET_ENEMY,8,[[キャラ:란다]],55,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
 
-				CALL SET_ENEMY,10,[[キャラ:섀도우]], 55, 0, 0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+					CALL SET_ENEMY,10,[[キャラ:듀라한]],55,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
 
-				CALL SET_ENEMY,11,[[キャラ:쿠드락]], 55, 0, 0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+					CALL SET_ENEMY,13,[[キャラ:비비안]],55,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
 
-				CALL SET_ENEMY,12,[[キャラ:베르세르크]], 55, 0, 0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+					CALL SET_ENEMY,15,[[キャラ:코아틀리쿠에]],55,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
 
-				CALL SET_ENEMY,13,[[キャラ:아마존]], 55, 0, 0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+					CALL BATTLE_START
 
+					FLAG:도주불가フラグ = 0
+					FLAG:회화불능フラグ = 0
+					FLAG:선제기습취소 = 0
 
-				CALL SET_ENEMY,14,[[キャラ:오베론]], 55, 0, 0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+				CALL MESSAGE_WINDOW_D, "미라이", "미안…해…… 벨… 아…빠……"
+				CALL MESSAGE_WINDOW_D, "", "＞카나메 미라이가 노예가 되었다"
+				CALL ADD_NEW_COMPANION,4504,300
+				CALL MESSAGE_WINDOW_D, "", "＞킹그리폰 벨이 동료마로 들어왔다"
+				CALL ADD_NEW_COMPANION,[[キャラ:벨(킹)]],200,1
+			ELSEIF 던전フラグ:61:1 == 2
+				CALL MESSAGE_WINDOW_D, "", "＞소년이 데빌라이저를 가지고 기다리고 있었다"
+				CALL MESSAGE_WINDOW_D, "세츠나", "아버지를 위해 너를 쓰러뜨려주겠어！"
+				IF FINDCHARA_B([[キャラ:미라이]])== 2
+				CALL MESSAGE_WINDOW_D, "미라이", "그만 둬 세츠나！"
+				CALL MESSAGE_WINDOW_D, "세츠나", "미라이… 미안…"
+				ENDIF
+				CALL MESSAGE_WINDOW_D, "", "＞세츠나가 데빌라이저를 이쪽으로 겨누었다！"
+				CALL MESSAGE_WINDOW_D, "세츠나", "콜！"
+				CALL MESSAGE_WINDOW_D, "", "＞데빌칠드런 세츠나가 １체, 그리고 동료마 ５체가 나타났다！" , , , , , , , , , "CENTER"
 
-				CALL SET_ENEMY,15,[[キャラ:티타니아]], 55, 0, 0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+				FLAG:도주불가フラグ = 1
+				FLAG:회화불능フラグ = 1
+				FLAG:선제기습취소 = 1
 
-				CALL SET_ENEMY,16,[[キャラ:뱀파이어]], 55, 0, 0
-				NAME:(CHARANUM-1) = 아젤
-				CALLNAME:(CHARANUM-1) = 아젤
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
+					CALL SET_ENEMY,14,[[キャラ:세츠나]],58,0,1
+					CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
+					CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+					CSTR:(CHARANUM-1):사고패턴 = 데빌칠드런
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,9,[[キャラ:쿨(킹)]],60,0,1
+					NAME:(CHARANUM-1) = 쿨
+					CALLNAME:(CHARANUM-1) = 쿨
+					CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
+					CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
+					ABL:(CHARANUM-1):스킬2 = [[스킬:데들리번]]
+					ABL:(CHARANUM-1):스킬3 = [[스킬:메・디아라한]]
+					ABL:(CHARANUM-1):스킬4 = [[스킬:킹스톰]]
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,8,[[キャラ:도철]],55,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,10,[[キャラ:나타태자]],55,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,13,[[キャラ:쿠라마텐구]],55,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
+					CALL SET_ENEMY,15,[[キャラ:쿠엘레브레]],55,0,0
+					CALL SYNC_STATUS,(CHARANUM-1)
+					CALL HEALTH_CHARA,(CHARANUM-1)
+
 				CALL BATTLE_START
 
 				FLAG:도주불가フラグ = 0
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
-			CALL MESSAGE_WINDOW_D, "목소리", "하하핫！"
-			CALL MESSAGE_WINDOW_D, "목소리", "즐길 수 있었는가？"
-			CALL MESSAGE_WINDOW_D, "", "＞목소리는 들리지 않게 되었다"
-		던전フラグ:64:0 = 2
-	ENDIF
-	CASE  300
-	IF 던전フラグ:64:0 == 2
-		IF 던전フラグ:61:1 == 1
-			CALL MESSAGE_WINDOW_D, "", "＞소녀가 데빌라이저를 가지고 기다리고 있었다"
-			CALL MESSAGE_WINDOW_D, "미라이", "아빠를 위해 당신을 쓰러뜨리겠습니다！"
-			IF FINDCHARA_B([[キャラ:세츠나]])== 2
-			CALL MESSAGE_WINDOW_D, "세츠나", "그만둬 미라이！"
-			CALL MESSAGE_WINDOW_D, "미라이", "세츠나… 미안해…"
+				CALL MESSAGE_WINDOW_D, "세츠나", "우…우…… 쿨… 아버…지……"
+				CALL MESSAGE_WINDOW_D, "", "＞카이 세츠나가 노예가 되었다"
+				CALL ADD_NEW_COMPANION,4529,300
+				CALL MESSAGE_WINDOW_D, "", "＞킹케르베로스 쿨이 동료마로 들어왔다"
+				CALL ADD_NEW_COMPANION,[[キャラ:쿨(킹)]],200,1
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "", "＞미라이는 데빌라이저를 이쪽으로 겨누었다！"
-			CALL MESSAGE_WINDOW_D, "미라이", "콜！"
-			CALL MESSAGE_WINDOW_D, "", "＞데빌칠드런 미라이가 １체, 그리고 동료마 ５체가 나타났다！" , , , , , , , , , "CENTER"
-
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
-			FLAG:선제기습취소 = 1
-
-				CALL SET_ENEMY,14,[[キャラ:미라이]],58,0,1
-				CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
-				CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
-				CSTR:(CHARANUM-1):사고패턴 = 데빌칠드런
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,9,868,60,0,1
-				CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
-				CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
-				NAME:(CHARANUM-1) = 벨
-				CALLNAME:(CHARANUM-1) = 벨
-				ABL:(CHARANUM-1):스킬2 = [[스킬:림도라]]
-				ABL:(CHARANUM-1):스킬3 = [[스킬:메・디아라한]]
-				ABL:(CHARANUM-1):스킬4 = [[스킬:킹스톰]]
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,8,[[キャラ:란다]],55,0,0
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,10,[[キャラ:듀라한]],55,0,0
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,13,[[キャラ:비비안]],55,0,0
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,15,[[キャラ:코아틀리쿠에]],55,0,0
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-				CALL BATTLE_START
-				FLAG:도주불가フラグ = 0
-				FLAG:회화불능フラグ = 0
-				FLAG:선제기습취소 = 0
-			CALL MESSAGE_WINDOW_D, "미라이", "미안…해…… 벨… 아…빠……"
-			CALL MESSAGE_WINDOW_D, "", "＞카나메 미라이가 노예가 되었다"
-			CALL ADD_NEW_COMPANION,4504,300
-			CALL MESSAGE_WINDOW_D, "", "＞킹그리폰 벨이 동료마로 들어왔다"
-			CALL ADD_NEW_COMPANION,868,200,1
-		ELSEIF 던전フラグ:61:1 == 2
-			CALL MESSAGE_WINDOW_D, "", "＞소년이 데빌라이저를 가지고 기다리고 있었다"
-			CALL MESSAGE_WINDOW_D, "세츠나", "아버지를 위해 너를 쓰러뜨려주겠어！"
-			IF FINDCHARA_B([[キャラ:미라이]])== 2
-			CALL MESSAGE_WINDOW_D, "미라이", "그만 둬 세츠나！"
-			CALL MESSAGE_WINDOW_D, "세츠나", "미라이… 미안…"
-			ENDIF
-			CALL MESSAGE_WINDOW_D, "", "＞세츠나가 데빌라이저를 이쪽으로 겨누었다！"
-			CALL MESSAGE_WINDOW_D, "세츠나", "콜！"
-			CALL MESSAGE_WINDOW_D, "", "＞데빌칠드런 세츠나가 １체, 그리고 동료마 ５체가 나타났다！" , , , , , , , , , "CENTER"
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
-			FLAG:선제기습취소 = 1
-
-				CALL SET_ENEMY,14,[[キャラ:세츠나]],58,0,1
-				CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
-				CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
-				CSTR:(CHARANUM-1):사고패턴 = 데빌칠드런
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,9,864,60,0,1
-				NAME:(CHARANUM-1) = 쿨
-				CALLNAME:(CHARANUM-1) = 쿨
-				CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
-				CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
-				ABL:(CHARANUM-1):스킬2 = [[스킬:데들리번]]
-				ABL:(CHARANUM-1):스킬3 = [[스킬:메・디아라한]]
-				ABL:(CHARANUM-1):스킬4 = [[스킬:킹스톰]]
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,8,[[キャラ:도철]],55,0,0
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,10,[[キャラ:나타태자]],55,0,0
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,13,[[キャラ:쿠라마텐구]],55,0,0
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-
-				CALL SET_ENEMY,15,[[キャラ:쿠엘레브레]],55,0,0
-				CALL SYNC_STATUS,(CHARANUM-1)
-				CALL HEALTH_CHARA,(CHARANUM-1)
-			CALL BATTLE_START
-			FLAG:도주불가フラグ = 0
-			FLAG:회화불능フラグ = 0
-			FLAG:선제기습취소 = 0
-			CALL MESSAGE_WINDOW_D, "세츠나", "우…우…… 쿨… 아버…지……"
-			CALL MESSAGE_WINDOW_D, "", "＞카이 세츠나가 노예가 되었다"
-			CALL ADD_NEW_COMPANION,4529,300
-			CALL MESSAGE_WINDOW_D, "", "＞킹케르베로스 쿨이 동료마로 들어왔다"
-			CALL ADD_NEW_COMPANION,864,200,1
+			던전フラグ:64:0 = 3
 		ENDIF
-		던전フラグ:64:0 = 3
-	ENDIF
 	CASE  400
 		IF 던전フラグ:64:0 == 3
 			CALL MESSAGE_WINDOW_D, "", "＞아까 싸웠던 슈트의 남자와 같은 얼굴을 한 남자가 있다。/＞대마왕 아젤이다。"
@@ -765,9 +791,11 @@ CASE 4
 			CALL MESSAGE_WINDOW_D, "아젤", "하핫！ 그건 그렇지！ / 그럼… 악마답게 빼앗아주도록 하지！"
 			CALL MESSAGE_WINDOW_D, "", "＞아젤의 몸이 부풀어 올라 거대한 악마가 되었다！"
 			CALL MESSAGE_WINDOW_D, "", "＞대마왕　아젤이 １체 나타났다！" , , , , , , , , , "CENTER"
+
 			FLAG:도주불가フラグ = 1
 			FLAG:회화불능フラグ = 1
 			FLAG:선제기습취소 = 1
+
 				CALL SET_ENEMY,9,[[キャラ:아젤]],65,0,1
 				CFLAG:(CHARANUM-1):ＨＰ보정 += 5000
 				CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
@@ -779,7 +807,9 @@ CASE 4
 				ABL:(CHARANUM-1):스킬8 = [[스킬:마하・그라다인]]
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
+
 			CALL BATTLE_START
+
 			FLAG:도주불가フラグ = 0
 			FLAG:회화불능フラグ = 0
 			FLAG:선제기습취소 = 0
@@ -822,11 +852,12 @@ CASE 4
 					CALL MESSAGE_WINDOW_D, "호시가미", "나는 호시가미……"
 					CALL MESSAGE_WINDOW_D, "호시가미", "당신은 세계 재생의 자격을 가진 노른의 열쇠을 만들었다…"
 					CALL MESSAGE_WINDOW_D, "호시가미", "도대체 무엇을 원하는가…"
-					IF DAY < 51
+					;日数制限の해제
+					; IF DAY < 51
 						CALL INPUT_SELECT_D, @"[0] 새로운 세계를 원한다 / [1] 자신이 신이 되길 원한다 / [2] 호시가미를 원한다 / [3] 아무것도 바라지 않는다/"
-					ELSE
-						CALL INPUT_SELECT_D, @"[2] 호시가미를 원한다/[3] 아무것도 바라지 않는다/"
-					ENDIF
+					; ELSE
+					; 	CALL INPUT_SELECT_D, @"[2] 호시가미를 원한다/[3] 아무것도 바라지 않는다/"
+					; ENDIF
 					SELECTCASE RESULT
 						CASE 0
 							CALL SHOW_PICTURE, "NONFLOORD", ""
@@ -865,11 +896,15 @@ CASE 4
 						CASE 2
 							CALL MESSAGE_WINDOW_D, "호시가미", "나를 바라는가？ / 이 얼마나 욕심이 많은가…"
 							CALL MESSAGE_WINDOW_D, "호시가미", "그러면 나에게 힘을 보여주거라…"
+
 							CALL BATTLE_hoshigami
+
 							CALL MESSAGE_WINDOW_D, "호시가미", "너의 승리다…"
 							CALL MESSAGE_WINDOW_D, "호시가미", "그러면 이제부터는 너의 것이다…"
 							CALL MESSAGE_WINDOW_D, "", "＞호시가미가 노예가 되었다"
 							CALL ADD_NEW_COMPANION,[[キャラ:호시가미]],300
+
+							던전フラグ:64:1 = 2
 							던전フラグ:64:0 = 6
 						CASE 3
 							CALL MESSAGE_WINDOW_D, "호시가미", "…정말로 아무것도 바라지 않는 것인가"
@@ -892,9 +927,42 @@ CASE 4
 				CALL MESSAGE_WINDOW_D, "호시가미", "그러면 이제부터는 너의 것이다…"
 				CALL MESSAGE_WINDOW_D, "", "＞호시가미가 노예가 되었다"
 				CALL ADD_NEW_COMPANION,[[キャラ:호시가미]],300
+				던전フラグ:64:1 = 2
+
+			CASE 2
+				CALL MESSAGE_WINDOW_D, "ホシガミ", "そうか……"
+			ENDSELECT
+		ELSEIF 던전フラグ:64:1 == 2
+			;味方にホシガミがいようが、既に売り払っていようが、まあ……
+			CALL MESSAGE_WINDOW_D, "", "＞ノルンの像がある……"
+			CALL MESSAGE_WINDOW_D, "", "＞……『ここは　オルゴールルーム　おとのしらべが　ながれるところ』と書いてある"
+			CALL MESSAGE_WINDOW_D, "ホシガミ", "……私を望むのか？"
+			CALL MESSAGE_WINDOW_D, "", "＞！"
+			CALL MESSAGE_WINDOW_D, "", "＞……いや、考えてみれば、彼女は創造主にも等しい存在だ"
+			CALL MESSAGE_WINDOW_D, "", "＞マカイが滅びていない以上、彼女はどこにでも存在できる/＞どこぞの好事家に売り払おうが、剣にしてしまおうが、/＞合体素材にしてしまおうが、それは彼女の『端末』のひとつ……"
+			CALL MESSAGE_WINDOW_D, "", "＞結局のところ、彼女の『本体』は、こうしてここにも存在できる余地を残している。"
+			CALL MESSAGE_WINDOW_D, "ホシガミ", "……私をまことの意味で望むのか？"
+			CALL MESSAGE_WINDOW_D, "", "＞……球体の中の童女――否、童女が、あなたを見上げて問う"
+			CALL MESSAGE_WINDOW_D, "", "＞……どうしたものか……"
+			CALL INPUT_SELECT_D, @"[1] 真の意味でホシガミが欲しい/[2] なんでもない"
+			SELECTCASE RESULT
+			CASE 1
+				CALL MESSAGE_WINDOW_D, "ホシガミ", "……まことの意味で私を望むのならば"
+				CALL MESSAGE_WINDOW_D, "ホシガミ", "その力、相応しきものか、試させてもらう"
+				CALL BATTLE_hoshigami_URA
+				CALL MESSAGE_WINDOW_D, "ホシガミ", "……ああ、お前の力を認めよう……"
+				CALL MESSAGE_WINDOW_D, "ホシガミ", "私はホシガミ　今後とも　よろしく頼む……"
+				던전フラグ:64:1 = 3
+				CALL LIFTING_A_BAN([[キャラ:호시가미]])
+
 			CASE 2
 				CALL MESSAGE_WINDOW_D, "호시가미", "그런가……"
 			ENDSELECT
+
+
+		ELSEIF 던전フラグ:64:1 == 3
+			CALL MESSAGE_WINDOW_D, "", "＞ノルンの像がある……"
+			CALL MESSAGE_WINDOW_D, "", "＞……『ここは　オルゴールルーム　おとのしらべが　ながれるところ』と書いてある"
 		ENDIF
 	ENDSELECT
 	RETURN 0
@@ -931,6 +999,165 @@ RETURN 1
 		FLAG:선제기습취소 = 0
 	CALL MESSAGE_WINDOW_D, "", "＞호시가미를 쓰러뜨렸다…"
 
+@BATTLE_hoshigami_URA
+	;裏バトル
+	;そもそもホシガミを仲間にするのは「ルシファー」「ゼブル」「ミカエル」が必要だったわけですが。
+	;（しかもパスワードが必要。『舞い降りたメシア』ってやつ）
+	;そのあたりを裏バトルとして捏造しますしました。
+	;ちなみにホシガミのボイスはKOS-MOSのひとで、ちょっと幼女って感じでは、流石に、ない。
+	;PS版では幼女が口パクするんだけども……
+	;ともあれ、ホシガミの分体、をモデルにしたカスタムホシガミを取り巻きにする
+
+	CALL MESSAGE_WINDOW_D, "", "＞ホシガミが１体と分霊が３体　出た！" , , , , , , , , , "CENTER"
+
+		FLAG:도주불가フラグ = 1
+		FLAG:회화불능フラグ = 1
+		FLAG:선제기습취소 = 1
+			CALL SET_ENEMY,14,[[キャラ:호시가미]],100,0,1
+			CSTR:(CHARANUM-1):사고패턴 = URAホシガミ
+			CFLAG:(CHARANUM-1):ＨＰ보정 += 8000
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 10000
+			BASE:(CHARANUM-1):힘 += 5
+			BASE:(CHARANUM-1):지혜 += 5
+			BASE:(CHARANUM-1):마력 += 5
+			BASE:(CHARANUM-1):인내력 += 5
+			BASE:(CHARANUM-1):속도 += 5
+			BASE:(CHARANUM-1):운 += 5
+			;弱点を100に（呪殺だけ弱点のまま）
+			BASE:(CHARANUM-1):검격 = 50
+			BASE:(CHARANUM-1):비구 = 50
+			BASE:(CHARANUM-1):타격 = 50
+			BASE:(CHARANUM-1):전술 = 100
+			BASE:(CHARANUM-1):화염 = 50
+			BASE:(CHARANUM-1):빙결 = 100
+			BASE:(CHARANUM-1):전격 = 50
+			BASE:(CHARANUM-1):충격 = 50
+			BASE:(CHARANUM-1):신경 = 0
+			BASE:(CHARANUM-1):정신 = 0
+			BASE:(CHARANUM-1):파마 = 0
+			BASE:(CHARANUM-1):주살 = 125
+			BASE:(CHARANUM-1):지변 = 50
+			BASE:(CHARANUM-1):수격 = 50
+			BASE:(CHARANUM-1):질풍 = 50
+			BASE:(CHARANUM-1):중력 = 50
+			BASE:(CHARANUM-1):핵열 = 50
+			BASE:(CHARANUM-1):만능 = 100
+			;3回行動
+			CFLAG:(CHARANUM-1):行動횟수 = 3
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+
+
+			;ゼブルモデル・ホシガミ
+			;蠅声の王
+			CALL SET_ENEMY,8,[[キャラ:호시가미]],80,0,1
+			CSTR:(CHARANUM-1):종족명 = 分霊
+			NAME:(CHARANUM-1) = サバエノオウ
+			CALLNAME:(CHARANUM-1) = サバエノオウ
+			CSTR:(CHARANUM-1):사고패턴 = URAゼブル
+			CFLAG:(CHARANUM-1):ＨＰ보정 += 3000
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 10000
+			;火炎弱点、他は弱点→通常化
+			BASE:(CHARANUM-1):검격 = 100
+			BASE:(CHARANUM-1):비구 = 100
+			BASE:(CHARANUM-1):타격 = 50
+			BASE:(CHARANUM-1):전술 = 50
+			BASE:(CHARANUM-1):화염 = 125
+			BASE:(CHARANUM-1):빙결 = 100
+			BASE:(CHARANUM-1):전격 = 50
+			BASE:(CHARANUM-1):충격 = 75
+			BASE:(CHARANUM-1):신경 = 0
+			BASE:(CHARANUM-1):정신 = 0
+			BASE:(CHARANUM-1):파마 = 999
+			BASE:(CHARANUM-1):주살 = 999
+			BASE:(CHARANUM-1):지변 = 0
+			BASE:(CHARANUM-1):수격 = 75
+			BASE:(CHARANUM-1):질풍 = 75
+			BASE:(CHARANUM-1):중력 = 100
+			BASE:(CHARANUM-1):핵열 = 100
+			BASE:(CHARANUM-1):만능 = 100
+			;2回行動
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+
+
+			;ルシファーモデル・ホシガミ
+			;暁の明星
+			CALL SET_ENEMY,9,[[キャラ:호시가미]],80,0,1
+			CSTR:(CHARANUM-1):종족명 = 分霊
+			NAME:(CHARANUM-1) = アケノホシ
+			CALLNAME:(CHARANUM-1) = アケノホシ
+			CSTR:(CHARANUM-1):사고패턴 = URAルシファー
+			CFLAG:(CHARANUM-1):ＨＰ보정 += 3000
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 10000
+			;万能75、全身50、ただし神経精神が通る
+			BASE:(CHARANUM-1):검격 = 50
+			BASE:(CHARANUM-1):비구 = 50
+			BASE:(CHARANUM-1):타격 = 50
+			BASE:(CHARANUM-1):전술 = 50
+			BASE:(CHARANUM-1):화염 = 50
+			BASE:(CHARANUM-1):빙결 = 50
+			BASE:(CHARANUM-1):전격 = 50
+			BASE:(CHARANUM-1):충격 = 50
+			BASE:(CHARANUM-1):신경 = 50
+			BASE:(CHARANUM-1):정신 = 50
+			BASE:(CHARANUM-1):파마 = 0
+			BASE:(CHARANUM-1):주살 = 999
+			BASE:(CHARANUM-1):지변 = 50
+			BASE:(CHARANUM-1):수격 = 50
+			BASE:(CHARANUM-1):질풍 = 50
+			BASE:(CHARANUM-1):중력 = 50
+			BASE:(CHARANUM-1):핵열 = 50
+			BASE:(CHARANUM-1):만능 = 75
+			;2回行動
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+
+
+			;ミカエルモデル・ホシガミ
+			;焔の剣
+			CALL SET_ENEMY,10,[[キャラ:호시가미]],80,0,1
+			CSTR:(CHARANUM-1):종족명 = 分霊
+			NAME:(CHARANUM-1) = ホムラノツルギ
+			CALLNAME:(CHARANUM-1) = ホムラノツルギ
+			CSTR:(CHARANUM-1):사고패턴 = URAミカエル
+			CFLAG:(CHARANUM-1):ＨＰ보정 += 3000
+			CFLAG:(CHARANUM-1):ＭＰ보정 += 10000
+			;素のミカエルさん耐性
+			BASE:(CHARANUM-1):검격 = 100
+			BASE:(CHARANUM-1):비구 = 50
+			BASE:(CHARANUM-1):타격 = 75
+			BASE:(CHARANUM-1):전술 = 100
+			BASE:(CHARANUM-1):화염 = -100
+			BASE:(CHARANUM-1):빙결 = 125
+			BASE:(CHARANUM-1):전격 = 50
+			BASE:(CHARANUM-1):충격 = 100
+			BASE:(CHARANUM-1):신경 = 0
+			BASE:(CHARANUM-1):정신 = 0
+			BASE:(CHARANUM-1):파마 = 999
+			BASE:(CHARANUM-1):주살 = 0
+			BASE:(CHARANUM-1):지변 = 0
+			BASE:(CHARANUM-1):수격 = 125
+			BASE:(CHARANUM-1):질풍 = 100
+			BASE:(CHARANUM-1):중력 = 50
+			BASE:(CHARANUM-1):핵열 = 999
+			BASE:(CHARANUM-1):만능 = 100
+			;2回行動
+			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CALL SYNC_STATUS,(CHARANUM-1)
+			CALL HEALTH_CHARA,(CHARANUM-1)
+
+			CALL BATTLE_START
+		FLAG:도주불가フラグ = 0
+		FLAG:회화불능フラグ = 0
+		FLAG:선제기습취소 = 0
+	CALL MESSAGE_WINDOW_D, "", "＞ホシガミとその分霊を倒した…"
+
+
+
+	
 ;=======================================================================
 ;階段置き場
 ;=======================================================================
@@ -1018,6 +1245,9 @@ RETURN 50, 50, 55, 70
 SELECTCASE FLAG:現M
 	CASEELSE
 		FLAG:エンカウント率 = FLAG:未遭遇歩数*5 + 10
+		;せめて３歩くらい歩かせろ
+		SIF FLAG:未遭遇歩数 < 3
+			FLAG:エンカウント率 = 0
 ENDSELECT
 
 ;=======================================================================
@@ -1142,4 +1372,447 @@ SELECTCASE RAND:3
 	CASE 2
 		RETURN [[キャラ:케르눈노스]] , 3 + RAND:10 , CSVBASE([[キャラ:케르눈노스]] , GETNUM(BASE , "LV") , 0) + RAND:3
 ENDSELECT
+
+
+
+
+;=======================================================================
+@SET_ACTION_URAホシガミ, ARG
+;=======================================================================
+;○コンセプト
+;　メジャー魔法・만능
+;　3回行動
+
+;사고패턴
+
+;HP50％以下になった時固定行動
+;　自分を全回復（行動はなにもなし）
+;　自分になにもしない
+;　専用スキル：舞い降りたメシアへ
+
+;オリジナルスキル：舞い降りたメシアへ
+;原作の必要パスワードから捏造。
+;빙결、전격、파마、万能の複合大威力全体攻撃＋デカジャ＋デクンダ。
+;
+;行動は基本ローテーション
+;　1ローテ：必殺ターン
+;　　単体ダイン・単体ダイン・메기도라온/舞い降りたメシアへ
+;　2ローテ：氷結ターン
+;　　すべて氷結相性攻撃
+;　3ローテ：전격ターン
+;　　すべて전격相性攻撃
+;　4ローテ：地母神ターン
+;　　기간트마키아
+;　1More時の行動が弱いのが弱点
+
+;原作性能
+;Lv50	キング	ニチ	ボス	부후라・라이트스피어・さばきのイカズチ・ごくかんとうけつ・メ디아라한・사마리캄
+
+;=======================================================================
+#DIM ホシガミ行動判定
+#DIM ホシガミ舞い降りたメシア判定
+
+;入力行動を-1とターゲットを-1にしておく
+CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:ターゲット = -1
+
+IF CFLAG:ARG:行動した횟수 == 0
+	ホシガミ行動判定 += 1
+
+	;0.1.2.3の4パターンのローテ
+	SIF ホシガミ行動判定 > 3
+		ホシガミ行動判定 = 0
+
+	;HP半分以下で、行動をリセットし、必殺行動を使用する
+	IF 現HP割合(ARG) <= 50 && ホシガミ舞い降りたメシア判定 == 0
+		ホシガミ行動判定 = 0
+		ホシガミ舞い降りたメシア判定 = 1
+	ENDIF
+
+ENDIF
+
+IF ホシガミ舞い降りたメシア判定 == 1
+	IF CFLAG:ARG:行動した횟수 == 0
+		PRINTFORML ┏> ホシガミ　━━━━━━━━━━━━━━━━━┓
+		PRINTFORML ┃お前はきっと、メシアではないのだろう　　　　　┃
+		PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━┛
+		;なにもしない/全回復
+		CSTR:ARG:전용기1 = ＷＡＩＴ
+		CFLAG:ARG:입력行動 = 3904
+		CALL HEALTH_CHARA,(ARG)
+	ELSEIF CFLAG:ARG:行動した횟수 == 1
+		PRINTFORML ┏> ホシガミ　━━━━━━━━━━━━━━━━━┓
+		PRINTFORML ┃だが、私を欲するならば――　　　　　　　　　　┃
+		PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━┛
+		;なにもしない
+		CSTR:ARG:전용기1 = ＷＡＩＴ
+		CFLAG:ARG:입력行動 = 3904
+	ELSEIF CFLAG:ARG:行動した횟수 == 2
+		PRINTFORML ┏> ホシガミ　━━━━━━━━━━━━━━━━━┓
+		PRINTFORML ┃――受けきって見せるがいい。人の子よ　　　　　┃
+		PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━━┛
+		;捏造スキル『舞い降りたメシアへ』
+		;原作の必要パスワードから捏造
+		;빙결、전격、파마、万能の複合攻撃
+		;CSTR専用スキルで性能設定
+		CSTR:ARG:전용기1 = 舞い降りたメシアへ
+		CFLAG:ARG:입력行動 = 3904
+		ホシガミ舞い降りたメシア判定 = 2
+		;以後、『舞い降りたメシアへ』を4Tに一回使用
+	ENDIF
+
+
+ELSEIF CFLAG:ARG:１moreフラグ > 0
+	IF ホシガミ行動判定 == 0
+		IF 0
+			;ランダムでマハダイン系を使用する
+		ELSEIF RAND:4 == 0
+			CFLAG:ARG:입력行動 = [[스킬:마하・라기다인]]
+		ELSEIF RAND:3 == 0
+			CFLAG:ARG:입력行動 = [[스킬:마하・부후다인]]
+		ELSEIF RAND:2 == 0
+			CFLAG:ARG:입력行動 = [[스킬:마하・지오다인]]
+		ELSE
+			CFLAG:ARG:입력行動 = [[스킬:마하・잔다인]]
+		ENDIF
+	ELSEIF ホシガミ行動判定 == 1
+		CFLAG:ARG:입력行動 = [[스킬:한숨]]
+	ELSEIF ホシガミ行動判定 == 2
+		;殺意のかたまり
+		CFLAG:ARG:입력行動 = [[스킬:나이스・샷]]
+	ELSE
+		CFLAG:ARG:입력行動 = [[스킬:열반]]
+	ENDIF
+
+ELSE
+	;必殺ターン
+	IF ホシガミ行動判定 == 0
+		;3回目の行動は固定
+		IF CFLAG:ARG:行動した횟수 == 2
+			IF ホシガミ舞い降りたメシア判定 == 2
+				CSTR:ARG:전용기1 = 舞い降りたメシアへ
+				CFLAG:ARG:입력行動 = 3904
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:메기도라온]]
+			ENDIF
+		ELSE
+			IF 0
+				;ランダムで単体ダイン系を使用する
+			ELSEIF RAND:4 == 0
+				CFLAG:ARG:입력行動 = [[스킬:아기다인]]
+			ELSEIF RAND:3 == 0
+				CFLAG:ARG:입력行動 = [[스킬:부후다인]]
+			ELSEIF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:지오다인]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:잔다인]]
+			ENDIF
+		ENDIF
+	;氷結ターン
+	ELSEIF ホシガミ行動判定 == 1
+		IF CFLAG:ARG:行動した횟수 == 2
+			IF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:극한동결]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:니플헤임]]
+			ENDIF
+		ELSE
+			IF 0
+				;
+			ELSEIF RAND:4 == 0
+				;見た目幼女の한숨…………ｳﾌﾌｰｯ!
+				CFLAG:ARG:입력行動 = [[스킬:한숨]]
+			ELSEIF RAND:3 == 0
+				CFLAG:ARG:입력行動 = [[스킬:아이스에이지]]
+			ELSEIF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:마하・부후다인]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:소녀의기도]]
+			ENDIF
+		ENDIF
+	;전격ターン
+	ELSEIF ホシガミ行動判定 == 2
+		IF CFLAG:ARG:行動した횟수 == 2
+			IF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:루나카미]]
+			ELSE
+				;殺意のかたまり
+				CFLAG:ARG:입력行動 = [[스킬:나이스・샷]]
+			ENDIF
+		ELSE
+			IF 0
+				;
+			ELSEIF RAND:4 == 0
+				;見た目幼女の한숨…………ｳﾌﾌｰｯ!
+				CFLAG:ARG:입력行動 = [[스킬:심판의천둥]]
+			ELSEIF RAND:3 == 0
+				CFLAG:ARG:입력行動 = [[스킬:대방전]]
+			ELSEIF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:파워브레스]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:히트라이저]]
+			ENDIF
+		ENDIF
+	;地母神ターン
+	ELSE
+		IF CFLAG:ARG:行動した횟수 == 2
+			IF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:기간트마키아]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:열반]]
+			ENDIF
+		ELSE
+			IF 0
+				;
+			ELSEIF RAND:4 == 0
+				CFLAG:ARG:입력行動 = [[스킬:티타노마키아]]
+			ELSEIF RAND:3 == 0
+				CFLAG:ARG:입력行動 = [[스킬:대지의분노]]
+			ELSEIF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:아쿠아리타이드]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:히트라이저]]
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+
+;アクション実行不能
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+SIF RESULT == 0
+	CFLAG:ARG:입력行動 = 0
+;ここまでターゲットが決まってなかったら、ランダムターゲットをよんで決定
+SIF CFLAG:ARG:ターゲット == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+RETURN 1
+
+
+;=======================================================================
+@SET_ACTION_URAゼブル, ARG
+;=======================================================================
+;○コンセプト
+;　타격、전술、マイナー魔法
+;　マイナー魔法ゴンゴンやって蠅にする
+;=======================================================================
+
+#DIM ゼブル行動判定
+;入力行動を-1とターゲットを-1にしておく
+CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:ターゲット = -1
+
+SIF CFLAG:ARG:行動した횟수 == 0
+	ゼブル行動判定 = RAND:2
+
+IF CFLAG:ARG:１moreフラグ > 0
+	IF RAND:2 == 0
+		;回避不能単体蠅化
+		CFLAG:ARG:입력行動 = [[스킬:파리의저주]]
+	ELSE
+		CFLAG:ARG:입력行動 = [[스킬:죽은파리의장례]]
+	ENDIF
+
+ELSE
+	;지변～核熱ターン
+	IF ゼブル行動判定 == 0
+		IF CFLAG:ARG:行動した횟수 == 0
+			IF 0
+				;ランダムでダイン系を使用する
+			ELSEIF RAND:5 == 0
+				CFLAG:ARG:입력行動 = [[스킬:마하・마그다인]]
+			ELSEIF RAND:4 == 0
+				CFLAG:ARG:입력行動 = [[스킬:마하・아쿠다인]]
+			ELSEIF RAND:3 == 0
+				CFLAG:ARG:입력行動 = [[스킬:마하・갈다인]]
+			ELSEIF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:마하・그라다인]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:마하기가리온]]
+			ENDIF
+		ELSE
+			IF 0
+				;ランダムで乱舞系を使用する
+			ELSEIF RAND:5 == 0
+				CFLAG:ARG:입력行動 = [[스킬:대지의난무]]
+			ELSEIF RAND:4 == 0
+				CFLAG:ARG:입력行動 = [[스킬:격류의난무]]
+			ELSEIF RAND:3 == 0
+				CFLAG:ARG:입력行動 = [[스킬:바람의춤]]
+			ELSEIF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:중력의난무]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:열핵의난무]]
+			ENDIF
+		ENDIF
+	;타격、戦技ターン
+	ELSE
+		IF 0
+			;まあランダムで使用します
+		ELSEIF RAND:6 == 0
+			CFLAG:ARG:입력行動 = [[스킬:마인드슬라이스]]
+		ELSEIF RAND:5 == 0
+			CFLAG:ARG:입력行動 = [[스킬:데몬레이브]]
+		ELSEIF RAND:4 == 0
+			CFLAG:ARG:입력行動 = [[스킬:명계의문]]
+		ELSEIF RAND:3 == 0
+			CFLAG:ARG:입력行動 = [[스킬:발칸킥]]
+		ELSEIF RAND:2 == 0
+			CFLAG:ARG:입력行動 = [[스킬:약자필멸권]]
+		ELSE
+			CFLAG:ARG:입력行動 = [[스킬:모탈지하드]]
+		ENDIF
+	ENDIF
+ENDIF
+
+;アクション実行不能
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+SIF RESULT == 0
+	CFLAG:ARG:입력行動 = 0
+;ここまでターゲットが決まってなかったら、ランダムターゲットをよんで決定
+SIF CFLAG:ARG:ターゲット == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+RETURN 1
+
+;=======================================================================
+@SET_ACTION_URAルシファー, ARG
+;=======================================================================
+;○コンセプト
+;　만능・지원
+;　万能弱点ころちゅ
+;=======================================================================
+#DIM ルシファー行動判定
+;入力行動を-1とターゲットを-1にしておく
+CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:ターゲット = -1
+
+SIF CFLAG:ARG:行動した횟수 == 0
+	ルシファー行動判定 = RAND:2
+
+IF CFLAG:ARG:１moreフラグ > 0
+	CFLAG:ARG:입력行動 = [[스킬:메기도라온]]
+ELSE
+	;万能ターン
+	IF ルシファー行動判定 == 0
+		IF CFLAG:ARG:行動した횟수 == 0
+			IF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:마카라칸]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:카오스엘리먼트]]
+			ENDIF
+		ELSE
+			IF RAND:3 == 0
+				;ルシファ―専用スキル
+				CFLAG:ARG:입력行動 = [[스킬:새벽의명성]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:메기도라온]]
+			ENDIF
+		ENDIF
+	;支援ターン
+	ELSE
+		IF CFLAG:ARG:行動した횟수 == 0
+			;1/5で랜더마이저、同라스타캔디、それ以外はマカカジャ
+			IF RAND:5 == 0
+				CFLAG:ARG:입력行動 = [[스킬:랜더마이저]]
+			ELSEIF RAND:4 == 0
+				CFLAG:ARG:입력行動 = [[스킬:라스타캔디]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:마카・카쟈]]
+			ENDIF
+		ELSE
+			IF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:다크브레스]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:데・카쟈]]
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+
+;アクション実行不能
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+SIF RESULT == 0
+	CFLAG:ARG:입력行動 = 0
+;ここまでターゲットが決まってなかったら、ランダムターゲットをよんで決定
+SIF CFLAG:ARG:ターゲット == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+RETURN 1
+
+
+
+;=======================================================================
+@SET_ACTION_URAミカエル, ARG
+;=======================================================================
+;○コンセプト
+;　파마・物理
+;　剣撃と飛具ターンに分かれる
+;　どちらでもハマ攻撃を行うのが弱点
+;=======================================================================
+#DIM ミカエル行動判定
+;入力行動を-1とターゲットを-1にしておく
+CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:ターゲット = -1
+
+SIF CFLAG:ARG:行動した횟수 == 0
+	ミカエル行動判定 = RAND:2
+
+IF CFLAG:ARG:１moreフラグ > 0
+	IF RAND:3 == 0
+		CFLAG:ARG:입력行動 = [[스킬:파마가드브레이크]]
+	ELSEIF RAND:2 == 0
+		CFLAG:ARG:입력行動 = [[스킬:검격가드브레이크]]
+	ELSE
+		CFLAG:ARG:입력行動 = [[스킬:비구가드브레이크]]
+	ENDIF
+ELSE
+	;剣撃ターン
+	IF ミカエル行動判定 == 0
+		IF CFLAG:ARG:行動した횟수 == 0
+			IF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:마하코우하]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:갓핸드]]
+			ENDIF
+		ELSE
+			IF RAND:2 == 0
+				;剣撃破魔の二段攻撃
+				CFLAG:ARG:입력行動 = [[스킬:천군의검]]
+			ELSE
+				;剣撃全体
+				CFLAG:ARG:입력行動 = [[스킬:허공참파]]
+			ENDIF
+		ENDIF
+	;飛具ターン
+	ELSE
+		IF CFLAG:ARG:行動した횟수 == 0
+			IF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:빛의심판]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:플레어샷]]
+			ENDIF
+		ELSE
+			IF RAND:2 == 0
+				CFLAG:ARG:입력行動 = [[스킬:무뢰콘체르토]]
+			ELSE
+				CFLAG:ARG:입력行動 = [[스킬:세이크리드애로]]
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+
+;アクション実行不能
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+SIF RESULT == 0
+	CFLAG:ARG:입력行動 = 0
+;ここまでターゲットが決まってなかったら、ランダムターゲットをよんで決定
+SIF CFLAG:ARG:ターゲット == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+RETURN 1
+
+
+
+
+
+
+
+
+
 

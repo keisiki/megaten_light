@@ -6,7 +6,11 @@
 RESULTS = 연부「마스터스파크」
 SIF  GETBIT (FLAG:カスタムゲーム화면,1)
 	RESULTS = 연부「마스터스파크」
-
+IF ARG > -1 && BASE:ARG:ＨＰ * 100 / MAXBASE:ARG:ＨＰ<= 5
+	RESULTS = 마포「파이널마스터스파크」
+	SIF  GETBIT (FLAG:カスタムゲーム화면,1)
+		RESULTS = 마포「파이널마스터스파크」
+ENDIF
 ;　명중
 @SKILL_HITRATE_2839, ARG
 RETURN 100
@@ -49,12 +53,12 @@ RETURN 16
 ;핵열
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2839
+@SKILL_DECIDE_TYPE_2839, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2839
+@SKILL_DAMAGETYPE_2839, ARG
 RETURN 2
 
 
@@ -141,7 +145,7 @@ FLAG:拡散フラグ = 0
 ;　 설명文の표시
 @SKILL_EXPLAIN_2839
 PRINTL 모든 존재를 몰아치는 초고열 마력의 격류。
-PRINTL 적전체에 핵열 相性의 마법공격。위기에 빠지면 마지막 힘을 쥐어짠다。
+PRINTL 적전체에 핵열 상성의 마법공격。위기에 빠지면 마지막 힘을 쥐어짠다。
 PRINTL 보통의 마법사 키리사메 마리사의 스펠 카드（승계불가）
 
 ;継承に필요한部位

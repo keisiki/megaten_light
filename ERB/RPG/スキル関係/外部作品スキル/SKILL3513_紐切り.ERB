@@ -36,12 +36,12 @@ RETURN GET_TYPE_NUM("전술")
 ;전술
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3513
+@SKILL_DECIDE_TYPE_3513, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3513
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3513, ARG
 RETURN 1
 
 
@@ -121,7 +121,7 @@ IF POS(ARG:1) > 0 && LOCAL:1 > BASE:POS(ARG:1):ＨＰ && GET_STATE(CFLAG:POS(ARG
 	CFLAG:POS(ARG:1):방어강화 = MAX(-16, CFLAG:POS(ARG:1):방어강화 - 4)
 	CFLAG:POS(ARG:1):명중강화 = MAX(-16, CFLAG:POS(ARG:1):명중강화 - 4)
 	CFLAG:POS(ARG:1):회피강화 = MAX(-16, CFLAG:POS(ARG:1):회피강화 - 4)
-	PRINTFORML 　　TARGET:[{ARG:1,2}] %CALLNAME:POS(ARG:1),20,LEFT%　>>>>>>　공격、방어、명중・회피が下がった！
+	PRINTFORML 　　TARGET:[{ARG:1,2}] %CALLNAME:POS(ARG:1),20,LEFT%　>>>>>>　공격、방어、명중・회피가 저하했다！
 ENDIF
 
 ;====================================================
@@ -130,8 +130,8 @@ ENDIF
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3513
-PRINTL 相손の首にある視신경を切る。
-PRINTL 공격、방어、명중・회피を下げる
+PRINTL 상대방의 목에 있는 신경을 끊는다。
+PRINTL 공격、방어、명중・회피를 저하한다
 
 ;継承に필요な部位
 @継承部位_3513,ARG

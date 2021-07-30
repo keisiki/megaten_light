@@ -23,9 +23,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2286,ARG,ARG:1 = -1
-RETURN 0
-
 @방어상성_2286,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -61,6 +58,16 @@ RETURN 0
 @장비箇所_2286
 RETURN GET_EQUIPNUM("검")
 
+;극락왕생파
+@장비추가스킬_2286,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 28
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -82,6 +89,9 @@ PRINTL 장비조건：LV45～
 
 @장비해설_2286
 PRINTL 다루기 쉽고 살상력 높은 도끼
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：극락왕생파
+RESETCOLOR
 
 RETURN 0
 

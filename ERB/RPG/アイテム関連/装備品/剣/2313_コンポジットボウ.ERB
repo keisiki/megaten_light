@@ -46,9 +46,15 @@ RETURN 1
 @장비箇所_2313
 RETURN GET_EQUIPNUM("검")
 
+;연속사격
 @장비추가스킬_2313,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 112
+	ENDSELECT
+ENDIF
 RETURN 0
-
 
 ;-----------------------------
 ;- SHOP
@@ -71,6 +77,9 @@ PRINTL 장비조건：LV35～
 
 @장비해설_2313
 PRINTL 나무와 가죽으로 만들어진 활。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：연속사격
+RESETCOLOR
 
 RETURN 0
 

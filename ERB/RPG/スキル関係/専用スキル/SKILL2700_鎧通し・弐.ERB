@@ -1,7 +1,7 @@
 ﻿;
 ;스킬名
 @SKILL_NAME_2700,ARG
-RESULTS = 갑옷관통・弐
+RESULTS = 갑옷관통・이
 
 ;　명중
 @SKILL_HITRATE_2700, ARG
@@ -34,12 +34,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2700
+@SKILL_DECIDE_TYPE_2700, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2700
+@SKILL_DAMAGETYPE_2700, ARG
 RETURN 1
 
 
@@ -117,7 +117,7 @@ CALL ATTACK_SINGLE, ARG, POS(ARG:1),2700
 
 IF POS(ARG:1) > 0 && LOCAL:1 > BASE:POS(ARG:1):ＨＰ && GET_STATE(CFLAG:POS(ARG:1):ステート) != "DYING"
 	CFLAG:POS(ARG:1):방어강화 = MAX(-16, CFLAG:POS(ARG:1):방어강화 - 4)
-	PRINTFORML 　　TARGET:[{ARG:1,2}] %CALLNAME:POS(ARG:1),20,LEFT%　>>>>>>　방어が下がった！
+	PRINTFORML 　　TARGET:[{ARG:1,2}] %CALLNAME:POS(ARG:1),20,LEFT%　>>>>>>　방어가 저하했다！
 ENDIF
 
 ;====================================================
@@ -126,8 +126,8 @@ ENDIF
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2700
-PRINTL 적1명に검격で中위력の공격을1回行う。방어력저하効果
-PRINTL トキ専用
+PRINTL 적 1명에게 검격으로 중간 위력의 공격을 1회 실행。방어력 저하효과
+PRINTL 톡 전용
 
 ;継承に필요한部位
 @継承部位_2700,ARG

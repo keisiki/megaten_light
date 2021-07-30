@@ -49,8 +49,14 @@ RETURN 1
 @장비箇所_2302
 RETURN GET_EQUIPNUM("검")
 
-;フェンサー持ちに충의의참격
+;세인트어택
 @장비추가스킬_2302,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 1324
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -75,6 +81,9 @@ PRINTL 장비조건：LV25～
 @장비해설_2302
 PRINTL 은으로 만들어진 사벨。
 PRINTL 은이라서 부드럽다。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：세인트어택
+RESETCOLOR
 
 RETURN 0
 

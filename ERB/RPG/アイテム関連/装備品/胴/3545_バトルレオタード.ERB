@@ -13,34 +13,69 @@ RETURN 0
 @전투능력수정_3545,ARG,ARG:1 = -1
 
 SELECTCASE ARG
-	;방어25
+	;防御24~80 露出癖とレベルで変化
 	CASE 2
-		RETURN 22
-	;회피20
+		IF ARG:1 > -1
+			SELECTCASE ABL:(ARG:1):노출증
+				CASE 0
+					RETURN 24
+				CASE 1
+					RETURN 28
+				CASE IS < 4
+					IF EQUIP:(ARG:1):머리 == 3004 && EQUIP:(ARG:1):발 == 4528
+						LOCAL = BASE:(ARG:1):LV / 5 + 30
+							IF LOCAL > 60
+								LOCAL = 60
+							ENDIF
+						RETURN LOCAL
+					ELSE
+						RETURN 30
+					ENDIF
+				CASEELSE
+					IF EQUIP:(ARG:1):머리 == 3004 && EQUIP:(ARG:1):발 == 4528
+						LOCAL = BASE:(ARG:1):LV / 4 + 35
+							IF LOCAL > 80
+								LOCAL = 80
+							ENDIF
+						RETURN LOCAL
+					ELSE
+						RETURN 35
+					ENDIF
+			ENDSELECT
+		ENDIF
+		RETURN 24
+	;露出癖とレベルで変化 最大100
 	CASE 3
 		IF ARG:1 > -1
 			SELECTCASE ABL:(ARG:1):노출증
 				CASE 0
-					RETURN -5
+					RETURN 10
 				CASE 1
-					RETURN 0
+					RETURN 15
 				CASE IS < 4
 					IF EQUIP:(ARG:1):머리 == 3004 && EQUIP:(ARG:1):발 == 4528
-						RETURN 16
+						LOCAL = BASE:(ARG:1):LV / 4 + 20
+							IF LOCAL > 80
+								LOCAL = 80
+							ENDIF
+						RETURN LOCAL
 					ELSE
-						RETURN 11
+						RETURN 20
 					ENDIF
 				CASEELSE
 					IF EQUIP:(ARG:1):머리 == 3004 && EQUIP:(ARG:1):발 == 4528
-						RETURN 21
+						LOCAL = BASE:(ARG:1):LV / 3 + 26
+							IF LOCAL > 100
+								LOCAL = 100
+							ENDIF
+						RETURN LOCAL
 					ELSE
-						RETURN 16
+						RETURN 26
 					ENDIF
 			ENDSELECT
 		ELSE
 			RETURN 11
 		ENDIF
-    ;마법효과3
 	CASE 5
 		RETURN 3
 ENDSELECT
@@ -66,7 +101,19 @@ RETURN 0
 ;16,핵열
 ;17,만능
 ;18,사이코
-SELECTCASE ARG
+SELECTCASE GET_TYPE(ARG)
+		CASE "지변", "중력"
+	IF EQUIP:(ARG:1):머리 == 3004 && EQUIP:(ARG:1):발 == 4528
+			RETURN 50
+	ENDIF
+		CASE "정신"
+	IF EQUIP:(ARG:1):머리 == 3004 && EQUIP:(ARG:1):발 == 4528
+			RETURN 999
+	ENDIF
+		CASE "만능"
+	IF EQUIP:(ARG:1):머리 == 3004 && EQUIP:(ARG:1):발 == 4528
+			RETURN 80
+	ENDIF
 ENDSELECT
 RETURN 100
 
@@ -118,10 +165,11 @@ RETURN 1
 PRINTL 장비조건：♀ LV13〜
 
 @장비해설_3545
-PRINTL 전투用に対刃繊維で강화された레오타드
-PRINTL 動きやすさと美しさを追求したフォルムは身体のラインを露にし
-PRINTL みるものを惹きつけてやまない
-PRINTL 아이언버니＆섹시힐と共に着ると…
+PRINTL 전투용으로 강화된 레오타드
+PRINTL 움직이기 쉬움과 아름다움을 추구한 폼은 신체선을 드러내어
+PRINTL 보는 사람을 매료시킨다
+PRINTL 노출증에 따라 성능이 변화한다
+PRINTL 아이언버니＆セクシーヒールと共に着ると…
 SETCOLOR 0x87ceeb
 PRINTL 《아이언버니　섹시힐》
 RESETCOLOR

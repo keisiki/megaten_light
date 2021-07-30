@@ -39,366 +39,366 @@ SELECTCASE ARG:1
 	CASE 1
 		;1:레이디・킬러즈
 	CASE 2
-		; 2:おねだり前の逡巡時(아이さつor問答で눈的が決まっている場合)
-		PRINTFORML 「ン〜……そいじゃぁ……」
+		; 2:おねだり前の逡巡時(아이さつor問答で목적が決まっている場合)
+		PRINTFORML 「음～……그러면……」
 	CASE 3
-		; 3:交渉の눈的を尋ねる
+		; 3:交渉の목적を尋ねる
 		SELECTCASE CFLAG:ARG:友好度
 			CASE IS < 25
 				;友好度低い
-				PRINTFORML 「それでニンゲン、%CSTR:ARG:一人称%に
-				PRINTFORMW 　何かヨカ、ヨカ、用かヨー？」
+				PRINTFORML 「그래서 인간、%CSTR:ARG:一人称%에게
+				PRINTFORMW 　뭔가 용건 있어、있어、용건 있어ー?」
 			CASE IS < 50
 				;友好度普通
-				PRINTFORMW 「それで、%CSTR:ARG:一人称%に何かヨカ、ヨカ、用かヨー？」
+				PRINTFORMW 「그래서、%CSTR:ARG:一人称%한테 뭔가 볼 일이 있어、있어、용건 있어ー?」
 			CASEELSE
 				;友好度高い
-				PRINTFORMW 「ブラザー、%CSTR:ARG:一人称%に出来る事あるかい？」
+				PRINTFORMW 「브라더ー、%조사처리(CSTR:ARG:一人称,"가")% 했으면 하는 일이 있어?」
 		ENDSELECT
 	CASE 84
 		;84:要求前の1文
-		PRINTFORMW 「そんじゃ……」
+		PRINTFORMW 「그럼……」
 	CASE 4
 		; 4-6:交渉목적：やらせてくれと言った時の反応
 		; 4:取り付く島もなし
-			PRINTFORMW 激しく拒否された
+			PRINTFORMW 호되게 거부당했다
 	CASE 5
 		; 5:交渉次第
-		PRINTFORMW 조건次第でヤらせてくれるようだ
+		PRINTFORMW 조건 나름으로 해주는 것 같다
 	CASE 6
 		; 6:一発おｋ
-		PRINTFORMW 「%CSTR:ARG:一人称%とヤりたいのか？」
-		PRINTFORMW 「それじゃお言葉に甘えていっただっきまーす♪」
+		PRINTFORMW 「%조사처리(CSTR:ARG:一人称,"와")% 하고 싶은거야?」
+		PRINTFORMW 「그러면 호의를 받아들여서 잘 먹-겠습니다♪」
 	CASE 7
 		; 7-9:交渉목적：やらせてくれと言った時の反応
 		; 7:取り付く島もなし
-			PRINTFORMW 激しく拒否された
+			PRINTFORMW 호되게 거부당했다
 	CASE 8
 		; 8:交渉次第
-		PRINTFORMW 조건次第で犯してくれるようだ
+		PRINTFORMW 조건 나름으로 범해줄 것 같다
 	CASE 9
 		; 9:一発おｋ
-		PRINTFORMW 「%CSTR:ARG:一人称%とヤりたいのか？」
-		PRINTFORMW 「それじゃお言葉に甘えていっただっきまーす♪」
+		PRINTFORMW 「%조사처리(CSTR:ARG:一人称,"와")% 하고 싶은건가?」
+		PRINTFORMW 「그러면 호의를 받아들여서 잘 먹-겠습니다♪」
 	CASE 10
 		;10:要求額を提示：￥
-		PRINTFORML 「￥{TFLAG:TALK用要求値}クレクレ」
+		PRINTFORML 「￥{TFLAG:TALK用要求値} 줘 줘」
 	CASE 11
 		;11-13:￥を払おうとしてお金が발りない
 		;11:別のものを要求する
-			PRINTFORMW 「持ってないのに見栄張りだなー」
+			PRINTFORMW 「갖고 있지도 않으면서 허세 부리긴ー」
 	CASE 85
 		;85:恵まれる
-		PRINTFORMW 「持ってないのに見栄張りだヨー」
-		PRINTFORMW 「ビンボー人にはコレでもくれちゃるー」
+		PRINTFORMW 「갖고 있지도 않으면서ー 허세구나」
+		PRINTFORMW 「가난한 사람은 이걸로 안녕이야-」
 	CASE 12
 		;12:交渉실패。立ち去る
-			PRINTFORMW 「持ってないのに見栄張りだなー」
-		PRINTFORMW 「こっちまで辛気くさくなるヨー。バッハハーイ」
+			PRINTFORMW 「갖고 있지도 않으면서 허세 부리긴ー」
+		PRINTFORMW 「나까지 짜증이 나기 시작했어. 바이바이」
 	CASE 13
 		;13:交渉실패。적対する
-			PRINTFORMW 「持ってないのに見栄張りだなー」
-			PRINTFORMW 「しょうがないから有り金全部で勘弁したるー！」
+			PRINTFORMW 「갖고 있지도 않으면서 허세 부리긴ー」
+			PRINTFORMW 「별 수 없으니까 가진 돈 전부로 봐줄게-!」
 	CASE 14
 		;14-16:￥を支払った
 		;14:払ったのに逃げられる
-				PRINTFORMW 「ありがとー！　これでホームランバーが買えるヨー！」
+				PRINTFORMW 「고마워ー！　덕분에 홈런바 살 수 있게 됐어ー!」
 	CASE 15
 		;15:さらに要求される
-				PRINTFORML 「발んっない！ 全っ然！」
+				PRINTFORML 「부족해！ 완전히!」
 	CASE 16
 		;16:交渉성공
-				PRINTFORMW 「さんきゅー！」
+				PRINTFORMW 「생큐-!」
 	CASE 17
 		;17-19:￥を支払うのを断った::
 		;17:交渉실패。奇襲する
-				PRINTFORMW 「それなら、アンタの命が欲しいヨー！」
+				PRINTFORMW 「그러면、네 생명을 갖고 싶어ー!」
 	CASE 18
 		;18:交渉실패。적対する
-				PRINTFORMW 「それなら身ぐるみはいじゃるー！」
+				PRINTFORMW 「그럼 몸까지 전부 가져버릴거야-!」
 	CASE 19
 		;19:他のものを要求する:
-				PRINTFORMW 「なら他ので勘弁しちゃるー」
+				PRINTFORMW 「그럼 다른 걸로 용서해줄게-」
 	CASE 20
 		;20:要求額を提示：ＭＡＧ
-		PRINTFORML 「{TFLAG:TALK用要求値}MAGオクレー」
+		PRINTFORML 「{TFLAG:TALK用要求値}MAG를 줘-」
 		PRINTFORML
 	CASE 21
 		;21-23:ＭＡＧを支払おうとしたが발りない
 		;21:別のものを要求する
-			PRINTFORMW 「ＭＡＧが발りてねージャン！」
-				PRINTFORMW 「他のをもらうことにするホ」
+			PRINTFORMW 「ＭＡＧ이 부족하-잖아!」
+				PRINTFORMW 「그럼 다른걸 받을거야」
 	CASE 86
 		;86:恵まれる
-			PRINTFORMW 「ＭＡＧが발りてねージャン！」
-			PRINTFORMW 「シケた奴には恵んじゃるー」
+			PRINTFORMW 「ＭＡＧ이 부족하-잖아!」
+			PRINTFORMW 「시시한 녀석은 됐다구-」
 	CASE 22
 		;22:交渉실패。立ち去る
-			PRINTFORMW 「ＭＡＧが발りてねージャン！」
-				PRINTFORMW 「ＭＡＧの切れ눈が縁の切れ눈だヨー。ばいばーい」
+			PRINTFORMW 「ＭＡＧ이 부족하-잖아!」
+				PRINTFORMW 「ＭＡＧ의 부족은 인연의 끈의 부족인거야ー。 바이바이」
 	CASE 23
 		;23:交渉실패。적対する
-			PRINTFORMW 「ＭＡＧが발りてねージャン！」
-			PRINTFORMW 「いっそのことアンタの生気吸っちゃるー！」
+			PRINTFORMW 「ＭＡＧ가 부족하-잖아!」
+			PRINTFORMW 「차라리 네 생명을 흡수할거야-!」
 	CASE 24
 		;24-26:ＭＡＧを支払った
 		;24:払ったのに逃げられる
-				PRINTFORMW 「さんきゅー！　お腹いっぱいなのでおうち帰るー！」
+				PRINTFORMW 「생큐-！　배부르고 이제 돌아갈거야-!」
 	CASE 25
 		;25:さらに要求される
-				PRINTFORMW 「발んっない！ 全っ然！」
+				PRINTFORMW 「부족해！ 완전히!」
 	CASE 26
 		;26:交渉성공
-				PRINTFORMW 「ごっそさーん！」
+				PRINTFORMW 「잘먹었슴다!」
 	CASE 27
 		;27-29:ＭＡＧを支払うのを断った
 		;27:交渉실패。奇襲する
-				PRINTFORMW 「ならアンタの命をもらうヨー！」
+				PRINTFORMW 「그럼 너의 생명을 받을게ー!」
 	CASE 28
 		;28:交渉실패。적対する
-				PRINTFORMW 「ケチ臭いホ！やっちゃるー！」
+				PRINTFORMW 「구두쇠 냄새！해치워버릴거야-!」
 	CASE 29
 		;29:他のものを要求する
-				PRINTFORMW 「なら他のを選ぶ〜」
+				PRINTFORMW 「그럼 다른 걸 고를래～」
 	CASE 30
 		;30:마석を要求
 		IF RAND:2 == 0
-			PRINTFORML 「마석チョー」
+			PRINTFORML 「마석 죠-」
 		ELSE
-			PRINTFORML 「ま・せ・き！ あそーれま・せ・き！」
-			PRINTFORML 「마석が欲しい！」
+			PRINTFORML 「마-아-석！ 아-그-거- 마-석!」
+			PRINTFORML 「마석을 원해!」
 		ENDIF
 		PRINTFORML
 	CASE 31
 		;31-33:마석を渡そうとしたが持っていない
 		;31:別のものを要求する
-			PRINTFORMW 「마석がないだってぇ？」
-				PRINTFORMW 「しょーがねーな。そんじゃー……」
+			PRINTFORMW 「마석이 없다고?」
+				PRINTFORMW 「별-수 없네. 그럼-……」
 	CASE 87
 		;87:恵まれる
-			PRINTFORMW 「마석がないだってぇ？」
-		PRINTFORMW 「서머너なら１個くらい持っとけよー……ホラ！」
+			PRINTFORMW 「마석이 없다고오?」
+		PRINTFORMW 「서머너라면 하나정도는 갖고 다녀-……자!」
 	CASE 32
 		;32:交渉실패。立ち去る
-			PRINTFORMW 「마석がないだってぇ？」
-				PRINTFORMW 「シケた奴とする話なんかないぜー！」
-				PRINTFORMW 「そんじゃ、バイびー！」
+			PRINTFORMW 「마석이 없다고오?」
+				PRINTFORMW 「시시한 녀석이랑은 얘기 같은 거 안해-!」
+				PRINTFORMW 「그럼, 안녀엉-!」
 	CASE 33
 		;33:交渉실패。적対する
-			PRINTFORMW 「마석がないだってぇ？」
-				PRINTFORMW 「마석も用意してないとか、アンタ%CSTR:ARG:一人称%バカにしてなーい？」
-				PRINTFORMW 「아귀だと思ってなめんなよ！」
+			PRINTFORMW 「마석이 없다고오?」
+				PRINTFORMW 「마석도 준비하고 있지 않다든가, 너 %CSTR:ARG:一人称% 바보 취급하는거 아-냐?」
+				PRINTFORMW 「꼬맹이라고 얕보지 마!」
 	CASE 34
 		;34-36:마석を渡した
 		;34:払ったのに逃げられる
-				PRINTFORMW 「サンキュー！」
-				PRINTFORMW 「……やっぱやーめた」
-				PRINTFORMW 「ニンゲンなんかの言う事聞くのはやめとくヨー、そんじゃバイピー♪」
+				PRINTFORMW 「생큐-!」
+				PRINTFORMW 「……역시 그만둘-래」
+				PRINTFORMW 「인간이 말하는대로 하는 건 그만둘래ー、그러면 바이피ー♪」
 	CASE 35
 		;35:さらに要求される
-				PRINTFORML 「발んっない！ 全っ然！」
+				PRINTFORML 「부족해！ 완전히!」
 	CASE 36
 		;36:交渉성공
-				PRINTFORMW 「サンキュー！」
+				PRINTFORMW 「생큐-!」
 	CASE 37
 		;37-39:마석を渡すのを断った
 		;37:交渉실패。奇襲する
-				PRINTFORMW 「ならアンタの命をもらうヨー！」
+				PRINTFORMW 「그럼 네 생명을 받을게ー!」
 	CASE 38
 		;38:交渉실패。적対する
 			;気分を害される
-				PRINTFORMW 「ケチ臭いホ！やっちゃるー！」
+				PRINTFORMW 「구두쇠 냄새！해치워버릴거야-!」
 	CASE 39
 		;39:他のものを要求する
-				PRINTFORMW 「なら他のを選ぶホ」
+				PRINTFORMW 「그럼 다른걸 선택할래」
 	CASE 40
 		;40:異性との성교渉を要求
-		PRINTFORML 「%CSTR:ARG:一人称%、オンナと一発やらせてほしーんだなぁ……」
+		PRINTFORML 「%CSTR:ARG:一人称%、여자랑 한 번 하게 해줬으면 하는데에……」
 	CASE 41
 		;18:異性を宛がってもらった時の反応
-			PRINTFORMW 「お、マジでくれんの！？」
-			PRINTFORMW 「それじゃお言葉に甘えていっただっきまーす♪」
+			PRINTFORMW 「오, 진짜로 하게 해주는거야!?」
+			PRINTFORMW 「그럼 호의를 받아들여서 잘 먹겠습니ー다♪」
 		CALL MESSAGE_TALK
 	CASE 42
 		;42-46:성교渉が終わった後
 		;42:敗北してる場合ここでゲームオーバー
-				PRINTFORMW 「アレ？ もう限界？」
-				PRINTFORMW 「ふざけんなよー、%CSTR:ARG:一人称%まだまだヤりたんねーのに」
-				PRINTFORMW 「そうだ！ これからアンタのこと%CSTR:ARG:一人称%の奴隷にしてやるよ！」
-				PRINTFORMW 「ヘヘっ、嬉しいだろ？ %CSTR:ARG:一人称%もいい변기がもらえて嬉しいヨー♪」
+				PRINTFORMW 「어라？ 벌써 한계?」
+				PRINTFORMW 「장난하지말라구ー、%CSTR:ARG:一人称% 아직도 한참 부족한데」
+				PRINTFORMW 「그래！ 이제부터 너 %CSTR:ARG:一人称%의 노예로 해줄게!」
+				PRINTFORMW 「헤헷、기쁘지？ %CSTR:ARG:一人称%도 좋은 변기를 갖게 돼서 기뻐ー♪」
 	CASE 43
 		;43:話しかけたキャラが倒れている
-				PRINTFORMW 「アレ？ もう限界？」
-				PRINTFORMW 「ふざけんなよー、%CSTR:ARG:一人称%まだまだヤりたんねーのに」
+				PRINTFORMW 「어라？ 벌써 한계?」
+				PRINTFORMW 「장난치지마-、%CSTR:ARG:一人称% 아직 아직 부족하다구-」
 	CASE 44
 		;44:ヤらせたのに逃げられる
-				PRINTFORMW 「へへっ、中々よかったぜ！」
-				PRINTFORMW 「そんじゃ%CSTR:ARG:一人称%クタクタだから帰るヨー！ バイビー♪」
+				PRINTFORMW 「헤헷, 꽤 좋았다구!」
+				PRINTFORMW 「그럼 %CSTR:ARG:一人称% 너덜너덜한 상태니까 이만 돌아갈래ー！ 바이피ー♪」
 	CASE 45
-		;45:満발してない
-				PRINTFORML 「발んっない！ 全っ然！」
-				;PRINTFORML 「%CSTR:ARG:一人称%、もう一発ヤらせてほしーんだよなぁ……」
+		;45:満다리してない
+				PRINTFORML 「부족해！ 완전히!」
+				;PRINTFORML 「%CSTR:ARG:一人称%、아직 한 발 내게 해줬으면 하는데에……」
 	CASE 46
-		;46:満발
-				PRINTFORMW 「へへっ、中々よかったぜ！」
+		;46:満다리
+				PRINTFORMW 「헤헷、꽤 좋았다구!」
 	CASE 47
 		;47-49:성교渉を断った
 		;47:交渉실패。奇襲する
-				PRINTFORMW 「そんなら힘ずくでいただいてくヨー！」
+				PRINTFORMW 「그렇다면 힘으로 받아갈게ー!」
 	CASE 48
 		;48:交渉실패。적対する
-				PRINTFORMW 「オンナくらいでケチケチすんなよ！」
-				PRINTFORMW 「モーヤメー！ 힘ずくでヤっちゃるー！」
+				PRINTFORMW 「여자 정도로 짜게 굴지마!」
+				PRINTFORMW 「이제-됐어-！ 힘으로 할거야-!」
 	CASE 49
 		;49:他のものを要求する
-				PRINTFORMW 「そんじゃー……」
+				PRINTFORMW 「그럼-……」
 	CASE 50
 		;50-55:ヤらせてもらった後
 		;50:敗北してる場合ここでゲームオーバー
-		PRINTFORMW 「アレ？ もう限界？」
-		PRINTFORMW 「ふざけんなよー、%CSTR:ARG:一人称%まだまだヤりたんねーのに」
-		PRINTFORMW 「そうだ！ これからアンタのこと%CSTR:ARG:一人称%の奴隷にしてやるよ！」
-		PRINTFORMW 「ヘヘっ、嬉しいだろ？ %CSTR:ARG:一人称%もいい변기がもらえて嬉しいヨー♪」
+		PRINTFORMW 「어라？ 벌써 한계?」
+		PRINTFORMW 「장난치지마ー、%CSTR:ARG:一人称% 아직도 한참 부족한데」
+		PRINTFORMW 「그래！ 이제부터 너 %CSTR:ARG:一人称%의 노예로 해줄게!」
+		PRINTFORMW 「헤헷、기쁘지？ %CSTR:ARG:一人称%도 좋은 변기를 갖게 돼서 기뻐ー♪」
 	CASE 51
 		;51:話かけたキャラが倒れいる
-		PRINTFORMW 「アレ？ もう限界？」
-		PRINTFORMW 「ふざけんなよー、%CSTR:ARG:一人称%まだまだヤりたんねーのに」
+		PRINTFORMW 「어라？ 벌써 한계?」
+		PRINTFORMW 「장난치지마ー、%CSTR:ARG:一人称% 아직 아직 부족하다구ー」
 	CASE 52
 		;52:去っていく
-		PRINTFORMW 「へへっ、中々よかったぜ！」
-		PRINTFORMW 「そんじゃ%CSTR:ARG:一人称%クタクタだから帰るヨー！ バイビー♪」
+		PRINTFORMW 「헤헷、꽤 좋았다구!」
+		PRINTFORMW 「그럼 %CSTR:ARG:一人称% 너덜너덜한 상태니까 이만 돌아갈래ー！ 바이피ー♪」
 	CASE 53
 		;53:満발し、仲魔になる
-		PRINTFORMW 「へへっ、中々よかったぜ！」
+		PRINTFORMW 「헤헷、꽤 좋았다구!」
 	CASE 54
 		;54:満발し、아이템をくれる
-		PRINTFORMW 「へへっ、中々よかったぜ！」
+		PRINTFORMW 「헤헷、꽤 좋았다구!」
 	CASE 53
 		;53:満발し、見逃してくれる
 		;現状、死に処理
 	CASE 56
 		;56-61:犯してもらった後
 		;56:敗北してる場合ここでゲームオーバー
-		PRINTFORMW 「アレ？ もう限界？」
-		PRINTFORMW 「ふざけんなよー、%CSTR:ARG:一人称%まだまだヤりたんねーのに」
-		PRINTFORMW 「そうだ！ これからアンタのこと%CSTR:ARG:一人称%の奴隷にしてやるよ！」
-		PRINTFORMW 「ヘヘっ、嬉しいだろ？ %CSTR:ARG:一人称%もいい변기がもらえて嬉しいヨー♪」
+		PRINTFORMW 「어라？ 벌써 한계?」
+		PRINTFORMW 「장난치지마ー、%CSTR:ARG:一人称% 아직도 한참 부족한데」
+		PRINTFORMW 「그래！ 이제부터 너 %CSTR:ARG:一人称%의 노예로 해줄게!」
+		PRINTFORMW 「헤헷、기쁘지？ %CSTR:ARG:一人称%도 좋은 변기를 갖게 돼서 기뻐ー♪」
 	CASE 57
 		;57:話かけたキャラが倒れいる
-		PRINTFORMW 「アレ？ もう限界？」
-		PRINTFORMW 「ふざけんなよー、%CSTR:ARG:一人称%まだまだヤりたんねーのに」
+		PRINTFORMW 「어라？ 벌써 한계?」
+		PRINTFORMW 「장난치지마ー、%CSTR:ARG:一人称% 아직 아직 부족하다구ー」
 	CASE 58
 		;58:去っていく
-		PRINTFORMW 「へへっ、中々よかったぜ！」
-		PRINTFORMW 「そんじゃ%CSTR:ARG:一人称%クタクタだから帰るヨー！ バイビー♪」
+		PRINTFORMW 「헤헷、꽤 좋았다구!」
+		PRINTFORMW 「그럼 %CSTR:ARG:一人称% 너덜너덜한 상태니까 이만 돌아갈래ー！ 바이피ー♪」
 	CASE 59
-		;59:満발し、仲魔になる
-		PRINTFORMW 「へへっ、中々よかったぜ！」
+		;59:満다리し、仲魔になる
+		PRINTFORMW 「헤헷、꽤 좋았다구!」
 	CASE 60
-		;60:満발し、아이템をくれる
-		PRINTFORMW 「へへっ、中々よかったぜ！」
+		;60:満다리し、아이템をくれる
+		PRINTFORMW 「헤헷、꽤 좋았다구!」
 	CASE 61
 		;61:満발し、見逃してくれる
 		;現状、死に処理
 	CASE 62
 		;62:仲魔になる
 			IF FLAG:交渉목적 > 3
-				PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、%CALLNAME:ARG%が仲魔になってくれました
+				PRINTFORMW %CALLNAME:PLAYER%의 몸에 대단히 만족해、%조사처리(CALLNAME:ARG,"가")% 동료마가 되어 주었습니다
 			ELSE
-				PRINTFORMW 「%CSTR:ARG:11%%STR:(ABL:ARG:종족)% %CALLNAME:ARG%だヨー！ 今後ともヨロピー！」
+				PRINTFORMW 「%CSTR:ARG:11%%STR:(ABL:ARG:종족)% %조사처리(CALLNAME:ARG,"라")%구ー！ 앞으로 잘 부탁해ー!」
 			ENDIF
 	CASE 63
 		;63:マスターの레벨より高い場合
-		PRINTFORMW 「よく見りゃアンタ%CSTR:ARG:11%より弱いジャン！」
-		PRINTFORMW 「修業して出直してきなー」
+		PRINTFORMW 「자세히 보니까 너 %CSTR:ARG:11%보다 약하잖아!」
+		PRINTFORMW 「수행해서 다시 와ー」
 		
 	CASE 64
 		;64:ＣＯＭＰの空きが無い場合
-		PRINTFORML 「%CSTR:ARG:11%、狭いところは嫌いだヨー」
+		PRINTFORML 「%CSTR:ARG:11%、좁은 곳은 싫어어ー」
 		
 	CASE 65
 		;65:搾りとられた
 	CASE 66 TO 75
 		;66:お金をくれる
 		IF FLAG:交渉목적 > 3 && ARG:1 == 66
-			PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、お金を恵んでもらいました
+			PRINTFORMW %CALLNAME:PLAYER%의 몸에 대단히 만족해、돈을 베풀어주었습니다
 		ELSEIF FLAG:交渉목적 > 3 && ARG:1 == 67
-				PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、ＭＡＧを恵んでもらいました
+				PRINTFORMW %CALLNAME:PLAYER%의 몸에 대단히 만족해、ＭＡＧ를 베풀어주었습니다
 		ELSE
-			PRINTFORMW 「コレヤルー」
+			PRINTFORMW 「이거 줄게-」
 		ENDIF
 ;	CASE 67
 ;		;67:ＭＡＧをくれる
 ;		IF FLAG:交渉목적 > 3
-;			PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、ＭＡＧを恵んでもらいました
+;			PRINTFORMW %CALLNAME:PLAYER%의 몸에 대단히 만족해、ＭＡＧ를 베풀어주었습니다
 ;		ELSE
-;			PRINTFORMW 「コレやる！」
+;			PRINTFORMW 「コレやる!」
 ;		ENDIF
 ;	CASE 68
-;		;68:ダメージをくれる
-;		PRINTFORMW 「コレあげるですぅ！」
+;		;68:데미지をくれる
+;		PRINTFORMW 「이거 줄게엣!」
 ;	CASE 69
 ;		;69-75:아이템をくれるor회복してくれる
 ;		;69:소마を使ってくれる
-;		PRINTFORMW 「コレあげるですぅ！」
+;		PRINTFORMW 「コレあげるですぅ!」
 ;	CASE 70
 ;		;70:보옥륜を使ってくれる
-;		PRINTFORMW 「コレあげるですぅ！」
+;		PRINTFORMW 「コレあげるですぅ!」
 ;	CASE 71
 ;		;71:ITEMor마석をくれる
-;		PRINTFORMW 「コレあげるですぅ！」
+;		PRINTFORMW 「コレあげるですぅ!」
 ;	CASE 72
 ;		;72:마석をくれる
-;		PRINTFORMW 「コレあげるですぅ！」
+;		PRINTFORMW 「コレあげるですぅ!」
 ;	CASE 73
 ;		;73:마석を使ってくれる
-;		PRINTFORMW 「コレあげるですぅ！」
+;		PRINTFORMW 「コレあげるですぅ!」
 ;	CASE 74
 ;		;74:보옥を使ってくれる
-;		PRINTFORMW 「コレあげるですぅ！」
+;		PRINTFORMW 「コレあげるですぅ!」
 ;	CASE 75
 ;		;75:보옥をくれる
-;		PRINTFORMW 「コレあげるですぅ！」
+;		PRINTFORMW 「コレあげるですぅ!」
 	CASE 76
 		;76-78:気まずくなった
 		;76:회화실패。奇襲する
-		PRINTFORMW 「やっぱニンゲンなんかと話たってムダムダじゃん！」
-		PRINTFORMW 「%CSTR:ARG:一人称%と一緒にごーとぅーへる！」
+		PRINTFORMW 「역시 인간 따위랑 얘기해봤자 쓸데없잖아!」
+		PRINTFORMW 「%조사처리(CSTR:ARG:一人称,"랑")% 같이ー!」
 	CASE 77
 		;77:회화실패。적対する
-		PRINTFORMW 「アンタの話、面白くないー。賠償と謝罪を求めるヨー！」
+		PRINTFORMW 「네 얘기、재미 없어ー。뭔가로 보상해줬으면 해ー!」
 	CASE 78
 		;78:회화継続
-		PRINTFORMW 「もっとオモロイ話は無いのかヨー」
+		PRINTFORMW 「좀 더 재밌는 얘기는 없는거냐구-」
 	CASE 79
 		;79-83:立ち去る
 		;79:同じ仲魔がいる場合
-		PRINTFORML 「%CSTR:ARG:11%のダチを、頼んだぜ！」
+		PRINTFORML 「%CSTR:ARG:11%의 친구를, 잘 부탁해!」
 		
 	CASE 80
 		;険悪な雰囲気
-		PRINTFORML 「%CSTR:ARG:11%もー帰るー」
+		PRINTFORML 「%CSTR:ARG:11%도ー돌아갈래ー」
 	CASE 81
 		;友好度が低い
-		PRINTFORML 「バイバーイ」
+		PRINTFORML 「바이바-이」
 	CASE 82
 		;友好度が普通
-		PRINTFORML 「また遊ぶヨー！」
+		PRINTFORML 「또 놀자ー!」
 	CASE 83
 		;友好度が高い
-		PRINTFORML 「まったなー」
+		PRINTFORML 「또 봐-」
 	CASE 88
 		;ヤらせてもらう・交渉が성공した場合
-		PRINTFORMW 交渉に성공し、犯させてもらえることになった
+		PRINTFORMW 교섭에 성공해, 범하게 해주기로했다
 		CALL MESSAGE_TALK
 	CASE 89
 		;犯してもらう・交渉が성공した場合
-		PRINTFORMW 交渉に성공し、犯してもらえることになった
+		PRINTFORMW 교섭에 성공해, 범해주게 되었다
 		CALL MESSAGE_TALK
 	CASE 90
 		;던전内성욕처리：윤간이벤트
 	CASE 91
-		;적が命乞いCASE91〜93
+		;적が命乞いCASE91～93
 		;91:命乞い
 	CASE 92
 		;92:助けた場合（RETURN 0, X = 0.逃げる　1.仲魔になる　2.何か貰う　3.奇襲）
@@ -407,9 +407,9 @@ SELECTCASE ARG:1
 	CASE 93
 		;93:断った場合
 	CASE 94
-		;적から助ける代わりに取引を持ちかけられるCASE94〜101
+		;적から助ける代わりに取引を持ちかけられるCASE94～101
 		;94:取引内容（RETURN 0, X = 1.￥　2.마카　3.異性）
-		PRINTFORML %CALLNAME:ARG%が%CALLNAME:PLAYER%に取引を持ちかけてきた
+		PRINTFORML %조사처리(CALLNAME:ARG,"가")% %CALLNAME:PLAYER%에게 거래를 걸어왔다
 	CASE 95
 		;95:要求をのむ（￥）
 	CASE 96
@@ -436,18 +436,18 @@ ENDSELECT
 SELECTCASE CFLAG:ARG:友好度
 	CASE IS > 25
 		PRINTFORML
-		PRINTFORML 「%CSTR:ARG:11%と話がしたいってー？」
-		PRINTFORMW 「よくわかってるニンゲンだなー」
+		PRINTFORML 「%조사처리(CSTR:ARG:11,"랑")% 얘기하고 싶다고ー?」
+		PRINTFORMW 「중요한 걸 잘 알고 있는 인간이잖아ー」
 		PRINTFORML
 	CASE IS > -25
 		PRINTFORML
-		PRINTFORML 「%CSTR:ARG:11%と話がしたいってー？」
-		PRINTFORMW 「ニンゲンにしては変わってるなー」
+		PRINTFORML 「%조사처리(CSTR:ARG:11,"랑")% 얘기하고 싶다고ー?」
+		PRINTFORMW 「인간치고는 별나네ー」
 		PRINTFORML
 	CASEELSE
 		PRINTFORML
-		PRINTFORML 「%CSTR:ARG:11%と話がしたいってー？」
-		PRINTFORMW 「いいけどつまらなかったら許さないヨー」
+		PRINTFORML 「%조사처리(CSTR:ARG:11,"랑")% 얘기하고 싶다고ー?」
+		PRINTFORMW 「별로 상관없지만 시시한 얘기라면 용서 안할거야ー」
 		PRINTFORML
 ENDSELECT
 
@@ -456,28 +456,28 @@ ENDSELECT
 ;0.회화継続 1.直接仲魔になる 2.何かくれる 3.奇襲される 4.적対する 5.逃げる 6.気まずくなる
 SELECTCASE RAND:1
 	CASE 0
-		PRINTFORMW 「そんでニンゲンがこんなトコロで何してんのさ？」
+		PRINTFORMW 「그래서 인간이 이런 곳에서 뭐하는거야?」
 		PRINTFORML
-		PRINTFORML [1]악마退治　　　　　[2]보물찾기
-		PRINTFORML [3]道に迷った　　　　[4]自己鍛錬
+		PRINTFORML [1]악마퇴치　　　　　[2]보물찾기
+		PRINTFORML [3]길을잃었다　　　　[4]자기단련
 		$INPUT_LOOP0
 		INPUT
 		PRINTFORML
 		IF RESULT == 1
 			;１．
 			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
-;			素質によって판정値が랜덤に上下することもある
+;			소질によって판정値が랜덤に上下することもある
 ;			SIF TALENT:ARG:반항적
 ;				LOCAL -= RAND:20
 			IF LOCAL < 30
 				CFLAG:ARG:友好度 -= RAND:50
 				;실패
-					PRINTFORMW 「%CSTR:ARG:11%も退治する気かよー！？」
+					PRINTFORMW 「%CSTR:ARG:11%도 퇴치할 생각이야ー!?」
 					RETURN 6
 			ELSE
 				CFLAG:ARG:友好度 += RAND:30
 				;성공
-					PRINTFORMW 「악마退治って…オッカネー。ぶるぶる」
+					PRINTFORMW 「악마 퇴치라니…무셔-. 부들부들」
 					RETURN 0
 			ENDIF
 		ELSEIF RESULT == 2
@@ -486,13 +486,13 @@ SELECTCASE RAND:1
 			IF LOCAL < 30
 				CFLAG:ARG:友好度 -= RAND:50
 				;실패
-					PRINTFORMW 「だったらイイモノ持ってるホ？　奪っちゃるー！」
+					PRINTFORMW 「그럼 좋은 거 갖고 있어？　빼앗아버릴거야-!」
 					RETURN 4
 			ELSE
 				CFLAG:ARG:友好度 += RAND:30
 				;성공
-					PRINTFORML 「宝物？ アイスの当たりとか레어シールとか！？」
-					PRINTFORMW 「%CSTR:ARG:11%もホシー、チョーホシー」
+					PRINTFORML 「보물？ 아이스당이라던가 레어실이라던가!?」
+					PRINTFORMW 「%CSTR:ARG:11%도 갖고 싶어-、무지 갖고 싶어-」
 					RETURN 0
 			ENDIF
 		ELSEIF RESULT == 3
@@ -501,14 +501,14 @@ SELECTCASE RAND:1
 			IF LOCAL < 30
 				CFLAG:ARG:友好度 -= RAND:50
 				;실패
-					PRINTFORML 「道に迷った〜？ そんな事言って、%CSTR:ARG:11%が道案内しようとしたらいきなり
-					PRINTFORMW 　窓から車に連れ込んでそのまま連れ去る気だホ？ おまわりさーん、誘拐犯がここにいるヨー！」
+					PRINTFORML 「길을 잃었어～？ 그런 말을 해놓고、%조사처리(CSTR:ARG:11,"가")% 길 안내를 하려고 하면 갑자기
+					PRINTFORMW 　창문 근처로 데려가서 차에 억지로 태워서 그대로 납치할 생각인거지？ 여러분ー、여기 유괴범이 있어요ー!」
 					RETURN 6
 			ELSE
 				CFLAG:ARG:友好度 += RAND:30
 				;성공
-					PRINTFORMW 「こんなところで道に迷うとか、どんだけ方向音痴なんだホ」
-					PRINTFORMW 「よかったら%CSTR:ARG:11%が道案内しちゃるぜー」
+					PRINTFORMW 「이런 곳에서 길을 잃다니, 어떻게 되먹은 방향치야-」
+					PRINTFORMW 「괜찮으면 %조사처리(CSTR:ARG:11,"가")% 길안내 해줄게-」
 					RETURN 0
 			ENDIF
 		ELSEIF RESULT == 4
@@ -517,13 +517,13 @@ SELECTCASE RAND:1
 			IF LOCAL < 30
 				CFLAG:ARG:友好度 -= RAND:50
 				;실패
-					PRINTFORMW 「레벨アップしたいー？」
-					PRINTFORMW 「そんなら俺の屍を越えていけ！ ああ%CSTR:ARG:一人称%ってカッコイイ……」
+					PRINTFORMW 「레벨업하고 싶어-?」
+					PRINTFORMW 「그렇담 내 시체를 넘어가라！ 아아 %CSTR:ARG:一人称% 는 어쩜 이렇게 멋질까……」
 					RETURN 4
 			ELSE
 				CFLAG:ARG:友好度 += RAND:50
 				;성공
-					PRINTFORMW 「いちごタンメン？ なんだかすっごく美味そうだヨー！」
+					PRINTFORMW 「딸기탕면？ 뭔가 굉장히 맛있을 것 같네ー!」
 					RETURN 0
 			ENDIF
 		ELSE
@@ -552,28 +552,28 @@ DO
 		CASE ARG:1
 			CONTINUE
 		CASE 0
-			PRINTFORMW 「アンタの話退屈ー。なんかおもろいことナイカヨー？」
-			PRINTFORML
-			PRINTFORML [1]芸をする　　　　　　[2]ギャグを言う
-			PRINTFORML [3]無視する　　　　　　[4]叱りつける
+  			PRINTFORMW 「네 얘기 지루해ー. 뭔가 재밌는 건 없어ー?」
+  			PRINTFORML
+  			PRINTFORML [1]마술을한다　　　　　[2]개그한다
+  			PRINTFORML [3]무시한다　　　　　　[4]야단친다
 			$INPUT_LOOP1
 			INPUT
 			PRINTFORML
 			IF RESULT == 1
 				;1.
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
-	;			素質によって판정値が랜덤に上下することもある
+	;			소질によって판정値が랜덤に上下することもある
 	;			SIF TALENT:ARG:반항적
 	;				LOCAL -= RAND:20
 				IF LOCAL < 30
 					CFLAG:ARG:友好度 -= RAND:30
 					;실패
-						PRINTFORMW 「……ツマンネー。テレビ見てる方がマシだホ」
+  						PRINTFORMW 「……시시해-. 티비 보는 게 낫겠다」
 						RETURN 6
 				ELSE
 					CFLAG:ARG:友好度 += RAND:30
 					;성공
-						PRINTFORMW 「おー、スゲースゲー！ やるじゃんオマエー！！」
+  						PRINTFORMW 「오- 대단해 대단해-！ 너 꽤 하잖아 -!!」
 						RETURN 0
 				ENDIF
 			ELSEIF RESULT == 2
@@ -582,12 +582,12 @@ DO
 				IF LOCAL < 30
 					CFLAG:ARG:友好度 -= RAND:50
 					;실패
-						PRINTFORMW 「…………さっぶ。帰る」
+						PRINTFORMW 「…………썰렁해. 돌아갈래」
 						RETURN 5
 				ELSE
 					CFLAG:ARG:友好度 += RAND:30
 					;성공
-						PRINTFORMW 「ギャハハハハ！ バカじゃんオマエー！！」
+  						PRINTFORMW 「갸하하하！ 바보지 너-!!」
 						RETURN 0
 				ENDIF
 			ELSEIF RESULT == 3
@@ -596,13 +596,13 @@ DO
 				IF LOCAL < 0
 					CFLAG:ARG:友好度 -= RAND:50
 					;실패
-						PRINTFORMW 「無視かよー、気ぃ悪いなー！」
-						PRINTFORMW 「そんな奴はこうしちゃるー！！」
+						PRINTFORMW 「무시냐구ー、기분 나빠ー!」
+  						PRINTFORMW 「그런 녀석은 이렇게해버릴거야ー!!」
 						RETURN 3
 				ELSE
 					CFLAG:ARG:友好度 += RAND:20
 					;성공
-						PRINTFORMW 「……怒った？ %CSTR:ARG:11%が悪かったヨー……」
+						PRINTFORMW 「……화났어？ %조사처리(CSTR:ARG:11,"가")% 잘못했어어ー……」
 						RETURN 0
 				ENDIF
 			ELSEIF RESULT == 4
@@ -611,43 +611,43 @@ DO
 				IF LOCAL < 0
 					CFLAG:ARG:友好度 -= RAND:50
 					;실패
-						PRINTFORMW 「ムッカー！ オマエに言われる筋合いないヨー！！」
+						PRINTFORMW 「열받아ー！ 너한테 그런 말을 들어야 할 이유 따윈 없다구ー!!」
 						RETURN 4
 				ELSE
 					CFLAG:ARG:友好度 += RAND:20
 					;성공
-						PRINTFORMW 「確かに%CSTR:ARG:11%の態度が悪かったよ。ごめんよ」
+						PRINTFORMW 「확실히 %CSTR:ARG:11%의 태도가 나빴어. 미안해」
 						RETURN 0
 				ENDIF
 			ELSE
 				GOTO INPUT_LOOP1
 			ENDIF
 		CASE 1
-			PRINTFORMW 「世の中しけてんぜー」
-			PRINTFORMW 「%CSTR:ARG:一人称%グレちゃう」
-			PRINTFORML
-			PRINTFORML [1]そうでもない　　　　[2]そうかもしれない
-			PRINTFORML [3]フフっと笑う　　　　[4]叱りつける
+  			PRINTFORMW 「세계는 재미없어ー」
+  			PRINTFORMW 「%CSTR:ARG:一人称% 지쳐버렸다구」
+  			PRINTFORML
+  			PRINTFORML [1]그렇지도 않다　　　　　[2]그럴지도 모른다
+  			PRINTFORML [3]후훗하고 웃는다　　　　[4]야단친다
 			$INPUT_LOOP2
 			INPUT
 			PRINTFORML
 			IF RESULT == 1
 				;1.
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
-	;			素質によって판정値が랜덤に上下することもある
+	;			소질によって판정値が랜덤に上下することもある
 	;			SIF TALENT:ARG:반항적
 	;				LOCAL -= RAND:20
 				IF LOCAL < 30
 					CFLAG:ARG:友好度 -= RAND:30
 					;실패
-						PRINTFORMW 「デビルバスターってイヤな奴でさー」
-						PRINTFORMW 「……アンタの事だよ」
+  						PRINTFORMW 「데빌 버스터는 싫은 놈인데말야ー」
+  						PRINTFORMW 「……네 얘기야」
 						RETURN 6
 				ELSE
 					CFLAG:ARG:友好度 += RAND:30
 					;성공
-						PRINTFORMW 「そこまで言えるなら懐あったかいんだろー？」
-						PRINTFORMW 「……話聞いてやってもいいぜー。へへへ」
+						PRINTFORMW 「그렇게까지 말한다면 뭔가 있는거지ー?」
+  						PRINTFORMW 「……얘기를 들어줄수도 있다구ー。헤헤헤」
 						RETURN 0
 				ENDIF
 			ELSEIF RESULT == 2
@@ -656,14 +656,14 @@ DO
 				IF LOCAL < 30
 					CFLAG:ARG:友好度 -= RAND:50
 					;실패
-						PRINTFORMW 「ホントにそう思う？」
-						PRINTFORMW 「うさんくせー、아귀だと思って適当に話合わせてんだろー」
+						PRINTFORMW 「정말로 그렇게 생각해?」
+  						PRINTFORMW 「짜증나ー、꼬맹이라고 생각해서 적당히 얘기하는거지ー」
 						RETURN 6
 				ELSE
 					CFLAG:ARG:友好度 += RAND:30
 					;성공
-						PRINTFORMW 「ホントにそう思う？」
-						PRINTFORMW 「……%CSTR:ARG:一人称%、アンタの せいい って奴が見てみたいんだなぁ……」
+						PRINTFORMW 「정말로 그렇게 생각해?」
+	  					PRINTFORMW 「……%CSTR:ARG:一人称%、너 같은 녀석은 드물지……」
 						RETURN 0
 				ENDIF
 			ELSEIF RESULT == 3
@@ -673,14 +673,14 @@ DO
 				IF LOCAL > -1
 					CFLAG:ARG:友好度 -= RAND:50
 					;실패
-						PRINTFORMW 「なんだそれー、아귀だと思ってバカにしてるな！」
-						PRINTFORMW 「ムカムカドッカン！ ごーとぅーへるしちゃるー！」
+  					PRINTFORMW 「뭐야 그거ー、꼬맹이라고 바보 취급하는거지!」
+  					PRINTFORMW 「짜증짜증무웃！ 고 투 헬 하자구ー!」
 						RETURN 3
 				ELSE
 					CFLAG:ARG:友好度 += RAND:20
 					;성공
 					;原作の流れ忘れちゃった
-						PRINTFORMW 「」
+						PRINTFORMW 
 						RETURN 0
 				ENDIF
 			ELSEIF RESULT == 4
@@ -689,14 +689,14 @@ DO
 				IF LOCAL < 85
 					CFLAG:ARG:友好度 -= RAND:50
 					;실패
-						PRINTFORMW 「%CSTR:ARG:一人称%が間違ってたヨー……」
-						PRINTFORMW 「なんて言うかよ、バーカ！」
+						PRINTFORMW 「%조사처리(CSTR:ARG:一人称,"가")% 틀렸던 거네ー……」
+  					PRINTFORMW 「라고 할 줄 알았냐、바보!」
 						RETURN 3
 				ELSE
 					CFLAG:ARG:友好度 += RAND:20
 					;성공
-						PRINTFORMW 「%SUBSTRING(CSTR:ARG:一人称,0,2)%、%CSTR:ARG:一人称%なんかを本気で叱ってくれるなんて……」
-						PRINTFORMW 「%CSTR:ARG:11%、アンタに一生ついてくぜー！」
+  					PRINTFORMW 「%SUBSTRING(CSTR:ARG:一人称,0,2)%、%CSTR:ARG:一人称% 같은 걸 진심으로 혼내주다니……」
+  					PRINTFORMW 「%CSTR:ARG:11%、너한테 평생을 맡기겠어ー!」
 						RETURN 1
 				ENDIF
 			ELSE
@@ -708,5 +708,5 @@ DO
 LOOP 1
 
 @FUSION_MESSAGE_PUB314,ARG
-PRINTFORMW 「オイラ\@ CSTR:ARG:종족명 != "" ? %CSTR:ARG:종족명% # %STR:(ABL:ARG:종족)% \@ %CALLNAME:ARG%だよ」
-PRINTFORMW 「今後ともよろピー！」
+PRINTFORMW 「난 \@ CSTR:ARG:종족명 != "" ? %CSTR:ARG:종족명% # %STR:(ABL:ARG:종족)% \@ %조사처리(CALLNAME:ARG,"야")%」
+PRINTFORMW 「앞으로도 잘 부탁피-!」

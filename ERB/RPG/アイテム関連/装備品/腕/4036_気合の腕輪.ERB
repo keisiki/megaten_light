@@ -6,24 +6,20 @@
 ;======================================================
 
 @기본능력수정_4036,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-ENDSELECT
 RETURN 0
 
 @전투능력수정_4036,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
+SELECTCASE ARG
+	CASE 2
 		RETURN 8
-	CASE "회피"
+	CASE 3
 		RETURN 16
-	CASE "마법효과"
+	CASE 5
 		RETURN 7
 ENDSELECT
 RETURN 0
 
 @방어상성_4036,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-ENDSELECT
 RETURN 100
 
 @장비추가스킬_4036, ARG, ARG:1 = -1
@@ -49,9 +45,7 @@ RETURN 1
 PRINTL 장비조건：LV25～
 
 @장비해설_4036
-PRINTL 전투中一度だけＨＰが０になってもＨＰ１で復活する팔찌
-PRINTL 　　　　　　　　
-
+PRINTFORML 전투중 한번 HP가 0이 되어도 HP1로 부활하는 팔찌
 
 @구입조건_4036
 RETURN 0

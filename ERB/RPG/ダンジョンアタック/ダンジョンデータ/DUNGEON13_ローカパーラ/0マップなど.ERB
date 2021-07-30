@@ -73,22 +73,22 @@ ELSEIF 던전フラグ:13:1 == 7 && 던전フラグ:13:0 < 5
 	던전フラグ:13:0 = 5
 ELSEIF 던전フラグ:13:1 == 9 && 던전フラグ:13:0 < 6
 	PRINTL ┏>MESSAGE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-	PRINTL ┃던전【로카파라아지트（???）】が出現！                         ┃
+	PRINTL ┃던전【로카파라아지트（???）】가 출현！                         ┃
 	PRINTW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 	던전フラグ:13:0 = 6
 ELSEIF 던전フラグ:13:1 == 11 && 던전フラグ:13:0 < 7
 	PRINTL ┏>MESSAGE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-	PRINTL ┃던전【로카파라아지트（????）】が出現！               　　     ┃
+	PRINTL ┃던전【로카파라아지트（????）】가 출현！               　　     ┃
 	PRINTW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 	던전フラグ:13:0 = 7
 ELSEIF 던전フラグ:13:1 == 13 && 던전フラグ:13:0 < 8
 	PRINTL ┏>MESSAGE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-	PRINTL ┃던전【로카파라아지트（?????）】が出現！               　　    ┃
+	PRINTL ┃던전【로카파라아지트（?????）】가 출현！               　　    ┃
 	PRINTW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 	던전フラグ:13:0 = 8
 ELSEIF 던전フラグ:13:1 == 15 && 던전フラグ:13:0 < 9
 	PRINTL ┏>MESSAGE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-	PRINTL ┃던전【로카파라아지트（太陽）】が出現！               　　    ┃
+	PRINTL ┃던전【로카파라아지트（태양）】가 출현！               　　    ┃
 	PRINTW ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 	던전フラグ:13:0 = 9
 ENDIF
@@ -125,9 +125,9 @@ ELSEIF 던전フラグ:13:1 < 13
 ELSEIF 던전フラグ:13:1 < 15
 	RESULTS = 로카파라아지트（?????）
 ELSEIF 던전フラグ:13:1 < 17
-	RESULTS = 로카파라아지트（太陽）
+	RESULTS = 로카파라아지트（태양）
 ELSE
-	RESULTS = 로카파라아지트（クリア済）
+	RESULTS = 로카파라아지트（클리어 후）
 ENDIF
 ;=======================================================================
 ;フ로어名표시
@@ -209,13 +209,13 @@ SELECTCASE FLAG:現M
 	CASE 36
 		PRINTL EGG시설 B11F　퀴비에 증후군 연구실
 	CASE 37
-		PRINTL EGG시설B30F
+		PRINTL EGG시설 B30F
 	CASE 38
 		PRINTL ???
 	CASE 39
 		PRINTL ???
 	CASE 40
-		PRINTL 동력플랜트　外
+		PRINTL 동력플랜트　바깥
 	CASE 41
 		PRINTL 동력플랜트　B1F
 	CASE 42
@@ -223,79 +223,79 @@ SELECTCASE FLAG:現M
 	CASE 43
 		PRINTL 동력플랜트　1F
 	CASE 44
-		PRINTL 双葉の정신세계
+		PRINTL 후타바의 정신세계
 	CASE 45
-		PRINTL 双葉の정신세계
+		PRINTL 후타바의 정신세계
 	CASE 46
-		PRINTL カルマ協会PCルーム
+		PRINTL 카르마 협회 PC룸
 	CASE 47,48,49,50,51,52,53
-		PRINTL 仮想空間
+		PRINTL 가상공간
 	CASE 54
-		PRINTL カルマシティ　外
+		PRINTL 카르마시티　바깥
 	CASE 55
-		PRINTL 宇宙の卵1-1
+		PRINTL 우주의 알1-1
 	CASE 56
-		PRINTL 宇宙の卵1-2
+		PRINTL 우주의 알1-2
 	CASE 57
-		PRINTL 宇宙の卵2-1
+		PRINTL 우주의 알2-1
 	CASE 58
-		PRINTL 宇宙の卵2-2
+		PRINTL 우주의 알2-2
 	CASE 59
-		PRINTL 宇宙の卵3-1
+		PRINTL 우주의 알3-1
 	CASE 60
-		PRINTL 宇宙の卵3-2
+		PRINTL 우주의 알3-2
 	CASE 61
-		PRINTL 宇宙の卵3-3
+		PRINTL 우주의 알3-3
 	CASE 62
-		PRINTL 宇宙の卵4
+		PRINTL 우주의 알4
 	CASE 63
-		PRINTL 太陽への扉
+		PRINTL 태양으로 향하는 문
 	CASE 64
-		PRINTL 太陽　対流層
+		PRINTL 태양 대류층
 	CASE 65	
-		PRINTL 太陽　第二層　1F
+		PRINTL 태양　제이층　1F
 	CASE 66	
-		PRINTL 太陽　第二層　2F
+		PRINTL 태양　제이층　2F
 	CASE 67	
-		PRINTL 太陽　第二層　3F
+		PRINTL 태양　제이층　3F
 	CASE 68	
-		PRINTL 太陽　第二層　4F
+		PRINTL 태양　제이층　4F
 	CASE 69	
-		PRINTL 太陽　第二層　5F
+		PRINTL 태양　제이층　5F
 	CASE 70	
-		PRINTL 太陽　第三層　1F
+		PRINTL 태양　제삼층　1F
 	CASE 71	
-		PRINTL 太陽　第三層　2F
+		PRINTL 태양　제삼층　2F
 	CASE 72	
-		PRINTL 太陽　第三層　3F
+		PRINTL 태양　제삼층　3F
 	CASE 73	
-		PRINTL 太陽　第三層　4F
+		PRINTL 태양　제삼층　4F
 	CASE 74	
-		PRINTL 太陽　第四層　1F
+		PRINTL 태양　제사층　1F
 	CASE 75	
-		PRINTL 太陽　第四層　2F
+		PRINTL 태양　제사층　2F
 	CASE 76	
-		PRINTL 太陽　第四層　3F
+		PRINTL 태양　제사층　3F
 	CASE 77	
-		PRINTL 太陽　第四層　4F
+		PRINTL 태양　제사층　4F
 	CASE 78	
-		PRINTL 太陽　第五層　1F
+		PRINTL 태양　제오층　1F
 	CASE 79	
-		PRINTL 太陽　第五層　2F
+		PRINTL 태양　제오층　2F
 	CASE 80	
-		PRINTL 太陽　第五層　3F
+		PRINTL 태양　제오층　3F
 	CASE 81	
-		PRINTL 太陽　第五層　4F
+		PRINTL 태양　제오층　4F
 	CASE 82	
-		PRINTL 太陽　第六層　1F
+		PRINTL 태양　제육층　1F
 	CASE 83	
-		PRINTL 太陽　第六層　2F
+		PRINTL 태양　제육층　2F
 	CASE 84	
-		PRINTL 太陽　第六層　3F
+		PRINTL 태양　제육층　3F
 	CASE 85	
-		PRINTL 太陽　第六層　4F
+		PRINTL 태양　제육층　4F
 	CASE 86	
-		PRINTL 太陽　第六層　5F
+		PRINTL 태양　제육층　5F
 ENDSELECT
 
 ;=======================================================================
@@ -313,11 +313,11 @@ FLAG:現Y = 2
 @EVENT_DUNGEON_START_13
 FLAG:탈출스킬禁止 = 1
 IF 던전フラグ:13:23 > 0 && GETBIT(던전フラグ:13:22,0) && !GETBIT(던전フラグ:13:22,1) && (DAY - 던전フラグ:13:23) > 2
-	CALL MESSAGE_WINDOW_D, "서프", "双葉は무기も使えるようになったし/防具も장비しても動けるようになったよ"
-	CALL MESSAGE_WINDOW_D, "서프", "だが　実戦はさせてない/実戦は俺たちと共に戦いながら経験を積んでいくのがいいだろうな"
-	CALL MESSAGE_WINDOW_D, "후타바", "よろしく頼むぜ "
-	CALL MESSAGE_WINDOW_D, "", "双葉は十分な訓練を受けて전투に出せるようになった"
-	CALL MESSAGE_WINDOW_D, "", "사쿠라　双葉が仲間になった "
+	CALL MESSAGE_WINDOW_D, "서프", "후타바는 무기도 사용할 수 있게 되었고/방어구를 장비해도 움직일 수 있게 되었어"
+	CALL MESSAGE_WINDOW_D, "서프", "하지만 실전은 시키지 않았어/실전은 우리와 같이 싸우면서 경험을 쌓아가는게 좋을거야"
+	CALL MESSAGE_WINDOW_D, "후타바", "잘 부탁해 "
+	CALL MESSAGE_WINDOW_D, "", "후타바는 충분한 훈련을 받아서 전투에 참가할 수 있게 되었다"
+	CALL MESSAGE_WINDOW_D, "", "사쿠라 후타바가 동료가 되었다 "
 	CALL ADD_NEW_COMPANION,[[キャラ:후타바]],100
 				IF RESULT
 					TALENT:(RESULT:1):비전투원 = 0
@@ -444,92 +444,92 @@ ELSEIF 던전フラグ:13:1 == 5
 	
 	던전フラグ:13:1 = 6
 ELSEIF 던전フラグ:13:1 == 7
-	CALL MESSAGE_WINDOW_D, "서프", "ちょうどいいところに来たな"
-	CALL MESSAGE_WINDOW_D, "서프", "ついさっき　突然出てきたクリシュナとか言う악마が/カルマシティ全土に映像付きで演説を始めたんだ"
-	CALL MESSAGE_WINDOW_D, "서프", "救うとか　どうだか言っていたが信用できない/あまり　인간をよくするような奴らには見えんからな"
-	CALL MESSAGE_WINDOW_D, "서프", "そして　演説していたところは動힘プラント/後ろには마코토達の仲間も映っていたらしい/名前はフタバというらしい"
-	CALL MESSAGE_WINDOW_D, "서프", "俺たちが安全に先に進めるよう/ローカパーラがプラントの적を공격している"
-	CALL MESSAGE_WINDOW_D, "서프", "それでわかったことは/なぜか　제나派のカルマ兵はなぜか多神連合に/協힘しているんだ"
-	CALL MESSAGE_WINDOW_D, "서프", "なぜ　そんなことをしているんだろうな…"
-	CALL MESSAGE_WINDOW_D, "서프", "とにかく　세라とフタバを助けるためにプラントに向かおう"
-	CALL MESSAGE_WINDOW_D, "서프", "準備ができたらいつでも話しかけてくれ"
+	CALL MESSAGE_WINDOW_D, "서프", "마침 잘 왔군"
+	CALL MESSAGE_WINDOW_D, "서프", "조금 전에 갑자기 나타난 크리슈나라는 악마가/카르마시티 전역에 영상으로 연설을 시작했어"
+	CALL MESSAGE_WINDOW_D, "서프", "구한다느니 어쩌느니 했지만 믿을 수가 없어/인간을 잘 대하는 놈들로는 보이지 않으니까 말이야"
+	CALL MESSAGE_WINDOW_D, "서프", "그리고 연설하던 영상 속 동력플랜트의/뒤에서 마코토들의 동료가 찍혀있었다고 한다/이름은 후타바라고 한다"
+	CALL MESSAGE_WINDOW_D, "서프", "우리가 안전하게 앞으로 나아갈 수 있도록 로카파라가 플랜트의 적을 공격하고 있어"
+	CALL MESSAGE_WINDOW_D, "서프", "그걸로 알게된건/왠지 제나파의 카르마병은 다신연합에/협력하고 있어"
+	CALL MESSAGE_WINDOW_D, "서프", "왜 그런 일을 하고 있을까…"
+	CALL MESSAGE_WINDOW_D, "서프", "어쨌든 세라와 후타바를 구하기 위해 플랜트로 향하자"
+	CALL MESSAGE_WINDOW_D, "서프", "준비가 되면 언제든지 말을 걸어 줘"
 	
 	던전フラグ:13:1 = 8
 ELSEIF 던전フラグ:13:1 == 9
-	CALL MESSAGE_WINDOW_D, "", "作戦室"
-	CALL MESSAGE_WINDOW_D, "", "先日、全員気が沈んでいたが/だいぶ落ち着いてきている"
-	CALL MESSAGE_WINDOW_D, "", "今後　どのようにするか作戦会議を開いていた"
-	CALL MESSAGE_WINDOW_D, "로알드", "크리슈나　세라　そして마코토君達の友のレン…/皆　どこを探しても見つからなかった"
-	CALL MESSAGE_WINDOW_D, "서프", "それだけじゃない　カルマシティの外に/変な物体もある"
-	CALL MESSAGE_WINDOW_D, "서프", "カルマシティの連中は　突然現れたと言っていたな"
-	CALL MESSAGE_WINDOW_D, "마코토(페르소나5)", "調べようにも　変な結界があって入れませんよね…"
-	CALL MESSAGE_WINDOW_D, "시에로", "真上からもいけねえぜ/入るところが全然ねえ"
-	CALL MESSAGE_WINDOW_D, "류지", "ぶち壊そうとしても/ビクともしねえしな"
-	CALL MESSAGE_WINDOW_D, "게일", "あの復活したミロクをどうにかすれば結界を/消せそうだが…"
-	CALL MESSAGE_WINDOW_D, "알지라", "そいつも全然見つからないのよね…"
+	CALL MESSAGE_WINDOW_D, "", "작전실"
+	CALL MESSAGE_WINDOW_D, "", "요전날, 전원 기분이 침울해져 있었지만/ 지금은 꽤 안정되어 있다"
+	CALL MESSAGE_WINDOW_D, "", "앞으로 어떻게 할 것인가를 놓고 작전 회의를 하고 있었다"
+	CALL MESSAGE_WINDOW_D, "로알드", "크리슈나 세라 그리고 마코토군들의 친구 렌... 모두들 어디를 찾아도 찾지 못했어"
+	CALL MESSAGE_WINDOW_D, "서프", "그뿐만 아니라 카르마시티 밖에 이상한 물체도 있어"
+	CALL MESSAGE_WINDOW_D, "서프", "카르마시티의 사람들은 그 물체가 갑자기 나타났다고 하던데"
+	CALL MESSAGE_WINDOW_D, "마코토(페르소나5)", "조사하려 해도 이상한 결계가 있어서 들어갈 수 없지요…"
+	CALL MESSAGE_WINDOW_D, "시에로", "바로 위에서도 안되지/들어갈 곳이 전혀 없어"
+	CALL MESSAGE_WINDOW_D, "류지", "때려 부수려고 해도/움찔할 것 같지도 않고"
+	CALL MESSAGE_WINDOW_D, "게일", "부활한 미륵를 어떻게든 하면 결계를/지울 수 있을 것 같은데…"
+	CALL MESSAGE_WINDOW_D, "알지라", "그녀석도 전혀 발견되지 않네…"
 	CALL MESSAGE_WINDOW_D, "서프", "…"
-	CALL MESSAGE_WINDOW_D, "", "みんな打つ손なしという状況だった"
-	CALL MESSAGE_WINDOW_D, "構成員", "すいません"
-	CALL MESSAGE_WINDOW_D, "로알드", "どうした"
-	CALL MESSAGE_WINDOW_D, "構成員", "なんか　ちっこい変な黒い奴が訪ねてきたんですよ/どうも　마코토達の仲間だとか言っているけど…"
-	CALL MESSAGE_WINDOW_D, "構成員", "奴はモルガナと名乗っていたんですが"
+	CALL MESSAGE_WINDOW_D, "", "모두 손 쓸 방도가 없는 상황이었다"
+	CALL MESSAGE_WINDOW_D, "조직원", "죄송합니다"
+	CALL MESSAGE_WINDOW_D, "로알드", "왜 그래"
+	CALL MESSAGE_WINDOW_D, "조직원", "왠지 이상한 검은 녀석이 찾아왔어요/아무래도 마코토들의 동료라고 하는거 같지만…"
+	CALL MESSAGE_WINDOW_D, "조직원", "녀석은 모르가나라고 자칭하고 있었습니다만"
 	CALL MESSAGE_WINDOW_D, "안", "모르가나？"
-	CALL MESSAGE_WINDOW_D, "春", "あの　もしかして尻꼬리と耳が生えてて/猫っぽい生き物ですか？"
-	CALL MESSAGE_WINDOW_D, "構成員", "ま、まあ　そんな感じだな"
-	CALL MESSAGE_WINDOW_D, "서프", "君たちの仲間か？"
-	CALL MESSAGE_WINDOW_D, "유스케", "ああ　인간じゃないけどな…"
-	CALL MESSAGE_WINDOW_D, "로알드", "ふむ…　何か有益な情報を持っているかもしれないな"
-	CALL MESSAGE_WINDOW_D, "構成員", "実は　もう一人いるんですが…"
-	CALL MESSAGE_WINDOW_D, "서프", "何？"
-	CALL MESSAGE_WINDOW_D, "", "皆でモルガナに会いに行くと/猫が二발歩行した生き物と　머리카락の赤い青年がいた"
-	CALL MESSAGE_WINDOW_D, "", "머리카락の赤い青年は서프がEGG施設で死んだと言っていた/히트だった"
-	CALL MESSAGE_WINDOW_D, "히트", "よ…よお…"
+	CALL MESSAGE_WINDOW_D, "하루", "저 혹시 꼬리와 귀가 나있고/고양이 같은 생물은 아닌가요？"
+	CALL MESSAGE_WINDOW_D, "조직원", "뭐, 뭐 그런 느낌이네"
+	CALL MESSAGE_WINDOW_D, "서프", "너희 동료인가？"
+	CALL MESSAGE_WINDOW_D, "유스케", "아아 인간은 아니지만…"
+	CALL MESSAGE_WINDOW_D, "로알드", "음…　뭔가 유익한 정보를 가지고 있는 걸지도 모르겠군"
+	CALL MESSAGE_WINDOW_D, "조직원", "사실 한 명 더 있는데…"
+	CALL MESSAGE_WINDOW_D, "서프", "뭐？"
+	CALL MESSAGE_WINDOW_D, "", "모두 함께 모르가나를 만나러 갔더니/고양이가 2족보행하는 생물과 머리카락이 빨간 청년이 있었다"
+	CALL MESSAGE_WINDOW_D, "", "머리칼이 붉은 청년은 서프가 EGG시설에서 죽었다고 했던/히트였다"
+	CALL MESSAGE_WINDOW_D, "히트", "요…여어…"
 	CALL MESSAGE_WINDOW_D, "서프", "히트！"
-	CALL MESSAGE_WINDOW_D, "시에로", "히트ぉ！"
-	CALL MESSAGE_WINDOW_D, "알지라", "히트…　うそでしょ！？"
-	CALL MESSAGE_WINDOW_D, "서프", "お前　あの時死んだと思っていたぞ！"
-	CALL MESSAGE_WINDOW_D, "시에로", "どうやってあの状況から生きてたんだ？"
-	CALL MESSAGE_WINDOW_D, "알지라", "流石に　偽者じゃないわよね…"
-	CALL MESSAGE_WINDOW_D, "히트", "んなわけねえだろ"
-	CALL MESSAGE_WINDOW_D, "게일", "その動作や性格から見て本物のようだな"
-	CALL MESSAGE_WINDOW_D, "서프", "お前がモルガナか？/히트を助けてくれたのか？"
-	CALL MESSAGE_WINDOW_D, "모르가나", "いや　なんかその辺にいたから声をかけたんだ/ちょうど　お前らと同じような옷を着てたからな"
-	CALL MESSAGE_WINDOW_D, "春", "モルちゃんも来てたのね"
-	CALL MESSAGE_WINDOW_D, "류지", "全然見ねえから来てないと思ってたぜ"
-	CALL MESSAGE_WINDOW_D, "안", "そうよね　尻꼬리も見えなかったもん"
-	CALL MESSAGE_WINDOW_D, "유스케", "まあ　こんな세계で生き残ってくれて何よりだ/모르가나"
-	CALL MESSAGE_WINDOW_D, "마코토(페르소나5)", "そうよね"
-	CALL MESSAGE_WINDOW_D, "로알드", "ところで　多神連合や攫われた세라やレンのことについて/何か知っていないか？"
-	CALL MESSAGE_WINDOW_D, "모르가나", "いや　俺は知らないが/一人多神連合の손がかりを知っていいるかもしれない"
-	CALL MESSAGE_WINDOW_D, "서프", "誰なんだ？"
-	CALL MESSAGE_WINDOW_D, "모르가나", "ここにいるフタバだ"
-	CALL MESSAGE_WINDOW_D, "류지", "なんでだよ　双葉は奴らに操られていたんじゃねえのか？"
-	CALL MESSAGE_WINDOW_D, "안", "そうよね　大体操られてた間って記憶なくなっちゃうよね"
-	CALL MESSAGE_WINDOW_D, "게일", "いや　そうでもないかもしれないな"
-	CALL MESSAGE_WINDOW_D, "류지", "え？　そうなの？"
-	CALL MESSAGE_WINDOW_D, "게일", "プラントの停電は彼女の知識でやったものだとすれば/恐らく　完全には操られていないはずだ"
-	CALL MESSAGE_WINDOW_D, "게일", "彼女を完全に操っていれば　その間の記憶は残らないだろうが/簡가운動作しかできないはずだ"
-	CALL MESSAGE_WINDOW_D, "게일", "催眠のようなもので操られたのであれば/記憶は残っているだろうな"
-	CALL MESSAGE_WINDOW_D, "모르가나", "お前なかなか冴えてるな/竜司のサル머리とは大違いだぜ"
-	CALL MESSAGE_WINDOW_D, "류지", "誰がサル머리だ！"
-	CALL MESSAGE_WINDOW_D, "마코토(페르소나5)", "その…双葉ちゃんなんだけど…/妙に눈を깨달음まさないのよね…"
-	CALL MESSAGE_WINDOW_D, "유스케", "普通に寝てるような様子じゃ無いんだよな…"
-	CALL MESSAGE_WINDOW_D, "안", "なんか苦しみながら寝てるような…"
-	CALL MESSAGE_WINDOW_D, "모르가나", "なに？　ちょっとフタバの所に連れてってくれないか？"
-	CALL MESSAGE_WINDOW_D, "", "モルガナを双葉の所に連れて行った"
-	CALL MESSAGE_WINDOW_D, "모르가나", "これは…　정신に악마が入ってるな"
-	CALL MESSAGE_WINDOW_D, "모르가나", "정신の中に入って악마をやっつけるしかねえ"
-	CALL MESSAGE_WINDOW_D, "안", "でも　それができるアプリってもうないんじゃ…"
-	CALL MESSAGE_WINDOW_D, "모르가나", "行くところはパレスじゃねえ/정신だ/双葉の정신세계に入って악마をやる"
-	CALL MESSAGE_WINDOW_D, "서프", "そんなことができるのか？"
-	CALL MESSAGE_WINDOW_D, "모르가나", "ああ　アン殿/ちょっとスマホを貸してくれないか？"
-	CALL MESSAGE_WINDOW_D, "", "モルガナは杏のスマホを少しいじる"
-	CALL MESSAGE_WINDOW_D, "안", "あ　なんかある"
-	CALL MESSAGE_WINDOW_D, "모르가나", "そのアプリで정신세계に入ることが可能だぜ/リュウジ達にも後でつけてやるよ"
-	CALL MESSAGE_WINDOW_D, "모르가나", "でも　フタバの정신はかなり弱ってきてる/これは　ボスを倒すまで戻ってこれねえかもな…"
-	CALL MESSAGE_WINDOW_D, "모르가나", "中に入ってる악마も相当強힘だぜ/これは相当な準備が필요だ"
-	CALL MESSAGE_WINDOW_D, "모르가나", "準備ができたらいつでも話しかけてくれ"
-	CALL MESSAGE_WINDOW_D, "", "モルガナと히트が仲間になった"
+	CALL MESSAGE_WINDOW_D, "시에로", "히트으！"
+	CALL MESSAGE_WINDOW_D, "알지라", "히트…　환상이 아니지！？"
+	CALL MESSAGE_WINDOW_D, "서프", "너 그때 죽었다고 생각했었어！"
+	CALL MESSAGE_WINDOW_D, "시에로", "어떻게 그 상황에서 살았지？"
+	CALL MESSAGE_WINDOW_D, "알지라", "역시 가짜는 아니겠지…"
+	CALL MESSAGE_WINDOW_D, "히트", "그럴 리가 없잖아"
+	CALL MESSAGE_WINDOW_D, "게일", "그 동작이나 성격으로 보아 진짜 같군"
+	CALL MESSAGE_WINDOW_D, "서프", "네가 모르가나야？/히트를 도와준건가？"
+	CALL MESSAGE_WINDOW_D, "모르가나", "아니 왠지 근처에 있길래 말을 걸었던거다/마침 너희들과 비슷한 옷을 입고 있었거든"
+	CALL MESSAGE_WINDOW_D, "하루", "모르쨩도 왔었구나"
+	CALL MESSAGE_WINDOW_D, "류지", "전혀 눈에 띄지 않아서 없다고 생각했지"
+	CALL MESSAGE_WINDOW_D, "안", "그치 꼬리도 안 보였는걸"
+	CALL MESSAGE_WINDOW_D, "유스케", "뭐 이런 세계에서 살아남았으니 다행이다/모르가나"
+	CALL MESSAGE_WINDOW_D, "마코토(페르소나5)", "그러네"
+	CALL MESSAGE_WINDOW_D, "로알드", "그런데 다신연합이나 유괴된 세라나 렌에 대해서/뭔가 알고 있지 않은가？"
+	CALL MESSAGE_WINDOW_D, "모르가나", "아니 난 모르지만/어떤 녀석이 다신 연합이 노리는것을 알고 있을 수도 있어"
+	CALL MESSAGE_WINDOW_D, "서프", "누구？"
+	CALL MESSAGE_WINDOW_D, "모르가나", "여기 있는 후타바다"
+	CALL MESSAGE_WINDOW_D, "류지", "어째서야 후타바는 녀석들에게 조종당하고 있었던 거 아냐？"
+	CALL MESSAGE_WINDOW_D, "안", "그렇지　대충 조종당하는 동안에는 기억이 없어져 버리잖아"
+	CALL MESSAGE_WINDOW_D, "게일", "아니 그렇지 않을지도 모르지"
+	CALL MESSAGE_WINDOW_D, "류지", "에？　그런거야？"
+	CALL MESSAGE_WINDOW_D, "게일", "플랜트의 정전이 그녀의 지식으로 이루어진 것이라면/아마 완전히 조작되지는 않았을 것이다"
+	CALL MESSAGE_WINDOW_D, "게일", "그녀를 완전히 조종했다면 그 동안의 기억은 남지 않겠지만/간단한 동작밖에 할 수 없을 것이다"
+	CALL MESSAGE_WINDOW_D, "게일", "최면같은 것으로 조종되었다면/기억은 남아있겠지"
+	CALL MESSAGE_WINDOW_D, "모르가나", "너 꽤 똑똑하구나/류지의 원숭이 머리와는 아주 달라"
+	CALL MESSAGE_WINDOW_D, "류지", "누가 원숭이머리냐！"
+	CALL MESSAGE_WINDOW_D, "마코토(페르소나5)", "그…후타바말인데…/이상하게 눈을 뜨지 않고있어…"
+	CALL MESSAGE_WINDOW_D, "유스케", "평범하게 자고 있는 것 같지가 않아…"
+	CALL MESSAGE_WINDOW_D, "안", "뭔가 괴로워하면서 자는 것 같은…"
+	CALL MESSAGE_WINDOW_D, "모르가나", "뭐？　잠깐 후타바한테 데려다주지 않을래？"
+	CALL MESSAGE_WINDOW_D, "", "모르가나를 후타바에게 데리고 갔다"
+	CALL MESSAGE_WINDOW_D, "모르가나", "이건…　정신에 악마가 들어갔구나"
+	CALL MESSAGE_WINDOW_D, "모르가나", "정신 속에 들어가서 악마를 해치울 수 밖에 없어"
+	CALL MESSAGE_WINDOW_D, "안", "그치만 그게 가능한 어플이 이제 없잖아…"
+	CALL MESSAGE_WINDOW_D, "모르가나", "가야할곳은 팰리스가 아니야/정신이다/후타바의 정신세계에 들어가서 악마를 해치우는거다"
+	CALL MESSAGE_WINDOW_D, "서프", "그럴 수가 있나？"
+	CALL MESSAGE_WINDOW_D, "모르가나", "아아 안 아가씨/네 폰 좀 빌려줄래？"
+	CALL MESSAGE_WINDOW_D, "", "모르가나는 안의 스마트폰을 약간 만지작거린다"
+	CALL MESSAGE_WINDOW_D, "안", "아 뭔가 생겼다"
+	CALL MESSAGE_WINDOW_D, "모르가나", "그 어플로 정신세계에 들어갈 수 있어/류지들한테도 나중에 넣어줄게"
+	CALL MESSAGE_WINDOW_D, "모르가나", "하지만 후타바의 정신은 상당히 약해져가고 있어/이건 보스를 쓰러뜨릴때까지 돌아올 수 없을지도 몰라…"
+	CALL MESSAGE_WINDOW_D, "모르가나", "안에 들어있는 악마도 상당히 강한데/이것은 상당한 준비가 필요해"
+	CALL MESSAGE_WINDOW_D, "모르가나", "준비가 되면 언제든지 말을 걸어 줘"
+	CALL MESSAGE_WINDOW_D, "", "모르가나와 히트가 동료가 되었다"
 				CALL ADD_NEW_COMPANION,4663,100
 				IF RESULT
 					BASE:(RESULT:1):LV = 60
@@ -611,68 +611,68 @@ ELSEIF 던전フラグ:13:1 == 9
 				ENDIF
 	던전フラグ:13:1 = 10
 ELSEIF 던전フラグ:13:1 == 11
-	CALL MESSAGE_WINDOW_D, "서프", "フタバが起き上がった"
-	CALL MESSAGE_WINDOW_D, "서프", "フタバによるとカルマ協会のパソコンで/仮想空間を作ったみたいなんだ"
-	CALL MESSAGE_WINDOW_D, "서프", "その空間にマダム派の作業員がアクセスしようとしていたが/おかしなロックがあったらしい"
-	CALL MESSAGE_WINDOW_D, "서프", "だが　いくらハッキングしてもなかなか繋がらないみたいなんだ"
-	CALL MESSAGE_WINDOW_D, "서프", "だから今フタバにハッキングさせている"
-	CALL MESSAGE_WINDOW_D, "서프", "だが　奴らが何かしてるのか/何か細工をしてアクセスが容易にできないらしい"
-	CALL MESSAGE_WINDOW_D, "서프", "フタバによると해제できるが時間がかかると言っていいたな"
-	CALL MESSAGE_WINDOW_D, "서프", "フタバの予定では今ぐらいに해제できるそうだ"
-	CALL MESSAGE_WINDOW_D, "서프", "準備ができたらいつでも話しかけてくれ"
+	CALL MESSAGE_WINDOW_D, "서프", "후타바가 깨어났다"
+	CALL MESSAGE_WINDOW_D, "서프", "후타바에 의하면 카르마 협회의 컴퓨터로/가상 공간을 만든 것 같아"
+	CALL MESSAGE_WINDOW_D, "서프", "그 공간에 마담파 작업자가 접속하려고 했는데/이상한 잠금이 있었던 것 같다"
+	CALL MESSAGE_WINDOW_D, "서프", "하지만 아무리 해킹을 해도 잘 연결이 되지 않는 것 같아"
+	CALL MESSAGE_WINDOW_D, "서프", "그래서 지금 후타바가 해킹하고 있어"
+	CALL MESSAGE_WINDOW_D, "서프", "하지만 놈들이 뭘 해놓은 건지/뭔가 세공해서 접근이 쉽지가 않은 것 같다"
+	CALL MESSAGE_WINDOW_D, "서프", "후타바에 의하면 해제할 수 있지만 시간이 걸린다고 말했지"
+	CALL MESSAGE_WINDOW_D, "서프", "후타바의 예정으로는 지금쯤 되면 해제할 수 있다고 했다"
+	CALL MESSAGE_WINDOW_D, "서프", "준비가 되면 언제든지 말을 걸어 줘"
 	
 	던전フラグ:13:1 = 12
 ELSEIF 던전フラグ:13:1 == 13
-	CALL MESSAGE_WINDOW_D, "서프", "準備はできたか？"
-	CALL MESSAGE_WINDOW_D, "서프", "結界が弱まって/あの物体に近づけるようになった"
-	CALL MESSAGE_WINDOW_D, "서프", "早くあそこに行き/세라とレンを助けに行こう"
-	CALL MESSAGE_WINDOW_D, "서프", "準備ができたらいつでも話しかけてくれ"
+	CALL MESSAGE_WINDOW_D, "서프", "준비됐어？"
+	CALL MESSAGE_WINDOW_D, "서프", "결계가 약해져서/저 물체에 가까워지게 되었다"
+	CALL MESSAGE_WINDOW_D, "서프", "어서 저기로/세라와 렌을 구하러 가자"
+	CALL MESSAGE_WINDOW_D, "서프", "준비가 되면 언제든지 말을 걸어 줘"
 	
 	던전フラグ:13:1 = 14
 ELSEIF 던전フラグ:13:1 == 15
 	;太陽이벤트
 	
-	CALL MESSAGE_WINDOW_D, "", "作戦室"
-	CALL MESSAGE_WINDOW_D, "로알드", "我々は세라を助けることができたが…/神と交信できる装置が全て破壊されてしまった…"
-	CALL MESSAGE_WINDOW_D, "세라", "まだ　손はあるわ"
-	CALL MESSAGE_WINDOW_D, "세라", "昔は　ここからずっと離れた施設で/実験をしていたの"
-	CALL MESSAGE_WINDOW_D, "세라", "その施設が生きていれば…"
-	CALL MESSAGE_WINDOW_D, "로알드", "その施設なんだが…"
-	CALL MESSAGE_WINDOW_D, "로알드", "カルマ協会が　その施設に行ったのだが…/壊れていて使えない상태だったようだ…"
-	CALL MESSAGE_WINDOW_D, "세라", "そんな…"
+	CALL MESSAGE_WINDOW_D, "", "작전실"
+	CALL MESSAGE_WINDOW_D, "로알드", "우리는 세라를 구할 수 있었지만/신과 교신할 수 있는 장치가 다 파괴되어 버렸네…"
+	CALL MESSAGE_WINDOW_D, "세라", "아직 방법은 있어"
+	CALL MESSAGE_WINDOW_D, "세라", "옛날에는 여기서 한참 떨어진 시설에서/실험을 했었어"
+	CALL MESSAGE_WINDOW_D, "세라", "그 시설이 남아있다면…"
+	CALL MESSAGE_WINDOW_D, "로알드", "그 시설 말인데…"
+	CALL MESSAGE_WINDOW_D, "로알드", "카르마 협회가 그 시설에 갔었는데…/고장나서 쓸 수 없는 상태였던 것 같다…"
+	CALL MESSAGE_WINDOW_D, "세라", "그런…"
 	
-	CALL MESSAGE_WINDOW_D, "謎の声", "その心配はない"
-	CALL MESSAGE_WINDOW_D, "", "声のある方を振り向くと1匹の黒猫がいた"
-	CALL MESSAGE_WINDOW_D, "류지", "모르가나…/猫になって何やってんだ？"
-	CALL MESSAGE_WINDOW_D, "모르가나", "俺はこっちだぞ！"
-	CALL MESSAGE_WINDOW_D, "세라", "シュレ디무ンガー！？"
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "宇宙の卵で손に入れた石柱…/それを持って宇宙の卵の所に来てくれ"
+	CALL MESSAGE_WINDOW_D, "수수께끼의 목소리", "그런 염려는 하지마라"
+	CALL MESSAGE_WINDOW_D, "", "목소리가 있는 쪽을 돌아보니 검은 고양이 한 마리가 있었다"
+	CALL MESSAGE_WINDOW_D, "류지", "모르가나…/고양이가 되어서 뭐하는 거야？"
+	CALL MESSAGE_WINDOW_D, "모르가나", "난 이쪽이야！"
+	CALL MESSAGE_WINDOW_D, "세라", "슈뢰딩거！？"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "우주의 알에서 손에 넣은 돌기둥…/그것을 가지고 우주의 알이 있는 곳으로 와줘"
 
-	CALL MESSAGE_WINDOW_D, "", "宇宙の卵に向かった"
-	CALL MESSAGE_WINDOW_D, "", "猫が言うには石柱を宇宙の卵に刺し/세라が歌えば神への道が開かれるという"
-	CALL MESSAGE_WINDOW_D, "", "その通りすると宇宙の卵は大きなモノリスに変わった"
+	CALL MESSAGE_WINDOW_D, "", "우주의 알로 향했다"
+	CALL MESSAGE_WINDOW_D, "", "고양이가 말한 돌기둥을 우주의 알에 꽂고/세라가 부르면 신의 길이 열린다고 한다"
+	CALL MESSAGE_WINDOW_D, "", "그 결과 우주의 알은 거대한 모노리스로 바뀌었다"
 
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "その扉に入れば神への道…　太陽へ行ける"
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "神のもとに直接行くことができる"
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "人の無限の可能性を　神に示すんだ"
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "大切な仲間たちと一緒にね"
-	CALL MESSAGE_WINDOW_D, "게일", "帰りはどうする"
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "これを通った先にも同じようなものがある/それを通ればここに戻ることができる"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "그 문으로 들어가면 신에게 향하는 길… 태양으로 갈 수 있어"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "신에게 직접 갈 수 있다"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "인간의 무한한 가능성을 신에게 보여주는 거야"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "소중한 동료들과 함께 말이야"
+	CALL MESSAGE_WINDOW_D, "게일", "돌아올 때는 어떻게 하지"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "여기를 지나간 다음에도 같은 문이 있어/그것을 지나면 여기로 돌아올 수 있어"
 	
-	CALL MESSAGE_WINDOW_D, "세라", "당신は一体…"
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "もうすぐわかる"
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "意識の翼を広げてごらん"
-	CALL MESSAGE_WINDOW_D, "シュレ디무ンガー？", "君に感じられないことなんて/ないはずだよ"
+	CALL MESSAGE_WINDOW_D, "세라", "당신은 대체…"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "이제 곧 알게 된다"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "의식의 날개를 펴 보렴"
+	CALL MESSAGE_WINDOW_D, "슈뢰딩거？", "네가 느낄 수 없는 것은/없을거야"
 	
-	CALL MESSAGE_WINDOW_D, "", "そう言い残すと　その黒猫から何か出て行ったような感じがした"
-	CALL MESSAGE_WINDOW_D, "", "その後　ニャアと普通の猫のように鳴き/その場を去っていった"
+	CALL MESSAGE_WINDOW_D, "", "그렇게 말하고 난 검은 고양이에게서 뭔가 빠져나간 것 같은 느낌이 들었다"
+	CALL MESSAGE_WINDOW_D, "", "그 후 냐양 거리며 보통의 고양이처럼 울고/그 자리를 떠났다"
 	
-	PRINTFORMW 太陽への道には出입からいけます
-	PRINTFORMW 今後から토라에스트で帰還できるようになました
-	PRINTFORMW ジャ란다ーラは殲滅され、アジトにも行けなくなりました
+	PRINTFORMW 태양으로 가는 길은 출구로 갈 수 있습니다
+	PRINTFORMW 이제부터 토라에스트로 귀환할수 있게되었습니다
+	PRINTFORMW 잘란다라는 섬멸되어 아지트에도 갈 수 없게 되었습니다
 	IF GETBIT(FLAG:発見ED, 45)
 		던전フラグ:13:31 ++
-		CALL MESSAGE_WINDOW_D, "", "クリアボーナス！/エレベーターから/ボスに直行できるようになった "
+		CALL MESSAGE_WINDOW_D, "", "클리어 보너스!/엘리베이터에서/보스로 직행할 수 있게 되었다 "
 	ENDIF
 	
 	던전フラグ:13:1 = 16
@@ -768,15 +768,15 @@ SELECTCASE FLAG:現M
 	CASE 0
 		RESULTS = 로카파라
 	CASE IS < 6
-		RESULTS = 地下街
+		RESULTS = 지하가
 	CASE IS < 8
-		RESULTS = 海底ケーブル
+		RESULTS = 해저케이블
 	CASE IS < 14
-		RESULTS = 収容所
+		RESULTS = 수용소
 	CASE IS < 26
-		RESULTS = カルマ協会本部
+		RESULTS = 카르마협회본부
 	CASE IS < 31
-		RESULTS = 空港
+		RESULTS = 공항
 ENDSELECT
 ;=======================================================================
 ;タイル定義
@@ -883,6 +883,40 @@ SELECTCASE ARG
 	CASE IS > 9
 		DA:(ARG:1):(ARG:2) = ARG
 ENDSELECT
+
+;---- D3D START (ADD) ------------------------------
+@D3D_CHECK_WALL_13,ARGS,ARG,ARG:1,ARGS:1
+#LOCALSIZE 2
+;3D表示の時にこのマスを壁扱いにするかどうか
+;ARGSそのマスの文字
+;ARG:1、ARG:2はそれぞれX座標とY座標
+;ARGS:1は今自分がいるマスの文字
+IF FLAG:現M == 15
+	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) % 10
+		CASE 1
+			SIF DA:(ARG):(ARG:1) % 10 - DA:(FLAG:現X):(FLAG:現Y) % 10 > 2
+				RETURN 2
+		CASE 3
+			SIF DA:(ARG):(ARG:1) % 10 - DA:(FLAG:現X):(FLAG:現Y) % 10 > 2
+				RETURN 2
+	ENDSELECT
+	RETURN 0
+ENDIF
+SELECTCASE DA:(ARG):(ARG:1)
+	CASE 12,22,32,42
+		RETURN 2
+ENDSELECT
+
+CALL 高低差_13,(FLAG:現X),(FLAG:現Y)
+LOCAL:0 = RESULT
+CALL 高低差_13,ARG,ARG:1
+LOCAL:1 = RESULT
+SIF LOCAL:0 == 99 || LOCAL:1 == 99
+	RETURN 0
+SIF LOCAL:1 - LOCAL:0 > 1
+	RETURN 2
+RETURN 0
+;---- D3D END   (ADD) ------------------------------
 
 @ループマップ作製_13
 #LOCALSIZE 4
@@ -1166,6 +1200,8 @@ ELSEIF ARG == 35
 ELSEIF ARG == 95 && GET_FLOOR_ANALYZE_T(ARG:1, ARG:2) == 2
 	SETCOLOR 0xbb0033
 	RESULTS = 穴
+ELSEIF ARG == 95 && FLAG:現M > 53 && FLAG:現M < 63 && (FLAG:月齢 == 8 || FLAG:라이트마 == 1)
+	RESULTS = 穴
 ELSEIF FLAG:現M == 15
 	CALL onmitsu_TILE, ARG , ARG:1 , ARG:2
 ELSE
@@ -1214,7 +1250,7 @@ IF DA:(FLAG:現X):(FLAG:現Y) == 8
 		PRINTFORML [ 0] 로카파라 아지트
 		PRINTFORML [ 1] 카르마 시티 시가지
 		IF 던전フラグ:13:1 > 15
-			PRINTFORML [ 2] 太陽への道
+			PRINTFORML [ 2] 태양으로의 길
 		ELSEIF 던전フラグ:13:1 > 4
 			PRINTFORML [ 2] 잘란다라 아지트
 		ENDIF
@@ -1297,8 +1333,8 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 9
 			ENDIF
 		CASE 1
 			IF 던전フラグ:13:1 > 0
-				CALL MESSAGE_WINDOW_D, "", "ここで仲間の入れ替えができそうだ "
-				CALL INPUT_SELECT_D, "[1]仲間を入れ替える/[0]何でもない "
+				CALL MESSAGE_WINDOW_D, "", "여기서 동료의 교체가 가능할 것 같다 "
+				CALL INPUT_SELECT_D, "[1]동료를 교체한다/[0]아무것도 아니다 "
 				SIF RESULT == 1
 					CALL RECONSTRUCTION
 			ENDIF
@@ -1336,7 +1372,7 @@ LOCAL:1 = RESULT
 CALL 高低差_13,(FLAG:現X),(FLAG:現Y)+2
 LOCAL:2 = RESULT
 IF LOCAL:0 > LOCAL:1 && LOCAL:0 == LOCAL:2
-	CALL SHOW_FORCEMOVE, "DD", "D", , ,  "南に飛んだ"
+	CALL SHOW_FORCEMOVE, "DD", "D", , ,  "남쪽으로 뛰었다"
 	CALL EVENT_ENTER_DUNGEON_13,0
 	;CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)+2
 	RETURN 0
@@ -1346,7 +1382,7 @@ LOCAL:1 = RESULT
 CALL 高低差_13,(FLAG:現X)+2,(FLAG:現Y)
 LOCAL:2 = RESULT
 IF LOCAL:0 > LOCAL:1 && LOCAL:0 == LOCAL:2
-	CALL SHOW_FORCEMOVE, "RR", "D", , ,  "東に飛んだ"
+	CALL SHOW_FORCEMOVE, "RR", "D", , ,  "동쪽으로 뛰었다"
 	CALL EVENT_ENTER_DUNGEON_13,0
 	;CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X)+2,(FLAG:現Y)
 	RETURN 0
@@ -1357,7 +1393,7 @@ IF (FLAG:現Y)-2 > -1
 	CALL 高低差_13,(FLAG:現X),(FLAG:現Y)-2
 	LOCAL:2 = RESULT
 	IF LOCAL:0 > LOCAL:1 && LOCAL:0 == LOCAL:2
-		CALL SHOW_FORCEMOVE, "UU", "D", , ,  "北に飛んだ"
+		CALL SHOW_FORCEMOVE, "UU", "D", , ,  "북쪽으로 뛰었다"
 		CALL EVENT_ENTER_DUNGEON_13,0
 		;CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)-2
 		RETURN 0
@@ -1369,7 +1405,7 @@ IF (FLAG:現X)-2 > -1
 	CALL 高低差_13,(FLAG:現X)-2,(FLAG:現Y)
 	LOCAL:2 = RESULT
 	IF LOCAL:0 > LOCAL:1 && LOCAL:0 == LOCAL:2
-		CALL SHOW_FORCEMOVE, "LL", "D", , ,  "東に飛んだ"
+		CALL SHOW_FORCEMOVE, "LL", "D", , ,  "동쪽으로 뛰었다"
 		CALL EVENT_ENTER_DUNGEON_13,0
 		;CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X)-2,(FLAG:現Y)
 		RETURN 0
@@ -1419,7 +1455,7 @@ IF DA:(FLAG:現X):(FLAG:現Y) % 10 == 8
 		PRINTFORML [ 0] 로카파라 아지트
 		PRINTFORML [ 1] 카르마 시티 시가지
 		IF 던전フラグ:13:1 > 15
-			PRINTFORML [ 2] 太陽への道
+			PRINTFORML [ 2] 태양으로의 길
 		ELSEIF 던전フラグ:13:1 > 4
 			PRINTFORML [ 2] 잘란다라 아지트
 		ENDIF
@@ -1535,10 +1571,10 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 1
 				LOCAL:1 ++
 			SIF LOCAL == 4
 				LOCAL:1 --
-			SKIPDISP 1
+			;SKIPDISP 0
 			CALL CAN_ENTER_13,LOCAL:1,LOCAL:2
 			LOCAL:3 = RESULT
-			SKIPDISP 0
+			;SKIPDISP 1
 			IF LOCAL:3 && LOCAL > 0 && LOCAL < 10 && LOCAL % 2 == 0 && DA:(LOCAL:1):(LOCAL:2) != 15 && DA:(LOCAL:1):(LOCAL:2) != 25 && DA:(LOCAL:1):(LOCAL:2) != 35
 				
 				FLAG:現X = LOCAL:1
@@ -1556,11 +1592,11 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 1
 		ENDIF
 ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 5
 	IF DA:(FLAG:現X):(FLAG:現Y) == 95
-		CALL MESSAGE_B,3, "落とし穴だ！ "
+		CALL MESSAGE_B,3, "함정이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M)-1,(FLAG:現X),(FLAG:現Y)
 	ELSEIF FLAG:現M > 50 && FLAG:現M < 53 && DA:(FLAG:現X):(FLAG:現Y) < 36
 		CALL 床崩れ
-	ELSEIF DA:(FLAG:現X):(FLAG:現Y) > 35
+	ELSEIF DA:(FLAG:現X):(FLAG:現Y) > 35 && FLAG:現M != 15
 		CALL TRAP_13
 		RETURN RESULT
 	ENDIF
@@ -1605,8 +1641,8 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) %10 == 9
 			ENDIF
 		CASE 1
 			IF 던전フラグ:13:1 > 0
-				CALL MESSAGE_WINDOW_D, "", "ここで仲間の入れ替えができそうだ "
-				CALL INPUT_SELECT_D, "[1]仲間を入れ替える/[0]何でもない "
+				CALL MESSAGE_WINDOW_D, "", "여기서 동료의 교체가 가능할 것 같다 "
+				CALL INPUT_SELECT_D, "[1]동료를 교체한다/[0]아무것도 아니다 "
 				SIF RESULT == 1
 					CALL RECONSTRUCTION
 			ENDIF

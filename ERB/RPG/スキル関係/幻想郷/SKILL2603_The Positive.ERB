@@ -27,7 +27,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_2603,ARG
-RETURN 30
+RETURN 35
 
 ;　相性
 @SKILL_TYPE_2603,ARG
@@ -35,12 +35,12 @@ RETURN 4
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2603
+@SKILL_DECIDE_TYPE_2603, ARG
 RETURN 2
 
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2603
+@SKILL_DAMAGETYPE_2603, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬변화？用랭크
 @SKILL_RANK_2603
-RETURN 15
+RETURN 16
 
 ;テン플레이트用、추가효과シ리즈
 ;추가효과스테이터스
@@ -123,8 +123,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,2603
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2603
-PRINTL 화염で적전체を焼き払った後呪い殺す。
-PRINTL 요마　SinGyokuの技。
+PRINTL 화염으로 적 전체를 불태운 뒤 저주해 죽인다。
+PRINTL 요마　SinGyoku의 기술。
 
 ;継承に필요한部位
 @継承部位_2603,ARG

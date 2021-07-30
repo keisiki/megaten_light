@@ -39,12 +39,12 @@ RETURN 2
 ;타격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_203
+@SKILL_DECIDE_TYPE_203, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_203
+@SKILL_DAMAGETYPE_203, ARG
 RETURN 1
 
 
@@ -92,6 +92,11 @@ RETURN 0
 @SKILL_RANK_203
 RETURN 3
 
+@SKILL_RANKUP_203
+;난동부리기
+D:1 = 263
+;랭크アップ先は１つ
+RETURN 1
 
 ;テン플레이트用、추가효과シリーズ
 ;추가효과스테이터스

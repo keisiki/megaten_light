@@ -36,12 +36,12 @@ RETURN 13
 ;수격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2919
+@SKILL_DECIDE_TYPE_2919, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2919
+@SKILL_DAMAGETYPE_2919, ARG
 RETURN 2
 
 
@@ -130,7 +130,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2919
 @SKILL_EXPLAIN_2919
 PRINTL 적 전체에 수격 속성으로 대위력 마법공격을 1회 한다. 추가효과：수격 속성 마봉
 PRINTL 비늘과 물의 파도를 일으켜서 적을 흘러가게 해、영창이나 기능을 방해한다
-PRINTL 인어　와카사키 히메의 스펠카드（専用）
+PRINTL 인어　와카사키 히메의 스펠카드（전용）
 
 ;継承に필요한部位
 @継承部位_2919,ARG

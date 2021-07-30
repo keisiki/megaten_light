@@ -12,8 +12,10 @@
 					CFLAG:ARG:元가슴サイズ = 4
 				CASE IS < 90
 					CFLAG:ARG:元가슴サイズ = 5
-				CASE IS < 100
+				CASE IS < 98
 					CFLAG:ARG:元가슴サイズ = 1
+				CASEELSE
+					CFLAG:ARG:元가슴サイズ = 6
 			ENDSELECT
 		ELSE
 			CFLAG:ARG:元가슴サイズ = 1
@@ -57,6 +59,8 @@
 				TALENT:ARG:거유 = 1
 			CASE 5
 				TALENT:ARG:폭유 = 1
+			CASE 6
+				TALENT:ARG:魔乳 = 1
 		ENDSELECT
 	ELSE
 		SELECTCASE CFLAG:ARG:現가슴サイズ
@@ -69,14 +73,11 @@
 				TALENT:ARG:거유 = 1
 			CASE 5
 				TALENT:ARG:폭유 = 1
+			CASE 6
+				TALENT:ARG:魔乳 = 1
 		ENDSELECT
 	ENDIF
-
-	IF EXP:ARG:ＴＳ경험 % 2 == 1
-		TALENT:ARG:ＴＳ = 1
-	ELSE 
-		TALENT:ARG:ＴＳ = 0
-	ENDIF	
+	
 	;오토코노코を入れ替え
 	SWAP TALENT:ARG:오토코노코 , CFLAG:ARG:元오토코노코
 	;이상경험等のテ키스トは표시させるかは時と場合による

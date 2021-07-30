@@ -69,6 +69,9 @@ IF 의뢰フラグ:27:0 == 0
 		PRINTFORMW %조사처리(NAME:LOCAL,"를")% 보냈다.
 		PRINTFORMW 5일 후 돌아올 예정이다.
 		CFLAG:LOCAL:この場に居ないフラグ = 1
+		;만일 파견할 노예가 파티에 있을 경우, 제외한다
+		SIF CPOS(LOCAL) > 0
+			CALL REMOVE_POSITION, CPOS(LOCAL)
 		SIF LOCAL == TARGET
 			TARGET = -1
 		SIF LOCAL == ASSI

@@ -38,12 +38,12 @@ RETURN GET_TYPE_NUM("수격")
 ;수격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2875
+@SKILL_DECIDE_TYPE_2875, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2875
+@SKILL_DAMAGETYPE_2875, ARG
 RETURN 1
 
 
@@ -126,7 +126,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2875
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2875
-PRINTL 역류하는 큰 파도를 타고 돌격해、 적 1명에게 수격대칭의 물리공격 。（위력：중、가운데 앞에서만 사용 가능）
+PRINTL 역류하는 큰 파도를 타고 돌격해、적 1명에게 수격대칭의 물리공격 。（위력：중、가운데 앞에서만 사용 가능）
 PRINTL 요귀　카와시로 나토리의 스펠카드
 
 ;継承に필요한部位

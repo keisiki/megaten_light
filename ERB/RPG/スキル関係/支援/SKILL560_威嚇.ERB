@@ -36,12 +36,12 @@ RETURN 40
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_560
+@SKILL_DECIDE_TYPE_560, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_560
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_560, ARG
 RETURN 0
 
 
@@ -123,10 +123,10 @@ ENDIF
 FOR LOCAL,LOCAL:1,LOCAL:2
 	SIF POS(LOCAL) < 0
 		CONTINUE
-	CFLAG:POS(LOCAL):공격강화 = MIN(32, CFLAG:POS(LOCAL):공격강화 - 8)
-	CFLAG:POS(LOCAL):방어강화 = MAX(-16, CFLAG:POS(LOCAL):방어강화 + 8)
-	CFLAG:POS(LOCAL):마법위력강화 = MIN(32, CFLAG:POS(LOCAL):마법위력강화 - 8)
-	CFLAG:POS(LOCAL):마법효과강화 = MAX(-16, CFLAG:POS(LOCAL):마법효과강화 + 8)
+	CFLAG:POS(LOCAL):공격강화 = MAX(-16, CFLAG:POS(LOCAL):공격강화 - 8)
+	CFLAG:POS(LOCAL):방어강화 = MIN(32, CFLAG:POS(LOCAL):방어강화 + 8)
+	CFLAG:POS(LOCAL):마법위력강화 = MAX(-16, CFLAG:POS(LOCAL):마법위력강화 - 8)
+	CFLAG:POS(LOCAL):마법효과강화 = MIN(32, CFLAG:POS(LOCAL):마법효과강화 + 8)
 NEXT
 PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@을 위협했다!
 
@@ -151,7 +151,7 @@ PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@을 위협했다!
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_560
-PRINTL [특수] 적 전체의 공격력・마법위력을 크게 감소시키고, 방어력・마법효과을 크게 상승시킨다.
+PRINTL [특수] 적 전체의 공격력・마법위력을 크게 감소시키고, 방어력・마법효과를 크게 상승시킨다.
 
 ;継承に필요な部位
 @継承部位_560,ARG

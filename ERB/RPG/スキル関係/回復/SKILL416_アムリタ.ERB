@@ -3,7 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_416,ARG
-RESULTS = 암리타
+IF SKILL_CHANGE(ARG, [[キャラ:T씨]])
+	RESULTS = 친정의 매실주
+ELSE
+	RESULTS = 암리타
+ENDIF
 
 
 ;　명중
@@ -36,12 +40,12 @@ RETURN 20
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_416
+@SKILL_DECIDE_TYPE_416, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_416
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_416, ARG
 RETURN 0
 
 

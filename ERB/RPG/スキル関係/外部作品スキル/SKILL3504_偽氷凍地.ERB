@@ -66,12 +66,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;빙결
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3504
+@SKILL_DECIDE_TYPE_3504, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3504
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3504, ARG
 RETURN 1
 
 
@@ -192,8 +192,8 @@ CFLAG:ARG:공격강화 = LOCAL:4
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3504
-PRINTL 偽氷による공격を一列に行う　빙결+전술相性
-PRINTL この스킬は마법위력でダメージ計算する
+PRINTL 가짜 얼음으로 1열을 공격하는 빙결+전술상성
+PRINTL 이 스킬은 마법 위력으로 데미지를 계산한다
 
 ;継承に필요な部位
 @継承部位_3504,ARG

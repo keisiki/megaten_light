@@ -14,7 +14,7 @@ RETURN 50+(FLAG:経過ターン数*4)
 RETURN 200+(FLAG:経過ターン数*2)
 
 ;　クリティカル率
-@SKILL_CRITICAL_RATE_2052
+@SKILL_CRITICAL_RATE_2052, ARG
 RETURN (FLAG:経過ターン数)
 
 ;　최저공격횟수
@@ -40,12 +40,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2052
+@SKILL_DECIDE_TYPE_2052, ARG
 RETURN 1
 ;EX
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2052
+@SKILL_DAMAGETYPE_2052, ARG
 RETURN 1
 
 
@@ -132,7 +132,8 @@ ENDIF
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2052
-PRINTL [후열] 적 전체에게 만능속성 물리데미지. 턴이 지날수록 명중률과 위력이 증가한다. 사용자는 방어력･회피율이 감소한다.
+PRINTL [후열] 적 전체에게 만능속성 물리데미지. 턴이 지날수록 명중률과 위력이 증가한다. 
+PRINTL 사용자는 방어력･회피율이 감소한다.
 
 ;継承に필요한部位
 @継承部位_2052,ARG

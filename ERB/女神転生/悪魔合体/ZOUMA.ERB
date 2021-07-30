@@ -344,7 +344,7 @@ IF FLAG:合体予定악마1 > 0
 				CONTINUE
 			;既に습득している스킬かつ、重複습득数（通常１）以上になるならば次へ
 			IF CHECK_SKILL(FLAG:合体予定악마1, ABL:(FLAG:合体予定악마2):LOCALS)
-				TRYCCALLFORM 重複습득数_{ABL:(FLAG:合体予定악마2):LOCALS}
+				TRYCCALLFORM 重複習得数_{ABL:(FLAG:合体予定악마2):LOCALS}
 					SIF HAVE_SKILL_OVERLAP(FLAG:合体予定악마1, ABL:(FLAG:合体予定악마2):LOCALS) + 1 > RESULT
 						CONTINUE
 				CATCH
@@ -385,7 +385,7 @@ IF FLAG:合体予定악마1 > 0
 				CONTINUE
 			;既に습득している스킬かつ、重複습득数（通常１）以上になるならば次へ
 			IF CHECK_SKILL(FLAG:合体予定악마1, LOCAL:(20+LOCAL:3))
-				TRYCCALLFORM 重複습득数_{LOCAL:(20+LOCAL:3)}
+				TRYCCALLFORM 重複習得数_{LOCAL:(20+LOCAL:3)}
 					SIF HAVE_SKILL_OVERLAP(FLAG:合体予定악마1, LOCAL:(20+LOCAL:3)) + 1 > RESULT
 						CONTINUE
 				CATCH

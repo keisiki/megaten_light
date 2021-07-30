@@ -4,7 +4,7 @@
 ;---------------------------------
 ;스킬名
 @SKILL_NAME_132,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:야치호]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:야치호]])
 	RESULTS = 리턴
 ELSE
 	RESULTS = 비구리플렉트
@@ -41,12 +41,12 @@ RETURN 2
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_132
+@SKILL_DECIDE_TYPE_132, ARG
 RETURN 2
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_132
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_132, ARG
 RETURN 0
 
 

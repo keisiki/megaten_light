@@ -2,62 +2,74 @@
 ;======================================================
 ;장비品の데이터
 ;초승달의구족
-;Lv35장비までは무효まで　기본능력に합계+3まで
 ;======================================================
 
 @기본능력수정_4506,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "마력"
-		RETURN 3
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_4506,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 20
-	CASE "회피"
-		RETURN 12
-	CASE "마법효과"
-		RETURN 8
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 11
+	CASE 3
+		RETURN 19
+	CASE 5
+		RETURN 4
 ENDSELECT
 RETURN 0
 
 @방어상성_4506,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "정신"
-		RETURN 75
-	CASE "주살"
-		RETURN 0
-	CASE "신경"
-		RETURN 150
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@공격상성_4506, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_4506, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_4506, ARG = -1
+
+RETURN 1
+
+@사거리_4506, ARG = -1
+
+RETURN 1
+
+@공격범위_4506, ARG = -1
+
+RETURN 1
 
 @장비箇所_4506
 RETURN GET_EQUIPNUM("발")
 
 @필요레벨_4506
-RETURN 33
+RETURN 20
+
+@장비해설_4506
+PRINTFORML 초승달 무늬가 새겨진 무릎 보호대
 
 @장비조건_4506,ARG
-SIF BASE:ARG:LV < 33
+SIF BASE:ARG:LV < 20
 	RETURN 0
 RETURN 1
 
 @장비조건설명_4506
-PRINTL 장비조건：LV33～
+PRINTL 장비조건：LV20～
 RETURN 1
-
-@장비해설_4506
-PRINTL 神秘的な파워を得るために三日月のプリントが施された具발。
-PRINTL 　　　　　　　　
 
 
 @구입조건_4506
-SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 75000
+;SIF 던전フラグ:1:1 == 1
+;	RETURN 1
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 60000
 	RETURN 0
 RETURN 1
-
-@引継ぎ可不可_4506
-RETURN 0

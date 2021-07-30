@@ -32,12 +32,12 @@ RETURN 15
 RETURN GET_TYPE_NUM("전격")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_945
+@SKILL_DECIDE_TYPE_945, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_945
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_945, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か

@@ -47,11 +47,11 @@ RETURN LOCAL
 RETURN GET_TYPE_NUM("정신")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3516
+@SKILL_DECIDE_TYPE_3516, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3516
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3516, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -130,8 +130,8 @@ CALL ATTACK_RAND, ARG, ARG:1, 3516
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3516
-PRINTL 적複数体に정신相性で中ダメージ+混乱
-PRINTL 함락しているほど공격횟수が増え、가창기능でダメージが上がる
+PRINTL 적 복수체에 정신 상성의 중 데미지+혼란
+PRINTL 함락 됐을 경우 공격횟수가 증가하고、가창기능으로 위력이 올라간다
 
 ;継承に필요な部位
 @継承部位_3516, ARG

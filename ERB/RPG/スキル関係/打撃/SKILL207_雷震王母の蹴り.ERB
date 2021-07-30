@@ -1,8 +1,11 @@
 ﻿
 ;스킬名
 @SKILL_NAME_207,ARG
-RESULTS = 뇌진왕모의발차기
-
+IF SKILL_CHANGE(ARG, 3118)
+	RESULTS = 아라하바키스탬프
+ELSE
+	RESULTS = 뇌진왕모의발차기
+ENDIF
 ;　명중
 @SKILL_HITRATE_207, ARG
 RETURN 90
@@ -34,12 +37,12 @@ RETURN 2
 ;타격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_207
+@SKILL_DECIDE_TYPE_207, ARG
 RETURN 1
 
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_207
+@SKILL_DAMAGETYPE_207, ARG
 RETURN 1
 
 
@@ -122,8 +125,11 @@ CALL ATTACK_FIELD,ARG,ARG:1,207
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_207
-PRINTL [후열] 적 전체에 타격속성 특대 물리데미지.
-
+IF U > 0 && U < CHARANUM && NO:U == 3118
+	PRINTL アラハバキを召喚し、敵全体を踏み潰す。
+ELSE
+	PRINTL [후열] 적 전체에 타격속성 특대 물리데미지.
+ENDIF
 ;継承に필요한部位
 @継承部位_207,ARG
 RETURN 1

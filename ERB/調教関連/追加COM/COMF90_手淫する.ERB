@@ -98,17 +98,19 @@ ENDIF
 
 RETURN 1
 
-
-@MESSAGE_COM90
-IF TEQUIP:12
-	PRINTFORMW %CALLNAME:PLAYER%는 오나홀을 씌운 %CALLNAME:TARGET%의 페니스를 훑고 있다…
-ELSE
-	IF TEQUIP:주도권
-		PRINTFORMW %타겟은()% %CALLNAME:PLAYER%의 손을 잡고、자신의 페니스를 훑게 했다…
-	ELSE
-		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 페니스를 손으로 홅었다…
-	ENDIF
-ENDIF
+;---- EDIT 002 촉수系コマンドを수정 DEL START ----
+;수정ついでにEVENT_Mに移動
+;@MESSAGE_COM90
+;IF TEQUIP:12
+;	PRINTFORMW %CALLNAME:PLAYER%는 오나홀을 씌운 %CALLNAME:TARGET%의 페니스를 훑고 있다…
+;ELSE
+;	IF TEQUIP:주도권
+;		PRINTFORMW %타겟은()% %CALLNAME:PLAYER%의 손을 잡고、자신의 페니스를 훑게 했다…
+;	ELSE
+;		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 페니스를 손으로 홅었다…
+;	ENDIF
+;ENDIF
+;---- EDIT 002 촉수系コマンドを수정 DEL END   ----
 
 ;===================================================
 ;조교타입

@@ -2,7 +2,7 @@
 
 ;스킬名
 @SKILL_NAME_2509,ARG
-RESULTS = 미혹의먹줄（弱）
+RESULTS = 미혹의먹줄（약）
 
 ;　명중
 @SKILL_HITRATE_2509, ARG
@@ -34,11 +34,11 @@ RETURN 10
 RETURN GET_TYPE_NUM("만능")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2509
+@SKILL_DECIDE_TYPE_2509, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2509
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2509, ARG
 RETURN 2
 
 
@@ -130,7 +130,7 @@ NEXT
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2509
-PRINTL 적전체に만능のBIND
+PRINTL 적 전체에 만능의 BIND
 
 ;継承に필요な部位
 @継承部位_2509,ARG

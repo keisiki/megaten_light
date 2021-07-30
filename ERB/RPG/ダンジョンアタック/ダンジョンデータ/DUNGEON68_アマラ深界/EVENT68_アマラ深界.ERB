@@ -1634,7 +1634,7 @@
 					SIF EXP:(LOCAL:1):촉수경험 == 0
 						CALL ADDS_ABNORMAL_EXP("촉수첫경험", (LOCAL:1))
 					EXP:(LOCAL:1):촉수경험 += LOCAL
-					CALL SHOW_ABNORMAL_EXP , LOCAL
+					CALL SHOW_ABNORMAL_EXP , LOCAL:1
 
 					PRINTFORML %CALLNAME:(LOCAL:1)%는 촉수에 전신을 빠짐없이 능욕당했다
 					PRINTFORML \@ TALENT:(LOCAL:1):남자 ?  # Ｖ경험 + {LOCAL}　　질사경험 + {LOCAL}\@　　Ａ경험 + {LOCAL}　　절정경험 + {LOCAL+20}　　성교경험 + {LOCAL+10}
@@ -1726,7 +1726,7 @@
 					SIF EXP:(LOCAL:1):촉수경험 == 0
 						CALL ADDS_ABNORMAL_EXP("촉수첫경험", (LOCAL:1))
 					EXP:(LOCAL:1):촉수경험 += LOCAL
-					CALL SHOW_ABNORMAL_EXP , LOCAL
+					CALL SHOW_ABNORMAL_EXP , LOCAL:1
 
 					PRINTFORML %CALLNAME:(LOCAL:1)%는 촉수에 전신을 빠짐없이 능욕당했다
 					PRINTFORML \@ TALENT:(LOCAL:1):남자 ?  # Ｖ경험 + {LOCAL}　　질사경험 + {LOCAL}\@　　Ａ경험 + {LOCAL}　　절정경험 + {LOCAL+20}　　성교경험 + {LOCAL+10}

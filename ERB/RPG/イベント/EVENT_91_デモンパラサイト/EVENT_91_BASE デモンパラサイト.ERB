@@ -10,17 +10,17 @@ SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 || GETBIT(FLAG:EXTRA이벤트필�
 
 ;초기개방
 IF 이벤트フラグ:91:0 == 0
-	RESULTS = 악마빙의자의 소문（DP）
+	RESULTS = （EX:DP）악마빙의자의 소문
 	RETURN 1
 ;당신の레벨10이상
 ELSEIF 이벤트フラグ:91:0 == 1 && BASE:MASTER:30 >= 10
-	RESULTS = 연분홍색의소녀・내방（DP）
+	RESULTS = 연분홍색의소녀・내방
 	RETURN 1
 ELSEIF 이벤트フラグ:91:0 == 2
-	RESULTS = 연분홍색의소녀・재방（DP）
+	RESULTS = （EX:DP）연분홍색의소녀・재방
 	RETURN 1
 ELSEIF 이벤트フラグ:91:0 == 3 && BASE:MASTER:30 >= 15
-	RESULTS = 야마토 나데시코（DP）
+	RESULTS = （EX:DP）야마토 나데시코
 	RETURN 1
 ELSEIF 이벤트フラグ:91:0 == 4 && 이벤트フラグ:91:9 == 0
 	RESULTS = 데몬 파라패치・디버그 처리

@@ -1,7 +1,15 @@
-﻿;=================================================================
-;장비스킬(장비지식Lv0～Lv5)に関する関数郡
-;=================================================================
-
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:SKILL_EQUIPTHEORY.ERB
+;	Facility	:장비스킬(장비지식Lv0～Lv5)に関する関数郡
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX		----					新規作成
+;	002		2019/08/27		空気					인간が장비知識を持った時の보정が이상な수치(Lv5で225%)だったので수정。장비보정Lv4で인간並みに장비を扱えるという설정なので、Lv5でのみ+25%の보정がつくように변경
 ;-----------------------------------------------------------------
 ;@SKILL_EQUIPTHEORY_IS_HAVE_SKILL
 ;장비지식스킬(Lv0～Lv5)を保持しているかを返す
@@ -102,43 +110,25 @@
 	
 	;종족が인간か半魔
 	IF ABL:(ARG:0):종족 == 0 || ABL:(ARG:0):종족 == 36
+;---- EDIT 002 MOD START -------------------------
 		;레벨によって장비に보정が掛かる설정かどうか
 		IF FLAG:인간전투ステ설정 == 3
 			;장비性能 = 元々の장비性能 * (장비지식の보정値 + 레벨보정)
 			IF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv5]])
-				LOCAL:0 = (LOCAL:0 * (225 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv4]])
-				LOCAL:0 = (LOCAL:0 * (200 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv3]])
-				LOCAL:0 = (LOCAL:0 * (175 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv2]])
-				LOCAL:0 = (LOCAL:0 * (150 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv1]])
 				LOCAL:0 = (LOCAL:0 * (125 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv0]])
-				LOCAL:0 = (LOCAL:0 * (110 + (BASE:(ARG:0):LV / 2))) / 100
+			ELSE
+				LOCAL:0 = (LOCAL:0 * (100 + (BASE:(ARG:0):LV / 2))) / 100
 			ENDIF
 		ELSE
 			;2.25倍
 			IF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv5]])
-				TIMES LOCAL:0, 2.25
-			;2.00倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv4]])
-				TIMES LOCAL:0, 2.00
-			;1.75倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv3]])
-				TIMES LOCAL:0, 1.75
-			;1.50倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv2]])
-				TIMES LOCAL:0, 1.5
-			;1.25倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv1]])
 				TIMES LOCAL:0, 1.25
-			;1.10倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv0]])
-				TIMES LOCAL:0, 1.1
+			;1.00倍
+			ELSE
+				TIMES LOCAL:0, 1.00
 			ENDIF
 		ENDIF
+;---- EDIT 002 MOD END ---------------------------
 	ELSE
 		;장비지식스킬(Lv0～Lv5)を保持している
 		;1.25倍
@@ -191,37 +181,17 @@
 		IF FLAG:인간전투ステ설정 == 3
 			;장비性能 = 元々の장비性能 * (장비지식の보정値 + 레벨보정)
 			IF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv5]])
-				LOCAL:0 = (LOCAL:0 * (225 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv4]])
-				LOCAL:0 = (LOCAL:0 * (200 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv3]])
-				LOCAL:0 = (LOCAL:0 * (175 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv2]])
-				LOCAL:0 = (LOCAL:0 * (150 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv1]])
 				LOCAL:0 = (LOCAL:0 * (125 + (BASE:(ARG:0):LV / 2))) / 100
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv0]])
-				LOCAL:0 = (LOCAL:0 * (110 + (BASE:(ARG:0):LV / 2))) / 100
+			ELSE
+				LOCAL:0 = (LOCAL:0 * (100 + (BASE:(ARG:0):LV / 2))) / 100
 			ENDIF
 		ELSE
 			;2.25倍
 			IF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv5]])
-				TIMES LOCAL:0, 2.25
-			;2.00倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv4]])
-				TIMES LOCAL:0, 2.00
-			;1.75倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv3]])
-				TIMES LOCAL:0, 1.75
-			;1.50倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv2]])
-				TIMES LOCAL:0, 1.5
-			;1.25倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv1]])
 				TIMES LOCAL:0, 1.25
-			;1.10倍
-			ELSEIF HAVE_SKILL(ARG:0, [[스킬:장비지식Lv0]])
-				TIMES LOCAL:0, 1.1
+			;1.00倍
+			ELSE
+				TIMES LOCAL:0, 1.00
 			ENDIF
 		ENDIF
 	ELSE

@@ -34,6 +34,7 @@ IF FLAG:合体予定악마1 > 0
 	SIF BASE:(FLAG:合体予定악마1):LV < LOCAL:4
 		LOCAL:3 *= POWER(2, MIN(( LOCAL:4 - BASE:(FLAG:合体予定악마1):LV)/4,4))
 	TIMES LOCAL:3 , 0.70
+	LOCAL:3 = MIN(LOCAL:3, BASE:MASTER:ＥＸＰ)
 	;취득するＭＡＧを記録
 	LOCAL:4 = BASE:(FLAG:合体予定악마2):ＭＡＧ
 	

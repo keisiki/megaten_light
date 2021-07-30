@@ -11,7 +11,7 @@ RETURN 100
 
 ;　위력
 @SKILL_POWER_3505, ARG
-RETURN 200
+RETURN 230
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_3505,ARG
@@ -28,7 +28,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_3505,ARG
-RETURN 35
+RETURN 30
 
 ;　相性
 @SKILL_TYPE_3505,ARG
@@ -65,12 +65,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;빙결
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3505
+@SKILL_DECIDE_TYPE_3505, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3505
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3505, ARG
 RETURN 1
 
 
@@ -163,8 +163,8 @@ CFLAG:ARG:공격강화 = LOCAL:1
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3505
-PRINTL 偽氷で作った검で相손を二度斬る　빙결+검격相性
-PRINTL この스킬は마법위력でダメージ計算する
+PRINTL 가짜 얼음으로 만든 검으로 상대를 두번 베는 빙결+검격상성
+PRINTL 이 스킬은 마법 위력으로 데미지를 계산한다
 
 ;継承に필요な部位
 @継承部位_3505,ARG

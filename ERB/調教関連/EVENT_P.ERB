@@ -19,6 +19,15 @@
 ;	009		2017/01/13		토트の人				スリーサイズを설정してると임신時に바스트が1cm大きくなる(縮まない)処理
 ;	010		2018/11/26		JK好き					一文字関数Cを排除
 ;	011		2019/03/24		TR(SAYA)				見世物小屋で임신した際きちんと대상を得る様に
+;	011		2020/05/14		JK好き					乳母설정時に実母が乳母リストに入ってしまうのを수정
+;	013		2020/05/14		NEO						1.オプションをオフにした時のために受胎人数を1に再設定する処理を追加
+;													2.多胎妊娠判定処理を追加
+;													3.多胎妊娠時、妊娠発覚時に加筆
+;	014		2021/05/18		JK好き					@PREGNANCY_CHECKにCALL 子宮最大容量初期設定を追加
+;	015		2021/05/25		JK好き					残留していたデバッグメッセージを普段は出ないように修正 ついでにマジックナンバーの掃除
+;	016		2021/05/28		864						主人の【모성】獲得処理を追加
+;	017		2021/06/21		JK好き					@CHANGE_N_STATUSの教会精奉仕での妊娠時の処理が間違っていたのを修正
+;													@CHILD_BIRTHの主人の【모성】獲得処理エラー落ち修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;EVENT_P、EVENT_PREGNANCY、임신関連の이벤트
 
@@ -127,7 +136,7 @@ FOR CHARA, 0 , CHARANUM
 								CONTINUE
 							BREAK
 						WEND
-						CALL SET_FATHERINFO, CHARA, LOCAL, , "名も知らぬ악마"
+						CALL SET_FATHERINFO, CHARA, LOCAL, , "이름도 모르는 악마"
 				ENDSELECT
 			ENDIF
 		;촉수が親
@@ -353,11 +362,13 @@ NEXT
 ;
 ;;판정を行った질사のリセット
 ;CFLAG:T:F = 0
+
+
 ;임신処理
 @GET_CHILD
 FOR LOCAL,0,CHARANUM
 ;	IF TALENT:LOCAL:153 == 0 && CFLAG:LOCAL:102 > 0 && CFLAG:LOCAL:110 <= DAY+15 && CFLAG:LOCAL:12 == 0
-	IF TALENT:LOCAL:임신 == 0 && CFLAG:LOCAL:102 > 0
+	IF TALENT:LOCAL:임신 == 0 && CFLAG:LOCAL:임신時の父親の판정 > 0
 ;		T = LOCAL
 ;		A = CFLAG:T:임신確定後の父親の판정
 		CALL GET_CHILD_MESSAGE, LOCAL
@@ -387,6 +398,24 @@ IF !STRLENS(CSTR:ARG:父親명칭)
 	ENDSELECT
 ENDIF
 PRINTFORML %조사처리(CALLNAME:ARG,"는")% %CSTR:ARG:父親명칭%의 아이를 임신한 것 같다
+
+;ふたごちゃんフラグが有効かつ双子以上なら
+IF FLAG:ふたごちゃんフラグ > 0 && CFLAG:ARG:今回受胎人数 > 1
+	;5つ子まではきちんとカウントしてくれる
+	IF 0
+	ELSEIF CFLAG:ARG:今回受胎人数 == 2
+		PRINTFORML ……게다가、아무래도 쌍둥이인 것 같다！
+	ELSEIF CFLAG:ARG:今回受胎人数 == 3
+		PRINTFORML ……게다가、아무래도 세쌍둥이인 것 같다！
+	ELSEIF CFLAG:ARG:今回受胎人数 == 4
+		PRINTFORML ……무려、네쌍둥이인 것 같다！
+	ELSEIF CFLAG:ARG:今回受胎人数 == 5
+		PRINTFORML ……무려、다섯쌍둥이인 것 같다！
+	ELSE
+		PRINTFORML ……정말 놀랍게도、{CFLAG:ARG:今回受胎人数}사람이나 되는 다태아 같다！
+	ENDIF
+ENDIF
+
 ;IF CFLAG:T:임신確定後の父親の판정 >= 0 && C >= 0
 ;	PRINTFORML %CALLNAME:T%は%CALLNAME:ARG%の아이を身篭った様だ
 ;	CSTR:T:父親명칭 = %CALLNAME:ARG%
@@ -409,6 +438,15 @@ IF ARG != MASTER
 	LOCAL = RAND:6+1
 	CFLAG:ARG:(GET_BASESTATUS(LOCAL) + "강화횟수") += 1
 	PRINTFORMW %CALLNAME:ARG%의 %조사처리(GET_BASESTATUS(LOCAL),"가")% 1 올랐다
+		;ふたごちゃんフラグが有効かつ双子以上なら
+	IF FLAG:ふたごちゃんフラグ > 0 && CFLAG:ARG:今回受胎人数 > 1
+		;（ふつうは）低確率で、あたり：もう一回
+		IF RAND:100 < CFLAG:ARG:今回受胎人数 + 5
+			LOCAL = RAND:6+1
+			CFLAG:ARG:(GET_BASESTATUS(LOCAL) + "강화횟수") += 1
+			PRINTFORMW 다태임신으로 인하여、추가적으로 %CALLNAME:ARG%의 %GET_BASESTATUS(LOCAL)%가 1 올랐다
+		ENDIF
+	ENDIF
 ENDIF
 TALENT:ARG:임신 = 1
 CALL CHANGE_N_STATUS, ARG
@@ -447,11 +485,11 @@ ELSEIF TALENT:ARG:거유 == 1
 	TALENT:ARG:거유 = 0
 	TALENT:ARG:폭유 = 1
 ELSEIF TALENT:ARG:폭유 == 1 || TALENT:ARG:魔乳 == 1
-	MARK:ARG:폭유の취득내역 = 1
+	MARK:ARG:폭유의취득내역 = 1
 ENDIF
 
 ;スリーサイズが有効、かつ바스트サイズを설정済み、かつ今回でサイズが変わったなら、바스트サイズを再計算する
-SIF SETTING_IS_3SIZE() && BASE:ARG:바스트 > 0 && MARK:ARG:폭유の취득내역 == 0
+SIF SETTING_IS_3SIZE() && BASE:ARG:바스트 > 0 && MARK:ARG:폭유의취득내역 == 0
 	CALL SET_INFO_BODYSIZE_AUTO_BUST, ARG
 
 ;모유出るようになる　임신の時は自然に治る = 2
@@ -488,6 +526,18 @@ SIF TALENT:ARG:정조관념
 SIF TALENT:ARG:정조관결여
 	B -= 10
 
+
+;ふたごちゃんフラグが有効の場合
+IF FLAG:ふたごちゃんフラグ > 0
+	;堕ちてるのでメタクソ下がる
+	SIF TALENT:ARG:잉태희망
+		B -= 50
+	;双子以上だとストレスがさらに増加、ただし+20まで
+	SIF CFLAG:ARG:今回受胎人数 > 1
+		B += MIN(20, CFLAG:ARG:今回受胎人数)
+ENDIF
+
+
 ;천사は기본的に임신バッチコイ
 SIF STR:(ABL:ARG:종족) == "천사" && TALENT:ARG:남자 == 0
 	B -= 30
@@ -495,6 +545,19 @@ SIF STR:(ABL:ARG:종족) == "천사" && TALENT:ARG:남자 == 0
 ;堕ちてたら無効
 SIF STR:(ABL:ARG:종족) == "천사" && TALENT:ARG:남자 && TALENT:ARG:타천사 == 0
 	B += 50
+
+;なんらかの素養により妊娠のストレスが極めて小さいと思われる場合
+;※素質ではないのは、それこそ「隠しフラグ」にしたいからだよ
+SIF CFLAG:ARG:妊娠無ストレスフラグ > 0
+	B -= 50
+;フラグが1なら一時的なものとみなし削除する
+SIF CFLAG:ARG:妊娠無ストレスフラグ == 1
+	CFLAG:ARG:妊娠無ストレスフラグ = 0
+
+;元々の性別が男の場合、かつ上位함락でない場合、ストレス爆増
+SIF CFLAG:ARG:元性別 == 0 && 함락(ARG) < 2
+	B += 50
+
 
 ;임신した횟수だけ減少
 SIF CFLAG:ARG:임신횟수 > 0
@@ -505,6 +568,8 @@ SIF B < 0
 
 ;반발각인の2乗×10%増加
 B = B * (100+POWER(MARK:ARG:반발각인,2)*10) / 100
+
+;父親が主人、奴隷、または助手の場合
 IF GROUPMATCH(CFLAG:ARG:임신時の父親の판정, 1, 2, 3)
 	IF 함락(ARG)
 		IF RESULTS == "연모"
@@ -641,23 +706,23 @@ ENDIF
 IF CFLAG:ARG:스트레스치 >= 100 && TALENT:ARG:붕괴 == 0 && T != MASTER
 	PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 멍한 표정을 하고 있다
 	PRINTFORMW %CALLNAME:ARG%의 안에서 무언가가 망가진 것 같다
-	PRINTFORM %CALLNAME:ARG%는 [붕괴]되어버렸다
+	PRINTFORM %조사처리(CALLNAME:ARG,"는")% [붕괴]되어버렸다
 	PRINTL
 	IF 함락(ARG)
-		PRINTFORM %CALLNAME:ARG%는[
+		PRINTFORM %조사처리(CALLNAME:ARG,"는")%[
 		SIF TALENT:ARG:연모
-			PRINTFORM 연모
+			PRINTFORM 연모]를
 		SIF TALENT:ARG:음란
-			PRINTFORM 음란
+			PRINTFORM 음란]을
 		SIF TALENT:ARG:복종
-			PRINTFORM 복종
+			PRINTFORM 복종]을
 		SIF TALENT:ARG:친애
-			PRINTFORM 친애
+			PRINTFORM 친애]를
 		SIF TALENT:ARG:창부
-			PRINTFORM 창부
+			PRINTFORM 창부]를
 		SIF TALENT:ARG:예속
-			PRINTFORM 예속
-		PRINTW ]을(를) 잃었다
+			PRINTFORM 예속]을
+		PRINTW  잃었다
 		TALENT:ARG:연모 = 0
 		TALENT:ARG:음란 = 0
 		TALENT:ARG:복종 = 0
@@ -687,6 +752,15 @@ SIF U
 
 ;臨月到達
 @REACH_FULL_TERM(ARG)
+;多胎妊娠の場合、通常と同じタイミングで動けなくなり、出産まで長期間かかる
+;ふたごちゃんフラグはここでは使わない
+IF CFLAG:ARG:今回受胎人数 > 1
+	PRINTFORML %조사처리(CALLNAME:ARG,"는")% 다태임신으로 인해、더 이상 움직일 수 없는 것 같다……
+ELSE
+	PRINTFORML %조사처리(CALLNAME:ARG,"는")% 만삭을 맞이했습니다
+ENDIF
+	PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 출산을 대비하여 육아실로 이동합니다
+
 PRINTFORML %조사처리(CALLNAME:ARG,"는")% 임월을 맞이했습니다
 PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 출산을 위해 육아실로 이동합니다
 SIF TARGET == ARG
@@ -699,16 +773,30 @@ SIF ASSI == ARG
 T = TARGET
 F = -1
 FOR LOCAL, 0, CHARANUM
-	SIF NO:LOCAL == CFLAG:ARG:111
+	SIF NO:LOCAL == CFLAG:ARG:임신確定後の父親の판정
 		F = LOCAL
 NEXT
+
+;多胎妊娠の場合、チョイとメッセージ変更
+;ふたごちゃんフラグはここでは使わない
+IF CFLAG:ARG:今回受胎人数 > 1
+	IF F >= 0
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")%、%CALLNAME:F%의 아이들을 무사히 출산했습니다
+	ELSEIF CFLAG:ARG:임신確定後の父親の판정 == -2
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")%、촉수의 아이들을 무사히 출산했습니다
+	ELSE
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 아이들을 무사히 출산했습니다
+	ENDIF
+ELSE
 IF F >= 0
-	PRINTFORMW %조사처리(CALLNAME:ARG,"는")% %CALLNAME:F%의 아이를 무사히 출산했습니다
-ELSEIF CFLAG:ARG:111 == -2
-	PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 촉수의 아이를 무사히 출산했습니다
-ELSE 
-	PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 아이를 무사히 출산했습니다
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% %CALLNAME:F%의 아이를 무사히 출산했습니다
+	ELSEIF CFLAG:ARG:임신確定後の父親の판정 == -2
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 촉수의 아이를 무사히 출산했습니다
+	ELSE 
+		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 아이를 무사히 출산했습니다
+	ENDIF
 ENDIF
+
 U = 0
 IF ASSI >= 0
 	SIF ASSI == ARG
@@ -725,14 +813,22 @@ SIF U
 ;임신を失う
 TALENT:ARG:임신 = 0
 CFLAG:ARG:発情임신 = 0
-EXP:ARG:출산경험 += 1
+
+;双子以上を孕んでいた場合、出産経験がドバりと増える（かもしれない）……出産回数で言えば1回だって？かもね！！！！
+IF CFLAG:ARG:今回受胎人数 > 1
+	EXP:ARG:출산경험 += CFLAG:ARG:今回受胎人数
+ELSE
+	EXP:ARG:출산경험 += 1
+ENDIF
+;CFLAG:ARG:今回受胎人数は育児室で対応させるためここではまだリセットしない
+
 
 ;育児放棄をした場合
 IF TALENT:ARG:붕괴
 	;育児放棄の際の赤子の処置
 	A = 0
 	FOR LOCAL, 0, CHARANUM
-		SIF TALENT:LOCAL:임신 == 0 && TALENT:LOCAL:육아중 == 0 && TALENT:LOCAL:모성 && CFLAG:LOCAL:12 == 0
+		SIF TALENT:LOCAL:임신 == 0 && TALENT:LOCAL:육아중 == 0 && TALENT:LOCAL:모성 && CFLAG:LOCAL:노역フラグ == 0
 			A += 1
 	NEXT
 	IF A > 0
@@ -742,7 +838,7 @@ IF TALENT:ARG:붕괴
 		PRINTL 누구에게 맡기겠습니까?
 		FOR LOCAL, 0, CHARANUM
 			;現在[임신]상태でなく、[모성]持ちで노역中でないキャラを羅列
-			IF TALENT:LOCAL:임신 == 0 && TALENT:LOCAL:육아중 == 0 && TALENT:LOCAL:모성 && CFLAG:LOCAL:12 == 0
+			IF TALENT:LOCAL:임신 == 0 && TALENT:LOCAL:육아중 == 0 && TALENT:LOCAL:모성 && CFLAG:LOCAL:노역フラグ == 0
 				IF LOCAL < 10
 					PRINTFORML [ {LOCAL}]%NAME:LOCAL% 
 				ELSE
@@ -756,14 +852,14 @@ IF TALENT:ARG:붕괴
 			PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 어쩔 수 없이 갓난아기를 수양자식으로 보냈습니다
 		ELSEIF RESULT < 0 || RESULT >= CHARANUM
 			GOTO INPUT_LOOP_CHILD_BIRTH
-		ELSEIF TALENT:RESULT:임신 == 1 || TALENT:RESULT:육아중 == 1 || TALENT:RESULT:모성 == 0 || CFLAG:RESULT:12 != 0
+		ELSEIF TALENT:RESULT:임신 == 1 || TALENT:RESULT:육아중 == 1 || TALENT:RESULT:모성 == 0 || CFLAG:RESULT:노역フラグ != 0
 			GOTO INPUT_LOOP_CHILD_BIRTH
 		ELSE
 			PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% %CALLNAME:RESULT%에게 유모가 되어달라고 부탁했습니다
 			;育児期間を설정する
-			CFLAG:RESULT:110 = DAY+1
+			CFLAG:RESULT:출산予定日 = DAY+1
 			CFLAG:RESULT:출산日 = DAY
-			CFLAG:RESULT:111 = CFLAG:ARG:111
+			CFLAG:RESULT:임신確定後の父親の판정 = CFLAG:ARG:임신確定後の父親の판정
 			CFLAG:RESULT:娘の産みの親のキャラ번호親 = NO:ARG
 			CFLAG:RESULT:娘の産みの親の固有번호親 = CFLAG:ARG:キャラ固有の번호
 			CFLAG:RESULT:父親の固有번호親 = CFLAG:ARG:父親の固有번호親
@@ -784,13 +880,17 @@ IF TALENT:ARG:붕괴
 	CALL CLEAR_FLAG(ARG)
 	;임신時に大きくなった가슴のサイズを一段小さくする
 	CALL REVERSE_B_SIZE(ARG)
+
+	;育児放棄したということで初期化
+	CFLAG:ARG:今回受胎人数 = 0
+
 ;育児に入った場合
 ELSE
 						;****乳母パッチ改造ここから****
 	;赤子の教育についての処置
 	A = 0
 	FOR LOCAL, 0, CHARANUM
-		SIF TALENT:LOCAL:임신 == 0 && TALENT:LOCAL:육아중 == 0 && TALENT:LOCAL:모성 && CFLAG:LOCAL:12 == 0
+		SIF TALENT:LOCAL:임신 == 0 && TALENT:LOCAL:육아중 == 0 && TALENT:LOCAL:모성 && CFLAG:LOCAL:노역フラグ == 0
 			A += 1
 	NEXT
 	IF A > 0
@@ -800,7 +900,7 @@ ELSE
 		PRINTL 누구에게 맡기겠습니까?
 		FOR LOCAL, 0, CHARANUM
 			;現在[임신]상태でなく、[모성]持ちで노역中でないキャラを羅列
-			IF TALENT:LOCAL:임신 == 0 && TALENT:LOCAL:육아중 == 0 && TALENT:LOCAL:모성 && CFLAG:LOCAL:12 == 0 && LOCAL != C
+			IF TALENT:LOCAL:임신 == 0 && TALENT:LOCAL:육아중 == 0 && TALENT:LOCAL:모성 && CFLAG:LOCAL:노역フラグ == 0 && LOCAL != C
 				IF LOCAL < 10
 					PRINTFORML [ {LOCAL}]%NAME:LOCAL% 
 				ELSE
@@ -815,29 +915,35 @@ ELSE
 			CFLAG:ARG:娘の産みの親のキャラ번호親 = NO:ARG
 			CFLAG:ARG:娘の産みの親の固有번호親 = CFLAG:ARG:キャラ固有の번호
 			CFLAG:ARG:출산日 = DAY
-			CFLAG:ARG:101 = 0
-			CFLAG:ARG:102 = 0
-			CFLAG:ARG:103 = 0
-			CFLAG:ARG:104 = 0
-			CFLAG:ARG:105 = 0
-			CFLAG:ARG:112 = 0
+			CFLAG:ARG:主人の中出氏による임신판정 = 0
+			CFLAG:ARG:임신時の父親の판정 = 0
+			CFLAG:ARG:조수の中出氏による임신판정 = 0
+			CFLAG:ARG:奴隷の中出氏による임신판정 = 0
+			CFLAG:ARG:顧客の中出氏による임신판정 = 0
+			CFLAG:ARG:촉수の中出氏による임신판정 = 0
 			TALENT:ARG:육아중 = 1
+			;母親が主人で父親が親愛持ちの奴隷か助手かつ主人の愛情経験3000以上の状態で、「自分で育てる」を選択
+			IF F > 0 && CFLAG:ARG:娘の産みの親のキャラ번호親 == NO:MASTER && TALENT:F:친애 && EXP:MASTER:애정경험 >= 3000 && TALENT:MASTER:모성 == 0
+				PRINTFORMW 愛する%CALLNAME:F%の子を授かった%NAME:MASTER%は[모성]に目覚めた
+				TALENT:MASTER:모성 = 1
 			;연모･친애持ちで父親が主人
-			IF (TALENT:ARG:연모 || TALENT:ARG:친애) && CFLAG:ARG:111 == NO:MASTER && TALENT:ARG:모성 == 0
+			ELSEIF (TALENT:ARG:연모 || TALENT:ARG:친애) && CFLAG:ARG:임신確定後の父親の판정 == NO:MASTER && TALENT:ARG:모성 == 0
 				PRINT 아무래도 
 				PRINTFORMW %조사처리(CALLNAME:ARG,"는")% [모성]에 눈을 뜬 것 같다
 				TALENT:ARG:모성 = 1
 			ENDIF
+			;今回受胎人数については親離れ時に初期化
+
 		ELSEIF RESULT < 0 || RESULT >= CHARANUM
 			GOTO INPUT_LOOP_CHILD_BIRTH_1
-		ELSEIF TALENT:RESULT:임신 == 1 || TALENT:RESULT:육아중 == 1 || TALENT:RESULT:모성 == 0 || CFLAG:RESULT:12 != 0
+		ELSEIF TALENT:RESULT:임신 == 1 || TALENT:RESULT:육아중 == 1 || TALENT:RESULT:모성 == 0 || CFLAG:RESULT:노역フラグ != 0
 			GOTO INPUT_LOOP_CHILD_BIRTH_1
 		ELSE
 			PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% %CALLNAME:RESULT%에게 유모가 되어달라고 부탁했습니다
 			;育児期間を설정する
-			CFLAG:RESULT:110 = DAY+1
+			CFLAG:RESULT:출산予定日 = DAY+1
 			CFLAG:RESULT:출산日 = DAY
-			CFLAG:RESULT:111 = CFLAG:ARG:111
+			CFLAG:RESULT:임신確定後の父親の판정 = CFLAG:ARG:임신確定後の父親の판정
 			CFLAG:RESULT:娘の産みの親のキャラ번호親 = NO:ARG
 			CFLAG:RESULT:娘の産みの親の固有번호親 = CFLAG:ARG:キャラ固有の번호
 			CFLAG:RESULT:父親の固有번호親 = CFLAG:ARG:父親の固有번호親
@@ -854,25 +960,33 @@ ELSE
 			CALL CLEAR_FLAG(ARG)
 			;임신時に大きくなった가슴のサイズを一段小さくする
 			CALL REVERSE_B_SIZE(ARG)
+
+			;乳母さんの場合も、見ることはできそうだけど、ひとまず初期化
+			CFLAG:ARG:今回受胎人数 = 0
+
 		ENDIF
 	ELSE
 		PRINTFORML %조사처리(CALLNAME:ARG,"는")% 육아실에서 육아를 시작했다
 		CFLAG:ARG:娘の産みの親のキャラ번호親 = NO:ARG
 		CFLAG:ARG:娘の産みの親の固有번호親 = CFLAG:ARG:キャラ固有の번호
 		CFLAG:ARG:출산日 = DAY
-		CFLAG:ARG:101 = 0
-		CFLAG:ARG:102 = 0
-		CFLAG:ARG:103 = 0
-		CFLAG:ARG:104 = 0
-		CFLAG:ARG:105 = 0
-		CFLAG:ARG:112 = 0
+		CFLAG:ARG:主人の中出氏による임신판정 = 0
+		CFLAG:ARG:임신時の父親の판정 = 0
+		CFLAG:ARG:조수の中出氏による임신판정 = 0
+		CFLAG:ARG:奴隷の中出氏による임신판정 = 0
+		CFLAG:ARG:顧客の中出氏による임신판정 = 0
+		CFLAG:ARG:촉수の中出氏による임신판정 = 0
 		TALENT:ARG:육아중 = 1
 		;연모･친애持ちで父親が主人
-		IF (TALENT:ARG:연모 || TALENT:ARG:친애) && CFLAG:ARG:111 == NO:MASTER && TALENT:ARG:모성 == 0
+		IF (TALENT:ARG:연모 || TALENT:ARG:친애) && CFLAG:ARG:임신確定後の父親の판정 == NO:MASTER && TALENT:ARG:모성 == 0
 			PRINT 아무래도 
 			PRINTFORMW %조사처리(CALLNAME:ARG,"는")% [모성]에 눈을 뜬 것 같다
 			TALENT:ARG:모성 = 1
 		ENDIF
+
+		;自分で育てる場合は初期化しない
+		;CFLAG:ARG:今回受胎人数 = 0
+
 	ENDIF
 						;****乳母パッチ改造ここまで****
 ENDIF
@@ -902,7 +1016,7 @@ FOR LCOUNT, 0, CHARANUM
 	IF LCOUNT == MASTER
 		CONTINUE
 	;現在臨月か[육아중]のキャラを羅列
-	ELSEIF  (TALENT:LCOUNT:임신 && (CFLAG:LCOUNT:110 - 3) <= DAY) || TALENT:LCOUNT:육아중
+	ELSEIF  (TALENT:LCOUNT:임신 && (CFLAG:LCOUNT:출산予定日 - 3) <= DAY) || TALENT:LCOUNT:육아중
 		IF LCOUNT < 10
 			PRINTFORML [ {LCOUNT}]%NAME:LCOUNT% 
 		ELSE
@@ -929,8 +1043,13 @@ ELSE
 	A = TARGET
 	TARGET = RESULT
 	TFLAG:13 = 13
+	;ふたごちゃんパッチアリの場合、「CFLAG:今回受胎人数」を見ることで今回何人産んだかを見ることができる
 	CALL KOJO_MESSAGE_EVENT
 	IF TALENT:육아중 == 1
+		;双子以上だった場合、「ひとりだけ育てられる」言い訳をする
+		;娘が一気に5人くらい増えても困るじゃろプレイヤー
+		SIF CFLAG:TARGET:今回受胎人数 > 1
+			PRINTFORML ……아무래도、다태라서 그런지、육아와의 싸움을 견딜 수 있는 것은 혼자뿐인 것 같다。
 		PRINTFORMW ￥50000이 소모됩니다만 %CALLNAME:TARGET%에게 아이의 교육을 맡기겠습니까?
 		PRINTFORMW 지금 교육을 맡\@ CFLAG:娘教育 ? 긴다  # 기지 않는다 \@
 		
@@ -959,12 +1078,20 @@ RETURN 1
 
 ;親離れ
 @DEPEARENT(ARG)
-PRINTFORML %조사처리(CALLNAME:ARG,"가")% 기르던 아이가 부모로부터 독립했습니다
+IF CFLAG:ARG:今回受胎人数 > 1
+	PRINTFORML %조사처리(CALLNAME:ARG,"가")% 기르던 아이들이 부모로부터 독립했습니다
+ELSE
+	PRINTFORML %조사처리(CALLNAME:ARG,"가")% 기르던 아이가 부모로부터 독립했습니다
+ENDIF
 PRINTW 
 PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 다시 조교 가능하게 되었습니다
 ;임신時に減った체력の최대値が회복
 ;MAXBASE:ARG:0 += 500
 TALENT:ARG:육아중 = 0
+
+;乳母でない場合、このタイミングで受胎人数を初期化
+SIF CFLAG:ARG:乳母かな？ == 0
+	CFLAG:ARG:今回受胎人数 = 0
 IF TALENT:ARG:빈유 == 0 && CFLAG:ARG:乳母かな？ == 0 && BASE:ARG:바스트 == 0
 	PRINTFORMW %CALLNAME:ARG%의 가슴은 모유를 주는 역할을 끝내면서 작아졌습니다
 	;임신時に大きくなった가슴のサイズを一段小さくする
@@ -981,16 +1108,22 @@ TFLAG:13 = 14
 CALL KOJO_MESSAGE_EVENT
 TARGET = A
 
-;임신まわりのフラグをリセット
+;親離れとかの時の口上で出せるようにここでリセット
+;主人が育てた場合、乳母の場合は事前に初期化しているので問題ないハズ。
+;ふたごちゃんフラグはまあ不要かしら。
+CFLAG:ARG:今回受胎人数 = 0
+
+
+;妊娠まわりのフラグをリセット
 @CLEAR_FLAG(ARG)
-CFLAG:ARG:101 = 0
-CFLAG:ARG:102 = 0
-CFLAG:ARG:103 = 0
-CFLAG:ARG:104 = 0
-CFLAG:ARG:105 = 0
-CFLAG:ARG:110 = 0
-CFLAG:ARG:111 = 0
-CFLAG:ARG:112 = 0
+CFLAG:ARG:主人の中出氏による임신판정 = 0
+CFLAG:ARG:임신時の父親の판정 = 0
+CFLAG:ARG:조수の中出氏による임신판정 = 0
+CFLAG:ARG:奴隷の中出氏による임신판정 = 0
+CFLAG:ARG:顧客の中出氏による임신판정 = 0
+CFLAG:ARG:출산予定日 = 0
+CFLAG:ARG:임신確定後の父親の판정 = 0
+CFLAG:ARG:촉수の中出氏による임신판정 = 0
 CFLAG:ARG:출산日 = 0
 CFLAG:ARG:父親の固有번호親 = 0
 CFLAG:ARG:父親失踪 = 0
@@ -998,10 +1131,11 @@ CFLAG:ARG:娘の産みの親のキャラ번호親 = 0
 CFLAG:ARG:娘の産みの親の固有번호親 = 0
 CFLAG:ARG:노역中の中出氏による暫定父親 = -1
 
+
 ;子育て終了or임신強制終了時の가슴サイズの縮小処理
 @REVERSE_B_SIZE(ARG)
 ;爆→巨　巨→普　普→貧　貧→絶　絶→そのまま
-IF (TALENT:ARG:폭유 || TALENT:ARG:魔乳) && MARK:ARG:폭유の취득내역 == 1
+IF (TALENT:ARG:폭유 || TALENT:ARG:魔乳) && MARK:ARG:폭유의취득내역 == 1
 	;취득履歴がある場合なにもしない
 ELSEIF TALENT:ARG:폭유
 	TALENT:ARG:폭유 = 0
@@ -1018,15 +1152,17 @@ IF TALENT:ARG:모유체질 == 2
 	TALENT:ARG:모유체질 = 0
 	PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 모유체질을 잃었다
 ENDIF
-MARK:ARG:폭유の취득내역 = 0
+MARK:ARG:폭유의취득내역 = 0
 
 ;スリーサイズが有効、かつ바스트サイズを설정済み、かつ今回でサイズが変わったなら、바스트サイズを再計算する
-SIF SETTING_IS_3SIZE() && BASE:ARG:바스트 > 0 && MARK:ARG:폭유の취득내역 == 0
+SIF SETTING_IS_3SIZE() && BASE:ARG:바스트 > 0 && MARK:ARG:폭유의취득내역 == 0
 	CALL SET_INFO_BODYSIZE_AUTO_BUST, ARG
 
 ;育児室にいるかの판정
 @CHECK_CHILD_CARE, ARG
 #FUNCTION
+SIF (CFLAG:(LOCAL:0):출산予定日 - 2 - MIN(6, CFLAG:ARG:今回受胎人数 - 1)) <= DAY && CFLAG:ARG:今回受胎人数 > 1
+	RETURNF 1
 SIF (TALENT:ARG:임신 && CFLAG:ARG:출산予定日 - 2 <= DAY)
 	RETURNF 1
 SIF TALENT:ARG:육아중
@@ -1081,10 +1217,20 @@ RETURNF 0
 ;==========================================================
 @PREGNANCY_CHECK, ARG, ARG:1 = 0
 #LOCALSIZE 3
-;LOCAL 임신판정用CFLAG変数の配列番号
-;LOCAL:1 父親판정用の値
+;LOCAL 妊娠判定用CFLAG変数の配列番号
+;LOCAL:1 父親判定用の値
+;LOCAL:2 受精率補正＆受胎人数計算用
+;LOCAL:3 受胎人数計算用
+#DIM 多胎率
+#DIM 受胎数
+#DIM 多胎率合計
+#DIM 多胎限界
+#DIM 多胎上限
+#DIM 多胎下限
+#DIM 受精率補正
 
-;一応임신可能か確認
+CALL 子宮最大容量初期設定,ARG
+;一応妊娠可能か確認
 IF !PREGNANCY_ABLE(ARG)
 	;임신できない상태でARGがキャラ登録番号の範囲内の場合
 	;임신판정の値をクリアして終了
@@ -1095,6 +1241,25 @@ ENDIF
 ;악마회화で임신が確定している場合
 SIF CFLAG:ARG:임신時の父親の판정 > 0
 	RETURN CFLAG:ARG:임신時の父親の판정
+
+;定数補正
+;排卵剤、임신하기쉬움・しにくい・孕みたがりによって補正する
+受精率補正 = 1 + (CFLAG:ARG:배란유발제 > 0) + (TALENT:ARG:임신하기쉬움 > 0) + (TALENT:ARG:잉태희망 > 0) - (TALENT:ARG:임신하기어려움 > 0)
+
+;たっぷり出したら補正1、1000ml以上だと倍
+SIF CFLAG:ARG:子宮現在容量 > 1000
+	受精率補正 *= 2
+
+;たっぷり出したら補正2、マンタンでおよそ2倍。ただし1倍以下にはならないようにする
+SIF CFLAG:ARG:子宮現在容量 > (CFLAG:ARG:子宮최대容量 / 2)
+	受精率補正 *= (CFLAG:ARG:子宮現在容量 / CFLAG:ARG:子宮최대容量) *2
+
+;디버그용
+IF CFLAG:ARG:子宮現在容量
+	DEBUGPRINTFORML %CALLNAME:ARG%子宮現在容量{CFLAG:(ARG):子宮現在容量}
+	DEBUGPRINTFORML %CALLNAME:ARG%受精率補正{受精率補正}
+ENDIF
+
 FOR LOCAL:1, 1, 7
 	;이벤트임신체크
 	;이벤트で確実に임신する場合は판정処理を飛ばす
@@ -1123,24 +1288,383 @@ FOR LOCAL:1, 1, 7
 
 	;확률処理(ここを抜けることで임신確定)
 	;排卵剤の有無による定数설정
-	LOCAL:2 = 1 + (CFLAG:ARG:배란유발제 > 0)
-	IF CFLAG:ARG:배란유발제 == 0 && (위험일(ARG) == 0) 
-		SIF RAND:100 >= MIN(50, CFLAG:ARG:LOCAL)
+	IF FLAG:ふたごちゃんフラグ > 0
+		;おまじない：さすがに精液が一滴も入ってなければMURI
+		IF CFLAG:ARG:子宮現在容量 < 1
 			CONTINUE
+		ENDIF
+		;ふたごちゃんフラグが3：胎内合体魔人だった場合、かつ十分に膣出ししている、かつ危険日or誘発剤使用時は確実に妊娠する
+		;あとは何匹孕むかです
+		SIF FLAG:ふたごちゃんフラグ > 2 && ((CFLAG:ARG:子宮최대容量 * 9 / 10) < CFLAG:ARG:子宮現在容量) && (CFLAG:ARG:배란유발제 || (위험일(ARG)))
+			GOTO PREGNANCY_PROCESS
+		;디버그용
+		DEBUGPRINTFORML %CFLAGNAME:LOCAL%{CFLAG:ARG:LOCAL}
+		;排卵誘発剤がなく、危険日でない場合、最大でも50％
+		IF CFLAG:ARG:배란유발제 == 0 && (위험일(ARG) == 0) 
+			;디버그용
+			DEBUGPRINTFORML RAND値{CFLAG:ARG:LOCAL*受精率補正}
+			DEBUGPRINTFORM 排卵誘発剤もなく危険日でもない。
+			IF RAND:100 >= MIN(50, (CFLAG:ARG:LOCAL*受精率補正))
+				DEBUGPRINTFORML RANDで弾かれた
+				CONTINUE
+			ENDIF
+			DEBUGPRINTFORML 妊娠確定
+			SIF FLAG:DEBUG
+				FORCEWAIT
+		ELSE
+			DEBUGPRINTFORML RAND値{CFLAG:ARG:LOCAL*受精率補正 * ((위험일(ARG) > 0) + 1)}
+			DEBUGPRINTFORM 排卵誘発剤もしくは危険日である。
+			IF RAND:100 >= CFLAG:ARG:LOCAL*受精率補正 * ((위험일(ARG) > 0) + 1)
+				DEBUGPRINTFORML RANDで弾かれた
+				CONTINUE
+			ENDIF
+			DEBUGPRINTFORML 妊娠確定
+			SIF FLAG:DEBUG
+				FORCEWAIT
+		ENDIF
+	;多胎妊娠オプションオフの場合（通常）
 	ELSE
-		SIF RAND:100 >= CFLAG:ARG:LOCAL*LOCAL:2 * ((위험일(ARG) > 0) + 1)
-			CONTINUE
+		;排卵剤の有無による定数設定
+		受精率補正 = 1 + (CFLAG:ARG:배란유발제 > 0)
+		IF CFLAG:ARG:배란유발제 == 0 && (위험일(ARG) == 0) 
+			SIF RAND:100 >= MIN(50, CFLAG:ARG:LOCAL)
+				CONTINUE
+		ELSE
+			SIF RAND:100 >= CFLAG:ARG:LOCAL*受精率補正 * ((위험일(ARG) > 0) + 1)
+				CONTINUE
+		ENDIF
 	ENDIF
 
+
 $PREGNANCY_PROCESS
+
 	;임신確定後の処理
 	SIF 위험일(ARG) > 1
 		CFLAG:ARG:発情임신 = 1
 	CFLAG:ARG:출산予定日 = DAY + 6
 	CFLAG:ARG:임신時の父親の판정 = LOCAL:1
+
 	;임신確定したのでループを抜ける
+	CFLAG:ARG:今回受胎人数 = 1
+
+	;===================
+	;●双子判定開始
+	;===================
+	;多胎妊娠オプションオンの場合
+	IF FLAG:ふたごちゃんフラグ > 0
+
+		;===================
+		;●多胎率計算
+		;===================
+		;実際に双子以上になるかの判定
+		;上限が高いほどなりやすい
+		;ただしオプションによっては双子率には限度アリ
+		;基本値は1(%)
+		多胎率 = 1
+
+		;排卵誘発剤があると+補正
+		SIF CFLAG:ARG:배란유발제
+			多胎率 += 3
+		;危険日なら+補正
+		SIF (위험일(ARG))
+			多胎率 += 2
+		;ケモノ系なら+補正
+		IF TALENT:ARG:여우 || TALENT:ARG:요호 || TALENT:ARG:동물귀 || TALENT:ARG:발정가능 || TALENT:ARG:짐승 || TALENT:ARG:새 || TALENT:ARG:파충류 || TALENT:ARG:부정형 || TALENT:ARG:물고기 || TALENT:ARG:이형
+			多胎率 += 1
+			;かつ、危険日ならさらに+補正
+			SIF (위험일(ARG))
+				多胎率 += 2
+		ENDIF
+		;母性なら+補正
+		SIF TALENT:ARG:모성
+			多胎率 += 1
+		;オトコの場合（男の娘の場合）孕む場所が子袋ではないのでマイナス補正
+		SIF TALENT:ARG:남자 || TALENT:ARG:오토코노코
+			多胎率 -= 3
+		;出産経験に応じて多胎率上昇
+		IF 0
+		ELSEIF EXP:ARG:출산경험 >= 250
+			多胎率 += 12
+		ELSEIF EXP:ARG:출산경험 >= 175
+			多胎率 += 10
+		ELSEIF EXP:ARG:출산경험 >= 125
+			多胎率 += 8
+		ELSEIF EXP:ARG:출산경험 >= 75
+			多胎率 += 6
+		ELSEIF EXP:ARG:출산경험 >= 25
+			多胎率 += 4
+		ELSE
+			;出産経験25未満なら補正ナシ
+		ENDIF
+		;ここまでの最大
+		;誘発3+危険日2+獣危険日3+母性1+出産経験12＝21％
+		;標準想定は誘発3+危険日2+母性1+出産経験0＝6%
+
+		;たっぷり注がれていたら*補正
+		SIF CFLAG:ARG:子宮現在容量 > (CFLAG:ARG:子宮최대容量 / 2)
+			多胎率 *= (CFLAG:ARG:子宮現在容量 / (CFLAG:ARG:子宮최대容量 + 1)) * 2
+		;妊娠しやすいなら*補正
+		SIF TALENT:ARG:임신하기쉬움
+			多胎率 *= 150
+			多胎率 /= 10
+		;妊娠しにくいなら/補正
+		SIF TALENT:ARG:임신하기어려움
+			多胎率 *= 8
+			多胎率 /= 10
+		;孕みたがりなら強めの*補正
+		;妊娠しやすいと合わせて3.75倍
+		SIF TALENT:ARG:잉태희망
+			多胎率 *= 25
+			多胎率 /= 10
+
+		;ここまでの最大
+		;21%*2*1.5*2.5＝157.5％
+		;標準想定は6%*2＝12％
+
+		;オプションによって確率補正
+		;フラグ1の場合
+		IF FLAG:ふたごちゃんフラグ == 1
+			;最大でも10%
+			;ちなみに現実では1%程度。自然妊娠に限れば、0.6%程度らしい
+			;ただし北欧では1.5%程度と、人種か環境かによって、多少差異があるようだ。
+			SIF 多胎率 >= 10
+				多胎率 = 10
+		;フラグ2の場合
+		ELSEIF FLAG:ふたごちゃんフラグ == 2
+			;双子率2倍
+			多胎率 *= 2
+			;ただし最大50%
+			SIF 多胎率 >= 50
+				多胎率 = 50
+		;フラグ3以上の場合
+		ELSE
+			;双子率3倍だけして確率は補正しない
+			多胎率 *= 3
+		ENDIF
+		;ここまでの最大
+		;21%*2*1.5*2.5＝157.5％でフラグ3で472.5％、ここまで来ると双子～多胎上限までがだいたい等確率で出てくる
+		;標準想定は6%*2＝12％から、10%、24%、36%
+
+		;1%は最低保証
+		SIF 多胎率 <= 0
+			多胎率 = 1
+
+		;===================
+		;●受胎数決定
+		;===================
+		;「多胎率」％で双子ちゃんになる
+		IF RAND:100 < 多胎率
+
+			;===================
+			;●受胎上限設定
+			;===================
+			;双子以上になる場合、2-上限の間の数字を取る
+			多胎上限 = 2
+			;体格による最大値補正
+			;小人体型は上限-補正
+			IF TALENT:ARG:소인체형
+				多胎上限 -= 1
+			ELSEIF TALENT:ARG:유아체형
+				多胎上限 += 0
+			ELSEIF TALENT:ARG:큰체형
+				多胎上限 += 2
+			ELSEIF TALENT:ARG:거체
+				多胎上限 += 3
+			;普通体格
+			ELSE
+				多胎上限 += 1
+			ENDIF
+			;ケツがデカい安産型なら+補正
+			SIF TALENT:ARG:巨尻 || TALENT:ARG:爆尻
+				多胎上限 += 1
+			SIF TALENT:ARG:魔尻
+				多胎上限 += 2
+			;妊娠しやすいなら+補正
+			SIF TALENT:ARG:임신하기쉬움
+				多胎上限 += 1
+			;妊娠しにくいならマイナス補正
+			SIF TALENT:ARG:임신하기어려움
+				多胎上限 -= 1
+			;孕みたがりなら強めの+補正
+			SIF TALENT:ARG:잉태희망
+				多胎上限 += 3
+
+			;出産経験による補正
+			;出産経験1000で打ち止め……にしようかと思ったが1万までは元気よく増える、頑張れ
+			IF 0
+			ELSEIF EXP:ARG:출산경험 >= 10000
+				;このあたりでYURUSITE　つまりイザナミママンは最低でも20-150人は産む
+				多胎上限 += 150
+			ELSEIF EXP:ARG:출산경험 >= 1100
+				;ここからは100刻みで増やす
+				;1100で100/100+20＝21
+				;1200で200/100+20＝22
+				;9900で8900/100+20＝109
+				多胎上限 += (EXP:ARG:출산경험 - 1000) / 100 +20
+			;1000以下はまあだいたい50刻みで増えていく
+			ELSEIF EXP:ARG:출산경험 >= 1000
+				多胎上限 += 20
+			ELSEIF EXP:ARG:출산경험 >= 950
+				多胎上限 += 19
+			ELSEIF EXP:ARG:출산경험 >= 900
+				多胎上限 += 18
+			ELSEIF EXP:ARG:출산경험 >= 850
+				多胎上限 += 17
+			ELSEIF EXP:ARG:출산경험 >= 800
+				多胎上限 += 16
+			ELSEIF EXP:ARG:출산경험 >= 750
+				多胎上限 += 15
+			ELSEIF EXP:ARG:출산경험 >= 700
+				多胎上限 += 14
+			ELSEIF EXP:ARG:출산경험 >= 650
+				多胎上限 += 13
+			ELSEIF EXP:ARG:출산경험 >= 600
+				多胎上限 += 12
+			ELSEIF EXP:ARG:출산경험 >= 550
+				多胎上限 += 11
+			ELSEIF EXP:ARG:출산경험 >= 500
+				多胎上限 += 10
+			ELSEIF EXP:ARG:출산경험 >= 450
+				多胎上限 += 9
+			ELSEIF EXP:ARG:출산경험 >= 400
+				多胎上限 += 8
+			ELSEIF EXP:ARG:출산경험 >= 350
+				多胎上限 += 7
+			ELSEIF EXP:ARG:출산경험 >= 300
+				多胎上限 += 6
+			ELSEIF EXP:ARG:출산경험 >= 200
+				多胎上限 += 5
+			ELSEIF EXP:ARG:출산경험 >= 150
+				多胎上限 += 4
+			ELSEIF EXP:ARG:출산경험 >= 100
+				多胎上限 += 3
+			ELSEIF EXP:ARG:출산경험 >= 50
+				多胎上限 += 2
+			ELSEIF EXP:ARG:출산경험 >= 10
+				多胎上限 += 1
+			ELSE
+				;出産経験9以下なら補正ナシ
+			ENDIF
+
+			;オプションによって最大値補正
+			;体がデカければ数を抱えられるが……という感じ
+			;フラグ3以下の場合
+			IF FLAG:ふたごちゃんフラグ < 3
+				;体格による限界
+				;小人:2　小柄:3　普通:5　큰체형:6　거체:8
+				;ただし魔尻とケモノ系があればそれぞれ+1
+				多胎限界 = 5
+				IF TALENT:ARG:소인체형
+					多胎限界 = 2
+				ELSEIF TALENT:ARG:유아체형
+					多胎限界 = 3
+				ELSEIF TALENT:ARG:큰체형
+					多胎限界 = 6
+				ELSEIF TALENT:ARG:거체
+					多胎限界 = 8
+				;普通体格
+				ELSE
+					多胎限界 = 5
+				ENDIF
+
+				;獣系は多産
+				SIF TALENT:ARG:여우 || TALENT:ARG:요호 || TALENT:ARG:동물귀 || TALENT:ARG:발정가능 || TALENT:ARG:짐승 || TALENT:ARG:새 || TALENT:ARG:파충류 || TALENT:ARG:부정형 || TALENT:ARG:물고기 || TALENT:ARG:이형
+					多胎限界 += 1
+				;ケツがデカい安産型、特に魔の領域に達した尻なら+補正
+				SIF TALENT:ARG:魔尻
+					多胎限界 += 1
+				;フラグが1ならどんな巨体でも最大値は2、「ふたごちゃん」しか生まれない
+				SIF FLAG:ふたごちゃんフラグ == 1 && 多胎上限 > 2
+					多胎上限 = 2
+				;多胎上限が多胎限界以上なら多胎限界まで補正
+				SIF 多胎上限 > 多胎限界
+					多胎上限 = 多胎限界
+
+			ELSE
+				;フラグ3の場合？　私は何も補正しない　自由に羽ばたいてほしい
+			ENDIF
+
+
+			;===================
+			;●受胎数計算
+			;===================
+			;何人受胎するかは下記の計算で行う
+			;　Nつ子を孕む率の重みは「基本値100/受胎数N+多胎率」
+			;　上記計算を、双子の場合をN2、三つ子の場合をN3……上限つ子の場合をNEとし、任意の受胎数をNXと置いた場合、
+			;　NXを孕む確率は「NX/(N2+N3+N4……NE)」となる
+			;　ex1.多胎率20%で三つ子までの場合、「100/2+20＝70」「100/3+20＝53」
+			;　　　70/（70+53）≒56%で双子、53/（70+53）≒43%で三つ子、となる
+			;　ex2.多胎率50%で三つ子までの場合、「100/2+50＝100」「100/3+50＝83」
+			;　　　100/（100+83）≒54%で双子、83/（100+83）≒45%で三つ子、となる
+			;　N2から順番に、「判定し、重みを抜いて、次の判定を行い、重みを抜いて……」と繰り返すことで確率計算ができる
+			;　多胎率が高くなればなるほど、相対的に補正の割合が増えるため、より多くの子を妊娠しやすくなる
+			;　（まあ100人以上孕むとほとんど全部多胎率になって2～多胎上限がほとんど等確率になるんだけど）
+			;　（500/60000で33つ子が産まれるよ！！！みたいな）
+			;　なおそもそも双子以上か否かの判定があるので、実際に三つ子以上が生まれる確率はここでの計算より低い
+			;　また、ふたごちゃんフラグが1の場合は双子までしか産まれない
+
+			;受胎率に重みをつける
+			FOR 受胎数,2,多胎上限
+				;多胎上限が受胎数より高い場合、重みづけを行う
+				IF 受胎数 <= 多胎上限
+					多胎率合計 += 100/受胎数 + 多胎率
+				;念のため：受胎数が上限より高くなった場合抜ける
+				ELSE
+					BREAK
+				ENDIF
+			NEXT
+
+			;受胎数決定
+			;念のため：最大数で初期化
+			CFLAG:ARG:今回受胎人数 = 多胎上限
+			FOR 受胎数,2,多胎上限
+				;受胎数判定
+				IF RAND:(多胎率合計) < (100/受胎数 + 多胎率)
+					CFLAG:ARG:今回受胎人数 = 受胎数
+					BREAK
+				ENDIF
+				;重みを抜く
+				多胎率合計 -= (100/受胎数 + 多胎率)
+				;念のため：多胎率が1以下になったら抜ける
+				SIF 多胎率合計 < 1
+					BREAK
+			NEXT
+
+			;===================
+			;●下限補正
+			;===================
+			;99%念のため（ただしイザナミママン）
+			;下限はここに来てる時点で通常２
+			多胎下限 = 2
+			;ふたごちゃんフラグが3以上の時のみ、ヤオヨロズ・マザーは下限からして限界突破
+			IF FLAG:ふたごちゃんフラグ > 2
+				;800万以上で+20
+				SIF EXP:ARG:출산경험 >= 8000000
+					多胎下限 += 20
+			ENDIF
+
+			;下限より今回受胎人数が小さければ補正
+			SIF CFLAG:ARG:今回受胎人数 < 多胎下限
+				CFLAG:ARG:今回受胎人数 = 多胎下限
+
+			;===================
+			;●妊娠期間補正
+			;===================
+			;受胎数-1か6の小さな方をさらに予定日に加算（最大妊娠期間は12日）
+			;双子であれば7日、4つ子であれば9日
+			CFLAG:ARG:출산予定日 += MIN(6, (CFLAG:ARG:今回受胎人数-1))
+
+		ENDIF
+	ENDIF
+
+	;最大記録より今回人数の方が大きければ記録を行う
+	SIF CFLAG:ARG:最大妊娠人数 < CFLAG:ARG:今回受胎人数
+		CFLAG:ARG:最大妊娠人数 = CFLAG:ARG:今回受胎人数
+
+	;妊娠確定したのでループを抜ける
 		BREAK
 NEXT
+
 ;フラグ초기化
 CALL CLEAR_PREGNANCY_DATERMINATION, ARG
 ;こっちは임신してない時だけ초기化
@@ -1191,6 +1715,58 @@ ELSEIF ARG >= 0 && ARG < CHARANUM
 	CFLAG:ARG:촉수の中出氏による임신판정 = 0
 	CFLAG:ARG:信者の中出氏による임신판정 = 0
 ENDIF
+
+;==========================================================
+;@CLEAR_PREGNANCY_MULTI_BIRTHS
+;妊娠判定用のフラグをクリアする。
+;<引数>
+;	ARG = -1(省略時):全員
+;         0以上		:対象キャラの登録番号
+;<戻り値>
+;	なし
+;該当キャラが妊娠している場合、その受胎人数を1にする処理
+;また、出産予定日も再設定する
+;==========================================================
+@CLEAR_PREGNANCY_MULTI_BIRTHS, ARG = -1
+#DIM LCOUNT
+;全員のフラグをクリア
+IF ARG == -1
+	FOR LCOUNT, 0, CHARANUM
+		IF TALENT:LCOUNT:임신
+			;多胎によって増えている出産予定日を再設定する
+			SIF CFLAG:LCOUNT:今回受胎人数 > 1
+				CFLAG:LCOUNT:출산予定日 -= MIN(6, CFLAG:ARG:今回受胎人数 - 1)
+
+			;受胎人数をひとりに
+			CFLAG:LCOUNT:今回受胎人数 = 1
+
+			;精液ボテ状態の解消
+			;ただし増えすぎた容積はひとまず戻さない（次の調教で補正されるはず）
+			SIF CFLAG:LCOUNT:子宮現在容量 > CFLAG:LCOUNT:子宮최대容量
+				CFLAG:LCOUNT:子宮現在容量 = CFLAG:LCOUNT:子宮최대容量
+
+		ENDIF
+	NEXT
+;対象キャラのフラグをクリア
+ELSEIF ARG >= 0 && ARG < CHARANUM
+	IF TALENT:ARG:임신
+		;多胎によって増えている出産予定日を再設定する
+		SIF CFLAG:ARG:今回受胎人数 > 1
+			CFLAG:ARG:출산予定日 -= MIN(6, CFLAG:ARG:今回受胎人数 - 1)
+
+		;受胎人数をひとりに
+		CFLAG:ARG:今回受胎人数 = 1
+
+		;精液ボテ状態の解消
+		SIF CFLAG:ARG:子宮現在容量 > CFLAG:ARG:子宮최대容量
+			CFLAG:ARG:子宮現在容量 = CFLAG:ARG:子宮최대容量
+
+	ENDIF
+ENDIF
+
+
+
+
 
 ;==========================================================
 ;@SET_FATHERINFO

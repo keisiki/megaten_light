@@ -40,12 +40,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3514
+@SKILL_DECIDE_TYPE_3514, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3514
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3514, ARG
 RETURN 2
 
 
@@ -136,7 +136,7 @@ NEXT
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3514
-PRINTL 自分以外にに만능小ダメージ+ＨＰ흡수
+PRINTL 자신 이외에게 만능 소 데미지+ＨＰ흡수
 
 ;継承に필요な部位
 @継承部位_3514,ARG

@@ -98,7 +98,7 @@
 能力,속성LD,1;Light
 能力,속성LC,2;Neutral
 CSTR,종족명,지모신
-CSTR,11,私
+CSTR,11,나
 CSTR,12,인간
 
 ;복장　おっぱいシリーズは未実装です

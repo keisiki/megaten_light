@@ -29,6 +29,12 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_515,ARG
+SIF ARG < 0
+	RETURN 40
+SIF NO:ARG == [[キャラ:단테]] || NO:ARG == [[キャラ:라이도우]] || NO:ARG == [[キャラ:버질]]
+	RETURN 20
+SIF (NO:ARG == 0 || NO:ARG == 4999) && CFLAG:MASTER:당신の専攻分野 == 7
+	RETURN 30
 RETURN 40
 
 ;　相性
@@ -36,12 +42,12 @@ RETURN 40
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_515
+@SKILL_DECIDE_TYPE_515, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_515
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_515, ARG
 RETURN 0
 
 

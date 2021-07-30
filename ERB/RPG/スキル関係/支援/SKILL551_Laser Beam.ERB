@@ -61,12 +61,12 @@ ENDIF
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_551
+@SKILL_DECIDE_TYPE_551, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_551
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_551, ARG
 RETURN 0
 
 
@@ -98,6 +98,9 @@ SIF ARG == 1
 RETURN 5
 ;지원
 
+@継承不能_551
+RETURN 1
+
 ;속도보정
 @SKILL_SPEED_551, ARG = -1
 RETURN 0
@@ -112,8 +115,6 @@ RETURN 0
 ;스킬変化？用랭크
 @SKILL_RANK_551
 RETURN 22
-
-
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -148,18 +149,30 @@ ENDIF
 FOR LOCAL,LOCAL:1,LOCAL:2
 	SIF POS(LOCAL) < 0
 		CONTINUE
-	CFLAG:POS(LOCAL):명중강화 = MAX(-16, CFLAG:POS(LOCAL):명중강화 - 8)
-	CFLAG:POS(LOCAL):회피강화 = MAX(-16, CFLAG:POS(LOCAL):회피강화 - 8)
-	CFLAG:POS(LOCAL):공격강화 = MAX(-16, CFLAG:POS(LOCAL):공격강화 - 8)
-	CFLAG:POS(LOCAL):마법위력강화 = MAX(-16, CFLAG:POS(LOCAL):마법위력강화 - 8)
+	IF ABL:ARG:가창기능 == 10
+		;2段階低下
+		CFLAG:POS(LOCAL):공격강화 = MAX(-16, CFLAG:POS(LOCAL):공격강화 - 8)
+		CFLAG:POS(LOCAL):명중강화 = MAX(-16, CFLAG:POS(LOCAL):명중강화 - 8)
+		CFLAG:POS(LOCAL):마법위력강화 = MAX(-16, CFLAG:POS(LOCAL):마법위력강화 - 8)
+	ELSEIF ABL:ARG:가창기능 > 5
+		;공격・魔法威力2段階低下/命中1段階低下
+		CFLAG:POS(LOCAL):공격강화 = MAX(-16, CFLAG:POS(LOCAL):공격강화 - 8)
+		CFLAG:POS(LOCAL):명중강화 = MAX(-16, CFLAG:POS(LOCAL):명중강화 - 4)
+		CFLAG:POS(LOCAL):마법위력강화 = MAX(-16, CFLAG:POS(LOCAL):마법위력강화 - 8)
+	ELSE
+		;공격・魔法威力1段階低下
+		CFLAG:POS(LOCAL):공격강화 = MAX(-16, CFLAG:POS(LOCAL):공격강화 - 4)
+		CFLAG:POS(LOCAL):마법위력강화 = MAX(-16, CFLAG:POS(LOCAL):마법위력강화 - 4)
+	ENDIF
 NEXT
-
-PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 공격력・마법위력・명중률・회피율이 크게 내려갔다!
-
-
-
-
-
+IF ABL:ARG:가창기능 == 10
+	PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 공격력・마법위력・명중률이 크게 내려갔다!
+ELSEIF ABL:ARG:가창기능 > 5
+	PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 공격력・마법위력이 크게 내려갔다!
+	PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 명중률이 내려갔다!
+ELSE
+	PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 공격력・마법위력・명중률이 내려갔다!
+ENDIF
 
 ;====================================================
 ;実行内容ここまで
@@ -169,15 +182,34 @@ PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@ 전체의 공격력�
 ;전투中以外での実行
 ;====================================================
 
-
 ;====================================================
 ;実行内容ここまで
 ;====================================================
 
-
 ;　 説明文の표시
 @SKILL_EXPLAIN_551
-PRINTL [특수] 적 전체의 공격력・마법위력・명중률・회피율을 크게 감소시킨다. 가창기능이 높을수록 필요한 MP가 감소한다.
+;ステータス画面からはこっち表示
+IF CFLAG:(CHARANUM-1):PTフラグ || U < 0 || U >= CHARANUM
+	PRINTL 自ら死地に飛び込んで、仲魔と共に敵を穿つ歌。敵の攻撃力・魔法威力を下げる。
+	PRINTL 歌唱技能に応じてコストが低下し、効果が強化され、命中率低下が追加される。
+	PRINTL 　
+	PRINTL 歌唱技能Lv10　 ：敵の攻撃力・命中率・마법위력　２段階低下
+	PRINTL 歌唱技能Lv6以上：敵の攻撃力・마법위력　　　　　２段階低下
+	PRINTL 　　　　　　　　 敵の命中率　　　　　　　　　　１段階低下
+	PRINTL それ以外　　　 ：敵の攻撃力・마법위력　　　　　１段階低下
+;戦闘中はこっち表示
+ELSE
+	PRINTL [특수] 自ら死地に飛び込んで、仲魔と共に敵を穿つ歌。
+	PRINTL 가창기능이 높을수록 적 전체의 공격력・마법위력・명중률・회피율을 크게 감소시키고, 필요한 MP가 감소한다.
+	IF ABL:U:가창기능 == 10
+		PRINTL 敵の攻撃力・命中率・魔法威力を２段階低下。
+	ELSEIF ABL:U:가창기능 > 5
+		PRINTL 敵の攻撃力・魔法威力を２段階低下。
+		PRINTL 敵の命中率　　　　　を１段階低下。
+	ELSE
+		PRINTL 敵の攻撃力・魔法威力を１段階低下。
+	ENDIF
+ENDIF
 
 ;継承に필요な部位
 @継承部位_551,ARG

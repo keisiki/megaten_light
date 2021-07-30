@@ -5,7 +5,7 @@
 ;フラグ
 ;0 = 出現フラグ(적の強さは 出現フラグ 1 * 10 + 20が基準で、フラグは1~4)
 ;    このフラグは이벤트10 組織からの通達によって立てられる
-;1 = 에키드나이벤트フラグ	 -1,에키드나撃破, 1,하니엘의뢰保留		2,하니엘의뢰受諾		3,カテドラル侵攻保留		4,カテドラル侵攻受諾
+;1 = 에키드나이벤트フラグ	 -1,에키드나撃破, 1,하니엘의뢰保留		2,하니엘의뢰受諾		3,카테드랄侵攻保留		4,카테드랄侵攻受諾
 ;2 = 에키드나友好フラグ		真の時、エンカウントがなくなる。どちらかの의뢰を受けたときに立てて、殺したときに折る
 ;3 = 初탐색フラグ
 ;3 = 쾌락　유리아・페테아스카
@@ -42,6 +42,9 @@
 ;-----------------------------------------------------------------------
 
 ;=======================================================================
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX								新規作成
+;	002		2020/08/20								필요레벨수정、아이템関連と카테드랄関連を변경
 
 ;=======================================================================
 ;攻略조건
@@ -98,7 +101,15 @@ FLAG:現Y = 30
 @EVENT_DUNGEON_START_35
 IF 던전フラグ:(FLAG:現던전):3++ == 0
 	CALL SHOW_PICTURE, "D"
-	CALL MESSAGE_WINDOW_D, "", "＞도쿄 교외에 있는『도쿄 데스티니 랜드』/＞한때 관광객과 가족동반객으로 번창했던 테마파크는/＞지금은 악마의 요새가 되어있었다/＞정보에 의하면 그 땅에 사룡 에키드나가 있는 것 같다"
+	CALL MESSAGE_WINDOW_D, "", "＞도쿄 교외에키드나がいるらしい"
+;------ MOD 002 ADD START -----
+	CALL MESSAGE_WINDOW_D, "", @"＞入り입には%SAVESTR:카오스히로コールネーム%がいる"
+	CALL MESSAGE_WINDOW_D, SAVESTR:카오스히로コールネーム , "やはりT.D.L.まで　来たか"
+	CALL MESSAGE_WINDOW_D, SAVESTR:카오스히로コールネーム , @"よう%CALLNAME:MASTER%か　監視塔の件以来だな/俺は今　神の計画をつぶす為/戦っているんだ"
+	CALL MESSAGE_WINDOW_D, SAVESTR:카오스히로コールネーム , "お前には　その힘があると/思っていたぜ"
+	CALL MESSAGE_WINDOW_D, SAVESTR:카오스히로コールネーム , "ここT.D.L.には/大지모신에키드나様がいる/会って話を聞いてみな"
+	CALL MESSAGE_WINDOW_D, "", @"＞%SAVESTR:카오스히로コールネーム%は去っていった"
+;------ MOD 002 ADD END -----
 ENDIF
 
 ;=======================================================================
@@ -1016,7 +1027,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y)/10
 							LOCAL = 1
 						ENDIF
 					ENDIF
-			;カテドラル侵攻保留
+			;카테드랄侵攻保留
 			CASE 3
 				CALL MESSAGE_WINDOW_D, "에키드나", "인간이여/각오는 되었는가？/가이아교도에 의한 카테드랄 탈취 계획/그대의 힘을 빌려주겠나？"
 				CALL INPUT_SELECT_D, @"[0] 힘을 빌려준다/[1] 거절한다%\@CFLAG:MASTER:秩混치 > 84?/[2] 싸움을 건다#\@%"
@@ -1028,9 +1039,11 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y)/10
 					CALL MESSAGE_WINDOW_D, "에키드나", "뭣이 천사에 이어、본녀까지도 쓰러뜨리려고 하는 겐가！/재미있다！/그러나 본녀도 호락호락 죽을 수는 없는 법/갈기갈기 찢어 주겠노라！"
 					LOCAL = 1
 				ENDIF
-			;カテドラル侵攻受諾
+			;카테드랄侵攻受諾
 			CASE 4
-				CALL MESSAGE_WINDOW_D, "에키드나", "가이아교도에 의한 카테드랄 탈취 계획이/머지않아 시작되려 한다/서둘러 긴자로 향하거라/그곳에서 카테드랄을 노리는 게다"
+				;------ 002 ADD -----ギンザ経由しなくても行けるように
+				;CALL MESSAGE_WINDOW_D, "에키드나", "가이아교도에 의한 카테드랄 탈취 계획이/머지않아 시작되려 한다/서둘러 긴자로 향하거라/그곳에서 카테드랄을 노리는 게다"
+				CALL MESSAGE_WINDOW_D, "에키드나", "가이아교도에 의한 카테드랄 탈취 계획이/머지않아 시작되려 한다/서둘러 카테드랄로 향하거라"
 		ENDSELECT
 		;前ブロックでのLOCALの内容で分岐する
 		SELECTCASE LOCAL
@@ -1050,7 +1063,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y)/10
 				던전フラグ:(FLAG:現던전):2 = 0
 				;에키드나進行フラグ
 				던전フラグ:(FLAG:現던전):1 = -1
-			;カテドラルの扉
+			;카테드랄の扉
 			CASE 9
 				CALL MESSAGE_WINDOW_D, "에키드나", "카테드랄을 향해 떠나겠다는 건가/그렇다면 마침 잘 되었다/본녀도 그 땅에 사람을 보내고 싶다고 생각하던 참이네"
 				CALL MESSAGE_WINDOW_D, "에키드나", "그렇긴 한데、약한 인간을 보내도 소용없다/일단은 시나가와의 천사를 쓰러뜨려/스스로 힘을 보여주는 게다"
@@ -1066,7 +1079,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y)/10
 				$YES
 				CALL MESSAGE_WINDOW_D, "에키드나", "맡아주겠다고 했는가！/과연 본녀가/기대한 보람이 있다"
 				CALL MESSAGE_WINDOW_D, "에키드나", "그럼/이것을 가지고 가게/어떻게든 도움이 되겠지"
-				CALL MESSAGE_WINDOW_D, "", @"＞￥100000을 손에 넣었다%\@ABL:MASTER:속성LC == 3 ? /＞독고저를 손에 넣었다/＞패왕의갑주를 손에 넣었다 #\@%"
+				;------ 002 ADD -----カオスに寄っていなくても손に入るように
+				;CALL MESSAGE_WINDOW_D, "", @"＞￥100000을 손에 넣었다%\@ABL:MASTER:속성LC == 3 ? /＞독고저을 손에 넣었다/＞패왕의갑주을 손에 넣었다 #\@%"
+				CALL MESSAGE_WINDOW_D, "", "＞￥100000을 손에 넣었다/＞독고저을 손에 넣었다/＞패왕의갑주을 손에 넣었다"
 				CALL MESSAGE_WINDOW_D, "에키드나", "그럼、부탁했네"
 				MONEY:0 += 100000
 				;カオスのときは독고저と패왕의갑주もついてくる
@@ -1083,9 +1098,11 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y)/10
 				$NO
 				CALL MESSAGE_WINDOW_D, "에키드나", "본녀는 데스티니 랜드에서 벗어날 수 없네/그대를 믿고서 부탁하는 걸세/이해해주게…"
 				던전フラグ:(FLAG:現던전):1 = 1
-			;カテドラル侵攻受諾
+			;카테드랄侵攻受諾
 			CASE 20
-				CALL MESSAGE_WINDOW_D, "에키드나", "그럼…카테드랄로의 길을 열겠다/긴자의 지하로 가거라"
+				;------ 002 ADD -----ギンザ経由しなくても行けるように
+				;CALL MESSAGE_WINDOW_D, "에키드나", "그럼…카테드랄로의 길을 열겠다/긴자의 지하로 가거라"
+				CALL MESSAGE_WINDOW_D, "에키드나", "그럼…카테드랄로의 길을 열겠다/긴자의 지하를 경유하지 않아도 카테드랄로 갈 수 있다"
 				;カオスの場合はここで천마의투구をもらえる
 				IF ABL:MASTER:속성LC == 3
 					CALL MESSAGE_WINDOW_D, "에키드나", "그리고、이것을 가지고 가게/그대라면 이 투구의 힘을 끌어낼 수 있겠지"
@@ -1097,7 +1114,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y)/10
 				;에키드나進行フラグ
 				던전フラグ:(FLAG:現던전):1 = 4
 				던전フラグ:20:0 |= 2
-			;カテドラル侵攻拒否
+			;카테드랄侵攻拒否
 			CASE 21
 				CALL MESSAGE_WINDOW_D, "에키드나", "뭣이！/본녀의 부탁/듣지않겠다고 했는가！"
 				CALL MESSAGE_WINDOW_D, "에키드나", "이제와서 법의 신과 싸우는 것이 두려워졌는가？/너무 본녀를 실망시키지 말게"
@@ -1177,7 +1194,7 @@ ENDSELECT
 ;권장LV 雑물고기최저LV 雑물고기最高LV ボスLV 
 ;=======================================================================
 @GET_DUNGEON_LV_35
-RETURN 25, 22, 27, 25
+RETURN 34, 28, 53, 62
 
 ;=======================================================================
 ;エンカウント率
@@ -1302,6 +1319,21 @@ SELECTCASE FLAG:現M
 					CASE IS < 100
 						RETURN [[キャラ:인큐버스]], 47; + RAND:2 * 3
 				ENDSELECT
+			CASEELSE
+				SELECTCASE RAND:100
+					CASE IS < 20
+						RETURN [[キャラ:맨이터]], 28; + RAND:2 * 3
+					CASE IS < 40
+						RETURN [[キャラ:고르곤]], 29; + RAND:2 * 3
+					CASE IS < 60
+						RETURN [[キャラ:토도메키]], 28; + RAND:2 * 3
+					CASE IS < 80
+						RETURN [[キャラ:히노엔마]], 29; + RAND:2 * 3
+					CASE IS < 90
+						RETURN [[キャラ:엘리고르]], 29; + RAND:2 * 3
+					CASE IS < 100
+						RETURN [[キャラ:인큐버스]], 28; + RAND:2 * 3
+				ENDSELECT				
 		ENDSELECT
 	CASEELSE
 	;二階、三階
@@ -1375,6 +1407,24 @@ SELECTCASE FLAG:現M
 					CASE IS < 100
 						RETURN [[キャラ:아가레스]], 53; + RAND:3 * 3
 				ENDSELECT
+			CASEELSE
+				SELECTCASE RAND:100
+					CASE IS < 20
+						RETURN [[キャラ:맨이터]], 28; + RAND:3 * 3
+					CASE IS < 40
+						RETURN [[キャラ:고르곤]], 29; + RAND:3 * 3
+					CASE IS < 60
+						RETURN [[キャラ:토도메키]], 31; + RAND:3 * 3
+					CASE IS < 70
+						RETURN [[キャラ:쿠치사케]], 32; + RAND:3 * 3
+					CASE IS < 80
+						RETURN [[キャラ:엘리고르]], 29; + RAND:3 * 3
+					CASE IS < 90
+						;10%　사룡바질리스크LV25
+						RETURN [[キャラ:바질리스크]], 31; + RAND:3 * 3
+					CASE IS < 100
+						RETURN [[キャラ:인큐버스]], 28; + RAND:3 * 3
+				ENDSELECT				
 		ENDSELECT
 ENDSELECT
 ;=======================================================================
@@ -1435,7 +1485,7 @@ IF FLAG:経過ターン数 == 0
 	ELSE
 		CFLAG:ARG:입력行動 = [[스킬:포그브레스]]
 	ENDIF
-ELSEIF CFLAG:ARG:１moreフラグ == 2
+ELSEIF CFLAG:ARG:１moreフラグ > 0
 	IF 現HP割合(ARG) > 25
 		SELECTCASE RAND:100
 			CASE IS < 15
@@ -1646,7 +1696,7 @@ ENDIF
 ;용왕펜드래곤の사고패턴
 @SET_ACTION_4570,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF CFLAG:기합フラグ == 0 && 現HP割合(ARG) < 60
 		;베어내기
 		CALL CHECK_ACTIONABLE,ARG,534

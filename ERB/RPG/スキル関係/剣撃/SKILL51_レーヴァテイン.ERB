@@ -44,12 +44,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_51
+@SKILL_DECIDE_TYPE_51, ARG
 RETURN 1
 ;EXTRA
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_51
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_51, ARG
 RETURN 1
 
 
@@ -121,47 +121,29 @@ RETURN 0
 RETURN 0
 
 ;====================================================
+;ヒット時데미지前処理
+;====================================================
+@SKILL_HIT_EFFECT_51,ARG,ARG:1
+IF CFLAG:(ARG:1):물리반사フラグ > 0
+	CFLAG:(ARG:1):물리반사フラグ = 0
+	PRINTFORML 　　TARGET:[{CPOS(ARG:1),2}] %CALLNAME:(ARG:1),20,LEFT%　>>>>>>　물리반사 결계를 파괴했다！
+ENDIF
+IF CFLAG:(ARG:1):검격무효화횟수 > 0
+	CFLAG:(ARG:1):검격무효화횟수 = 0
+	PRINTFORML 　　TARGET:[{CPOS(ARG:1),2}] %CALLNAME:(ARG:1),20,LEFT%　>>>>>>　검격무효화횟수를 전부 파괴했다！
+ENDIF
+IF 1 > CFLAG:(ARG:1):검격가드킬
+	CFLAG:(ARG:1):검격가드킬 = 1
+	PRINTFORML 　　TARGET:[{CPOS(ARG:1),2}] %CALLNAME:(ARG:1),20,LEFT%　>>>>>>　검격속성 내성을 1턴 동안 파괴했다！
+ENDIF
+
+;====================================================
 ;스킬及び行動の実行
 ;====================================================
 @ACTION_51,ARG,ARG:1
-#LOCALSIZE 4
-SELECTCASE ARG:1
-	CASE 17
-		LOCAL:1 = 1
-		LOCAL:2 = 4
-	CASE 18
-		LOCAL:1 = 4
-		LOCAL:2 = 7
-	CASE 20
-		LOCAL:1 = 7
-		LOCAL:2 = 12
-	CASE 21
-		LOCAL:1 = 12
-		LOCAL:2 = 17
-ENDSELECT
-FOR LOCAL, LOCAL:1, LOCAL:2
-	SIF POS(LOCAL) == -1 || CFLAG:POS(LOCAL):ステート == GET_STATE_NUM("DYING")
-		CONTINUE
-	;SIF CFLAG:ARG:PTフラグ == 0
-	;	RETURN 4
+;CALL ATTACK_SINGLE, ARG, POS(LOCAL), 51,1
 
-	LOCAL:3 = 0
-	IF CFLAG:POS(LOCAL):물리반사フラグ == 1
-		CFLAG:POS(LOCAL):물리반사フラグ = 0
-		PRINTFORML [{LOCAL}]%CALLNAME:POS(LOCAL),20% >>>>> 물리반사 결계를 파괴했다!
-		LOCAL:3 = 1
-	ENDIF
-
-	IF CFLAG:POS(LOCAL):검격무효화횟수 > 0
-		CFLAG:POS(LOCAL):검격무효화횟수 = 0
-		PRINTFORML [{LOCAL}]%CALLNAME:POS(LOCAL),20% >>>>> 검격무효화횟수를 전부 파괴했다!
-	ELSEIF 1 > CFLAG:POS(LOCAL):검격가드킬
-		CFLAG:POS(LOCAL):검격가드킬 = 1
-		PRINTFORML [{LOCAL}]%CALLNAME:POS(LOCAL),20% >>>>> 검격속성 내성을 1턴 동안 파괴했다!
-	ENDIF
-	CALL ATTACK_SINGLE, ARG, POS(LOCAL), 51,1
-NEXT
-
+CALL ATTACK_FIELD,ARG,ARG:1,51,1
 WAIT
 
 
@@ -172,7 +154,8 @@ WAIT
 
 ;　설명文の표시
 @SKILL_EXPLAIN_51
-	PRINTL [전열] 적 전열에 검격속성 특대 물리데미지. 적의 검격속성 내성 및 물리방어를 모두 관통하며 파괴한다.
+	PRINTL 모든 존재를 파괴하는 마검의 힘을 해방하여 적 전열 을 떨쳐버린다
+	PRINTL 적의 검격속성 내성 및 물리방어를 모두 관통하며 파괴한다.
 
 
 

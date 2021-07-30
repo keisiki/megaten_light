@@ -47,9 +47,15 @@ RETURN 1
 @장비箇所_2311
 RETURN GET_EQUIPNUM("검")
 
+;산탄사격
 @장비추가스킬_2311,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 113
+	ENDSELECT
+ENDIF
 RETURN 0
-
 
 ;-----------------------------
 ;- SHOP
@@ -72,6 +78,9 @@ PRINTL 장비조건：LV15～
 
 @장비해설_2311
 PRINTL 등나무를 두껍게 휘감은 활。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：산탄사격
+RESETCOLOR
 
 RETURN 0
 

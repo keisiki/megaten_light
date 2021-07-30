@@ -126,7 +126,7 @@ SELECTCASE ARG / 10
 			SETCOLOR 0x00ff00
 			RESULTS = ロ
 		ENDIF
-	;ア디무ル
+	;아딜
 	CASE 2
 		IF 던전フラグ:13:1 > 16
 			SETCOLOR 0x00ff00
@@ -167,7 +167,7 @@ SELECTCASE ARG / 10
 			RESULTS = □
 		ENDIF
 	CASE 7
-	;フレッド
+	;프레드
 		IF 던전フラグ:13:1 > 0
 			SETCOLOR 0x00ff00
 			RESULTS = フ
@@ -206,7 +206,7 @@ SELECTCASE ARG / 10
 		ELSE
 			RESULTS = □
 		ENDIF
-	;奥村　春
+	;奥村　하루
 	CASE 12
 		IF 던전フラグ:13:1 > 4
 			SETCOLOR 0x00ff00
@@ -291,38 +291,38 @@ SIF 던전フラグ:13:9 < 1
 
 RESULTS = 
 SIF 던전フラグ:13:9 % 2 > 0 && 던전フラグ:13:1 > 1
-	RESULTS += "[1]本物の총/"
+	RESULTS += "[1]진짜 총/"
 SIF 던전フラグ:13:9 % 3 > 0 && 던전フラグ:13:1 > 0
-	RESULTS += "[2]真の페르소나/"
+	RESULTS += "[2]마코토의 페르소나/"
 SIF 던전フラグ:13:9 % 5 > 0 && 던전フラグ:13:1 > 0
-	RESULTS += "[3]竜司の페르소나/"
+	RESULTS += "[3]류지의 페르소나/"
 SIF 던전フラグ:13:9 % 7 > 0 && 던전フラグ:13:1 > 2
-	RESULTS += "[4]杏の페르소나/"
+	RESULTS += "[4]안의 페르소나/"
 SIF 던전フラグ:13:9 % 11 > 0 && 던전フラグ:13:1 > 2
-	RESULTS += "[5]祐介の페르소나/"
+	RESULTS += "[5]유스케의 페르소나/"
 SIF 던전フラグ:13:9 % 13 > 0 && 던전フラグ:13:1 > 2
-	RESULTS += "[6]その涙は誇りに思え/"
+	RESULTS += "[6]그 눈물을 자랑으로 생각해라/"
 SIF 던전フラグ:13:9 % 17 > 0 && ((던전フラグ:13:1 > 6 && 던전フラグ:13:12 == 0) || (던전フラグ:13:1 > 4 && 던전フラグ:13:12 > 1 && 던전フラグ:13:12 % 3 == 0))
-	RESULTS += "[7]苦労人の川上さん/"
+	RESULTS += "[7]고생한 카와카미 씨/"
 SIF 던전フラグ:13:9 % 19 > 0 && ((던전フラグ:13:1 > 6 && 던전フラグ:13:13 == 0) || (던전フラグ:13:1 > 4 && 던전フラグ:13:13 > 1 && 던전フラグ:13:13 % 3 == 0))
-	RESULTS += "[8]綺麗な女棋士の東郷一二三/"
+	RESULTS += "[8]예쁜 여류기사 토고 히후미/"
 SIF 던전フラグ:13:9 % 23 > 0 && 던전フラグ:13:1 > 4
-	RESULTS += "[9]春の페르소나/"
+	RESULTS += "[9]하루의 페르소나/"
 SIF !GETBIT(던전フラグ:13:22,0) && 던전フラグ:13:1 > 11
-	RESULTS += "[10]双葉のお願い/"
+	RESULTS += "[10]후타바의 부탁/"
 ;SIF!GETBIT(던전フラグ:13:22,1) && && 던전フラグ:13:1 > 11
-;	RESULTS += "[10]双葉の전투訓練終了/"
+;	RESULTS += "[10]후타바의 전투훈련 종료/"
 SIF !GETBIT(던전フラグ:13:22,2) && 던전フラグ:13:1 > 14 && 던전フラグ:13:16 % 2 == 0
-	RESULTS += "[11]異세계の女医者　武見妙/"
+	RESULTS += "[11]이세계의 여의사 타케미 타에/"
 ;SIF!GETBIT(던전フラグ:13:22,3) && 던전フラグ:13:1 > 14
-;	RESULTS += "[11]異세계の女医者　武見妙/"
+;	RESULTS += "[11]이세계의 여의사 타케미 타에/"
 SIF !GETBIT(던전フラグ:13:22,4) && 던전フラグ:13:1 > 14
 	RESULTS += "[12]제나・엔젤/"
 ;SIF!GETBIT(던전フラグ:13:22,5) && 던전フラグ:13:1 > 14
 ;	RESULTS += "[12]제나・엔젤/"
 ;SIF 던전フラグ:13:1 > 4
-	RESULTS += "[70]謎の奴隷商人/"
-RESULTS += "[0]やめる"
+	RESULTS += "[70]수수께끼의 노예 상인/"
+RESULTS += "[0]그만두다"
 CALL INPUT_SELECT_D , RESULTS , , , 2
 SELECTCASE RESULT
 	CASE 1
@@ -497,113 +497,113 @@ SELECTCASE RESULT
 		CALL MESSAGE_WINDOW_D, "안", "별로 언급 안 하는 게 좋아/저래 보여도 신경 쓰는 면이 있으니까 "
 		던전フラグ:13:9 *= 23
 	CASE 10
-		CALL MESSAGE_WINDOW_D, "", "서프と一緒に双葉に呼ばれた "
-		CALL MESSAGE_WINDOW_D, "후타바", "ねえ　ちょっとしたお願いがあるんだけどさ "
-		CALL MESSAGE_WINDOW_D, "서프", "なんだ？/できる範囲ならしてやれる "
-		CALL MESSAGE_WINDOW_D, "후타바", "私を戦えるようにしてほしいんだ "
-		CALL MESSAGE_WINDOW_D, "후타바", "私の페르소나はっ전투向けじゃないけど/今の私だったら訓練すればできるような気がするんだ "
-		CALL MESSAGE_WINDOW_D, "후타바", "だから　私に전투を教えてほしいんだ/서프と당신は教えるの上손そうだし "
-		CALL MESSAGE_WINDOW_D, "서프", "なるほどな…/確か前の페르소나とは少し別みたいだからな "
-		CALL INPUT_SELECT_D, "[0]自分が教える（비전투원のまま仲間に）/[1]서프に教えさせる（三日後전투員として仲間に）/[2]教えない "
+		CALL MESSAGE_WINDOW_D, "", "서프와 함께 후타바에게 불렸다 "
+		CALL MESSAGE_WINDOW_D, "후타바", "있잖아 부탁이 있는데 "
+		CALL MESSAGE_WINDOW_D, "서프", "뭔데?/할수있는 범위라면 해줄수있어 "
+		CALL MESSAGE_WINDOW_D, "후타바", "나를 싸울 수 있게 해줬으면 해 "
+		CALL MESSAGE_WINDOW_D, "후타바", "내 페르소나는 전투용이 아니지만/지금의 나라면 훈련하면 할 수 있을것 같아 "
+		CALL MESSAGE_WINDOW_D, "후타바", "그러니까 나한테 전투를 알려줬으면 좋겠어/서프와 당신은 가르침도 잘 할 것 같고 "
+		CALL MESSAGE_WINDOW_D, "서프", "그렇구나…/확실히 전의 페르소나와는 조금 다른것 같으니까"
+		CALL INPUT_SELECT_D, "[0]자신이 가르친다（비전투원인채로 동료가 됨）/[1]서프에게 가르치게한다（삼일후 전투원으로서 동료가 됨）/[2]가르치지 않는다 "
 		IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "서프", "フタバをよろしく頼むぞ "
-				CALL MESSAGE_WINDOW_D, "후타바", "ああ　よろしくな "
+				CALL MESSAGE_WINDOW_D, "서프", "후타바를 잘 부탁한다 "
+				CALL MESSAGE_WINDOW_D, "후타바", "아아 잘 부탁해 "
 				CALL ADD_NEW_COMPANION,[[キャラ:후타바]],100
-				CALL MESSAGE_WINDOW_D, "", "사쿠라　双葉を奴隷にした "
+				CALL MESSAGE_WINDOW_D, "", "사쿠라 후타바를 노예로 만들었다 "
 		ELSEIF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "서프", "俺が教えよう/ここには訓練できるところは豊富にあるからな "
-				CALL MESSAGE_WINDOW_D, "후타바", "ああ　よろしくな "
-				CALL MESSAGE_WINDOW_D, "", "사쿠라　双葉は三日後にサブ이벤트で전투員として仲間になります "
+				CALL MESSAGE_WINDOW_D, "서프", "내가 가르쳐 주마/여기에는 훈련할 수 있는 곳이 많이 있으니까 "
+				CALL MESSAGE_WINDOW_D, "후타바", "아아 잘 부탁해 "
+				CALL MESSAGE_WINDOW_D, "", "사쿠라 후타바는 삼일후에 서브이벤트에서 전투원으로 동료가 됩니다 "
 				던전フラグ:13:23 = DAY
 		ELSEIF RESULT == 2
-				CALL MESSAGE_WINDOW_D, "서프", "いや　ダメだ/お前は見たところからだが弱い "
-				CALL MESSAGE_WINDOW_D, "서프", "少し厳しいことを言うと思うが諦めてくれ "
-				CALL MESSAGE_WINDOW_D, "후타바", "う　うん "
+				CALL MESSAGE_WINDOW_D, "서프", "아니 안돼/내가 보기에 너는 몸이 약해 "
+				CALL MESSAGE_WINDOW_D, "서프", "좀 냉정한 말이겠지만 단념해 줘 "
+				CALL MESSAGE_WINDOW_D, "후타바", "으 으응 "
 		ENDIF
 		SETBIT 던전フラグ:13:22,0
 	CASE 11
 		IF !GETBIT(던전フラグ:13:22,3)
-			CALL MESSAGE_WINDOW_D, "서프", "세라を取り戻すことができたな "
-			CALL MESSAGE_WINDOW_D, "로알드", "彼女に身体検査を受けさせたいんだが/医療できる인간が今はいない/負傷兵の치료で全員で손に負えない "
-			CALL MESSAGE_WINDOW_D, "서프", "필요な事なのか？ "
-			CALL MESSAGE_WINDOW_D, "로알드", "ああ　言いにくいことだが/彼女の体は著しく弱いからな "
-			CALL MESSAGE_WINDOW_D, "히트", "それなら　信用できる奴がいるぜ/ついてきな "
-			CALL MESSAGE_WINDOW_D, "", "히트に着いていくと/女性が一人いた "
-			CALL MESSAGE_WINDOW_D, "", "EGG施設で会った武美妙という女性だ "
-			CALL MESSAGE_WINDOW_D, "서프", "お前は… "
-			CALL MESSAGE_WINDOW_D, "武見", "당신は… "
-			CALL MESSAGE_WINDOW_D, "武見", "よかった…세라ちゃんは/無事だったのね… "
-			CALL MESSAGE_WINDOW_D, "", "武見は세라の姿を見ると安堵した "
-			CALL MESSAGE_WINDOW_D, "히트", "早速だが… "
-			CALL MESSAGE_WINDOW_D, "武見", "言わなくてもわかってる/세라ちゃんこっちに来て　身体検査するから "
-			CALL MESSAGE_WINDOW_D, "세라", "うん "
-			CALL MESSAGE_WINDOW_D, "", "武見は세라の身体検査を始める "
-			CALL MESSAGE_WINDOW_D, "", "武美のいる所は少し古いが/レントゲンなどの精密機器を備わっていた "
-			CALL MESSAGE_WINDOW_D, "", "세라の身体検査が終わった "
-			CALL MESSAGE_WINDOW_D, "서프", "どうだった？/세라の様子は… "
-			CALL MESSAGE_WINDOW_D, "武見", "信じられないわ/あんなに内臓があんなに老化していたはずなのに… "
-			CALL MESSAGE_WINDOW_D, "武見", "治ってるのよ！全部！年相応に！/すごい…奇跡だわ… "
-			CALL MESSAGE_WINDOW_D, "로알드", "それなら　よかった "
-			CALL MESSAGE_WINDOW_D, "서프", "前はどんな様子だったんだ？ "
-			CALL MESSAGE_WINDOW_D, "武見", "前は一日を生きるだけで奇跡なくらいなのよ/減速剤が利かなくなるほど進んでたけど… "
-			CALL MESSAGE_WINDOW_D, "武見", "もう完全にその心配もなくなったわ "
-			CALL MESSAGE_WINDOW_D, "서프", "よかったな　세라 "
-			CALL MESSAGE_WINDOW_D, "세라", "うん！　タケミ先生ありがとう "
-			CALL MESSAGE_WINDOW_D, "武見", "お大事にね　세라ちゃん "
-			CALL MESSAGE_WINDOW_D, "", "서프と세라と로알드は出て行った "
-			CALL MESSAGE_WINDOW_D, "히트", "あの…よ…/ありがとな…세라の아군をしてくれてよ "
-			CALL MESSAGE_WINDOW_D, "武見", "何よ　もう少し솔직함になればいいのに "
-			CALL MESSAGE_WINDOW_D, "히트", "うるせえよ！ "
-			CALL MESSAGE_WINDOW_D, "武見", "あの時　당신が아군してくれなかったら/あの子は　今頃生きてなかったかもしれないからね "
-			CALL MESSAGE_WINDOW_D, "히트", "お前だけだったよ　세라を인간扱いしてくれる奴はよ "
-			CALL MESSAGE_WINDOW_D, "히트", "じゃあな　また会おうぜ "
-			CALL MESSAGE_WINDOW_D, "武見", "ええ　じゃあね "
-			CALL MESSAGE_WINDOW_D, "", "히트は出て行った "
+			CALL MESSAGE_WINDOW_D, "서프", "세라를 되찾을 수 있었구나 "
+			CALL MESSAGE_WINDOW_D, "로알드", "그녀에게 신체검사를 받게 하고 싶지만/의료할 수 있는 인간이 지금은 없어/부상병 치료로 인해서 모두가 감당할 수 없어 "
+			CALL MESSAGE_WINDOW_D, "서프", "필요한 일인가？ "
+			CALL MESSAGE_WINDOW_D, "로알드", "아아 말하기 거북한 것이지만/그녀의 몸은 현저하게 약하니까 "
+			CALL MESSAGE_WINDOW_D, "히트", "그렇다면 믿을만한 놈이 있지/따라와 "
+			CALL MESSAGE_WINDOW_D, "", "히트를 따라가보니/여자가 한명있었다 "
+			CALL MESSAGE_WINDOW_D, "", "EGG 시설에서 만난 타케미 타에라는 여성이다 "
+			CALL MESSAGE_WINDOW_D, "서프", "너는… "
+			CALL MESSAGE_WINDOW_D, "타케미", "당신은… "
+			CALL MESSAGE_WINDOW_D, "타케미", "다행이다… 세라쨩은/무사했었구나… "
+			CALL MESSAGE_WINDOW_D, "", "타케미는 세라의 모습을 보자 안도했다 "
+			CALL MESSAGE_WINDOW_D, "히트", "갑작스럽지만… "
+			CALL MESSAGE_WINDOW_D, "타케미", "말 안해도 알아/세라쨩 여기로 와줘 신체검사할테니까 "
+			CALL MESSAGE_WINDOW_D, "세라", "그래 "
+			CALL MESSAGE_WINDOW_D, "", "타케미는 세라의 신체검사를 시작했다 "
+			CALL MESSAGE_WINDOW_D, "", "타케미가 있는 곳은 좀 낡았지만/뢴트겐과 같은 정밀한 장치가 있었다 "
+			CALL MESSAGE_WINDOW_D, "", "세라의 신체검사가 끝났다 "
+			CALL MESSAGE_WINDOW_D, "서프", "어땠어?/세라의 몸은… "
+			CALL MESSAGE_WINDOW_D, "타케미", "믿을 수 없어/내장이 노화되었을 텐데… "
+			CALL MESSAGE_WINDOW_D, "타케미", "낫고 있는거야! 전부! 나이에 맞게!/대단해... 기적이네… "
+			CALL MESSAGE_WINDOW_D, "로알드", "그렇다면 다행이네 "
+			CALL MESSAGE_WINDOW_D, "서프", "전에는 어떤 모습이었지？ "
+			CALL MESSAGE_WINDOW_D, "타케미", "전에는 하루를 사는것만으로도 기적같았을 정도야/감속제가 먹히지 않을정도로 진행되었지만… "
+			CALL MESSAGE_WINDOW_D, "타케미", "이젠 완전히 그런 걱정도 없어졌어 "
+			CALL MESSAGE_WINDOW_D, "서프", "다행이네 세라 "
+			CALL MESSAGE_WINDOW_D, "세라", "응！　타케미 선생님 고마워요 "
+			CALL MESSAGE_WINDOW_D, "타케미", "몸조리 잘하세요 세라쨩 "
+			CALL MESSAGE_WINDOW_D, "", "서프와 세라와 로알드는 나갔다 "
+			CALL MESSAGE_WINDOW_D, "히트", "저기…어…/고마워… 세라의 아군이 되어줘서 "
+			CALL MESSAGE_WINDOW_D, "타케미", "뭐야 좀더 솔직하게 되면 좋겠는데 "
+			CALL MESSAGE_WINDOW_D, "히트", "시끄러워！ "
+			CALL MESSAGE_WINDOW_D, "타케미", "그 때 당신이 아군이 되어주지 않았더라면/그 아이는 지금쯤 살아있지 않았을지도 모르니까. "
+			CALL MESSAGE_WINDOW_D, "히트", "너 뿐이었어 세라를 인간으로 취급하는 녀석은 말이야 "
+			CALL MESSAGE_WINDOW_D, "히트", "그럼 또 만나자 "
+			CALL MESSAGE_WINDOW_D, "타케미", "네에 잘 가 "
+			CALL MESSAGE_WINDOW_D, "", "히트는 나갔다 "
 			
 			SETBIT 던전フラグ:13:22,3
 		ENDIF
-		CALL MESSAGE_WINDOW_D, "武見", "…何か用？"
-		CALL INPUT_SELECT_D, "[0]武見を奴隷にする/[1]아무것도안한다 "
+		CALL MESSAGE_WINDOW_D, "타케미", "…무슨 용무？"
+		CALL INPUT_SELECT_D, "[0]타케미를 노예로 만든다/[1]아무것도 안한다 "
 		IF RESULT == 0
-			CALL MESSAGE_WINDOW_D, "武見", "きゃ！…な　何！？ "
+			CALL MESSAGE_WINDOW_D, "타케미", "꺄악！…뭐　뭐야！？ "
 			CALL ADD_NEW_COMPANION,[[キャラ:타에]],100
-			PRINTFORML 武見　妙を손に入れた
+			PRINTFORML 타케미 타에를 손에 넣었다
 			SETBIT 던전フラグ:13:22,2
 		ENDIF
 	CASE 12
 		IF !GETBIT(던전フラグ:13:22,5)
-			CALL MESSAGE_WINDOW_D, "", "カルマシティを歩いていると제나に出会った "
-			CALL MESSAGE_WINDOW_D, "제나", "貴様か…/ "
-			CALL MESSAGE_WINDOW_D, "제나", "私に何の用だ？ "
-			CALL INPUT_SELECT_D, "[0]こんなところで何をしている/[1]게일に合わないのか？ "
+			CALL MESSAGE_WINDOW_D, "", "카르마시티를 걷다가 제나를 만났다 "
+			CALL MESSAGE_WINDOW_D, "제나", "네 놈이냐…/ "
+			CALL MESSAGE_WINDOW_D, "제나", "내게 무슨 볼일이냐？ "
+			CALL INPUT_SELECT_D, "[0]이런 곳에서 뭘 하고 있어/[1]게일을 만나지 않는 건가？ "
 			IF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "제나", "아이つの話はするな！ "
-				CALL MESSAGE_WINDOW_D, "제나", "私の前から消えろ！ "
+				CALL MESSAGE_WINDOW_D, "제나", "그녀석 이야기는 하지 마라！ "
+				CALL MESSAGE_WINDOW_D, "제나", "내 앞에서 사라져！ "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "제나", "私がここにいて可笑しいか？ "
-				CALL MESSAGE_WINDOW_D, "제나", "用はそれだけか？ "
-				CALL INPUT_SELECT_D, "[0]아이つと一緒に戦わないのか？/[1]デイビットとは何者だ？ "
+				CALL MESSAGE_WINDOW_D, "제나", "내가 여기 있어서 우스운가？ "
+				CALL MESSAGE_WINDOW_D, "제나", "용건은 그것뿐인가？ "
+				CALL INPUT_SELECT_D, "[0]그와 함께 싸우지 않느냐？/[1]데이빗이란 누구냐？ "
 				IF RESULT == 1
-					CALL MESSAGE_WINDOW_D, "제나", "…まあ　お前には話しても何ともないか… "
-					CALL MESSAGE_WINDOW_D, "제나", "デイビットは私の恋人だよ/彼は両性具有の私を愛してくれた "
-					CALL MESSAGE_WINDOW_D, "제나", "だが　キュヴィエ症候群の研究中に隔離病棟で爆破が起きた…/そこで彼もキュヴィエ症候群にかかって…死んだんだ "
-					CALL INPUT_SELECT_D, "[0]それで인간を恨んでいたのか/[1]お気の毒に… "
+					CALL MESSAGE_WINDOW_D, "제나", "…뭐 너한테는 말해도 아무상관없나… "
+					CALL MESSAGE_WINDOW_D, "제나", "데이빗은 내 여자 친구야/그는 양성 구유의 나를 사랑해 주었다 "
+					CALL MESSAGE_WINDOW_D, "제나", "하지만 퀴비에 증후군 연구 중에 격리 병동에서 폭파가 일어났다…/그래서 그 사람도 큐비에 증후군에 걸려서…죽었어 "
+					CALL INPUT_SELECT_D, "[0]그래서 인간을 원망하고 있었던 거야/[1]안됐군… "
 					IF RESULT == 1
-						CALL MESSAGE_WINDOW_D, "제나", "今頃　そんな言葉なんていらんよ "
-						CALL MESSAGE_WINDOW_D, "제나", "はあ…　帰らせてもらう… "
+						CALL MESSAGE_WINDOW_D, "제나", "이제와서 그런 말 따윈 필요없어 "
+						CALL MESSAGE_WINDOW_D, "제나", "하아… 돌아가겠다… "
 					ELSE
-						CALL MESSAGE_WINDOW_D, "제나", "そんなところだ "
-						CALL MESSAGE_WINDOW_D, "제나", "解脱なんてただの建前で　세계を滅茶苦茶にしたかった/だけかもしれないな私は "
-						CALL MESSAGE_WINDOW_D, "제나", "ただ　私もチューナーの身/私も　もうまともな生活はできんがな "
-						CALL INPUT_SELECT_D, "[0]その힘を役に立てないか？/[1]その힘を아이つらのために使わないのか？ "
+						CALL MESSAGE_WINDOW_D, "제나", "그런 거다 "
+						CALL MESSAGE_WINDOW_D, "제나", "해탈따윈 그저 명분이고 사실 세계를 엉망으로 만들고 싶었을/뿐일지도 모르지 나는 "
+						CALL MESSAGE_WINDOW_D, "제나", "다만 나도 튜너의 몸/나도 이제 제대로 된 생활은 할 수 없지만 "
+						CALL INPUT_SELECT_D, "[0]그 힘이 도움 되지 않을까？/[1]그 힘을 그를 위해서 쓰지 않는가？ "
 						IF RESULT == 1
-							CALL MESSAGE_WINDOW_D, "제나", "아이つの話はするな！ "
-							CALL MESSAGE_WINDOW_D, "제나", "私の前から消えろ！ "
+							CALL MESSAGE_WINDOW_D, "제나", "그녀석 같은 말은 하지 마라！ "
+							CALL MESSAGE_WINDOW_D, "제나", "내 앞에서 사라져！ "
 						ELSE
-							CALL MESSAGE_WINDOW_D, "제나", "なんだと？ "
-							CALL MESSAGE_WINDOW_D, "", "당신は自分の組織ではその힘を役に立てると説得した "
-							CALL MESSAGE_WINDOW_D, "제나", "…そうだな/どうせ　喰うことしか取り柄のなくなった身だ "
-							CALL MESSAGE_WINDOW_D, "제나", "こんなところにいるより/おまえの下に着いた方がまだマシそうだな… "
+							CALL MESSAGE_WINDOW_D, "제나", "뭐라고？ "
+							CALL MESSAGE_WINDOW_D, "", "당신은 자신의 조직에서 그가 가진 힘을 발휘할 수 있다고 설득했다 "
+							CALL MESSAGE_WINDOW_D, "제나", "…그렇구나/어차피 먹는 것밖에 쓸모없는 몸이다 "
+							CALL MESSAGE_WINDOW_D, "제나", "이런 곳에 있는 것 보다/네 밑에 있는 게 그나마 나을 것 같은데… "
 						CALL ADD_NEW_COMPANION,4622,100
 						IF RESULT
 							BASE:(RESULT:1):LV = 80
@@ -631,8 +631,8 @@ SELECTCASE RESULT
 							EQUIP:(RESULT:1):머리 = 3014
 							EQUIP:(RESULT:1):몸통 = 3514
 							EQUIP:(RESULT:1):팔 = 4014
-							EQUIP:(RESULT:1):발 = 5038
-							EQUIP:(RESULT:1):악세사리 = 4514
+							EQUIP:(RESULT:1):발 = 4514
+							EQUIP:(RESULT:1):악세사리 = 5038
 							CFLAG:(RESULT:1):전투참가불가능 = 0
 							CALL SYNC_STATUS,(RESULT:1)
 							CALL HEALTH_CHARA,(RESULT:1)
@@ -646,11 +646,11 @@ SELECTCASE RESULT
 							ABL:(RESULT:1):초기변신악마스킬8 = [[스킬:씹어흩뿌리기]]
 						ENDIF
 						ENDIF
-						PRINTFORML 제나・엔젤が仲間になった
+						PRINTFORML 제나・엔젤이 동료가 되었다
 					ENDIF
 				ELSE
-					CALL MESSAGE_WINDOW_D, "제나", "아이つの話はするな！ "
-					CALL MESSAGE_WINDOW_D, "제나", "私の前から消えろ！ "
+					CALL MESSAGE_WINDOW_D, "제나", "그녀석 이야기는 하지 마라！ "
+					CALL MESSAGE_WINDOW_D, "제나", "내 앞에서 사라져！ "
 				ENDIF
 			ENDIF
 			
@@ -865,7 +865,7 @@ ELSEIF 던전フラグ:13:1 == 1
 			ELSE
 				CALL MESSAGE_WINDOW_D, "프레드의 동료 소녀", "어른이면서、어른이면서 "
 			ENDIF
-		;フレッドの友達
+		;프레드の友達
 		CASE 4
 			CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "로카파라는/이름만은 거창하지"
 			CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "옛날에 있었던 인도라는 나라의 말인데/세계를 지키는 신들을 말하는 거래"
@@ -881,7 +881,7 @@ ELSEIF 던전フラグ:13:1 == 1
 			CALL MESSAGE_WINDOW_D, "알지라", "억지로 몸이 갱신되었다고 할까…"
 			CALL MESSAGE_WINDOW_D, "알지라", "기억이 지워진 듯한 느낌일까"
 			CALL MESSAGE_WINDOW_D, "알지라", "사실은 해서는 안 되는 일이/강제로 행해진 폐해…그런 기분이 들어"
-		;フレッド
+		;프레드
 		CASE 7
 			CALL MESSAGE_WINDOW_D, "프레드", "이 녀석들 로카파라는/반협회 게릴라이면서도 입만 살았어"
 		;게일
@@ -992,7 +992,7 @@ ELSEIF 던전フラグ:13:1 == 2
 				CALL MESSAGE_WINDOW_D, "노인", "태양이 저렇게 되고 나서/벌써 5년이 지났구먼 "
 				CALL MESSAGE_WINDOW_D, "노인", "그렇다면 올해는 2025년인가/아직 노망 들기에는 일러 "
 			ENDIF
-		;フレッドの友達
+		;프레드の友達
 		CASE 4
 			CALL MESSAGE_WINDOW_D, "프레드의 동료 소녀", "우리들、밖에 나가서/쓸 만한 물건을 찾아서 팔고 있거든 "
 			CALL MESSAGE_WINDOW_D, "프레드의 동료 소녀", "티미는/그때 끌려가버렸어… "
@@ -1005,7 +1005,7 @@ ELSEIF 던전フラグ:13:1 == 2
 		CASE 6
 			CALL MESSAGE_WINDOW_D, "알지라", "히트가 조금 전 이야기를 들었다면/어떻게 생각할까…"
 			CALL MESSAGE_WINDOW_D, "알지라", "히트뿐만이 아니야。사실이라면/우리는 어떡해야 하는 거야！？"
-		;フレッド
+		;프레드
 		CASE 7
 			CALL MESSAGE_WINDOW_D, "프레드", "이런 건 믿을 수 없다고ー…！"
 			CALL MESSAGE_WINDOW_D, "프레드", "모두 악수도 했고/우리를 구해줬어"
@@ -1093,7 +1093,7 @@ ELSEIF 던전フラグ:13:1 == 3
 				CALL MESSAGE_WINDOW_D, "노인", "이 거리에서도 채소 같은 것을 재배하고 있네만/역시 나무는 없어 "
 				CALL MESSAGE_WINDOW_D, "노인", "지금은 삼림욕이 최고의 사치지 "
 			ENDIF
-		;フレッドの友達
+		;프레드の友達
 		CASE 4
 			IF 던전フラグ:13:4 < 19
 				CALL MESSAGE_WINDOW_D, "프레드의 동료 소녀", "있잖아、티미 찾았어？ "
@@ -1131,7 +1131,7 @@ ELSEIF 던전フラグ:13:1 == 3
 		CASE 6
 			CALL MESSAGE_WINDOW_D, "알지라", "긍지…"
 			CALL MESSAGE_WINDOW_D, "알지라", "게일을 다시 봤어"
-		;フレッド
+		;프레드
 		CASE 7
 			CALL MESSAGE_WINDOW_D, "프레드", "나、그 녀석 몫까지 살아갈 거야/무슨 일이 있어도"
 		;게일
@@ -1182,7 +1182,7 @@ ELSEIF 던전フラグ:13:1 == 4
 				CALL MESSAGE_WINDOW_D, "노인", "이 거리에서도 채소 같은 것을 재배하고 있네만/역시 나무는 없어 "
 				CALL MESSAGE_WINDOW_D, "노인", "지금은 삼림욕이 최고의 사치지 "
 			ENDIF
-		;フレッドの友達
+		;프레드の友達
 		CASE 4
 				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "잘란다라는/인도라는 나라의 나쁜 신의 이름이래 "
 		;서프
@@ -1208,7 +1208,7 @@ ELSEIF 던전フラグ:13:1 == 4
 		;알지라
 		CASE 6
 			CALL MESSAGE_WINDOW_D, "알지라", "빨리 가자/늦을지도 몰라"
-		;フレッド
+		;프레드
 		CASE 7
 			CALL MESSAGE_WINDOW_D, "프레드", "잘란다라…/위험한 놈들한테 붙잡혔네…"
 		;게일
@@ -1290,7 +1290,7 @@ ELSEIF 던전フラグ:13:1 == 5
 		CASE 3
 				CALL MESSAGE_WINDOW_D, "노인", "이 거리에서도 채소 같은 것을 재배하고 있네만/역시 나무는 없어 "
 				CALL MESSAGE_WINDOW_D, "노인", "지금은 삼림욕이 최고의 사치지 "
-		;フレッドの友達
+		;프레드の友達
 		CASE 4
 				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "잘란다라는/인도라는 나라의 나쁜 신의 이름이래 "
 		;서프
@@ -1304,7 +1304,7 @@ ELSEIF 던전フラグ:13:1 == 5
 			CALL MESSAGE_WINDOW_D, "알지라", "그렇지만 울거나 웃을 수 있게/된 것도 이 힘 덕분이래…"
 			CALL MESSAGE_WINDOW_D, "알지라", "어떡해야 하는 거야？/자신을 미워할 수도 용서할 수도 없어…"
 			CALL MESSAGE_WINDOW_D, "알지라", "이렇게 되지 않았으면/모두를 동료라고 생각할 일도 없었다는 거야！？"
-		;フレッド
+		;프레드
 		CASE 7
 			CALL MESSAGE_WINDOW_D, "프레드", "마담은 카르마 시티의 녀석들만 악마로 만들어서/우리를 먹이로 쓰려고 하고…"
 			CALL MESSAGE_WINDOW_D, "프레드", "세라의 엄마는 모두를 악마로 만들어서/배틀로얄 시키려고 하고…"
@@ -1326,7 +1326,7 @@ ELSEIF 던전フラグ:13:1 == 5
 		CASE 11
 			CALL MESSAGE_WINDOW_D, "로알드", "내통이 일종의 모략일 가능성은/고려했었지만/설마 그 엔젤일 줄이야 "
 			CALL MESSAGE_WINDOW_D, "로알드", "이 내분、이용하지 않을 수는 없어 "
-		;奥村　春
+		;奥村　하루
 		CASE 12
 			CALL MESSAGE_WINDOW_D, "하루", "여기는 멸망 직전의 세계이고/시에로 군과 동료들은 우리와는 다른 세계에서 온 데이터… "
 			CALL MESSAGE_WINDOW_D, "하루", "그리고 지금은 악마화하는 인간이 많이 있고/카르마 시티는 카르마 협회가… "
@@ -1376,7 +1376,7 @@ ELSEIF 던전フラグ:13:1 == 6
 		;알지라
 		CASE 6
 			CALL MESSAGE_WINDOW_D, "알지라", "우리라고 되고 싶어서 된 것이… "
-		;フレッド
+		;프레드
 		CASE 7
 			CALL MESSAGE_WINDOW_D, "프레드", "로카파라는 내 아버지가/세운 조직이야 "
 		;게일
@@ -1397,7 +1397,7 @@ ELSEIF 던전フラグ:13:1 == 6
 			CALL MESSAGE_WINDOW_D, "로알드", "튜너 지원자 모집이라…/지원자 쪽은 신통치 않은데… "
 			CALL MESSAGE_WINDOW_D, "로알드", "인간을 그만두라는 거니까/강요할 수도 없지 "
 			
-		;奥村　春
+		;奥村　하루
 		CASE 12
 			CALL MESSAGE_WINDOW_D, "하루", "악마로 변신할 수 있는 대신에/굶주리기 쉬워져서 머리가 이상해지는 일이 있는 거지…？ "
 			CALL MESSAGE_WINDOW_D, "하루", "게다가 사람이나 악마를 먹지 않으면/견딜 수 없는 거잖아… "
@@ -1434,7 +1434,7 @@ ELSEIF 던전フラグ:13:1 == 7
 	CALL MESSAGE_WINDOW_D, "조직원", "어중간하게 변신해버려가지고 "
 	CALL MESSAGE_WINDOW_D, "조직원", "뭐랄까、힘 조절이/터무니 없어진다고 해야 하나… "
 	CALL MESSAGE_WINDOW_D, "조직원", "그래도 뭐、위험하다 싶으면/도망갈 거야、나 "
-		;フレッドの友達
+		;프레드の友達
 		CASE 4
 			CALL MESSAGE_WINDOW_D, "조직원", "기껏 아내도 돌아왔는데/아, 악마가 되어버리면… "
 		;서프
@@ -1445,7 +1445,7 @@ ELSEIF 던전フラグ:13:1 == 7
 		CASE 6
 			CALL MESSAGE_WINDOW_D, "알지라", "EGG시설에서 이것저것 있었지만…/아무튼 서프가 무사해서 다행이야 "
 			CALL MESSAGE_WINDOW_D, "알지라", "그런데 도중에 나온/다신 연합이라는 녀석들은 도대체 뭐야？ "
-		;フレッド
+		;프레드
 		CASE 7
 			CALL MESSAGE_WINDOW_D, "프레드", "서프의 모델이/그런 녀석이었다니"
 			CALL MESSAGE_WINDOW_D, "프레드", "그런데 세라는 어린애였다기 보다/사실 지금도 어린애잖아？"
@@ -1474,7 +1474,7 @@ ELSEIF 던전フラグ:13:1 == 7
 			CALL MESSAGE_WINDOW_D, "로알드", "서프 일행의 니르바나도/그런 이미지였겠지 "
 			CALL MESSAGE_WINDOW_D, "로알드", "그 세계의 완성도가 높아서/세라에게 군사용 정크야드를 만들게 한 거야 "
 			CALL MESSAGE_WINDOW_D, "로알드", "그리고 서프의 모델이 셰필드라는 것은/로카파라 사람들에게는 말하지 않았어/불필요한 혼란을 초래하니까… "
-		;奥村　春
+		;奥村　하루
 		CASE 12
 			CALL MESSAGE_WINDOW_D, "하루", "나、세라쨩의 기분 알 것 같기도 "
 			CALL MESSAGE_WINDOW_D, "하루", "언제나 항상 혼자면/그렇게 해서라도 친구를 만들고 싶어지는걸… "
@@ -1497,191 +1497,191 @@ ELSEIF 던전フラグ:13:1 == 8
 		;プラント
 		CASE 0
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "騒ぎに乗じて/동력플랜트外の兵隊は押し返したんだが… "
-			CALL MESSAGE_WINDOW_D, "構成員", "籠城組が　まだ中で頑張ってる "
+			CALL MESSAGE_WINDOW_D, "조직원", "소란을 틈타서/동력플랜트 바깥의 병사들은 물리쳤지만… "
+			CALL MESSAGE_WINDOW_D, "조직원", "농성조가 아직 안에서 열심히 하고 있어 "
 		CASE 2
-			CALL MESSAGE_WINDOW_D, "ア디무ル", "多神連合の奴らは　神を殺すと抜かしているようだ"
-			CALL MESSAGE_WINDOW_D, "ア디무ル", "神が私たちが苦しませてると言っているが/私は信じていない"
+			CALL MESSAGE_WINDOW_D, "아딜", "다신연합의 녀석들이 신을 죽이겠다고 꾀를 부리고 있는 것 같다"
+			CALL MESSAGE_WINDOW_D, "아딜", "신이 우리를 힘들게 한다고 말하지만/난 믿지 않아"
 		CASE 3
-			CALL MESSAGE_WINDOW_D, "構成員", "連中の無線を傍受したんだが/마다ム・マルゴが死んだってよ！ "
-			CALL MESSAGE_WINDOW_D, "構成員", "後釜は엔젤って幹部らしいが/そいつが多神連合と協힘してるみたいなんだ "
-		;フレッドの友達
+			CALL MESSAGE_WINDOW_D, "조직원", "그 놈들의 무전을 감청했는데/마담 마르고가 죽었대！ "
+			CALL MESSAGE_WINDOW_D, "조직원", "후임자는 엔젤이라고 해서 간부인것 같지만/그녀석이 다신연합과 협력하고 있는것 같아 "
+		;프레드の友達
 		CASE 4
 			
-			CALL MESSAGE_WINDOW_D, "構成員", "連中　플랜트の隔壁を制御するパネルを/ぶっ壊しやがったんだ"
-			CALL MESSAGE_WINDOW_D, "構成員", "爆薬なんかじゃビクともしねえ…/一体どうすりゃいいんだ "
+			CALL MESSAGE_WINDOW_D, "조직원", "놈들이 격벽을 제어하는 패널을/부쉈어"
+			CALL MESSAGE_WINDOW_D, "조직원", "폭약 따윈 효과가 없어…/도대체 어떻게 하면 좋은 거야 "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "どうする？そろそろ플랜트に行くか？ "
-			CALL INPUT_SELECT_D, "[0]行く/[1]まだ行かない "
+			CALL MESSAGE_WINDOW_D, "서프", "어떡하지？ 슬슬 플랜트에 갈까？ "
+			CALL INPUT_SELECT_D, "[0]간다/[1]아직 안 간다 "
 			IF RESULT == 1
 			ELSEIF RESULT == 0
 				CALL DUNGEON_WORP,40,10,16
 			ENDIF
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "結局힘づくか… "
-			CALL MESSAGE_WINDOW_D, "알지라", "こっからはマジモードでいくよ "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "결국 힘이 부족한가… "
+			CALL MESSAGE_WINDOW_D, "알지라", "여기서부터는 진심모드로 갈게 "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "アジトは俺たちとローカパーラがいれば大丈남편だぜ！"
-			CALL MESSAGE_WINDOW_D, "フレッド", "早くいってきなよ！/仲間が待ってんだろ！"
+			CALL MESSAGE_WINDOW_D, "프레드", "아지트는 우리랑 로카파라가 있으면 괜찮아！"
+			CALL MESSAGE_WINDOW_D, "프레드", "빨리 갔다 와！/동료가 기다리고 있잖아！"
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "多神連合…/奴らは変わったことを言っていたな…"
-			CALL MESSAGE_WINDOW_D, "게일", "神は奴らを異神と謗り/인간を肉で封じ　宙で囲い　言葉で縛っていると言っていたな "
+			CALL MESSAGE_WINDOW_D, "게일", "다신연합…/녀석들은 이상한 말을 했지…"
+			CALL MESSAGE_WINDOW_D, "게일", "신은 놈들을 다른 신이라 비방하고/인간을 고기로 만들어 허공에서 내려온 언어로 묶고 있다고 하더군 "
 			
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "早く行こう！/連中に何かされる前に "
+			CALL MESSAGE_WINDOW_D, "안", "빨리 가자!/친구들이 무슨 일을 당하기 전에 "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "映像に映っていた双葉ちゃんなんですけど/눈に生気がなかったような気がするんです "
+			CALL MESSAGE_WINDOW_D, "마코토", "영상에 찍혔던 후타바쨩입니다만/눈 위에 생기가 없었던것 같은 느낌이 듭니다 "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "よくわからない奴らと組んでいるとは…/奴らは正気なのか？ "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "잘 모르는 놈들과 계획을 짜고 있다니/놈들은 제정신인가？ "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "후타바ちゃん　大丈남편かしら… "
+			CALL MESSAGE_WINDOW_D, "하루", "후타바쨩 괜찮을까… "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "今まではコソコソやってたんだけどよ "
-			CALL MESSAGE_WINDOW_D, "류지", "ここでは正面突破のドンパチばかりだぜ "
+			CALL MESSAGE_WINDOW_D, "류지", "지금까지는 조용히 있었지만 "
+			CALL MESSAGE_WINDOW_D, "류지", "여기서는 정면돌파로 박살을 낼 수 밖에 없어 "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "あの아줌마さんが死んだ！？/どーなってんだ一体 "
+			CALL MESSAGE_WINDOW_D, "시에로", "그 아줌마가 죽었다고！？/어떻게 되는거야 도대체 "
 		;喜多川　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "どうやら시에로は　多神連合に注눈していて/아줌마さんの死体には気づいてなかったみたいなんだ "
+			CALL MESSAGE_WINDOW_D, "유스케", "아무래도 시에로는 다신연합에 주목하고 있어서/아줌마의 시체는 알지 못했던 것 같다. "
 	ENDSELECT
 ELSEIF 던전フラグ:13:1 == 9
 	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		;플랜트
 		CASE 0
 			CALL MESSAGE_WINDOW_D, "후타바", "… "
-			CALL MESSAGE_WINDOW_D, "", "彼女は気を失っている "
+			CALL MESSAGE_WINDOW_D, "", "그녀는 넋을 잃고 있다 "
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "あの　変なものを囲っている결계なんだがな… "
-			CALL MESSAGE_WINDOW_D, "構成員", "あの中に入れないんだよ/そうなってんだあれ？ "
+			CALL MESSAGE_WINDOW_D, "조직원", "저 이상한 것을 숨겨두고 있는 결계 말인데… "
+			CALL MESSAGE_WINDOW_D, "조직원", "저 안에 들어갈 수 없어요/어떻게 되어있는 거지？ "
 		CASE 2
 		CASE 3
-				CALL MESSAGE_WINDOW_D, "構成員", "カルマシティの電気が止まっていいるらしいぞ "
-				CALL MESSAGE_WINDOW_D, "構成員", "동력플랜트に何かしたのか？ "
-		;フレッドの友達
+				CALL MESSAGE_WINDOW_D, "조직원", "카르마시티의 전기가 끊겼다고 하던데 "
+				CALL MESSAGE_WINDOW_D, "조직원", "동력플랜트에 무슨 짓을 했나？ "
+		;프레드の友達
 		CASE 4
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "そうしちまったんだ？/みんな沈んじまってよ "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "그렇게 됐구나？/모두 침울해 하지 말아요. "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "…まさか　こんなことになってしまうとはな… "
-			CALL MESSAGE_WINDOW_D, "서프", "だが　今は今できることを考えることが先決なんだが… "
+			CALL MESSAGE_WINDOW_D, "서프", "…설마 이렇게 되어 버릴 줄이야… "
+			CALL MESSAGE_WINDOW_D, "서프", "하지만 지금은 지금 할 수 있는 일을 생각하는 것이 선결과제인데… "
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "そんな…　세라が…嘘よ… "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "그런…　세라가…거짓말… "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "どうしたんだ？/仲間を助けられたのに何でみんな落ち込んでんだよ…"
+			CALL MESSAGE_WINDOW_D, "프레드", "왜그래?/동료를 구했는데 왜 다들 시무룩해…"
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "流石にこの状況は서프も相当応えているな…"
-			CALL MESSAGE_WINDOW_D, "게일", "마코토達もかなり気が沈んでいる/今は　気を休める時間が필요だろう"
+			CALL MESSAGE_WINDOW_D, "게일", "과연 이 상황은 서프도 상당히 곤란해하는군…"
+			CALL MESSAGE_WINDOW_D, "게일", "마코토들도 잔뜩 풀이 죽어있어/지금은 정신 좀 차릴 시간이 필요할거야"
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "どうしよう…　아이つらにさらわれちゃったよ… "
+			CALL MESSAGE_WINDOW_D, "안", "어떡하지… 그녀석들에게 납치당했어… "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "雨宮君が捕まってしまうなんて…… "
-			CALL MESSAGE_WINDOW_D, "마코토", "双葉ちゃんも起きないし/どうすればいいのよ "
+			CALL MESSAGE_WINDOW_D, "마코토", "아마미야군이 잡혀버리다니…… "
+			CALL MESSAGE_WINDOW_D, "마코토", "후타바도 깨어나지 않고/어떻게 하면 좋을까 "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "そうか…　彼はアマミヤ・レンというのか "
-			CALL MESSAGE_WINDOW_D, "로알드", "実はあの소년はあの巨大な식노を/弱らせてくれたんだ "
-			CALL MESSAGE_WINDOW_D, "로알드", "…まさか　連中につかまってしまうとはな… "
-			CALL MESSAGE_WINDOW_D, "로알드", "フタバの事なんだが/彼女には作戦室で休んでもらってるよ "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "그렇구나… 그는 아마미야 렌이라고 하는가 "
+			CALL MESSAGE_WINDOW_D, "로알드", "사실 그 소년은 그 거대한 식노를/약하게 한 거야 "
+			CALL MESSAGE_WINDOW_D, "로알드", "…설마 놈들에게 붙잡히고 말 줄이야… "
+			CALL MESSAGE_WINDOW_D, "로알드", "후타바 말인데/그녀는 작전실에서 자고 있어 "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "雨宮君…　そんな "
+			CALL MESSAGE_WINDOW_D, "하루", "아마미야군… 그런 "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "아이つの事だ　気絶したふりをしているに違いねえ！ "
-			CALL MESSAGE_WINDOW_D, "류지", "そうなんだろう？　なあ… "
+			CALL MESSAGE_WINDOW_D, "류지", "그녀석이잖아 기절한척하고 있는게 틀림없어！ "
+			CALL MESSAGE_WINDOW_D, "류지", "그렇겠지？　뭐어… "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "…なあ　세라は元に戻るよなあ… "
-			CALL MESSAGE_WINDOW_D, "시에로", "こんなのないぜ… "
+			CALL MESSAGE_WINDOW_D, "시에로", "…이봐 세라는 원래대로 돌아가지… "
+			CALL MESSAGE_WINDOW_D, "시에로", "이런 건 싫어… "
 		;키타가와　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "雨宮…　まさか아이つもここに来ていたとはな… "
-			CALL MESSAGE_WINDOW_D, "유스케", "まさかこそ세계で初めて見たときにさらわれてしまうとは… "
+			CALL MESSAGE_WINDOW_D, "유스케", "아마미야…　설마 그도 여기에 와 있었을 줄이야… "
+			CALL MESSAGE_WINDOW_D, "유스케", "설마 이 세계에서 처음 재회했을 때 납치당해 버릴 줄이야… "
 	ENDSELECT
 ELSEIF 던전フラグ:13:1 == 10
 	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		;？？？
 		CASE 0
 			CALL MESSAGE_WINDOW_D, "후타바", "… "
-			CALL MESSAGE_WINDOW_D, "", "彼女は気を失っている "
+			CALL MESSAGE_WINDOW_D, "", "그녀는 넋을 잃고 있다 "
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "あの소년たちの持っている機械/세계がこんなになる前に研究していたんだ "
-			CALL MESSAGE_WINDOW_D, "構成員", "세계がこんなになってしまった後　研究が中断してしまってね/どこかで完成していたんだな… "
+			CALL MESSAGE_WINDOW_D, "조직원", "저 소년들이 갖고 있는 기계/세계가 이렇게 되기 전에 연구했었어 "
+			CALL MESSAGE_WINDOW_D, "조직원", "세계가 이렇게 되버려서 연구가 중단돼서/어디선가 완성되었구나… "
 		CASE 2
 		CASE 3
-				CALL MESSAGE_WINDOW_D, "構成員", "あの小さな機械でいろんなことができるらしいな "
-				CALL MESSAGE_WINDOW_D, "構成員", "もし　文明が進んでいたら/人類みんな持っていいただろうな… "
-		;フレッドの友達
+				CALL MESSAGE_WINDOW_D, "조직원", "저 작은 기계로 여러 가지 일을 할 수 있나 보군 "
+				CALL MESSAGE_WINDOW_D, "조직원", "만약 문명이 진보했더라면/인류 모두가 가졌을 것이다… "
+		;프레드の友達
 		CASE 4
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "あの機械ちょっと触ってみたんだけどよー "
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "ゲーム機と違ってボタンがなくて/使いにくいんだぜー "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "저 기계 좀 만져봤는데ー "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "게임기와는 다르게 버튼이 없어서/사용하기 불편해ー "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "마코토達の持っていた機械　変わっているよな "
-			CALL MESSAGE_WINDOW_D, "서프", "ジャンクヤードにも화면を押す装置はなかったな "
+			CALL MESSAGE_WINDOW_D, "서프", "마코토들이 가지고 있던 기계 변했어 "
+			CALL MESSAGE_WINDOW_D, "서프", "정크 야드에도 화면을 누르는 장치는 없었지 "
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "モルガナって言ったっけ？/私　一回会ったことあるのよ "
-			CALL MESSAGE_WINDOW_D, "알지라", "하루を助けに行ったときにね "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "모르가나라 그랬나?/나 한번만났어 "
+			CALL MESSAGE_WINDOW_D, "알지라", "하루를 구하러 갔을 때 말이야 "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "아이つ　猫なのか？/明らかに見たこともない生き物に見えるんだけど…"
+			CALL MESSAGE_WINDOW_D, "프레드", "그 고양이란거 귀여워？/지금껏 본 적 없는 생물로 보이는데…"
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "通信　射影　記録/あの機械は色々なことに使えるらしいな"
-			CALL MESSAGE_WINDOW_D, "게일", "あの小さな装置からそこまでの事ができるとは…"
+			CALL MESSAGE_WINDOW_D, "게일", "통신 사영 기록/저 기계는 여러가지에 쓸모가 있나봐"
+			CALL MESSAGE_WINDOW_D, "게일", "저 작은 장치에서 그정도로 다양한 일을 할 수 있다니…"
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "そういえばここの人たちってスマホ使ってないよね "
-			CALL MESSAGE_WINDOW_D, "안", "スマホ持ってない人がたくさんいるのって逆に新鮮 "
+			CALL MESSAGE_WINDOW_D, "안", "그러고 보니 여기 사람들은 스마트폰을 안 쓰네 "
+			CALL MESSAGE_WINDOW_D, "안", "스마트폰을 갖고 있지 않은 사람이 많은 것은 반대로 신선해 "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "スマホはいろんなことができますけど/欠点があるんですよ "
-			CALL MESSAGE_WINDOW_D, "마코토", "充電が1日しか持たないんですよ "
+			CALL MESSAGE_WINDOW_D, "마코토", "스마트폰은 여러가지 일을 할 수 있지만/단점이 있어 "
+			CALL MESSAGE_WINDOW_D, "마코토", "충전해도 하루밖에 못 쓰더라 "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "スマホか… "
-			CALL MESSAGE_WINDOW_D, "로알드", "마코토達のいる세계では/세계中の인간が皆　使っているらしい "
-			CALL MESSAGE_WINDOW_D, "로알드", "神さえ狂っていなければ/私たちの세계もスマホが普及されてたかもしれないな "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "스마트폰이라… "
+			CALL MESSAGE_WINDOW_D, "로알드", "마코토들이 원래 있던 세계에서는/전세계의 인간 모두가 사용하고 있는것 같아 "
+			CALL MESSAGE_WINDOW_D, "로알드", "신이 미치지 않았다면/우리세상도 스마트폰이 보급되었을지도 모르지 "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "そういえば私スマホって/電話とラインくらいしか使ってないかな… "
+			CALL MESSAGE_WINDOW_D, "하루", "그러고보니 나 스마트폰은/전화랑 라인정도밖에 사용하지않네… "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "俺たち　スマホ使ってんのが日常だからなー "
+			CALL MESSAGE_WINDOW_D, "류지", "우린 스마트폰 쓰는 게 일상이잖아 "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "それってボタン押さずに動いてんのか？/すげーな "
+			CALL MESSAGE_WINDOW_D, "시에로", "그거 버튼 안 누르고 움직이는 거야？/굉장하네 "
 		;키타가와　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "こんな세계だ　電波もないから/ガラケーも使えないだろうな "
+			CALL MESSAGE_WINDOW_D, "유스케", "이런 세계다 전파도 없으니까/2G폰도 못쓰겠지 "
 		;히트
 		CASE 18
-			CALL MESSAGE_WINDOW_D, "히트", "お前は…서프と一緒にいたやつだな… "
-			CALL MESSAGE_WINDOW_D, "히트", "自分でも死んだと思っていたからな/気が付いた時には눈の前に머리카락の黒い奴がいてな "
-			CALL MESSAGE_WINDOW_D, "히트", "そいつが俺を助けてくれたんだ "
+			CALL MESSAGE_WINDOW_D, "히트", "너는…서프와 함께 있던 녀석이구나… "
+			CALL MESSAGE_WINDOW_D, "히트", "스스로도 죽었다고 생각하고 있었으니까/깨어났을 때에는 눈 앞에 머리칼이 검은 녀석이 있어서 "
+			CALL MESSAGE_WINDOW_D, "히트", "그 녀석이 날 도와줬어 "
 		;모르가나
 		CASE 19
-			CALL MESSAGE_WINDOW_D, "모르가나", "多分　フタバの정신세계に入ると/ボス倒すまで戻ってこれねえぞ "
-			CALL MESSAGE_WINDOW_D, "모르가나", "もう準備できたか？ "
-			CALL INPUT_SELECT_D, "[0]行く/[1]まだ行かない "
+			CALL MESSAGE_WINDOW_D, "모르가나", "아마 후타바의 정신세계에 들어가면/보스를 쓰러뜨릴때까지 돌아오지 못할거야 "
+			CALL MESSAGE_WINDOW_D, "모르가나", "이제 준비됐어？ "
+			CALL INPUT_SELECT_D, "[0]간다/[1]아직 안 간다 "
 			IF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "모르가나", "準備はしっかりしろよ "
+				CALL MESSAGE_WINDOW_D, "모르가나", "준비는 확실히 해라 "
 			ELSEIF RESULT == 0
 				CALL DUNGEON_WORP,44,18,20
 			ENDIF
@@ -1691,279 +1691,279 @@ ELSEIF 던전フラグ:13:1 == 11
 		;？？？
 		CASE 0
 			CALL MESSAGE_WINDOW_D, "후타바", "… "
-			CALL MESSAGE_WINDOW_D, "", "いつものように寝ているが/表情がいつもより楽そうだ "
+			CALL MESSAGE_WINDOW_D, "", "여느 때처럼 자고 있지만/표정이 평소보다 편한것 같다 "
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "あの소년たちの持っている機械/세계がこんなになる前に研究していたんだ "
-			CALL MESSAGE_WINDOW_D, "構成員", "세계がこんなになってしまった後　研究が中断してしまってね/どこかで完成していたんだな… "
+			CALL MESSAGE_WINDOW_D, "조직원", "저 소년들이 갖고 있는 기계/세계가 이렇게 되기 전에 연구했었어 "
+			CALL MESSAGE_WINDOW_D, "조직원", "세계가 이렇게 되버려서 연구가 중단돼서/어디선가 완성되었구나… "
 		CASE 2
 		CASE 3
-				CALL MESSAGE_WINDOW_D, "構成員", "あの小さな機械でいろんなことができるらしいな "
-				CALL MESSAGE_WINDOW_D, "構成員", "もし　文明が進んでいたら/人類みんな持っていいただろうな… "
-		;フレッドの友達
+				CALL MESSAGE_WINDOW_D, "조직원", "저 작은 기계로 여러 가지 일을 할 수 있나 보군 "
+				CALL MESSAGE_WINDOW_D, "조직원", "만약 문명이 진보했더라면/인류 모두가 가졌을 것이다… "
+		;프레드の友達
 		CASE 4
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "あの機械ちょっと触ってみたんだけどよー "
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "ゲーム機と違ってボタンがなくて/使いにくいんだぜー "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "저 기계 좀 만져봤는데ー "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "게임기와는 다르게 버튼이 없어서/사용하기 불편해ー "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "次に何をするのかは　彼女が起き次第か… "
+			CALL MESSAGE_WINDOW_D, "서프", "다음에 뭘 할지는 그녀가 일어나기 나름인지… "
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "こんな　소녀まで巻き込んで "
-			CALL MESSAGE_WINDOW_D, "알지라", "아이つら絶対に許さないわ "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "이런 소녀까지 끌어들여서 "
+			CALL MESSAGE_WINDOW_D, "알지라", "그자식들은 절대 용서 못해 "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "아이つ　猫なのか？/明らかに見たこともない生き物に見えるんだけど…"
+			CALL MESSAGE_WINDOW_D, "프레드", "그 고양이란거 귀여워？/지금껏 본 적 없는 생물로 보이는데…"
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "フタバの정신に住み着いていた악마は倒した"
-			CALL MESSAGE_WINDOW_D, "게일", "あとはフタバから多神連合の情報を聞き出すだけだな"
+			CALL MESSAGE_WINDOW_D, "게일", "후타바의 정신에 자리 잡은 악마는 쓰러졌다"
+			CALL MESSAGE_WINDOW_D, "게일", "이제 후타바로부터 다신연합의 정보를 듣는 것 뿐이야"
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "あとは雨宮君と세라ちゃんを助けるだけね "
+			CALL MESSAGE_WINDOW_D, "안", "이제 아마미야군과 세라를 도울뿐이야 "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "双葉ちゃん　助けられてよかった… "
+			CALL MESSAGE_WINDOW_D, "마코토", "후타바쨩 무사해서 다행이야… "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "あとは彼女の회복を待つだけか… "
-			CALL MESSAGE_WINDOW_D, "로알드", "できるだけ早く眼を깨달음ましてくれると嬉しいのだがな "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "이제 그녀의 회복을 기다리는 것뿐이야… "
+			CALL MESSAGE_WINDOW_D, "로알드", "가능한 한 빨리 눈을 떠준다면 기쁠 텐데 "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "双葉ちゃんが눈を깨달음ませば/今度は雨宮君ですね "
+			CALL MESSAGE_WINDOW_D, "하루", "후타바군이 눈을 뜨면/다음에는 아마미야군이네요 "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "まさか　ここでも人の머리の中に入って/戦うなんて思ってなかったぜ… "
+			CALL MESSAGE_WINDOW_D, "류지", "설마 여기서도 사람의 마음속에 들어가서/싸운다고는 생각못했어… "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "악마に변신した奴らと戦ってきたが/まさか　本物と戦うことになるとはなー "
+			CALL MESSAGE_WINDOW_D, "시에로", "악마로 변신하는 녀석들과 싸워왔는데/설마 진짜와 싸우게 될줄이야ー "
 		;키타가와　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "とにかく　次に何をやるかは佐倉次第だな "
+			CALL MESSAGE_WINDOW_D, "유스케", "아무튼 다음에 뭘 할지는 사쿠라에게 달려있어 "
 		;히트
 		CASE 18
-			CALL MESSAGE_WINDOW_D, "히트", "今はフタバが起きるまで待とうぜ "
+			CALL MESSAGE_WINDOW_D, "히트", "지금은 후타바가 일어날때까지 기다리자구 "
 		;모르가나
 		CASE 19
-			CALL MESSAGE_WINDOW_D, "모르가나", "フタバなら多神連合のことを知ってるはずだぜ "
+			CALL MESSAGE_WINDOW_D, "모르가나", "후타바라면 다신연합의 정보를 알고 있을 거야 "
 	ENDSELECT
 ELSEIF 던전フラグ:13:1 == 12
 	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		;仮想空間
 		CASE 0
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "あの娘が起きたそうだな "
-			CALL MESSAGE_WINDOW_D, "構成員", "操られてた時のことを깨달음えてたみたいだぞ "
+			CALL MESSAGE_WINDOW_D, "조직원", "저 아가씨가 일어났다면서 "
+			CALL MESSAGE_WINDOW_D, "조직원", "조종 당했을 때를 기억하고 있던 것 같은데 "
 		CASE 2
-				CALL MESSAGE_WINDOW_D, "構成員", "カルマ協会は多神連合に協힘していると思っていたが/적対してる奴らもいるらしい "
-				CALL MESSAGE_WINDOW_D, "構成員", "どうやらマダム派のカルマ協会らしい/今　起き上がった娘にカルマ協会のPCをつかわせているよ "
+				CALL MESSAGE_WINDOW_D, "조직원", "카르마 협회는 다신 연합에 협력하고 있다고 생각했는데/적대하고 있는 녀석들도 있는 것 같다 "
+				CALL MESSAGE_WINDOW_D, "조직원", "아무래도 마담파인 카르마 협회인것 같아/지금 일어난 소녀에게 카르마 협회의 PC를 맡기고 있어 "
 		CASE 3
-		;フレッドの友達
+		;프레드の友達
 		CASE 4
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "フタバってさー　年齢の割に小さいよな "
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "俺たちとあまり変わんねーように見えたんだけどな "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "후타바는 나이에 비해 작지 "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "우리랑 별로 다를 게 없어 보였는데 "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "準備できたか？ "
-			CALL INPUT_SELECT_D, "[0]行く/[1]まだ行かない "
+			CALL MESSAGE_WINDOW_D, "서프", "준비됐어？ "
+			CALL INPUT_SELECT_D, "[0]간다/[1]아직 안 간다 "
 			IF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "서프", "そうか "
+				CALL MESSAGE_WINDOW_D, "서프", "그렇군 "
 			ELSEIF RESULT == 0
 				CALL DUNGEON_WORP,46,4,6
-				CALL MESSAGE_WINDOW_D, "", "双葉の所に着いた "
-				CALL MESSAGE_WINDOW_D, "", "ここに来る途中　多神連合の一味や제나派のカルマ兵に襲われた "
-				CALL MESSAGE_WINDOW_D, "", "この場所もローカパーラとマダム派のカルマ兵に守られている "
-				CALL MESSAGE_WINDOW_D, "", "双葉はまだパソコンを打ち付けている "
+				CALL MESSAGE_WINDOW_D, "", "후타바가 있는 곳에 도착했다 "
+				CALL MESSAGE_WINDOW_D, "", "여기에 오는 길에 다신연합 일당과 제나파 카르마병에게 습격당했다 "
+				CALL MESSAGE_WINDOW_D, "", "이곳도 로카파라와 마담파 카르마병의 보호를 받고 있다 "
+				CALL MESSAGE_WINDOW_D, "", "후타바는 아직 퍼스널 컴퓨터를 두드리고 있다 "
 				CALL MESSAGE_WINDOW_D, "후타바", "……… "
-				CALL MESSAGE_WINDOW_D, "후타바", "あー　ダメだ… "
-				CALL MESSAGE_WINDOW_D, "서프", "どうかしたのか？ "
-				CALL MESSAGE_WINDOW_D, "후타바", "奴らの仮想空間を見つけたんだけどさ　なんか変なプロテクトが入ってるよ "
-				CALL MESSAGE_WINDOW_D, "후타바", "仮想空間を消して奴らを出そうとしたけど/それのせいで불가능なんだ "
-				CALL MESSAGE_WINDOW_D, "시에로", "なんでだよ "
-				CALL MESSAGE_WINDOW_D, "후타바", "なんて言うか…機械的なプロテクトじゃないんだよね…/魔法的というか… "
-				CALL MESSAGE_WINDOW_D, "후타바", "とにかく　ハッキングじゃ壊せない壁なんだよ "
-				CALL MESSAGE_WINDOW_D, "히트", "じゃあ　その仮想空間に乗り込んで奴らを/潰しゃ아이いだろ "
-				CALL MESSAGE_WINDOW_D, "알지라", "そういえば　엔젤もジャンクヤードに入ってきたことがあったわね/同じ方法でそこに入れないかしら "
-				CALL MESSAGE_WINDOW_D, "후타바", "それ　無理だよ/修理ができないくらいに装置が壊されてた "
-				CALL MESSAGE_WINDOW_D, "모르가나", "じゃあこいつを使えばいいぜ "
-				CALL MESSAGE_WINDOW_D, "", "モルガナは杏のスマホに指を指す "
-				CALL MESSAGE_WINDOW_D, "안", "え？　スマホ使えるの？ "
-				CALL MESSAGE_WINDOW_D, "모르가나", "アン殿　スマホ貸してくれ "
-				CALL MESSAGE_WINDOW_D, "", "モルガナはスマホを少しいじる "
-				CALL MESSAGE_WINDOW_D, "모르가나", "よし　フタバ/このパソコンとつなげてくれ "
-				CALL MESSAGE_WINDOW_D, "후타바", "う　うん "
-				CALL MESSAGE_WINDOW_D, "모르가나", "ちなみにフタバ　その仮想空間に入れそうなところはあったか？ "
-				CALL MESSAGE_WINDOW_D, "후타바", "うん　一か所だけあったよ "
-				CALL MESSAGE_WINDOW_D, "모르가나", "じゃあ　そことつないでくれ/このアプリを使えばそこに移動できるはずだ "
-				CALL MESSAGE_WINDOW_D, "서프", "わかった　行こうみんな "
+				CALL MESSAGE_WINDOW_D, "후타바", "아아 안돼… "
+				CALL MESSAGE_WINDOW_D, "서프", "무슨 일이야？ "
+				CALL MESSAGE_WINDOW_D, "후타바", "녀석들의 가상공간을 발견했는데 이상한 프로텍트가 걸려있어 "
+				CALL MESSAGE_WINDOW_D, "후타바", "가상공간을 끄고 놈들을 내보내려고 했는데/그것 때문에 불가능하단 말이야 "
+				CALL MESSAGE_WINDOW_D, "시에로", "어째서지 "
+				CALL MESSAGE_WINDOW_D, "후타바", "뭐랄까…기계적인 프로텍트가 아니잖아…/마법적이랄까… "
+				CALL MESSAGE_WINDOW_D, "후타바", "아무튼 해킹으로는 깨뜨릴 수 없는 벽이야 "
+				CALL MESSAGE_WINDOW_D, "히트", "그럼 그 가상공간에 들어가서 놈들을/으스러뜨리자 "
+				CALL MESSAGE_WINDOW_D, "알지라", "그러고보니 엔젤도 정크야드에 들어온적이 있었네/같은 방법으로 그곳에 들어갈수 없을까 하고 생각해 "
+				CALL MESSAGE_WINDOW_D, "후타바", "그거 무리야/수리가 안될정도로 장치가 망가져있었어 "
+				CALL MESSAGE_WINDOW_D, "모르가나", "그럼 이 녀석을 쓰면 되지 "
+				CALL MESSAGE_WINDOW_D, "", "모르가나는 안의 스마트폰을 손가락으로 가리킨다 "
+				CALL MESSAGE_WINDOW_D, "안", "에？　스마트폰 쓸 줄 알아？ "
+				CALL MESSAGE_WINDOW_D, "모르가나", "안 아가씨 스마트폰 좀 빌려줘 "
+				CALL MESSAGE_WINDOW_D, "", "모르가나는 스마트폰을 조금 만진다 "
+				CALL MESSAGE_WINDOW_D, "모르가나", "좋아 후타바/이 컴퓨터와 연결해줘 "
+				CALL MESSAGE_WINDOW_D, "후타바", "으 으응 "
+				CALL MESSAGE_WINDOW_D, "모르가나", "덧붙여서 후타바 그 가상공간에 들어갈만한 곳은 있었는가？ "
+				CALL MESSAGE_WINDOW_D, "후타바", "응 한 군데만 있었어 "
+				CALL MESSAGE_WINDOW_D, "모르가나", "그럼 거기랑 연결해줘/이 어플 쓰면 거기로 이동할 수 있겠지 "
+				CALL MESSAGE_WINDOW_D, "서프", "알았어 가자 모두 "
 			ENDIF
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "ようやく　세라に近づいてきたわね "
-			CALL MESSAGE_WINDOW_D, "알지라", "早くフタバの所に行こう "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "드디어 세라에게 다가왔구나 "
+			CALL MESSAGE_WINDOW_D, "알지라", "빨리 후타바한테 가자 "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "손がかり見つかったんだってな"
-			CALL MESSAGE_WINDOW_D, "フレッド", "頑張っていこいよ！応援してるぜ！"
+			CALL MESSAGE_WINDOW_D, "프레드", "단서를 찾았다면서"
+			CALL MESSAGE_WINDOW_D, "프레드", "힘내서 갔다와！ 응원하고 있어！"
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "今　フタバは奴らが作った仮想空間を探している"
-			CALL MESSAGE_WINDOW_D, "게일", "フタバの힘を借りて作った세계らしい"
+			CALL MESSAGE_WINDOW_D, "게일", "지금 후타바는 놈들이 만든 가상공간을 찾고 있다"
+			CALL MESSAGE_WINDOW_D, "게일", "후타바의 힘을 빌려서 만든 세계답다"
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "双葉ちゃんが探している空間にあの結界を張っている奴かいるらしいの "
+			CALL MESSAGE_WINDOW_D, "안", "후타바가 찾고 있는 공간에 그 결계를 치고 있는 녀석이 있는 것 같아 "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "早く　双葉ちゃんの所に行きましょう "
+			CALL MESSAGE_WINDOW_D, "마코토", "빨리 후타바한테 갑시다 "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "마코토君によればフタバは凄팔のハッカーらしいな "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "마코토군에 의하면 후타바는 굉장한 해커인것 같구나 "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "早く　双葉ちゃんの所に行きましょう "
+			CALL MESSAGE_WINDOW_D, "하루", "빨리 후타바한테 갑시다 "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "パレスの次は　人の作った仮想空間か… "
-			CALL MESSAGE_WINDOW_D, "류지", "ほんと変なところに行くよな俺たち "
+			CALL MESSAGE_WINDOW_D, "류지", "팰리스 다음은 사람이 만든 가상공간인가… "
+			CALL MESSAGE_WINDOW_D, "류지", "진짜 이상한 데 가네 우리 "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "もう一回　あの空間に入ることになんのか… "
-			CALL MESSAGE_WINDOW_D, "시에로", "ジャンクヤードじゃねーみてーだけどな "
+			CALL MESSAGE_WINDOW_D, "시에로", "다시 한 번 그 공간에 들어가게 되는 거구나… "
+			CALL MESSAGE_WINDOW_D, "시에로", "정크야드는 아닌걸 보고있긴 한데 "
 		;키타가와　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "今　佐倉はここにはいない "
-			CALL MESSAGE_WINDOW_D, "유스케", "カルマ協会の高性能のパソコンを使っているらしい "
+			CALL MESSAGE_WINDOW_D, "유스케", "지금 사쿠라는 여기에 없다 "
+			CALL MESSAGE_WINDOW_D, "유스케", "카르마 협회의 고성능 PC를 사용하고 있는 것 같다 "
 		;히트
 		CASE 18
-			CALL MESSAGE_WINDOW_D, "히트", "どうした早くフタバのところまで行くぞ "
+			CALL MESSAGE_WINDOW_D, "히트", "뭐야 빨리 후타바한테 가 "
 		;모르가나
 		CASE 19
-			CALL MESSAGE_WINDOW_D, "모르가나", "フタバの所に行くなら서프に話しかけてくれ "
+			CALL MESSAGE_WINDOW_D, "모르가나", "후타바한테 가려면 서프에게 말을 걸어 주게 "
 	ENDSELECT
 ELSEIF 던전フラグ:13:1 == 13
 	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		;仮想空間
 		CASE 0
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "結界が解けたか/早く奴らを叩き止めなくて "
+			CALL MESSAGE_WINDOW_D, "조직원", "결계가 풀렸나/빨리 놈들을 쓰러트리지 않으면 "
 		CASE 2
-				CALL MESSAGE_WINDOW_D, "構成員", "カルマ協会は多神連合に協힘していると思っていたが/적対してる奴らもいるらしい "
+				CALL MESSAGE_WINDOW_D, "조직원", "카르마 협회는 다신 연합에 협력하고 있다고 생각했는데/적대하고 있는 녀석들도 있는 것 같다 "
 		CASE 3
-		;フレッドの友達
+		;프레드の友達
 		CASE 4
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "フタバってさー　年齢の割に小さいよな "
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "俺たちとあまり変わんねーように見えたんだけどな "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "후타바는 나이에 비해 작지 "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "우리랑 별로 다를 게 없어 보였는데 "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "フタバのハッキング能力には驚かされたな "
-			CALL MESSAGE_WINDOW_D, "서프", "演算だけなら게일以上かもしれないな "
+			CALL MESSAGE_WINDOW_D, "서프", "후타바의 해킹 능력에는 놀랐는걸 "
+			CALL MESSAGE_WINDOW_D, "서프", "연산만이라면 게일 이상일지도 모르겠네 "
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "フタバって머리いいわね "
-			CALL MESSAGE_WINDOW_D, "알지라", "게일もいい方だけど/ちょっと鉄面皮すぎるのよね "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "후타바는 머리 좋네 "
+			CALL MESSAGE_WINDOW_D, "알지라", "게일도 좋은 편이지만/너무 철면피야 "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "変なものを囲んでいた奴が薄くなってるぜ "
-			CALL MESSAGE_WINDOW_D, "フレッド", "奴らを倒してきたんだな/やったな "
+			CALL MESSAGE_WINDOW_D, "프레드", "이상한 것을 둘러싸고 있던 녀석이 희미해지고 있네 "
+			CALL MESSAGE_WINDOW_D, "프레드", "놈들을 쓰러뜨리고 왔구나/해냈구나 "
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "마코토達が心の怪盗団をやっていた話を聞いたことがある…/国전체の電波を乗っ取ったという話があった"
-			CALL MESSAGE_WINDOW_D, "게일", "どうやったのかが理解不能だったが/その怪盗団にフタバが入っていたら十分理解できる"
+			CALL MESSAGE_WINDOW_D, "게일", "마코토들이 마음의 괴도단을 운영했다는 이야기를 들은 적이 있다…/나라전체의 전파를 점령했다는 이야기가 있었다"
+			CALL MESSAGE_WINDOW_D, "게일", "어떻게 했는지 이해가 안 갔지만/그 괴도단에 후타바가 들어가 있다면 충분히 이해할 수 있다"
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "まさか仮想空間に行くことになるなんて/思ってなかったわ "
+			CALL MESSAGE_WINDOW_D, "안", "설마 가상공간에 가게 되리라고는/생각하지 못했어 "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "双葉ちゃんには日本のテレビの/電波ジャックもしたんですよ "
+			CALL MESSAGE_WINDOW_D, "마코토", "후타바쨩은 일본 티비의/전파재킹도 했답니다 "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "うちもハッキングを行っていたが/フタバほどできる인간はいなかったな "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "우리도 해킹을 하고 있었는데/후타바만큼 할 수 있는 인간은 없었지 "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "怪盗団のときも思ったんですけど "
-			CALL MESSAGE_WINDOW_D, "春", "双葉ちゃんって本当にすごいなあ… "
+			CALL MESSAGE_WINDOW_D, "하루", "괴도단 때도 생각했었는데 "
+			CALL MESSAGE_WINDOW_D, "하루", "후타바는 정말 대단하구나… "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "まさか　この세계でも双葉のハッキングに助けられるなんて/思ってもなかったぜ "
+			CALL MESSAGE_WINDOW_D, "류지", "설마 이 세계에서도 후타바의 해킹에 도움을 받을 수 있으리라고는/생각도 못했어 "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "フタバが多神連合の아군のままだとやばかったな "
+			CALL MESSAGE_WINDOW_D, "시에로", "후타바가 다신연합의 아군 그대로였다면 난리였군 "
 		;키타가와　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "こう見えて佐倉はとても人見知りでな "
-			CALL MESSAGE_WINDOW_D, "유스케", "一緒に海に行ったときは顔を布で見えなくしていたんだ "
+			CALL MESSAGE_WINDOW_D, "유스케", "이래뵈도 사쿠라는 낯을 많이 가려서 말야 "
+			CALL MESSAGE_WINDOW_D, "유스케", "바다에 같이 갔을 때는 천으로 얼굴을 가렸었다 "
 		;사쿠라　후타바
 		CASE 17
-			CALL MESSAGE_WINDOW_D, "후타바", "よう　こうやって話すのは初めてだよな "
-			CALL MESSAGE_WINDOW_D, "후타바", "私は　사쿠라　후타바/よろしくな "
+			CALL MESSAGE_WINDOW_D, "후타바", "요오 이렇게 말하는 건 처음이네 "
+			CALL MESSAGE_WINDOW_D, "후타바", "나는 사쿠라 후타바/잘 부탁해 "
 		;히트
 		CASE 18
-			CALL MESSAGE_WINDOW_D, "히트", "フタバは多神連合にいいように使われてたんだよな "
-			CALL MESSAGE_WINDOW_D, "히트", "ちっ　가슴糞悪いぜ… "
+			CALL MESSAGE_WINDOW_D, "히트", "후타바는 다신연합에 유용하게 쓰였었지 "
+			CALL MESSAGE_WINDOW_D, "히트", "칫 쓰레기같은 놈들… "
 		;모르가나
 		CASE 19
-			CALL MESSAGE_WINDOW_D, "모르가나", "フタバは怪盗団の中でブ레이ンだったんだぜ "
-			CALL MESSAGE_WINDOW_D, "모르가나", "エンブリオンでいうところの게일と同じ포지션だな "
-			CALL MESSAGE_WINDOW_D, "모르가나", "페르소나は전투向けじゃなかったから/게일と違って戦えなかったけどな "
+			CALL MESSAGE_WINDOW_D, "모르가나", "후타바는 괴도단 중에서 두뇌였어 "
+			CALL MESSAGE_WINDOW_D, "모르가나", "엠브리온에서 말하는 게일과 같은 역할이구나 "
+			CALL MESSAGE_WINDOW_D, "모르가나", "페르소나는 전투용이 아니었기 때문에/게일과 달리 싸울 순 없었지만 "
 	ENDSELECT
 ELSEIF 던전フラグ:13:1 == 14
 	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		;tamago
 		CASE 0
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "まさか一部とはいえ/カルマ協会と共闘することになるとはな "
+			CALL MESSAGE_WINDOW_D, "조직원", "설마 일부라고는 해도/카르마 협회와 공동 투쟁하게 될 줄이야 "
 		CASE 2
 		CASE 3
-			CALL MESSAGE_WINDOW_D, "マダム派カルマ兵", "俺たちは악마だらけの세계を望んでいない！ "
-		;フレッドの友達
+			CALL MESSAGE_WINDOW_D, "마담파 카르마병", "우린 악마투성이의 세계를 바라지 않아！ "
+		;프레드の友達
 		CASE 4
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "あの卵みたいなところに行くんだろ？ "
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "頑張って来いよ/応援してるぜ！ "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "그 달걀 같은 데 가는 거지？ "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "힘내서 갔다와/응원하고 있어！ "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "準備はできたか？ "
-			CALL MESSAGE_WINDOW_D, "서프", "早く二人を助けに行こう "
-			CALL INPUT_SELECT_D, "[0]行く/[1]まだ行かない "
+			CALL MESSAGE_WINDOW_D, "서프", "준비됐어？ "
+			CALL MESSAGE_WINDOW_D, "서프", "빨리 두 사람을 구하러 가자 "
+			CALL INPUT_SELECT_D, "[0]간다/[1]아직 안 간다 "
 			IF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "서프", "そうか/できるだけ早くしてくれ "
+				CALL MESSAGE_WINDOW_D, "서프", "그래/될수있는한 빨리해줘 "
 			ELSEIF RESULT == 0
 				CALL DUNGEON_WORP,54,7,5
-				CALL MESSAGE_WINDOW_D, "", "結界が解けて謎の物体のところに着いた "
-				CALL MESSAGE_WINDOW_D, "", "そこには제나が待ち構えていた "
-				CALL MESSAGE_WINDOW_D, "제나", "来るとわかっていたよ… "
+				CALL MESSAGE_WINDOW_D, "", "결계가 풀려 의문의 물체가 있는 곳에 이르렀다 "
+				CALL MESSAGE_WINDOW_D, "", "거기에는 제나가 기다리고 있었다 "
+				CALL MESSAGE_WINDOW_D, "제나", "올 줄 알고 있었어… "
 				CALL MESSAGE_WINDOW_D, "서프", "제나 "
-				CALL MESSAGE_WINDOW_D, "서프", "なぜ　多神連合に協힘をする？/このままでは악마に인간は支配されるぞ "
-				CALL MESSAGE_WINDOW_D, "제나", "どうせ　お前らも醜い악마になるだろう "
-				CALL MESSAGE_WINDOW_D, "제나", "악마に支配されることで/この세계はさらに混沌になる "
-				CALL MESSAGE_WINDOW_D, "제나", "人々が解脱を得るにはいい近道じゃないか "
-				CALL MESSAGE_WINDOW_D, "시에로", "세라の事はどうなるんだよ "
+				CALL MESSAGE_WINDOW_D, "서프", "왜 다신연합을 돕는거지?/이대로는 악마에게 인간이 지배당하겠어 "
+				CALL MESSAGE_WINDOW_D, "제나", "어차피 너희들도 추악한 악마잖아 "
+				CALL MESSAGE_WINDOW_D, "제나", "악마에게 지배당함으로써/이 세계는 더욱 혼돈에 빠진다 "
+				CALL MESSAGE_WINDOW_D, "제나", "사람들이 해탈을 얻는데 좋은 지름길이 아닌가 "
+				CALL MESSAGE_WINDOW_D, "시에로", "세라 일은 어떻게 되는 거야 "
 				CALL MESSAGE_WINDOW_D, "제나", "… "
-				CALL MESSAGE_WINDOW_D, "제나", "放っておいても　どのみち死ぬ娘だ/それに　神との交信しかできない "
-				CALL MESSAGE_WINDOW_D, "제나", "今はもう役に立たない　どうせなら/神殺しの礎として使ってやった方が/マシだと思わないか？ "
-				CALL MESSAGE_WINDOW_D, "류지", "てめえ　それでも親か！？/死んじまうかもしれねえんだぞ！ "
+				CALL MESSAGE_WINDOW_D, "제나", "내버려 두어도 어차피 죽을 딸이야/게다가 신과의 교신밖에 할 수 없어 "
+				CALL MESSAGE_WINDOW_D, "제나", "이젠 쓸모없으니 이왕이면/신 죽임의 주춧돌로서 사용해 주는 것이/낫다고 생각하지 않는가？ "
+				CALL MESSAGE_WINDOW_D, "류지", "너 그러고도 부모냐！？/죽을지도 모른다잖아！ "
 				
-				CALL MESSAGE_WINDOW_D, "", "게일が前に出てきた "
-				CALL MESSAGE_WINDOW_D, "게일", "そろそろ눈を깨달음ましたらどうだ "
-				CALL MESSAGE_WINDOW_D, "제나", "どういう意味だ "
-				CALL MESSAGE_WINDOW_D, "게일", "デイビットは　人を導けと言ったはずだ "
+				CALL MESSAGE_WINDOW_D, "", "게일이 앞에 나왔다 "
+				CALL MESSAGE_WINDOW_D, "게일", "슬슬 눈을 뜨는 것이 어떤가 "
+				CALL MESSAGE_WINDOW_D, "제나", "무슨 뜻인가 "
+				CALL MESSAGE_WINDOW_D, "게일", "데이빗은 사람들을 인도하라고 말했을 것이다 "
 				CALL MESSAGE_WINDOW_D, "제나", "！！ "
-				CALL MESSAGE_WINDOW_D, "", "제나はかなり驚いた顔をしている "
-				CALL MESSAGE_WINDOW_D, "게일", "怨念は捨てるんだ　제나！ "
+				CALL MESSAGE_WINDOW_D, "", "제나는 꽤 놀란 얼굴을 하고 있다 "
+				CALL MESSAGE_WINDOW_D, "게일", "원념은 버려라 제나！ "
 				
-				CALL MESSAGE_WINDOW_D, "제나", "馬鹿な！/お前があの人であるはずがない "
-				CALL MESSAGE_WINDOW_D, "", "제나はかなり慌てた声で言った/いつもより女性らしい입調になった気がする "
-				CALL MESSAGE_WINDOW_D, "게일", "だが　デイビットはここにいる/死んだ者の情報は神へ還る "
-				CALL MESSAGE_WINDOW_D, "게일", "神から生まれた俺たちに/彼らの魂が宿っても不思議じゃない "
-				CALL MESSAGE_WINDOW_D, "제나", "嘘よ！/あの人は　愚かな인간たちに殺された！ "
-				CALL MESSAGE_WINDOW_D, "제나", "キュヴィエ症候群は伝染しない/なのに… "
-				CALL MESSAGE_WINDOW_D, "게일", "彼は幸福だった "
-				CALL MESSAGE_WINDOW_D, "게일", "身体は滅んでも/思いを受け継ぐ者がいる "
-				CALL MESSAGE_WINDOW_D, "제나", "やめろ "
-				CALL MESSAGE_WINDOW_D, "게일", "彼は　自分の研究と人を… "
-				CALL MESSAGE_WINDOW_D, "게일", "お前を愛していた "
-				CALL MESSAGE_WINDOW_D, "제나", "戯言を言うな！ "
-				CALL MESSAGE_WINDOW_D, "", "제나は악마に변신した "
-				CALL MESSAGE_WINDOW_D, "제나", "데이터のくせに…コピーのくせに…/知ったような입を聞くなあ！ "
-				CALL MESSAGE_WINDOW_D, "제나", "殺してやる…殺してやる！ "
+				CALL MESSAGE_WINDOW_D, "제나", "바보녀석！/네가 그 사람일 리가 없어 "
+				CALL MESSAGE_WINDOW_D, "", "제나는 많이 당황한 목소리로 말했다/평소보다 여성스러운 말투가 된 것 같다 "
+				CALL MESSAGE_WINDOW_D, "게일", "하지만 데이빗은 여기 있다/죽은 자의 정보는 신에게 돌아간다 "
+				CALL MESSAGE_WINDOW_D, "게일", "신에게서 태어난 우리들에게/그들의 영혼이 깃들어도 이상하지 않아 "
+				CALL MESSAGE_WINDOW_D, "제나", "거짓말！/그 사람은 어리석은 인간들에게 살해당했다！ "
+				CALL MESSAGE_WINDOW_D, "제나", "퀴비에 증후군은 전염되지 않는다/일텐데… "
+				CALL MESSAGE_WINDOW_D, "게일", "그는 행복했다 "
+				CALL MESSAGE_WINDOW_D, "게일", "몸은 사라져도/뜻을 잇는 사람이 있다 "
+				CALL MESSAGE_WINDOW_D, "제나", "그만해 "
+				CALL MESSAGE_WINDOW_D, "게일", "그는 자신의 연구와 사람을… "
+				CALL MESSAGE_WINDOW_D, "게일", "너를 사랑했어 "
+				CALL MESSAGE_WINDOW_D, "제나", "헛소리 하지 마라！ "
+				CALL MESSAGE_WINDOW_D, "", "제나는 악마로 변신했다 "
+				CALL MESSAGE_WINDOW_D, "제나", "데이터 주제에…카피인 주제에…/전부 다 알았다는 듯한 말을 하지 마라！ "
+				CALL MESSAGE_WINDOW_D, "제나", "죽여버리겠다…죽여버리겠다！ "
 				
 				
 				CALL SET_ENEMY,14,4622,70,0,1
@@ -1999,264 +1999,269 @@ ELSEIF 던전フラグ:13:1 == 14
 				
 				CALL BATTLE_START
 				
+				FLAG:도주불가フラグ = 0
+				FLAG:회화불능フラグ = 0
+				FLAG:선제기습취소 = 0
+				FLAG:エンカウント率 = 0
+				FLAG:未遭遇歩数 = 0
 				
 				CALL INCREASE_ANALYZE(3314,1000)
 				
-				CALL MESSAGE_WINDOW_D, "게일", "もうやめろ　제나/もう　誰も恨むんじゃない "
-				CALL MESSAGE_WINDOW_D, "제나", "殺さないのか… "
-				CALL MESSAGE_WINDOW_D, "게일", "お前さんはこの세계で/まだやるべきことがあるはずだ "
-				CALL MESSAGE_WINDOW_D, "제나", "데이터のくせに… "
-				CALL MESSAGE_WINDOW_D, "", "제나は踵を返す "
-				CALL MESSAGE_WINDOW_D, "게일", "どこへ行く "
-				CALL MESSAGE_WINDOW_D, "제나", "少し一人にさせてくれ… "
+				CALL MESSAGE_WINDOW_D, "게일", "이제 그만해 제나/이제 누구도 원망해서는 안돼 "
+				CALL MESSAGE_WINDOW_D, "제나", "죽이지 않을거냐… "
+				CALL MESSAGE_WINDOW_D, "게일", "넌 이 세계에서/아직 해야할 일이 있을거야 "
+				CALL MESSAGE_WINDOW_D, "제나", "데이터 주제에… "
+				CALL MESSAGE_WINDOW_D, "", "제나는 발길을 돌린다 "
+				CALL MESSAGE_WINDOW_D, "게일", "어디로 가나 "
+				CALL MESSAGE_WINDOW_D, "제나", "잠시 혼자 있게 해 줘… "
 				CALL MESSAGE_WINDOW_D, "게일", "제나… "
-				CALL MESSAGE_WINDOW_D, "제나", "この物体は　宇宙の卵だ/これが　孵化すると新しい宇宙ができる "
-				CALL MESSAGE_WINDOW_D, "제나", "もうすぐ孵化する/今日中に奴らを止めないと間に合わないぞ "
-				CALL MESSAGE_WINDOW_D, "제나", "私に構わず早く行け… "
-				CALL MESSAGE_WINDOW_D, "", "제나は去っていった "
+				CALL MESSAGE_WINDOW_D, "제나", "이 물체는 우주의 알이다/이것이 부화하면 새로운 우주가 된다 "
+				CALL MESSAGE_WINDOW_D, "제나", "이제 곧 부화한다/오늘 중으로 놈들을 쓰러트리지 않으면 시간에 맞출 수 없다 "
+				CALL MESSAGE_WINDOW_D, "제나", "나한테 상관하지 말고 빨리 가라… "
+				CALL MESSAGE_WINDOW_D, "", "제나는 떠났다 "
 				
 				
-				CALL MESSAGE_WINDOW_D, "시에로", "…でこの中どうやって入るんだ？/入입がどこにもねえぞ… "
-				CALL MESSAGE_WINDOW_D, "마코토", "何かしら…これ… "
-				CALL MESSAGE_WINDOW_D, "", "真は刺さってあった物を引き抜くと/大きな穴が出てきた "
-				CALL MESSAGE_WINDOW_D, "서프", "なるほど　これで入입を塞いでいたのか "
-				CALL MESSAGE_WINDOW_D, "서프", "この中身も同じようなことになっているかもな/行こう　皆 "
-				CALL MESSAGE_WINDOW_D, "마코토", "ええ　あのこれ/持っていてください "
-				CALL MESSAGE_WINDOW_D, "", "白の石柱を손に入れた "
+				CALL MESSAGE_WINDOW_D, "시에로", "…근데 이 안에 어떻게 들어가？/입구가 어디에도 없어… "
+				CALL MESSAGE_WINDOW_D, "마코토", "뭘까…이거… "
+				CALL MESSAGE_WINDOW_D, "", "마코토가 꽂혀 있던 것을 빼내니/큰 구멍이 났다 "
+				CALL MESSAGE_WINDOW_D, "서프", "과연 이것으로 출입을 막고 있었단 말인가 "
+				CALL MESSAGE_WINDOW_D, "서프", "이 안도 같은 것이 되어 있을지도 몰라/가자 모두 "
+				CALL MESSAGE_WINDOW_D, "마코토", "네 이것/가지고 있어주세요 "
+				CALL MESSAGE_WINDOW_D, "", "흰 돌기둥을 손에 넣었다 "
 				
 				던전フラグ:13:26 = 1
 				
 			ENDIF
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "やっと세라を助けられるのね "
-			CALL MESSAGE_WINDOW_D, "알지라", "세라　待ってて/すぐ助けるから "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "겨우 세라를 구할 수 있구나 "
+			CALL MESSAGE_WINDOW_D, "알지라", "세라 기다리고 있어/금방 구해줄께 "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド","やっと助けに行けるんだな "
-			CALL MESSAGE_WINDOW_D, "フレッド","みんな　死なないでくれよ… "
+			CALL MESSAGE_WINDOW_D, "프레드","겨우 구하러 갈 수 있겠어 "
+			CALL MESSAGE_WINDOW_D, "프레드","모두 죽지 말아 줘… "
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "ここまであさましさを突きつければ/恨み続けるなどできなかっただろう？ "
-			CALL MESSAGE_WINDOW_D, "게일", "つらかっただろうに…　馬鹿だよ君は… "
+			CALL MESSAGE_WINDOW_D, "게일", "여기까지 치사하게 들이대면/계속 원망할 수는 없겠지？ "
+			CALL MESSAGE_WINDOW_D, "게일", "힘들었을텐데… 바보야 너는… "
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "雨宮　助けに行くからね "
+			CALL MESSAGE_WINDOW_D, "안", "아마미야 구하러 갈게 "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "雨宮君…どうか無事でいて… "
+			CALL MESSAGE_WINDOW_D, "마코토", "아마미야군… 제발 무사해줘… "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "一つ気がかりなことがあるのだが… "
-			CALL MESSAGE_WINDOW_D, "로알드", "いや　今は考えていても仕方がない/彼女らの救出を優先しよう "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "한 가지 마음에 걸리는 일이 있는데… "
+			CALL MESSAGE_WINDOW_D, "로알드", "아니 지금은 생각해도 소용없어/그녀들의 구출을 우선하자 "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "雨宮君　待っててね/すぐ助けるから "
+			CALL MESSAGE_WINDOW_D, "하루", "아마미야군 기다려/곧 구해줄께 "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "待ってろよ雨宮/すぐに　助けてやるからよ "
+			CALL MESSAGE_WINDOW_D, "류지", "기다려라 아마미야/당장 구해줄게 "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "これでやっとあそこに行けるな "
-			CALL MESSAGE_WINDOW_D, "시에로", "세라　待ってろよ "
+			CALL MESSAGE_WINDOW_D, "시에로", "이제 겨우 그곳에 갈 수 있겠구나 "
+			CALL MESSAGE_WINDOW_D, "시에로", "세라 기다리고 있어 "
 		;키타가와　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "雨宮　すぐに助けてやるぞ "
+			CALL MESSAGE_WINDOW_D, "유스케", "아마미야 빨리 구해줄게 "
 		;사쿠라　후타바
 		CASE 17
-			CALL MESSAGE_WINDOW_D, "후타바", "ここに来るまでいろいろあってな… "
-			CALL MESSAGE_WINDOW_D, "후타바", "話せば長くなるから今は話さないけど "
+			CALL MESSAGE_WINDOW_D, "후타바", "여기에 오기까지 여러가지 일이 있어서… "
+			CALL MESSAGE_WINDOW_D, "후타바", "얘기하면 길어지니까 지금은 얘기 안 하지만 "
 		;히트
 		CASE 18
-			CALL MESSAGE_WINDOW_D, "히트", "早く세라を助けようぜ "
-			CALL MESSAGE_WINDOW_D, "히트", "아이つらぶっ飛ばさなきゃ収まんねえ… "
+			CALL MESSAGE_WINDOW_D, "히트", "어서 세라를 구하자구 "
+			CALL MESSAGE_WINDOW_D, "히트", "그녀석들을 냅다 날려버리지 않으면 용서 못해… "
 		;모르가나
 		CASE 19
-			CALL MESSAGE_WINDOW_D, "모르가나", "まさか　本当の神を相손にすることになるとはな… "
-			CALL MESSAGE_WINDOW_D, "모르가나", "조커　待ってろよ "
+			CALL MESSAGE_WINDOW_D, "모르가나", "설마 진짜 신을 마주하게 될 줄이야… "
+			CALL MESSAGE_WINDOW_D, "모르가나", "조커 기다려라 "
 	ENDSELECT
 ELSEIF 던전フラグ:13:1 == 15
 	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		;卵後
 		CASE 0
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "テクノシャーマンを손に入れたが…/神と交信できない今　何をすればいいんだ… "
+			CALL MESSAGE_WINDOW_D, "조직원", "테크노 샤먼을 손에 넣었지만/신이랑 교신이 안 되는데 어떻게 해야 되냐… "
 		CASE 2
 		CASE 3
-				CALL MESSAGE_WINDOW_D, "構成員", "あれがテクノシャーマンか/どんな娘かと思ったが意外と普通だな "
-				CALL MESSAGE_WINDOW_D, "構成員", "これで7歳だっていうのも驚きだ/どう見ても12歳ぐらいの소녀なのにな "
-				CALL MESSAGE_WINDOW_D, "構成員", "神との交信は体を著しく老化させるらしい/特に体内はもっと老化が進んでいたと聞いたな "
-		;フレッドの友達
+				CALL MESSAGE_WINDOW_D, "조직원", "저게 테크노 샤먼인가/어떤 아가씨인가 했는데 의외로 평범하네 "
+				CALL MESSAGE_WINDOW_D, "조직원", "이제 일곱 살이라는 것도 놀랍다/아무리 봐도 열두 살 정도의 소녀인데 말이야 "
+				CALL MESSAGE_WINDOW_D, "조직원", "신과의 교신은 몸을 현저하게 노화시키는 것 같아/특히 체내는 더욱 노화가 진행되고 있었다고 들었어 "
+		;프레드の友達
 		CASE 4
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "構成員から聞いたんだけどよー/세라って7歳って本当の話なのか？ "
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "どう見ても俺らより大きいよな "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "조직원한테 들었는데 말이야/세라가 7살이라니 정말이야？ "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "딱 봐도 우리보다 크긴 하지 "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "세라とレンを無事に救出することができたな "
+			CALL MESSAGE_WINDOW_D, "서프", "세라와 렌을 무사히 구출할 수 있었구나 "
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "세라が無事でよかった…　本当に… "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "세라가 무사해서 다행이야…	 정말… "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "二人とも助けられてよかったな "
-			CALL MESSAGE_WINDOW_D, "フレッド", "ローカパーラは세라を손に入れることを눈的にしていたが/何をするんだろうな "
+			CALL MESSAGE_WINDOW_D, "프레드", "둘 다 구할 수 있어서 다행이네 "
+			CALL MESSAGE_WINDOW_D, "프레드", "로카파라는 세라구하기가 목적이었는데/이제 뭘할까 "
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "多神連合もカルマ協会も기능は/しなくなったが油断はするな "
-			CALL MESSAGE_WINDOW_D, "게일", "まだ　奴らの残党が多いからな "
+			CALL MESSAGE_WINDOW_D, "게일", "다신연합도 카르마협회도 움직이지/못하게 되었지만 방심하지 마라 "
+			CALL MESSAGE_WINDOW_D, "게일", "아직 녀석들의 잔당이 많으니까 "
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "雨宮ほんとに無事でよかったー "
-			CALL MESSAGE_WINDOW_D, "안", "변신したときはどうなることかと思ったよ "
+			CALL MESSAGE_WINDOW_D, "안", "아마미야 정말로 무사해서 다행이야 "
+			CALL MESSAGE_WINDOW_D, "안", "변신했을 때는 어떻게 되는 걸까 하고 생각했어 "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "明智君… "
-			CALL MESSAGE_WINDOW_D, "마코토", "雨宮君が助けられたのはいいんですが/心残りもありますね "
+			CALL MESSAGE_WINDOW_D, "마코토", "아케치 군… "
+			CALL MESSAGE_WINDOW_D, "마코토", "아마미야군이 도움을 받은건 다행이지만/아쉬움도 있네요 "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "EGG施設などの神と交信できる施設が/ことごとく破壊させられたらしい… "
-			CALL MESSAGE_WINDOW_D, "로알드", "세라を손に入れたのはいいが/太陽をもとに戻すにはもっと時間が필요かもな "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "EGG 시설등의 신과 교신할 수 있는 시설이/모조리 파괴된 것 같다… "
+			CALL MESSAGE_WINDOW_D, "로알드", "세라를 구한건 좋지만/태양를 되찾으려면 시간이 더 필요하겠지 "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "雨宮君　本当に無事でよかった… "
-			CALL MESSAGE_WINDOW_D, "春", "明智君　助けられなくてごめんね… "
+			CALL MESSAGE_WINDOW_D, "하루", "아마미야군 정말로 무사해서 다행이야… "
+			CALL MESSAGE_WINDOW_D, "하루", "아케치군 구해주지 못해서 미안해… "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "雨宮は助けられたがよ　아이つは助けてやれなかったな "
-			CALL MESSAGE_WINDOW_D, "류지", "結局　あの時と一緒かよ…　くそっ "
+			CALL MESSAGE_WINDOW_D, "류지", "아마미야는 구조했지만 그녀석은 구해주지 못했구나 "
+			CALL MESSAGE_WINDOW_D, "류지", "결국 그때랑 똑같네… 빌어먹을 "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "姿が変わっちまったときはどうなっちまうかと/思ったんだけどよ "
-			CALL MESSAGE_WINDOW_D, "시에로", "ほんと無事でよかったぜ/마코토たちの仲間も無事だしよ "
+			CALL MESSAGE_WINDOW_D, "시에로", "모습이 변해 버렸을 때는 어떻게 되어 버릴까 하고/생각했지만요. "
+			CALL MESSAGE_WINDOW_D, "시에로", "정말 무사해서 다행이야/마코토들의 동료들도 무사해 "
 		;세라
 		CASE 15
-			CALL MESSAGE_WINDOW_D, "세라", "악마ウイルスを入れられた時の事は깨달음えてないの/多分　気絶しているときにやられたんだと思う… "
-			CALL MESSAGE_WINDOW_D, "세라", "でも　私の事は心配しなくて大丈남편よ/なぜか　身体がいつもより軽くなっているような気がするの "
+			CALL MESSAGE_WINDOW_D, "세라", "악마바이러스를 넣어진때는 기억나지않아/아마 기절했을때 당한것 같아… "
+			CALL MESSAGE_WINDOW_D, "세라", "그치만 내 걱정은 안해도 괜찮아/왠지 몸이 평소보다 가벼워진 것 같아 "
 		;키타가와　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "二人とも無事に救出できて一安心だな "
-			CALL MESSAGE_WINDOW_D, "유스케", "ただ　아이つを助けられなかったのが/心残りだがな "
+			CALL MESSAGE_WINDOW_D, "유스케", "둘 다 무사히 구출해내서 한시름 놓이는군 "
+			CALL MESSAGE_WINDOW_D, "유스케", "단지 그를 돕지 못했던 것이/아쉬운데 "
 		;사쿠라　후타바
 		CASE 17
-			CALL MESSAGE_WINDOW_D, "후타바", "もともと多神連合は세라と蓮を/利用する予定でいたんだ "
-			CALL MESSAGE_WINDOW_D, "후타바", "私がもっとしっかりしていればよかったのに…　ごめんな "
+			CALL MESSAGE_WINDOW_D, "후타바", "원래 다신연합은 세라와 렌을 이용할 예정이였어 "
+			CALL MESSAGE_WINDOW_D, "후타바", "내가 좀 더 빨리 정신을 차렸어야 했는데... 미안해 "
 		;히트
 		CASE 18
-			CALL MESSAGE_WINDOW_D, "히트", "세라が無事でよかったぜ/レンにも借りを返すことができたしよ "
+			CALL MESSAGE_WINDOW_D, "히트", "세라가 무사해서 다행이야/렌한테도 빚을 갚을 수 있었잖아 "
 		;모르가나
 		CASE 19
-			CALL MESSAGE_WINDOW_D, "모르가나", "やっと怪盗団が全員揃ったぜ "
-			CALL MESSAGE_WINDOW_D, "모르가나", "一番後に入ったのがリーダーってのが/変わってるけどな "
-		;雨宮　蓮
+			CALL MESSAGE_WINDOW_D, "모르가나", "드디어 괴도단이 전원 모였네 "
+			CALL MESSAGE_WINDOW_D, "모르가나", "맨뒤에 귀환한것이 리더라는게/특이하긴 하지만 "
+		;雨宮　렌
 		CASE 20
-			CALL MESSAGE_WINDOW_D, "蓮", "まさか　皆　ローカパーラにいたとはな/俺も何度もカルマシティには来ていたんだ "
-			CALL MESSAGE_WINDOW_D, "蓮", "会えば　合流するつもりでいたんだが/すれ違いが何度も起きていたとはな… "
+			CALL MESSAGE_WINDOW_D, "렌", "설마 모두들 로카파라에 있었을줄이야/나도 몇번이나 카르마시티에 왔었어 "
+			CALL MESSAGE_WINDOW_D, "렌", "만나면 합류할 생각으로 있었는데/엇갈림이 몇번이나 일어났다니… "
 	ENDSELECT
 ELSEIF 던전フラグ:13:1 == 16
 	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		;プラント
 		CASE 0
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "正直　マダムや技術長に従うのは違和感があったよ "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "でも　従ってたんだ/自分に自信が持てなくてね "
+			CALL MESSAGE_WINDOW_D, "카르마병", "솔직히 마담이나 기술자를 따르는 것이 낯설었다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "하지만 따랐어/스스로 자신감을 가질수없어서 "
 		CASE 2
-			;CALL MESSAGE_WINDOW_D, "ア디무ル", ""
+			;CALL MESSAGE_WINDOW_D, "아딜", ""
 		CASE 3
-			CALL MESSAGE_WINDOW_D, "構成員", "まさか　カルマ兵と組むことになるとはな… "
-			CALL MESSAGE_WINDOW_D, "構成員", "多神連合が来てからだな…/ "
-		;フレッドの友達
+			CALL MESSAGE_WINDOW_D, "조직원", "설마 카르마병과 같은 편이 될 줄이야… "
+			CALL MESSAGE_WINDOW_D, "조직원", "다신연합이 와서 그렇지…/ "
+		;프레드の友達
 		CASE 4
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "太陽まで行くって聞いたけどさ/あんたらマジでスゲーよな "
-				CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "熱くないの？ "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "태양까지 간다는데/너희들 정말 대단해 "
+				CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "뜨겁지 않아？ "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "前から不思議な猫だとは思っていたが/俺を導いていたんだな "
-			CALL MESSAGE_WINDOW_D, "서프", "行こう　この場所を本当の楽園に変えるんだ "
+			CALL MESSAGE_WINDOW_D, "서프", "예전부터 이상한 고양이인줄은 알았는데/나를 이끌었구나 "
+			CALL MESSAGE_WINDOW_D, "서프", "가자 이 장소를 진정한 낙원으로 바꾸는 거야 "
 		;알지라
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "알지라", "あの猫　前から不思議だと思ってたのよ "
-			CALL MESSAGE_WINDOW_D, "알지라", "ジャンクヤードの時から/あまり　猫っぽくなったのよね "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "알지라", "저 고양이 전부터 신기하다고 생각했거든 "
+			CALL MESSAGE_WINDOW_D, "알지라", "정크야드때부터/너무 고양이같이 되었지 뭐야 "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "前にそこらで　そんな猫見たけど/不思議な感じの猫だったな"
+			CALL MESSAGE_WINDOW_D, "프레드", "일전에 그 근처에서 그런 고양이 봤는데/이상한 느낌의 고양이였어"
 		;게일
 		CASE 8
-			CALL MESSAGE_WINDOW_D, "게일", "서프を導いてたんだ　적ではなかろうがな/何者かが세라の飼い猫を騙っているのか"
+			CALL MESSAGE_WINDOW_D, "게일", "서프를 이끌었구나 적은 아니겠지/누군가가 세라가 기르던 고양이를 바꿔치기한건지"
 			
 		;高巻　안
 		CASE 9
-			CALL MESSAGE_WINDOW_D, "안", "わ　私も一瞬モルガナだと思ってしまった… "
+			CALL MESSAGE_WINDOW_D, "안", "와 나도 한순간 모르가나인 줄 알았어… "
 		;新島　마코토
 		CASE 10
-			CALL MESSAGE_WINDOW_D, "마코토", "あの猫　서프さんに会ってから見るようになったんです "
-			CALL MESSAGE_WINDOW_D, "마코토", "妙に猫っぽくないって感じてました "
+			CALL MESSAGE_WINDOW_D, "마코토", "저 고양이 서프 씨를 만나고 나서 보게 된 거예요 "
+			CALL MESSAGE_WINDOW_D, "마코토", "이상하게 고양이 같지가 않다고 느꼈어요 "
 		;로알드
 		CASE 11
-			CALL MESSAGE_WINDOW_D, "로알드", "やっと　太陽を元に戻すことができるんだな "
-			CALL MESSAGE_WINDOW_D, "로알드", "グレッグ…　見ていてくれ… "
-		;奥村　春
+			CALL MESSAGE_WINDOW_D, "로알드", "이제야 겨우 태양을 원래대로 되돌릴 수 있겠구나 "
+			CALL MESSAGE_WINDOW_D, "로알드", "벡…　보고있어줘… "
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", "フレッド達は知らないかもしれないんですけど/太陽の光はで植物は光合成をして成長するんですよ "
-			CALL MESSAGE_WINDOW_D, "春", "野菜や果物もそれで成長してきたんです "
+			CALL MESSAGE_WINDOW_D, "하루", "프레드들은 모를 수 있는데/햇빛을 맞아 식물은 광합성을 해서 성장하거든요 "
+			CALL MESSAGE_WINDOW_D, "하루", "야채와 과일도 그렇게 성장해왔구요 "
 		;坂本　류지
 		CASE 13
-			CALL MESSAGE_WINDOW_D, "류지", "パレスや異세계に続いて　太陽に行くなんてな "
-			CALL MESSAGE_WINDOW_D, "류지", "俺達　妙に変なところに行くんだよな "
+			CALL MESSAGE_WINDOW_D, "류지", "팰리스나 이세계에 이어서 태양으로 가다니 "
+			CALL MESSAGE_WINDOW_D, "류지", "우리 묘하게 이상한 데만 가잖아 "
 		;시에로
 		CASE 14
-			CALL MESSAGE_WINDOW_D, "시에로", "あの猫って/ジャンクヤードからちょこちょこ見てきた/아이つだろ？ "
-			CALL MESSAGE_WINDOW_D, "시에로", "喋ったぜ　一体何者なんだ？ "
+			CALL MESSAGE_WINDOW_D, "시에로", "그 고양이는/정크야드에서 가끔 봐왔어/그녀석이잖아？ "
+			CALL MESSAGE_WINDOW_D, "시에로", "지껄이고 있어 도대체 정체가 뭐야？ "
 		;세라
 		CASE 15
-			CALL MESSAGE_WINDOW_D, "세라", "シュレ디무ンガーって/昔히트先生がくれた猫の名前よ "
-			CALL MESSAGE_WINDOW_D, "세라", "でも　普通の猫だったし… "
+			CALL MESSAGE_WINDOW_D, "세라", "슈뢰딩거는/옛날에 히트선생님이 준 고양이 이름이야 "
+			CALL MESSAGE_WINDOW_D, "세라", "근데 그냥 고양이였어… "
 		;키타가와　유스케
 		CASE 16
-			CALL MESSAGE_WINDOW_D, "유스케", "太陽にも芸術はある/朝日や夕日は特に綺麗に見えるからな "
-			CALL MESSAGE_WINDOW_D, "유스케", "もちろんそれを題材に描いた画家もたくさんいるからな/人を石にする공포の物体として終わらせたくないからな "
+			CALL MESSAGE_WINDOW_D, "유스케", "태양에도 예술은 있어/아침해나 석양은 특히 아름다워 보이니까 "
+			CALL MESSAGE_WINDOW_D, "유스케", "물론 그것을 소재로 그린 화가도 많이 있으니까/사람을 돌로 만드는 공포의 물체로 끝내고 싶지는 않으니까 "
 		;사쿠라　후타바
 		CASE 17
-			CALL MESSAGE_WINDOW_D, "후타바", "神か…　どんな姿してんだろうな "
-			CALL MESSAGE_WINDOW_D, "후타바", "列車みたいにな形だったりして "
+			CALL MESSAGE_WINDOW_D, "후타바", "신인가… 어떤 모습을 하고 있을까 "
+			CALL MESSAGE_WINDOW_D, "후타바", "기차처럼 생긴 것도 있고 해서 "
 		;히트
 		CASE 18
-			CALL MESSAGE_WINDOW_D, "히트", "俺が言ったこと/ちゃんと実践してるみてぇだな　서프… "
+			CALL MESSAGE_WINDOW_D, "히트", "내가 말한것/제대로 실천하고 있는것 같네 서프… "
 		;모르가나
 		CASE 19
-			CALL MESSAGE_WINDOW_D, "모르가나", "아이つ俺と黒猫でかぶってんじゃねーか "
-		;雨宮　蓮
+			CALL MESSAGE_WINDOW_D, "모르가나", "그 녀석 나랑 검은 고양이로 겹치고 있잖아 "
+		;雨宮　렌
 		CASE 20
-			CALL MESSAGE_WINDOW_D, "蓮", "思えば俺たちの怪盗団も黒猫から始まったんだよな "
-			CALL MESSAGE_WINDOW_D, "蓮", "その黒猫　モルガナの事なんだ "
+			CALL MESSAGE_WINDOW_D, "렌", "생각해보면 우리 괴도단도 검은 고양이 덕분에 시작된 거 같아 "
+			CALL MESSAGE_WINDOW_D, "렌", "그 검은 고양이는 모르가나를 말하는 거야 "
 	ENDSELECT
 ELSEIF 던전フラグ:13:1 == 17
 	SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		;プラント
 		CASE 0
 		CASE 1
-			CALL MESSAGE_WINDOW_D, "構成員", "チューナーになったやつらはみんな死んじまったよ/多神連合やジャ란다ーラの残党と戦っているときにな "
-			CALL MESSAGE_WINDOW_D, "構成員", "おかげで全滅することができたんだがな "
-			CALL MESSAGE_WINDOW_D, "構成員", "아이つらの墓も作ってやらないとな… "
+			CALL MESSAGE_WINDOW_D, "조직원", "튜너가 된 녀석들은 모두 죽었어/다신연합이나 잘란다라의 잔당들과 싸우고 있을 때 "
+			CALL MESSAGE_WINDOW_D, "조직원", "덕분에 전멸은 피했지만 "
+			CALL MESSAGE_WINDOW_D, "조직원", "그들 무덤도 만들어 줘야겠네… "
 		CASE 2
-			CALL MESSAGE_WINDOW_D, "ア디무ル","やあ　アジトで合うのは/プラント突入前以来か… "
-			CALL MESSAGE_WINDOW_D, "ア디무ル","実は　巨大な악마に殺される前にレンに助けられたんだ/その前に重傷を負っていたがな "
-			CALL MESSAGE_WINDOW_D, "ア디무ル","完治するまで動けなくってな/奥で치료を受けてたよ "
+			CALL MESSAGE_WINDOW_D, "아딜","이 아지트에서 만나는 것은/플랜트 돌입전 이후인가… "
+			CALL MESSAGE_WINDOW_D, "아딜","실은 거대한 악마에게 살해당하기 직전에 렌의 구조를 받았어/그 전에 중상을 입었지만 "
+			CALL MESSAGE_WINDOW_D, "아딜","완치가 될때까지 움직일 수 없어서/안쪽에서 치유를 받았어 "
 		CASE 3
-			CALL MESSAGE_WINDOW_D, "フレッドの仲間の소녀", "太陽の下に初めて行ったの/ポカポカして気持ちよかったの "
-		;フレッドの友達
+			CALL MESSAGE_WINDOW_D, "프레드의 동료 소녀", "태양아래에 처음 가봤어/따끈따끈해서 기분 좋았어 "
+		;프레드の友達
 		CASE 4
-			CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "へへ　あんたらには感謝してるぜ "
+			CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "헤헤 당신들에게는 감사하고 있어 "
 		;서프
 		CASE 5
-			CALL MESSAGE_WINDOW_D, "서프", "太陽にはまだいけるみたいだな… "
-			CALL MESSAGE_WINDOW_D, "서프", "수련に使えるだろうな "
-		;雨宮　蓮
+			CALL MESSAGE_WINDOW_D, "서프", "태양 내부는 아직 멀쩡한가보구나… "
+			CALL MESSAGE_WINDOW_D, "서프", "수련에 쓸 만하겠군 "
+		;雨宮　렌
 		CASE 6
-			CALL MESSAGE_WINDOW_D, "蓮", "太陽への扉は消えてないみたいだな "
-			CALL MESSAGE_WINDOW_D, "蓮", "どうする？仲魔を集めに行くか？ "
-		;フレッド
+			CALL MESSAGE_WINDOW_D, "렌", "태양으로의 문은 사라지지 않은 것 같네 "
+			CALL MESSAGE_WINDOW_D, "렌", "어떻게 해？ 중마를 모으러 갈까？ "
+		;프레드
 		CASE 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "よう　さみしくなって俺に会いに来たのか？/へへ"
+			CALL MESSAGE_WINDOW_D, "프레드", "여어 그리워져서 날 만나러 온거야？/헤헤"
 		;게일
 		CASE 8
 			CALL MESSAGE_WINDOW_D, "게일", ""
@@ -2270,9 +2275,9 @@ ELSEIF 던전フラグ:13:1 == 17
 		;로알드
 		CASE 11
 			CALL MESSAGE_WINDOW_D, "로알드", " "
-		;奥村　春
+		;奥村　하루
 		CASE 12
-			CALL MESSAGE_WINDOW_D, "春", " "
+			CALL MESSAGE_WINDOW_D, "하루", " "
 		;坂本　류지
 		CASE 13
 			CALL MESSAGE_WINDOW_D, "류지", " "
@@ -2309,13 +2314,13 @@ PRINTFORML [99] 買わない
 
 INPUT
 ;IF RESULT == 1 && 던전フラグ:13:1 > 6 && 던전フラグ:13:1 > 0 && GETCHARA([[キャラ:카스미]]) < 1
-;	PRINTFORML 武見　妙を買いますか？
+;	PRINTFORML 타케미의 인지를 구매하시겠습니까？
 ;	CALL INPUT_YN
 ;	IF RESULT == 0
 ;		CALL ADD_NEW_COMPANION,[[キャラ:카스미]],100
 ;		IF RESULT == 1
 ;			MONEY:1 -= 1000
-;			PRINTFORML 요시자와 카스미を손に入れた
+;			PRINTFORML 요시자와 카스미를 손에 넣었다
 ;		ENDIF
 ;	ELSE
 ;		GOTO DOREI

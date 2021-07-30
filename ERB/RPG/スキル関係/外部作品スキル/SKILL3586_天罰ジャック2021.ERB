@@ -36,12 +36,12 @@ RETURN 16
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3586
+@SKILL_DECIDE_TYPE_3586, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3586
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3586, ARG
 RETURN 2
 
 
@@ -114,12 +114,16 @@ RETURN 0
 ;스킬及び行動の実行
 ;====================================================
 @ACTION_3586,ARG,ARG:1
-IF CFLAG:ARG:고유게이지D1 > 0 && CFLAG:ARG:고유게이지H1 > -1 && GET_STATE(CFLAG:(CFLAG:ARG:고유게이지H1):ステート) != "DYING" && CPOS(CFLAG:ARG:고유게이지H1) > 0
-	ARG:1 = CPOS(CFLAG:ARG:고유게이지H1)
+#DIM HACKING_D
+#DIM HACKING_H
+HACKING_D = SKILLGAGE_D_GET(ARG,3581)
+HACKING_H = SKILLGAGE_H_GET(ARG,3581)
+IF HACKING_D > 0 && HACKING_H > -1 && GET_STATE(CFLAG:HACKING_H:ステート) != "DYING" && CPOS(HACKING_H) > 0
+	ARG:1 = CPOS(HACKING_H)
 	
 	IF CFLAG:POS(ARG:1):마법반사フラグ >= 1
 		CFLAG:POS(ARG:1):마법반사フラグ = 0
-		PRINTFORML [{ARG:1}]%CALLNAME:POS(LOCAL),20% >>>>> 마법반사 결계를 파괴했다！
+		PRINTFORML [{ARG:1}]%CALLNAME:POS(ARG:1),20% >>>>> 마법반사 결계를 파괴했다！
 	ENDIF
 	IF CFLAG:POS(ARG:1):핵열무효화횟수 > 0
 		CFLAG:POS(ARG:1):핵열무효화횟수 = 0
@@ -150,7 +154,8 @@ RETURN 1
 
 ;사용조건
 @SKILL_SPECIAL_ACTIONABLE_3586,ARG
-SIF CFLAG:ARG:고유게이지D1 > 0
+;적にハッキング効果があると사용可能
+SIF SKILLGAGE_D_GET(ARG,3581) > 0
 	RETURN 1
 RETURN 0
 ;とくにない

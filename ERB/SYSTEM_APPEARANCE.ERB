@@ -44,8 +44,15 @@ CALL DEFINITE_KOSINIKU(ARG)
 IF BASE:ARG:신장 > 0 && !TALENT:ARG:유아／유아퇴행
 	PRINTFORM 신장：{BASE:ARG:신장}cm
 
+	;体重が設定されており、「0：인간」「32：괴이」「36：半魔」「43：영웅」「44：悪魔つき」「45：조마」なら体重表示
 	IF BASE:ARG:체중 > 0 && (ABL:ARG:종족 == 0 || ABL:ARG:종족 == 32 || ABL:ARG:종족 == 36 || ABL:ARG:종족 == 43 || ABL:ARG:종족 ==44 || ABL:ARG:종족 == 45)
-		PRINTFORM   체중：{BASE:ARG:체중}kg
+			;ふたごちゃんパッチオンかつ妊娠している場合
+		;計算しようかと思ったが、元から計算はしていないので
+		IF FLAG:ふたごちゃんフラグ > 0 && TALENT:ARG:임신
+			PRINTFORM   체중：{BASE:ARG:체중}kg ＋ 胎児{CFLAG:ARG:今回受胎人数}人分
+		ELSE
+			PRINTFORM   체중：{BASE:ARG:체중}kg
+		ENDIF
 	ELSE
 		PRINTFORM   체중：불명
 	ENDIF
@@ -65,8 +72,10 @@ IF BASE:ARG:신장 > 0 && !TALENT:ARG:유아／유아퇴행
 		IF CFLAG:ARG:子宮現在容量 == 0
 			PRINTFORM   Ｗ：{BASE:ARG:웨스트}cm
 		ELSE
-			PRINTFORM   現在Ｗ：{( (CFLAG:ARG:子宮現在容量*6/100) + BASE:ARG:웨스트)}cm （元Ｗ：{BASE:ARG:웨스트}cm）
-		endif
+			;腹囲が470センチとかになっちゃってたので修正
+			PRINTFORM   現在Ｗ：{( (CFLAG:ARG:子宮現在容量*6/1000) + BASE:ARG:웨스트)}cm （元Ｗ：{BASE:ARG:웨스트}cm）
+;			PRINTFORM   現在Ｗ：{( (CFLAG:ARG:子宮現在容量*6/100) + BASE:ARG:웨스트)}cm （元Ｗ：{BASE:ARG:웨스트}cm）
+		ENDIF
 	ENDIF
 
 	IF BASE:ARG:힙사이즈 == 0 
@@ -75,10 +84,15 @@ IF BASE:ARG:신장 > 0 && !TALENT:ARG:유아／유아퇴행
 		PRINTFORM   Ｈ：{BASE:ARG:힙사이즈}cm
 		CALL CHECK_HIPSIZE(ARG)
 	ENDIF
-	SIF !BASE:ARG:웨스트 == 0
 		PRINTFORML 
-		PRINTFORM 現在子宮内정액量{CFLAG:ARG:子宮現在容量}ml 최대子宮容量{CFLAG:ARG:子宮최대容量}ml
 
+	;「子宮」容量なので、オトコの場合は表示しない（男の娘は妊娠できるが、表示しない）
+	IF !BASE:ARG:웨스트 == 0 && !TALENT:ARG:남자
+		PRINTFORM 現在子宮内정액量{CFLAG:ARG:子宮現在容量}ml ／ 최대子宮容量{CFLAG:ARG:子宮최대容量}ml
+		;5000ml＝一般的な妊娠後期の子宮容積を超過している場合
+		SIF FLAG:ふたごちゃんフラグ > 0 && (CFLAG:ARG:子宮現在容量 > 5000)
+			PRINTFORM ：【精液ボテ】
+	ENDIF
 ENDIF
 
 ;IF TALENT:ARG:남자 || TALENT:ARG:후타나리
@@ -98,10 +112,11 @@ PRINTL
 X = ((((BASE:ARG:바스트 * 100) - (BASE:ARG:신장 * 54)) * 100) / 250)
 Y = ((((BASE:ARG:신장 * 38) - (BASE:ARG:웨스트 * 100)) * 100) / 342)
 ;임신時は임신発깨달음時のウェストから計算
-SIF TALENT:ARG:임신
-	Y = ((((BASE:ARG:신장 * 38) - ((BASE:ARG:웨스트 - (CFLAG:123 / 100)) * 100)) * 100) / 342)
+; SIF TALENT:ARG:임신
+;	Y = ((((BASE:ARG:신장 * 38) - ((BASE:ARG:웨스트 - (CFLAG:ARG:123 / 100)) * 100)) * 100) / 342)
 	;Y = ((((BASE:ARG:신장 * 38) - ((BASE:ARG:웨스트 - (CFLAG:123 / 100)) * 100)) * 100) / 342)
 	;↑のCFLAG:123が何の数字なのか불명なのでこの部分を仮で消す;後で分からなくなるから数字で書かないほうがいいよまじで
+	;→たぶん別バリアントの名残と思われる。削除してしまってよさそうな気がする……ゾ……
 Z = ((((BASE:ARG:신장 * 100) - 15880) * 100) / 2300)
 S = X + Y + Z
 CFLAG:ARG:컵수 = 0
@@ -207,11 +222,11 @@ CALL CHECK_CUPSIZE(ARG)
 		PRINT Ｚ
 	CASE IS >= 29
 		IF ABL:ARG:속성LC == 2 && ABL:ARG:속성LD > 1
-			PRINT 超
+			PRINT 초
 		ELSEIF ABL:ARG:속성LD == 3 || ABL:ARG:속성LC == 3
-			PRINT 魔
+			PRINT 마
 		ELSE
-			PRINT 히지리
+			PRINT 성
 		ENDIF
 	ENDSELECT
 
@@ -273,11 +288,11 @@ S = 0
 @CHECK_WS_P, ARG
 $WS_P_START
 IF BASE:ARG:신장 == 0 || BASE:ARG:23 == 0
-	PRINTFORML %CALLNAME:ARG%の페니스サイズは未설정です
+	PRINTFORML %CALLNAME:ARG%의 페니스 사이즈는 미설정입니다
 ELSE
-	PRINTFORML %CALLNAME:ARG%の페니스サイズは{BASE:ARG:23}cmです
+	PRINTFORML %CALLNAME:ARG%의 페니스 사이즈는{BASE:ARG:23}cm 입니다
 ENDIF
-PRINTFORML サイズを指定してください[10-{BASE:ARG:신장 / 8}]
+PRINTFORML 사이즈를 설정해주세요[10-{BASE:ARG:신장 / 8}]
 	INPUT
 IF RESULT >= 10 || RESULT <= (BASE:ARG:신장 / 8)
 	BASE:ARG:23 = RESULT
@@ -285,13 +300,13 @@ IF RESULT >= 10 || RESULT <= (BASE:ARG:신장 / 8)
 	IF TALENT:ARG:크고아름다움
 		O = 0
 		O = RAND:(BASE:ARG:23 / 5) + 1
-		PRINTFORML [크고아름다움]持ちには{O}cmのボーナスポイントが추가されます
+		PRINTFORML [크고아름다움]소지시 {O}cm의 보너스 포인트가 추가됩니다.
 		BASE:ARG:23 += O
 	O = 0
 	ENDIF
-	PRINTFORML 페니스サイズは{BASE:ARG:23}cmに설정されました。
+	PRINTFORML 페니스사이즈가 {BASE:ARG:23}cm로 설정되었습니다.
 ELSE
-	PRINTFORML 不正な値です
+	PRINTFORML 맞지 않는 값입니다.
 	GOTO WS_P_START
 ENDIF
 
@@ -380,37 +395,37 @@ PRINTL
 @SHOW_HAIRCOLOR, ARG
 SELECTCASE CFLAG:ARG:머리카락색깔
 CASE 0
-	PRINT 未설정
+	PRINT 미설정
 CASE 1
-	PRINT 黒
+	PRINT 검은색
 CASE 2
-	PRINT 茶色
+	PRINT 갈색
 CASE 3
-	PRINT 金色
+	PRINT 금색
 CASE 4
-	PRINT 銀色
+	PRINT 은색
 CASE 5
-	PRINT 赤
+	PRINT 빨간색
 CASE 6
-	PRINT 青
+	PRINT 파란색
 CASE 7
-	PRINT 緑
+	PRINT 녹색
 CASE 8
-	PRINT ピンク
+	PRINT 핑크
 CASE 9
-	PRINT 유카리
+	PRINT 자주색
 CASE 10
-	PRINT 白
+	PRINT 백색
 CASE 11
-	PRINT 栗色
+	PRINT 밤색
 CASE 12
-	PRINT 薄紫
+	PRINT 박빛
 CASE 13
-	PRINT 赤紫
+	PRINT 적자색
 CASE 14
-	PRINT プラチナ
+	PRINT 플라티나
 CASE 15
-	PRINT アッシュブラウン
+	PRINT 애쉬 브라운
 CASE 16
 	PRINT 오렌지
 CASEELSE
@@ -421,60 +436,60 @@ ENDSELECT
 IF TALENT:ARG:남자 && !TALENT:ARG:오토코노코
 	SELECTCASE CFLAG:ARG:머리카락형태
 	CASE 0
-		PRINT 未설정
+		PRINT 미설정
 	CASE 1
-		PRINT スキン헤드
+		PRINT 스킨헤드
 	CASE 2
-		PRINT スポーツ刈り
+		PRINT 스포츠
 	CASE 3
-		PRINT 短머리카락
+		PRINT 단발
 	CASE 4
-		PRINT モヒカン
+		PRINT 모히칸
 	CASE 5
-		PRINT ちょんまげ
+		PRINT 상투
 	CASE 6
-		PRINT 七三
+		PRINT 칠대삼
 	CASE 7
-		PRINT ロン毛
+		PRINT 장발
 	CASE 8
-		PRINT パンチパーマ
+		PRINT 펀치파마
 	CASE 9
-		PRINT みずら머리카락
+		PRINT 미즈라
 	CASE 10
-		PRINT 弁머리카락
+		PRINT 변발
 	CASEELSE
 		PRINT 불명
 	ENDSELECT
 ELSE
 	SELECTCASE CFLAG:ARG:머리카락형태
 	CASE 0
-		PRINT 未설정
+		PRINT 미설정
 	CASE 1
-		PRINT ショートヘア
+		PRINT 숏헤어
 	CASE 2
-		PRINT ショートボブ
+		PRINT 숏커트
 	CASE 3
-		PRINT セミロング
+		PRINT 세미롱
 	CASE 4
-		PRINT ポニー테일
+		PRINT 포니테일
 	CASE 5
-		PRINT ツイン테일
+		PRINT 트윈테일
 	CASE 6
-		PRINT ストレートロング
+		PRINT 스트레이트 롱
 	CASE 7
-		PRINT アップ
+		PRINT 업
 	CASE 8
-		PRINT ゆるふわパーマ
+		PRINT 뭉실뭉실 파마
 	CASE 9
-		PRINT ロングウェーブ
+		PRINT 롱웨이
 	CASE 10
-		PRINT 三つ編み
+		PRINT 땋은 머리
 	CASE 11
-		PRINT ツーサイドアップ
+		PRINT 투사이드업
 	CASE 12
-		PRINT シニョン
+		PRINT 번
 	CASE 13
-		PRINT 和머리카락
+		PRINT 일본식 머리
 	CASEELSE
 		PRINT 불명
 	ENDSELECT
@@ -483,27 +498,27 @@ ENDIF
 @SHOW_EYECOLOR, ARG
 SELECTCASE CFLAG:ARG:눈동자색깔
 CASE 0
-	PRINT 未설정
+	PRINT 미설정
 CASE 1
-	PRINT 黒
+	PRINT 검은색
 CASE 2
-	PRINT 茶色
+	PRINT 갈색
 CASE 3
-	PRINT 金色
+	PRINT 금색
 CASE 4
-	PRINT 銀色
+	PRINT 은색
 CASE 5
-	PRINT 赤
+	PRINT 빨간색
 CASE 6
-	PRINT 青
+	PRINT 파란색
 CASE 7
-	PRINT 緑
+	PRINT 녹색
 CASE 8
-	PRINT 유카리
+	PRINT 자주색
 CASE 9
-	PRINT 灰色
+	PRINT 회색
 CASE 10
-	PRINT 水色
+	PRINT 하늘색
 CASEELSE
 	PRINT 불명
 ENDSELECT
@@ -511,17 +526,17 @@ ENDSELECT
 @SHOW_SKINCOLOR, ARG
 SELECTCASE CFLAG:ARG:피부색깔
 CASE 0
-	PRINT 未설정
+	PRINT 미설정
 CASE 1
-	PRINT 白
+	PRINT 흰색
 CASE 2
-	PRINT 褐色
+	PRINT 갈색
 CASE 3
-	PRINT 赤
+	PRINT 빨간색
 CASE 4
-	PRINT 青
+	PRINT 파란색
 CASE 5
-	PRINT 緑
+	PRINT 녹색
 CASEELSE
 	PRINT 불명
 ENDSELECT
@@ -533,7 +548,7 @@ ENDSELECT
 ;誤差上等。仮決めみたいなもの。
 ;-------------------------------------------------
 @SET_INFO_BODYSIZE, ARG, ARGS
-;남자の場合、または身長未설정、また、厳しめの조건に合致しない場合は帰る
+;남자の場合、または身長미설정、また、厳しめの조건に合致しない場合は帰る
 SIF TALENT:ARG:남자 || BASE:ARG:신장 == 0
 	RETURN 0
 
@@ -694,7 +709,7 @@ ENDSELECT
 			LOCAL = 75
 		SIF LOCAL <= 50
 			LOCAL = 50
-	;未설정、または普通尻
+	;미설정、または普通尻
 	ELSE
 		;20-29
 		;ちょっとおしりは小さめになりがちです。普通ならな。

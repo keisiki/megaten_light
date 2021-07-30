@@ -49,6 +49,16 @@ RETURN 1
 @장비箇所_2318
 RETURN GET_EQUIPNUM("검")
 
+;기간피스트
+@장비추가스킬_2318,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 211
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -70,6 +80,9 @@ PRINTL 장비조건：LV35～
 
 @장비해설_2318
 PRINTL 강력한 위력을 가진 주먹무기。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：기간피스트
+RESETCOLOR
 
 RETURN 0
 

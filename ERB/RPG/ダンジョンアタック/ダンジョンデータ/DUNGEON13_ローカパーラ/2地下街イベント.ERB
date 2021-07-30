@@ -9,7 +9,7 @@ SELECTCASE FLAG:現M
 	CASE 3
 		IF 던전フラグ:13:25 && 던전フラグ:13:2 < 6
 			IF ARG:1 < 13 || ARG:1 > 25
-				CALL MESSAGE_WINDOW_D, "", "＞彼女を探さなくては…"
+				CALL MESSAGE_WINDOW_D, "", "＞그녀를 찾지 않으면…"
 				RETURN 0
 			ENDIF
 			
@@ -68,7 +68,7 @@ SELECTCASE ARG / 10
 		ELSE
 			RESULTS = □
 		ENDIF
-	;フレッド
+	;프레드
 	CASE 302
 		IF 던전フラグ:13:2 > 5
 			SETCOLOR 0x00ff00
@@ -212,7 +212,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		CALL MESSAGE_WINDOW_D, "알지라", "검고 꽤 컸어/정말 눈부셨어 "
 		CALL MESSAGE_WINDOW_D, "알지라", "프레드 애들은/그 태양 때문에 밖에서 살 수 없는 거잖아 "
 		CALL MESSAGE_WINDOW_D, "알지라", "이래서는 비만 내리는 정크야드가 더 나아 "
-	;フレッド
+	;프레드
 	CASE 302
 		CALL MESSAGE_WINDOW_D, "프레드", "서프하고 게일은/대낮에 위쪽에서 이 거리로 왔지？ "
 		CALL MESSAGE_WINDOW_D, "프레드", "악마의 몸은/태양 빛에 닿아도 괜찮구나 "
@@ -1007,22 +1007,22 @@ IF 던전フラグ:13:2 < 6
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 315
 		IF 던전フラグ:13:24 < 1
-			CALL MESSAGE_WINDOW_D, "", "分かれ道がある "
-			CALL MESSAGE_WINDOW_D, "フレッド", "ここから北に進むと近道だ/でも　西はダメだぜ　かなり遠回りなる "
-			CALL MESSAGE_WINDOW_D, "", "と　言っているが/近道の方からはかなり발音が聞こえる "
-			CALL MESSAGE_WINDOW_D, "서프", "近道の方には적がたくさんいるみたいだ/安全に行くなら遠回りするべきかもしれないな "
+			CALL MESSAGE_WINDOW_D, "", "갈림길이 있다 "
+			CALL MESSAGE_WINDOW_D, "프레드", "여기서 북쪽으로 가면 지름길이야/하지만 서쪽은 안돼 꽤 멀리 돌아 "
+			CALL MESSAGE_WINDOW_D, "", "라고 말하고 있지만/지름길 쪽에서는 꽤 발소리가 들린다 "
+			CALL MESSAGE_WINDOW_D, "서프", "지름길 쪽에는 적이 많은 것 같아/안전하게 가려면 멀리 돌아가야 할지도 몰라 "
 			던전フラグ:13:24 = 1
 		ENDIF
 	CASE 311
 		IF 던전フラグ:13:24 < 2
-			CALL MESSAGE_WINDOW_D, "", "扉の向こうから気配がする "
-			CALL INPUT_SELECT_D, "[0]向こうへ行く/[1]行かない "
+			CALL MESSAGE_WINDOW_D, "", "문 너머에서 기척이 난다 "
+			CALL INPUT_SELECT_D, "[0]들어간다/[1]가지 않는다 "
 			IF RESULT == 1
 				CALL DUNGEON_WORP,3,(FLAG:現X),(FLAG:現Y)+1
 			ELSEIF RESULT == 0
 				CALL DUNGEON_WORP,3,(FLAG:現X),(FLAG:現Y)-2
 				
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "この集団には勝てまい！/大人しく　捕まれ！ "
+			CALL MESSAGE_WINDOW_D, "카르마병", "이 무리는 이길 수 없으리라！/얌전히 잡혀라！ "
 			
 				
 			FLAG:도주불가フラグ = 1
@@ -1069,28 +1069,28 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		ENDIF
 	CASE 303
 		IF 던전フラグ:13:25 < 10
-			CALL MESSAGE_WINDOW_D, "", "ここには3人のカルマ兵の姿があった "
-			CALL MESSAGE_WINDOW_D, "", "動きからしてモニターで見た奴らだ "
-			CALL MESSAGE_WINDOW_D, "서프", "奴らは夢中でこちらに気づいていないな/게일 "
-			CALL MESSAGE_WINDOW_D, "", "そういって서프と게일の二人はカルマ兵３人を一気に即死させた "
-			CALL MESSAGE_WINDOW_D, "서프", "大丈남편か？ "
+			CALL MESSAGE_WINDOW_D, "", "여기에는 세 명의 카르마병이 있었다 "
+			CALL MESSAGE_WINDOW_D, "", "움직임부터가 모니터로 본 녀석들이다 "
+			CALL MESSAGE_WINDOW_D, "서프", "녀석들은 정신없어서 이쪽을 모르고 있군/게일 "
+			CALL MESSAGE_WINDOW_D, "", "그렇게 서프와 게일 두사람은 카르마병 세명을 단숨에 즉사시켰다 "
+			CALL MESSAGE_WINDOW_D, "서프", "괜찮아？ "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "あ…당신は…？ "
-				CALL MESSAGE_WINDOW_D, "안", "良かった…　無事だった… "
-				CALL MESSAGE_WINDOW_D, "마코토", "안…助けにけてくれたんだ… "
+				CALL MESSAGE_WINDOW_D, "마코토", "아…당신은…？ "
+				CALL MESSAGE_WINDOW_D, "안", "다행이다…　무사해서… "
+				CALL MESSAGE_WINDOW_D, "마코토", "안…도우러 와 줬구나… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "あ…ありがと/えーっと… "
-				CALL MESSAGE_WINDOW_D, "마코토", "大丈남편　この人たちは아군だから "
-				CALL MESSAGE_WINDOW_D, "안", "마코토　良かったぁ… "
+				CALL MESSAGE_WINDOW_D, "안", "아…고마워요/에 또… "
+				CALL MESSAGE_WINDOW_D, "마코토", "괜찮아 이 사람들은 아군이니까 "
+				CALL MESSAGE_WINDOW_D, "안", "마코토 다행이야… "
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "알지라", "ほら！男はここから出てって！/옷はそこまでひどく破れてないようね… "
-			CALL MESSAGE_WINDOW_D, "", "女性陣でカルマ兵に襲われた彼女の介抱をした "
+			CALL MESSAGE_WINDOW_D, "알지라", "자! 남자는 여기서 나가!/옷은 거기까지 심하게 찢어지진 않았나봐… "
+			CALL MESSAGE_WINDOW_D, "", "여성진이 카르마병에 습격당한 그녀를 간호했다 "
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "악마はカルマ兵を犬のように喰っている "
-			CALL MESSAGE_WINDOW_D, "류지", "お前！　そこをどきやがれ！ "
-			CALL MESSAGE_WINDOW_D, "서프", "危険だ！　奴は完全に暴走している！ "
-			CALL MESSAGE_WINDOW_D, "악마", "ニク…うがあああ！ "
-			CALL MESSAGE_WINDOW_D, "", "악마はこちらに襲い掛かってきた "
+			CALL MESSAGE_WINDOW_D, "", "악마는 카르마병을 개처럼 먹고 있다 "
+			CALL MESSAGE_WINDOW_D, "류지", "너！　거기서 비켜！ "
+			CALL MESSAGE_WINDOW_D, "서프", "위험해！ 그 녀석은 완전히 폭주하고 있어！ "
+			CALL MESSAGE_WINDOW_D, "악마", "고기…우가아아아！가아아아！ "
+			CALL MESSAGE_WINDOW_D, "", "악마는 이쪽으로 덤벼들었다 "
 			FLAG:도주불가フラグ = 1
 			FLAG:회화불능フラグ = 1
 			FLAG:선제기습취소 = 1
@@ -1108,51 +1108,51 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			FLAG:エンカウント率 = 0
 			FLAG:未遭遇歩数 = 0
 			
-			CALL MESSAGE_WINDOW_D, "", "전투が終わりカルマ兵の死体をどかす "
-			CALL MESSAGE_WINDOW_D, "", "そこには顔面蒼白の彼女の姿があった "
+			CALL MESSAGE_WINDOW_D, "", "전투이 끝나고 카르마병의 시체를 치웠다 "
+			CALL MESSAGE_WINDOW_D, "", "거기에는 얼굴이 창백한 그녀의 모습이 있었다 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "あ…당신は…？ "
-				CALL MESSAGE_WINDOW_D, "안", "良かった…　無事だった… "
-				CALL MESSAGE_WINDOW_D, "마코토", "안…助けにけてくれたんだ… "
+				CALL MESSAGE_WINDOW_D, "마코토", "아…당신은…？ "
+				CALL MESSAGE_WINDOW_D, "안", "다행이다…　무사해서… "
+				CALL MESSAGE_WINDOW_D, "마코토", "안…도우러 와 줬구나… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "あ…ありがと/えーっと… "
-				CALL MESSAGE_WINDOW_D, "마코토", "大丈남편　この人たちは아군だから "
-				CALL MESSAGE_WINDOW_D, "안", "마코토　良かったぁ… "
+				CALL MESSAGE_WINDOW_D, "안", "아…고마워요/에 또… "
+				CALL MESSAGE_WINDOW_D, "마코토", "괜찮아 이 사람들은 아군이니까 "
+				CALL MESSAGE_WINDOW_D, "안", "마코토 다행이야… "
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "류지", "ま…マジで無事でよかった… "
-			CALL MESSAGE_WINDOW_D, "서프", "助けに来るのが遅くて済まなかった/怖い思いをさせてしまったな "
-			CALL MESSAGE_WINDOW_D, "서프", "알지라　彼女の介抱をしてやってくれ "
-			CALL MESSAGE_WINDOW_D, "알지라", "わかったわ "
+			CALL MESSAGE_WINDOW_D, "류지", "뭐…정말로 무사해서 다행이야… "
+			CALL MESSAGE_WINDOW_D, "서프", "구하러 오는게 늦어서 미안했어/두려움을 느끼게 해버렸구나 "
+			CALL MESSAGE_WINDOW_D, "서프", "알지라 그녀의 간호를 해줘 "
+			CALL MESSAGE_WINDOW_D, "알지라", "알았어 "
 			
 			
 		ENDIF
-			CALL MESSAGE_WINDOW_D, "", "しばらくたって…/彼女たちがどうやってここに来たのか聞くことにした "
-			CALL MESSAGE_WINDOW_D, "", "彼女の話によると/突然この세계に来て他の仲間達と/バラバラになったらしい "
-			CALL MESSAGE_WINDOW_D, "フレッド", "서프達と同じだな "
-			CALL MESSAGE_WINDOW_D, "알지라", "でも、私たちと違ってト라이브抗争に勝ち抜いて来たわけじゃないのね/트라이브수트も着てないし "
-			CALL MESSAGE_WINDOW_D, "게일", "仲間を送った後の帰り道の途中で何かに飲み込まれて/いつの間にかここに来てたと… "
-			CALL MESSAGE_WINDOW_D, "坂本　류지", "ああ、いつの間にか세계が滅亡したみてーなことにきて "
-			CALL MESSAGE_WINDOW_D, "新島　마코토", "そして、変な兵隊に追われてここまで来たんです "
-			CALL MESSAGE_WINDOW_D, "高巻　안", "せっかく、事件解決してゆっくりできると思ったのに… "
-			CALL MESSAGE_WINDOW_D, "フレッド", "そういえば　姉ちゃんたち/外から出たみたいだけど　太陽の光は大丈남편だったのか？ "
-			CALL MESSAGE_WINDOW_D, "坂本　류지", "へ？/フツーに大丈남편だけど… "
-			CALL MESSAGE_WINDOW_D, "高巻　안", "ど、どういう意味なの？ "
-			CALL MESSAGE_WINDOW_D, "フレッド", "わからないのか？/石になった인간はたくさん見てきただろ？ "
-			CALL MESSAGE_WINDOW_D, "フレッド", "あれ、太陽の光を浴びちまってみんな石になったんだ "
-			CALL MESSAGE_WINDOW_D, "高巻　안", "嘘でしょ？ "
-			CALL MESSAGE_WINDOW_D, "新島　마코토", "じゃあ、あの上空にあった黒い物体が太陽なの？ "
-			CALL MESSAGE_WINDOW_D, "フレッド", "どうやら　お前らも何も知らねーみてーだな "
-			CALL MESSAGE_WINDOW_D, "서프", "俺たちみたいにここにいきなり飛ばされたんだ/何も知らないほうが納得できる "
-			CALL MESSAGE_WINDOW_D, "서프", "君たちもほかに仲間がいるのか？ "
-			CALL MESSAGE_WINDOW_D, "新島　마코토", "ええ　他に3人ほどいるはずなんですけど "
-			CALL MESSAGE_WINDOW_D, "坂本　류지", "아이つらも無事であってほしいよな… "
-			CALL MESSAGE_WINDOW_D, "高巻　안", "彼も巻き込まれてなければいいけど… "
-			CALL MESSAGE_WINDOW_D, "新島　마코토", "서프さん達はカルマシティを눈指しているのですよね "
-			CALL MESSAGE_WINDOW_D, "新島　마코토", "一緒について行ってもいいですか？/私たちの仲間が捕らわれているかもしれないんです "
-			CALL MESSAGE_WINDOW_D, "서프", "いいだろう　今は少しでも戦힘が欲しいからな/協힘し合おう "
-			CALL MESSAGE_WINDOW_D, "新島　마코토", "ありがとうございます "
-			CALL MESSAGE_WINDOW_D, "게일", "だが、まずは로알드に会わなくてはな…/フレッド　頼む "
-			CALL MESSAGE_WINDOW_D, "フレッド", "ああ　ついてきな "
+			CALL MESSAGE_WINDOW_D, "", "잠시후/여기에 어떻게 왔는지 물어보기로 했다 "
+			CALL MESSAGE_WINDOW_D, "", "그녀 말에 의하면/갑자기 이 세계에 와서 다른 동료들과/떨어졌다고 한다 "
+			CALL MESSAGE_WINDOW_D, "프레드", "서프들과 똑같구나 "
+			CALL MESSAGE_WINDOW_D, "알지라", "근데 우리랑 다르게 트라이브항쟁을 이겨낸건 아니구나/트라이브수트도 안입었고 "
+			CALL MESSAGE_WINDOW_D, "게일", "동료를 보내고 돌아오는 길에 무언가에 휩쓸려/어느새 이곳에 와있었다고… "
+			CALL MESSAGE_WINDOW_D, "사카모토　류지", "아아、어느샌가 세계가 멸망했대나 싶어서 "
+			CALL MESSAGE_WINDOW_D, "니지마　마코토", "그리고、이상한 군인들에게 쫓겨 이곳까지 왔죠 "
+			CALL MESSAGE_WINDOW_D, "타카마키　안", "모처럼、사건 해결하고 느긋하게 쉴 수 있을 줄 알았는데… "
+			CALL MESSAGE_WINDOW_D, "프레드", "그러고보니 누나들/밖에서 온거 같은데 햇빛은 괜찮았어？ "
+			CALL MESSAGE_WINDOW_D, "사카모토　류지", "헤？/보통으로 괜찮았는데… "
+			CALL MESSAGE_WINDOW_D, "타카마키　안", "무、무슨 뜻이야？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "몰라？/돌로 된 인간은 많이 보고 왔지？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "그거、태양빛을 받아서 모두 돌이 되었어 "
+			CALL MESSAGE_WINDOW_D, "타카마키　안", "거짓말이지？ "
+			CALL MESSAGE_WINDOW_D, "니지마　마코토", "그럼、저 상공에 있던 검은 물체가 태양인 거야？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "아무래도 너희들은 아무것도 몰랐나보네 "
+			CALL MESSAGE_WINDOW_D, "서프", "우리처럼 여기에 갑자기 날아왔어/아무것도 모르는게 이해가 돼 "
+			CALL MESSAGE_WINDOW_D, "서프", "너희들도 그 밖에 동료가 있나？ "
+			CALL MESSAGE_WINDOW_D, "니지마　마코토", "네 다른 사람은 3명 정도 있을 텐데요 "
+			CALL MESSAGE_WINDOW_D, "사카모토　류지", "그녀석들도 무사했으면 좋겠구만… "
+			CALL MESSAGE_WINDOW_D, "타카마키　안", "그들도 말려들지 않았으면 좋겠지만… "
+			CALL MESSAGE_WINDOW_D, "니지마　마코토", "서프씨들은 카르마시티를 목표로 하고 있는 거죠 "
+			CALL MESSAGE_WINDOW_D, "니지마　마코토", "같이 가도 될까요？/우리의 동료가 잡혀있을지도 모릅니다 "
+			CALL MESSAGE_WINDOW_D, "서프", "괜찮아 지금은 조금이라도 힘이 필요하니까/서로 협력하자 "
+			CALL MESSAGE_WINDOW_D, "니지마　마코토", "감사합니다 "
+			CALL MESSAGE_WINDOW_D, "게일", "하지만 일단 로알드를 만나야지/프레드 부탁해 "
+			CALL MESSAGE_WINDOW_D, "프레드", "아아 따라와 "
 			IF 던전フラグ:13:24 == 3
 				CALL ADD_NEW_COMPANION,4659,100
 				IF RESULT
@@ -1282,153 +1282,153 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 310
 		IF 던전フラグ:13:25 < 1
 				
-			CALL MESSAGE_WINDOW_D, "서프", "ふむ…　まだモニターは使えそうだな "
-			CALL MESSAGE_WINDOW_D, "", "서프がモニターの電源を点けると/いろいろな部屋の中が見える "
-			CALL MESSAGE_WINDOW_D, "", "その中には소녀が映ってるが　その소녀は満身創痍で倒れており/数人のカルマ兵の姿も見える "
+			CALL MESSAGE_WINDOW_D, "서프", "음… 아직 모니터는 쓸만하군 "
+			CALL MESSAGE_WINDOW_D, "", "서프가 모니터 전원을 켜면/여러 가지 방안이 보인다 "
+			CALL MESSAGE_WINDOW_D, "", "그 안에는 소녀가 비치는데 그 소녀을은 만신창이로 쓰러져 있고/여러 명의 카르마병의 모습도 보인다 "
 			IF 던전フラグ:13:24 == 3
 				CALL MESSAGE_WINDOW_D, "안", "마코토！？ "
-				CALL MESSAGE_WINDOW_D, "마코토", "もう…動けない… "
+				CALL MESSAGE_WINDOW_D, "마코토", "이젠…못 움직이겠어… "
 			ELSE
 				CALL MESSAGE_WINDOW_D, "마코토", "안！？ "
-				CALL MESSAGE_WINDOW_D, "안", "もう…ダメ… "
+				CALL MESSAGE_WINDOW_D, "안", "이제…안돼… "
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "こうして見るとなかなか可愛いねえ "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "へへ…　体も結構いい形してるじゃねえか "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "これは連れて行く前に楽しませてもらうかな "
-			CALL MESSAGE_WINDOW_D, "류지", "や　やべえよ… "
-			CALL MESSAGE_WINDOW_D, "게일", "서프　部屋の場所はわかるか？ "
-			CALL MESSAGE_WINDOW_D, "서프", "この近くの部屋ということはわかるが…/地図に部屋の番号が書いていない "
-			CALL MESSAGE_WINDOW_D, "서프", "これは　総当たりしていくしかないな… "
-			CALL MESSAGE_WINDOW_D, "알지라", "とにかく　フレッドたちはここに隠れてて/決して出てはだめよ "
-			CALL MESSAGE_WINDOW_D, "フレッド", "お…おう "
+			CALL MESSAGE_WINDOW_D, "카르마병", "이렇게 보니 꽤 귀엽구나 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "헤헤… 몸도 괜찮게 생겼는데 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "이거 데려가기 전에 같이 놀 수 있을까요 "
+			CALL MESSAGE_WINDOW_D, "류지", "위 위험해… "
+			CALL MESSAGE_WINDOW_D, "게일", "서프　방의 위치는 알겠어？ "
+			CALL MESSAGE_WINDOW_D, "서프", "이 근처의 방이라는 것은 알겠지만…/지도에 방 번호가 써있지 않다 "
+			CALL MESSAGE_WINDOW_D, "서프", "이것은 전부 부딪쳐 나갈 수밖에 없군… "
+			CALL MESSAGE_WINDOW_D, "알지라", "아무튼 프레드들은 여기 숨어서/절대 나오면 안 돼 "
+			CALL MESSAGE_WINDOW_D, "프레드", "오…오우 "
 			던전フラグ:13:25 = 1
 		ENDIF
 		IF 던전フラグ:13:25 == 1
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "", "襲われそうな真がいる "
-				CALL MESSAGE_WINDOW_D, "마코토", "こ…来ないで… "
+				CALL MESSAGE_WINDOW_D, "", "습격당할 것 같은 장면이 있다 "
+				CALL MESSAGE_WINDOW_D, "마코토", "오…오지마… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "", "襲われそうな杏がいる "
-				CALL MESSAGE_WINDOW_D, "안", "ち…近寄らないで… "
+				CALL MESSAGE_WINDOW_D, "", "습격당할 것 같은 장면이 있다 "
+				CALL MESSAGE_WINDOW_D, "안", "가…가까이 오지 마… "
 			ENDIF
 		ENDIF
 		IF 던전フラグ:13:25 == 2
-			CALL MESSAGE_WINDOW_D, "", "カルマ兵は乱暴に옷を脱がせ始める "
-			CALL MESSAGE_WINDOW_D, "", "疲労困憊の彼女にはそれに抗う힘もなく/なすがままに脱がされていた "
+			CALL MESSAGE_WINDOW_D, "", "카르마병은 난폭하게 옷을 벗기기 시작했다 "
+			CALL MESSAGE_WINDOW_D, "", "기진맥진한 그녀에게는 그걸 이겨낼 힘도 없이/강제로 벗겨져 버렸다 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "や…やめて… "
+				CALL MESSAGE_WINDOW_D, "마코토", "그…그만해… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "ちょ…やめてよ "
+				CALL MESSAGE_WINDOW_D, "안", "좀…그만해 "
 			ENDIF
 		ENDIF
 		IF 던전フラグ:13:25 == 3
-			CALL MESSAGE_WINDOW_D, "", "彼女は키스をされながらあらわになった/가슴や尻、恥部などを触られている "
+			CALL MESSAGE_WINDOW_D, "", "그녀는 키스를 당하면서 노출된/가슴과 엉덩이, 치부등을 손대지고 있다 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "ひ…そ…そこ触んないでよ "
+				CALL MESSAGE_WINDOW_D, "마코토", "히…거…거기 만지지마 "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "変なとこ…触るな… "
+				CALL MESSAGE_WINDOW_D, "안", "이상한 곳…건들지 마… "
 			ENDIF
 		ENDIF
 		IF 던전フラグ:13:25 == 4
-			CALL MESSAGE_WINDOW_D, "", "彼女はパンツを脱がされて一人の男に恥部をなめられている "
-			CALL MESSAGE_WINDOW_D, "", "ほかの二人は바지をいじり下半身を出す準備をしている "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "ずいぶん綺麗だねえ/こりゃ처녀だな "
+			CALL MESSAGE_WINDOW_D, "", "그녀는 팬티를 벗겨져 한 남자에게 창피를 당하고 있다 "
+			CALL MESSAGE_WINDOW_D, "", "다른 두사람은 바지를 만지작거리며 하반신을 내밀 준비를 하고 있다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "꽤 예쁘구나/이거 처녀잖아 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "や　やめてよ…… "
+				CALL MESSAGE_WINDOW_D, "마코토", "그 그만해…… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "く…최저… "
+				CALL MESSAGE_WINDOW_D, "안", "큿…최저… "
 			ENDIF
 		ENDIF
 		IF 던전フラグ:13:25 == 5
-			CALL MESSAGE_WINDOW_D, "", "一人の男が彼女に挿入しようとする "
+			CALL MESSAGE_WINDOW_D, "", "한 남자가 그녀에게 삽입하려 한다 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "この野郎！ "
+				CALL MESSAGE_WINDOW_D, "마코토", "이자식！ "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "いい加減にしろ！ "
+				CALL MESSAGE_WINDOW_D, "안", "그만 좀 해！ "
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "", "彼女は男を突き飛ばした "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "くぅ～　いってぇ "
+			CALL MESSAGE_WINDOW_D, "", "그녀는 남자를 밀쳐냈다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "쿠우～　아프네에 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "お前らなんて　死んでしまえ！ "
+				CALL MESSAGE_WINDOW_D, "마코토", "너희들 따위는 죽어 버려！ "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "こんなところでやられてなるもんか！ "
+				CALL MESSAGE_WINDOW_D, "안", "이런 데서 당할거 같아！ "
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "ちっ　しぶとい奴だぜ "
-			CALL MESSAGE_WINDOW_D, "", "そう言って男は악마に변신し/彼女に粉をかける "
-			CALL MESSAGE_WINDOW_D, "", "すると彼女の顔が紅潮していった "
+			CALL MESSAGE_WINDOW_D, "카르마병", "칫 시건방진 녀석이야 "
+			CALL MESSAGE_WINDOW_D, "", "그러면서 남자는 악마로 변신하고/그녀를 쳐날렸다 "
+			CALL MESSAGE_WINDOW_D, "", "그러자 그녀의 얼굴이 붉어져 갔다 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "な…なにこれ…体が…熱い？ "
+				CALL MESSAGE_WINDOW_D, "마코토", "뭐…뭐야…몸이…뜨거워？ "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "う…あ…熱い… "
+				CALL MESSAGE_WINDOW_D, "안", "우…뜨…뜨거워… "
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "へっ　驚いたかい？/俺のこの힘は인간を脱힘させる힘がある "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "今度は動かねえようにきっちりとやんねえとな "
+			CALL MESSAGE_WINDOW_D, "카르마병", "헷 놀랐나？/나의 이 힘은 인간을 탈진시키는 능력이 있어 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "이번에는 움직이지 못하게끔 제대로 응석을 부려봐 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "い…いや… "
+				CALL MESSAGE_WINDOW_D, "마코토", "시…싫어… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "や…やだ… "
+				CALL MESSAGE_WINDOW_D, "안", "시…싫어… "
 			ENDIF
 		ENDIF
 		IF 던전フラグ:13:25 == 6
-			CALL MESSAGE_WINDOW_D, "", "彼女は尻を突き出した상태で/柱に팔を括りつけられている "
-			CALL MESSAGE_WINDOW_D, "", "部屋の男たちは準備万端だ "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "さて　楽しませてもらおうかな "
+			CALL MESSAGE_WINDOW_D, "", "그녀는 엉덩이를 내민 상태로/기둥에 팔이 묶여 있다 "
+			CALL MESSAGE_WINDOW_D, "", "그 방의 남자들은 만반의 준비가 되어 있다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "자 즐겁게 해 볼까 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "くう… "
+				CALL MESSAGE_WINDOW_D, "마코토", "크윽… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "う… "
+				CALL MESSAGE_WINDOW_D, "안", "으… "
 			ENDIF
 		ENDIF
 		IF 던전フラグ:13:25 == 7
-			CALL MESSAGE_WINDOW_D, "", "すでに一人の男が彼女の後ろで腰を振っている "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "さすが　처녀だぜ…/も…もう出そうだ！ "
-			CALL MESSAGE_WINDOW_D, "", "男が硬直した後　彼女の恥部に刺さっていた突起したものを引き抜くと/彼女の恥部から赤と白の混濁した액체が流れ出てきた "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "よし　次は俺だぜ "
+			CALL MESSAGE_WINDOW_D, "", "이미 한 남자가 그녀 뒤에서 허리를 흔들고 있다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "역시 처녀구나…/이…이제 나올 것 같다！ "
+			CALL MESSAGE_WINDOW_D, "", "남자가 경직된 후 그녀의 치부에 박혀 있던 돌기를 빼내자/그녀의 치부에서 적과 백의 혼탁한 액체가 흘러나왔다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "좋아 다음은 나야 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "本当…やめてよ "
+				CALL MESSAGE_WINDOW_D, "마코토", "정말…하지마 "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "う…うう… "
+				CALL MESSAGE_WINDOW_D, "안", "으…우우… "
 			ENDIF
 		ENDIF
 		IF 던전フラグ:13:25 == 8
-			CALL MESSAGE_WINDOW_D, "", "二人눈が終わっていたみたいで/彼女の恥部からは白濁の액체がいつもより流れていた "
-			CALL MESSAGE_WINDOW_D, "", "その時　彼女の발は生まれたての小鹿のように/とても　がくがく震えていた "
+			CALL MESSAGE_WINDOW_D, "", "두 번째가 끝난 듯하여/그녀의 치부에서는 백탁의 액체가 더 많이 흐르고 있었다. "
+			CALL MESSAGE_WINDOW_D, "", "그때 그녀의 발은 갓 태어난 생명처럼/덜덜 떨리고 있었다 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "はあ…はあ… "
+				CALL MESSAGE_WINDOW_D, "마코토", "하아…하아… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "あ…あああ… "
+				CALL MESSAGE_WINDOW_D, "안", "아…아아아… "
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "まあ　これぐらいになりゃこれは필요ないな "
-			CALL MESSAGE_WINDOW_D, "", "밧줄をほどかれて/彼女は仰向けで地面に寝かせられる "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "次は俺の番だな "
+			CALL MESSAGE_WINDOW_D, "카르마병", "뭐 이쯤 되면 이건 필요 없겠는걸 "
+			CALL MESSAGE_WINDOW_D, "", "밧줄이 풀리자/그녀는 벌렁 누워서 땅바닥에 눕혀졌다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "다음은 내 차례군 "
 			IF 던전フラグ:13:24 == 3
-				CALL MESSAGE_WINDOW_D, "마코토", "じ…地獄に落ちろ… "
+				CALL MESSAGE_WINDOW_D, "마코토", "지…지옥에나 떨어져… "
 			ELSE
-				CALL MESSAGE_WINDOW_D, "안", "う… "
-				CALL MESSAGE_WINDOW_D, "", "杏は彼らの顔を見ないようにしている "
+				CALL MESSAGE_WINDOW_D, "안", "으… "
+				CALL MESSAGE_WINDOW_D, "", "안은 그들의 얼굴을 보지 않으려 하고 있다 "
 			ENDIF
 		ENDIF
 		IF 던전フラグ:13:25 == 9
-			CALL MESSAGE_WINDOW_D, "", "カルマ兵は彼女を取り囲むように犯しているため/彼女の様子が見えない "
-			CALL MESSAGE_WINDOW_D, "", "次の瞬間　隣の壁から大きい악마が突き破ってきた "
-			CALL MESSAGE_WINDOW_D, "악마", "グおおお　ニク…ニクううう "
-			CALL MESSAGE_WINDOW_D, "", "壁の破片がカルマ兵に刺さり　倒れた/当たり所が悪かったせいかそのまま動いていない "
-			CALL MESSAGE_WINDOW_D, "", "彼女に覆いかぶさるように三人とも倒れたため/彼女の安否がわからない "
-			CALL MESSAGE_WINDOW_D, "악마", "…ニクううう "
-			CALL MESSAGE_WINDOW_D, "", "악마はカルマ兵を犬のように喰い始めた "
+			CALL MESSAGE_WINDOW_D, "", "카르마병은 그녀를 둘러싸듯이 범하고 있어서/그녀의 모습이 보이지 않는다 "
+			CALL MESSAGE_WINDOW_D, "", "다음 순간 옆 벽에서 커다란 악마가 들이받고 있었다 "
+			CALL MESSAGE_WINDOW_D, "악마", "구오오오 고기…고기이이이 "
+			CALL MESSAGE_WINDOW_D, "", "벽의 파편이 카르마병에게 떨어졌다/맞은 곳이 나빴던 탓인지 그대로 움직이지 못았다 "
+			CALL MESSAGE_WINDOW_D, "", "그녀를 감싸안듯이 세사람 모두 쓰러졌기 때문에/그녀의 안부를 알 수 없다 "
+			CALL MESSAGE_WINDOW_D, "악마", "…고기이이이 "
+			CALL MESSAGE_WINDOW_D, "", "악마는 카르마병을 개처럼 먹기 시작했다 "
 			던전フラグ:13:25 = 10
 		ENDIF
 		IF 던전フラグ:13:25 > 9
-			CALL MESSAGE_WINDOW_D, "", "악마はカルマ兵を犬のように喰っている "
+			CALL MESSAGE_WINDOW_D, "", "악마는 카르마병을 개처럼 먹고 있다 "
 		ENDIF
 	CASE 312
 		IF 던전フラグ:13:24 < 3
 				
-			CALL MESSAGE_WINDOW_D, "", "黒머리카락の소녀が体から악마を召喚しながら/カルマ兵と戦っている "
-			CALL MESSAGE_WINDOW_D, "黒머리카락の소녀", "ハァ…ハァ…/しぶとい… "
-			CALL MESSAGE_WINDOW_D, "류지", "助けに来たぜ！　新島先輩！ "
-			CALL MESSAGE_WINDOW_D, "黒머리카락の소녀", "竜司君！ "
-			CALL MESSAGE_WINDOW_D, "게일", "竜司の仲間だな？　今助ける "
+			CALL MESSAGE_WINDOW_D, "", "검은 머리칼의 소녀가 몸에서 악마를 소환하면서/카르마병과 싸우고 있다 "
+			CALL MESSAGE_WINDOW_D, "검은 머리칼의 소녀", "하아…하아…/끈질겨… "
+			CALL MESSAGE_WINDOW_D, "류지", "도우러 왔다구！ 니지마선배！ "
+			CALL MESSAGE_WINDOW_D, "검은 머리칼의 소녀", "류지군！ "
+			CALL MESSAGE_WINDOW_D, "게일", "류지 친구구나？ 지금 도와줄게 "
 			
 				
 			FLAG:도주불가フラグ = 1
@@ -1451,14 +1451,14 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			FLAG:エンカウント率 = 0
 			FLAG:未遭遇歩数 = 0
 			
-			CALL MESSAGE_WINDOW_D, "서프", "おい　大丈남편か？ "
-			CALL MESSAGE_WINDOW_D, "마코토", "ありがとうございます…/私は　新島　真といいます "
-			CALL MESSAGE_WINDOW_D, "마코토", "竜司君　杏は？ "
-			CALL MESSAGE_WINDOW_D, "류지", "いや　今はまだ見つからねえ "
-			CALL MESSAGE_WINDOW_D, "게일", "後の仲間はそのアンとやらで最後か？ "
-			CALL MESSAGE_WINDOW_D, "류지", "ああ　ここに来たときは三人だったからな "
-			CALL MESSAGE_WINDOW_D, "서프", "わかった　大事になる前に急ごう "
-			CALL MESSAGE_WINDOW_D, "", "新島　真が仲間になった "
+			CALL MESSAGE_WINDOW_D, "서프", "이봐 괜찮아？ "
+			CALL MESSAGE_WINDOW_D, "마코토", "감사합니다…/저는 니지마 마코토라고 합니다 "
+			CALL MESSAGE_WINDOW_D, "마코토", "류지군 안은？ "
+			CALL MESSAGE_WINDOW_D, "류지", "아니 지금은 아직 못찾았어 "
+			CALL MESSAGE_WINDOW_D, "게일", "다른 동료는 그 안인가 뭔가로 마지막인가？ "
+			CALL MESSAGE_WINDOW_D, "류지", "아아 여기 왔을 때는 세 명이었으니까 "
+			CALL MESSAGE_WINDOW_D, "서프", "알았어 큰일나기 전에 서두르자 "
+			CALL MESSAGE_WINDOW_D, "", "니지마 마코토가 동료가 되었다 "
 			
 				CALL ADD_NEW_COMPANION,4659,100
 				IF RESULT
@@ -1507,11 +1507,11 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 313
 		IF 던전フラグ:13:24 < 3
 				
-			CALL MESSAGE_WINDOW_D, "", "金머리카락の소녀が体から악마を召喚しながら/カルマ兵と戦っている "
-			CALL MESSAGE_WINDOW_D, "金머리카락の소녀", "ハァ…ハァ…/もう！しつこい… "
-			CALL MESSAGE_WINDOW_D, "류지", "助けに来たぜ！　안！ "
-			CALL MESSAGE_WINDOW_D, "金머리카락の소녀", "류지！ "
-			CALL MESSAGE_WINDOW_D, "알지라", "今助けるわ！ "
+			CALL MESSAGE_WINDOW_D, "", "금색 머리카락의 소녀가 몸에서 악마를 소환하면서/카르마병과 싸우고 있다 "
+			CALL MESSAGE_WINDOW_D, "금색 머리카락의 소녀", "하아…하아…/진짜！끈질겨… "
+			CALL MESSAGE_WINDOW_D, "류지", "도우러 왔어！　안！ "
+			CALL MESSAGE_WINDOW_D, "금색 머리카락의 소녀", "류지！ "
+			CALL MESSAGE_WINDOW_D, "알지라", "지금 도와줄게！ "
 			
 				
 			FLAG:도주불가フラグ = 1
@@ -1534,13 +1534,13 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			FLAG:エンカウント率 = 0
 			FLAG:未遭遇歩数 = 0
 			
-			CALL MESSAGE_WINDOW_D, "서프", "おい　大丈남편か？ "
-			CALL MESSAGE_WINDOW_D, "안", "ありがとう…/私は　高巻　안…　真は？ "
-			CALL MESSAGE_WINDOW_D, "류지", "いや　今いやまだ見つからねえ "
-			CALL MESSAGE_WINDOW_D, "알지라", "마코토のほかに仲間はいるの？ "
-			CALL MESSAGE_WINDOW_D, "류지", "いや　ここに来たときは三人だったからな "
-			CALL MESSAGE_WINDOW_D, "서프", "わかった　大事になる前に急ごう "
-			CALL MESSAGE_WINDOW_D, "", "高巻　杏が仲間になった "
+			CALL MESSAGE_WINDOW_D, "서프", "이봐 괜찮아？ "
+			CALL MESSAGE_WINDOW_D, "안", "고마워요…/저는 타카마키 안… 마코토는？ "
+			CALL MESSAGE_WINDOW_D, "류지", "아니 지금 아직 찾지 못했어 "
+			CALL MESSAGE_WINDOW_D, "알지라", "마코토 외에 동료는 있어？ "
+			CALL MESSAGE_WINDOW_D, "류지", "아니 여기 왔을 때는 세 명이었으니까 "
+			CALL MESSAGE_WINDOW_D, "서프", "알았어 큰일나기 전에 서두르자 "
+			CALL MESSAGE_WINDOW_D, "", "타카마키 안이 동료가 되었다 "
 			
 				CALL ADD_NEW_COMPANION,4658,100
 				IF RESULT
@@ -1586,15 +1586,15 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 314
 		IF 던전フラグ:13:24 < 2
 				
-			CALL MESSAGE_WINDOW_D, "", "金머리카락の소년が体から악마を召喚しながら/カルマ兵と戦っている "
-			CALL MESSAGE_WINDOW_D, "", "金머리카락の소년はかなり弱っている "
-			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "ハァ…ハァ… "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "くらえっ "
-			CALL MESSAGE_WINDOW_D, "", "金머리카락の소년はこちらに吹き飛ばされた "
-			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "く…くそっ "
-			CALL MESSAGE_WINDOW_D, "서프", "あとは任せておけ "
-			CALL MESSAGE_WINDOW_D, "", "서프たちは소년の前に出た "
-			CALL MESSAGE_WINDOW_D, "カルマ兵", "ボギーか！　貴様らも生け捕りにしてやる！ "
+			CALL MESSAGE_WINDOW_D, "", "금색 머리카락의 소년이 몸에서 악마를 소환하면서/카르마병과 싸우고 있다 "
+			CALL MESSAGE_WINDOW_D, "", "금색 머리카락의 소년은 많이 약해져 있다 "
+			CALL MESSAGE_WINDOW_D, "금색 머리카락의 소년", "하아…하아… "
+			CALL MESSAGE_WINDOW_D, "카르마병", "받아라 "
+			CALL MESSAGE_WINDOW_D, "", "금색 머리카락의 소년은 이리 날아왔다 "
+			CALL MESSAGE_WINDOW_D, "금색 머리카락의 소년", "비…빌어먹을 "
+			CALL MESSAGE_WINDOW_D, "서프", "뒷일은 맡겨 두어라 "
+			CALL MESSAGE_WINDOW_D, "", "서프들은 소년 앞에 나섰다 "
+			CALL MESSAGE_WINDOW_D, "카르마병", "보기냐！ 네놈들도 사로잡아 주겠다！ "
 			
 				
 			FLAG:도주불가フラグ = 1
@@ -1617,24 +1617,24 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			FLAG:エンカウント率 = 0
 			FLAG:未遭遇歩数 = 0
 			
-			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "た…助かった…/誰だか　わからないけどありがとな… "
-			CALL MESSAGE_WINDOW_D, "서프", "ああ/しかし驚いたな、フレッド達の仲間にも악마と戦える/能力者がいるとはな… "
-			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "フレッド？ "
-			CALL MESSAGE_WINDOW_D, "フレッド", "すまないけど、そこの兄ちゃんは俺たち知らないぜ "
-			CALL MESSAGE_WINDOW_D, "フレッドの仲間の소년", "兄ちゃん　誰だ？ "
-			CALL MESSAGE_WINDOW_D, "金머리카락の소년", "俺は　坂本竜司っていうんだけど… "
-			CALL MESSAGE_WINDOW_D, "류지", "それどころじゃねえ！/仲間とはぐれちまった！ "
-			CALL MESSAGE_WINDOW_D, "류지", "すぐ探しに行かないと！ "
-			CALL MESSAGE_WINDOW_D, "서프", "待て　その상태で行く気か？ "
-			CALL MESSAGE_WINDOW_D, "알지라", "そうよ　死ぬかもしれないわよ "
-			CALL MESSAGE_WINDOW_D, "류지", "いや　でもこれは… "
-			CALL MESSAGE_WINDOW_D, "알지라", "でも　ほかの仲間も死ぬかもしれないわ "
-			CALL MESSAGE_WINDOW_D, "게일", "その通りだ　また奴らに見つかるとやられるし/仲間も助けられんだろう "
-			CALL MESSAGE_WINDOW_D, "서프", "お前も奴らにと戦える힘を持っているのだろう？/共にここから出られるよう協힘し合おうじゃないか "
-			CALL MESSAGE_WINDOW_D, "서프", "いいよな　フレッド "
-			CALL MESSAGE_WINDOW_D, "フレッド", "一度　乗っかった船だ/協힘してやるぜ "
-			CALL MESSAGE_WINDOW_D, "류지", "あ　ありがとな… "
-			CALL MESSAGE_WINDOW_D, "", "坂本　竜司が仲間になった "
+			CALL MESSAGE_WINDOW_D, "금색 머리카락의 소년", "사…살았어…/누군지 모르지만 고마워… "
+			CALL MESSAGE_WINDOW_D, "서프", "아아/그런데 놀랐어, 프레드의 친구들한테도 악마와 싸울 수 있는/능력자가 있다니… "
+			CALL MESSAGE_WINDOW_D, "금색 머리카락의 소년", "프레드？ "
+			CALL MESSAGE_WINDOW_D, "프레드", "미안하지만、거기 형은 우리는 몰라 "
+			CALL MESSAGE_WINDOW_D, "프레드의 동료 소년", "형 누구야？ "
+			CALL MESSAGE_WINDOW_D, "금색 머리카락의 소년", "나는 사카모토 류지라고해… "
+			CALL MESSAGE_WINDOW_D, "류지", "이럴 때가 아니야！/동료들과 떨어져버렸어！ "
+			CALL MESSAGE_WINDOW_D, "류지", "바로 찾으러 가야지！ "
+			CALL MESSAGE_WINDOW_D, "서프", "기다려라 그 상태로 갈 작정인가？ "
+			CALL MESSAGE_WINDOW_D, "알지라", "그래 죽을지도 몰라 "
+			CALL MESSAGE_WINDOW_D, "류지", "아니 근데 이거는… "
+			CALL MESSAGE_WINDOW_D, "알지라", "그치만 다른 동료들도 죽을지도 몰라 "
+			CALL MESSAGE_WINDOW_D, "게일", "그대로다 또 놈들에게 들키면 당하고/동료도 도울 수 없겠지 "
+			CALL MESSAGE_WINDOW_D, "서프", "너도 놈들과 싸울 수 있는 힘을 가지고 있지？/우리 함께 여기서 나갈 수 있도록 힘을 합치자 "
+			CALL MESSAGE_WINDOW_D, "서프", "괜찮지 프레드 "
+			CALL MESSAGE_WINDOW_D, "프레드", "한번 탄 배다/협력해 줄게 "
+			CALL MESSAGE_WINDOW_D, "류지", "고 고마워… "
+			CALL MESSAGE_WINDOW_D, "", "사카모토 류지가 동료가 되었다 "
 			
 				CALL ADD_NEW_COMPANION,4657,100
 				IF RESULT

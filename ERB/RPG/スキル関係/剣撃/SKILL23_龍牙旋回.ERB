@@ -3,7 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_23,ARG
-RESULTS = 용아선회
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	RESULTS = Ｇ・플라즈마사이즈
+ELSE
+	RESULTS = 용아선회
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_23, ARG
@@ -38,12 +42,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_23
+@SKILL_DECIDE_TYPE_23, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_23
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_23, ARG
 RETURN 1
 
 
@@ -133,7 +137,12 @@ CALL ATTACK_SPREAD,ARG,ARG:1,23
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_23
-PRINTL [후열] 전열의 적 1체와 그 주변에 2회 검격속성 중 물리데미지.
+IF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	PRINTL 左팔プラズマ・ステーク3本のうち内側2本を引き抜き、大型のビーム鎌に출력を上げて
+	PRINTL 投げつけ대상とその周囲に검격相性で２回데미지を与える。후열사용可。
+ELSE
+	PRINTL [후열] 전열의 적 1체와 그 주변에 2회 검격속성 중 물리데미지.
+ENDIF
 
 ;継承に필요な部位
 @継承部位_23,ARG

@@ -2,7 +2,7 @@
 ;とりあえずつくってみただけ
 ;스킬名
 @SKILL_NAME_1726,ARG
-RESULTS = 다크 네뷸러
+RESULTS = 다크 네뷸라
 
 ;　명중
 @SKILL_HITRATE_1726, ARG
@@ -60,12 +60,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;질풍
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1726
+@SKILL_DECIDE_TYPE_1726, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1726
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1726, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -161,7 +161,7 @@ CFLAG:ARG:ターゲット = CFLAG:ARG:포지션 < 7 ? 22 # 19
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1726
-PRINTL [후열] 적 전체에 복합속성(질풍+충격+주살) 특대 마법데미지.
+PRINTL [후열] 선풍을 일으켜, 적 전체에 복합속성(질풍+충격+주살) 특대 마법데미지.
 
 ;継承に필요な部位
 @継承部位_1726,ARG

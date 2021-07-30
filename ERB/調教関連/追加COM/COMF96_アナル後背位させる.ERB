@@ -1,4 +1,11 @@
-﻿
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		2021/02/14		J>s!UL@1				派生コマンドの処理、挿入継続時の分岐を追加
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
 @CHECK_COM_ABLE96
 ;애널후배위시킨다実行판정
 
@@ -29,6 +36,18 @@ IF TEQUIP:31
 ENDIF
 
 RETURN 1
+
+@JUMP_COM96
+;-------------------------------------------------
+;特殊派生処理
+;-------------------------------------------------
+;前のプレイがアナル後背位させるかつ対象の技巧3以上の場合、挿入前立腺責めさせるへ派生
+IF PREVCOM == 96 && (ABL:TARGET:2 > 2)
+	CALL COM_ABLE_COMMON, 520
+	SIF RESULT == 1
+		RETURN 520
+ENDIF
+RETURN -1
 
 @ACT_COM96
 ;애널후배위시킨다
@@ -425,8 +444,18 @@ RETURN 1
 
 
 @MESSAGE_COM96
-	IF TEQUIP:주도권
-		PRINTFORM %타겟은()% 뒤에서부터 %CALLNAME:PLAYER%의 애널에 페니스를 대고
+	;前回の調教がアナル後背位させるであり、入れっぱなしの場合
+	IF TEQUIP:주도권 && TEQUIP:PLAYER:51 && (PREVCOM == 96 || PREVCOM == 520)
+		PRINTFORMW %CALLNAME:TARGET%は%CALLNAME:PLAYER%のアヌスの感触を味わいながら、再び腰を動かし始めた……
+	;同様に、前回の調教がアナル正常位させるである場合
+	ELSEIF TEQUIP:주도권 && TEQUIP:PLAYER:51 && PREVCOM == 95
+		PRINTFORMW %CALLNAME:TARGET%は腸内に挿入したまま、%CALLNAME:PLAYER%を裏返すように四つん這いにさせ、再び腰を動かし始めた……
+	;同様に前回の調教がアナル対面座位かアナル背面座位かアナル騎乗位の場合
+	ELSEIF TEQUIP:주도권 && TEQUIP:PLAYER:51 && (PREVCOM == 97 || PREVCOM == 902 || PREVCOM == 903)
+		PRINTFORMW %CALLNAME:TARGET%は挿入したまま%CALLNAME:PLAYER%を四つん這いにし、再び腰を動かし始めた……
+	ELSEIF TEQUIP:주도권
+		PRINTFORM %CALLNAME:TARGET%は\@TALENT:영맹 ? 乱暴に#\@%CALLNAME:PLAYER%を四つん這いにさせると、後ろから
+				PRINTFORML \@ ABL:PLAYER:Ａ감각 > 2 ? 기대로 실룩거리는  #\@ 애널에 페니스를 대고
 		;「TARGETが真性の새드か」「새드끼持ちか」で分岐
 		IF (TALENT:새드 || ABL:새드끼 >= 5) && RAND:3 == 0
 			PRINT 몸으로 두드리듯이
@@ -454,6 +483,12 @@ RETURN 1
 		ELSE
 			PRINTFORMW 허리를 앞뒤로 움직이기 시작했다…
 		ENDIF
+	;前回の調教がアナル後背位させるであり、抜かないフラグがある場合
+	ELSEIF TEQUIP:PLAYER:51 && (PREVCOM == 96 || PREVCOM == 520)
+			PRINTFORMW %CALLNAME:TARGET%をアナルに受け入れたまま、%CALLNAME:PLAYER%はもっと突くようにせがんだ……
+	;同様に前回の調教がアナル正常位かアナル対面座位かアナル背面座位かアナル騎乗位の場合
+	ELSEIF TEQUIP:PLAYER:51 && (PREVCOM == 95 || PREVCOM == 97 || PREVCOM == 902 || PREVCOM == 903)
+			PRINTFORMW 繋がったまま%CALLNAME:PLAYER%は四つん這いになり、もっと突くようにと強請った……
 	ELSE
 		PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 앞에 납죽 엎드려、
 		SIF TALENT:PLAYER:음란

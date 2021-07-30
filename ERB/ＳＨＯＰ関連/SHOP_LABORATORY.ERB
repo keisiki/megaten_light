@@ -15,6 +15,11 @@
 ;	005		2017/04/05		JK好き					강화するたびにSHOP화면に戻されるのがうざいのでGOTOで最初に戻るように修正
 ;	006		2017/06/23		kuni					キャラ표시でINPUT_CHARA_LISTを사용するように변경
 ;	007		2020/04/01		U-U						촉수레벨でＭＡＧ譲渡の倍率がかかるように변경
+;	008		2020/08/10		MkjX					労役中、従順3未満もＭＡＧ譲渡可能に変更、従順3未満も生贄可能に変更
+;													生贄の保有ＭＡＧを最終値に加算するように変更
+;	009		2020/10/11		MkjX					計算して入力するのが大変なのでＭＡＧ譲渡上限チェックを補正倍率なしの値に変更、代わりに補正上限を設定
+;													確認時に抽出できるエネルギー量を表示
+;	010		2020/10/12		JK好き					触手レベル強化時に現在の触手エネルギーを表示する様に追加
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 @SHOPCOMABLE_172
@@ -127,7 +132,7 @@ ENDIF
 
 LOCAL = RESULT
 
-PRINTFORML 에너지를 얼마나 줍니까？에너지 {FLAG:촉수エネルギー}F
+PRINTFORML 에너지를 얼마나 줍니까？에너지 {FLAG:촉수エネルギー}F　촉수레벨보정{MIN(10, (FLAG:촉수레벨 +50) / 50)}배＞
 PRINTFORML %CALLNAME:LOCAL%　ＭＡＧ　{BASE:LOCAL:ＭＡＧ}/{MAXBASE:LOCAL:ＭＡＧ}
 $INPUT_LOOP_2
 INPUT
@@ -137,19 +142,21 @@ ELSEIF RESULT < 0
 	GOTO INPUT_LOOP_2
 ELSEIF RESULT > FLAG:촉수エネルギー
 	PRINTFORMW 에너지가 부족합니다
-	RETURN 0
+	GOTO INPUT_LOOP_2
 ELSEIF RESULT > MAXBASE:LOCAL:ＭＡＧ - BASE:LOCAL:ＭＡＧ
 	PRINTFORML %조사처리(CALLNAME:LOCAL,"는")% 그만큼의 ＭＡＧ를 가질 수 없습니다
-	RETURN 0
+	GOTO INPUT_LOOP_2
 ENDIF
 
+	;ＭＡＧ換算
+	;보정최대10倍
 	LOCAL:1 = RESULT
+	LOCAL:2 = LOCAL:1 * MIN(10, (FLAG:촉수레벨 +50) / 50)
 
 PRINTFORML 에너지 {LOCAL:1}F를 %CALLNAME:LOCAL%에게 주어도 괜찮습니까？
 CALL INPUT_YN,"Yes","NO"
 IF  RESULT == 0
 	FLAG:촉수エネルギー -= LOCAL:1
-	LOCAL:2 = LOCAL:1 * (FLAG:촉수레벨 +50) / 50
 	BASE:LOCAL:ＭＡＧ += LOCAL:2
 	PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% ＭＡＧ{LOCAL:1}를 얻었다
 	RETURN 0
@@ -159,14 +166,14 @@ ELSE
 ENDIF
 
 @CASTING_TENTACLE_LABORATORY_MAG(ARG)
-;노역中キャラは除外
-SIF CFLAG:ARG:노역フラグ == 3
-	RETURN 0
+;;노역中キャラは除外
+;SIF CFLAG:ARG:노역フラグ == 3
+;	RETURN 0
 ;순종が3未満だと除外
-SIF ABL:ARG:순종 < 3
-	RETURN 0
-SIF (TALENT:ARG:임신 || TALENT:ARG:육아중) && FLAG:출산기능ONOFF == 1
-	RETURN 0
+;SIF ABL:ARG:순종 < 3
+;	RETURN 0
+;SIF (TALENT:ARG:임신 || TALENT:ARG:육아중) && FLAG:출산기능ONOFF == 1
+;	RETURN 0
 ;失踪中などこの場にいないなら除外
 SIF CFLAG:ARG:この場に居ないフラグ
 	RETURN 0
@@ -181,19 +188,8 @@ IF RESULT == 1000
 ENDIF
 
 LOCAL = RESULT
-PRINTFORML ※촉수의 제물로 바치면 다시는 %조사처리(CALLNAME:LOCAL, "를")% 만날 수 없습니다。
-PRINTL 그래도 실행합니까？
-PRINTC [0]예
-PRINTC [1]아니오
-PRINTL 
-$INPUT_LOOP_2
-INPUT
-IF RESULT == 1
-	RETURN 0
-ELSEIF RESULT != 0
-	GOTO INPUT_LOOP_2
-ENDIF
 
+;売値計算
 IF ABL:LOCAL:종족 > 0 && ABL:LOCAL:종족 < 45 && NO:LOCAL != 3501 && NO:LOCAL != 3502
 	S = (CSVBASE((NO:LOCAL),GETNUM(BASE,"LV"),0) < 13 ? 100 # 0 ) + CSVBASE((NO:LOCAL),GETNUM(BASE,"LV"),0) * (5+MAX(5,CSVBASE((NO:LOCAL),GETNUM(BASE,"LV"),0)/2)) * 5
 ELSEIF ABL:LOCAL:종족 == 45
@@ -1312,6 +1308,27 @@ ENDIF
 ;ENDIF
 S *= (10 + ABL:LOCAL:촉수중독 * 9)
 S /= 10
+
+;所有MAG加算
+S += BASE:LOCAL:ＭＡＧ
+
+
+PRINTFORML
+PRINTFORML %CALLNAME:LOCAL%에서 에너지를 {S}F추출합니다.
+PRINTFORML ※촉수의 제물로 바치면 다시는 %조사처리(CALLNAME:LOCAL, "를")% 만날 수 없습니다。
+PRINTFORML 
+PRINTL 그래도 실행합니까？
+PRINTC [0]예
+PRINTC [1]아니오
+PRINTL 
+$INPUT_LOOP_2
+INPUT
+IF RESULT == 1
+	RETURN 0
+ELSEIF RESULT != 0
+	GOTO INPUT_LOOP_2
+ENDIF
+
 PRINTW ………………
 PRINTW …………
 PRINTW ……
@@ -1332,11 +1349,11 @@ SIF ARG == MASTER
 ;노역中キャラは除外
 SIF CFLAG:ARG:노역フラグ == 3
 	RETURN 0
-;순종が3未満だと除外
-SIF ABL:ARG:순종 < 3
-	RETURN 0
-SIF (TALENT:ARG:임신 || TALENT:ARG:육아중) && FLAG:출산기능ONOFF == 1
-	RETURN 0
+;;순종が3未満だと除外
+;SIF ABL:ARG:순종 < 3
+;	RETURN 0
+;SIF (TALENT:ARG:임신 || TALENT:ARG:육아중) && FLAG:출산기능ONOFF == 1
+;	RETURN 0
 ;失踪中などこの場にいないなら除外
 SIF CFLAG:ARG:この場に居ないフラグ
 	RETURN 0

@@ -9,7 +9,12 @@ RETURN 100
 
 ;　위력
 @SKILL_POWER_4287, ARG
-RETURN 0
+SIF ARG == -1 || CFLAG:ARG:단독링케이지
+	RETURN 345
+;발동자と참가자の마법위력の比率により、위력に보정がかかる
+RETURN 345 * (MAXBASE:ARG:마법위력 * 2 + MAXBASE:(CFLAG:ARG:링케이지참가자1):마법위력 + MAXBASE:(CFLAG:ARG:링케이지참가자2):마법위력) / (MAXBASE:ARG:마법위력 * 4)
+
+;　최저공격횟수
 @SKILL_MINATTACKNUMBER_4287,ARG
 RETURN 1
 
@@ -31,11 +36,11 @@ RETURN 24
 RETURN GET_TYPE_NUM("화염")
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4287
+@SKILL_DECIDE_TYPE_4287, ARG
 RETURN 1
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_4287
+@SKILL_DAMAGETYPE_4287, ARG
 RETURN 2
 
 
@@ -69,7 +74,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4287, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4287,ARG
@@ -121,7 +126,7 @@ CALL FIELD_BADSTATE, ARG, ARG:1, 4287
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_4287
-PRINTL 지면에서 불러일으킨 화염으로 적을 구워버려、적 전체를 빈사로
+PRINTL 지면에서 불러일으킨 화염으로 적에게 대 데미지를 주고 높은 확률로 화염상성 빈사로 만든다
 
 ;継承に필요한部位
 @継承部位_4287,ARG

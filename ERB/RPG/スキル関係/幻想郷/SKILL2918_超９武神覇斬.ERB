@@ -47,12 +47,12 @@ RETURN GET_TYPE_NUM("검격")
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2918
+@SKILL_DECIDE_TYPE_2918, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2918
+@SKILL_DAMAGETYPE_2918, ARG
 RETURN 1
 
 
@@ -140,7 +140,7 @@ CALL ATTACK_RAND,ARG,ARG:1,2918
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2918
-PRINTL 모든 상대를 파괴시킨다を破壊せしめる、공전절후의 대검 난무空前絶後の大검乱舞。
+PRINTL 모든 상대를 파괴시키는、공전절후의 대검 난무。
 PRINTL 대검으로 적전체에 랜덤으로 여러차례 공격한다.。
 PRINTL ＥＸ요정　애드벤트 치르노의 리밋트 브레이크（승계불가）
 

@@ -10,23 +10,16 @@ TSTR:0 = 아무것도안한다
 ;-------------------------------------------------
 ;ソース추가処理
 ;-------------------------------------------------
-;소비체력、기력
-DOWNBASE:TARGET:체력 += 10
-DOWNBASE:TARGET:기력 += 10
+IF TFLAG:60 == 0
+;체력、기력 회복
+	BASE:TARGET:체력 += 10
+	BASE:TARGET:기력 += 10
+ENDIF
 
-SOURCE:TARGET:정애 = 10
-SOURCE:TARGET:노출 = 10
-SOURCE:TARGET:일탈 = 10
+SOURCE:TARGET:정애 += 10
+SOURCE:TARGET:노출 += 10
+SOURCE:TARGET:일탈 += 10
 
-TALENT:처녀 = 1
-MARK:고통각인 = 2
-MARK:반발각인 = 0
-
-SIF BASE:음핵 > 0
-	BASE:음핵 += 100
-
-SIF ASSI > 0
-	TALENT:ASSI:처녀 = 1
 ;-------------------------------------------------
 ;特殊ソース処理
 ;-------------------------------------------------

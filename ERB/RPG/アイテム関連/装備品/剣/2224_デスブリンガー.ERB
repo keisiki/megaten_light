@@ -59,6 +59,18 @@ RETURN 8
 @장비箇所_2224
 RETURN GET_EQUIPNUM("검")
 
+;무거운한숨、도무디
+@장비추가스킬_2224,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+			RETURN 518
+		CASE 1
+			RETURN 1438
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -81,6 +93,9 @@ RETURN 1
 @장비해설_2224
 PRINTL 불길한 장독을 품은 칠흑의 검。
 PRINTL 낮은 확률로 적을 즉사시킨다。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬존재
+RESETCOLOR
 
 ;마카交換可能か
 @EQUIP_EXCHANGE_2224

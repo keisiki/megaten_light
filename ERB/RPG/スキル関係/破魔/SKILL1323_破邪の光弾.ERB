@@ -1,9 +1,19 @@
-﻿;通常공격
-;스킬のテンプレートになっています
+﻿;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		yyyy/mm/dd								新規作成
+;	002		2020/06/25		kamedakeisuke(ﾟдﾟ)		破ぁ！！
+
+;통상공격
+;스킬のテン플레이트になっています
 
 ;스킬名
 @SKILL_NAME_1323,ARG
-RESULTS = 파사의 광탄
+IF SKILL_CHANGE(ARG, [[キャラ:T씨]])
+	RESULTS = 파아(破ぁ)!!
+ELSE
+	RESULTS = 파사의광탄
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_1323, ARG
@@ -36,12 +46,12 @@ RETURN 10
 ;파마
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1323
+@SKILL_DECIDE_TYPE_1323, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1323
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1323, ARG
 RETURN 1
 
 

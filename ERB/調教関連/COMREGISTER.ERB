@@ -45,7 +45,7 @@ FOR LOCAL, 0, 3
 	VARSET LOCALS, ""
 	IF CSTR:(71+LOCAL) == ""
 		;個別조교메뉴未설정の場合、메뉴명칭のみ설정
-		CTMNAME:LOCAL = 個別조교메뉴{LOCAL+1}
+		CTMNAME:LOCAL = 개별조교메뉴{LOCAL+1}
 		;とりあえず초기설정を登録
 		CALL REGIST_CHARA_TRAIN_MENU,0,0,0,0,0,0,0,0,0,0,CTMNAME:LOCAL,LOCAL
 	ELSE

@@ -10,7 +10,7 @@ RETURN 100
 
 ;　위력
 @SKILL_POWER_1221, ARG
-RETURN 0
+RETURN 75
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_1221,ARG
@@ -35,13 +35,13 @@ RETURN 9
 ;정신
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1221
+@SKILL_DECIDE_TYPE_1221, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1221
-RETURN 0
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1221, ARG
+RETURN 2
 
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -58,7 +58,7 @@ RETURN 1
 
 ;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
 @SKILL_EFECT_1221
-RETURN 3
+RETURN 1
 
 ;　 特殊処理の有無、及び処理内容
 @SKILL_SPECIALEFECT_1221,ARG
@@ -117,7 +117,7 @@ RETURN 70
 ;====================================================
 @ACTION_1221,ARG,ARG:1
 LOCAL = POS(ARG:1)
-CALL SINGLE_BADSTATE,ARG,LOCAL,1221
+CALL ATTACK_SINGLE,ARG,LOCAL,1221
 
 
 

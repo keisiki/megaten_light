@@ -2,8 +2,7 @@
 ;스킬名
 @SKILL_NAME_1717,ARG
 ;京都人が사용する場合水仙花に
-;IF ARG > 0 && NO:ARG == [[キャラ:카오루코]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카오루코]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:카오루코]])
 	RESULTS = 수선화／대담하게
 ELSE
 	RESULTS = 바람의춤
@@ -15,9 +14,8 @@ RETURN 95
 
 ;　威힘
 @SKILL_POWER_1717, ARG
-;京都人が사용する場合、레벨で威힘が変わる
-;IF ARG > 0 && NO:ARG == [[キャラ:카오루코]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카오루코]]) == 1
+;京都人が사용する場合、레벨で위력が変わる
+IF SKILL_CHANGE(ARG, [[キャラ:카오루코]])
 	SIF ARG == -1
 	      RETURN 40
 	IF BASE:ARG:LV < 10
@@ -71,12 +69,12 @@ RETURN 14
 ;질풍
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1717
+@SKILL_DECIDE_TYPE_1717, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1717
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1717, ARG
 RETURN 1
 
 
@@ -125,7 +123,7 @@ RETURN 0
 RETURN 12
 
 @SKILL_RANKUP_1717
-RETURN 1
+RETURN 0
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -162,9 +160,9 @@ CALL ATTACK_RAND,ARG,ARG:1,1717
 ;　 説明文の표시
 @SKILL_EXPLAIN_1717
 IF U > 0 && U < CHARANUM && NO:U == [[キャラ:카오루코]]
-	PRINTL 소녀のキラめきにより鋳造された薙刀。
-	PRINTL 大胆な발取りで적전체랜덤に１〜８回物理질풍ダメージ
-	PRINTL ただし威힘はLvの10の位に比例する
+	PRINTL 소녀의 반짝임으로 주조된 나기나타.
+	PRINTL 대담한 발놀림으로 적 전체 랜덤으로 １〜８회 물리 질풍 데미지
+	PRINTL 다만 위력은 Lv의 10의 단위에 비례한다
 ELSE
 	PRINTL [후열] 적 전체에 1～8회(1인 최대 4회) 질풍속성 소 물리데미지.
 ENDIF

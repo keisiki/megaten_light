@@ -93,6 +93,15 @@ RETURN 1
 @장비箇所_2350
 RETURN GET_EQUIPNUM("검")
 
+@장비추가스킬_2350,ARG,ARG:1 = -1
+IF ARG:1 > -1 && ARG:1 == GETCHARA([[キャラ:단테]])
+	SELECTCASE ARG
+		CASE 0
+			RETURN [[스킬:데빌트리거]]
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -102,6 +111,9 @@ RETURN 0
 @필요레벨_2350
 RETURN 40
 
+@최대소지수_2350
+RETURN 1
+
 @장비조건_2350,ARG
 SIF TALENT:ARG:석세서 == 0
 	RETURN 0
@@ -110,10 +122,15 @@ SIF TALENT:ARG:무기 == 0
 RETURN 1
 
 @장비조건설명_2350
-PRINTL 장비조건：단테専用
+PRINTL 장비조건：단테전용
 
 @장비해설_2350
 PRINTL 아버지 스파다의 유품인「반역」이라는 이름을 가진 단테가 애용하는 장검。
 
 @引継ぎ可不可_2350
 RETURN 1
+
+@검타입_2350
+;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
+;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+RETURN 4

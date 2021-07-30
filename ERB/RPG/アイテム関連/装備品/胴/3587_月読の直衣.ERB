@@ -26,7 +26,7 @@ RETURN 0
 
 @방어상성_3587,ARG,ARG:1 = -1
 SELECTCASE GET_TYPE(ARG)
-	CASE "정신", "주살"
+	CASE "정신", "주살", "중력", "질풍", "전격"
 		RETURN 0
 	CASE "검격", "타격", "전술", "신경"
 		RETURN 200
@@ -68,10 +68,10 @@ SIF (BASE:ARG:지혜 + BASE:ARG:마력) < 80
 RETURN 1
 
 @장비조건설명_3587
-PRINTL 장비조건：♂　＆　지혜・운の합계80以上
+PRINTL 장비조건：♂ ＆ 지혜・운이 합계80이상
 
 @장비해설_3587
-PRINTL 月読の身につけていた直衣（のうし）
+PRINTL 츠키요미가 입던 귀한 옷（노우시）
 
 @구입조건_3587
 RETURN 0

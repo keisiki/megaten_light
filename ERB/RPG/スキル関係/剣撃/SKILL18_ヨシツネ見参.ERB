@@ -3,14 +3,19 @@
 
 ;스킬名
 @SKILL_NAME_18,ARG
-RESULTS = 요시츠네등장
-
+IF SKILL_CHANGE(ARG, 3118)
+	RESULTS = 랑다초래
+ELSE
+	RESULTS = 요시츠네등장
+ENDIF
 ;　명중
 @SKILL_HITRATE_18, ARG
 RETURN 90
 
 ;　위력
 @SKILL_POWER_18, ARG
+SIF SKILL_CHANGE(ARG, 3118)
+	RETURN 220
 SIF FLAG:공격횟수 == 2
 	RETURN 620
 RETURN 10
@@ -38,17 +43,17 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_18
+@SKILL_DECIDE_TYPE_18, ARG
 RETURN 1
 
 ;高クリティカル
-@SKILL_CRITICAL_RATE_18
+@SKILL_CRITICAL_RATE_18, ARG
 SIF FLAG:공격횟수 < 3
 	RETURN 0
 RETURN 45
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_18
+@SKILL_DAMAGETYPE_18, ARG
 RETURN 1
 
 
@@ -130,9 +135,11 @@ CALL ATTACK_SINGLE,ARG,LOCAL,18
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_18
-PRINTL [후열] 전열의 적 1체에 3회 검격속성 궁극(마지막 HIT) 물리데미지.
-
-
+IF U > 0 && U < CHARANUM && NO:U == 3118
+	PRINTL 魔王ランダと共に敵前一体に襲い掛かる。後列使用可。クリティカルしやすい。
+ELSE
+	PRINTL [후열] 전열의 적 1체에 3회 검격속성 궁극(마지막 HIT) 물리데미지.
+ENDIF
 ;継承に필요한部位
 @継承部位_18,ARG
 RETURN 1

@@ -11,6 +11,14 @@
 ;	006		2012/06/07		----					기승위、기승위애널、속옷비켜삽입、속옷비켜삽입애널、세로파이즈리の誤記修正
 ;	007		2019/10/30		ypa 					맹우取得추가
 ;	008		2020/03/17		(ﾟдﾟ)					コンサートにおける라이브하우스・무도관のパターンを整備
+;	009		2020/06/01		(ﾟдﾟ)					後天性の純デビシフにも道具知識LV3が付くように追加
+;	010		2020/09/06		MkjX					触手系コマンドを修正
+;	011		2020/09/21		U-U						改造手術で異能者・メカっぽい素質がつくように
+;	012		2021/01/28		eMさ者					애무、胸愛撫系、클리애무、キス、회화、V挿入系コマンドにV挿入継続時の分岐を追加
+;	013		2021/02/10		純水100%				オトコだと矛盾する表記の書き換え
+;	014		2021/02/19		J>s!UL@1				A系派生コマンド追加
+;	015		2021/04/13		NEO						ふたごちゃんパッチ：황색사탕、多胎妊娠関係の文章の追加
+;	016		2021/04/14		スカの人				オトコは野外放尿で立ちションするように
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 
@@ -20,7 +28,10 @@
 ;0,애무
 ;-------------------------------------------------
 @MESSAGE_COM0
-;날개根がある場合
+IF TEQUIP:50 > 0
+	PRINTFORM 하반신으로 이어진 채、
+ENDIF
+;羽根がある場合
 IF (TALENT:MASTER:64 || ASSIPLAY) && TALENT:306 && RAND:3 ==0
 	PRINTFORM 깃털을 살며시 살짝 깨물면서 
 ;꼬리がある場合
@@ -32,6 +43,12 @@ ELSEIF PLAY_KISS(PLAYER, TARGET) && TEQUIP:25 == 0
 	PRINTFORM 키스를 하면서 
 ENDIF
 PRINTFORM %CALLNAME:TARGET%의 
+;카테터
+SIF TEQUIP:43
+	PRINTFORMW 尿道にカテーテルが挿入された状態の
+;요도플러그
+SIF TEQUIP:44
+	PRINTFORMW 尿道にプラグが挿入された状態の
 ;유아체형
 SIF TALENT:100
 	PRINT 발달이 덜된 
@@ -220,12 +237,17 @@ ELSE
 		PRINT 털이 없는 
 	PRINT 비렬
 ENDIF
+;---- EDIT 010 触手系コマンドを修正 MOD START ----
+;촉수
+IF TEQUIP:25
+	PRINTFORMW を粘液に塗れた触手が弄んでいる……
 ;바이브の有無で分岐
-IF TEQUIP:13
+ELSEIF TEQUIP:13
 	PRINTFORMW 의 안에 요염하게 구불대는 바이브를 앞뒤로 넣었다 뺐다.
 ELSE
 	PRINTFORMW 에 %CALLNAME:PLAYER%의 손가락을 느긋하게 삽입했다……
 ENDIF
+;---- EDIT 010 触手系コマンドを修正 MOD END   ----
 ;-------------------------------------------------
 ;4,애널핥기
 ;-------------------------------------------------
@@ -289,6 +311,13 @@ ENDIF
 ;6,가슴주무르기
 ;-------------------------------------------------
 @MESSAGE_COM6
+IF TFLAG:60 == 4 || TFLAG:60 == 10
+	IF TFLAG:전회の조교者 == PLAYER
+		PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%에게 허리를 흔들게 하면서, 
+	ELSEIF TFLAG:전회の조교者 == ASSI
+		PRINTFORM %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%에게 허리를 흔들게 하면서, 
+	ENDIF
+ENDIF
 IF TEQUIP:유방노출 != -1 || (TEQUIP:유방노출 == -1 && TEQUIP:속옷（상） == 520)
 	IF TEQUIP:옷 > 0
 		CALL CLOTHES_NAME,1,TARGET
@@ -367,6 +396,13 @@ ENDIF
 ;7,유두자극
 ;-------------------------------------------------
 @MESSAGE_COM7
+IF TFLAG:60 == 4 || TFLAG:60 == 10
+	IF TFLAG:전회の조교者 == PLAYER
+		PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%에게 허리를 흔들게 하면서, 
+	ELSEIF TFLAG:전회の조교者 == ASSI
+		PRINTFORM %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%에게 허리를 흔들게 하면서, 
+	ENDIF
+ENDIF
 IF TEQUIP:유방노출 != -1 || (TEQUIP:유방노출 == -1 && TEQUIP:속옷（상） == 520)
 	IF TEQUIP:옷 > 0
 		CALL CLOTHES_NAME,1,TARGET
@@ -435,10 +471,10 @@ IF TFLAG:60 && TFLAG:60 != 7
 			PRINT %CALLNAME:TARGET%에게 
 		ENDIF
 		PRINTL 삽입한 채로, %CALLNAME:TARGET%의 가슴에 손을 뻗어,
-        PRINTFORMW %CALLNAME:TARGET%의 가슴과 질 내의 감촉을 맛보면서, 다시 허리를 움직이기 시작했다….
+        PRINTFORM %CALLNAME:TARGET%의 가슴과 질내의 감촉을 맛보면서, 다시 허리를 움직이기 시작했다….
     ;페니스 밴드를 사용하고 있는 경우
     ELSE
-        PRINT %CALLNAME:TARGET%의 
+        PRINTFORM %CALLNAME:TARGET%의 
 		IF TFLAG:60 > 7
 			PRINT 애널에서 
 		ELSE
@@ -477,7 +513,6 @@ ELSE
 		ENDIF
 	ENDIF
 	PRINTFORM %CALLNAME:TARGET%의 
-
 	;절벽
 	;유아체형＋빈유、절벽
 	IF (TALENT:100 && TALENT:109) || TALENT:110
@@ -508,7 +543,13 @@ ENDIF
 ;9,조개젖히기
 ;-------------------------------------------------
 @MESSAGE_COM9
-PRINTFORM %CALLNAME:PLAYER%에게 명령 받아、%타겟은()% 
+IF TEQUIP:주도권
+;여자주도
+	PRINTFORM %타겟은()% 스스로 
+ELSE
+;남자주도
+	PRINTFORM %CALLNAME:PLAYER%에게 명령 받아、%타겟은()% 
+ENDIF
 ;노출증
 ;노출증LV8이상かつ부끄럼쟁이持ちでない＋음란or창부
 IF (ABL:8 >= 8 && !TALENT:35) && (TALENT:4 || TALENT:7)
@@ -605,6 +646,13 @@ ELSEIF TEQUIP:28
 ELSEIF (ABL:8 >= 6 && !TALENT:35)
 	PRINTL 과시하듯이 행동해、
 ENDIF
+IF TFLAG:60 == 4 || TFLAG:60 == 10
+	IF TFLAG:전회の조교者 == PLAYER
+		PRINTFORM %CALLNAME:PLAYER%의 위에서 허리를 흔들면서、
+	ELSEIF TFLAG:전회の조교者 == ASSI
+		PRINTFORM %CALLNAME:ASSI%의 위에서 허리를 흔들면서、
+	ENDIF
+ENDIF
 IF TEQUIP:유방노출 != -1 || (TEQUIP:유방노출 == -1 && TEQUIP:속옷（상） == 520)
 	IF TEQUIP:옷 > 0
 		CALL CLOTHES_NAME,1,TARGET
@@ -625,13 +673,13 @@ IF TEQUIP:유방노출 != -1 || (TEQUIP:유방노출 == -1 && TEQUIP:속옷（�
 ELSE
 	IF TEQUIP:옷 > 0
 		CALL CLOTHES_NAME,1,TARGET
-		PRINT 의 열려진 가슴팍에서 새어나온
+		PRINT 의 열려진 가슴팍에서 새어나온 
 	ELSEIF TEQUIP:전신복 > 0
 		CALL CLOTHES_NAME,3,TARGET
-		PRINT 의 열려진 가슴팍에서 새어나온
+		PRINT 의 열려진 가슴팍에서 새어나온 
 	ELSEIF TEQUIP:겉옷 > 0
 		CALL CLOTHES_NAME,10,TARGET
-		PRINT 의 열려진 가슴팍에서 새어나온, 
+		PRINT 의 열려진 가슴팍에서 새어나온 
 	ENDIF
 ENDIF
 ;모유체질
@@ -662,205 +710,410 @@ ENDIF
 ;11,자위
 ;-------------------------------------------------
 @MESSAGE_COM11
-;순종LV3미만
-IF ABL:0 < 3
-	PRINTFORM 자위를 명령받자 %타겟은()%
-	;프라이드높음
-	SIF TALENT:15
-		PRINT 드높은 자존심을 과시하며
-	;반항적
-	IF TALENT:11 || RAND:2 == 0
-		PRINT 반항적인 태도로 
-	;꿋꿋함
-	ELSEIF TALENT:12 || RAND:2 == 1
-		PRINT 꿋꿋한 태도로 
+IF TEQUIP:주도권
+;여자주도
+	;순종LV5미만
+	IF ABL:0 <= 5
+		PRINTFORM 조교의 성과가 나왔는지 %타겟은()% 
+	ELSE
+		PRINTFORM %조사처리(CALLNAME:TARGET,"는")% 싫어하는 기색 없이 
 	ENDIF
-	PRINT 매섭게 쏘아보았지만 재차 명령하자 마지못해 
-;순종LV5미만
-ELSEIF ABL:0 <= 5
-	PRINTFORM 조교의 성과가 나왔는지 %타겟은()% 명령에 따라 
-ELSE
-	PRINTFORM %조사처리(CALLNAME:TARGET,"는")% 자위의 명령에도 싫어하는 기색 없이 
-ENDIF
-;ビデオ촬영中
-SIF TEQUIP:28
-	PRINT 비디오카메라의 앞에서 
-;노출증LV6이상かつ부끄럼쟁이持ちでない
-SIF (ABL:8 >= 6 && !TALENT:35)
-	PRINT 과시하듯이 행동해、
-;바이브＋애널바이브
-IF TEQUIP:13 && TEQUIP:14
-	IF TEQUIP:의상내장애무패턴Ｖ == 1
-		PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)% 위에
-		IF RAND:2 == 0
-			PRINTFORM 쑤셔넣은 
-		ENDIF
-		PRINTFORM ２개의 바이브를 
-		IF RAND:2 == 0
-			PRINTFORM 움직이면서 
+	;ビデオ촬영中
+	SIF TEQUIP:28
+		PRINT 비디오카메라의 앞에서 
+	;노출증LV6이상かつ부끄럼쟁이持ちでない
+	SIF (ABL:8 >= 6 && !TALENT:35)
+		PRINT 과시하듯이 행동해、
+	;바이브＋애널바이브
+	IF TEQUIP:13 && TEQUIP:14
+		IF TEQUIP:의상내장애무패턴Ｖ == 1
+			PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)% 위에
+			IF RAND:2 == 0
+				PRINTFORM 쑤셔넣은 
+			ENDIF
+			PRINTFORM ２개의 바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 누르면서 
+			ENDIF
+		ELSEIF TEQUIP:의상내장애무패턴Ｖ == 2
+			PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:음순노출),"를")% 밀쳐내고 
+			IF RAND:2 == 0
+				PRINTFORM 쑤셔넣은 
+			ENDIF
+			PRINTFORM ２개의 바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 교대로 
+			ENDIF
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 스스로 넣다 빼면서
+			ENDIF
 		ELSE
-			PRINTFORM 누르면서 
+			PRINTFORM 쑤셔넣은 ２개의 바이브를 스스로 넣다 빼면서 
 		ENDIF
-	ELSEIF TEQUIP:의상내장애무패턴Ｖ == 2
-		PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:음순노출),"를")% 밀쳐내고 
-		IF RAND:2 == 0
-			PRINTFORM 쑤셔넣은 
-		ENDIF
-		PRINTFORM ２개의 바이브를 
-		IF RAND:2 == 0
-			PRINTFORM 교대로 
-		ENDIF
-		IF RAND:2 == 0
-			PRINTFORM 움직이면서 
+	;바이브
+	ELSEIF TEQUIP:13
+		IF TEQUIP:의상내장애무패턴Ｖ == 1
+			PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 위로 보지에 넣어진 바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 누르면서 
+			ENDIF
+		ELSEIF TEQUIP:의상내장애무패턴Ｖ == 2
+			PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:음순노출),"를")% 옆으로 밀치고 보지에 삽입한 바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 교대로 
+			ENDIF
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 스스로 넣다 빼면서
+			ENDIF
 		ELSE
-			PRINTFORM 스스로 넣다 빼면서
+			PRINT 보지에 삽입한 바이브를 직접 넣다 빼면서
+		ENDIF
+	;애널바이브
+	ELSEIF TEQUIP:14
+		IF TEQUIP:의상내장애무패턴Ａ == 1
+			PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:둔부노출)%의 위로 
+			IF RAND:2 == 0
+				PRINTFORM 애널에 
+			ELSE
+				PRINTFORM 엉덩이 구멍에 
+			ENDIF
+			IF RAND:2 == 0
+				PRINTFORM 물고 있는 
+			ELSE
+				PRINTFORM 찔러넣고 있는 
+			ENDIF
+			PRINTFORM 애널바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 누르면서 
+			ENDIF
+		ELSEIF TEQUIP:의상내장애무패턴Ａ == 2
+			PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:둔부노출),"를")% 옆으로 밀치고 
+			IF RAND:2 == 0
+				PRINTFORM 애널에 
+			ELSE
+				PRINTFORM 엉덩이 구멍에 
+			ENDIF
+			IF RAND:2 == 0
+				PRINTFORM 물고 있는 
+			ELSE
+				PRINTFORM 찔러넣고 있는 
+			ENDIF
+			PRINTFORM 애널바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 스스로 넣다 빼면서 
+			ENDIF
+		ELSE
+			PRINT 삽입된 애널바이브를 스스로 넣다 빼면서 
+		ENDIF
+	;애널비즈
+	ELSEIF TEQUIP:15
+		IF TEQUIP:옷내부애무Ａ & 4
+			PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:둔부노출),"를")% 밀어 젖히고 
+		ENDIF
+		PRINT 애널비즈를 
+		IF RAND:2 == 0
+			PRINTFORM 애널에서 
+		ELSE
+			PRINTFORM 엉덩이 구멍에서 
+		ENDIF
+		PRINTFORM 스스로 한 개, 또 한 개 당겨 
+		IF RAND:2 == 0
+			PRINTFORM 뽑으면서
+		ELSE
+			PRINTFORM 뽑았다가 다시 넣으면서
 		ENDIF
 	ELSE
-		PRINTFORM 쑤셔넣은 ２개의 바이브를 스스로 넣다 빼면서 
-	ENDIF
-;바이브
-ELSEIF TEQUIP:13
-	IF TEQUIP:의상내장애무패턴Ｖ == 1
-		PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 위로 보지에 넣어진 바이브를 
-		IF RAND:2 == 0
-			PRINTFORM 움직이면서 
+		IF TEQUIP:속옷（하） == 620 || TEQUIP:속옷（상） == 520
+			PRINT 민감한 부분에 박힌 피어스를 
+		;남자の場合
+		ELSEIF IS_MALE(TARGET)
+			SIF TALENT:유아체형
+				PRINT 어린 
+			PRINT 페니스를 
 		ELSE
-			PRINTFORM 누르면서 
+			SIF TALENT:유아체형
+				PRINT 어린 
+			PRINT 비소를 
 		ENDIF
-	ELSEIF TEQUIP:의상내장애무패턴Ｖ == 2
-		PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:음순노출),"를")% 옆으로 밀치고 보지에 삽입한 바이브를 
-		IF RAND:2 == 0
-			PRINTFORM 교대로 
-		ENDIF
-		IF RAND:2 == 0
-			PRINTFORM 움직이면서 
+		;짐승型の場合
+		IF (TALENT:213 || TALENT:214 || TALENT:215 || TALENT:216 || TALENT:217) == 1
+			PRINT 자극하며 
 		ELSE
-			PRINTFORM 스스로 넣다 빼면서
-		ENDIF
-	ELSE
-		PRINT 보지에 삽입한 바이브를 직접 넣다 빼면서
-	ENDIF
-;애널바이브
-ELSEIF TEQUIP:14
-	IF TEQUIP:의상내장애무패턴Ａ == 1
-		PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:둔부노출)%의 위로 
-		IF RAND:2 == 0
-			PRINTFORM 애널에 
-		ELSE
-			PRINTFORM 엉덩이 구멍에 
-		ENDIF
-		IF RAND:2 == 0
-			PRINTFORM 물고 있는 
-		ELSE
-			PRINTFORM 찔러넣고 있는 
-		ENDIF
-		PRINTFORM 애널바이브를 
-		IF RAND:2 == 0
-			PRINTFORM 움직이면서 
-		ELSE
-			PRINTFORM 누르면서 
-		ENDIF
-	ELSEIF TEQUIP:의상내장애무패턴Ａ == 2
-		PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:둔부노출),"를")% 옆으로 밀치고 
-		IF RAND:2 == 0
-			PRINTFORM 애널에 
-		ELSE
-			PRINTFORM 엉덩이 구멍에 
-		ENDIF
-		IF RAND:2 == 0
-			PRINTFORM 물고 있는 
-		ELSE
-			PRINTFORM 찔러넣고 있는 
-		ENDIF
-		PRINTFORM 애널바이브를 
-		IF RAND:2 == 0
-			PRINTFORM 움직이면서 
-		ELSE
-			PRINTFORM 스스로 넣다 빼면서 
-		ENDIF
-	ELSE
-		PRINT 삽입된 애널바이브를 스스로 넣다 빼면서 
-	ENDIF
-;애널비즈
-ELSEIF TEQUIP:15
-	IF TEQUIP:옷내부애무Ａ & 4
-		PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:둔부노출),"를")% 밀어 젖히고 
-	ENDIF
-	PRINT 애널비즈를 
-	IF RAND:2 == 0
-		PRINTFORM 애널에서 
-	ELSE
-		PRINTFORM 엉덩이 구멍에서 
-	ENDIF
-	PRINTFORM 스스로 한 개, 또 한 개 당겨 
-	IF RAND:2 == 0
-		PRINTFORM 뽑으면서
-	ELSE
-		PRINTFORM 뽑았다가 다시 넣으면서
-	ENDIF
-ELSE
-	IF TEQUIP:속옷（하） == 620 || TEQUIP:속옷（상） == 520
-		PRINT 민감한 부분에 박힌 피어스를 
-	;남자の場合
-	ELSEIF IS_MALE(TARGET)
-		SIF TALENT:유아체형
-			PRINT 어린 
-		PRINT 페니스를 
-	ELSE
-		SIF TALENT:유아체형
-			PRINT 어린 
-		PRINT 비소를 
-	ENDIF
-	;짐승型の場合
-	IF (TALENT:213 || TALENT:214 || TALENT:215 || TALENT:216 || TALENT:217) == 1
-	    PRINT 자극하며 
-	ELSE
-		IF TEQUIP:의상내장애무패턴Ｃ == 1
-			PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 위로 
-		ELSEIF TEQUIP:의상내장애무패턴Ｃ == 2
-			PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 안에 집어넣은 
-		ENDIF
-	    PRINT 손가락으로 
-    	IF TEQUIP:속옷（하） == 620 || TEQUIP:속옷（상） == 520
-			IF RAND:3 == 0
-				PRINTFORM 문지르면서 
-			ELSEIF RAND:2 == 0
-				PRINTFORM 잡아당기면서 
+			IF TEQUIP:의상내장애무패턴Ｃ == 1
+				PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 위로 
+			ELSEIF TEQUIP:의상내장애무패턴Ｃ == 2
+				PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 안에 집어넣은 
+			ENDIF
+			PRINT 손가락으로 
+			IF TEQUIP:속옷（하） == 620 || TEQUIP:속옷（상） == 520
+				IF RAND:3 == 0
+					PRINTFORM 문지르면서 
+				ELSEIF RAND:2 == 0
+					PRINTFORM 잡아당기면서 
+				ELSE
+					PRINTFORM 만지작 거리면서 
+				ENDIF
 			ELSE
 				PRINTFORM 만지작 거리면서 
 			ENDIF
-		ELSE
-			PRINTFORM 만지작 거리면서 
 		ENDIF
 	ENDIF
-ENDIF
-PRINTW 쾌감을 맛보고 있다……
-;바이브＋애널바이브＋Ｖ감각LV5이상＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
-IF TEQUIP:13 && TEQUIP:14 && ABL:4 >= 5 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
-	PRINTFORML %타겟은()% 침을 흘리며、부들부들 몸을 경련시키며 울부짖고 있다
-	PRINTFORMW 아무래도 절정에서 내려오지 못하고、계속 가버리기만하고 있는 것 같다……
-;바이브＋Ｖ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
-ELSEIF TEQUIP:13 && ABL:4 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
-	PRINTFORML %타겟은()% 애액을 흩뿌리는 것도 상관없이、바이브를 격렬하게 넣다빼고 있다
-	PRINTFORMW 아무래도 더이상 다른 일은 눈에 들어오지도 않는 것 같다……
-;애널바이브＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
-ELSEIF TEQUIP:14 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
-	PRINTFORML %타겟은()% 부들부들 몸을 떨면서、애널에 바이브를 찔러넣고 있다
-	PRINTFORMW 아무래도 벽을 긁혀질 때마다 몇 번이나 가버리고 있는 것 같다……
-;애널비즈＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
-ELSEIF TEQUIP:15 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
-	PRINTFORML %타겟은()% 자신의 애널에서 단번에 애널비즈를 당겨뽑고는 부들부들 신체를 경련시켰다
-	PRINTFORMW 애널비즈를 토해낸 %타겟은()% 애널을 탐욕스럽게 실룩대고 있다
-	PRINTFORMW 아무래도 배설감과도 비슷한 장벽을 긁어내는 쾌감에 중독되어버린 것 같다……
-;자위중독LV3이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
-ELSEIF ABL:15 >= 3 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
-	PRINTFORML %타겟은()% 교성을 울리면서 일심불란하게 자기 자신의 비소를 계속 만지고 있다
-	PRINTFORMW 아무래도 멈추고싶어도 손이 멋대로 움직여 움직일 수 없는 것 같다……
+	PRINTW 쾌감을 맛보고 있다……
+	;바이브＋애널바이브＋Ｖ감각LV5이상＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	IF TEQUIP:13 && TEQUIP:14 && ABL:4 >= 5 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 침을 흘리며、부들부들 몸을 경련시키며 울부짖고 있다
+		PRINTFORMW 아무래도 절정에서 내려오지 못하고、계속 가버리기만하고 있는 것 같다……
+	;바이브＋Ｖ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	ELSEIF TEQUIP:13 && ABL:4 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 애액을 흩뿌리는 것도 상관없이、바이브를 격렬하게 넣다빼고 있다
+		PRINTFORMW 아무래도 더이상 다른 일은 눈에 들어오지도 않는 것 같다……
+	;애널바이브＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	ELSEIF TEQUIP:14 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 부들부들 몸을 떨면서、애널에 바이브를 찔러넣고 있다
+		PRINTFORMW 아무래도 벽을 긁혀질 때마다 몇 번이나 가버리고 있는 것 같다……
+	;애널비즈＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	ELSEIF TEQUIP:15 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 자신의 애널에서 단번에 애널비즈를 당겨뽑고는 부들부들 신체를 경련시켰다
+		PRINTFORMW 애널비즈를 토해낸 %타겟은()% 애널을 탐욕스럽게 실룩대고 있다
+		PRINTFORMW 아무래도 배설감과도 비슷한 장벽을 긁어내는 쾌감에 중독되어버린 것 같다……
+	;자위중독LV3이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	ELSEIF ABL:15 >= 3 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 교성을 울리면서 일심불란하게 자기 자신의 비소를 계속 만지고 있다
+		PRINTFORMW 아무래도 멈추고싶어도 손이 멋대로 움직여 움직일 수 없는 것 같다……
+	ENDIF
+ELSE
+;남자주도
+	;순종LV3미만
+	IF ABL:0 < 3
+		PRINTFORM 자위를 명령받자 %타겟은()%
+		;프라이드높음
+		SIF TALENT:15
+			PRINT 드높은 자존심을 과시하며
+		;반항적
+		IF TALENT:11 || RAND:2 == 0
+			PRINT 반항적인 태도로 
+		;꿋꿋함
+		ELSEIF TALENT:12 || RAND:2 == 1
+			PRINT 꿋꿋한 태도로 
+		ENDIF
+		PRINT 매섭게 쏘아보았지만 재차 명령하자 마지못해 
+	;순종LV5미만
+	ELSEIF ABL:0 <= 5
+		PRINTFORM 조교의 성과가 나왔는지 %타겟은()% 명령에 따라 
+	ELSE
+		PRINTFORM %조사처리(CALLNAME:TARGET,"는")% 자위의 명령에도 싫어하는 기색 없이 
+	ENDIF
+	;ビデオ촬영中
+	SIF TEQUIP:28
+		PRINT 비디오카메라의 앞에서 
+	;노출증LV6이상かつ부끄럼쟁이持ちでない
+	SIF (ABL:8 >= 6 && !TALENT:35)
+		PRINT 과시하듯이 행동해、
+	;카테터
+	SIF TEQUIP:43
+		PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+	;요도플러그
+	SIF TEQUIP:44
+		PRINTFORMW 尿道プラグが挿入された状態のまま、	
+	;바이브＋애널바이브
+	IF TEQUIP:13 && TEQUIP:14
+		IF TEQUIP:의상내장애무패턴Ｖ == 1
+			PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)% 위에
+			IF RAND:2 == 0
+				PRINTFORM 쑤셔넣은 
+			ENDIF
+			PRINTFORM ２개의 바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 누르면서 
+			ENDIF
+		ELSEIF TEQUIP:의상내장애무패턴Ｖ == 2
+			PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:음순노출),"를")% 밀쳐내고 
+			IF RAND:2 == 0
+				PRINTFORM 쑤셔넣은 
+			ENDIF
+			PRINTFORM ２개의 바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 교대로 
+			ENDIF
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 스스로 넣다 빼면서
+			ENDIF
+		ELSE
+			PRINTFORM 쑤셔넣은 ２개의 바이브를 스스로 넣다 빼면서 
+		ENDIF
+	;바이브
+	ELSEIF TEQUIP:13
+		IF TEQUIP:의상내장애무패턴Ｖ == 1
+			PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 위로 보지에 넣어진 바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 누르면서 
+			ENDIF
+		ELSEIF TEQUIP:의상내장애무패턴Ｖ == 2
+			PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:음순노출),"를")% 옆으로 밀치고 보지에 삽입한 바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 교대로 
+			ENDIF
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 스스로 넣다 빼면서
+			ENDIF
+		ELSE
+			PRINT 보지에 삽입한 바이브를 직접 넣다 빼면서
+		ENDIF
+	;애널바이브
+	ELSEIF TEQUIP:14
+		IF TEQUIP:의상내장애무패턴Ａ == 1
+			PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:둔부노출)%의 위로 
+			IF RAND:2 == 0
+				PRINTFORM 애널에 
+			ELSE
+				PRINTFORM 엉덩이 구멍에 
+			ENDIF
+			IF RAND:2 == 0
+				PRINTFORM 물고 있는 
+			ELSE
+				PRINTFORM 찔러넣고 있는 
+			ENDIF
+			PRINTFORM 애널바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 누르면서 
+			ENDIF
+		ELSEIF TEQUIP:의상내장애무패턴Ａ == 2
+			PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:둔부노출),"를")% 옆으로 밀치고 
+			IF RAND:2 == 0
+				PRINTFORM 애널에 
+			ELSE
+				PRINTFORM 엉덩이 구멍에 
+			ENDIF
+			IF RAND:2 == 0
+				PRINTFORM 물고 있는 
+			ELSE
+				PRINTFORM 찔러넣고 있는 
+			ENDIF
+			PRINTFORM 애널바이브를 
+			IF RAND:2 == 0
+				PRINTFORM 움직이면서 
+			ELSE
+				PRINTFORM 스스로 넣다 빼면서 
+			ENDIF
+		ELSE
+			PRINT 삽입된 애널바이브를 스스로 넣다 빼면서 
+		ENDIF
+	;애널비즈
+	ELSEIF TEQUIP:15
+		IF TEQUIP:옷내부애무Ａ & 4
+			PRINTFORM %조사처리(CLOTHESNAMEF(TARGET,TEQUIP:둔부노출),"를")% 밀어 젖히고 
+		ENDIF
+		PRINT 애널비즈를 
+		IF RAND:2 == 0
+			PRINTFORM 애널에서 
+		ELSE
+			PRINTFORM 엉덩이 구멍에서 
+		ENDIF
+		PRINTFORM 스스로 한 개, 또 한 개 당겨 
+		IF RAND:2 == 0
+			PRINTFORM 뽑으면서
+		ELSE
+			PRINTFORM 뽑았다가 다시 넣으면서
+		ENDIF
+	ELSE
+		IF TEQUIP:속옷（하） == 620 || TEQUIP:속옷（상） == 520
+			PRINT 민감한 부분에 박힌 피어스를 
+		;남자の場合
+		ELSEIF IS_MALE(TARGET)
+			SIF TALENT:유아체형
+				PRINT 어린 
+			PRINT 페니스를 
+		ELSE
+			SIF TALENT:유아체형
+				PRINT 어린 
+			PRINT 비소를 
+		ENDIF
+		;짐승型の場合
+		IF (TALENT:213 || TALENT:214 || TALENT:215 || TALENT:216 || TALENT:217) == 1
+			PRINT 자극하며 
+		ELSE
+			IF TEQUIP:의상내장애무패턴Ｃ == 1
+				PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 위로 
+			ELSEIF TEQUIP:의상내장애무패턴Ｃ == 2
+				PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 안에 집어넣은 
+			ENDIF
+			PRINT 손가락으로 
+			IF TEQUIP:속옷（하） == 620 || TEQUIP:속옷（상） == 520
+				IF RAND:3 == 0
+					PRINTFORM 문지르면서 
+				ELSEIF RAND:2 == 0
+					PRINTFORM 잡아당기면서 
+				ELSE
+					PRINTFORM 만지작 거리면서 
+				ENDIF
+			ELSE
+				PRINTFORM 만지작 거리면서 
+			ENDIF
+		ENDIF
+	ENDIF
+	PRINTW 쾌감을 맛보고 있다……
+	;바이브＋애널바이브＋Ｖ감각LV5이상＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	IF TEQUIP:13 && TEQUIP:14 && ABL:4 >= 5 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 침을 흘리며、부들부들 몸을 경련시키며 울부짖고 있다
+		PRINTFORMW 아무래도 절정에서 내려오지 못하고、계속 가버리기만하고 있는 것 같다……
+	;바이브＋Ｖ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	ELSEIF TEQUIP:13 && ABL:4 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 애액을 흩뿌리는 것도 상관없이、바이브를 격렬하게 넣다빼고 있다
+		PRINTFORMW 아무래도 더이상 다른 일은 눈에 들어오지도 않는 것 같다……
+	;애널바이브＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	ELSEIF TEQUIP:14 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 부들부들 몸을 떨면서、애널에 바이브를 찔러넣고 있다
+		PRINTFORMW 아무래도 벽을 긁혀질 때마다 몇 번이나 가버리고 있는 것 같다……
+	;애널비즈＋Ａ감각LV5이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	ELSEIF TEQUIP:15 && ABL:5 >= 5 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 자신의 애널에서 단번에 애널비즈를 당겨뽑고는 부들부들 신체를 경련시켰다
+		PRINTFORMW 애널비즈를 토해낸 %타겟은()% 애널을 탐욕스럽게 실룩대고 있다
+		PRINTFORMW 아무래도 배설감과도 비슷한 장벽을 긁어내는 쾌감에 중독되어버린 것 같다……
+	;자위중독LV3이상＋Ｃ감각LV5이상＋Ｂ감각LV5이상＋욕정のPALAMLV4이상
+	ELSEIF ABL:15 >= 3 && ABL:3 >= 5 && ABL:6 >= 5 && PALAM:6 >= PALAMLV:4
+		PRINTFORML %타겟은()% 교성을 울리면서 일심불란하게 자기 자신의 비소를 계속 만지고 있다
+		PRINTFORMW 아무래도 멈추고싶어도 손이 멋대로 움직여 움직일 수 없는 것 같다……
+	ENDIF
 ENDIF
 ;-------------------------------------------------
 ;14,클리애무
 ;-------------------------------------------------
 @MESSAGE_COM14
+IF TFLAG:60 == 4 || TFLAG:60 == 10
+	IF TFLAG:전회の조교者 == PLAYER
+		PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%에게 허리를 흔들게 하면서, 
+	ELSEIF TFLAG:전회の조교者 == ASSI
+		PRINTFORM %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%에게 허리를 흔들게 하면서, 
+	ENDIF
+ENDIF
+;카테터
+SIF TEQUIP:43
+	PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+;요도플러그
+SIF TEQUIP:44
+	PRINTFORMW 尿道にプラグが挿入された状態のまま、
 PRINTFORM %CALLNAME:TARGET%의 
 ;하의または전신복を着ている
 IF TEQUIP:82 || TEQUIP:83
@@ -889,29 +1142,195 @@ PRINTW 클리토리스를 자극했다……
 ;20,키스한다
 ;-------------------------------------------------
 @MESSAGE_COM20
-PRINTFORM %CALLNAME:TARGET%의 입안을 구석구석까지 휘
-;반발각인LV2以上＋함락していない
-IF MARK:3 >= 2 && TALENT:연모 == 0 && TALENT:친애 == 0 && TALENT:음란 == 0 && TALENT:창부 == 0 && TALENT:복종 == 0 && TALENT:예속 == 0
-	PRINTFORMW 젓자、%타겟은()% 노골적으로 혐오스러운 표정을 지으며 미간을 모았다……
-;순종LV3이상＋레즈경험1000이상＋조교者が남자でない
-ELSEIF ABL:0 >= 3 && EXP:40 >= 1000 && !IS_MALE(PLAYER)
-	PRINTFORMW 저어、끈적끈적하게 혀를 서로 엮으면서 타액을 교환했다……
-;순종LV3이상、または함락済み
-ELSEIF ABL:0 >= 3 || TALENT:연모 || TALENT:친애 || TALENT:음란 || TALENT:창부 || TALENT:복종 || TALENT:예속
-	PRINTFORMW 젓자、%CALLNAME:TARGET%도 적극적으로 혀를 섞었다……
-ELSE
-	PRINTW 저었다……
+IF (TFLAG:60 == 4 || TFLAG:60 == 10) && (TARGET != ASSI)
+	IF TEQUIP:주도권
+	;여자주도
+		PRINTFORM %조사처리(CALLNAME:TARGET,"는")% 허리를 흔들면서, 
+	ELSE
+	;남자주도
+		IF TFLAG:전회の조교者 == PLAYER
+			PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%에게 허리를 흔들게 하면서, 
+		ELSEIF TFLAG:전회の조교者 == ASSI
+			PRINTFORM %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%에게 허리를 흔들게 하면서, 
+		ENDIF
+	ENDIF
 ENDIF
+IF TEQUIP:주도권
+;노예주도
+	PRINTFORM %CALLNAME:PLAYER%의 입안을 구석구석까지 휘
+	;순종LV3이상＋레즈경험1000이상＋조교者が남자でない
+	IF ABL:0 >= 3 && EXP:40 >= 1000 && !IS_MALE(PLAYER)
+		PRINTFORMW 저어、끈적끈적하게 혀를 서로 엮으면서 타액을 교환했다……
+	;순종LV3이상、または함락済み
+	ELSEIF ABL:0 >= 3 || TALENT:연모 || TALENT:친애 || TALENT:음란 || TALENT:창부 || TALENT:복종 || TALENT:예속
+		PRINTFORMW 젓자、%CALLNAME:PLAYER%도 적극적으로 혀를 섞었다……
+	ELSE
+		PRINTW 저었다……
+	ENDIF
+ELSE
+;주인주도
+	PRINTFORM %CALLNAME:TARGET%의 입안을 구석구석까지 휘
+	;반발각인LV2以上＋함락していない
+	IF MARK:3 >= 2 && TALENT:연모 == 0 && TALENT:친애 == 0 && TALENT:음란 == 0 && TALENT:창부 == 0 && TALENT:복종 == 0 && TALENT:예속 == 0
+		PRINTFORMW 젓자、%타겟은()% 노골적으로 혐오스러운 표정을 지으며 미간을 모았다……
+	;순종LV3이상＋레즈경험1000이상＋조교者が남자でない
+	ELSEIF ABL:0 >= 3 && EXP:40 >= 1000 && !IS_MALE(PLAYER)
+		PRINTFORMW 저어、끈적끈적하게 혀를 서로 엮으면서 타액을 교환했다……
+	;순종LV3이상、または함락済み
+	ELSEIF ABL:0 >= 3 || TALENT:연모 || TALENT:친애 || TALENT:음란 || TALENT:창부 || TALENT:복종 || TALENT:예속
+		PRINTFORMW 젓자、%CALLNAME:TARGET%도 적극적으로 혀를 섞었다……
+	ELSE
+		PRINTW 저었다……
+	ENDIF
+ENDIF
+
 ;-------------------------------------------------
 ;21,아무것도안한다
 ;-------------------------------------------------
 @MESSAGE_COM21
-
+IF TFLAG:전회の조교者 == PLAYER
+	IF TFLAG:60 == 1
+	;후배위
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 피스톤질을 멈추려고 했으나… 애석하게도 허리가 멈추지 않는다!
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 엉덩이를 단단히 잡고 육봉을 찔러넣었다
+	ELSEIF TFLAG:60 == 2
+	;대면위
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 피스톤질을 멈추었으나… 웬일인지 %조사처리(CALLNAME:TARGET,"가")% 허리놀림을 멈추지 않는다!
+	ELSEIF TFLAG:60 == 3
+	;배면위
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 피스톤질을 멈추었으나… 웬일인지 %조사처리(CALLNAME:TARGET,"가")% 허리놀림을 멈추지 않는다!
+	ELSEIF TFLAG:60 == 4
+	;기승위, 역강간당한다
+		IF RAND:3 == 0
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 이어진 결합부를 과시하면서 미친듯이 허리를 흔들고 있다
+		ELSEIF RAND:2 == 0
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 애액에 젖어 빛나는 %CALLNAME:PLAYER%의 육봉을 질에서 살짝 뽑았다가 다시 집어넣으면서
+			PRINTFORMW 허리를 신나게 미친듯이 흔들기 시작했다
+		ELSE
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 결합부와 애널을 동시에 드러내면서 신나게 허리를 흔들고 있다
+		ENDIF
+	ELSEIF TFLAG:60 == 5
+	;정상위, 속옷빗겨, 요정오나홀
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 피스톤질을 멈추려고 했으나… 애석하게도 허리가 멈추지 않는다!
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 두 다리를 단단히 잡고 육봉을 찔러넣었다
+	ELSEIF TFLAG:60 == 6
+	;역강간, 기승위한다
+		IF RAND:3 == 0
+			PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 이어진 결합부를 과시하면서 미친듯이 허리를 흔들고 있다
+		ELSEIF RAND:2 == 0
+			PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 애액에 젖어 빛나는 %CALLNAME:TARGET%의 육봉을 질에서 살짝 뽑았다가 다시 집어넣으면서
+			PRINTFORMW 허리를 신나게 미친듯이 흔들기 시작했다
+		ELSE
+			PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 결합부와 애널을 동시에 드러내면서 신나게 허리를 흔들고 있다
+		ENDIF
+	ELSEIF TFLAG:60 == 7
+	;후배위애널
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 피스톤질을 멈추려고 했으나… 애석하게도 허리가 멈추지 않는다!
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 엉덩이를 단단히 잡고 육봉을 찔러넣었다
+	ELSEIF TFLAG:60 == 8
+	;대면위애널
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 피스톤질을 멈추었으나… 웬일인지 %조사처리(CALLNAME:TARGET,"가")% 허리놀림을 멈추지 않는다!
+	ELSEIF TFLAG:60 == 9
+	;배면위애널
+		PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% 피스톤질을 멈추었으나… 웬일인지 %조사처리(CALLNAME:TARGET,"가")% 허리놀림을 멈추지 않는다!
+	ELSEIF TFLAG:60 == 10
+	;기승위애널
+		IF RAND:2 == 0
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 이어진 결합부를 과시하면서 미친듯이 허리를 흔들고 있다
+		ELSE
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 결합부와 질구를 동시에 드러내면서 신나게 허리를 흔들고 있다
+		ENDIF
+	ELSEIF TFLAG:60 == 11
+	;정상위, 속옷빗겨 애널
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 피스톤질을 멈추려고 했으나… 애석하게도 허리가 멈추지 않는다!
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 두 다리를 단단히 잡고 육봉을 찔러넣었다
+	ELSE
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %조사처리(CALLNAME:TARGET,"를")% 그저 보고 있다…
+		PRINTFORMW 잠시 무언가를 멈추는 것도 좋군… 휴식이 된다…
+	ENDIF
+ELSEIF TFLAG:전회の조교者 == ASSI
+	IF TFLAG:60 == 1
+	;후배위
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 피스톤질을 멈추려고 했으나… 애석하게도 허리가 멈추지 않는다!
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%의 엉덩이를 단단히 잡고 육봉을 찔러넣었다
+	ELSEIF TFLAG:60 == 2
+	;대면위
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 피스톤질을 멈추었으나… 웬일인지 %조사처리(CALLNAME:TARGET,"가")% 허리놀림을 멈추지 않는다!
+	ELSEIF TFLAG:60 == 3
+	;배면위
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 피스톤질을 멈추었으나… 웬일인지 %조사처리(CALLNAME:TARGET,"가")% 허리놀림을 멈추지 않는다!
+	ELSEIF TFLAG:60 == 4
+	;기승위, 역강간당한다
+		IF RAND:3 == 0
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 이어진 결합부를 과시하면서 미친듯이 허리를 흔들고 있다
+		ELSEIF RAND:2 == 0
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 애액에 젖어 빛나는 %CALLNAME:ASSI%의 육봉을 질에서 살짝 뽑았다가 다시 집어넣으면서
+			PRINTFORMW 허리를 신나게 미친듯이 흔들기 시작했다
+		ELSE
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 결합부와 애널을 동시에 드러내면서 신나게 허리를 흔들고 있다
+		ENDIF
+	ELSEIF TFLAG:60 == 5
+	;정상위, 속옷빗겨, 요정오나홀
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 피스톤질을 멈추려고 했으나… 애석하게도 허리가 멈추지 않는다!
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%의 두 다리를 단단히 잡고 육봉을 찔러넣었다
+	ELSEIF TFLAG:60 == 6
+	;역강간, 기승위한다
+		IF RAND:3 == 0
+			PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 이어진 결합부를 과시하면서 미친듯이 허리를 흔들고 있다
+		ELSEIF RAND:2 == 0
+			PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 애액에 젖어 빛나는 %CALLNAME:TARGET%의 육봉을 질에서 살짝 뽑았다가 다시 집어넣으면서
+			PRINTFORMW 허리를 신나게 미친듯이 흔들기 시작했다
+		ELSE
+			PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 결합부와 애널을 동시에 드러내면서 신나게 허리를 흔들고 있다
+		ENDIF
+	ELSEIF TFLAG:60 == 7
+	;후배위애널
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 피스톤질을 멈추려고 했으나… 애석하게도 허리가 멈추지 않는다!
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%의 엉덩이를 단단히 잡고 육봉을 찔러넣었다
+	ELSEIF TFLAG:60 == 8
+	;대면위애널
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 피스톤질을 멈추었으나… 웬일인지 %조사처리(CALLNAME:TARGET,"가")% 허리놀림을 멈추지 않는다!
+	ELSEIF TFLAG:60 == 9
+	;배면위애널
+		PRINTFORM %조사처리(CALLNAME:ASSI,"는")% 피스톤질을 멈추었으나… 웬일인지 %조사처리(CALLNAME:TARGET,"가")% 허리놀림을 멈추지 않는다!
+	ELSEIF TFLAG:60 == 10
+	;기승위애널
+		IF RAND:2 == 0
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 이어진 결합부를 과시하면서 미친듯이 허리를 흔들고 있다
+		ELSE
+			PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 결합부와 질구를 동시에 드러내면서 신나게 허리를 흔들고 있다
+		ENDIF
+	ELSEIF TFLAG:60 == 11
+	;정상위, 속옷빗겨 애널
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 피스톤질을 멈추려고 했으나… 애석하게도 허리가 멈추지 않는다!
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%의 두 다리를 단단히 잡고 육봉을 찔러넣었다
+	ELSE
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% %조사처리(CALLNAME:TARGET,"를")% 그저 보고 있다…
+	ENDIF
+ENDIF
 ;-------------------------------------------------
 ;22,회화
 ;-------------------------------------------------
 @MESSAGE_COM22
-PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %조사처리(CALLNAME:TARGET,"와")% 회화를 하고 있다……
+IF TFLAG:60 == 4 || TFLAG:60 == 10
+	IF TEQUIP:주도권
+	;여자주도
+		PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 허리를 천천히 흔들면서, 신음소리가 섞인 야릇한 회화를 하고 있다…
+	ELSE
+	;남자주도
+		IF TFLAG:전회の조교者 == PLAYER
+			PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%에게 허리를 천천히 흔들게 하면서, 신음소리가 섞인 야릇한 회화를 하고 있다…
+		ELSEIF TFLAG:전회の조교者 == ASSI
+			PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:TARGET%에게 허리를 천천히 흔들게 하면서, %조사처리(CALLNAME:PLAYER,"와")% 셋이서 신음소리가 섞인 야릇한 회화를 하고 있다…
+		ENDIF
+	ENDIF
+ELSE
+	IF TFLAG:전회の조교者 == PLAYER
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %조사처리(CALLNAME:TARGET,"와")% 회화를 하고 있다……
+	ELSEIF TFLAG:전회の조교者 == ASSI
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% %조사처리(CALLNAME:PLAYER,"와")% %조사처리(CALLNAME:TARGET,"와")% 셋이서 회화를 하고 있다……
+	ENDIF
+ENDIF
 ;-------------------------------------------------
 ;23,프레젠트
 ;-------------------------------------------------
@@ -937,6 +1356,10 @@ ELSEIF TFLAG:17 == 4
 	ENDIF
 ELSEIF TFLAG:17 == 5
 	PRINTFORM 이계의 귀중한 술
+ELSEIF TFLAG:17 == 6
+	PRINTFORM 、欲しがっていたもの
+ELSEIF TFLAG:17 == 7
+	PRINTFORM 、欲しがっていたもの
 ENDIF
 PRINTFORMW 을(를) 선물했다……
 ;-------------------------------------------------
@@ -1009,10 +1432,10 @@ ELSE
 		ELSE
 			PRINTW 올려보며、애원이 가득찬 음성으로 매도의 말을 조르고 있다……
 		ENDIF
-	ELSEIF ABL:9 >= 2
-		PRINTFORMW %조사처리(CALLNAME:PLAYER,"를")% 올려보고 있지만 그 표정에는 약간의 쾌감이 비치고 있다
 	ELSEIF ABL:9 >= 4
 		PRINTW 매도당하는 것에 쾌감을 느끼는 것 같다……
+	ELSEIF ABL:9 >= 2
+		PRINTFORMW %조사처리(CALLNAME:PLAYER,"를")% 올려보고 있지만 그 표정에는 약간의 쾌감이 비치고 있다
 	ELSE
 		;반항적、프라이드높음、건방짐がない
 		IF TALENT:11 == 0 && TALENT:15 == 0 && TALENT:16 == 0
@@ -1040,6 +1463,12 @@ PRINTFORM %CALLNAME:TARGET%의
 IF TEQUIP:의상내장애무패턴Ｃ == 2
 	PRINTFORML %CLOTHESNAMEF(TARGET,TEQUIP:TARGET:음순노출)%의 안에 진동하는 로터를 침몰시켜、
 ENDIF
+;카테터
+SIF TEQUIP:43
+	PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+;요도플러그
+SIF TEQUIP:44
+	PRINTFORMW 尿道にプラグが挿入された状態のまま、
 ;남자＋욕정のPALAMLV3이상
 IF IS_MALE(TARGET) && (PALAM:6 >= PALAMLV:3)
 	PRINT 딱딱하게 솟아오른 페니스에 
@@ -1069,6 +1498,12 @@ PRINTW 꾹 눌렀다……
 ;41,전기맛사지기
 ;-------------------------------------------------
 @MESSAGE_COM41
+;카테터
+SIF TEQUIP:43
+	PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+;요도플러그
+SIF TEQUIP:44
+	PRINTFORMW 尿道にプラグが挿入された状態のまま、
 PRINTFORM %CALLNAME:TARGET%의 비소에 진동하고 있는 전기안마기를 
 SIF TEQUIP:음순노출 > -1
 	PRINTFORM %CLOTHESNAMEF(TARGET,TEQUIP:음순노출)%의 위로 
@@ -1104,6 +1539,12 @@ PRINTW 다……
 ;42,클리캡
 ;-------------------------------------------------
 @MESSAGE_COM42
+;카테터
+SIF TEQUIP:43
+	PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+;요도플러그
+SIF TEQUIP:44
+	PRINTFORMW 尿道にプラグが挿入された状態のまま、
 ;해제時
 IF TEQUIP:11
 	PRINTFORMW %CALLNAME:TARGET%에게 전동 클리캡을 달았다
@@ -1114,6 +1555,12 @@ ENDIF
 ;43,오나홀
 ;-------------------------------------------------
 @MESSAGE_COM43
+;카테터
+SIF TEQUIP:43
+	PRINTFORMW 尿道カテーテルが挿入された状態のまま、
+;요도플러그
+SIF TEQUIP:44
+	PRINTFORMW 尿道にプラグが挿入された状態のまま、
 ;装着時
 IF TEQUIP:12
 	PRINTFORMW %CALLNAME:TARGET%의 페니스를 오나홀에 삽입했다
@@ -1418,18 +1865,19 @@ ENDIF
 ;60,정상위
 ;-------------------------------------------------
 @MESSAGE_COM60
-;전회と今回の조교者が同じで、전회の조교が정상위であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 60 && (TFLAG:전회の조교者 == PLAYER)
+;전회와 이번의 조교자가 동일하면、전회의 조교가 정상위이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
+;同様に전회の조교が후배위か기승위、대면좌위、배면좌위の場合
+IF TFLAG:60 && (PREVCOM == 61 || PREVCOM == 66 || PREVCOM == 68 || PREVCOM == 69 || (TFLAG:59 == 1 || TFLAG:59 == 2 || TFLAG:59 == 3 || TFLAG:59 == 4)) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORMW 질내에서 뽑아내지 않고 %타겟을()% 바로 눕히고 재차 허리를 움직이기 시작했다……
+ELSEIF TFLAG:60 && (PREVCOM == 60 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
 	;조교者が남자か반인반요か후타나리である
 	IF HAVE_PENIS(PLAYER)
 		PRINTFORMW %CALLNAME:TARGET%의 질내의 감촉을 맛보면서 다시 허리를 움직이기 시작했다……
-	;페니스밴드を사용している場合
+	;페니스밴드를 사용하는 경우
 	ELSE
 		PRINTFORMW %CALLNAME:TARGET%의 질내에서 뽑지 않고 다시 허리를 움직였다……
 	ENDIF
-;同様に전회の조교が후배위か기승위、대면좌위、배면좌위の場合
-ELSEIF TFLAG:60 && (PREVCOM == 61 || PREVCOM == 66 || PREVCOM == 68 || PREVCOM == 69) && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORMW 질내에서 뽑아내지 않고 %타겟을()% 바로 눕히고 재차 허리를 움직이기 시작했다……
 ELSE
 	PRINTFORM %CALLNAME:TARGET%의 
 	;처녀
@@ -1530,21 +1978,22 @@ IF TEQUIP:30
 		ENDIF
 	ENDIF
 ENDIF
-;전회と今回の조교者が同じで、전회の조교が후배위であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 61 && (TFLAG:전회の조교者 == PLAYER)
+;전회와 이번의 조교자가 동일하면、전회의 조교가 후배위이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
+;同様に、전회の조교が정상위である場合
+IF TFLAG:60 && (PREVCOM == 60 || TFLAG:59 == 5) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORMW 질내에서 뽑지 않고 %CALLNAME:TARGET%의 뒤로 돌아 다시 허리를 움직이기 시작했다……
+;同様に、전회の조교が대면좌위、배면좌위、기승위である場合
+ELSEIF TFLAG:60 && (PREVCOM == 66 || PREVCOM == 68 || PREVCOM == 69 || PREVCOM == 74 || (TFLAG:59 == 2 || TFLAG:59 == 3 || TFLAG:59 == 4)) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORMW 삽입한 채로 %조사처리(CALLNAME:TARGET,"를")% 앞으로 엎드리게 해 다시 허리를 움직이기 시작했다……
+ELSEIF TFLAG:60 && (PREVCOM == 61 || RESULT == 1)&& (TFLAG:전회の조교者 == PLAYER)
 	;조교者が남자か반인반요か후타나리である
 	IF HAVE_PENIS(PLAYER)
-		PRINTFORMW %CALLNAME:TARGET%의 질내의 감촉을 느끼면서 다시 허리를 움직이기시작했다……
+		PRINTFORMW %CALLNAME:TARGET%의 질내의 감촉을 느끼면서 다시 허리를 움직이기 시작했다……
 	;페니스밴드を사용している場合
 	ELSE
 		PRINTFORMW %CALLNAME:TARGET%의 질내에서 뽑지 않고 다시금 허리를 움직였다……
 	ENDIF
-;同様に、전회の조교が정상위である場合
-ELSEIF TFLAG:60 && PREVCOM == 60 && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORMW 질내에서 뽑지 않고 %CALLNAME:TARGET%의 뒤로 돌아 다시 허리를 움직이기 시작했다……
-;同様に、전회の조교が대면좌위、배면좌위、기승위である場合
-ELSEIF TFLAG:60 && (PREVCOM == 66 || PREVCOM == 68 || PREVCOM == 69 || PREVCOM == 74) && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORMW 삽입한 채로 %조사처리(CALLNAME:TARGET,"를")% 앞으로 엎드리게 해 다시 허리를 움직이기 시작했다……
 ELSE
 	IF RAND:2 == 0
 		PRINT 뒤에서부터 
@@ -1582,8 +2031,12 @@ ENDIF
 ;62,정상위애널
 ;-------------------------------------------------
 @MESSAGE_COM62
-;전회と今回の조교者が同じで、전회の조교が정상위애널であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 26 && (TFLAG:전회の조교者 == PLAYER)
+;전회와 이번의 조교자가 동일하면、전회의 조교가 정상위애널이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
+;同様に전회の조교が후배위애널か대면좌위애널か배면좌위애널か기승위애널の場合
+IF TFLAG:60 && (PREVCOM == 63 || PREVCOM == 70 || PREVCOM == 71 || PREVCOM == 67 || (TFLAG:59 == 7 || TFLAG:59 == 8 || TFLAG:59 == 9 || TFLAG:59 == 10)) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORMW 장내에서 뽑지 않고 %조사처리(CALLNAME:TARGET,"를")% 바로 눕게 해、다시 허리를 움직이기 시작했다……
+ELSEIF TFLAG:60 && (PREVCOM == 62 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
 	;조교者が남자か반인반요か후타나리である
 	IF HAVE_PENIS(PLAYER)
 		PRINTFORMW %CALLNAME:TARGET%의 애널의 감촉을 맛보면서 다시 허리를 움직이기 시작했다……
@@ -1591,9 +2044,6 @@ IF TFLAG:60 && PREVCOM == 26 && (TFLAG:전회の조교者 == PLAYER)
 	ELSE
 		PRINTFORMW %CALLNAME:TARGET%의 장내에서 뽑지 않고 다시 허리를 움직이기 시작했다……
 	ENDIF
-;同様に전회の조교が후배위애널か대면좌위애널か배면좌위애널か기승위애널の場合
-ELSEIF TFLAG:60 && (PREVCOM == 27 || PREVCOM == 28 || PREVCOM == 29 || PREVCOM == 36) && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORMW 장내에서 뽑지 않고 %조사처리(CALLNAME:TARGET,"를")% 바로 눕게 해、다시 허리를 움직이기 시작했다……
 ELSE
 	PRINTFORM %CALLNAME:TARGET%의 
 	;윤활LV4이상
@@ -1611,8 +2061,15 @@ ENDIF
 ;63,후배위애널
 ;-------------------------------------------------
 @MESSAGE_COM63
-;전회と今回の조교者が同じで、전회の조교が후배위애널であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 63 && (TFLAG:전회の조교者 == PLAYER)
+;전회와 이번의 조교자가 동일하면、전회의 조교가 후배위애널이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
+;同様に、전회の조교が정상위애널である場合
+IF TFLAG:60 && (PREVCOM == 62 || TFLAG:59 == 11) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORMW 장내에서 뽑지 않고 %CALLNAME:TARGET%의 뒤로 돌아 다시 허리를 움직이기 시작했다……
+;同様に、전회の조교が대면좌위애널、배면좌위애널、기승위애널である場合
+ELSEIF TFLAG:60 && (PREVCOM == 67 || PREVCOM == 70 || PREVCOM == 71 || (TFLAG:59 == 8 || TFLAG:59 == 9 || TFLAG:59 == 10)) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORMW 삽입한채로 %타겟을()% 앞으로 엎드리게해 다시 허리를 움직이기 시작했다……
+ELSEIF TFLAG:60 && (PREVCOM == 63 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
 	;조교者が남자か반인반요か후타나리である
 	IF HAVE_PENIS(PLAYER)
 		PRINTFORMW %CALLNAME:TARGET%의 애널의 감촉을 맛보면서 다시 허리를 움직이기 시작했다……
@@ -1620,12 +2077,6 @@ IF TFLAG:60 && PREVCOM == 63 && (TFLAG:전회の조교者 == PLAYER)
 	ELSE
 		PRINTFORMW %CALLNAME:TARGET%의 장내에서 뽑지 않고 다시 허리를 움직이기 시작했다……
 	ENDIF
-;同様に、전회の조교が정상위애널である場合
-ELSEIF TFLAG:60 && PREVCOM == 62 && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORMW 장내에서 뽑지 않고 %CALLNAME:TARGET%의 뒤로 돌아 다시 허리를 움직이기 시작했다……
-;同様に、전회の조교が대면좌위애널、배면좌위애널、기승위애널である場合
-ELSEIF TFLAG:60 && (PREVCOM == 67 || PREVCOM == 70 || PREVCOM == 71) && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORMW 삽입한채로 %타겟을()% 앞으로 엎드리게해 다시 허리를 움직이기 시작했다……
 ELSE
 	IF TEQUIP:13 == 1
 		;유아체형
@@ -1666,8 +2117,9 @@ ENDIF
 ;64,역강간
 ;-------------------------------------------------
 @MESSAGE_COM64
-;전회と今回の조교者が同じで、전회の조교が역강간であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 64 && (TFLAG:전회の조교者 == PLAYER)
+;전회와 이번의 조교자가 동일하면、전회의 조교가 역강간이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
+IF TFLAG:60 && (PREVCOM == 64 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 페니스를 아랫입으로 꽉 문채로、집요하게 허리를 흔들었다……
 ELSE
 	PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 페니스를 억지로 
@@ -1730,29 +2182,52 @@ PRINTW 억지로 페니스를 훑었다……
 ;66,기승위
 ;-------------------------------------------------
 @MESSAGE_COM66
-;전회と今回の조교者が同じで、전회の조교が기승위であり、抜かないフラグがある場合
-IF TFLAG:60 && (PREVCOM == 66 || PREVCOM == 74) && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORML %타겟은()% 삽입된 채인 페니스를 단단히 조여、다시 허리를 움직이기 시작했다……
+#DIM DYNAMIC COMPARE1 ;비교 변수1
+#DIM DYNAMIC COMPARE2 ;비교 변수2
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (하의 - 스커트)
+;참고 - 스커트 유형 리턴값(3), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:TARGET:하의}
+COMPARE1 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (전신복)
+;참고 - 스커트 유형 리턴값(3), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:TARGET:전신복}
+COMPARE2 = RESULT
+
+;전회와 이번의 조교자가 동일하면、전회의 조교가 기승위이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
 ;同様に、전회の조교が정상위か후배위である場合
-ELSEIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 61) && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권 == 0
+IF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 61 || (TFLAG:59 == 1 || TFLAG:59 == 5)) && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권 == 0
 	PRINTFORML 질내에서 뽑는 일 없이 %타겟을()% 안아올려、아래로부터 허리를 쳐올려갔다……
 ;同様に、전회の조교が대면좌위か배면좌위である場合
-ELSEIF TFLAG:60 && (PREVCOM == 68 || PREVCOM == 69) && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권 == 0
+ELSEIF TFLAG:60 && (PREVCOM == 68 || PREVCOM == 69 || (TFLAG:59 == 2 || TFLAG:59 == 3)) && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권 == 0
 	PRINTFORML %조사처리(CALLNAME:PLAYER,"는")% 삽입한 채로 누워서、아래로부터 허리를 쳐올렸다……
-ELSEIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 61) && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권
+ELSEIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 61 || (TFLAG:59 == 1 || TFLAG:59 == 5)) && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권
 	PRINTFORM 질내에서 뽑지 않고 %조사처리(CALLNAME:PLAYER,"를")% 눕혀、 허리를 
 	SIF PALAM:욕정 >= PALAMLV:3
 		PRINT 미친듯이 
 	PRINTL 흔들었다……
 ;同様に、전회の조교が대면좌위か배면좌위である場合
-ELSEIF TFLAG:60 && (PREVCOM == 68 || PREVCOM == 69) && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권
+ELSEIF TFLAG:60 && (PREVCOM == 68 || PREVCOM == 69 || (TFLAG:59 == 2 || TFLAG:59 == 3)) && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권
 	PRINTFORML %조사처리(CALLNAME:TARGET,"는")% 삽입한 채로 
 	PRINTFORM %조사처리(CALLNAME:PLAYER,"를")% 눕히곤、허리를 
 	SIF PALAM:욕정 >= PALAMLV:3
 		PRINT 미친듯이 
 	PRINTL 흔들었다……
+ELSEIF TFLAG:60 && (PREVCOM == 66 || PREVCOM == 74 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORML %타겟은()% 삽입된 채인 페니스를 단단히 조여、다시 허리를 움직이기 시작했다……
 ELSE
-	PRINTFORM %타겟은()% %CALLNAME:PLAYER%의 위에 올라가、천천히 걸터앉
+	PRINTFORM %타겟은()% 
+	;스커트 유형을 착용하고 있을 경우
+	IF COMPARE1 == 3 || COMPARE2 == 3
+		IF RAND:2 == 0
+			PRINTFORM 스스로의 손으로 스커트를 끌어올려 비부를 노출시킨 채、
+		ELSE
+			PRINTFORM 스스로 치마를 들어올려 사타구니를 노출시킨 채、
+		ENDIF
+	ENDIF
+	PRINTFORM %CALLNAME:PLAYER%의 위에 올라가、천천히 걸터앉
 	;처녀＋유아체형
 	IF TALENT:100 && TALENT:0
 		PRINTL 아、남자를 모르는 어린 균열로 페니스를 삼켜갔다……
@@ -1783,15 +2258,16 @@ ENDIF
 ;67,기승위애널
 ;-------------------------------------------------
 @MESSAGE_COM67
-;전회と今回の조교者が同じで、전회の조교が기승위であり、抜かないフラグがある場合
-IF TFLAG:60 && (PREVCOM == 67) && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORML %타겟은()% 삽입된 물건을 아래로 꽉 물면서、다시 허리를 움직이기 시작했다……
+;전회와 이번의 조교자가 동일하면、전회의 조교가 기승위애널이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
 ;同様に、전회の조교が정상위애널か후배위애널である場合
-ELSEIF TFLAG:60 && (PREVCOM == 62 || PREVCOM == 63) && (TFLAG:전회の조교者 == PLAYER)
+IF TFLAG:60 && (PREVCOM == 62 || PREVCOM == 63 || (TFLAG:59 == 7 || TFLAG:59 == 11)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORML 장내에서 뽑지 않고 %타겟을()% 안아올려、아래서부터 허리를 쳐올렸다……
 ;同様に、전회の조교が대면좌위애널か배면좌위애널である場合
-ELSEIF TFLAG:60 && (PREVCOM == 70 || PREVCOM == 71) && (TFLAG:전회の조교者 == PLAYER)
+ELSEIF TFLAG:60 && (PREVCOM == 70 || PREVCOM == 71 || (TFLAG:59 == 8 || TFLAG:59 == 9)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORML %조사처리(CALLNAME:PLAYER,"는")% 삽입한 채로 드러누워서、아래로부터 허리를 쳐올렸다……
+ELSEIF TFLAG:60 && (PREVCOM == 67 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORML %타겟은()% 삽입된 물건을 아래로 꽉 물면서、다시 허리를 움직이기 시작했다……
 ELSE
 	PRINTFORM %타겟은()% %CALLNAME:PLAYER%의 위에 올라가、
 	;윤활LV4이상
@@ -1819,12 +2295,10 @@ ENDIF
 ;68,대면좌위
 ;-------------------------------------------------
 @MESSAGE_COM68
-;전회と今回の조교者が同じで、전회の조교が대면좌위であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 68 && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORMW %타겟은()% %조사처리(CALLNAME:PLAYER,"와")% 키스하고 혀를 섞으면서 다시 허리를 흔들기 시작했다……
-	RETURN 0
+;전회와 이번의 조교자가 동일하면、전회의 조교가 대면좌위이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
 ;同様に전회の조교が정상위、기승위の場合
-ELSEIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 66 || PREVCOM == 74) && (TFLAG:전회の조교者 == PLAYER)
+IF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 66 || PREVCOM == 74 || (TFLAG:59 == 4 || TFLAG:59 == 5)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORM 질내에서 페니스를 뽑지 않고 %CALLNAME:TARGET%의 몸을 
 	;전회の조교が정상위
 	IF PREVCOM == 60
@@ -1833,7 +2307,7 @@ ELSEIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 66 || PREVCOM == 74) && (TFLAG:�
 		PRINT 꼭 껴안아、
 	ENDIF
 ;同様に전회の조교が후배위、배면좌위の場合
-ELSEIF TFLAG:60 && (PREVCOM == 61 || PREVCOM == 66) && (TFLAG:전회の조교者 == PLAYER)
+ELSEIF TFLAG:60 && (PREVCOM == 61 || PREVCOM == 69 || (TFLAG:59 == 1 || TFLAG:59 == 3)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORM 삽입한 채로 신체를 이쪽으로 향하게
 	;전회の조교が후배위
 	IF PREVCOM == 61
@@ -1841,6 +2315,9 @@ ELSEIF TFLAG:60 && (PREVCOM == 61 || PREVCOM == 66) && (TFLAG:전회の조교者
 	ELSE
 		PRINT 꼭 껴안아、
 	ENDIF
+ELSEIF TFLAG:60 && (PREVCOM == 68 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORMW %타겟은()% %조사처리(CALLNAME:PLAYER,"와")% 키스하고 혀를 섞으면서 다시 허리를 흔들기 시작했다……
+	RETURN 0
 ELSE
 	PRINTFORM %CALLNAME:TARGET%의 몸을 안아올려、느긋이 내리면서 
 	;윤활LV4以上
@@ -1911,14 +2388,13 @@ ENDIF
 ;69,배면좌위
 ;-------------------------------------------------
 @MESSAGE_COM69
-;전회と今回の조교者が同じで、전회の조교が배면좌위であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 69 && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORML %타겟을()% 등 뒤에서 끌어안고 다시 %CALLNAME:TARGET%의 신체를 흔들기 시작했다……
+;전회와 이번의 조교자가 동일하면、전회의 조교가 배면좌위이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
 ;同様に、전회の조교が후배위か기승위である場合
-ELSEIF TFLAG:60 && (PREVCOM == 61 || PREVCOM == 66 || PREVCOM == 74) && (TFLAG:전회の조교者 == PLAYER)
+IF TFLAG:60 && (PREVCOM == 61 || PREVCOM == 66 || PREVCOM == 74 || (TFLAG:59 == 1 || TFLAG:59 == 4)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORML 질내에서 페니스를 빼지 않은 채 %CALLNAME:TARGET%의 신체를 배후에서 끌어안아、몸을 흔들기 시작했다……
 ;同様に、전회の조교が정상위か대면좌위である場合
-ELSEIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 68) && (TFLAG:전회の조교者 == PLAYER)	
+ELSEIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 68 || (TFLAG:59 == 2 || TFLAG:59 == 5)) && (TFLAG:전회の조교者 == PLAYER)	
 	PRINTFORML 삽입한 채 몸을 뒤로 향하게 해 %CALLNAME:TARGET%의 몸을 
 	;전회の조교が정상위
 	IF PREVCOM == 60
@@ -1927,6 +2403,8 @@ ELSEIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 68) && (TFLAG:전회の조교者
 		PRINT 꽉 끌어안아、
 	ENDIF
 	PRINTFORML 격렬하게 허리를 흔들기 시작했다……
+ELSEIF TFLAG:60 && (PREVCOM == 69 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORML %타겟을()% 등 뒤에서 끌어안고 다시 %CALLNAME:TARGET%의 신체를 흔들기 시작했다……
 ELSE
 	PRINTFORM %CALLNAME:TARGET%의 신체를 안아올려、
 	;윤활LV4以上
@@ -1953,12 +2431,10 @@ ENDIF
 ;70,대면좌위애널
 ;-------------------------------------------------
 @MESSAGE_COM70
-;전회と今回の조교者が同じで、전회の조교が대면좌위애널であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 70 && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORMW %타겟은()% %조사처리(CALLNAME:PLAYER,"와")% 키스하고、혀를 섞으면서 다시 허리를 흔들기 시작했다……
-	RETURN 0
+;전회와 이번의 조교자가 동일하면、전회의 조교가 대면좌위애널이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
 ;同様に전회の조교が정상위애널、기승위애널の場合
-ELSEIF TFLAG:60 && (PREVCOM == 62 || PREVCOM == 67) && (TFLAG:전회の조교者 == PLAYER)
+IF TFLAG:60 && (PREVCOM == 62 || PREVCOM == 67 || (TFLAG:59 == 10 || TFLAG:59 == 11)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORM 장내에서 
 	;조교者が남자か반인반요か후타나리である
 	IF HAVE_PENIS(PLAYER)
@@ -1968,7 +2444,7 @@ ELSEIF TFLAG:60 && (PREVCOM == 62 || PREVCOM == 67) && (TFLAG:전회の조교者
 	ENDIF
 		PRINTFORM 빼지 않고 %CALLNAME:TARGET%의 몸을 꽉 껴안아、
 ;同様に전회の조교が후배위애널、배면좌위애널の場合
-ELSEIF TFLAG:60 && (PREVCOM == 63 || PREVCOM == 71) && (TFLAG:전회の조교者 == PLAYER)
+ELSEIF TFLAG:60 && (PREVCOM == 63 || PREVCOM == 71 || (TFLAG:59 == 7 || TFLAG:59 == 9)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORM 삽입한 채로 몸을 이쪽으로 향하게해
 	;전회の조교が후배위애널
 	IF PREVCOM == 63
@@ -1976,6 +2452,9 @@ ELSEIF TFLAG:60 && (PREVCOM == 63 || PREVCOM == 71) && (TFLAG:전회の조교者
 	ELSE
 		PRINT 서 꼭 껴안아、
 	ENDIF
+ELSEIF TFLAG:60 && (PREVCOM == 70 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORMW %타겟은()% %조사처리(CALLNAME:PLAYER,"와")% 키스하고、혀를 섞으면서 다시 허리를 흔들기 시작했다……
+	RETURN 0
 ELSE
 	PRINTFORM %CALLNAME:TARGET%의 몸을 안아올려 느긋하게 내리면서
 	;윤활LV4以上
@@ -2010,11 +2489,10 @@ ENDIF
 ;71,배면좌위애널
 ;-------------------------------------------------
 @MESSAGE_COM71
-;전회と今回の조교者が同じで、전회の조교が배면좌위애널であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 71 && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORML %타겟을()% 뒤에서 끌어안고 다시 %CALLNAME:TARGET%의 신체를 흔들기 시작했다……
+;전회와 이번의 조교자가 동일하면、전회의 조교가 배면좌위애널이고、삽입유지 플래그가 있는 경우 + 파생체위일 경우
+CALL CHECK_EX_COM_INSERTING, PREVCOM ;이전 커맨드가 파생체위인지 검사
 ;同様に、전회の조교が후배위애널か기승위애널である場合
-ELSEIF TFLAG:60 && (PREVCOM == 63 || PREVCOM == 67) && (TFLAG:전회の조교者 == PLAYER)
+IF TFLAG:60 && (PREVCOM == 63 || PREVCOM == 67 || (TFLAG:59 == 7 || TFLAG:59 == 10)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORM 장내에서 
 	;조교者が남자か반인반요か후타나리である
 	IF HAVE_PENIS(PLAYER)
@@ -2024,7 +2502,7 @@ ELSEIF TFLAG:60 && (PREVCOM == 63 || PREVCOM == 67) && (TFLAG:전회の조교者
 	ENDIF
 	PRINTFORML 뽑지 않고 %CALLNAME:TARGET%의 몸을 꽉 껴안고서 몸을 흔들기 시작했다……
 ;同様に、전회の조교が정상위애널か대면좌위애널である場合
-ELSEIF TFLAG:60 && (PREVCOM == 62 || PREVCOM == 70) && (TFLAG:전회の조교者 == PLAYER)
+ELSEIF TFLAG:60 && (PREVCOM == 62 || PREVCOM == 70 || (TFLAG:59 == 8 || TFLAG:59 == 11)) && (TFLAG:전회の조교者 == PLAYER)
 	PRINTFORM 삽입한 채로 반대쪽으로 몸을 돌린 %CALLNAME:TARGET%의 몸을 
 	;전회の조교が정상위애널
 	IF PREVCOM == 62
@@ -2033,6 +2511,8 @@ ELSEIF TFLAG:60 && (PREVCOM == 62 || PREVCOM == 70) && (TFLAG:전회の조교者
 		PRINT 꽉 끌어안아、
 	ENDIF
 	PRINTFORML 격렬하게 허리를 흔들기 시작했다……
+ELSEIF TFLAG:60 && (PREVCOM == 71 || RESULT == 1) && (TFLAG:전회の조교者 == PLAYER)
+	PRINTFORML %타겟을()% 뒤에서 끌어안고 다시 %CALLNAME:TARGET%의 신체를 흔들기 시작했다……
 ELSE
 	PRINTFORML %CALLNAME:TARGET%의 몸을 안아올려、
 	;윤활LV4以上
@@ -2050,43 +2530,73 @@ ENDIF
 ;72,속옷비켜삽입
 ;-------------------------------------------------
 @MESSAGE_COM72
-PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% 
-;야외　廃ビル=1　公園=2　森林=4　水辺=8
-SIF TEQUIP:29 == 1
-	PRINTFORM 선 채로 벽에 손을 붙이고 양다리를 벌린 
-PRINTFORM %CALLNAME:TARGET%의 
-IF TEQUIP:속옷（하）
-	CALL CLOTHES_NAME,6,TARGET
-ELSE
-	CALL CLOTHES_NAME,7,TARGET
-ENDIF
-PRINTFORM \@ TEQUIP:속옷（하） == 620 ? 에 장난치면서、 # 을 옆으로 비껴、\@
-PRINT 바깥에 드러난 
-;처녀
-IF TALENT:0
-	PRINT 남자를 모르는 
-;윤활LV4이상
-ELSEIF PALAM:4 >= PALAMLV:4
-	PRINT 애액이 방울져 떨어지는 
-ENDIF
-;유아체형
-IF TALENT:100
-	PRINT 어린 균열을
-ELSE
-	SIF TALENT:129
-		PRINT 털이 없는 
-	PRINT 비렬을 
-ENDIF
-;함락済み
-IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8)
-	PRINTL 꿰뚫었다
-	IF TEQUIP:29 == 1
-		PRINTFORMW %타겟은()% %CALLNAME:PLAYER%에게 적극적으로 허리를 꽉 눌러왔다……
+;挿入継続時の分岐
+IF TEQUIP:50 > 3
+	SIF TEQUIP:29 == 1
+	PRINTFORM 立ったまま
+	IF TEQUIP:속옷（하）
+		CALL CLOTHES_NAME,6,TARGET
 	ELSE
-		PRINTFORMW %타겟은()% %CALLNAME:PLAYER%에게 다리를 감아 허리를 꽉 눌러왔다……
+		CALL CLOTHES_NAME,7,TARGET
 	ENDIF
+	PRINTFORM \@ TEQUIP:속옷（하） == 620 ? を弄られながら # をずらした状態で\@
+	PRINT 挿入されている
+;	IF HAVE_PENIS(PLAYER)
+;		PRINT ペニスを
+;	ELSE
+;		PRINT ディルドを
+;	ENDIF
+	PRINTFORM %CALLNAME:TARGET%の身体を掴みながら、再び腰を動かし
+		;함락済み
+		IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8)
+			PRINTL 始めた
+			IF TEQUIP:29 == 1
+				PRINTFORMW %CALLNAME:TARGET%は%CALLNAME:PLAYER%に積極的に腰を押し付けている……
+			ELSE
+				PRINTFORMW %CALLNAME:TARGET%は%CALLNAME:PLAYER%に足を絡め腰を押し付けている……
+			ENDIF
+		ELSE
+			PRINTW 始めた……
+		ENDIF
 ELSE
-	PRINTW 꿰뚫었다……
+	PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% 
+	;야외　廃ビル=1　公園=2　森林=4　水辺=8
+	SIF TEQUIP:29 == 1
+		PRINTFORM 선 채로 벽에 손을 붙이고 양다리를 벌린 
+	PRINTFORM %CALLNAME:TARGET%의 
+	IF TEQUIP:속옷（하）
+		CALL CLOTHES_NAME,6,TARGET
+	ELSE
+		CALL CLOTHES_NAME,7,TARGET
+	ENDIF
+	PRINTFORM \@ TEQUIP:속옷（하） == 620 ? 에 장난치면서、 # 을 옆으로 비껴、\@
+	PRINT 바깥에 드러난 
+	;처녀
+	IF TALENT:0
+		PRINT 남자를 모르는 
+	;윤활LV4이상
+	ELSEIF PALAM:4 >= PALAMLV:4
+		PRINT 애액이 방울져 떨어지는 
+	ENDIF
+	;유아체형
+	IF TALENT:100
+		PRINT 어린 균열을
+	ELSE
+		SIF TALENT:129
+			PRINT 털이 없는 
+		PRINT 비렬을 
+	ENDIF
+	;함락済み
+	IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8)
+		PRINTL 꿰뚫었다
+		IF TEQUIP:29 == 1
+			PRINTFORMW %타겟은()% %CALLNAME:PLAYER%에게 적극적으로 허리를 꽉 눌러왔다……
+		ELSE
+			PRINTFORMW %타겟은()% %CALLNAME:PLAYER%에게 다리를 감아 허리를 꽉 눌러왔다……
+		ENDIF
+	ELSE
+		PRINTW 꿰뚫었다……
+	ENDIF
 ENDIF
 
 ;-------------------------------------------------
@@ -2247,7 +2757,7 @@ ELSEIF IS_MALE(TARGET)
 ELSEIF TALENT:100
 	PRINT 어린 균열을 
 ELSE
-	PRINTFORM \@ TEQUIP:속옷（하） == 620 ? 피어스가 이상하게 빛나는 # \@음순을
+	PRINTFORM \@ TEQUIP:속옷（하） == 620 ? 피어스가 이상하게 빛나는 # \@음순을 
 ENDIF
 PRINTW 문지르고 있다……
 ;-------------------------------------------------
@@ -2503,6 +3013,31 @@ ELSEIF (TALENT:3 || TALENT:6)
 ELSE
 	PRINTW 가슴의 끝을 빨아 모유를 마셨다……
 ENDIF
+;---- EDIT 010 触手系コマンドを修正 ADD START ----
+;-------------------------------------------------
+;90,수음한다
+;-------------------------------------------------
+@MESSAGE_COM90
+;카테터
+	SIF TEQUIP:43
+	PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+;요도플러그
+	SIF TEQUIP:44
+	PRINTFORMW 尿道プラグが挿入された状態のまま、
+;촉수
+IF TEQUIP:25
+	PRINTFORMW %CALLNAME:TARGET%のペニスを咥えこんだ触手がゆっくりと脈動している…
+;오나홀
+ELSEIF TEQUIP:12
+	PRINTFORMW %CALLNAME:PLAYER%はオナホールごと%CALLNAME:TARGET%のペニスを扱いている…
+ELSE
+	IF TEQUIP:주도권
+		PRINTFORMW %CALLNAME:TARGET%は%CALLNAME:PLAYER%の手を掴むと、自らのペニスを扱かせた…
+	ELSE
+		PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:TARGET%のペニスを手で扱いている…
+	ENDIF
+ENDIF
+;---- EDIT 010 触手系コマンドを修正 ADD END   ----
 ;-------------------------------------------------
 ;100,스팽킹
 ;-------------------------------------------------
@@ -2970,7 +3505,13 @@ IF (TALENT:복종 || TALENT:예속) && RAND:5 == 0
 	ELSE
 		PRINTFORM 흠칫흠칫 
 	ENDIF
-	PRINTFORMW 한쪽 다리를 올려서、개와 같은 자세로 오줌을 쌌다……
+	SIF TEQUIP:43
+		PRINTFORMW カテーテルが挿入された状態のまま、
+	IF IS_MALE(TARGET)
+		PRINTFORMW 片足を上げて、ペニスを震わせて犬のようなポーズで放尿した…………
+	ELSE
+		PRINTFORMW 한쪽 다리를 올려서、개와 같은 자세로 오줌을 쌌다……
+	ENDIF
 ;야외플레이中
 ELSEIF TEQUIP:29 && RAND:5 == 1
 	PRINTFORM %타겟은()% 
@@ -2981,7 +3522,13 @@ ELSEIF TEQUIP:29 && RAND:5 == 1
 	ELSE
 		PRINTFORM 수치와 굴욕감에 눈물을 흘리면서、
 	ENDIF
-	PRINTFORMW 수풀의 안에서 오줌을 쌌다……
+	SIF TEQUIP:43
+		PRINTFORMW カテーテルが挿入された状態のまま、
+	IF IS_MALE(TARGET)
+		PRINTFORMW 立ったままペニスに手を添えて放尿し始めた……
+	ELSE
+		PRINTFORMW 수풀의 안에서 오줌을 쌌다……
+	ENDIF
 ;수치플레이中
 ELSEIF TEQUIP:30 && RAND:5 == 2
 	PRINTFORM %타겟은()% 거울에 비친 자신
@@ -2992,7 +3539,13 @@ ELSEIF TEQUIP:30 && RAND:5 == 2
 	ELSE
 		PRINTFORM 을 보지않게 하면서、
 	ENDIF
-	PRINTFORMW 주저앉아 오줌을 싸기 시작했다……
+	SIF TEQUIP:43
+		PRINTFORMW カテーテルが挿入された状態のまま、
+	IF IS_MALE(TARGET)
+		PRINTFORMW 立ったままペニスに手を添えて放尿し始めた……
+	ELSE
+		PRINTFORMW 주저앉아 오줌을 싸기 시작했다……
+	ENDIF
 ;유아체형
 ELSEIF TALENT:100 && RAND:5 == 3
 	PRINTFORM %조사처리(CALLNAME,"는")% %CALLNAME:MASTER%에게 어린 아이처럼 양다리를 안아올려져서、
@@ -3003,7 +3556,13 @@ ELSEIF TALENT:100 && RAND:5 == 3
 	ELSE
 		PRINTFORM 얼굴을 새빨갛게 붉히면서、흠칫흠칫 
 	ENDIF
-	PRINTFORMW 방뇨했다……
+	SIF TEQUIP:43
+		PRINTFORMW カテーテルが挿入された状態のまま、
+	IF IS_MALE(TARGET)
+		PRINTFORMW 立ったままペニスに手を添えて放尿し始めた……
+	ELSE
+		PRINTFORMW 쭈그리고 앉아 수풀 속에서 방뇨하기 시작했다…… 
+	ENDIF
 ELSE
 	PRINTFORM %조사처리(CALLNAME,"는")% 
 	IF (ABL:노출증 >= 6 && !TALENT:부끄럼쟁이) || (ABL:노출증 >= 4 && TALENT:부끄럼없음)
@@ -3013,7 +3572,13 @@ ELSE
 	ELSE
 		PRINTFORM 수치에 얼굴을 붉히면서、
 	ENDIF
-	PRINTFORMW 그 자리에 주저앉아 오줌을 누기 시작했다……
+	SIF TEQUIP:43
+		PRINTFORMW カテーテルが挿入された状態のまま、
+	IF IS_MALE(TARGET)
+		PRINTFORMW 立ったままペニスに手を添えて放尿し始めた……
+	ELSE
+		PRINTFORMW 그 자리에 주저앉아 오줌을 누기 시작했다……
+	ENDIF
 ENDIF
 ;-------------------------------------------------
 ;145,애널봉사강제
@@ -3193,6 +3758,28 @@ PRINTFORML 무수한 벌레가 꿈틀데는 욕탕에 %타겟을()% 밀어넣자
 @MESSAGE_COM156
 PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 자신의 가랑이에 %CALLNAME:TARGET%의 머리를 억누르고 오줌을 먹였다……
 ;-------------------------------------------------
+;158,카테터
+;-------------------------------------------------
+@MESSAGE_COM158
+;装着時
+IF TEQUIP:43
+PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:TARGET%の尿道へと尿道カテーテルを挿入した……
+;解除時
+ELSE
+PRINTFORMW %CALLNAME:TARGET%の尿道からずるずるとカテーテルを引きずり出した
+ENDIF
+;-------------------------------------------------
+;159,요도플러그
+;-------------------------------------------------
+@MESSAGE_COM159
+;装着時
+IF TEQUIP:44
+PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:TARGET%の尿道へと銀色に輝く尿道プラグを挿入した……
+;解除時
+ELSE
+PRINTFORMW %CALLNAME:TARGET%の尿道からてらてらと濡れて光るプラグをを引きずり出した
+ENDIF
+;-------------------------------------------------
 ;160,촉수소환
 ;-------------------------------------------------
 @MESSAGE_COM160
@@ -3302,7 +3889,7 @@ IF TEQUIP:16
 			PRINT 의 위에서 
 		ELSEIF TEQUIP:속옷（상） > 0
 			CALL CLOTHES_NAME,5,TARGET
-			PRINTFORM \@ TEQUIP:속옷（상） == 520 ? を弄りながら # の上から\@
+			PRINTFORM \@ TEQUIP:속옷（상） == 520 ? 를 만지작거리면서 # 의 위에서\@
 		ELSEIF TEQUIP:겉옷 > 0
 			CALL CLOTHES_NAME,10,TARGET
 			PRINT 의 안쪽에 비집고 들어가 
@@ -3532,6 +4119,62 @@ IF TEQUIP:12
 ELSE
 	PRINTFORMW 촉수는 %CALLNAME:TARGET%의 페니스를 풀어주었다
 ENDIF
+
+;---- EDIT 010 触手系コマンドを修正 ADD START ----
+;-------------------------------------------------
+;176,アナル極太触手
+;-------------------------------------------------
+@MESSAGE_COM176
+;装着時
+IF TEQUIP:22
+	PRINTFORM 極太な触手が%CALLNAME:TARGET%の
+	;潤滑LV4以上
+	SIF PALAM:4 >= PALAMLV:4
+		PRINTFORM 粘液にまみれた
+	PRINTFORML アナルに突き刺さると更にその太さを増していった
+	PRINTFORM 徐々に強まる圧迫感に%CALLNAME:TARGET%は
+	;Ａ経験180以上＋淫乱か娼婦
+	IF EXP:1 > 180 && (TALENT:4 || TALENT:7)
+		PRINTFORM とろけきった表情で、肛悦を受け入れ
+	;Ａ経験140以上＋淫乱か娼婦
+	ELSEIF EXP:1 > 140 && (TALENT:4 || TALENT:7)
+		PRINTFORM 強い肛悦に腰をくねらせ
+	;Ａ経験100以上＋淫乱か娼婦
+	ELSEIF EXP:1 > 100 && (TALENT:4 || TALENT:7)
+		PRINTFORM 頬を染めながらも、ゆらゆらとお尻を揺らめかせ
+	;Ａ経験70以上＋淫乱か娼婦
+	ELSEIF EXP:1 > 70 && (TALENT:4 || TALENT:7)
+		PRINTFORM すぼまりに与えられる刺激に、身体を震わせ
+	;Ａ経験40以上
+	ELSEIF EXP:1 > 40
+		PRINTFORM 期待と否定の入り混じった、複雑な表情をし
+	;Ａ経験20以上
+	ELSEIF EXP:1 > 20
+		PRINTFORM 恥じらいに染まった顔を伏せ、肛虐に耐え
+	;それ以外
+	ELSE
+		PRINTFORM 不浄の穴を犯される恥辱と屈辱感にまみれた表情をし
+	ENDIF
+	PRINTFORMW ている……
+;解除時
+ELSE
+	PRINTFORML %CALLNAME:TARGET%の広がりきったアヌスから触手が引き抜かれた
+	;Ａ감각
+	IF ABL:5 == 0
+		PRINTFORMW %CALLNAME:TARGET%の肛門はゆっくりと閉じていった
+	ELSEIF ABL:5 == 1
+		PRINTFORMW %CALLNAME:TARGET%の肛門はひくつきながらゆるゆると閉じていった
+	ELSEIF ABL:5 == 2
+		PRINTFORMW %CALLNAME:TARGET%の肛門はぽっかり口を開いている
+	ELSEIF ABL:5 == 3
+		PRINTFORMW %CALLNAME:TARGET%の肛門は拡がったままなかなか戻らないようだ
+	ELSEIF ABL:5 == 4
+		PRINTFORMW %CALLNAME:TARGET%の肛門から腸の中が丸見えになっている
+	ELSEIF ABL:5 >= 5
+		PRINTFORMW %CALLNAME:TARGET%は、自分の肛門を指で拡げ、恍惚としている
+	ENDIF
+ENDIF
+;---- EDIT 010 触手系コマンドを修正 ADD END   ----
 ;-------------------------------------------------
 ;180,로션,
 ;-------------------------------------------------
@@ -3582,10 +4225,18 @@ IF TEQUIP:28
 	PRINTFORMW 비디오카메라로 %CALLNAME:TARGET%의 촬영을 시작했다……
 	IF FLAG:22 == 2 && (TALENT:ASSI:연모 || TALENT:ASSI:친애 || TALENT:ASSI:음란 || TALENT:ASSI:창부)
 		PRINTFORM %조사처리(CALLNAME:ASSI,"는")% 
-		PRINTFORM %CALLNAME:MASTER%의 등에 가슴을 밀착시키며 한손으로 비디오 촬영을 유지한채 다른 한손으로는 아나타의 목을 끌어안았다.
-		PRINTFORML %조사처리(CALLNAME:ASSI,"는")% 고개를 빼 
-		PRINTFORM %CALLNAME:MASTER%의 볼을 핥고 가볍게 키스하며 카메라를 
-		PRINTFORM %CALLNAME:MASTER%의 1인칭인 것 마냥 각도를 유지하며 촬영하고 있다.
+		IF TEQUIP:주도권
+		;여자주도
+			PRINTFORML %조사처리(CALLNAME:MASTER,"를")% 내려다보며 두 손으로 비디오 촬영을 유지한채, 다가와 %CALLNAME:MASTER%의 입술에 키스를 했다.
+			PRINTFORM 그런 다음 %조사처리(CALLNAME:ASSI,"는")% %조사처리(CALLNAME:TARGET,"와")% %조사처리(CALLNAME:MASTER,"로")%부터 떨어져, 
+			PRINTFORML 마치 이 비디오가 AV인 것 마냥 전체적인 시점을 유지하며 촬영하고 있다.
+		ELSE
+		;남자주도
+			PRINTFORML %CALLNAME:MASTER%의 등에 가슴을 밀착시키며 한손으로 비디오 촬영을 유지한채 다른 한손으로는 %CALLNAME:MASTER%의 목을 끌어안았다.
+			PRINTFORM %조사처리(CALLNAME:ASSI,"는")% 고개를 빼 
+			PRINTFORM %CALLNAME:MASTER%의 볼을 핥고 가볍게 키스하며 카메라를 
+			PRINTFORML %CALLNAME:MASTER%의 1인칭인 것 마냥 각도를 유지하며 촬영하고 있다.
+		ENDIF
 	ENDIF
 ;解除(촬영종료)時
 ELSE
@@ -3624,7 +4275,7 @@ IF TEQUIP:유방노출 && TEQUIP:유두노출 && TEQUIP:음순노출 && TEQUIP:�
 ELSE
 	SELECTCASE TEQUIP:29
 	CASE 0
-		PRINTFORMW 部屋に戻ってきた……
+		PRINTFORMW 방으로 돌아왔다……
 	CASE 1
 		PRINTFORML %CALLNAME:TARGET%에게 목걸이를 걸고 폐빌딩에 데려갔다
 	CASE 2
@@ -3841,6 +4492,37 @@ ENDIF
 
 
 ;-------------------------------------------------
+;260,밧줄와이어 기승위
+;-------------------------------------------------
+@MESSAGE_COM260
+IF PREVCOM == 260 && TFLAG:전회の조교者 == PLAYER
+	PRINTFORML %조사처리(CALLNAME:ASSI,"는")% 계속해서 밧줄 손잡이를 잡아당겨 %조사처리(CALLNAME:TARGET,"를")% 위아래로 흔들었다
+	PRINTFORMW 이에 %CALLNAME:PLAYER%의 페니스가 %CALLNAME:TARGET%의 균열에서 들어갔다 나왔다를 반복하고 있다
+ELSE
+	PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 몸에 묶여있는 밧줄에 새로운 여러 개의 밧줄을 연결하여 묶었고、이윽고 그 밧줄들을 지지대에 묶었다
+	PRINTFORML 잠시 후、%조사처리(CALLNAME:TARGET,"가")% 묶여있는 모습은 마치 한 마리의 나비가 거미줄에 걸려있는 듯했다
+	PRINTFORMW 다만 다른 점은、한 가닥의 굵은 밧줄로 된 손잡이가 %CALLNAME:TARGET%의 묶여있는 두 손목과 연결되어 있었다는 점이다
+	PRINTFORMW 또한、%조사처리(CALLNAME:TARGET,"는")% 두 다리가 쫙 벌려진 채 밧줄에 의해 공중에 떠있다
+	PRINTL
+	PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% %CALLNAME:PLAYER%의 지시에 따라 밧줄 손잡이를 잡아당겼다、이에 %조사처리(CALLNAME:TARGET,"가")% 위로 들어올려졌다
+	PRINTFORML %조사처리(CALLNAME:PLAYER,"는")% 그 와중에 %CALLNAME:TARGET%의 사타구니에 물건이 닿도록 조준한 채 바닥에 누워 자지를 송곳처럼 세웠다
+	PRINTFORMW 이내 %조사처리(CALLNAME:ASSI,"는")% 밧줄 손잡이를 잡고 있던 손에 힘을 뺐고、이로 인해 %조사처리(CALLNAME:TARGET,"가")% 다시 아래로 낙하했다
+	PRINTFORM 그로 인해 %CALLNAME:PLAYER%의 페니스가 
+	;처녀＋유아체형
+	IF TALENT:100 && TALENT:0
+		PRINTL 남자를 모르는 어린 균열에 삼켜져갔다……
+	;처녀
+	ELSEIF TALENT:0
+		PRINTL 남자를 모르는 비렬에 삼켜져갔다……
+	ELSE
+		PRINTFORMW %CALLNAME:TARGET%의 비렬에 삼켜져갔다……
+	ENDIF
+	PRINTL
+	PRINTFORMW 그렇게 %조사처리(CALLNAME:ASSI,"는")% 밧줄 손잡이를 잡아당겨 %조사처리(CALLNAME:TARGET,"를")% 위아래로 흔들었다
+ENDIF
+
+
+;-------------------------------------------------
 ;派生コマンド群
 ;500,513,514,３Ｐ
 ;-------------------------------------------------
@@ -4026,8 +4708,8 @@ ENDIF
 	CALL MESSAGE_COM505
 @MESSAGE_COM505
 ;전회と今回の조교者が同じで、전회の조교が기승위であり、抜かないフラグがある場合
-IF TFLAG:60 && PREVCOM == 66 && (TFLAG:전회の조교者 == PLAYER)
-	PRINTFORML 질 내에서 뽑지 않고 %타겟을()% 안아올려、밑에서부터 허리를 쳐올렸다……
+IF TFLAG:60 && PREVCOM == 66 && (TFLAG:전회の조교者 == PLAYER) && TEQUIP:주도권 == 0
+	PRINTFORML 질내에서 뽑지 않고 %타겟을()% 안아올려、밑에서부터 허리를 쳐올렸다……
 	PRINTFORM %타겟은()% 
 ;전회と今回の조교者が同じで、전회の조교が기승위애널であり、抜かないフラグがある場合
 ELSEIF TFLAG:60 && PREVCOM == 67 && (TFLAG:전회の조교者 == PLAYER)
@@ -4281,7 +4963,120 @@ PRINTFORMW %타겟과()% %CALLNAME:ASSI%의 성기의 사이에 페니스를 끼
 @MESSAGE_COM511
 PRINTFORMW %CALLNAME:TARGET%에게 %플레이어와()% %CALLNAME:ASSI%의 페니스를 동시에 봉사하도록 했다……
 
+;-------------------------------------------------
+;516,前立腺刺激
+;-------------------------------------------------
+@MESSAGE_COM516
+;前回が前立腺刺激
+IF PREVCOM == 516
+	;Ａ経験が120より多い
+	IF EXP:0 > 120
+		PRINTFORMW %CALLNAME:TARGET%はだらしなく口を開け、指の刺激を強請るように小刻みに腰を動かしている……
+	;Ａ経験が80より多い
+	ELSEIF EXP:0 > 80
+		PRINTFORMW %CALLNAME:TARGET%は指が天井をなぞる感覚に熱い吐息を吐いて悶えている……
+	;Ａ経験が50より多い
+	ELSEIF EXP:0 > 50
+		PRINTFORMW %CALLNAME:TARGET%は指のうごめく感触にうっとりとしている……
+	;Ａ経験が30より多い
+	ELSEIF EXP:0 > 30
+		PRINTFORMW %CALLNAME:TARGET%は指の感触を楽しんでいるようだ……
+	;Ａ経験が0より多い
+	ELSEIF EXP:0 > 0
+		PRINTFORMW %CALLNAME:TARGET%は指の感触に吐息を吐いて耐えている……
+	ELSE
+		PRINTFORMW %CALLNAME:TARGET%は異物が肛門を押し広げる感触に怯えている……
+	ENDIF
+;アナルバイブ挿入中＋欲情のPALAMLV3以上＋Ａ感覚LV3以上
+ELSEIF TEQUIP:13 && PALAM:6 >= PALAMLV:3 && ABL:5 >= 3
+	PRINTFORMW %CALLNAME:TARGET%の肛門はアナルバイブをくわえこんで放さない……
+;アナルバイブ挿入中＋欲情のPALAMLV3未満＋Ａ感覚LV3以上
+ELSEIF TEQUIP:13 && PALAM:6 < PALAMLV:3 && ABL:5 >= 3
+	PRINTFORMW %CALLNAME:TARGET%はアナルバイブの刺激に悶えている……
+;アナルバイブ挿入中＋欲情のPALAMLV3以上＋Ａ感覚LV3未満
+ELSEIF TEQUIP:13 && PALAM:6 >= PALAMLV:3 && ABL:5 < 3
+	PRINTFORMW %CALLNAME:TARGET%は頬を染めて時折声を上げている……
+;アナルバイブ挿入中＋欲情のPALAMLV3未満＋Ａ感覚LV3未満
+ELSEIF TEQUIP:13 && PALAM:6 < PALAMLV:3 && ABL:5 < 3
+	PRINTFORMW %CALLNAME:TARGET%は異物を受け入れ苦しそうな表情をしている……
+;アナルバイブ挿入中
+ELSEIF TEQUIP:13
+	PRINTFORMW %CALLNAME:PLAYER%は巧みにアナルバイブを操り、前立腺をなぶった……
+ELSE
+	PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:TARGET%の直腸まで挿し入れた指を曲げ、ザラついた天井を刺激した……
+ENDIF
 
+;-------------------------------------------------
+;506,挿入前立腺責め
+;-------------------------------------------------
+@MESSAGE_COM517
+IF PREVCOM == 67
+	PRINTFORML 騎乗前立腺責め
+	PRINTFORMW 
+	PRINTFORML %CALLNAME:TARGET%は上体を逸らし腰を浮かせ、脈打つペニスで自らの腸壁を擦っている…
+	IF EXP:1 <= 30
+		PRINTFORML %CALLNAME:TARGET%は戸惑いながらもその行為を続けている…
+		PRINTFORMW
+	ELSEIF EXP:1 <= 50
+		PRINTFORML %CALLNAME:TARGET%は掴んだ快感を追って腰をくねらせ、半勃ちのペニスを揺らしている…
+		PRINTFORMW
+	ELSEIF EXP:1 <= 80
+		PRINTFORML %CALLNAME:TARGET%は尻をすぼめ、小刻みに腰をしゃくって\@(TEQUIP:20) ? # 嬌声を上げて\@いる…
+		PRINTFORMW
+	ELSEIF EXP:1 <= 120
+		PRINTFORML %CALLNAME:TARGET%は後ろに手をついて、腰をガクガク揺らして快楽を貪っている…
+		PRINTFORML 反り返ったペニスの先端が、鋭角に前立腺を抉っている…
+		PRINTFORMW
+	ELSE
+		PRINTFORML %CALLNAME:TARGET%は漢の急所を、自らの腰の痙攣で思う存分刺激している…
+		PRINTFORML 結合部の震えが全身に広がるたび、鼻に抜けただらしのない声が漏れる…
+		PRINTFORMW
+	ENDIF
+
+ELSE
+	PRINTFORML 挿入前立腺責め
+	PRINTFORMW
+	;정상위애널 または 속옷비켜삽입애널
+	IF PREVCOM == 62 || PREVCOM == 73
+		PRINTFORML 腰をしゃくり、%CALLNAME:TARGET%の直腸内からペニスの付け根あたりを小刻みに擦りあげた…
+	;후배위애널
+	ELSEIF PREVCOM == 63
+		PRINTFORML 上体を屈め、%CALLNAME:TARGET%の直腸の手前を抉るように突き入れた…
+	;대면좌위애널
+	ELSEIF PREVCOM == 70
+		PRINTFORML 上体を離し、%CALLNAME:TARGET%のペニスを下腹に押しつけ、前立腺を擦りあげた…
+	;배면좌위애널
+	ELSEIF PREVCOM == 71
+		PRINTFORML %CALLNAME:TARGET%を持ち上げ揺するように動かし、前立腺を執拗に刺激した…
+	
+	;乱れ牡丹アナル
+	ELSEIF PREVCOM == 515
+		PRINTFORML %CALLNAME:PLAYER%は鏡の前でさらなる%CALLNAME:TARGET%の痴態を見せ付けるように、
+		PRINTFORML %CALLNAME:TARGET%を持ち上げ、揺するように直腸の手前を執拗に刺激した…
+	ENDIF
+	
+	IF EXP:1 <= 30
+		PRINTFORML %CALLNAME:TARGET%はむずがるように腰を揺すっている…
+		PRINTFORMW
+	ELSEIF EXP:1 <= 50
+		PRINTFORML %CALLNAME:TARGET%は\@(TEQUIP:20) ? 身体を揺らされながらも、# 口を結んで\@不慣れな快楽を堪えている…
+		PRINTFORMW
+	ELSEIF EXP:1 <= 80
+		PRINTFORML %CALLNAME:TARGET%は弱点を責められ、あまりの快感に目をぱちぱちさせている…
+		PRINTFORMW
+	ELSEIF EXP:1 <= 120
+		PRINTFORML %CALLNAME:PLAYER%は腰に力を入れ、前立腺を突いてやった…
+		PRINTFORML %CALLNAME:TARGET%は腰の奥から広がる感覚に\@(TEQUIP:20) ? 身体を熱く震わせ # 熱い吐息を漏らし\@ている…
+		PRINTFORMW
+	ELSEIF TEQUIP:20
+		PRINTFORML %CALLNAME:TARGET%は前立腺からの刺激に激しく頭を振って悶えている…
+		PRINTFORMW
+	ELSE
+		PRINTFORML %CALLNAME:TARGET%は喉を鳴らして涎を飲み、足指を丸めて頭を振って悶えている…
+		PRINTFORML まともに呼吸もできず、口をぱくつかせて声にならない喘ぎを繰り返す…
+		PRINTFORMW
+	ENDIF
+ENDIF
 
 ;-------------------------------------------------
 ;600,기초훈련
@@ -4289,7 +5084,7 @@ PRINTFORMW %CALLNAME:TARGET%에게 %플레이어와()% %CALLNAME:ASSI%의 페니
 @MESSAGE_COM600
 PRINTFORM %CALLNAME:TARGET%에게 
 IF TEQUIP:29 == 1
-	PRINT 폐 빌딩에서 
+	PRINT 폐빌딩에서 
 	IF RAND:5 == 0
 		PRINTW 근접 격투기술의 기초를 배웠다……
 	ELSEIF RAND:4 == 0
@@ -4369,6 +5164,7 @@ IF RESULT == 0
 	PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 악마 소환에 성공했다。
 	PRINTFORMW 서머너가 된 일에 의해、%조사처리(CALLNAME:TARGET,"는")% ［비전투원］를 잃고、
 	PRINTW ［서머너］［석세서］［도구지식］［건슬링거］를 얻었다。
+	CALL REMOVE_WILL_LEARN_MAGIC
 	CALL CHECK_COMBATANTING,TARGET
 ENDIF
 
@@ -4391,6 +5187,7 @@ IF RESULT == 0
 	PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 페르소나 소환에 성공했다。
 	PRINTFORMW 페르소나 사용자가 되면서、%조사처리(CALLNAME:TARGET,"는")% ［비전투원］[Ａ잠재]를 잃고、
 	PRINTW ［페르소나구사자］［도구지식］을 얻었다。
+	CALL REMOVE_WILL_LEARN_MAGIC
 	CALL CHECK_COMBATANTING,TARGET
 ENDIF
 
@@ -4411,17 +5208,17 @@ IF RESULT == 0
 	;PRINTL [3]いらない
 	;CALL INPUTINT,0,1,2,3
 	;SELECTCASE RESULT
-		;CASE 0
-			;TALENT:TARGET:서머너 = 1
-		;CASE 1
-			;TALENT:TARGET:석세서 = 1
-		;CASE 2
-			;TALENT:TARGET:도구지식 = 3
-		;CASE 3
-			;PRINTL
-			;PRINTL では、特に추가しません
-			;PRINTW	
-		;ENDSELECT
+	;	;CASE 0
+	;		;TALENT:TARGET:서머너 = 1
+	;	;CASE 1
+	;		;TALENT:TARGET:석세서 = 1
+	;	;CASE 2
+	;		;TALENT:TARGET:도구지식 = 3
+	;	;CASE 3
+	;		;PRINTL
+	;		;PRINTL では、特に추가しません
+	;		;PRINTW	
+	;ENDSELECT
 	TALENT:TARGET:비전투원 = 0
 	TALENT:TARGET:이능자 = 1
 	TALENT:TARGET:도구지식 = 1
@@ -4431,6 +5228,7 @@ IF RESULT == 0
 	PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 이능에 눈을 떴다。
 	PRINTFORMW 이능자가 된 것에 의해、%조사처리(CALLNAME:TARGET,"는")% ［비전투원］을 잃고、
 	PRINTW ［이능자］［도구지식］을 얻었다。
+	CALL APPRENTICE_AKUMA_LINKING
 	CALL CHECK_COMBATANTING,TARGET
 ENDIF
 
@@ -4453,6 +5251,8 @@ IF RESULT == 0
 	PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 전자파 조사를 마치고도 자아를 유지하고 있는 것 같다…
 	PRINTFORMW 아트마의 보유자가 된 것에 의해、%조사처리(CALLNAME:TARGET,"는")% ［비전투원］를 잃고、
 	PRINTW ［식노］［건슬링거］를 얻었다。
+	CALL REMOVE_WILL_LEARN_MAGIC
+	CALL APPRENTICE_AKUMA_LINKING
 	CALL CHECK_COMBATANTING,TARGET
 ENDIF
 
@@ -4462,17 +5262,20 @@ ENDIF
 ;-------------------------------------------------
 @MESSAGE_COM605
 DRAWLINE
-PRINTFORMW %조사처리(CALLNAME:TARGET,"를")% 데빌 시프터로 만들겠습니까?
+PRINTFORMW %조사처리(CALLNAME:TARGET,"를")% 데빌시프터로 만들겠습니까?
 CALL INPUT_YN,"Yes","No"
 IF RESULT == 0
 	TALENT:TARGET:비전투원 = 0
 	TALENT:TARGET:데빌시프터 = 1
+	TALENT:TARGET:도구지식 = 3
 	PRINTW ………
 	PRINTW ……
 	PRINTW …
 	PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 그 몸에 악마를 깃들이는 것에 성공했다。
 	PRINTFORMW 데빌시프터가 되면서、%조사처리(CALLNAME:TARGET,"는")% ［비전투원］을 잃고、
 	PRINTW ［데빌시프터］를 얻었다。
+	CALL REMOVE_WILL_LEARN_MAGIC
+	CALL APPRENTICE_AKUMA_LINKING
 	CALL CHECK_COMBATANTING,TARGET
 ENDIF
 
@@ -4485,14 +5288,61 @@ DRAWLINE
 PRINTFORMW %조사처리(CALLNAME:TARGET,"를")% 기계의 처녀로 만들겠습니까?
 CALL INPUT_YN,"Yes","No"
 IF RESULT == 0
+	;전투부문
 	TALENT:TARGET:비전투원 = 0
 	TALENT:TARGET:기계의처녀 = 1
+	TALENT:TARGET:이능자 = 1
+	;조교소질부문
+	TALENT:TARGET:Ｃ민감 = 0
+	TALENT:TARGET:Ｃ둔감 = 1
+	TALENT:TARGET:Ｂ민감 = 0
+	TALENT:TARGET:Ｂ둔감 = 1
+	TALENT:TARGET:젖기쉬움 = 0
+	TALENT:TARGET:젖기어려움 = 1
+	TALENT:TARGET:아픔에약함 = 0
+	TALENT:TARGET:아픔에강함 = 1
 	PRINTW ………
 	PRINTW ……
 	PRINTW …
 	PRINTFORMW %CALLNAME:TARGET%의 개조수술은 무사히 성공했다。
 	PRINTFORMW 개조인간이 되면서、%조사처리(CALLNAME:TARGET,"는")% ［비전투원］을 잃고、
-	PRINTW ［기계의처녀］를 얻었다。
+	PRINTW ［기계의처녀］［이능자］를 얻었다。
+	PRINTW 그리고 ［Ｃ둔감］［Ｂ둔감］［젖기어려움］［아픔에강함］소질을 얻었다。
+	DRAWLINE
+	PRINTL 추가 부품을 선택할 수 있습니다(초기 스킬)。
+	PRINTL ※주의: 초기 스킬을 가진 캐릭터의 경우는 덮어쓰기가 될 수도 있습니다。
+	PRINTL 
+	PRINTL [0] 간이 치료 키트
+	PRINTL [1] 격투용 부품
+	PRINTL [2] 증가 장갑
+	PRINTL [3] 추가부품은 필요없다
+	CALL INPUTINT,0,1,2,3
+	SELECTCASE RESULT
+		CASE 0
+		;간이 치료 키트
+			ABL:TARGET:스킬1 = 401 ;디아
+			ABL:TARGET:스킬2 = 408 ;파트라
+			ABL:TARGET:스킬3 = 410 ;포즈무디
+			PRINTW ［디아］［파트라］［포즈무디］를 기억했다。
+		CASE 1
+		;격투용 부품
+			ABL:TARGET:스킬1 = 204 ;돌려차기
+			ABL:TARGET:스킬2 = 301 ;할퀴기
+			ABL:TARGET:스킬3 = 939 ;스탠샷
+			PRINTW ［돌려차기］［파트라］［스탠샷］을 기억했다。
+		CASE 2
+		;증가 장갑
+			ABL:TARGET:스킬1 = 2400 ;일할의활천
+			ABL:TARGET:스킬2 = 2401 ;이할의활천
+			ABL:TARGET:스킬3 = 2005 ;자폭
+			PRINTW ［일할의활천］［이할의활천］［자폭］을 기억했다。
+		CASE 3
+		;추가부품은 필요없다
+			PRINTL
+			PRINTL 그럼, 딱히 추가하지 않겠습니다
+			PRINTL
+	ENDSELECT
+	CALL REMOVE_WILL_LEARN_MAGIC
 	CALL CHECK_COMBATANTING,TARGET
 ENDIF
 
@@ -6828,7 +7678,7 @@ IF ABL:B:8 >= 5 && !TALENT:35
 		CASE 6
 			PRINTFORML %조사처리(CALLNAME:B,"는")% 조용하게 숨소리를 내고 있는 %조사처리(CALLNAME:E,"를")% 갖고 싶어하듯 응시하고 있었지만 
 			PRINTFORML 이윽고 자신의 몸에 손을 뻗어, 옷을 내리고 만지작 거리기 시작했다…
-			PRINTFORM 자고잇는 %CALLNAME:E%의 눈 앞으로 
+			PRINTFORM 자고있는 %CALLNAME:E%의 눈 앞으로 
 	ENDSELECT
 ELSE
 	SELECTCASE RAND:6
@@ -7066,10 +7916,22 @@ ENDIF
 ;황색사탕（임신時の産卵）を사용時の이벤트구상
 @EVENT_MESSAGE_10
 PRINTFORML 황색사탕을 삼킨 %조사처리(CALLNAME,"는")% 급격한 몸의 변화를 호소했다
-PRINTFORML 임신한 배인 채로 오랫동안 괴로워하며 뒹굴렀지만、
-PRINTFORML Ｍ자 모양으로 다리를 벌린 \@ TALENT:남자 == 0 ? 질구 # 항문\@에서 사랑스러운 형태의 알이 얼굴이 보이는가 싶더니, 
-PRINTFORML 대량의 양수와 함께 단번에 쏟아졌다
+;ふたごちゃんパッチがオンかつ多胎だと少しだけメッセージ変更
+IF FLAG:ふたごちゃんフラグ > 0 && CFLAG:TARGET:今回受胎人数 > 5
+	PRINTFORML 이상하게 불룩한 임신부의 배를 안고、이제는 몸부림조차 못하고 오랫동안 괴로워하다가、
+	PRINTFORML Ｍ로 다리를 벌린 \@ TALENT:남자 == 0 ? 질구 # 국화\@에서 모양이 삐둘어진 알이 얼굴을 보인다 싶더니
+	PRINTFORML 많은 양의 양수와 함께、몇 개의 알이 한꺼번에 쏟아졌다
+ELSEIF FLAG:ふたごちゃんフラグ > 0 && CFLAG:TARGET:今回受胎人数 > 1
+	PRINTFORML 잔뜩 불룩해진 임신부의 배를 안고、이제는 몸부림조차 못하고 오랫동안 괴로워하다가、
+	PRINTFORML Ｍの字に開脚した\@ TALENT:남자 == 0 ? 질구 # 국화\@에서 모양이 삐둘어진 알이 얼굴을 보인다 싶더니
+	PRINTFORML 많은 양의 양수와 함께、알 몇 개가 한꺼번에 쏟아졌다
+ELSE
+	PRINTFORML 임신한 배인 채로 오랫동안 괴로워하며 뒹굴렀지만、
+	PRINTFORML Ｍ자 모양으로 다리를 벌린 \@ TALENT:남자 == 0 ? 질구 # 항문\@에서 사랑스러운 형태의 알이 얼굴이 보이는가 싶더니, 
+	PRINTFORML 대량의 양수와 함께 단번에 쏟아졌다
+ENDIF
 PRINTFORMW %조사처리(CALLNAME,"는")% 고통스러운 나머지 소리도 내지 못하는 것 같다……
+
 
 ;임신発깨달음時の이벤트구상
 ;임신대상をTARGETに격납し、父親は奴隷はV、조수はWとする
@@ -7123,7 +7985,13 @@ ELSE
 			IF 함락(TARGET)
 				IF RESULTS == "연모"
 					IF FAVORITE_1(TARGET) == MASTER
-						PRINTFORMW %타겟은()% 당혹스러워 하면서도 %CALLNAME:MASTER%의 아이를 가진 것에 대한 기쁨에 얼굴 근육을 느슨하게 하고 있다……
+						;双子以上の場合
+						IF FLAG:ふたごちゃんフラグ > 0 && CFLAG:TARGET:今回受胎人数 > 1
+							PRINTFORMW %조사처리(CALLNAME:TARGET,"는")% 당황하고 있었지만、%CALLNAME:MASTER%의 아이를 몇 명이나 갖게 된 기쁨에 표정이 부드러워졌다……
+						ELSE
+							PRINTFORMW %타겟은()% 당혹스러워 하면서도 %CALLNAME:MASTER%의 아이를 가진 것에 대한 기쁨에 얼굴 근육을 느슨하게 하고 있다……
+						ENDIF
+
 					ELSE
 						PRINTFORMW %타겟은()% %CSTR:TARGET:父親명칭%의 아이를 가진 것을 알고、표정이 흐려졌다……
 						PRINTFORMW 확실하게 말은 하지 않지만 불만이 있는 모양이다……
@@ -7257,7 +8125,16 @@ PRINTL
 @EVENT_MESSAGE_12
 ;연모か친애で、父親がマ스타の場合
 IF (TALENT:3 || TALENT:6) && CFLAG:111 == NO:MASTER
-	PRINTFORMW %타겟은()% 막 태어난 갓난아기를 받고는 상냥하게 안아들어 모유를 먹이기 시작했다……
+	;ふたごまでなら標準的な腕やおパイが足りるけども、ということで三つ子以上だとちょっと困る描写に
+	IF FLAG:ふたごちゃんフラグ > 0 && CFLAG:TARGET:今回受胎人数 > 2
+		IF RAND:2 == 0
+			PRINTFORMW 多胎児出産によってひどく消耗した%CALLNAME:TARGET%は、ベビーベッドに並べられる我が子を見て、優しく微笑んだ……
+		ELSE
+			PRINTFORMW %CALLNAME:TARGET%は産まれたばかりの赤ん坊を受け取ろうとして、抱えきれない、と笑いながら言った……
+		ENDIF
+	ELSE
+		PRINTFORMW %타겟은()% 막 태어난 갓난아기를 받고는 상냥하게 안아들어 모유를 먹이기 시작했다……
+	ENDIF
 ;母親がマスターで、父親が연모か친애の場合
 ELSEIF TARGET == MASTER && F != -1
 		IF (TALENT:F:3 || TALENT:F:6)
@@ -7275,7 +8152,7 @@ ELSE
 	PRINTFORMW %타겟은()% 어딘가 그늘진 표정을 지으면서도 갓난아기를 받아들고는 모유를 먹이기 시작했다……
 ENDIF
 
-;育児室での이벤트구상
+;육아실에서의 이벤트구상
 @EVENT_MESSAGE_13
 ;まだ출산前の場合
 IF TALENT:153
@@ -7294,7 +8171,15 @@ IF TALENT:153
 	ENDIF
 ;연모か친애で父親がMASTER
 ELSEIF (TALENT:3 || TALENT:6) && CFLAG:111 == NO:MASTER
-	IF TIME < 2
+	;忙しい！！！！！ってなる
+	IF FLAG:ふたごちゃんフラグ > 0 && CFLAG:TARGET:今回受胎人数 > 2 && RAND:2 == 0
+		PRINTFORML %조사처리(CALLNAME:TARGET,"는")% %조사처리(CALLNAME:MASTER,"가")% 방에 들어온 것을 바로 눈치챘지만、
+		PRINTFORML 막 보채는 갓난아기를 달래고 있어、손을 뗄 수 없는 것 같다
+		PRINTFORML ……%조사처리(CALLNAME:MASTER,"가")% 들어와서인지、잠든 아기가 보채기 시작했고、
+		PRINTFORML 그로 인해 %조사처리(CALLNAME:TARGET,"가")% 어르고 있는 아기가 또 보채기 시작했다……
+		PRINTFORML %조사처리(CALLNAME:MASTER,"과")% %조사처리(CALLNAME:TARGET,"는")%、두더지 잡기처럼 갓난아기 돌보기에 급급했지만、
+		PRINTFORMW 가슴속의 포근함은 얻었다……
+	ELSEIF TIME < 2
 		PRINTFORM %조사처리(CALLNAME:MASTER,"가")% 방에 들어온 것을 눈치채자 
 		PRINTFORML %타겟은()% 만면에 웃음을 띠고 맞이했다
 		PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 그 뒤로 잠시 동안 가족간의 시간을 즐겼다
@@ -7509,7 +8394,7 @@ ELSE
 		ENDIF
 		SELECTCASE RAND:3
 			CASE 1
-				PRINTFORMW %CALLNAME:TARGET%はほっとした様子で観客の声援に応えていた……
+				PRINTFORMW %CALLNAME:TARGET%은 안심한 모습으로 관객의 성원에 보답하고 있었다……
 			CASE 2
 				IF ITEM:라이브하우스 == 1 || ITEM:무도관 == 1
 					PRINTFORMW 포켓에 들어간 %타겟은()% 느꼈던 반응을 생각하면서 여운에 잠긴 모양이다……
@@ -7518,7 +8403,7 @@ ELSE
 				PRINTFORMW %타겟은()% 노래가 끝난 후에도 기분이 고양되었는지、조금 전부터 계속 콧노래를 부르고 있다……
 		ENDSELECT
 	ELSE
-		PRINTL 、とりあえず실패せずに済んだようだ
+		PRINTL 、일단은 실패하지는 않은것 같다
 		PRINTFORM %타겟은()% 긴장하고 있었는지、
 		IF ITEM:무도관 == 1
 			PRINTW 무대의 포켓에 들어가자마자 물통의 물을 단번에 흘려넣었다……
@@ -7606,7 +8491,7 @@ ENDIF
 @EVENT_MESSAGE_43
 CALL EVENT_MESSAGE_STRIP
 
-;オープン/クローズ・オブ・オッパイ時の이벤트메시지
+;가슴팍열기 닫기의 이벤트메시지
 @EVENT_MESSAGE_44
 #LOCALSIZE 1
 LOCAL = (TEQUIP:유방노출 > -1 ? TEQUIP:유방노출 # TEQUIP:유두노출)
@@ -7624,10 +8509,10 @@ IF TEQUIP:가슴앞열림
 		ELSEIF (TEQUIP:가슴구조 & 4) && (TEQUIP:가슴구조 & 8)
 			PRINTFORM %CLOTHESNAMEF(TARGET,LOCAL)%
 			IF  RAND:2 == 0
-				PRINTFORM の가슴元をずり下げると、%CALLNAME%の
+				PRINTFORM 의 앞가슴을 끌어내리자、%CALLNAME%의
 				CFLAG:衣装ずらし方向 = 1
 			ELSE
-				PRINTFORM をたくし上げると、%CALLNAME%の
+				PRINTFORM 을 걷어올리자、%CALLNAME%의
 				CFLAG:衣装ずらし方向 = 2
 			ENDIF
 		ELSEIF TEQUIP:가슴구조 & 4
@@ -7693,7 +8578,7 @@ IF TEQUIP:가슴앞열림
 			ENDIF
 			PRINTFORM 걷어올리자 %CALLNAME%의 
 		ELSEIF TEQUIP:가슴구조 & 16
-			PRINTFORM %CALLNAME%が%조사처리(CLOTHESNAMEF(TARGET,LOCAL),"를")% 
+			PRINTFORM %조사처리(CALLNAME,"가")% %조사처리(CLOTHESNAMEF(TARGET,LOCAL),"를")% 
 			IF TALENT:음란 || TALENT:창부 || (ABL:노출증 >= 3 && !TALENT:부끄럼쟁이)
 				PRINT 과시하듯이 
 			ELSEIF TALENT:부끄럼쟁이

@@ -12,6 +12,9 @@
 ;	002		2011/01/15			P					風呂場プ레이・야외조교を던전内조교時は実行能に변경
 ;	003		2011/02/01			P					노래연습と회화を입が使えないと能に변경
 ;	004		2016/10/23			JK好き				노래연습と회화を입がなくても使えるように변경
+;	005		2020/09/06		MkjX					触手系コマンドを修正
+;	006		2021/01/13								158,159追加？
+;	006		2021/02/07		J>s!UL@1				A系派生コマンド追加
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;-------------------------------------------------
 ;0番台,０．애무계コマンド
@@ -215,7 +218,7 @@ IF TALENT:0 && ASSIPLAY
 		RETURN 0
 ENDIF
 ;下着をつけてるとダメ
-SIF (TEQUIP:음순노출 != -1 && TEQUIP:Ｃ촉각 == 0 )|| (TEQUIP:유방노출 != -1 && TEQUIP:유방촉각 == 0)
+SIF (TEQUIP:음순노출 != -1 && TEQUIP:Ｃ촉각 == 0 ) || (TEQUIP:유방노출 != -1 && TEQUIP:유방촉각 == 0)
 	RETURN 0
 
 SIF !USE_HAND(TARGET) && !IS_BEAST(TARGET)
@@ -381,13 +384,13 @@ RETURN 1
 
 @CHECK_COM_ABLE29
 
-;비디오감상
-;事前に奴隷を촬영したビデオが無いとダメ
+;ビデオ鑑賞
+;事前に奴隷を撮影したビデオが無いとダメ
 SIF CFLAG:20 == 0
 	RETURN 0
 
 ;함락済みじゃないとダメ
-SIF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+SIF !함락(TARGET)
 	RETURN 0
 RETURN 1
 
@@ -1020,6 +1023,22 @@ SIF !PLAY_ANALSEX(PLAYER,TARGET)
 RETURN 1
 
 @CHECK_COM_ABLE72
+#DIM DYNAMIC COMPARE1 ;비교변수
+#DIM DYNAMIC COMPARE2 ;비교변수
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (전신속옷)
+;참고 - ビキニ 유형 리턴값(2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:전신속옷}
+COMPARE1 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (속옷（하）)
+;참고 - ビキニ 유형 리턴값(2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:속옷（하）}
+COMPARE2 = RESULT
+
+;젖힐수 있는 전신속옷 혹은 속옷 유형이 아닐 경우, 안됨
+SIF !(COMPARE1 == 2 || COMPARE2 == 2)
+	RETURN 0
 
 ;속옷비켜삽입実行판정
 SIF !USE_VAGINA(TARGET,0,2)
@@ -1091,7 +1110,7 @@ SIF TEQUIP:25
 SIF TEQUIP:41
 	RETURN 0
 
-;목욕탕플레이中は플레이매트が無いとダメ
+;목욕탕플레이중에는 플레이매트가 없으면 안됨
 IF TEQUIP:31
 	SIF !EXIST_ITEM(20)
 		RETURN 0
@@ -1099,9 +1118,24 @@ ENDIF
 RETURN 1
 
 @CHECK_COM_ABLE73
+#DIM DYNAMIC COMPARE1 ;비교변수
+#DIM DYNAMIC COMPARE2 ;비교변수
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (전신속옷)
+;참고 - ビキニ 유형 리턴값(2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:전신속옷}
+COMPARE1 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (속옷（하）)
+;참고 - ビキニ 유형 리턴값(2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:속옷（하）}
+COMPARE2 = RESULT
+
+;젖힐수 있는 전신속옷 혹은 속옷 유형이 아닐 경우, 안됨
+SIF !(COMPARE1 == 2 || COMPARE2 == 2)
+	RETURN 0
 
 ;속옷비켜삽입애널実行판정
-
 SIF !USE_ANUS(TARGET,0,2)
 	RETURN 0
 
@@ -1197,11 +1231,12 @@ SIF !USE_HAND(TARGET) && !IS_BEAST(TARGET)
 ;촉수조교中はダメ
 SIF TEQUIP:25
 	RETURN 0
-RETURN 1
-
 ;삼각목마騎乗中はダメ
 SIF TEQUIP:41
 	RETURN 0
+RETURN 1
+
+
 
 @CHECK_COM_ABLE81
 
@@ -2326,13 +2361,53 @@ SIF TEQUIP:41
 RETURN 1
 
 @CHECK_COM_ABLE156
-;음뇨実行판정
+;飲尿実行判定
 SIF !USE_PENIS(PLAYER)
 	RETURN 0
 SIF !USE_MOUTH(TARGET)
 	RETURN 0
-;촉수조교中はダメ
+;触手調教中はダメ
 SIF TEQUIP:25
+	RETURN 0
+RETURN 1
+
+@CHECK_COM_ABLE158
+
+;カテーテル実行判定
+;触手調教中はダメ
+SIF TEQUIP:25
+	RETURN 0
+
+;射精止め実行中はダメ
+SIF TEQUIP:42
+	RETURN 0
+
+;解除はいつでも可能
+SIF TEQUIP:43
+	RETURN 1
+
+;アイテムを持っているか、アイテムなし設定でないとダメ
+SIF !EXIST_ITEM(31)
+	RETURN 0
+RETURN 1
+
+@CHECK_COM_ABLE159
+
+;尿道プラグ実行判定
+;触手調教中はダメ
+SIF TEQUIP:25
+	RETURN 0
+
+;射精止め実行中はダメ
+SIF TEQUIP:42
+	RETURN 0
+
+;解除はいつでも可能
+SIF TEQUIP:44
+	RETURN 1
+
+;アイテムを持っているか、アイテムなし設定でないとダメ
+SIF !EXIST_ITEM(32)
 	RETURN 0
 RETURN 1
 
@@ -2383,6 +2458,11 @@ SIF TEQUIP:25 == 0
 ;촉수관장中は
 SIF TEQUIP:21
 	RETURN 0
+;---- EDIT 005 触手系コマンドを修正 ADD START ----
+;アナル極太触手中は不可
+SIF TEQUIP:22
+	RETURN 0
+;---- EDIT 005 触手系コマンドを修正 ADD END   ----
 RETURN 1
 
 @CHECK_COM_ABLE163
@@ -2438,6 +2518,11 @@ SIF TEQUIP:25 == 0
 ;애널촉수中は
 SIF TEQUIP:14
 	RETURN 0
+;---- EDIT 005 触手系コマンドを修正 ADD START ----
+;アナル極太触手中は不可
+SIF TEQUIP:22
+	RETURN 0
+;---- EDIT 005 触手系コマンドを修正 ADD END   ----
 RETURN 1
 
 @CHECK_COM_ABLE168
@@ -2461,6 +2546,40 @@ SIF TEQUIP:25 == 0
 SIF !HAVE_PENIS(TARGET)
 	RETURN 0
 RETURN 1
+
+;---- EDIT 005 触手系コマンドを修正 ADD START ----
+@CHECK_COM_ABLE176
+
+;アナル極太触手
+SIF TEQUIP:25 == 0
+	RETURN 0
+
+;アナル触手中は不可
+SIF TEQUIP:14
+	RETURN 0
+;触手浣腸中は不可
+SIF TEQUIP:21
+	RETURN 0
+RETURN 1
+
+
+@CHECK_COM_ABLE177
+
+;触手暴走
+SIF TEQUIP:25 == 0
+	RETURN 0
+
+RETURN 1
+
+@CHECK_COM_ABLE178
+
+;触手暴走させる
+SIF TEQUIP:25 == 0
+	RETURN 0
+
+RETURN 1
+;---- EDIT 005 触手系コマンドを修正 ADD END   ----
+
 
 ;-------------------------------------------------
 ;180番台,９．특수커맨드
@@ -2514,15 +2633,26 @@ SIF TEQUIP:33
 RETURN 1
 
 @CHECK_COM_ABLE183
-
-;ビデオ촬영実行판정
-;해제はいつでも가능
+;비디오 촬영 실행판정
+;해제는 언제든지 가능
 SIF TEQUIP:28
 	RETURN 1
 ;카메라とテープの아이템を持っているか、아이템なし설정でないとダメ
 SIF (ITEM:18 == 0 || ITEM:43 == 0) && NOITEM == 0
 	RETURN 0
-RETURN 1
+IF TEQUIP:주도권
+;여자주도 -> 반드시 조수가 있어야 한다
+	IF ASSI >= 0
+	;조수가 있는 경우 -> 촬영가능
+		RETURN 1
+	ELSE
+	;조수 없음 -> 촬영불가능
+		RETURN 0
+	ENDIF
+ELSE
+;남자주도 -> 조수 시키거나, 조수가 없더라도 자기가 찍으면 된다
+	RETURN 1
+ENDIF
 
 @CHECK_COM_ABLE184
 
@@ -2648,7 +2778,6 @@ SIF TEQUIP:33
 RETURN 1
 
 @CHECK_COM_ABLE187
-
 ;목욕탕플레이実行판정
 ;해제はいつでも가능
 SIF TEQUIP:31
@@ -3206,11 +3335,58 @@ SIF ( !PLAY_FELLA(TARGET,MASTER) || !PLAY_FELLA(TARGET,ASSI) )
 SIF TEQUIP:33
 	RETURN 0
 
-;촉수조교中はダメ
+;触手調教中はダメ
+SIF TEQUIP:25
+	RETURN 0
+;三角木馬騎乗中はダメ
+SIF TEQUIP:41
+	RETURN 0
+
+RETURN 1
+
+@CHECK_COM_ABLE516
+
+;前立腺刺激
+;남자・男の娘じゃないとダメ
+SIF HAVE_VAGINA(TARGET)
+	RETURN 0
+SIF TFLAG:전회の조교者 != PLAYER
+	RETURN 0
+;潤滑不足で、従順3以下・レズっ気3以下のASSIの場合アナル愛撫はできない（サドならＯＫ）
+IF PALAM:4 < PALAMLV:2 && ASSIPLAY
+	SIF (ABL:ASSI:0 <= 3 || ABL:ASSI:11 <= 3) && TALENT:ASSI:83 == 0
+		RETURN 0
+ENDIF
+
+;下半身下着をつけている、スカート以外の下半身上着を履いている、下の空いてない全身上着を着ているとダメ
+SIF TEQUIP:TARGET:음순노출 != -1
+	RETURN 0
+
+;主人の技巧が3以下はだめ
+SIF ABL:PLAYER:2 < 3
+	RETURN 0
+
+;触手調教中はダメ
 SIF TEQUIP:25
 	RETURN 0
 ;삼각목마騎乗中はダメ
 SIF TEQUIP:41
+	RETURN 0
+
+RETURN 1
+
+@CHECK_COM_ABLE517
+
+;挿入前立腺責め
+;남자・男の娘じゃないとダメ
+SIF HAVE_VAGINA(TARGET)
+	RETURN 0
+
+;技巧3未満はダメ
+SIF ABL:PLAYER:2 < 3
+	RETURN 0
+
+SIF !PLAY_ANALSEX(PLAYER,TARGET)
 	RETURN 0
 
 RETURN 1
@@ -3220,10 +3396,10 @@ RETURN 1
 ;-------------------------------------------------
 @CHECK_COM_ABLE600
 ;함락済みじゃないとダメ
-SIF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+SIF !함락(TARGET)
 	RETURN 0
 ;비전투원じゃないとダメ
-SIF TALENT:230 == 0
+SIF TALENT:비전투원 == 0
 	RETURN 0
 ;전투소질を持っているとダメ
 ;SIF TALENT:220 == 1 && TALENT:221 == 1 && TALENT:222 == 1 && TALENT:223 == 1 && TALENT:224 == 1 && TALENT:225 == 1 && TALENT:226 ==1 && TALENT:227 ==1 && TALENT:228 ==1 && TALENT:229 ==1 && TALENT:232 ==1
@@ -3258,31 +3434,32 @@ SIF TEQUIP:41
 RETURN 1
 
 @CHECK_COM_ABLE601
-;함락済みじゃないとダメ
-SIF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+;시험소환
+;함락된 것이 아니면 안돼
+SIF !함락(TARGET)
 	RETURN 0
-;비전투원じゃないとダメ
-SIF TALENT:230 == 0
+;비전투원이 아니면 안돼
+SIF TALENT:비전투원 == 0
 	RETURN 0
-;전투소질を持っているとダメ
-SIF TALENT:TARGET:220 || TALENT:TARGET:221 || TALENT:TARGET:222 || TALENT:TARGET:223 || TALENT:TARGET:224 || TALENT:TARGET:225 || TALENT:TARGET:226 || TALENT:TARGET:227 || TALENT:TARGET:228 || TALENT:TARGET:229 || TALENT:TARGET:232
+;전투소질을 가지고 있으면 안돼
+SIF TALENT:TARGET:석세서 || TALENT:TARGET:데빌시프터 || TALENT:TARGET:이능자 || TALENT:TARGET:페르소나구사자 || TALENT:TARGET:도구지식 || TALENT:TARGET:아이템숙련 || TALENT:TARGET:건슬링거 || TALENT:TARGET:쿠즈노하 || TALENT:TARGET:식노 || TALENT:TARGET:달인 || TALENT:TARGET:기계의처녀
 	RETURN 0
-;훈련경험が100미만じゃできない
-SIF EXP:65 < 100
+;훈련경험이 300미만이면 안돼
+SIF EXP:65 < 300
 	RETURN 0
-;아이마스크사용중は
+;아이마스크사용중은 안돼
 SIF TEQUIP:18
 	RETURN 0
-;밧줄사용중は
+;밧줄사용중은 안돼
 SIF TEQUIP:19
 	RETURN 0
-;촉수조교中はダメ
+;촉수조교중은 안돼
 SIF TEQUIP:25
 	RETURN 0
-;야외はダメ
+;야외는 안돼
 SIF TEQUIP:29
 	RETURN 0
-;목욕탕플레이中はダメ
+;목욕탕플레이중은 안돼
 SIF TEQUIP:31
 	RETURN 0
 ;삼각목마騎乗中はダメ
@@ -3291,16 +3468,17 @@ SIF TEQUIP:41
 RETURN 1
 
 @CHECK_COM_ABLE602
-;함락済みじゃないとダメ
-SIF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+;그림자빼기
+;함락된 것이 아니면 안돼
+SIF !함락(TARGET)
 	RETURN 0
-;비전투원じゃないとダメ
-SIF TALENT:230 == 0
+;비전투원이 아니면 안돼
+SIF TALENT:비전투원 == 0
 	RETURN 0
-;A潜在じゃないとダメ
+;A잠재가 아니면 안돼
 SIF TALENT:233 == 0
 	RETURN 0
-;조교者が페르소나구사자じゃないとダメ
+;조교자 혹은 조수가 페르소나구사자가 아니면 안돼
 IF ASSIPLAY
 	SIF TALENT:ASSI:223 == 0
 		RETURN 0
@@ -3308,11 +3486,11 @@ ELSE
 	SIF TALENT:MASTER:223 == 0
 		RETURN 0
 ENDIF
-;전투소질を持っているとダメ
-SIF TALENT:TARGET:220 || TALENT:TARGET:221 || TALENT:TARGET:222 || TALENT:TARGET:223 || TALENT:TARGET:224 || TALENT:TARGET:225 || TALENT:TARGET:226 || TALENT:TARGET:227 || TALENT:TARGET:228 || TALENT:TARGET:229 || TALENT:TARGET:232
+;전투소질을 가지고 있으면 안돼
+SIF TALENT:TARGET:석세서 || TALENT:TARGET:데빌시프터 || TALENT:TARGET:이능자 || TALENT:TARGET:페르소나구사자 || TALENT:TARGET:도구지식 || TALENT:TARGET:아이템숙련 || TALENT:TARGET:건슬링거 || TALENT:TARGET:쿠즈노하 || TALENT:TARGET:식노 || TALENT:TARGET:달인 || TALENT:TARGET:기계의처녀
 	RETURN 0
-;훈련경험が100미만じゃできない
-SIF EXP:65 < 100
+;훈련경험이 300미만이면 안돼
+SIF EXP:65 < 300
 	RETURN 0
 ;착유기사용중は
 SIF TEQUIP:17
@@ -3347,17 +3525,18 @@ SIF TEQUIP:41
 RETURN 1
 
 @CHECK_COM_ABLE603
+;깨달음을 원조
 ;함락済みじゃないとダメ
-SIF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+SIF !함락(TARGET)
 	RETURN 0
 ;비전투원じゃないとダメ
-SIF TALENT:230 == 0
+SIF TALENT:비전투원 == 0
 	RETURN 0
 ;전투소질を持っているとダメ
-SIF TALENT:TARGET:220 || TALENT:TARGET:221 || TALENT:TARGET:222 || TALENT:TARGET:223 || TALENT:TARGET:224 || TALENT:TARGET:225 || TALENT:TARGET:226 || TALENT:TARGET:227 || TALENT:TARGET:228 || TALENT:TARGET:229 || TALENT:TARGET:232
+SIF TALENT:TARGET:석세서 || TALENT:TARGET:데빌시프터 || TALENT:TARGET:이능자 || TALENT:TARGET:페르소나구사자 || TALENT:TARGET:도구지식 || TALENT:TARGET:아이템숙련 || TALENT:TARGET:건슬링거 || TALENT:TARGET:쿠즈노하 || TALENT:TARGET:식노 || TALENT:TARGET:달인 || TALENT:TARGET:기계의처녀
 	RETURN 0
-;훈련경험が100미만じゃできない
-SIF EXP:65 < 100
+;훈련경험이 300미만이면 안돼
+SIF EXP:65 < 300
 	RETURN 0
 ;착유기사용중は
 SIF TEQUIP:17
@@ -3392,20 +3571,21 @@ SIF TEQUIP:41
 RETURN 1
 
 @CHECK_COM_ABLE604
+;바이러스 조사
 ;함락済みじゃないとダメ
-SIF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+SIF !함락(TARGET)
 	RETURN 0
 ;비전투원じゃないとダメ
-SIF TALENT:230 == 0
+SIF TALENT:비전투원 == 0
 	RETURN 0
 ;전투소질を持っているとダメ
-SIF TALENT:TARGET:220 || TALENT:TARGET:221 || TALENT:TARGET:222 || TALENT:TARGET:223 || TALENT:TARGET:224 || TALENT:TARGET:225 || TALENT:TARGET:226 || TALENT:TARGET:227 || TALENT:TARGET:228 || TALENT:TARGET:229 || TALENT:TARGET:232
+SIF TALENT:TARGET:석세서 || TALENT:TARGET:데빌시프터 || TALENT:TARGET:이능자 || TALENT:TARGET:페르소나구사자 || TALENT:TARGET:도구지식 || TALENT:TARGET:아이템숙련 || TALENT:TARGET:건슬링거 || TALENT:TARGET:쿠즈노하 || TALENT:TARGET:식노 || TALENT:TARGET:달인 || TALENT:TARGET:기계의처녀
 	RETURN 0
 ;변신先を持ってないとダメ
 SIF TALENT:234 == 0
 	RETURN 0
-;훈련경험が100미만じゃできない
-SIF EXP:65 < 100
+;훈련경험이 300미만이면 안돼
+SIF EXP:65 < 300
 	RETURN 0
 ;착유기사용중は
 SIF TEQUIP:17
@@ -3440,17 +3620,18 @@ SIF TEQUIP:41
 RETURN 1
 
 @CHECK_COM_ABLE605
+;영매실험
 ;함락済みじゃないとダメ
-SIF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+SIF !함락(TARGET)
 	RETURN 0
 ;비전투원じゃないとダメ
-SIF TALENT:230 == 0
+SIF TALENT:비전투원 == 0
 	RETURN 0
 ;전투소질を持っているとダメ
-SIF TALENT:TARGET:220 || TALENT:TARGET:221 || TALENT:TARGET:222 || TALENT:TARGET:223 || TALENT:TARGET:224 || TALENT:TARGET:225 || TALENT:TARGET:226 || TALENT:TARGET:227 || TALENT:TARGET:228 || TALENT:TARGET:229 || TALENT:TARGET:232
+SIF TALENT:TARGET:석세서 || TALENT:TARGET:데빌시프터 || TALENT:TARGET:이능자 || TALENT:TARGET:페르소나구사자 || TALENT:TARGET:도구지식 || TALENT:TARGET:아이템숙련 || TALENT:TARGET:건슬링거 || TALENT:TARGET:쿠즈노하 || TALENT:TARGET:식노 || TALENT:TARGET:달인 || TALENT:TARGET:기계의처녀
 	RETURN 0
-;훈련경험が100미만じゃできない
-SIF EXP:65 < 100
+;훈련경험이 300미만이면 안돼
+SIF EXP:65 < 300
 	RETURN 0
 ;착유기사용중は
 SIF TEQUIP:17
@@ -3485,21 +3666,22 @@ SIF TEQUIP:41
 RETURN 1
 
 @CHECK_COM_ABLE606
-;見た눈が乙女じゃないとダメ
+;개조수술
+;생김새가 여자여야 한다(즉, 여자나 오토코노코이면 가능)
 ;SIF TALENT:MASTER:140 && TALENT:MASTER:157 == 0
 SIF TALENT:140 == 1
 	RETURN 0
 ;함락済みじゃないとダメ
-SIF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0
+SIF !함락(TARGET)
 	RETURN 0
 ;비전투원じゃないとダメ
-SIF TALENT:230 == 0
+SIF TALENT:비전투원 == 0
 	RETURN 0
 ;전투소질を持っているとダメ
-SIF TALENT:TARGET:220 || TALENT:TARGET:221 || TALENT:TARGET:222 || TALENT:TARGET:223 || TALENT:TARGET:224 || TALENT:TARGET:225 || TALENT:TARGET:226 || TALENT:TARGET:227 || TALENT:TARGET:228 || TALENT:TARGET:229 || TALENT:TARGET:232
+SIF TALENT:TARGET:석세서 || TALENT:TARGET:데빌시프터 || TALENT:TARGET:이능자 || TALENT:TARGET:페르소나구사자 || TALENT:TARGET:도구지식 || TALENT:TARGET:아이템숙련 || TALENT:TARGET:건슬링거 || TALENT:TARGET:쿠즈노하 || TALENT:TARGET:식노 || TALENT:TARGET:달인 || TALENT:TARGET:기계의처녀
 	RETURN 0
-;훈련경험が100미만じゃできない
-SIF EXP:65 < 100
+;훈련경험이 300미만이면 안돼
+SIF EXP:65 < 300
 	RETURN 0
 ;착유기사용중は
 SIF TEQUIP:17
@@ -3519,7 +3701,7 @@ SIF TEQUIP:24
 ;촉수조교中はダメ
 SIF TEQUIP:25
 	RETURN 0
-;야외はダメ
+;야외는 안돼
 SIF TEQUIP:29
 	RETURN 0
 ;수치플레이中はダメ

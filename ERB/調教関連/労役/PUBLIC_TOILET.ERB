@@ -23,6 +23,9 @@
 ;													조교すると신뢰を失うキャラは변기にしても신뢰を失うようにした
 ;													客がつかなかった場合の処理を추가した
 ;													客が혀놀림섹스광애널광を評価するようにした
+;	007		2020/05/19		がめら					NTR好感度処理をCDFLAGに변경
+;	008		2020/07/29		Jガン					변기を選んだ時のエ라を수정（140行あたり）
+;	009		2021/04/27		JK好き					公衆便所で多胎OP時でも妊娠するように修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;공중변소に필요한処理置き場
 @MANAGEMENT_PUBLIC_TOILET, ARG
@@ -106,7 +109,7 @@ IF 변기_集まった客 > 점포("규모", ARG)
 ELSE
 	변기_店内の客 = 변기_集まった客
 ENDIF
-	
+
 ;점포の集客힘　(점포인기＋선전효과)の約1/10
 변기_集まった客 += MAX(1 + RAND:3, (점포("인기", ARG) + 점포("선전효과", ARG)) * (80 + RAND:11) / 850)
 
@@ -128,16 +131,37 @@ IF 변기_店内の客 > 변기_嬢눈当ての客
 	NEXT
 ENDIF
 
+
 ;-----------------------------
 ;변기毎の計算
 ;-----------------------------
 FOR POT, 0, 변기_設置数
 	CHARA = C:POT
-	
+
 	;未조교함락フラグを折る
 	CFLAG:CHARA:被조교횟수  += 1
 
 	;信じてたのに！
+	IF TALENT:CHARA:신뢰 || TALENT:CHARA:동료
+		SETCOLOR 0xff0033
+		IF TALENT:CHARA:연모
+			PRINTFORMW 공중육변기가 된 일로 인하여、%조사처리(NAME:TARGET, "는")% %NAME:MASTER%에게의 애욕이 우정을 앞서 버렸다
+		ELSEIF CFLAG:CHARA:전투참가불가능 == -1
+			PRINTFORMW PRINTFORMW 공중육변기가 된 일로 인하여、%조사처리(NAME:TARGET, "는")% %NAME:MASTER%에게의 우정이 깨지고 전투에 참여하지 않게 되었다
+			CFLAG:CHARA:전투참가불가능 = 1
+			SIF CFLAG:CHARA:포지션 > 0
+				CALL REMOVE_POSITION,CFLAG:포지션
+		ELSE
+			PRINTFORMW 공중육변기가 된 일로 인하여、%조사처리(NAME:TARGET, "는")% %NAME:MASTER% 의 노예임을 재인식한 듯하다.
+		ENDIF
+		SIF TALENT:CHARA:신뢰
+			PRINTFORMW %조사처리(NAME:TARGET, "는")%【신뢰】를 잃었다
+		SIF TALENT:CHARA:동료
+			PRINTFORMW %조사처리(NAME:TARGET, "는")%【동료】를 잃었다
+		TALENT:CHARA:신뢰 = 0
+		TALENT:CHARA:동료 = 0
+		RESETCOLOR
+	ENDIF
 	IF CFLAG:CHARA:전투참가불가능 == -1
 		SETCOLOR 0xff0033
 		PRINTFORMW 공중육변기가 된 일로 인하여、%NAME:CHARA%는 %NAME:MASTER%에 대한 신뢰를 잃어、전투에 참가하지 않습니다.
@@ -146,16 +170,16 @@ FOR POT, 0, 변기_設置数
 			CALL REMOVE_POSITION, CFLAG:CHARA:포지션
 		RESETCOLOR
 	ENDIF
-	
+
 	;로션塗ります
 	PALAM:CHARA:윤활 = 1000
-	
+
 	;念のため
 	CFLAG:CHARA:펠라횟수 = 0
 	CFLAG:CHARA:本番횟수 = 0
 	CFLAG:CHARA:애널횟수 = 0
 	CFLAG:CHARA:中出し횟수 = 0
-	
+
 	변기_만족도 = 0
 	변기_NTR客フラグ = 0
 	변기_マネジメント数 = 0
@@ -261,6 +285,8 @@ FOR POT, 0, 변기_設置数
 				변기_マネジメント数 += 1
 				CALL 中出し_변기_MANAGEMENT, CHARA
 				변기_만족도 += RESULT
+				PRINTFORML 中出し満足度{RESULT}
+				CFLAG:(ARG):子宮現在容量 += RESULT / 10
 			ENDIF
 		ENDIF
 		;-----------------------------
@@ -317,13 +343,13 @@ FOR POT, 0, 변기_設置数
 				변기_만족도 += RESULT
 			ENDIF
 		ENDIF
-	
+
 		SIF BASE:CHARA:체력 <= (CFLAG:CHARA:펠라횟수 * 10 + CFLAG:CHARA:本番횟수 * 15 + CFLAG:CHARA:애널횟수 * 25 + CFLAG:CHARA:中出し횟수 * 5)
 			BREAK
-		
+
 	NEXT
 	;客毎の計算ここまで
-	
+
 	;-----------------------------
 	;集計
 	;-----------------------------
@@ -334,7 +360,7 @@ FOR POT, 0, 변기_設置数
 		SIF TALENT:CHARA:남자 && TALENT:CHARA:오토코노코
 			CFLAG:CHARA:顧客の中出氏による임신판정 += CFLAG:CHARA:애널횟수
 	ENDIF
-	
+
 
 	;使われた
 	IF 변기_マネジメント数
@@ -347,15 +373,15 @@ FOR POT, 0, 변기_設置数
 		CALL WORK_MESSAGE_TOILET, CHARA
 
 		PRINTFORML %CALLNAME:CHARA%의 노역 결과
-		
+
 		SIF CFLAG:CHARA:변기사용예정인수
 			PRINTFORML 사용해준 인원：{CFLAG:CHARA:변기사용예정인수}명　　성공도　{CFLAG:CHARA:노역성공度}％
-		
+
 		CFLAG:CHARA:個別매상 += CFLAG:CHARA:펠라횟수 * CFLAG:CHARA:펠라가격
 		CFLAG:CHARA:個別매상 += CFLAG:CHARA:本番횟수 * CFLAG:CHARA:섹스가격
 		CFLAG:CHARA:個別매상 += CFLAG:CHARA:애널횟수 * CFLAG:CHARA:애널가격
 		CFLAG:CHARA:個別매상 += CFLAG:CHARA:中出し횟수 * CFLAG:CHARA:질내사정가격
-		
+
 		;횟수の표시
 		IF FLAG:공중변소報告설정 < 2
 			PRINTL
@@ -371,13 +397,13 @@ FOR POT, 0, 변기_設置数
 				PRINTFORM 질내사정　{CFLAG:CHARA:中出し횟수}회　　
 			PRINTL
 		ENDIF
-		
+
 		;경험の증가
 		EXP:CHARA:변기경험 += CFLAG:CHARA:변기사용예정인수
 		EXP:CHARA:펠라경험 += CFLAG:CHARA:펠라횟수
 		EXP:CHARA:Ｖ경험 += CFLAG:CHARA:本番횟수
 		EXP:CHARA:Ａ경험 += CFLAG:CHARA:애널횟수
-		
+
 		IF FLAG:공중변소報告설정 < 2
 			SIF CFLAG:CHARA:변기사용예정인수
 				PRINTFORM 변기경험 + {CFLAG:CHARA:변기사용예정인수}　　
@@ -390,24 +416,24 @@ FOR POT, 0, 변기_設置数
 			SIF CFLAG:CHARA:애널횟수
 				PRINTFORM Ａ경험 + {CFLAG:CHARA:애널횟수}　　
 		ENDIF
-		
+
 		IF CFLAG:CHARA:자궁내피임결계 == 0
 			EXP:CHARA:질사경험 += CFLAG:CHARA:中出し횟수
 			SIF CFLAG:CHARA:中出し횟수 && FLAG:공중변소報告설정 < 2
 				PRINTFORM 질사경험 + {CFLAG:CHARA:中出し횟수}　　
-			
+
 		ELSEIF CFLAG:CHARA:中出し횟수 && FLAG:공중변소報告설정 < 2
 			PRINTFORM <피임결계>
 		ENDIF
 		SIF !LINEISEMPTY()
 			PRINTL 
-		
+
 		EXP:CHARA:키스경험 += TCVAR:CHARA:획득키스경험
 		TCVAR:CHARA:획득키스경험 = 0
 		EXP:CHARA:성교경험 += CFLAG:CHARA:애널횟수 + CFLAG:CHARA:本番횟수
 		EXP:CHARA:정액경험 += CFLAG:CHARA:中出し횟수 + CFLAG:CHARA:펠라횟수 + CFLAG:CHARA:本番횟수 + CFLAG:CHARA:애널횟수
 		EXP:CHARA:절정경험 += EX:CHARA:0 + EX:CHARA:1 + EX:CHARA:2 + EX:CHARA:3
-		
+
 		;레즈、수간の場合はココに入る
 		IF CFLAG:CHARA:14 == 1 && TALENT:CHARA:남자 == 0
 			EXP:CHARA:레즈경험 += CFLAG:CHARA:애널횟수 + CFLAG:CHARA:本番횟수 + CFLAG:CHARA:펠라횟수
@@ -421,7 +447,7 @@ FOR POT, 0, 변기_設置数
 		ENDIF
 		;레즈、수간フラグを리셋
 		CFLAG:CHARA:14 = 0
-		
+
 		;처녀/재생처녀상실時の메시지표시および이상경험加算
 		IF CFLAG:CHARA:처녀상실フラグ
 			CFLAG:CHARA:처녀상실フラグ = 0
@@ -431,7 +457,7 @@ FOR POT, 0, 변기_設置数
 		ENDIF
 		SIF !LINEISEMPTY()
 			PRINTL 
-		
+
 		IF FLAG:공중변소報告설정 < 2
 			SIF CFLAG:CHARA:애널횟수 + CFLAG:CHARA:本番횟수
 				PRINTFORM 성교경험 + {CFLAG:CHARA:애널횟수 + CFLAG:CHARA:本番횟수}　　
@@ -445,26 +471,26 @@ FOR POT, 0, 변기_設置数
 				PRINTFORML 　수간경험 + {CFLAG:CHARA:애널횟수 + CFLAG:CHARA:本番횟수 + CFLAG:CHARA:펠라횟수}
 			PRINTL
 		ENDIF
-		
+
 		;珠の증가
 		CALL JUEL_CHECK_TOILET, CHARA
-		
+
 		;처녀/재생처녀を상실した場合、처녀가격を個別매상に加算
 		SIF CFLAG:CHARA:처녀상실フラグ || CFLAG:CHARA:재생처녀상실フラグ
 			CFLAG:CHARA:個別매상 += CFLAG:CHARA:처녀가격
-		
+
 		;MAG증가処理
 		변기_変動計算用 = CFLAG:CHARA:펠라횟수 * 2 + CFLAG:CHARA:本番횟수 / 2 + CFLAG:CHARA:애널횟수 * 4 + CFLAG:CHARA:中出し횟수 * 6
 		변기_変動計算用 *= MAXBASE:CHARA:LV / 5 + 1  
 		변기_変動計算用 *= 1 + (CHARA == MASTER) + MAX(0, TALENT:CHARA:영매체질 * 9 - !TALENT:CHARA:비전투원 * 4)
 		PRINTFORML ＭＡＧ + {변기_変動計算用}
 		CALL CONTROL_MAG, CHARA, 변기_変動計算用
-		
+
 		;체력の소비
 		변기_変動計算用 = CFLAG:CHARA:펠라횟수 * 10 + CFLAG:CHARA:本番횟수 * 15 + CFLAG:CHARA:애널횟수 * 25 + CFLAG:CHARA:中出し횟수 * 5
 		PRINTFORML 체력 - {변기_変動計算用}
 		BASE:CHARA:체력 -= 변기_変動計算用
-		
+
 		;스트레스증가
 		IF CHARA != MASTER
 			변기_変動計算用 = CFLAG:CHARA:펠라횟수 + CFLAG:CHARA:本番횟수 * 2 + CFLAG:CHARA:애널횟수 * 2 + CFLAG:CHARA:中出し횟수 * 5
@@ -474,7 +500,7 @@ FOR POT, 0, 변기_設置数
 			PRINTFORML 스트레스 + {변기_変動計算用}
 			CFLAG:CHARA:스트레스치 += 변기_変動計算用
 		ENDIF
-		
+
 		;비전투원は경험値획득
 		IF TALENT:CHARA:비전투원
 			변기_変動計算用 = CFLAG:CHARA:個別매상 * (1 + BASE:CHARA:LV / 5)
@@ -483,7 +509,7 @@ FOR POT, 0, 변기_設置数
 			;레벨업판정
 			CALL CHECK_LEVEL_UP, CHARA
 		ENDIF
-		
+
 		;페르소나구사자は装着中の페르소나の경험치획득
 		IF TALENT:CHARA:페르소나구사자
 			CALL INCREASE_PERSONA_EXP, CHARA, CFLAG:CHARA:個別매상 / 10, -1 ,1
@@ -497,14 +523,14 @@ FOR POT, 0, 변기_設置数
 				ENDIF
 			ENDIF
 		ENDIF
-		
+
 		;인기増減
 		IF CFLAG:CHARA:노역성공度 < 30
 			PRINTFORML 인기 {CFLAG:CHARA:변기인기} - {6 - CFLAG:CHARA:노역성공度 / 5}
 		ELSE
 			PRINTFORML 인기 {CFLAG:CHARA:변기인기} + {CFLAG:CHARA:노역성공度 / 5 - 6}
 		ENDIF
-		
+
 		CFLAG:CHARA:변기인기 += CFLAG:CHARA:노역성공度/5 - 6
 		IF CFLAG:CHARA:引継ぎ횟수 && FLAG:5 < 9 && DAY < 51
 			PRINTFORML 인계된 캐릭터：매상 × 0.01
@@ -512,23 +538,23 @@ FOR POT, 0, 변기_設置数
 		ENDIF
 		PRINTFORML 매상：{CFLAG:CHARA:個別매상}
 		CALL 帳簿閲覧_노역, CHARA, CFLAG:CHARA:個別매상, CFLAG:CHARA:변기사용예정인수, 3
-		
+
 		변기_総売上 += CFLAG:CHARA:個別매상
 		SIF CHARA == MASTER
 			CALL EVENTCHECK_M
-			
+
 		CALL 공중변소ＮＴＲ, CHARA
 
 		CALL 気絶処理, CHARA
 		SIF RESULT == 0
 			PRINTW
-		
+
 
 	;使われなかった
 	ELSE
 		;성공度-1
 		CFLAG:CHARA:노역성공度 = -1
-		
+
 		PRINTFORML %조사처리(CALLNAME:CHARA,"는")% 아무에게도 사용되지 않았다.
 
 		;客がつかなかった場合の
@@ -540,10 +566,10 @@ FOR POT, 0, 변기_設置数
 		SOURCE:CHARA:반감 = 200 * 변기_変動計算用 * (TALENT:CHARA:처녀 ? 3 # 1)
 		CALL SOURCE_MANAGEMENT_CHECK, CHARA
 		CALL CUP_MANAGEMENT_T, CHARA
-	
+
 		;珠の증가
 		CALL JUEL_CHECK_TOILET, CHARA
-	
+
 		;스트레스증가
 		IF CHARA != MASTER
 			변기_変動計算用 = 2
@@ -554,11 +580,11 @@ FOR POT, 0, 변기_設置数
 			CFLAG:CHARA:스트레스치 += 변기_変動計算用
 		ENDIF
 	ENDIF
-	
+
 	;主人の속성値変動
 	CALL INCREASE_LD, -3
 	CALL SYNC_STATUS, MASTER
-	
+
 	DRAWLINE
 NEXT
 ;변기毎の計算ここまで
@@ -655,7 +681,7 @@ FOR JNUM, 0, 15
 		GOTJUEL:ARG:JNUM = MANY / 10
 	ELSE
 		SIF ARG != MASTER
-		GOTJUEL:ARG:100 += MANY
+			GOTJUEL:ARG:100 += MANY
 	ENDIF
 	IF JNUM < 12 && GOTJUEL:ARG:JNUM > 0
 		SIF FLAG:공중변소報告설정 < 2
@@ -1029,6 +1055,11 @@ L_만족도 += 500 * L_만족도 / (CFLAG:ARG:질내사정가격 + 1) /400 - 10
 IF ABL:ARG:순종 < 3 && ARG != MASTER
 	L_만족도 /= 2
 ENDIF
+;子宮現在容量加算
+IF !IS_MALE(ARG)
+	CFLAG:(ARG):子宮現在容量 += L_만족도 * 2
+ENDIF
+
 RETURN L_만족도
 
 ;애널
@@ -1239,6 +1270,10 @@ L_만족도 += 300 * L_만족도 /(CFLAG:ARG:애널가격 + 1) / 400 - 10
 IF ABL:ARG:순종 < 3 && ARG != MASTER
 	L_만족도 /= 2
 ENDIF
+;子宮現在容量加算
+IF TALENT:ARG:오토코노코
+	CFLAG:(ARG):子宮現在容量 += L_만족도 * 2
+ENDIF
 RETURN L_만족도
 
 
@@ -1340,30 +1375,30 @@ SIF (FLAG:공중변소報告설정 < 2) == 0
 	RETURN
 
 SELECTCASE CFLAG:ARG:14
-;후타나리
-CASE 1
-	SETCOLOR 0x9900FF
-	PRINTFORML %CALLNAME:ARG%의 주위를 요염한 여자들이 둘러싼다
-	PRINTFORML 하지만 그녀들의 가랑이에는 아름다운 용모와는 어울리지 않는 물건이 우뚝 솟아 있다…
-	RESETCOLOR
-;けもい
-CASE 2
-	SETCOLOR COLOR("RED")
-	PRINTFORML %CALLNAME:ARG%의 주위를 짐승들이 둘러싼다
-	PRINTFORML 짐승들은 페니스를 발기시키고 %CALLNAME:ARG%에게 일제히 달려 들었다…
-	RESETCOLOR
+	;후타나리
+	CASE 1
+		SETCOLOR 0x9900FF
+		PRINTFORML %CALLNAME:ARG%의 주위를 요염한 여자들이 둘러싼다
+		PRINTFORML 하지만 그녀들의 가랑이에는 아름다운 용모와는 어울리지 않는 물건이 우뚝 솟아 있다…
+		RESETCOLOR
+	;けもい
+	CASE 2
+		SETCOLOR COLOR("RED")
+		PRINTFORML %CALLNAME:ARG%의 주위를 짐승들이 둘러싼다
+		PRINTFORML 짐승들은 페니스를 발기시키고 %CALLNAME:ARG%에게 일제히 달려 들었다…
+		RESETCOLOR
 ENDSELECT
 
 ;성공度で分岐
-	PRINTFORML %조사처리(CALLNAME:ARG,"는")% {CFLAG:ARG:변기사용예정인수}명의 손님에게 성욕처리용 육변기로 사용되어 
-	SIF CFLAG:ARG:펠라횟수
-		PRINTFORM 입안에 {CFLAG:ARG:펠라횟수}회, 
-	SIF CFLAG:ARG:애널횟수
-		PRINTFORM 항문에 {CFLAG:ARG:애널횟수}회, 
-	SIF CFLAG:ARG:中出し횟수
-		PRINTFORM 질내에 {CFLAG:ARG:中出し횟수}회, 
-	SIF CFLAG:ARG:펠라횟수+CFLAG:ARG:애널횟수+CFLAG:ARG:中出し횟수
-		PRINTL 정액을 쏟아부어졌다.
+PRINTFORML %조사처리(CALLNAME:ARG,"는")% {CFLAG:ARG:변기사용예정인수}명의 손님에게 성욕처리용 육변기로 사용되어 
+SIF CFLAG:ARG:펠라횟수
+	PRINTFORM 입안에 {CFLAG:ARG:펠라횟수}회, 
+SIF CFLAG:ARG:애널횟수
+	PRINTFORM 항문에 {CFLAG:ARG:애널횟수}회, 
+SIF CFLAG:ARG:中出し횟수
+	PRINTFORM 질내에 {CFLAG:ARG:中出し횟수}회, 
+SIF CFLAG:ARG:펠라횟수+CFLAG:ARG:애널횟수+CFLAG:ARG:中出し횟수
+	PRINTL 정액을 쏟아부어졌다.
 IF FLAG:공중변소報告설정 == 0
 	;봉사정신Lv5이상or혀놀림
 	IF CFLAG:ARG:펠라횟수 >= 1 && (ABL:ARG:7 >= 5 || TALENT:ARG:52)
@@ -1543,7 +1578,7 @@ LOCAL:2 = LIMIT(CFLAG:ARG:放置日数 * 2, 0, 30) + TALENT:ARG:인기 * 10
 LOCAL:3 = CFLAG:ARG:放置日数 * 2 + TALENT:ARG:즉각함락 * 50
 SIF 위험일(ARG) > 1
 	LOCAL:3 += 위험일(ARG) * 10
-	
+
 ;NTR客のプ레이횟수、기본は5
 LOCAL:5 = 5
 
@@ -1563,27 +1598,27 @@ SELECTCASE FLAG:ＮＴＲ客の설정
 		TIMES LOCAL:5 , 4.00
 ENDSELECT
 
-SIF (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117 || CFLAG:ARG:그외4 == 1117 || CFLAG:ARG:그외5 == 1117 || CFLAG:ARG:그외6 == 1117)
+SIF (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117)
 	PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 뭐라 말할 수 없는 달콤한 향기를 풍기고 있다……
 ;호감도
 LOCAL:1 = ARG:1/3+ARG:2/3 + ARG:3 + CFLAG:ARG:放置日数
 IF RAND:2 == 0
-	CFLAG:ARG:(2094) += LOCAL:1
+	CDFLAG:ARG:キャラ間好感度:(94) += LOCAL:1
 ELSE
-	CFLAG:ARG:(2093) -= LOCAL:1
+	CDFLAG:ARG:キャラ間好感度:(93) -= LOCAL:1
 ENDIF
 
 ;ＮＴＲ好きの客（연모・친애限定）
 ;放置日数*2（上限30％）の확률로声をかけられる（인기持ちはさらに+10％）
 ;愛ＮＴＲ상태の場合は50％
-IF (TALENT:ARG:연모 || TALENT:ARG:친애) && RAND:100 < LOCAL:2 || (TALENT:ARG:ＮＴＲ == 1 || TALENT:ARG:ＮＴＲ == 4) && RAND:100 < 50 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117 || CFLAG:ARG:그외4 == 1117 || CFLAG:ARG:그외5 == 1117 || CFLAG:ARG:그외6 == 1117)
+IF (TALENT:ARG:연모 || TALENT:ARG:친애) && RAND:100 < LOCAL:2 || (TALENT:ARG:ＮＴＲ == 1 || TALENT:ARG:ＮＴＲ == 4) && RAND:100 < 50 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117)
 	PRINTFORML 
 	PRINTFORMW %CALLNAME:ARG%에게 네토리 취미를 가진 손님이 온 듯하다……
 	;誘いに乗るか판정
 	;기본치0％+放置日数*2（上限なし）さらに즉각함락持ちは+50で、発情の場合も+10～15
 	;これに함락度*10の마이ナス보정を入れる
 	;ＮＴＲ상태の場合は無조건
-	IF RAND:100 > 100 + 함락(ARG) * 10 - LOCAL:3 || TALENT:ARG:ＮＴＲ > 0 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117 || CFLAG:ARG:그외4 == 1117 || CFLAG:ARG:그외5 == 1117 || CFLAG:ARG:그외6 == 1117)
+	IF RAND:100 > 100 + 함락(ARG) * 10 - LOCAL:3 || TALENT:ARG:ＮＴＲ > 0 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117)
 		PRINTFORML 
 		PRINTFORML 네토리 취미의 손님이 %CALLNAME:ARG%의 귓가에 무언가를 속삭이고 있다……
 		PRINTFORML ・
@@ -1593,7 +1628,7 @@ IF (TALENT:ARG:연모 || TALENT:ARG:친애) && RAND:100 < LOCAL:2 || (TALENT:ARG
 		;기본치50％+放置日数*2（上限なし）さらに즉각함락持ちは+50
 		;これに함락度*50の마이ナス보정を入れる
 		;愛ＮＴＲ상태の場合は無조건でドピュドピュされる
-		IF RAND:100 > 50 + 함락(ARG) * 50 - LOCAL:3 || TALENT:ARG:ＮＴＲ > 0 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117 || CFLAG:ARG:그외4 == 1117 || CFLAG:ARG:그외5 == 1117 || CFLAG:ARG:그외6 == 1117)
+		IF RAND:100 > 50 + 함락(ARG) * 50 - LOCAL:3 || TALENT:ARG:ＮＴＲ > 0 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117)
 			IF CFLAG:ARG:現ＮＴＲ進行度 > 10
 				IF CFLAG:ARG:108 == 1
 					CFLAG:ARG:108 = 0
@@ -1639,7 +1674,7 @@ IF (TALENT:ARG:연모 || TALENT:ARG:친애) && RAND:100 < LOCAL:2 || (TALENT:ARG
 ;절륜、薬物、テクニシャン等
 ;放置日数*2（上限30％）の확률로声をかけられる（인기持ちはさらに+10％）
 ;ＮＴＲ상태の場合は50％
-ELSEIF RAND:100 < LOCAL:2 || (TALENT:ARG:ＮＴＲ == 2 || TALENT:ARG:ＮＴＲ == 5) && RAND:100 < 50 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117 || CFLAG:ARG:그외4 == 1117 || CFLAG:ARG:그외5 == 1117 || CFLAG:ARG:그외6 == 1117)
+ELSEIF RAND:100 < LOCAL:2 || (TALENT:ARG:ＮＴＲ == 2 || TALENT:ARG:ＮＴＲ == 5) && RAND:100 < 50 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117)
 	PRINTFORML 
 	;フェラ有り
 	IF CFLAG:ARG:個別성적서비스 & 8 && RAND:5 == 0
@@ -1675,7 +1710,7 @@ ELSEIF RAND:100 < LOCAL:2 || (TALENT:ARG:ＮＴＲ == 2 || TALENT:ARG:ＮＴＲ 
 	;기본치50％+放置日数*2（上限なし）さらに즉각함락持ちは+50
 	;これに함락度*50の마이ナス보정を入れる
 	;ＮＴＲ상태の場合は無조건でドピュドピュされる
-	IF RAND:100 > 50 + 함락(ARG) * 50 - LOCAL:3 || (TALENT:ARG:ＮＴＲ == 2 || TALENT:ARG:ＮＴＲ == 5) || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117 || CFLAG:ARG:그외4 == 1117 || CFLAG:ARG:그외5 == 1117 || CFLAG:ARG:그외6 == 1117)
+	IF RAND:100 > 50 + 함락(ARG) * 50 - LOCAL:3 || (TALENT:ARG:ＮＴＲ == 2 || TALENT:ARG:ＮＴＲ == 5) || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117)
 		IF CFLAG:ARG:現ＮＴＲ進行度 > 10
 			IF CFLAG:ARG:108 == 1
 				CFLAG:ARG:108 = 0
@@ -1817,7 +1852,7 @@ FOR LCOUNT , 0 , LOCAL:2
 			ELSEIF CFLAG:ARG:個別성적서비스 & 8
 				CFLAG:ARG:펠라횟수 += 1
 			ELSE
-				
+
 			ENDIF
 		ENDIF
 	ELSEIF RAND:100 < 50
@@ -1831,7 +1866,7 @@ FOR LCOUNT , 0 , LOCAL:2
 			ELSEIF CFLAG:ARG:個別성적서비스 & 32
 				CFLAG:ARG:애널횟수 += 1
 			ELSE
-			
+
 			ENDIF
 		ENDIF
 	ELSE
@@ -1866,7 +1901,7 @@ FOR LCOUNT , 0 , LOCAL:2
 			ELSEIF CFLAG:ARG:個別성적서비스 & 8
 				CFLAG:ARG:펠라횟수 += 1
 			ELSE
-				
+
 			ENDIF
 		ENDIF
 	ENDIF
@@ -1897,8 +1932,8 @@ ENDIF
 IF CFLAG:ARG:처녀상실フラグ
 	CFLAG:ARG:처녀상실フラグ = 0
 	TALENT:ARG:처녀 = 0
-	SETCOLOR COLOR("red")
-	PRINTFORML 이상경험획득　【＋２】　처녀상실（ＮＴＲ）
+	;SETCOLOR COLOR("red")
+	;PRINTFORML 이상경험획득　【＋２】　처녀상실（ＮＴＲ）
 	;RESETCOLOR
 	;EXP:ARG:이상경험 += 2
 	;SETBIT CFLAG:ARG:이상경험記録 , 35
@@ -1948,7 +1983,7 @@ ENDIF
 
 ;호감도
 IF ARG:1 == -8
-	CFLAG:ARG:(2096) += LOCAL:3
+	CDFLAG:ARG:キャラ間好感度:(96) += LOCAL:3
 ;不特定多数に설정
 ELSE
 	ARG:1 = -1
@@ -1969,17 +2004,22 @@ ELSE
 	CFLAG:ARG:음란度 += LOCAL:4
 ENDIF
 
+;子宮現在容量加算
+IF TALENT:ARG:오토코노코
+	CFLAG:(ARG):子宮現在容量 += LOCAL:5 * 3
+ELSEIF !IS_MALE(ARG)
+	CFLAG:(ARG):子宮現在容量 += LOCAL:5 * 3
+ENDIF
+
 ;호감도減少処理
 CALL NTR_SHOOT , ARG , ARG:1 , LOCAL:5
 SIF ARG:1 == -1
-	CFLAG:ARG:(2099) -= LOCAL:5
-CALL SHOW_ADD_EXP, ARG
+	CDFLAG:ARG:キャラ間好感度:(99) -= LOCAL:5
 
 
 ;임신用
 SIF CFLAG:ARG:자궁내피임결계 == 0
 	CFLAG:ARG:顧客の中出氏による임신판정 = TCVAR:ARG:획득질사경험*2
 
-
-
+CALL SHOW_ADD_EXP, ARG
 

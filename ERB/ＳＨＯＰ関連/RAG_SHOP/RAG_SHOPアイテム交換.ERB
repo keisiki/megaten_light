@@ -27,8 +27,10 @@ IF 이벤트フラグ:33:1 == 4
 	CALL RAG_ITEM_EXCHANGE_표시(112, [[아이템:취색구슬・손위풍]], "에메랄드", 3, "토파즈", 3, "사파이어", 3)
 	CALL RAG_ITEM_EXCHANGE_표시(113, [[아이템:자색구슬・건위천]], "아메지스트", 3, "아쿠아마린", 3, "다이아몬드", 3)
 ENDIF
-CALL RAG_ITEM_EXCHANGE_표시(200, 2227, "에메랄드", 1, "터키석", 1, "오닉스", 1)
-;CALL RAG_ITEM_EXCHANGE_표시([[]], "", 0, "", 0, "", 0)
+SIF FLAG:페르소나구사자仕様설정 < 3
+	CALL RAG_ITEM_EXCHANGE_표시(114,[[아이템:나비의엠블럼]], "토파즈", 1, "오닉스", 1, "터키석", 1)
+CALL RAG_ITEM_EXCHANGE_표시(200,2227, "에메랄드", 1, "터키석", 1, "오닉스", 1)
+;CALL RAG_ITEM_EXCHANGE_표시(XX,[[]], "", 0, "", 0, "", 0)
 PRINTL
 PRINTFORM [999] 돌아간다　
 PRINTFORML [1000]가게를 나간다
@@ -112,7 +114,7 @@ FOR LOCAL, 1, 13
 		LOCAL:1 = 宝石소지数:LOCAL / 宝石필요数:LOCAL
 NEXT
 
-TRYCCALLFORM 최대소지수_{ARG}
+TRYCCALLFORM 최대소지수_{COUNT_ITEMMAX(ARG)}
 	SIF LOCAL:1 > (RESULT - ITEM:ARG)
 		LOCAL:1 = RESULT - ITEM:ARG
 CATCH

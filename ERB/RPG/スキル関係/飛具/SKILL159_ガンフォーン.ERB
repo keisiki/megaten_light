@@ -40,12 +40,12 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_159
+@SKILL_DECIDE_TYPE_159, ARG
 RETURN 1
 ;特技
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_159
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_159, ARG
 RETURN 1
 
 
@@ -129,7 +129,7 @@ CALL ATTACK_SPREAD,ARG,ARG:1,159
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_159
-PRINTL 대상とその周囲に機関총トークでダメージ+HAPPY
+PRINTL 대상과 그 주위에 기관총 공격으로 데미지+HAPPY
 
 ;継承に필요な部位
 @継承部位_159,ARG

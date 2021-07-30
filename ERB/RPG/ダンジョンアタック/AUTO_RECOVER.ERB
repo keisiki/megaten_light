@@ -127,7 +127,11 @@ FOR LCOUNT, 0, 6
 	SIF RESULT == 0
 		CONTINUE
 	;MPが설정より少ないならとばす
-	SIF BASE:(LOCAL):ＭＰ == 0 || (BASE:(LOCAL):ＭＰ * 100 / MAXBASE:(LOCAL):ＭＰ) <= PART_VAR_READ(FLAG:오토리커버설정3, 3, 0)
+	SIF BASE:(LOCAL):ＭＰ <= 0
+		CONTINUE
+	SIF MAXBASE:(LOCAL):ＭＰ <= 0
+		CONTINUE
+	SIF (BASE:(LOCAL):ＭＰ * 100 / MAXBASE:(LOCAL):ＭＰ) <= PART_VAR_READ(FLAG:오토리커버설정3, 3, 0)
 		CONTINUE
 	;全습득済み스킬の中から회복마법選ぶ
 	FOR LCOUNT:1, 1, FLAG:스킬数+1
@@ -486,7 +490,11 @@ FOR LCOUNT, 0, 6
 	SIF RESULT == 0
 		CONTINUE
 	;MPが설정より少ないならとばす
-	SIF BASE:(LOCAL):ＭＰ == 0 || (BASE:(LOCAL):ＭＰ * 100 / MAXBASE:(LOCAL):ＭＰ) <= PART_VAR_READ(FLAG:오토리커버설정3, 3, 0)
+	SIF BASE:(LOCAL):ＭＰ == 0 
+		CONTINUE
+	SIF MAXBASE:(LOCAL):ＭＰ <= 0
+		CONTINUE
+	SIF (BASE:(LOCAL):ＭＰ * 100 / MAXBASE:(LOCAL):ＭＰ) <= PART_VAR_READ(FLAG:오토리커버설정3, 3, 0)
 		CONTINUE
 	;全습득済み스킬の中から회복마법選ぶ
 	FOR LCOUNT:1, 1, FLAG:스킬数+1

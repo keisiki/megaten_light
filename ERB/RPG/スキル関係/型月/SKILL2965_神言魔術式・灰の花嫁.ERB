@@ -13,7 +13,7 @@ RETURN 100
 @SKILL_POWER_2965, ARG
 RETURN 450
 
-@SKILL_CRITICAL_RATE_2965
+@SKILL_CRITICAL_RATE_2965, ARG
 RETURN 0
 
 ;　최저공격횟수
@@ -38,12 +38,12 @@ RETURN 50
 RETURN GET_TYPE_NUM("만능")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2965
+@SKILL_DECIDE_TYPE_2965, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2965
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2965, ARG
 RETURN 2
 
 
@@ -129,8 +129,8 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2965
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2965
-PRINTL 魔女メ디아の宝具、空中に巨大な魔方陣を描き、地上に向かって無数の마력弾を連続で撃ちだす。
-PRINTL 神言とは神話の時代に使われた現代では発音불가능な言葉で、ただの一言が現代の長大な詠唱に匹적する。
+PRINTL 마녀 메데이아의 보구、공중에 거대한 마방진을 그려、지상에 향해 무수한 마력탄을 방사한다.
+PRINTL 신언이란 신화의 시대에 사용되어 현대에서는 발음 불가능한 말로、한 마디가 현대의 장대한 영창에 필적 한다.
 
 ;継承に필요な部位
 @継承部位_2965,ARG

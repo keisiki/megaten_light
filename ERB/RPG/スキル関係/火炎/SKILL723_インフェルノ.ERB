@@ -2,8 +2,11 @@
 
 ;스킬名
 @SKILL_NAME_723,ARG
-RESULTS = 인페르노
-
+IF SKILL_CHANGE(ARG, 3118)
+	RESULTS = 이누가미인페르노
+ELSE
+	RESULTS = 인페르노
+ENDIF
 ;　명중
 @SKILL_HITRATE_723, ARG
 RETURN 100
@@ -35,12 +38,12 @@ RETURN 4
 ;화염
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_723
+@SKILL_DECIDE_TYPE_723, ARG
 RETURN 2
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_723
+@SKILL_DAMAGETYPE_723, ARG
 RETURN 2
 
 
@@ -125,7 +128,11 @@ CALL ATTACK_SINGLE,ARG,LOCAL,723
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_723
-PRINTL [후열] 적 1체에 화염속성 특대 마법데미지. (낮은 확률로 FLAME)
+IF U > 0 && U < CHARANUM && NO:U == 3118
+	PRINTL 魔獣イヌガミを召喚し、強烈な火炎で敵一体を焼き上げる。火炎属性の特大데미지+炎上
+ELSE
+	PRINTL [후열] 적 1체에 화염속성 특대 마법데미지. (낮은 확률로 FLAME)
+ENDIF
 ;継承に필요한部位
 @継承部位_723,ARG
 RETURN 1

@@ -40,12 +40,12 @@ RETURN 8
 ;신경
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2552
+@SKILL_DECIDE_TYPE_2552, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2552
+@SKILL_DAMAGETYPE_2552, ARG
 RETURN 1
 
 
@@ -135,7 +135,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2552
 PRINTL 키렌츠 사카니、헝가리에 옛날부터 전해지는 날씨의 정령이자 천둥소리의 드래곤의 위풍을 보구로 바꾼 것
 PRINTL 사카니(Sárkány)는 이 드래곤의 이름이다.
 PRINTL 듣는 사람의 몸뿐만 아니라 마음까지 파괴하고 유린하는 마의 노랫소리.
-PRINTL 적 전체에 中위력의 공격을 실시、보통 확률로 PALYZE에 빠뜨린다。
+PRINTL 적 전체에 중 위력의 공격을 실시、보통 확률로 PALYZE에 빠뜨린다。
 
 ;継承に필요한部位
 @継承部位_2552,ARG

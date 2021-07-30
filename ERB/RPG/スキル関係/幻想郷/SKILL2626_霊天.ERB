@@ -35,12 +35,12 @@ RETURN 14
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2626
+@SKILL_DECIDE_TYPE_2626, ARG
 RETURN 2
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2626
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2626, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2626
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -123,8 +123,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,2626
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2626
-PRINTL 질풍の魔法を적전체に放つ。
-PRINTL 요마　ルイズの技。
+PRINTL 질풍의 마법을 적 전체에 사용한다。
+PRINTL 요마　루이즈의 기술。
 
 ;継承に필요な部位
 @継承部位_2626,ARG

@@ -12,12 +12,12 @@
 ; 초기化
 VARSET LOCAL, 0
 ; 1moreか컨센트레이트未実行なら컨센트레이트
-IF CFLAG:ARG:１moreフラグ == 2 || CFLAG:ARG:集中フラグ == 0
+IF CFLAG:ARG:１moreフラグ > 0 || CFLAG:ARG:集中フラグ == 0
 	CALL EVENT_16_SET_ACTION, ARG, [[스킬:컨센트레이트]]
 	RETURN 0
 ; それ以外
 ELSE
-	; HPが5割を切ってるなら1/4で메기도라온セット
+	; HPが5割を切ってるなら1/4で메기도라온세트
 	IF 現HP割合(ARG) < 50 && RAND:4 == 0
 		CALL EVENT_16_SET_ACTION, ARG, [[스킬:메기도라온]]
 		RETURN 0
@@ -120,10 +120,10 @@ ENDIF
 ; 
 ; ・全단계で常時2回行動
 ; ・全단계で1moreを含む行動50回毎に9999固定메기도라온
-; ・全단계で一定조건において메기도라온モード(行動が全て9999固定데미지메기도라온化)
-;     불굴의투지が発動した場合、메기도라온モードon
-;     パーティーに레벨に対して능력が高すぎる(18+Lv*1.5+5の2倍이상)キャラが存在する場合、메기도라온モードon
-;     パーティーに主人以外の마하애널라이즈を持っているキャラが存在する場合、메기도라온モードon
+; ・全단계で一定조건において메기도라온모드(行動が全て9999固定데미지메기도라온化)
+;     불굴의투지が発動した場合、메기도라온모드on
+;     パーティーに레벨に対して능력が高すぎる(18+Lv*1.5+5の2倍이상)キャラが存在する場合、메기도라온모드on
+;     パーティーに당신 이외의 마하애널라이즈を持っているキャラが存在する場合、메기도라온모드on
 ; 
 ; ・第一단계 HP90%まで
 ;   アタック*2
@@ -136,18 +136,18 @@ ENDIF
 ; ・第五단계 第三단계以降HP90%まで
 ;   アタック*2
 ; ・第六단계 第三단계以降HP50%まで
-;   화염->빙결->전격->질풍->コンセ->메기도라온のローテーションで공격。공격상성が무효と흡수のみの場合は次の공격상성의 가드브레이크
+;   화염->빙결->전격->질풍->コンセ->메기도라온のローテーションで공격。공격상성が무효と흡수のみの場合は次の공격상성のガードブ레이호우ク
 ; ・第七단계 第三단계以降HP50%미만
 ;   화염->빙결->전격->질풍->기합->팔척뛰기のローテーションで공격
 ;   この時点で스킬から불굴의투지が삭제される
 @SET_ACTION_마가렛, ARG
 #LOCALSIZE 4
 VARSET LOCAL, 0
-; 全能の真珠モード체크
+; 全能の真珠모드체크
 IF !CFLAG:ARG:601 < 99
 	; 速攻キルしたら死ぬがよい
 	IF CFLAG:ARG:이악물기フラグ
-		DEBUGPRINTL 메기도라온モードon(이악물기フラグ)
+		DEBUGPRINTL 메기도라온모드on(이악물기フラグ)
 		CFLAG:ARG:601 = 99
 	ELSE
 		FOR LOCAL, 1, 7
@@ -155,11 +155,11 @@ IF !CFLAG:ARG:601 < 99
 				CONTINUE
 			; 마하애널라이즈を持っていたら死ぬがよい(ただしMASTERは除く)
 			IF POS(LOCAL) != MASTER && HAVE_SKILL(POS(LOCAL), [[스킬:마하애널라이즈]])
-				DEBUGPRINTL 메기도라온モードon(마하애널라이즈)
+				DEBUGPRINTL 메기도라온모드on(마하애널라이즈)
 				CFLAG:ARG:601 = 99
 				BREAK
 			ENDIF
-			; 능력許容値(캐릭터作成時の基準の2倍)を超えているなら死ぬがよい
+			; 능력許容値(캐릭터작성時の基準の2倍)を超えているなら死ぬがよい
 			; 例. Lv100なら합계346まで許容
 			LOCAL:2 = 0
 			FOR LOCAL:1 ,31 ,37
@@ -168,8 +168,8 @@ IF !CFLAG:ARG:601 < 99
 			FOR LOCAL:1 ,1171 ,1177
 				LOCAL:2 += CFLAG:(POS(LOCAL)):(LOCAL:1)
 			NEXT
-			IF LOCAL:2 > (23 + BASE:(POS(LOCAL)):LV * 3 / 2) * 2
-				DEBUGPRINTL 메기도라온モードon(能力許容値オーバー)
+			IF LOCAL:2 > (23 + BASE:(POS(LOCAL)):LV * 3 / 2) * 3 / 2
+				DEBUGPRINTL 메기도라온모드on(능력許容値オーバー)
 				CFLAG:ARG:601 = 99
 				BREAK
 			ENDIF
@@ -181,7 +181,7 @@ ELSE
 	NEXT
 ENDIF
 
-; 50の倍数回行動するか全能の真珠モードで9999메기도라온
+; 50の倍数回行動するか全能の真珠모드で9999메기도라온
 IF (CFLAG:ARG:600 > 0 && (CFLAG:ARG:600 % 50) == 0) || CFLAG:ARG:601 == 99
 	; 9999메기도라온
 	CALL EVENT_16_SET_ACTION, ARG, [[스킬:9999메기도라온]]
@@ -222,7 +222,7 @@ ELSE
 		CASE 0
 			; 기본的に메기도라온で1moreは取らないと思うので、
 			; 必然的に八艘跳びで取った際にここに来る
-			IF CFLAG:ARG:１moreフラグ == 2
+			IF CFLAG:ARG:１moreフラグ > 0
 				; 弱体がかかっていればデクンダ。かかってなければ히트라이저
 				FOR LOCAL, 0, 6
 					IF CFLAG:ARG:(GET_BATTLESTATUS(LOCAL) + "강화") < 0
@@ -239,7 +239,7 @@ ELSE
 			ELSE
 				RESULT = EVENT_16_SEARCH_REGISTANCE(2, "화염", 1, 1)
 				DEBUGPRINTFORML 화염내성検索결과:{RESULT}
-				; 弱点持ちがいる
+				; 약점持ちがいる
 				IF RESULT > 0
 					; 화염1명
 					CALL EVENT_16_SET_ACTION, ARG, [[스킬:라그나로크]], RESULT
@@ -258,7 +258,7 @@ ELSE
 			ENDIF
 		CASE 1
 			; 화염で1more
-			IF CFLAG:ARG:１moreフラグ == 2
+			IF CFLAG:ARG:１moreフラグ > 0
 				; 화염전체
 				CALL EVENT_16_SET_ACTION, ARG, [[스킬:프로미넌스]]
 				DEBUGPRINTFORML 행동 {CFLAG:ARG:600, 4}회째:1more_화염전체
@@ -284,7 +284,7 @@ ELSE
 			ENDIF
 		CASE 2
 			; 빙결で1more
-			IF CFLAG:ARG:１moreフラグ == 2
+			IF CFLAG:ARG:１moreフラグ > 0
 				; 빙결전체
 				CALL EVENT_16_SET_ACTION, ARG, [[스킬:니플헤임]]
 				DEBUGPRINTFORML 행동 {CFLAG:ARG:600, 4}회째:1more_빙결전체
@@ -310,7 +310,7 @@ ELSE
 			ENDIF
 		CASE 3
 			; 전격で1more
-			IF CFLAG:ARG:１moreフラグ == 2
+			IF CFLAG:ARG:１moreフラグ > 0
 				; 전격전체
 				CALL EVENT_16_SET_ACTION, ARG, [[스킬:엘・지하드]]
 				DEBUGPRINTFORML 행동 {CFLAG:ARG:600, 4}회째:1more_전격전체
@@ -336,7 +336,7 @@ ELSE
 			ENDIF
 		CASE 4
 			; 질풍で1more
-			IF CFLAG:ARG:１moreフラグ == 2
+			IF CFLAG:ARG:１moreフラグ > 0
 				; 질풍전체
 				CALL EVENT_16_SET_ACTION, ARG, [[스킬:신공파]]
 				DEBUGPRINTFORML 행동 {CFLAG:ARG:600, 4}회째:1more_질풍전체
@@ -376,7 +376,7 @@ RETURN 0
 ; 스테이터스변화はオミット
 ; ARG   변경대상キャラ
 ; ARG:1 변경페르소나번호
-; ARG:2 現在の페르소나번호
+; ARG:2 현재의페르소나번호
 ; ARG:3 변경を표시するかどうか
 @EVENT_16_PCHANGE, ARG, CHANGE_P, ARG:1 = 0
 #DIM CHANGE_P, 1
@@ -502,7 +502,7 @@ SELECTCASE CHANGE_P
 		CALL SYNC_STATUS, ARG
 	CASE 5
 		; 皇帝 오베론 (컨센트레이트, チャージ, 9999메기도라온)
-		; 만능以外무효。만능1/4
+		; 만능이외무효。만능1/4
 		; 이악물기フラグが立っている場合は全무효
 		; 가드킬で殴ることもできるが……
 		LOCALS = P・체인지(황제 오베론)
@@ -554,8 +554,8 @@ SELECTCASE CHANGE_P
 		CALL SYNC_STATUS, ARG
 	CASE 7
 		; 쇼우 ルシフェル (새벽의명성)
-		; 물리と만능、파마주살以外を흡수
-		; ただし行動패턴の関係上、これで공격을受けることはほぼない
+		; 물리と만능、파마주살이외を흡수
+		; ただし行動패턴の関係上、これで공격を受けることはほぼない
 		LOCALS = P・체인지(별 루시펠)
 		BASE:ARG:검격 = 100
 		BASE:ARG:비구 = 100
@@ -614,7 +614,7 @@ ENDIF
 CFLAG:ARG:603 = CHANGE_P
 RETURN 0
 
-; 行動セット
+; 行動세트
 @EVENT_16_SET_ACTION, ARG, ARG:1, ARG:2 = -1
 ; MP全쾌
 BASE:ARG:ＭＰ = MAXBASE:ARG:ＭＰ
@@ -851,7 +851,7 @@ FOR LOCAL, LOCAL:2, LOCAL:3
 	ENDIF
 	COM:(LOCAL - 1) = MAXBASE:(POS(LOCAL)):(LOCAL:1)
 NEXT
-; 変数セット
+; 変数세트
 LOCAL:4 = -999
 FOR LOCAL, 0, 6
 	IF LOCAL:4 < COM:LOCAL

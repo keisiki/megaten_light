@@ -3,7 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_502,ARG
-RESULTS = 스쿠카쟈
+RESULTS = 스쿠・카쟈
 
 
 ;　명중
@@ -36,12 +36,12 @@ RETURN 12
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_502
+@SKILL_DECIDE_TYPE_502, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_502
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_502, ARG
 RETURN 0
 
 
@@ -130,7 +130,7 @@ FOR LOCAL,LOCAL:1,LOCAL:2
 	CFLAG:POS(LOCAL):명중강화 = MIN(32, CFLAG:POS(LOCAL):명중강화 + 4)
 	CFLAG:POS(LOCAL):회피강화 = MIN(32, CFLAG:POS(LOCAL):회피강화 + 4)
 NEXT
-PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 명중률・회피윻이 올라갔다!
+PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 명중률・회피율이 올라갔다!
 
 
 

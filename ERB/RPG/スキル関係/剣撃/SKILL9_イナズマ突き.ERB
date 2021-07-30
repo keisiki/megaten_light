@@ -3,14 +3,14 @@
 
 ;스킬名
 @SKILL_NAME_9,ARG
-;華恋が사용する場合P.o.P(Possibility of Puberty）に
-;IF ARG > 0 && NO:ARG == [[キャラ:카렌（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카렌（무대소녀）]]) == 1
-	RESULTS = P.of.Puberty
-;ファントムが사용する場合ジェット・마그나ムに
-;ELSEIF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-ELSEIF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+;팬텀が사용する場合ジェット・마그나ムに
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
 	RESULTS = 제트・매그넘
+;桐条미츠루Lv50이상。アルテミシア限定
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:미츠루]]) && BASE:ARG:LV >= 50 && EQUIP:ARG:장비페르소나 == 0 && DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("NO") == 3952
+	RESULTS = 쿠・드로어
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:블레이드(X)]]) && EQUIP:ARG:악세사리 == 5349
+	RESULTS = 번개찌르기・碧雷
 ELSE
 	RESULTS = 번개찌르기
 ENDIF
@@ -21,13 +21,10 @@ RETURN 100
 
 ;　威힘
 @SKILL_POWER_9, ARG
-;華恋が사용する場合威힘を盛る（主人公보정）
-;IF ARG > 0 && NO:ARG == [[キャラ:카렌（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카렌（무대소녀）]]) == 1
-	RETURN 240
-;ELSEIF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-ELSEIF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 210
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:블레이드(X)]]) && EQUIP:ARG:악세사리 == 5349
+	RETURN 280
 ELSE
 	RETURN 225
 ENDIF
@@ -47,25 +44,69 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_9,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
-	RETURN 12
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
+	RETURN 6
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:블레이드(X)]]) && EQUIP:ARG:악세사리 == 5349
+	RETURN 9
 ELSE
 	RETURN 7
 ENDIF
 
 ;　相性
 @SKILL_TYPE_9,ARG
-RETURN 0
-;검격
+#LOCALSSIZE 3
+#LOCALSIZE 4
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
+	;타격
+	RETURN 2
+;桐条미츠루Lv50이상。アルテミシア限定
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:미츠루]]) && BASE:ARG:LV >= 50 && EQUIP:ARG:장비페르소나 == 0 && DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("NO") == 3952
+	;전격
+	RETURN 6
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:블레이드(X)]]) && EQUIP:ARG:악세사리 == 5349
+	SIF ARG < 0 || 스킬속성표시中
+		RETURN GET_TYPE_NUM("검격")
+	SIF CFLAG:ARG:ターゲット > 16 || CFLAG:ARG:ターゲット < 1
+		RETURN GET_TYPE_NUM("검격")
+	LOCAL = POS(CFLAG:ARG:ターゲット)
+	SIF LOCAL < 0 || CFLAG:LOCAL:마법반사フラグ || CFLAG:LOCAL:무효フラグ
+		RETURN GET_TYPE_NUM("검격")
+	SIF LOCAL < 0 || CFLAG:LOCAL:물리반사フラグ
+		RETURN GET_TYPE_NUM("전격")
+	LOCAL:2 = -1000
+	LOCALS = 검격
+	LOCALS:1 = 검격
+	LOCALS:2 = 전격
+	FOR LOCAL:1, 1, 3
+		;判定用に数値を仕舞う。反射は-200扱い
+		LOCAL:3 = MAXBASE:LOCAL:(LOCALS:(LOCAL:1)) == 999 ? -200 # MAXBASE:LOCAL:(LOCALS:(LOCAL:1))
+		LOCAL:3 = !(HAVE_SKILL(ARG, [[스킬:영세라이도우]]) || HAVE_SKILL(ARG,2947)) && CFLAG:LOCAL:(LOCALS:(LOCAL:1)+"무효화횟수") ? -5 # LOCAL:3
+		LOCAL:3 = CFLAG:LOCAL:(LOCALS:(LOCAL:1)+"가드킬") && LOCAL:3 < 100 ? 100 # LOCAL:3
+		SELECTCASE LOCAL:1
+			CASE 1
+				LOCAL:3 = CFLAG:LOCAL:물리반사フラグ ? -200 # LOCAL:3
+			CASE 2
+				LOCAL:3 = CFLAG:LOCAL:마법반사フラグ ? -200 # LOCAL:3
+			CASEELSE
+		ENDSELECT
+		IF LOCAL:3 > LOCAL:2
+			LOCAL:2 = LOCAL:3
+			LOCALS = %LOCALS:(LOCAL:1)%
+		ENDIF
+	NEXT
+	RETURN GET_TYPE_NUM(LOCALS)
+ELSE
+	;검격
+	RETURN 0
+ENDIF
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_9
+@SKILL_DECIDE_TYPE_9, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_9
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_9, ARG
 RETURN 1
 
 
@@ -75,8 +116,7 @@ RETURN 1
 
 ;　사거리
 @SKILL_RANGE_9,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 1
 ELSE
 	RETURN 2
@@ -117,7 +157,16 @@ RETURN 0
 @SKILL_RANK_9
 RETURN 4
 
-;テンプレート用、추가효과シリーズ
+@SKILL_RANKUP_9
+IF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	;썬더피스트
+	D:1 = 257
+	;랭크アップ先は１つ
+	RETURN 1
+ENDIF
+RETURN 0
+
+;テン플레이트用、추가효과시리즈
 ;추가효과스테이터스
 @SKILL_ADDTIONAL_STATE_9,ARG
 RETURN GET_STATE_NUM("SHOCK")
@@ -152,12 +201,22 @@ CALL ATTACK_SINGLE,ARG,LOCAL,9
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_9
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:카렌（무대소녀）]]
-	PRINTL Possibility of Puberty。소녀のキラめきによって鋳造された才能のサーベル。
-	PRINTL キラめきを燃やし적一体へ돌격、その生きざまで感電させる。後列사용可。
-ELSEIF U > 0 && U < CHARANUM && NO:U == [[キャラ:팬텀]]
-	PRINTL 左팔プラズマ・ステーク3本を오비電させて殴りつける。また오비電してる都合上、麻痺効果が期待できる。
-	PRINTL なおゲシュペンスト系列機の中には背負い投げ後にこれを叩き込むコンバットパターンを持つ機種も存在する。
+IF U > 0 && U < CHARANUM && NO:U == [[キャラ:미츠루]]
+	PRINTL 桐条 미츠루の스킬。
+	PRINTL コマンドは←タメ→+AorB。
+	PRINTL 踏み込んで적一体を검で突く突進技。
+	;PRINTL 性能
+	;PRINTL Aは発生が早く、Bは突進距離が長い。B及びSB版のみ発動時にレバーを←か→に入れっぱなしにすることによって突進距離を調節することができる。
+	;PRINTL A版は小技から繋がるほど発生が早い。連続技や奇襲に使える。
+	;PRINTL B版は発生が遅いがスライドダウンを発生させ、レバー←입력版はガードされても先端なら반격を受けにくい。
+	;PRINTL ボタンを押しっぱなしにすることで溜めることができ、최대溜めで데미지が上昇する。
+	;PRINTL 相손を高めでヒットさせると特定状況では追撃することができる。『P4U2』では被フェイタルカウンター속성が付いている。
+	;PRINTL SB版は発生がかなり早く、硬直もB版より短い。
+	;PRINTL またB版と同じように空中ヒットさせると相손をスライドダウンさせるため、硬直の短さによって容易に追撃を行うことができる。단발데미지はB版より低い。
+	;PRINTL スーパー취소対応。
+ELSEIF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	PRINTL 왼팔 플라즈마 스택 세 개를 대전시켜 공격한다. 또한 대전하고 있으므로, 마비 효과를 기대할 수 있다.
+	PRINTL 또한 게슈펜스트 계열기 중에는 업어치기 후에 이것을 넣는 컴뱃 패턴을 가진 기종도 존재한다.
 ELSE
 	PRINTL [후열] 전열의 적 1체에 검격속성 중 물리데미지. (낮은 확률로 SHOCK)
 ENDIF

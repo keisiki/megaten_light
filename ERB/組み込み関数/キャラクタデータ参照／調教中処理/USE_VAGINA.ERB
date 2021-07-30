@@ -18,12 +18,5 @@ SIF TEQUIP:ARG:음순노출 != -1 && ((ARG:1 & 1 && (TEQUIP:ARG:Ｖ촉각 & 2)) 
 	RETURNF 0
 
 SIF ITEM_VAGINA(ARG) > 0
-	RETURNF 0	
-	
-;로터사용중はダメ
-SIF TEQUIP:ARG:로터
-	RETURNF 0
-;바기나전극사용중はダメ
-SIF TEQUIP:ARG:바기나전극
 	RETURNF 0
 RETURNF 1

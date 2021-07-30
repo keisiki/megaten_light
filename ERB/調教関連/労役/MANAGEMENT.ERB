@@ -64,10 +64,6 @@ PRINTL [12] - 곡예 오두막 (￥25000)
 PRINTL [13] - 메시아 교회 (￥50000)
 PRINTL [14] - 가이아 교회 (￥50000)
 PRINTL [15] - 교회 (￥75000)
-;아이마스 모드
-SIF 의뢰フラグ:95:0 == 2
-	PRINTL [99] - 배게영업 매니져 대기소 (￥500)
-;
 DRAWLINE
 PRINTL [0]  - 그만둔다
 $INPUT_LOOP
@@ -89,10 +85,6 @@ SELECTCASE LOCAL
 		LOCAL:1 = 50000
 	CASE 15
 		LOCAL:1 = 75000
-;아이마스 모드
-	CASE 99
-		LOCAL:1 = 500
-;
 	CASEELSE
 		GOTO INPUT_LOOP
 ENDSELECT
@@ -119,11 +111,11 @@ SELECTCASE LOCAL
 		LOCALS = 공중변소
 	CASE 11
 		CALL 점포演算("규모",ARG,1,"=")
-		LOCALS = ストリップ劇場
+		LOCALS = 스트립 극장
 	CASE 12
 		CALL 점포演算("규모",ARG,1,"=")
 		CALL 점포演算("접객고용",ARG,1,"=")
-		LOCALS = 見世物小屋
+		LOCALS = 곡예 오두막
 	CASE 13
 		CALL 점포演算("규모",ARG,1,"=")
 		CALL 점포演算("접객고용",ARG,2,"=")
@@ -136,10 +128,6 @@ SELECTCASE LOCAL
 		CALL 점포演算("규모",ARG,1,"=")
 		CALL 점포演算("접객고용",ARG,2,"=")
 		LOCALS = 교회
-	CASE 99
-		CALL 점포演算("규모",ARG,1,"=")
-		CALL 점포演算("접객고용",ARG,5,"=")
-		LOCALS = 베개영업 대기소
 ENDSELECT
 MONEY -= LOCAL:1
 
@@ -336,29 +324,6 @@ ELSEIF 점포("종류",ARG) == 15
 				RETURN 0
 			ENDIF
 	ENDSELECT
-;아이마스 모드
-ELSEIF 점포("종류",ARG) == 99
-	SELECTCASE RESULT
-		CASE 0
-			;配置
-			CALL ARRANGE_MANAGEMENT,ARG
-		CASE 1
-			;人数확장
-			CALL EXTEND_MEMBER_MANAGEMENT,ARG
-		CASE 2
-			CALL EXTEND_MANAGEMENT_베개, ARG
-		CASE 3
-			CALL 베개_敬拝値_交換, ARG
-		CASE 11
-			;利用方法個別설정
-			CALL ARRANGE_CHARA_COMMODITY_MANAGEMENT_베개,ARG
-		CASE 99
-			CALL 점포매각,ARG
-			IF RESULT == 1
-				RETURN 0
-			ENDIF
-	ENDSELECT
-
 ENDIF
 
 RESTART
@@ -760,7 +725,7 @@ ENDSELECT
 ;========================================================
 @ARRANGE_CHARA_PRICE_MANAGEMENT,ARG
 Z = ARG
-CALL INPUT_CHARA_LIST("이용料金を변경したい변기を選んでください", "CASTING_ARRANGE_CHARA_PRICE_MANAGEMENT")
+CALL INPUT_CHARA_LIST("이용 요금을 변경하고 싶은 변기를 선택해주세요", "CASTING_ARRANGE_CHARA_PRICE_MANAGEMENT")
 IF RESULT == 1000
 	RETURN 0
 ENDIF
@@ -1152,8 +1117,6 @@ ELSEIF [[점포:종류]]:ARG == 12
 	CALL MANAGEMENT_SHOW_TENT,ARG
 ELSEIF [[점포:종류]]:ARG == 13 || [[점포:종류]]:ARG == 14 || [[점포:종류]]:ARG == 15
 	CALL MANAGEMENT_教会,ARG
-ELSEIF [[점포:종류]]:ARG == 99
-	CALL MANAGEMENT_베개,ARG
 ENDIF
 
 ;※변경点ここから※

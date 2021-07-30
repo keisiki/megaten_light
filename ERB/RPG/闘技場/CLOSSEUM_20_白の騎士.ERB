@@ -111,9 +111,9 @@ NEXT
 ;HPが５０％切ったら行動횟수増える
 IF CFLAG:ARG:行動횟수 < 3 && (BASE:ARG:ＨＰ)*100/(MAXBASE:ARG:ＨＰ) < 50
 	PRINTFORML ┏>CHARA━━━━━━━━━━┓　┏>ACT━━━━━━━━━━━━━━━━━━┓
-	PRINTFORM  ┃[{CFLAG:ARG:포지션,2}] %CALLNAME:ARG,21,LEFT%┃			     ┃
+	PRINTFORM  ┃[{CFLAG:ARG:포지션,2}] %CALLNAME:ARG,21,LEFT%┃　┃
 	RESULTS = 용의안광　		      
-	PRINTFORML %RESULTS,40,LEFT%	       ┃  ┃					     ┃
+	PRINTFORML %RESULTS,40,LEFT%┃
 	PRINTFORMW ┗━━━━━━━━━━━━━┛　┗━━━━━━━━━━━━━━━━━━━━┛
 	CFLAG:ARG:行動횟수 = 4
 ENDIF
@@ -176,9 +176,9 @@ ELSE
 		IF !CFLAG:ARG:600
 			SETCOLOR 0xff0033
 			PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
-			PRINTFORML ┃음음? 뭐냐 너,　　　　　　　　　　　　　　　　　┃
-			PRINTFORML ┃신의 화살이 듣지 않는 것이냐? 그럼 이거다!　　　┃
-			PRINTFORML ┃　　　　　　　　　　　　　　　　　　　　　　　┃
+			PRINTFORML ┃음음? 뭐냐 너,　　　　　　　　　　　　　　　┃
+			PRINTFORML ┃신의 화살이 듣지 않는 것이냐? 그럼 이거다!　┃
+			PRINTFORML ┃　　　　　　　　　　　　　　　　　　　　　　┃
 			PRINTFORMW ┗━━━━━━━━━━━━━━━━━━━━━━┛
 			RESETCOLOR
 			CFLAG:ARG:600 = 1

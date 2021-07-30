@@ -3,8 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_1112,ARG
-RESULTS = 독가스브레스
-
+IF SKILL_CHANGE(ARG, 3118)
+	RESULTS = 타마모살생석
+ELSE
+	RESULTS = 독가스브레스
+ENDIF
 ;　명중
 @SKILL_HITRATE_1112, ARG
 RETURN 100
@@ -13,8 +16,11 @@ RETURN 100
 @SKILL_POWER_1112, ARG
 SIF FLAG:拡散フラグ
 	RETURN 73
-RETURN 145
-
+IF SKILL_CHANGE(ARG, 3118)
+	RETURN 350
+ELSE
+	RETURN 145
+ENDIF
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_1112,ARG
 RETURN 1
@@ -32,7 +38,11 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_1112,ARG
-RETURN 9
+IF SKILL_CHANGE(ARG, 3118)
+	RETURN 25
+ELSE
+	RETURN 9
+ENDIF
 
 ;　相性
 @SKILL_TYPE_1112,ARG
@@ -40,12 +50,12 @@ RETURN 8
 ;신경
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1112
+@SKILL_DECIDE_TYPE_1112, ARG
 RETURN 1
 ;特技
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1112
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1112, ARG
 RETURN 1
 
 
@@ -130,8 +140,11 @@ CALL ATTACK_SPREAD,ARG,ARG:1,1112
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1112
-PRINTL [후열] 전열의 적 1체와 주변의 적에게 신경속성 소 물리데미지. (보통 확률로 POISON)
-
+IF U > 0 && U < CHARANUM && NO:U == 3118
+	PRINTL 마수 타마모를 소환하여 살생석을 던지게 하고 대상과 그 주위에 신경속성 물리데미지+독
+ELSE
+	PRINTL [후열] 독가스를 분사해, 전열의 적 1체와 주변의 적에게 신경속성 소 물리데미지. (보통 확률로 POISON)
+ENDIF
 ;継承に필요な部位
 @継承部位_1112,ARG
 SIF TALENT:ARG:입

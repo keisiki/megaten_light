@@ -6,14 +6,58 @@
 ;ミッションログ해설メイン페이지
 ;--------------------------------------------------
 @DICTIONARY_ENDING_MAIN
+P = 0
+P:1 = 4
 $PRINT_LIST
 DRAWLINE
+IF P == 0
 		PRINTL [ 0] 견습 서모너
 	IF DAY:1 > 10 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
 		PRINTL [ 1] 초심자 서모너
 	ELSE
 		PRINTL [ 1] ????
 	ENDIF
+	IF DAY:1 > 20 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
+		PRINTL [ 2] 반사람분 서모너
+	ELSE
+		PRINTL [ 2] ????
+	ENDIF
+	IF DAY:1 > 30 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
+		PRINTL [ 3] 미실장
+	ELSE
+		PRINTL [ 3] ????
+	ENDIF
+	IF DAY:1 > 40 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
+		PRINTL [ 4] 미실장
+	ELSE
+		PRINTL [ 4] ????
+	ENDIF
+	IF FLAG:周回횟수 >= 1 || FLAG:5 == 9
+		PRINTL [ 5] 미실장
+	ELSE
+		PRINTL [ 5] ????
+	ENDIF
+	IF 0
+		PRINTL [ 6] 미실장
+	ELSE
+		PRINTL [ 6] ????
+	ENDIF
+	IF 0
+		PRINTL [ 7] 미실장
+	ELSE
+		PRINTL [ 7] ????
+	ENDIF
+	IF 0
+		PRINTL [ 8] 미실장
+	ELSE
+		PRINTL [ 8] ????
+	ENDIF
+	IF 0
+		PRINTL [ 9] 미실장
+	ELSE
+		PRINTL [ 9] ????
+	ENDIF
+ELSEIF P == 1
 	IF FLAG:처녀탈취人数 > 0
 		PRINTL [10] 처음인 존재
 	ELSE
@@ -64,6 +108,7 @@ DRAWLINE
 	ELSE
 		PRINTL [19] ????
 	ENDIF
+ELSEIF P == 2
 	IF FLAG:奴隷매각最高額（음란창부） >= 150000
 		PRINTL [20] 고급 창부의 어획료
 	ELSE
@@ -94,12 +139,141 @@ DRAWLINE
 	ELSE
 		PRINTL [25] ????
 	ENDIF
+	IF 0
+		PRINTL [26] 미실장
+	ELSE
+		PRINTL [26] ????
+	ENDIF
+	IF 0
+		PRINTL [27] 미실장
+	ELSE
+		PRINTL [27] ????
+	ENDIF
+	IF 0
+		PRINTL [28] 미실장
+	ELSE
+		PRINTL [28] ????
+	ENDIF
+	IF 0
+		PRINTL [29] 미실장
+	ELSE
+		PRINTL [29] ????
+	ENDIF
+ELSEIF P == 3
+	IF 0
+		PRINTL [30] 미실장
+	ELSE
+		PRINTL [30] ????
+	ENDIF
+	IF 0
+		PRINTL [31] 미실장
+	ELSE
+		PRINTL [31] ????
+	ENDIF
+	IF 0
+		PRINTL [32] 미실장
+	ELSE
+		PRINTL [32] ????
+	ENDIF
+	IF 0
+		PRINTL [33] 미실장
+	ELSE
+		PRINTL [33] ????
+	ENDIF
+	IF 0
+		PRINTL [34] 미실장
+	ELSE
+		PRINTL [34] ????
+	ENDIF
+	IF 0
+		PRINTL [35] 미실장
+	ELSE
+		PRINTL [35] ????
+	ENDIF
+	IF 0
+		PRINTL [36] 미실장
+	ELSE
+		PRINTL [36] ????
+	ENDIF
+	IF 0
+		PRINTL [37] 미실장
+	ELSE
+		PRINTL [37] ????
+	ENDIF
+	IF 0
+		PRINTL [38] 미실장
+	ELSE
+		PRINTL [38] ????
+	ENDIF
+	IF 0
+		PRINTL [39] 미실장
+	ELSE
+		PRINTL [39] ????
+	ENDIF
+ELSEIF P == 4
+	IF 0
+		PRINTL [40] 미실장
+	ELSE
+		PRINTL [40] ????
+	ENDIF
+	IF 0
+		PRINTL [41] 미실장
+	ELSE
+		PRINTL [41] ????
+	ENDIF
+	IF 0
+		PRINTL [42] 미실장
+	ELSE
+		PRINTL [42] ????
+	ENDIF
+	IF 0
+		PRINTL [43] 미실장
+	ELSE
+		PRINTL [43] ????
+	ENDIF
+	IF 0
+		PRINTL [44] 미실장
+	ELSE
+		PRINTL [44] ????
+	ENDIF
+	IF 0
+		PRINTL [45] 미실장
+	ELSE
+		PRINTL [45] ????
+	ENDIF
+	IF 0
+		PRINTL [46] 미실장
+	ELSE
+		PRINTL [46] ????
+	ENDIF
+	IF 0
+		PRINTL [47] 미실장
+	ELSE
+		PRINTL [47] ????
+	ENDIF
+	IF 0
+		PRINTL [48] 미실장
+	ELSE
+		PRINTL [48] ????
+	ENDIF
+	IF 0
+		PRINTL [49] 미실장
+	ELSE
+		PRINTL [49] ????
+	ENDIF
+ENDIF
 DRAWLINE
+PRINTFORMLC \@(P <= 0) ? %" " * 18% # [1001]이전 페이지\@
 PRINTLC [1000]돌아간다
+PRINTFORMLC \@(P >= P:1) ? %" " * 18% # [1009]다음 페이지\@
 $INPUT_LOOP
 INPUT
 IF RESULT == 1000
 	RETURN 0
+ELSEIF RESULT == 1001 && P > 0
+	P -= 1
+ELSEIF RESULT == 1009 && P < P:1
+	P += 1
 ELSEIF RESULT < 0 || RESULT > 49
 	GOTO INPUT_LOOP
 ELSE
@@ -131,6 +305,109 @@ ELSE
 	PRINTW 
 ENDIF
 
+@DICTIONARY_ENDING_2
+IF DAY:1 > 20 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
+	PRINTL 〔반사람분 서모너〕
+	PRINTL 지금은 만들어지지 않았습니다.
+	PRINTL 
+	PRINTW 
+ELSE
+	PRINTL 〔????〕
+	PRINTL 취득조건：2회째의 할당량 납금을 끝마친다
+	PRINTL 
+	PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_3
+IF DAY:1 > 30 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
+	PRINTL 〔미실장〕
+	PRINTL 지금은 만들어지지 않았습니다.
+	PRINTL 
+	PRINTW 
+ELSE
+	PRINTL 〔????〕
+	PRINTL 취득조건：3회째의 할당량 납금을 끝마친다
+	PRINTL 
+	PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_4
+IF DAY:1 > 40 || FLAG:周回횟수 >= 1 || FLAG:5 == 9
+	PRINTL 〔미실장〕
+	PRINTL 지금은 만들어지지 않았습니다.
+	PRINTL 
+	PRINTW 
+ELSE
+	PRINTL 〔????〕
+	PRINTL 취득조건：4회째의 할당량 납금을 끝마친다
+	PRINTL 
+	PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_5
+IF FLAG:周回횟수 >= 1 || FLAG:5 == 9
+PRINTL 〔미실장〕
+PRINTL 지금은 만들어지지 않았습니다.
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：모든 납금을 끝마친다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_6
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_7
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_8
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_9
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
 
 @DICTIONARY_ENDING_10
 IF FLAG:처녀탈취人数 > 0
@@ -352,5 +629,317 @@ ELSE
 	PRINTL 취득조건：복종・예속를 취득한 노예를 50만 마카 이상의 값으로 판다
 	PRINTL 
 	PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_26
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_27
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_28
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_29
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_30
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_31
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_32
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_33
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_34
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_35
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_36
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_37
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_38
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_39
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_40
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_41
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_42
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_43
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_44
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_45
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_46
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_47
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_48
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ENDIF
+
+@DICTIONARY_ENDING_49
+IF 0
+PRINTL 〔미실장〕
+PRINTL 현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
+ELSE
+PRINTL 〔????〕
+PRINTL 취득조건：현재 실장되어 있지 않습니다
+PRINTL 
+PRINTW 
 ENDIF
 

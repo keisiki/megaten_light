@@ -61,12 +61,12 @@ ENDIF
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_549
+@SKILL_DECIDE_TYPE_549, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_549
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_549, ARG
 RETURN 0
 
 
@@ -113,6 +113,8 @@ RETURN 0
 @SKILL_RANK_549
 RETURN 22
 
+@継承不能_549
+RETURN 1
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -149,13 +151,29 @@ ENDIF
 FOR LOCAL,LOCAL:1,LOCAL:2
 	SIF POS(LOCAL) < 0
 		CONTINUE
-	CFLAG:POS(LOCAL):방어강화 = MIN(32, CFLAG:POS(LOCAL):방어강화 + 16)
+	IF ABL:ARG:가창기능 == 10
+		;4段階上昇
+		CFLAG:POS(LOCAL):방어강화 = MIN(32, CFLAG:POS(LOCAL):방어강화 + 16)
+		CFLAG:POS(LOCAL):마법효과강화 = MIN(32, CFLAG:POS(LOCAL):마법효과강화 + 16)
+	ELSEIF ABL:ARG:가창기능 > 6
+		;3段階上昇
+		CFLAG:POS(LOCAL):방어강화 = MIN(32, CFLAG:POS(LOCAL):방어강화 + 12)
+		CFLAG:POS(LOCAL):마법효과강화 = MIN(32, CFLAG:POS(LOCAL):마법효과강화 + 12)
+	ELSEIF ABL:ARG:가창기능 > 3
+		;2段階上昇
+		CFLAG:POS(LOCAL):방어강화 = MIN(32, CFLAG:POS(LOCAL):방어강화 + 8)
+		CFLAG:POS(LOCAL):마법효과강화 = MIN(32, CFLAG:POS(LOCAL):마법효과강화 + 8)
+	ELSE
+		;1段階上昇
+		CFLAG:POS(LOCAL):방어강화 = MIN(32, CFLAG:POS(LOCAL):방어강화 + 4)
+		CFLAG:POS(LOCAL):마법효과강화 = MIN(32, CFLAG:POS(LOCAL):마법효과강화 + 4)
+	ENDIF
 NEXT
-PRINTFORML \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 방어력이 매우 크게 올라갔다!
-SIF !ARG:2
-	WAIT
-
-
+IF ABL:ARG:가창기능 > 3
+    PRINTFORML \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 방어력・마볍효과가 매우 크게 올라갔다!
+ELSE
+    PRINTFORML \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 방어력・마볍효과가 올라갔다!
+ENDIF
 
 ;====================================================
 ;実行内容ここまで
@@ -173,7 +191,30 @@ SIF !ARG:2
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_549
-PRINTL [특수] 아군 전체의 방어력을 매우 크게 상승시킨다. 가창기능이 높을수록 필요한 MP가 감소한다.
+;ステータス画面からはこっち表示
+IF CFLAG:(CHARANUM-1):PTフラグ || U < 0 || U >= CHARANUM
+	PRINTL 誰も正解を知らない、人生という名の迷宮を楽しむ歌。防御力・魔法効果が上昇する。
+	PRINTL 歌唱技能に応じてコストが低下し、効果が強化される。
+	PRINTL 　
+	PRINTL 歌唱技能Lv10　 ：味方の防御力・마법효과　４段階上昇
+	PRINTL 歌唱技能Lv7以上：味方の防御力・마법효과　３段階上昇
+	PRINTL 歌唱技能Lv4以上：味方の防御力・마법효과　２段階上昇
+	PRINTL それ以外　　　 ：味方の防御力・마법효과　１段階上昇
+;戦闘中はこっち表示
+ELSE
+	PRINTL [특수] 誰も正解を知らない、人生という名の迷宮を楽しむ歌。
+    PRINTL 가창기능이 높을수록 아군 전체의 방어력・마볍효과를 매우 크게 상승시키고, 필요한 MP가 감소한다.
+	IF ABL:U:가창기능 == 10
+		PRINTL 味方の防御力・魔法効果を４段階上昇。
+	ELSEIF ABL:U:가창기능 > 6
+		PRINTL 味方の防御力・魔法効果を３段階上昇。
+	ELSEIF ABL:U:가창기능 > 3
+		PRINTL 味方の防御力・魔法効果を２段階上昇。
+	ELSE
+		PRINTL 味方の防御力・魔法効果を１段階上昇。
+	ENDIF
+ENDIF
+;PRINTL 夜に灯した明かりの様な、仲魔との絆を詠った歌。防御力が。歌唱技能に応じてコストが低下する。
 
 ;継承に필요な部位
 @継承部位_549,ARG

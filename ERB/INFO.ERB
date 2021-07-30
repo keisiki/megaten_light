@@ -23,6 +23,7 @@
 ;
 ; 선택 후 호출 한 후 RESULT : 1을 참조하십시오.
 ; RESULT : 1이 0이면 현재 RESULT 처리를 종료하면 그 이외라면 RESTART합니다.
+
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;
 ;	Modification Data:
@@ -41,6 +42,8 @@
 ;	011		2019/04/25		JK好き					合体用ソフトクイック설정の為に@INPUT_CHARA_LISTに追記
 ;	012		2019/10/30		ypa 					신뢰系함락추가
 ;	013		2020/01/25		Jガン 					일시적함락소질변경処理추가
+;	014		2020/08/26		MkjX 					촉수研究でも現在MAG/최대MAGを표시するように수정
+;	015		2021/02/07		Rsp暇人					名前等変更画面での文字数溢れを修正
 ;=============================================================================
 @INPUT_CHARA_LIST(ARGS, ARGS:1 = "", ARGS:2 = "", ARGS:3 = "", ARGS:4 = "", ARGS:5 = "돌아간다")
 #DIM LINE, 2
@@ -220,7 +223,22 @@ SELECTCASE LOCAL
 		SIF EXTRACHECK_DEVIL_CHILDREN(RESULT) && EQUIP:MASTER:라지엘의서
 			SETCOLOR COLOR("aqua")
 ;EDIT RASIEL-ADD-ON END   ------------------------------------------------
-		PRINTFORM  ：%CSV종족명(RESULT,0),6,LEFT% 
+;정령合体랭크変動表記用改変ここから
+		LOCAL:1 = GETCOLOR()
+		IF RESULT:2 == 1
+			SETCOLOR 0X66FFFF
+			PRINT  ↑
+			SETCOLOR LOCAL:1
+		ELSEIF RESULT:2 == -1
+			SETCOLOR 0X990000
+			PRINT  ↓
+			SETCOLOR LOCAL:1
+		ELSE
+			PRINT  ：
+		ENDIF
+		RESULT:2 = 0
+;정령合体랭크変動表記用改変ここまで
+		PRINTFORM %CSV종족명(RESULT,0),6,LEFT% 
 		SIF 合体後레벨 > BASE:MASTER:LV + FLAG:경험ED数 && 合体後충성도 < POWER(合体後레벨 -(BASE:MASTER:LV + FLAG:경험ED数) , 2)*500 && EQUIP:MASTER:스티븐 == 0
 			SETCOLOR COLOR("gray")
 		PRINTFORM LV{CSVBASE(RESULT,GETNUM(BASE,"LV"),0),2} 
@@ -427,6 +445,22 @@ FOR LCOUNT, 0, リスト표시数()
 							PRINTFORM 　충성도:{BASE:LOCAL:충성도,6}
 						PRINTFORM 　MAG:{BASE:LOCAL:ＭＡＧ,6}/{MAXBASE:LOCAL:ＭＡＧ,6}
 					ENDIF
+					;解析度表示追加　ここから
+					IF ABL:LOCAL:종족 > 0 && ABL:LOCAL:종족 < 45
+						IF FLAG:(20000+NO:LOCAL) <= 0
+							SETCOLOR 0xFFFFFF
+						ENDIF
+						IF FLAG:(20000+NO:LOCAL) > 999
+							SETCOLOR 0x404040
+							PRINT  100％
+						ELSE
+							PRINTFORM  {FLAG:(20000+NO:LOCAL)/10,3}％
+						ENDIF
+						RESETCOLOR
+					ELSE
+						PRINTFORM %" " * 6%
+					ENDIF
+					;解析度表示追加　ここまで
 				CASE [[SHOP:셋업]]
 					IF ABL:(LOCAL):종족 == 0
 						PRINTFORM [　－　]
@@ -435,7 +469,7 @@ FOR LCOUNT, 0, リスト표시数()
 					ENDIF
 				CASE 1201
 					SIF 文字色변경 != 0
-						PRINT 　全書と差異あり
+						PRINT 　전서와 차이 있음
 				CASE [[SHOP:요바이필터]]
 					PRINTFORM 　요바이허가：\@ CFLAG:LOCAL:요바이불허가 ? [×] # [○] \@
 				CASE 665
@@ -496,7 +530,7 @@ FOR LCOUNT, 0, リスト표시数()
 			ENDSELECT
 			;SIF FLAG:SHOPコマンド == 122
 			;	PRINTFORM 　MAG:{BASE:LOCAL:ＭＡＧ, 8}/{MAXBASE:LOCAL:ＭＡＧ, 8}
-			IF FLAG:SHOPコマンド == 122
+			IF FLAG:SHOPコマンド == 122 || FLAG:SHOPコマンド == 172
 				IF BASE:LOCAL:ＭＡＧ == MAXBASE:LOCAL:ＭＡＧ
 					SETCOLOR COLOR("pink")
 				ELSEIF BASE:LOCAL:ＭＡＧ >= MAXBASE:LOCAL:ＭＡＧ / 4 * 3
@@ -563,15 +597,17 @@ PRINTFORM %AUTO_SPLIT("　,☆,★,●,○",",",LOCAL)%
 RESULTS = [{ARG, 2}]
 RESULTS = %RESULTS%명칭：
 IF FLAG:カスタムゲーム화면
-	RESULTS = %RESULTS%%NAME:ARG, 34, LEFT% 
+;---- EDIT 015 MOD START -------------------------
+	RESULTS = %RESULTS%%S_NAME(ARG, 34, 1), 34, LEFT%  
 	RESULTS = %RESULTS%애칭：
-	RESULTS = %RESULTS%%CALLNAME:ARG, 18, LEFT% 
+	RESULTS = %RESULTS%%S_NAME(ARG, 18, 2), 18, LEFT% 
 	RESULTS = %RESULTS%일인칭：
-	RESULTS = %RESULTS%%CSTR:ARG:一人称, 18, LEFT% 
+		RESULTS = %RESULTS%%CSTR:ARG:一人称, 18, LEFT% 
 ELSE
-	RESULTS = %RESULTS%%NAME:ARG, 16, LEFT% 
+	RESULTS = %RESULTS%%S_NAME(ARG, 16, 1), 16, LEFT% 
 	RESULTS = %RESULTS%애칭：
-	RESULTS = %RESULTS%%CALLNAME:ARG, 16, LEFT% 
+	RESULTS = %RESULTS%%S_NAME(ARG, 16, 2), 16, LEFT%  
+	;---- EDIT 015 MOD END -------------------------
 	RESULTS = %RESULTS%일인칭：
 	RESULTS = %RESULTS%%CSTR:ARG:一人称, 12, LEFT% 
 ENDIF

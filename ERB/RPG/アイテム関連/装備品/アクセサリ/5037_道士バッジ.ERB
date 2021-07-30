@@ -19,32 +19,35 @@ SELECTCASE ARG
 ENDSELECT
 RETURN 100
 
-@장비추가스킬_5037,ARG,ARG:1 = -1
-SELECTCASE ARG
-	CASE 0
-		;기공(중)
-		RETURN 2412
-ENDSELECT
-RETURN 0
+@공격상성_5037, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_5037, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_5037, ARG = -1
+
+RETURN 1
+
+@사거리_5037, ARG = -1
+
+RETURN 1
+
+@공격범위_5037, ARG = -1
+
+RETURN 1
 
 @장비箇所_5037
 RETURN GET_EQUIPNUM("악세사리")
 
-;-----------------------------
-;- 조건・설명処理
-;-----------------------------
 @필요레벨_5037
 RETURN 1
 
 @장비조건_5037,ARG
 RETURN 1
 
-@장비해설_5037
-PRINTL 매 턴 MP가 조금 회복되는 씰.
-
-;-----------------------------
-;- 구입・引き継ぎ
-;-----------------------------
 @구입조건_5037
 RETURN 0
 
@@ -52,5 +55,12 @@ RETURN 0
 @EQUIP_EXCHANGE_5037
 RETURN 0
 
-@引継ぎ可不可_5037
+@장비추가스킬_5037,ARG,ARG:1 = -1
+SELECTCASE ARG
+	CASE 0
+		RETURN 2412
+ENDSELECT
 RETURN 0
+@장비해설_5037
+PRINTL 매 턴 MP가 조금 회복되는 씰.
+

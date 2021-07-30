@@ -10,15 +10,15 @@ RETURN 95
 
 ;　위력
 @SKILL_POWER_2618, ARG 
-RETURN 95
+RETURN 400
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_2618,ARG
-RETURN 4
+RETURN 1
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_2618,ARG
-RETURN 5
+RETURN 1
 
 
 ;　ＨＰ2を支払うかＭＰ3を支払うか
@@ -27,7 +27,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_2618,ARG
-RETURN 30
+RETURN 40
 
 ;　相性
 @SKILL_TYPE_2618,ARG
@@ -35,12 +35,12 @@ RETURN 16
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2618
+@SKILL_DECIDE_TYPE_2618, ARG
 RETURN 2
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2618
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2618, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2618
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -119,8 +119,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,2618
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2618
-PRINTL 이치고クロスを大量に전개し적전체を공격する。
-PRINTL 영웅　夢美の技。
+PRINTL 딸기크로스를 대량으로 전개하여 적 전체를 공격한다。
+PRINTL 영웅　유메미의 기술。
 
 ;継承に필요な部位
 @継承部位_2618,ARG

@@ -8,13 +8,13 @@
 SELECTCASE FLAG:現M
 	CASE 35
 		IF ARG == 16 && ARG:1 == 9 && 던전フラグ:13:15 < 7
-			CALL MESSAGE_WINDOW_D, "", "＞０５のマークの扉は閉ざされている"
+			CALL MESSAGE_WINDOW_D, "", "＞05의 마크의 문은 닫혀 있다"
 			RETURN 0
 		ENDIF
 	CASE 9
 		IF ARG == 3 && ARG:1 == 4 && 던전フラグ:13:4 < 14
-			CALL MESSAGE_WINDOW_D, "", "＞エレベーターだ"
-			CALL MESSAGE_WINDOW_D, "", "＞扉は閉ざされている"
+			CALL MESSAGE_WINDOW_D, "", "＞엘리베이터다"
+			CALL MESSAGE_WINDOW_D, "", "＞문은 닫혀 있다"
 			RETURN 0
 		ENDIF
 		
@@ -44,8 +44,8 @@ ENDSELECT
 
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 4000
-		CALL MESSAGE_WINDOW_D, "", "外の連中はいったん退却しやがったが…/すぐ引き返してくるだろうな "
-		CALL MESSAGE_WINDOW_D, "", "ま　そのときはまた/追い返してやるさ "
+		CALL MESSAGE_WINDOW_D, "", "다른 적들은 일단 물러났지만…/곧 되돌아오겠지 "
+		CALL MESSAGE_WINDOW_D, "", "뭐 그때는 또/되돌려보내주자 "
 ENDSELECT
 
 
@@ -61,121 +61,121 @@ ENDSELECT
 
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 4400
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),30,31
 	CASE 4401
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),20,31
 	CASE 4402
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),30,17
 	CASE 4403
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M)+1,31,21
 		
 	CASE 4528
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),12,11
 		SIF GETBIT(FLAG:発見ED, 45)
 			CALL DUNGEON_WORP,(FLAG:現M),20,17
 ;------------------------------------------------------------------------
 	CASE 4506
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),12,11
 	CASE 4507
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),18,11
 ;------------------------------------------------------------------------
 	CASE 4501
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),12,11
 	CASE 4502
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),25,14
 ;------------------------------------------------------------------------
 	CASE 4504
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),26,17
 	CASE 4505
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),18,11
 ;------------------------------------------------------------------------
 	CASE 4514
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),28,26
 	CASE 4517
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),25,14
 ;------------------------------------------------------------------------
 	CASE 4521
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),18,25
 	CASE 4524
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),25,14
 ;------------------------------------------------------------------------
 	CASE 4520
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),26,17
 	CASE 4525
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),14,25
 ;------------------------------------------------------------------------
 	CASE 4526
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),26,17
 	CASE 4527
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),13,17
 ;------------------------------------------------------------------------
 	CASE 4513
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),12,27
 	CASE 4516
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),12,11
 ;------------------------------------------------------------------------
 	CASE 4518
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),13,17
 	CASE 4519
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),29,28
 ;------------------------------------------------------------------------
 	CASE 4522
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),14,21
 	CASE 4523
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),13,17
 ;------------------------------------------------------------------------
 	CASE 4509
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),29,22
 	CASE 4510
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),13,17
 ;------------------------------------------------------------------------
 	CASE 4508
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),13,17
 	CASE 4511
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),15,13
 ;------------------------------------------------------------------------
 	CASE 4500
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),13,17
 	CASE 4503
-		CALL MESSAGE_WINDOW_D, "", "ワープゾーンだ！ "
+		CALL MESSAGE_WINDOW_D, "", "워프존이다！ "
 		CALL DUNGEON_WORP,(FLAG:現M),20,17
 		
 		
 ;------------------------------------------------------------------------
 ;ボス前
 	CASE 4515
-		CALL MESSAGE_WINDOW_D, "", "向こうからすさまじい気配を感じる "
-		CALL INPUT_SELECT_D, "[1]奥に行く/[0]行かない "
+		CALL MESSAGE_WINDOW_D, "", "저편에서 무서운 낌새를 느꼈다 "
+		CALL INPUT_SELECT_D, "[1]안으로 들어간다/[0]가지 않는다 "
 		IF RESULT == 1
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)-2
 		ELSE
@@ -183,9 +183,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		ENDIF
 ;ボス戦
 	CASE 4512
-				CALL MESSAGE_WINDOW_D, "악마", "ふむ…　この娘の知識を使うために催眠のように操っていいたが…/まさか　この정신세계に入ってくるとはな… "
-				CALL MESSAGE_WINDOW_D, "악마", "我は多神連合の一柱　바엘/我も　神により権威を奪われたのだ/それを奪い返すために戦っている "
-				CALL MESSAGE_WINDOW_D, "악마", "それを邪魔立てするなら/この場で消し去ってやろう "
+				CALL MESSAGE_WINDOW_D, "악마", "흐음… 이 아가씨의 지식을 쓰기 위해서 최면처럼 조종했는데…/설마 이 정신세계에 들어올 줄이야… "
+				CALL MESSAGE_WINDOW_D, "악마", "이 몸은 다신연합의 한 기둥 바엘/나도 신에 의해 권위를 빼앗긴것이다/그것을 다시 빼앗기위해 싸우고있다 "
+				CALL MESSAGE_WINDOW_D, "악마", "그것을 방해한다면/이 자리에서 지워버리지 "
 				
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
@@ -215,21 +215,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			FLAG:エンカウント率 = 0
 			FLAG:未遭遇歩数 = 0
 			
-				CALL MESSAGE_WINDOW_D, "악마", "バカな…我の…豊穣が… "
-				CALL MESSAGE_WINDOW_D, "", "악마は消えていった "
-				CALL MESSAGE_WINDOW_D, "모르가나", "よし、これで戻れるぜ "
-				CALL MESSAGE_WINDOW_D, "", "モルガナからもらったアプリを使って戻った "
+				CALL MESSAGE_WINDOW_D, "악마", "바보같은…이몸의…풍양이… "
+				CALL MESSAGE_WINDOW_D, "", "악마는 사라져 갔다 "
+				CALL MESSAGE_WINDOW_D, "모르가나", "좋아、이것으로 돌아갈 수 있겠어 "
+				CALL MESSAGE_WINDOW_D, "", "모르가나로부터 받은 앱을 사용하여 되돌아왔다 "
 				CALL DUNGEON_WORP,0,14,18
 			던전フラグ:13:1 = 11
-			CALL MESSAGE_WINDOW_D, "모르가나", "これでフタバは無事だぜ "
-			CALL MESSAGE_WINDOW_D, "모르가나", "だが…　相当ヤバい악마だったからな/정신にかなりダメージがあるぜ "
-			CALL MESSAGE_WINDOW_D, "모르가나", "でも　安心しな/しばらく　寝てりゃあ元気になるぜ "
-			CALL MESSAGE_WINDOW_D, "모르가나", "…いつ起きるのかわかんねえけどな… "
-				CALL MESSAGE_WINDOW_D, "", @"＞名声250を得た"
+			CALL MESSAGE_WINDOW_D, "모르가나", "이것으로 후타바는 무사하다구 "
+			CALL MESSAGE_WINDOW_D, "모르가나", "하지만… 상당히 위험한 악마였으니까/정신에 상당한 데미지가 있어 "
+			CALL MESSAGE_WINDOW_D, "모르가나", "그래도 안심해/잠시 자면 건강해질거야 "
+			CALL MESSAGE_WINDOW_D, "모르가나", "…언제 일어날지는 모르겠지만 말야… "
+				CALL MESSAGE_WINDOW_D, "", @"＞명성 250을 얻었다"
 				FLAG:名声 += 250
 	CASE 405
 		IF 던전フラグ:13:2 < 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "頼む！/助けてやってくれよ… "
+			CALL MESSAGE_WINDOW_D, "프레드", "부탁해！/도와줘… "
 			;この命令で이벤트は破壊され、ただの床になる
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 			던전フラグ:13:2 = 7
@@ -245,7 +245,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 4204
 		CALL DUNGEON_WORP,(FLAG:現M)-2,3,1
 	CASE 4200
-		CALL MESSAGE_WINDOW_D, "", "コントロール室のようなところに着いた "
+		CALL MESSAGE_WINDOW_D, "", "통제실 같은 곳에 도착했다 "
 	CASE 100
 		CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 		CALL DUNGEON_WORP,2,3,22

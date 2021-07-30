@@ -191,9 +191,15 @@ RETURN 1
 @MESSAGE_COM91
 IF TEQUIP:주도권
 	PRINTFORM %타겟은()% %CALLNAME:PLAYER%의 가슴을 쥐고 
+	;카테터
+		SIF TEQUIP:43
+		PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+	;요도플러그
+		SIF TEQUIP:44
+		PRINTFORMW 尿道プラグが挿入された状態のまま、
 	IF TALENT:PLAYER:빈유 || TALENT:PLAYER:절벽
 		PRINTW 그 빈약한 가슴에 페니스를 문질렀다…
-	ELSEIF TALENT:PLAYER:폭유 || TALENT:PLAYER:거유
+	ELSEIF TALENT:PLAYER:폭유 || TALENT:PLAYER:거유 || TALENT:PLAYER:魔乳
 		PRINTW 마치 섹스하듯이 가슴골에 삽입하기 시작했다…
 	ELSE
 		PRINTW 그대로 페니스를 끼워서 훑기 시작했다…
@@ -201,9 +207,15 @@ IF TEQUIP:주도권
 ;それ以外
 ELSE
 	PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% 
+	;카테터
+		SIF TEQUIP:43
+		PRINTFORMW 尿道にカテーテルが挿入された状態のまま、
+	;요도플러그
+		SIF TEQUIP:44
+		PRINTFORMW 尿道プラグが挿入された状態のまま、
 	IF TALENT:PLAYER:빈유 || TALENT:PLAYER:절벽
 		PRINTFORM 빈약한 가슴으로 열심히 %CALLNAME:TARGET%의 페니스를 
-	ELSEIF TALENT:PLAYER:폭유 || TALENT:PLAYER:거유
+	ELSEIF TALENT:PLAYER:폭유 || TALENT:PLAYER:거유 || TALENT:PLAYER:魔乳
 		PRINTFORM 풍만한 가슴으로 %CALLNAME:TARGET%의 페니스를 감싸 
 	ELSE
 		PRINTFORM 가슴에 %CALLNAME:TARGET%의 페니스를 끼워서 

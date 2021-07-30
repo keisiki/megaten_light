@@ -726,7 +726,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		LOCALS = 야마타노드링크
 		LOCAL = 3
 	CASE 900
-		LOCALS = 무가의투구
+		LOCALS = 마사카도의투구
 	CASE 1000
 		LOCALS = 힘의향
 	CASE 1100
@@ -905,7 +905,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y)
 				FLAG:도주불가フラグ = 0
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
-				FLAG:11406 = 1
+				;FLAG:11406 = 1
+				CALL LIFTING_A_BAN([[キャラ:토르]])
 				CALL MESSAGE_WINDOW_D, "목소리", "훌륭하다…인간이여/설마 토르까지도 쓰러뜨릴거라고는…"
 				CALL MESSAGE_WINDOW_D, "", "＞장내는 터져나온 박수소리로 뒤덮여 있다"
 				CALL MESSAGE_WINDOW_D, "목소리", "무엇보다도 강자야말로 존중 받는 것이 우리들의 섭리/너 정도의 강함이 있다면/바람을 죽인 것도 또한 용서된다"
@@ -1338,7 +1339,7 @@ ENDIF
 ;葛葉라이도우の사고패턴
 @SET_ACTION_4542,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF CFLAG:MASTER:방어강화 > -1
 		CFLAG:(CHARANUM-1):속도보정 = 25
 		CALL CHECK_ACTIONABLE,ARG,515

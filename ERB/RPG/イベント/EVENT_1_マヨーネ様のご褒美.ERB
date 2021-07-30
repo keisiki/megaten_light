@@ -11,6 +11,13 @@
 ;	001		20XX/XX/XX		XXXX					作成
 ;	002		2017/09/19		kuma					마요네加入조건레벨の변경
 ;	003		2019/03/02		JK好き					마요네입수後そのまま조교する選択肢추가 조교しない場合時間経過しない様に변경
+;	004		2020/06/13		名無し					도리と마리に초기이상경험が付く様に
+;													これで친애ルートが捗るね
+;													さらに　CFLAG:LOCAL:이벤트加入　を설정しました。구상を書く時に이용してください
+;													CFLAG:1		윤간されちゃいました
+;													CFLAG:2		후타나리に개조されちゃいました
+;													CFLAG:3		윤간조교されて60日が経ちました。짐승とのSEXも경험しました
+;													CFLAG:4		윤간조교と후타나리개조されて60日が経ちました。짐승とのSEXも경험しました
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 ;이벤트フラグ:1:0 = マヨ様の상태( 3仲魔に )
@@ -95,7 +102,7 @@ ELSEIF 이벤트フラグ:1:0 < 2
 	SIF FLAG:5 != 9
 		PRINTW 「그렇다고해도 잠시 방심하면 금새 어쩔 방법이 없게 되아요? 후후후」
 	PRINTL 
-	PRINT そう言って마요네が指を鳴らすと、
+	PRINT 그렇게 말하면서 마요네가 손가락을 튕기면,
 	
 	;経過日数で分岐　20日以内なら綺麗な상태、それ以後は조교済み
 	IF DAY < 21
@@ -207,7 +214,6 @@ ELSEIF 이벤트フラグ:1:0 < 2
 					ABL:LOCAL:자위중독 = 1
 					ABL:LOCAL:정액중독 = 1
 					MARK:LOCAL:반발각인 = 3
-					MARK:LOCAL:4 = 3
 					EXP:LOCAL:키스경험 = (DAY-20)*10
 					EXP:LOCAL:Ｖ경험 = (DAY-20)*10
 					EXP:LOCAL:Ａ경험 = (DAY-20)*10
@@ -223,7 +229,12 @@ ELSEIF 이벤트フラグ:1:0 < 2
 					EXP:LOCAL:방뇨경험 = (DAY-20)*5
 					EXP:LOCAL:레즈경험 = (DAY-20)*10
 					EXP:LOCAL:긴박경험 = (DAY-20)*5
+					CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+					CALL SHOW_ABNORMAL_EXP , (RESULT:1), 0
+					CFLAG:LOCAL:초기이상경험 = 2
 					EXP:LOCAL:이상경험 = 2
+					;정액便所경험済み구상を誰かが作りやすくするために
+					CFLAG:LOCAL:이벤트加入 = 1
 
 					;2ヶ月も使ってたんで
 					IF DAY > 60
@@ -253,7 +264,13 @@ ELSEIF 이벤트フラグ:1:0 < 2
 						EXP:LOCAL:수간경험 = (DAY-60)*10
 						EXP:LOCAL:고통쾌락경험 = (DAY-20)*10
 						EXP:LOCAL:방뇨경험 = (DAY-20)*5
+						CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+						CALL ADDS_ABNORMAL_EXP("수간", (RESULT:1))
+						CALL SHOW_ABNORMAL_EXP , (RESULT:1), 0
+						CFLAG:LOCAL:초기이상경험 = 3
 						EXP:LOCAL:이상경험 = 3
+						;정액便所경험済み구상を誰かが作りやすくするために
+						CFLAG:LOCAL:이벤트加入 = 3
 					ENDIF
 				ENDIF
 				
@@ -282,6 +299,7 @@ ELSEIF 이벤트フラグ:1:0 < 2
 				LOCAL = GETCHARA(4505)
 				IF RESULT == 1
 					TALENT:LOCAL:처녀 = 0
+					TALENT:LOCAL:자위광 = 1
 					ABL:LOCAL:Ｃ감각 = 1
 					ABL:LOCAL:Ｖ감각 = 3
 					ABL:LOCAL:Ａ감각 = 3
@@ -296,7 +314,6 @@ ELSEIF 이벤트フラグ:1:0 < 2
 					ABL:LOCAL:자위중독 = 2
 					ABL:LOCAL:정액중독 = 1
 					MARK:LOCAL:반발각인 = 2
-					MARK:LOCAL:4 = 2
 					EXP:LOCAL:키스경험 = (DAY-20)*15
 					EXP:LOCAL:Ｖ경험 = (DAY-20)*15
 					EXP:LOCAL:Ａ경험 = (DAY-20)*15
@@ -312,7 +329,12 @@ ELSEIF 이벤트フラグ:1:0 < 2
 					EXP:LOCAL:방뇨경험 = (DAY-20)*5
 					EXP:LOCAL:레즈경험 = (DAY-20)*10
 					EXP:LOCAL:긴박경험 = (DAY-20)*5
+					CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+					CALL SHOW_ABNORMAL_EXP , (RESULT:1), 0
+					CFLAG:LOCAL:초기이상경험 = 2
 					EXP:LOCAL:이상경험 = 2
+					;정액便所경험済み구상を誰かが作りやすくするために
+					CFLAG:LOCAL:이벤트加入 = 1
 
 					;2ヶ月も使ってたんで
 					IF DAY > 60
@@ -342,7 +364,13 @@ ELSEIF 이벤트フラグ:1:0 < 2
 						EXP:LOCAL:수간경험 = (DAY-60)*10
 						EXP:LOCAL:고통쾌락경험 = (DAY-20)*10
 						EXP:LOCAL:방뇨경험 = (DAY-20)*5
+						CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+						CALL ADDS_ABNORMAL_EXP("수간", (RESULT:1))
+						CALL SHOW_ABNORMAL_EXP , (RESULT:1), 0
+						CFLAG:LOCAL:초기이상경험 = 3
 						EXP:LOCAL:이상경험 = 3
+						;정액便所경험済み구상を誰かが作りやすくするために
+						CFLAG:LOCAL:이벤트加入 = 3
 					ENDIF
 				ENDIF
 			CASEELSE
@@ -372,6 +400,10 @@ ELSEIF 이벤트フラグ:1:0 < 2
 				IF RESULT == 1
 					TALENT:LOCAL:처녀 = 0
 					TALENT:LOCAL:후타나리 = 1
+					TALENT:LOCAL:정조관념 = 0
+					TALENT:LOCAL:일선을넘지않음 = 0
+					TALENT:LOCAL:해방 = 1
+					TALENT:LOCAL:불결무시 = 1
 					ABL:LOCAL:Ｃ감각 = 1
 					ABL:LOCAL:Ｖ감각 = 3
 					ABL:LOCAL:Ａ감각 = 3
@@ -386,8 +418,7 @@ ELSEIF 이벤트フラグ:1:0 < 2
 					ABL:LOCAL:자위중독 = 1
 					ABL:LOCAL:정액중독 = 1
 					MARK:LOCAL:반발각인 = 3
-					MARK:LOCAL:4 = 3
-					EXP:LOCAL:키스경험 = (DAY-20)*50
+					EXP:LOCAL:키스경험 = (DAY-20)*30
 					EXP:LOCAL:Ｖ경험 = (DAY-20)*50
 					EXP:LOCAL:Ａ경험 = (DAY-20)*40
 					EXP:LOCAL:절정경험 = (DAY-20)*95
@@ -396,17 +427,25 @@ ELSEIF 이벤트フラグ:1:0 < 2
 					EXP:LOCAL:자위경험 = (DAY-20)*5
 					EXP:LOCAL:조교자위경험 = (DAY-20)*15
 					EXP:LOCAL:정액경험 = (DAY-20)*55
-					EXP:LOCAL:봉사쾌락경험 = (DAY-20)*5
+					EXP:LOCAL:봉사쾌락경험 = (DAY-20)*10
 					EXP:LOCAL:펠라경험 = (DAY-20)*30
-					EXP:LOCAL:고통쾌락경험 = (DAY-20)*10
+					EXP:LOCAL:고통쾌락경험 = (DAY-20)*15
 					EXP:LOCAL:방뇨경험 = (DAY-20)*5
 					EXP:LOCAL:레즈경험 = (DAY-20)*20
 					EXP:LOCAL:긴박경험 = (DAY-20)*5
 					EXP:LOCAL:사정경험 = (DAY-20)*15
-					EXP:LOCAL:이상경험 = 2
+					CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+					CALL ADDS_ABNORMAL_EXP("사정", (RESULT:1))
+					CALL SHOW_ABNORMAL_EXP , (RESULT:1), 0
+					CFLAG:LOCAL:초기이상경험 = 3
+					EXP:LOCAL:이상경험 = 3
+					;정액便所경험済み구상を誰かが作りやすくするために
+					CFLAG:LOCAL:이벤트加入 = 2
 
 					;2ヶ月経過したんで
 					IF DAY > 60
+						TALENT:LOCAL:거유 = 0
+						TALENT:LOCAL:폭유 = 1
 						ABL:LOCAL:Ｃ감각 = 4
 						ABL:LOCAL:Ｖ감각 = 5
 						ABL:LOCAL:Ａ감각 = 5
@@ -420,6 +459,14 @@ ELSEIF 이벤트フラグ:1:0 < 2
 						ABL:LOCAL:레즈끼 = 4
 						ABL:LOCAL:섹스중독 = 1
 						ABL:LOCAL:정액중독 = 3
+						CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+						CALL ADDS_ABNORMAL_EXP("수간", (RESULT:1))
+						CALL ADDS_ABNORMAL_EXP("사정", (RESULT:1))
+						CALL SHOW_ABNORMAL_EXP , (RESULT:1), 0
+						CFLAG:LOCAL:초기이상경험 = 4
+						EXP:LOCAL:이상경험 = 4
+						;정액便所경험済み구상を誰かが作りやすくするために
+						CFLAG:LOCAL:이벤트加入 = 4
 					ENDIF
 
 				ENDIF
@@ -428,6 +475,8 @@ ELSEIF 이벤트フラグ:1:0 < 2
 				IF RESULT == 1
 					TALENT:LOCAL:처녀 = 0
 					TALENT:LOCAL:후타나리 = 1
+					TALENT:LOCAL:해방 = 1
+					TALENT:LOCAL:불결무시 = 1
 					ABL:LOCAL:Ｃ감각 = 3
 					ABL:LOCAL:Ｖ감각 = 3
 					ABL:LOCAL:Ａ감각 = 1
@@ -442,27 +491,33 @@ ELSEIF 이벤트フラグ:1:0 < 2
 					ABL:LOCAL:자위중독 = 2
 					ABL:LOCAL:정액중독 = 1
 					MARK:LOCAL:반발각인 = 2
-					MARK:LOCAL:4 = 2
-					EXP:LOCAL:키스경험 = (DAY-20)*20
-					EXP:LOCAL:Ｖ경험 = (DAY-20)*20
-					EXP:LOCAL:Ａ경험 = (DAY-20)*20
-					EXP:LOCAL:절정경험 = (DAY-20)*25
+					EXP:LOCAL:키스경험 = (DAY-20)*30
+					EXP:LOCAL:Ｖ경험 = (DAY-20)*50
+					EXP:LOCAL:Ａ경험 = (DAY-20)*40
+					EXP:LOCAL:절정경험 = (DAY-20)*95
 					EXP:LOCAL:성교경험 = (DAY-20)*110
-					EXP:LOCAL:질사경험 = (DAY-20)*20
-					EXP:LOCAL:자위경험 = (DAY-20)*5
-					EXP:LOCAL:조교자위경험 = (DAY-20)*5
+					EXP:LOCAL:질사경험 = (DAY-20)*40
+					EXP:LOCAL:자위경험 = (DAY-20)*15
+					EXP:LOCAL:조교자위경험 = (DAY-20)*10
 					EXP:LOCAL:정액경험 = (DAY-20)*55
 					EXP:LOCAL:봉사쾌락경험 = (DAY-20)*5
 					EXP:LOCAL:펠라경험 = (DAY-20)*30
 					EXP:LOCAL:고통쾌락경험 = (DAY-20)*10
-					EXP:LOCAL:방뇨경험 = (DAY-20)*5
+					EXP:LOCAL:방뇨경험 = (DAY-20)*10
 					EXP:LOCAL:레즈경험 = (DAY-20)*20
 					EXP:LOCAL:긴박경험 = (DAY-20)*5
 					EXP:LOCAL:사정경험 = (DAY-20)*25
-					EXP:LOCAL:이상경험 = 2
+					CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+					CALL ADDS_ABNORMAL_EXP("사정", (RESULT:1))
+					CALL SHOW_ABNORMAL_EXP , (RESULT:1), 0
+					CFLAG:LOCAL:초기이상경험 = 3
+					EXP:LOCAL:이상경험 = 3
+					;정액便所경험済み구상を誰かが作りやすくするために
+					CFLAG:LOCAL:이벤트加入 = 2
 
 					;2ヶ月経過したんで
 					IF DAY > 60
+						TALENT:LOCAL:오줌싸개 = 1
 						ABL:LOCAL:Ｃ감각 = 5
 						ABL:LOCAL:Ｖ감각 = 5
 						ABL:LOCAL:Ａ감각 = 3
@@ -476,6 +531,14 @@ ELSEIF 이벤트フラグ:1:0 < 2
 						ABL:LOCAL:레즈끼 = 4
 						ABL:LOCAL:섹스중독 = 1
 						ABL:LOCAL:정액중독 = 3
+						CALL ADDS_ABNORMAL_EXP("처녀상실（윤간）", (RESULT:1))
+						CALL ADDS_ABNORMAL_EXP("수간", (RESULT:1))
+						CALL ADDS_ABNORMAL_EXP("사정", (RESULT:1))
+						CALL SHOW_ABNORMAL_EXP , (RESULT:1), 0
+						CFLAG:LOCAL:초기이상경험 = 4
+						EXP:LOCAL:이상경험 = 4
+						;정액便所경험済み구상を誰かが作りやすくするために
+						CFLAG:LOCAL:이벤트加入 = 4
 					ENDIF
 
 				ENDIF

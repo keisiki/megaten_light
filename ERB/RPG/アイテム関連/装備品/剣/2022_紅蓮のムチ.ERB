@@ -8,13 +8,12 @@
 @기본능력수정_2022,ARG,ARG:1 = -1
 SELECTCASE ARG
 	CASE 1
-		IF ARG:1 > -1
-			SELECTCASE EQUIP:(ARG:1):13
-				CASE 0
-					RETURN 0
-				CASE 3501
-					RETURN 1
-			ENDSELECT
+		SIF ARG:1 == -1
+			RETURN 0
+		IF EQUIP:(ARG:1):몸통 == 3501
+			RETURN 1
+		ELSE
+			RETURN 0
 		ENDIF
 ENDSELECT
 RETURN 0
@@ -89,11 +88,14 @@ PRINTL 장비조건：♀ LV18～
 
 @장비해설_2022
 PRINTL 활활 타오르는 듯한 빨간색의 채찍。
+SETCOLOR 0x87ceeb
+PRINTL 《하이레그아머》
+RESETCOLOR
 
 @引継ぎ可不可_2022
 RETURN 1
 
 @검타입_2022
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 RETURN 7

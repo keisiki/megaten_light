@@ -148,70 +148,70 @@ SELECTCASE ARG / 10
 ;鬼太郎・ハム子
 CASE 22
 	IF ( 던전フラグ:70:(10) >= 1 || 던전フラグ:70:(11) >=1 ) && 던전フラグ:70:(94) != 0
-		RESULTS = 主
+		RESULTS = 주
 	ELSE
 		RESULTS = □
 	ENDIF
 ;유카리
 CASE 23 
 	IF 던전フラグ:70:(12)>=1
-		RESULTS = ゆ
+		RESULTS = 유
 	ELSE
 		RESULTS = □
 	ENDIF
 ;준페이
 CASE 24
 	IF 던전フラグ:70:(13)>=1
-		RESULTS = 順
+		RESULTS = 준
 	ELSE
 		RESULTS = □
 	ENDIF
 ;明彦
 CASE 25
 	IF 던전フラグ:70:(14)>=1
-		RESULTS = 明
+		RESULTS = 사
 	ELSE
 		RESULTS = □
 	ENDIF
 ;미츠루
 CASE 26
 	IF 던전フラグ:70:(15)>=1
-		RESULTS = 美
+		RESULTS = 미
 	ELSE
 		RESULTS = □
 	ENDIF
 ;후카
 CASE 27 
 	IF 던전フラグ:70:(22)>=1
-		RESULTS = 風
+		RESULTS = 후
 	ELSE
 		RESULTS = □
 	ENDIF
 ;아이기스
 CASE 28
 	IF 던전フラグ:70:(16)>=1
-		RESULTS = ア
+		RESULTS = 아
 	ELSE
 		RESULTS = □
 	ENDIF
 ;コロ丸
 CASE 29
 	IF 던전フラグ:70:(17)>=1
-		RESULTS = 犬
+		RESULTS = 코
 	ELSE
 		RESULTS = □
 	ENDIF
 ;ショタ
 CASE 30
 	IF 던전フラグ:70:(18)>=1
-		RESULTS = 天
+		RESULTS = 켄
 	ELSE
 		RESULTS = □
 	ENDIF
 ;요리上손
 CASE 31
 	IF 던전フラグ:70:(19)>=1
-		RESULTS = 荒
+		RESULTS = 신
 	ELSE
 		RESULTS = □
 	ENDIF
@@ -727,259 +727,258 @@ CASE 4
 		CASE 0
 			SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CASE 22
-		IF 던전フラグ:70:(94) == 1
-			;여주인공
-			IF 던전フラグ:70:(11) == 1
-				PRINTW 소녀는 가볍게 인사해왔다…….
-				던전フラグ:70:(11) = 2
-			ELSEIF 던전フラグ:70:(70) == 1 && 던전フラグ:70:92 == 0 && ITEM:타르타로스 == 0 && 던전フラグ:70:(16) > 0
-				PRINTW ……?
-				PRINTW 소녀가 무슨 소프트웨어를 주었다.
-				PRINTW 「아이기스를 구해준 답례」라고 한다.
-				PRINTL 
-				PRINTW [타르타로스] 를 손에 넣었다.
-				ITEM:타르타로스 += 1
-				던전フラグ:70:92 = 1
-			ELSEIF 던전フラグ:70:(11) >= 2
-				PRINTW 소녀는 멍하니 있다……
-			ENDIF
-
+				IF 던전フラグ:70:(94) == 1
+					;여주인공
+					IF 던전フラグ:70:(11) == 1
+						PRINTW 소녀는 가볍게 인사해왔다…….
+						던전フラグ:70:(11) = 2
+					ELSEIF 던전フラグ:70:(70) == 1 && 던전フラグ:70:92 == 0 && ITEM:타르타로스 == 0 && 던전フラグ:70:(16) > 0
+						PRINTW ……?
+						PRINTW 소녀가 무슨 소프트웨어를 주었다.
+						PRINTW 「아이기스를 구해준 답례」라고 한다.
+						PRINTL 
+						PRINTW [타르타로스] 를 손에 넣었다.
+						ITEM:타르타로스 += 1
+						던전フラグ:70:92 = 1
+					ELSEIF 던전フラグ:70:(11) >= 2
+						PRINTW 소녀는 멍하니 있다……
+					ENDIF
 				ELSE
-			;남주인공
-			IF 던전フラグ:70:(10) == 1
-				PRINTW 소년은 가볍게 인사해왔다…….
-				던전フラグ:70:(10) = 2
-			ELSEIF 던전フラグ:70:(70) == 1 && 던전フラグ:70:92 == 0 && ITEM:타르타로스 == 0 && 던전フラグ:70:(16) > 0
-				PRINTW ……?
-				PRINTW 소년은 무슨 소프트웨어를 주었다.
-				PRINTW 「아이기스를 구해준 답례」라고 한다.
-				PRINTL 
-				PRINTW [타르타로스] 를 손에 넣었다.
-				ITEM:타르타로스 += 1
-				던전フラグ:70:92 = 1
-			ELSEIF 던전フラグ:70:(10) >= 2
-				PRINTW 소년은 멍하니 있다…….
-			ENDIF
-		ENDIF
-		CASE 23
-		;유카리
-		IF 던전フラグ:70:(12) == 1
-			PRINTW 「저, 저기, 처음 뵙겠습니다」
-			PRINTW 「타케바 유카리라고 합니다. 잘 부탁드려요!」
-			PRINTFORMW 유카리라고 이름을 밝힌 소녀는 %CALLNAME:MASTER%에게 어색하게 인사해왔다…….
-			던전フラグ:70:(12) = 2
-		ELSEIF 던전フラグ:70:(12) >= 2
-			PRINTW 유카리가 있다.
-			IF 던전フラグ:70:(89) == 0 && 던전フラグ:70:(1) == 1
-				PRINTFORMW 「아, %CALLNAME:MASTER% 씨」
-				PRINTW 「드릴 말씀이 있는데요, 저」
-				PRINTW 「최근에 우리 학교 학생이 타르타로스에 들어가버린 모양이라……」
-				PRINTW 「그, 그래서!」
-				PRINTW 「아직 발견되지 않은 것 같으니, 만약 찾으면 데려와주실 수 있을까요?」
-				PRINTL 
-				PRINTW 「행방불명된 소녀」이야기를 들었다.
-				던전フラグ:70:(89) = 1
-				RETURN 0
-			ELSEIF 던전フラグ:70:(1) == 0
-				PRINTW 「곤충 모습의 되게 딱딱한 쉐도가 보일 텐데요」
-				PRINTW 「그 녀석『사갑충』이라 해서, 잔 같은 충격 속성이 잘 먹히는데」
-				PRINTW 「맞으면 아프니까 상대하지 않는 편이 나아요」
-			ELSEIF 던전フラグ:70:(1) == 1
-				PRINTW 「던전 안에서 이따금 저희를 발견할지도 모르겠는데요」
-				PRINTW 「만약 핀치에 몰려있다면, 저기, 구해주세요?」
-				PRINTW 「일단 낼 수 있는 대로 답례는 하겠으니……」
-			ELSEIF 던전フラグ:70:(1) == 2
-				PRINTW 「타르타로스, 위로 가면 갈수록 자꾸자꾸 쉐도도 강해져가네……」
-				PRINTW 「벅차단 느낌이면 아래층이나 일단 다른 곳에서 몸을 단련하는 편이 좋을지도 모르겠어」
-			ELSE
-				PRINTW 「타르타로스, 위로 가면 갈수록 자꾸자꾸 쉐도도 강해져가네……」
-				PRINTW 「벅차단 느낌이면 아래층이나 일단 다른 곳에서 몸을 단련하는 편이 좋을지도 모르겠어」
-			ENDIF
-		ENDIF
-		CASE 24
-		;テレッテ
-		IF 던전フラグ:70:(13) == 1
-			PRINTFORMW 「당신이 %CALLNAME:MASTER% 씨?」
-			PRINTW 「난 이오리 준페이라고 하우. 잘 부탁드림다!」
-			PRINTFORMW 준페이라고 이름을 밝힌 소년은 %CALLNAME:MASTER%에게 허물없이 인사해왔다…….
-			던전フラグ:70:(13) = 2
-		ELSEIF 던전フラグ:70:(13) >= 2
-			PRINTW 준페이가 있다.
-			IF 던전フラグ:70:(89) == 0 && 던전フラグ:70:(1) == 1
-				PRINTFORMW 「아、%CALLNAME:MASTER% 씨」
-				PRINTW 「그나저나 이런 이야기가 있는데요」
-				PRINTW 「우리 학생이 이 타르타로스에서 행방불명돼버렸다네요―」
-				PRINTW 「만약 찾으면 구출해주시도록 부탁해도 되겠슴까?」
-				PRINTL 
-				PRINTW 「행방불명된 소녀」이야기를 들었다.
-				던전フラグ:70:(89) = 1
-				RETURN 0
-			ELSEIF 던전フラグ:70:(1) == 0
-				PRINTW 「그 뭐냐, 악마사역자?」
-				PRINTW 「괴물 끌도 다니며 무섭지 않나―라는 생각도 하는데」
-			ELSEIF 던전フラグ:70:(1) == 1
-				PRINTW 「6층 정도부터 비너스 이글이란 새가 나오는데요」
-				PRINTW 「빠르지 강하지 바람으로 토막을 치지, 애먹으니까 조심하는 편이 좋심다」
-			ELSEIF 던전フラグ:70:(1) == 2
-				PRINTW 「아― 빌어먹을―」
-				PRINTW 「팬텀 위치라고 귀여운 여자아이 같은 쉐도 있는데요」
-				PRINTW 「화염에 내성 가지고 있으면 낙승, 이라고 여유 부리고 있다가 쓴맛 봤수다……」
-			ELSEIF 던전フラグ:70:(1) == 3
-				PRINTW 「타르타로스에 떨어져 있는 보물상자 말인데요」
-				PRINTW 「가∼끔 비싸게 팔리는 물건이 들어있어서 돈벌이가 되기도 합죠」
-			ELSEIF 던전フラグ:70:(1) == 4
-				PRINTW 「기계라든가, 물건 같은 적은 전격 말고도 수격(水擊)이 잘 먹히기도 합죠」
-				PRINTW 「그밖에는 날고 있는 적에게 총이나 중력이라든가, 마음을 흔들어대는 적에게 신경도 제법 효과 있고요」
-			ELSEIF 던전フラグ:70:(1) == 5
-				PRINTW 「저번에 쉐도를 가비얍∼게 쓸어주려고 했더니 반사당했지 뭐유!」
-				PRINTW 「은근슬쩍 쉐도에 끼어 있는 여유 같이 생긴 놈에게 주의하는 편이 좋심다!」
-			ELSE
-				PRINTW 「악마라고 하자면, 그, 매력적인 여성 같은 악마도 있는 건감유……」
-				PRINTW 「앗, 아니! 이상하게 신경 쓰지 않아도 됨다! 혼잣말이거든요!」
-			ENDIF
-		ENDIF
-		CASE 25
-		;肉
-		IF 던전フラグ:70:(14) == 1
-				PRINTW 「사나다 아키히코다」
-				PRINTW 「잘 부탁한다」
-				PRINTW 늠름한 소년은 인사해왔다…….
-				던전フラグ:70:(14) = 2
-		ELSEIF 던전フラグ:70:(14) >= 2
-			PRINTW 아키히코가 있다.
-			IF 던전フラグ:70:(1) == 0
-				PRINTW 「얼마 전에 쉐도의 습격을 당해 부상을 입어서 말이야」
-				PRINTW 「부상을 다스리라고 미츠루에게 만류당해 벤치 대기 상태지」
-			ELSEIF 던전フラグ:70:(1) == 1
-				PRINTW 「부상도 아물어 겨우 나도 탐색에 참가할 수 있군」
-				PRINTW 「탐색 중에 만날 일도 있겠지만 잘 부탁한다」
-			ELSEIF 던전フラグ:70:(1) == 2
-				PRINTW 「강철의 기가스는 꽤 터프하고, 더욱이 강렬한 일격을 쏴대지」
-				PRINTW 「공격을 받기 전에 전격으로 선제를 잡아 움직임을 막아 봉살하면 된다」
-			ELSEIF 던전フラグ:70:(1) == 3
-				PRINTW 「점점 한 번에 나오는 적의 수가 늘기 시작한 느낌이군」
-				PRINTW 「이 추세면 아마도 층을 올라갈 때마다 적이 강해지고, 또 많아지겠어」
-			ELSEIF 던전フラグ:70:(1) == 4
-				PRINTW 「평범한 인간과는 관계없지만, 파마 속성으로 즉사를 노리는 적이 있다」
-				PRINTW 「파마에 약한 악마를 데리고 있을 경우, 가장 우선해서 잽싸게 쓰러뜨려야하겠지」
-			ELSEIF 던전フラグ:70:(1) == 5
-				PRINTW 「외견에 비해 사실은… 같은 쉐도를 주의해라」
-				PRINTW 「예를 들면 미노타우로스 4호」
-				PRINTW 「언뜻 물리형으로 보이지만, 그놈은 마법 쪽도 꽤 특기야」
-			ELSEIF 던전フラグ:70:(1) == 6
-				PRINTW 「이번 층은 적이 꽤 만만한데……」
-				PRINTW 「뭔가 있을지도 모르겠어. 주의하는 편이 낫다」
-			ELSE
-				PRINTW 「악마라……. 조만간 기회가 있으면 한 판 붙게 해줬으면 한다」
-			ENDIF
-		ENDIF
-		CASE 26
-		SIF 던전フラグ:70:(15) >= 2
-		PRINTW 미츠루가 있다.
-		;ブリリアント
-		IF 던전フラグ:70:(15) == 1
-			PRINTW 「이사장에게서 얘기는 들었습니다」
-			PRINTW 「그…… 미성년뿐이지만 저희에게는 인원 또한 전혀 부족하단 것도 이해해주십시오」
-			PRINTW 특별 과외 활동부를 이끄는 소녀는 우울하게 말했다…….
-			던전フラグ:70:(15) = 2
-		ELSEIF 던전フラグ:70:(15) >= 2
-			IF 던전フラグ:70:(22) >= 1
-				IF 던전フラグ:70:(1) == 2
-					PRINTW 「백업 교대자가 발견되었기에 저도 탐색에 참가하게 되었습니다」
-					PRINTW 「뭔가 정보가 들어오는 대로 당신에게도 전달하겠습니다」
-				ELSEIF 던전フラグ:70:(1) == 3
-					PRINTW 「이번 계층은 전체적으로 전격이 약점, 혹은 무효화하는 쉐도뿐인 듯합니다」
-					PRINTW 「전격 속성을 중심으로 대책을 세워가면 쉽게 탐색할 수 있을지도 모르겠습니다」
-				ELSEIF 던전フラグ:70:(1) == 4
-					PRINTW 「이번 계층은 적의 바리에이션이 꽤 풍부해서 이렇다 할 대책은 없을 성싶군요」
-					PRINTW 「다만 강력한 화염 마법을 사용하는 적이 있기에 경계해둬야겠지요」
-				ELSEIF 던전フラグ:70:(1) == 5
-					PRINTW 「이번 계층은 가공할 힘을 가진 쉐도가 있더군요」
-					PRINTW 「더욱이 물리 공격을 반사하는 쉐도도 있으니 물리 대책은 필수입니다」
-				ELSEIF 던전フラグ:70:(1) == 6
-					PRINTW 「이번 계층은 묘하게 적이 약하군요」
-					PRINTW 「다들 편하다고 긴장을 풀고 있어요……. 정말이지 못 말리는 녀석들입니다」
-				ELSE
-					PRINTW 「후카는 훌륭한 백어퍼지만 그녀에게도 한계가 있습니다」
-					PRINTW 「안타깝게도 당신까지는 지원의 손길이 닿을 것 같지가 않아요」
-					PRINTW 「죄송합니다만, 단독으로 탐색하시길 부탁드리겠습니다」
+					;남주인공
+					IF 던전フラグ:70:(10) == 1
+						PRINTW 소년은 가볍게 인사해왔다…….
+						던전フラグ:70:(10) = 2
+					ELSEIF 던전フラグ:70:(70) == 1 && 던전フラグ:70:92 == 0 && ITEM:타르타로스 == 0 && 던전フラグ:70:(16) > 0
+						PRINTW ……?
+						PRINTW 소년은 무슨 소프트웨어를 주었다.
+						PRINTW 「아이기스를 구해준 답례」라고 한다.
+						PRINTL 
+						PRINTW [타르타로스] 를 손에 넣었다.
+						ITEM:타르타로스 += 1
+						던전フラグ:70:92 = 1
+					ELSEIF 던전フラグ:70:(10) >= 2
+						PRINTW 소년은 멍하니 있다…….
+					ENDIF
 				ENDIF
-			ELSE
-				IF 던전フラグ:70:(1) < 2
-					PRINTW 「그들은 아직 가입하고서 경험도 일천하지만, 보는 바로는 높은 포텐션을 숨기고 있습니다」
-					PRINTW 「그걸 잘 뽑아낼 수 있으면 좋겠습니다만……」
-				ELSE
-					PRINTW 「저도 탐색에 참가하고 싶습니다만」
-					PRINTW 「저 말고는 백업을 맡지 못하는 이상, 여기서 지원해야만 하지요」
+				CASE 23
+				;유카리
+				IF 던전フラグ:70:(12) == 1
+					PRINTW 「저, 저기, 처음 뵙겠습니다」
+					PRINTW 「타케바 유카리라고 합니다. 잘 부탁드려요!」
+					PRINTFORMW 유카리라고 이름을 밝힌 소녀는 %CALLNAME:MASTER%에게 어색하게 인사해왔다…….
+					던전フラグ:70:(12) = 2
+				ELSEIF 던전フラグ:70:(12) >= 2
+					PRINTW 유카리가 있다.
+					IF 던전フラグ:70:(89) == 0 && 던전フラグ:70:(1) == 1
+						PRINTFORMW 「아, %CALLNAME:MASTER% 씨」
+						PRINTW 「드릴 말씀이 있는데요, 저」
+						PRINTW 「최근에 우리 학교 학생이 타르타로스에 들어가버린 모양이라……」
+						PRINTW 「그, 그래서!」
+						PRINTW 「아직 발견되지 않은 것 같으니, 만약 찾으면 데려와주실 수 있을까요?」
+						PRINTL 
+						PRINTW 「행방불명된 소녀」이야기를 들었다.
+						던전フラグ:70:(89) = 1
+						RETURN 0
+					ELSEIF 던전フラグ:70:(1) == 0
+						PRINTW 「곤충 모습의 되게 딱딱한 쉐도가 보일 텐데요」
+						PRINTW 「그 녀석『사갑충』이라 해서, 잔 같은 충격 속성이 잘 먹히는데」
+						PRINTW 「맞으면 아프니까 상대하지 않는 편이 나아요」
+					ELSEIF 던전フラグ:70:(1) == 1
+						PRINTW 「던전 안에서 이따금 저희를 발견할지도 모르겠는데요」
+						PRINTW 「만약 핀치에 몰려있다면, 저기, 구해주세요?」
+						PRINTW 「일단 낼 수 있는 대로 답례는 하겠으니……」
+					ELSEIF 던전フラグ:70:(1) == 2
+						PRINTW 「타르타로스, 위로 가면 갈수록 자꾸자꾸 쉐도도 강해져가네……」
+						PRINTW 「벅차단 느낌이면 아래층이나 일단 다른 곳에서 몸을 단련하는 편이 좋을지도 모르겠어」
+					ELSE
+						PRINTW 「타르타로스, 위로 가면 갈수록 자꾸자꾸 쉐도도 강해져가네……」
+						PRINTW 「벅차단 느낌이면 아래층이나 일단 다른 곳에서 몸을 단련하는 편이 좋을지도 모르겠어」
+					ENDIF
+				ENDIF
+				CASE 24
+				;テレッテ
+				IF 던전フラグ:70:(13) == 1
+					PRINTFORMW 「당신이 %CALLNAME:MASTER% 씨?」
+					PRINTW 「난 이오리 준페이라고 하우. 잘 부탁드림다!」
+					PRINTFORMW 준페이라고 이름을 밝힌 소년은 %CALLNAME:MASTER%에게 허물없이 인사해왔다…….
+					던전フラグ:70:(13) = 2
+				ELSEIF 던전フラグ:70:(13) >= 2
+					PRINTW 준페이가 있다.
+					IF 던전フラグ:70:(89) == 0 && 던전フラグ:70:(1) == 1
+						PRINTFORMW 「아、%CALLNAME:MASTER% 씨」
+						PRINTW 「그나저나 이런 이야기가 있는데요」
+						PRINTW 「우리 학생이 이 타르타로스에서 행방불명돼버렸다네요―」
+						PRINTW 「만약 찾으면 구출해주시도록 부탁해도 되겠슴까?」
+						PRINTL 
+						PRINTW 「행방불명된 소녀」이야기를 들었다.
+						던전フラグ:70:(89) = 1
+						RETURN 0
+					ELSEIF 던전フラグ:70:(1) == 0
+						PRINTW 「그 뭐냐, 악마사역자?」
+						PRINTW 「괴물 끌도 다니며 무섭지 않나―라는 생각도 하는데」
+					ELSEIF 던전フラグ:70:(1) == 1
+						PRINTW 「6층 정도부터 비너스 이글이란 새가 나오는데요」
+						PRINTW 「빠르지 강하지 바람으로 토막을 치지, 애먹으니까 조심하는 편이 좋심다」
+					ELSEIF 던전フラグ:70:(1) == 2
+						PRINTW 「아― 빌어먹을―」
+						PRINTW 「팬텀 위치라고 귀여운 여자아이 같은 쉐도 있는데요」
+						PRINTW 「화염에 내성 가지고 있으면 낙승, 이라고 여유 부리고 있다가 쓴맛 봤수다……」
+					ELSEIF 던전フラグ:70:(1) == 3
+						PRINTW 「타르타로스에 떨어져 있는 보물상자 말인데요」
+						PRINTW 「가∼끔 비싸게 팔리는 물건이 들어있어서 돈벌이가 되기도 합죠」
+					ELSEIF 던전フラグ:70:(1) == 4
+						PRINTW 「기계라든가, 물건 같은 적은 전격 말고도 수격(水擊)이 잘 먹히기도 합죠」
+						PRINTW 「그밖에는 날고 있는 적에게 총이나 중력이라든가, 마음을 흔들어대는 적에게 신경도 제법 효과 있고요」
+					ELSEIF 던전フラグ:70:(1) == 5
+						PRINTW 「저번에 쉐도를 가비얍∼게 쓸어주려고 했더니 반사당했지 뭐유!」
+						PRINTW 「은근슬쩍 쉐도에 끼어 있는 여유 같이 생긴 놈에게 주의하는 편이 좋심다!」
+					ELSE
+						PRINTW 「악마라고 하자면, 그, 매력적인 여성 같은 악마도 있는 건감유……」
+						PRINTW 「앗, 아니! 이상하게 신경 쓰지 않아도 됨다! 혼잣말이거든요!」
+					ENDIF
+				ENDIF
+				CASE 25
+				;肉
+				IF 던전フラグ:70:(14) == 1
+						PRINTW 「사나다 아키히코다」
+						PRINTW 「잘 부탁한다」
+						PRINTW 늠름한 소년은 인사해왔다…….
+						던전フラグ:70:(14) = 2
+				ELSEIF 던전フラグ:70:(14) >= 2
+					PRINTW 아키히코가 있다.
+					IF 던전フラグ:70:(1) == 0
+						PRINTW 「얼마 전에 쉐도의 습격을 당해 부상을 입어서 말이야」
+						PRINTW 「부상을 다스리라고 미츠루에게 만류당해 벤치 대기 상태지」
+					ELSEIF 던전フラグ:70:(1) == 1
+						PRINTW 「부상도 아물어 겨우 나도 탐색에 참가할 수 있군」
+						PRINTW 「탐색 중에 만날 일도 있겠지만 잘 부탁한다」
+					ELSEIF 던전フラグ:70:(1) == 2
+						PRINTW 「강철의 기가스는 꽤 터프하고, 더욱이 강렬한 일격을 쏴대지」
+						PRINTW 「공격을 받기 전에 전격으로 선제를 잡아 움직임을 막아 봉살하면 된다」
+					ELSEIF 던전フラグ:70:(1) == 3
+						PRINTW 「점점 한 번에 나오는 적의 수가 늘기 시작한 느낌이군」
+						PRINTW 「이 추세면 아마도 층을 올라갈 때마다 적이 강해지고, 또 많아지겠어」
+					ELSEIF 던전フラグ:70:(1) == 4
+						PRINTW 「평범한 인간과는 관계없지만, 파마 속성으로 즉사를 노리는 적이 있다」
+						PRINTW 「파마에 약한 악마를 데리고 있을 경우, 가장 우선해서 잽싸게 쓰러뜨려야하겠지」
+					ELSEIF 던전フラグ:70:(1) == 5
+						PRINTW 「외견에 비해 사실은… 같은 쉐도를 주의해라」
+						PRINTW 「예를 들면 미노타우로스 4호」
+						PRINTW 「언뜻 물리형으로 보이지만, 그놈은 마법 쪽도 꽤 특기야」
+					ELSEIF 던전フラグ:70:(1) == 6
+						PRINTW 「이번 층은 적이 꽤 만만한데……」
+						PRINTW 「뭔가 있을지도 모르겠어. 주의하는 편이 낫다」
+					ELSE
+						PRINTW 「악마라……. 조만간 기회가 있으면 한 판 붙게 해줬으면 한다」
+					ENDIF
+				ENDIF
+				CASE 26
+				SIF 던전フラグ:70:(15) >= 2
+				PRINTW 미츠루가 있다.
+				;ブリリアント
+				IF 던전フラグ:70:(15) == 1
+					PRINTW 「이사장에게서 얘기는 들었습니다」
+					PRINTW 「그…… 미성년뿐이지만 저희에게는 인원 또한 전혀 부족하단 것도 이해해주십시오」
+					PRINTW 특별 과외 활동부를 이끄는 소녀는 우울하게 말했다…….
+					던전フラグ:70:(15) = 2
+				ELSEIF 던전フラグ:70:(15) >= 2
+					IF 던전フラグ:70:(22) >= 1
+						IF 던전フラグ:70:(1) == 2
+							PRINTW 「백업 교대자가 발견되었기에 저도 탐색에 참가하게 되었습니다」
+							PRINTW 「뭔가 정보가 들어오는 대로 당신에게도 전달하겠습니다」
+						ELSEIF 던전フラグ:70:(1) == 3
+							PRINTW 「이번 계층은 전체적으로 전격이 약점, 혹은 무효화하는 쉐도뿐인 듯합니다」
+							PRINTW 「전격 속성을 중심으로 대책을 세워가면 쉽게 탐색할 수 있을지도 모르겠습니다」
+						ELSEIF 던전フラグ:70:(1) == 4
+							PRINTW 「이번 계층은 적의 바리에이션이 꽤 풍부해서 이렇다 할 대책은 없을 성싶군요」
+							PRINTW 「다만 강력한 화염 마법을 사용하는 적이 있기에 경계해둬야겠지요」
+						ELSEIF 던전フラグ:70:(1) == 5
+							PRINTW 「이번 계층은 가공할 힘을 가진 쉐도가 있더군요」
+							PRINTW 「더욱이 물리 공격을 반사하는 쉐도도 있으니 물리 대책은 필수입니다」
+						ELSEIF 던전フラグ:70:(1) == 6
+							PRINTW 「이번 계층은 묘하게 적이 약하군요」
+							PRINTW 「다들 편하다고 긴장을 풀고 있어요……. 정말이지 못 말리는 녀석들입니다」
+						ELSE
+							PRINTW 「후카는 훌륭한 백어퍼지만 그녀에게도 한계가 있습니다」
+							PRINTW 「안타깝게도 당신까지는 지원의 손길이 닿을 것 같지가 않아요」
+							PRINTW 「죄송합니다만, 단독으로 탐색하시길 부탁드리겠습니다」
+						ENDIF
+					ELSE
+						IF 던전フラグ:70:(1) < 2
+							PRINTW 「그들은 아직 가입하고서 경험도 일천하지만, 보는 바로는 높은 포텐션을 숨기고 있습니다」
+							PRINTW 「그걸 잘 뽑아낼 수 있으면 좋겠습니다만……」
+						ELSE
+							PRINTW 「저도 탐색에 참가하고 싶습니다만」
+							PRINTW 「저 말고는 백업을 맡지 못하는 이상, 여기서 지원해야만 하지요」
 						ENDIF
 					ENDIF
 				ENDIF
 				CASE 27
-		;후카
-		IF 던전フラグ:70:(22)>=1
-			PRINTW 후카가 있다.
-			IF 던전フラグ:70:(22) == 1
-				PRINTW 「구해주셔서 감사합니다…」
-				PRINTW 「전, 야마기시 후카라고 해요…」
-				던전フラグ:70:(22) = 2
-			ELSEIF 던전フラグ:70:(22)>=2
-				SELECTCASE RAND:2
-					CASE IS == 0
-						PRINTW 「적의 애널라이즈는 싸움을 계속하거나 ＣＯＯＰ로 알아낼 수 있어요…」
-						PRINTW 「마카로 교환할 수 있는 Ｈｉ－ＤＡＳ가 있으면 저랑 똑같이 적에 대해 조사할 수 있고요…」
-					CASE IS == 1
-						PRINTW 「파마나 주살이 무효인 적도 있지만 효과가 있는 적도 많이 있으니 아이템이나 스킬을 준비해두면 좋을 거예요…」
-				ENDSELECT
-			ENDIF
-		ENDIF
-		CASE 28
-		;ロボ
-		SIF 던전フラグ:70:(16)>=1
-			PRINTW 아이기스가 있다.
-		IF 던전フラグ:70:(16)==1
-			PRINTW 「저는 대 쉐도 특별제압병장 아이기스입니다」
-			PRINTW 「구해주셔서 감사하지 말입니다」
-		던전フラグ:70:(16) = 2
-		ELSEIF 던전フラグ:70:(22)>=2
-			SELECTCASE RAND:2
-				CASE IS == 0
-					PRINTW 「전투에 있어선 보조가 중요합니다」
-					PRINTW 「유비무환이지 말입니다」
-				CASE IS == 1
-					PRINTL 「안녕하시지 말입니다」
+				;후카
+				IF 던전フラグ:70:(22)>=1
+					PRINTW 후카가 있다.
+					IF 던전フラグ:70:(22) == 1
+						PRINTW 「구해주셔서 감사합니다…」
+						PRINTW 「전, 야마기시 후카라고 해요…」
+						던전フラグ:70:(22) = 2
+					ELSEIF 던전フラグ:70:(22)>=2
+						SELECTCASE RAND:2
+							CASE IS == 0
+								PRINTW 「적의 애널라이즈는 싸움을 계속하거나 ＣＯＯＰ로 알아낼 수 있어요…」
+								PRINTW 「마카로 교환할 수 있는 Ｈｉ－ＤＡＳ가 있으면 저랑 똑같이 적에 대해 조사할 수 있고요…」
+							CASE IS == 1
+								PRINTW 「파마나 주살이 무효인 적도 있지만 효과가 있는 적도 많이 있으니 아이템이나 스킬을 준비해두면 좋을 거예요…」
+						ENDSELECT
+					ENDIF
+				ENDIF
+				CASE 28
+				;ロボ
+				SIF 던전フラグ:70:(16)>=1
+					PRINTW 아이기스가 있다.
+				IF 던전フラグ:70:(16)==1
+					PRINTW 「저는 대 쉐도 특별제압병장 아이기스입니다」
+					PRINTW 「구해주셔서 감사하지 말입니다」
+					던전フラグ:70:(16) = 2
+				ELSEIF 던전フラグ:70:(22)>=2
+					SELECTCASE RAND:2
+						CASE IS == 0
+							PRINTW 「전투에 있어선 보조가 중요합니다」
+							PRINTW 「유비무환이지 말입니다」
+						CASE IS == 1
+							PRINTL 「안녕하시지 말입니다」
+					ENDSELECT
+		;		PRINTL 「그―런 건가―」
+				ENDIF
+				CASE 29
+				;わんこ
+				IF 던전フラグ:70:(17)>=1
+					PRINTW 코로마루가 있다.
+					PRINTW 「멍멍!」
+				SIF 던전フラグ:70:(17)==1
+				던전フラグ:70:(17) = 2
+				ENDIF
+				CASE 30
+				;ショタ
+				IF 던전フラグ:70:(18)>=1
+					IF 던전フラグ:70:(18) == 1
+						PRINTW 소년이 있다.
+						PRINTW 「처음 뵙겠어요. 전 아마다 켄이라고 해요」
+						던전フラグ:70:(18) = 2
+					ELSE
+					PRINTW 아마다가 있다.
+					PRINTW 「상태이상을 고치는 약 준비해두셨어요?」
+					PRINTW 「상태이상 공격을 하는 쉐도가 제법 있거든요」
+					ENDIF
+				ENDIF
+				CASE 31
+				;요리上손
+				IF 던전フラグ:70:(19)>=1
+					PRINTW 신지로가 있다.
+				SIF 던전フラグ:70:(19)==1
+				던전フラグ:70:(19) = 2
+				ENDIF
+				RETURN 0
 			ENDSELECT
-;		PRINTL 「그―런 건가―」
-		ENDIF
-		CASE 29
-		;わんこ
-		IF 던전フラグ:70:(17)>=1
-			PRINTW 코로마루가 있다.
-			PRINTW 「멍멍!」
-		SIF 던전フラグ:70:(17)==1
-		던전フラグ:70:(17) = 2
-		ENDIF
-		CASE 30
-		;ショタ
-		IF 던전フラグ:70:(18)>=1
-			IF 던전フラグ:70:(18) == 1
-				PRINTW 소년이 있다.
-				PRINTW 「처음 뵙겠어요. 전 아마다 켄이라고 해요」
-				던전フラグ:70:(18) = 2
-			ELSE
-			PRINTW 아마다가 있다.
-			PRINTW 「상태이상을 고치는 약 준비해두셨어요?」
-			PRINTW 「상태이상 공격을 하는 쉐도가 제법 있거든요」
-			ENDIF
-		ENDIF
-		CASE 31
-		;요리上손
-		IF 던전フラグ:70:(19)>=1
-			PRINTW 신지로가 있다.
-		SIF 던전フラグ:70:(19)==1
-		던전フラグ:70:(19) = 2
-		ENDIF
-RETURN 0
-	ENDSELECT
 		CASE 1
 			CALL TARTAR_DGEVENT
 		CASE 2
@@ -994,7 +993,7 @@ RETURN 0
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
-				CALL SET_ENEMY,9,3210,10,0,1
+				CALL SET_ENEMY,9,[[キャラ:프리스티스]],10,0,1
 				ABL:(CHARANUM-1):스킬4 = 802
 				ABL:(CHARANUM-1):스킬5 = 2416
 				ABL:(CHARANUM-1):스킬6 = 2415
@@ -1003,7 +1002,7 @@ RETURN 0
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
 				CFLAG:(CHARANUM-1):行動횟수 = 2
-				CSTR:(CHARANUM-1):사고패턴 = 3210
+				CSTR:(CHARANUM-1):사고패턴 = 3322
 				ABL:(CHARANUM-1):아이템1 = 1014
 				ABL:(CHARANUM-1):입수확률1 = 100
 				CALL SET_ENEMY,8,3203,8,1,0
@@ -1041,7 +1040,7 @@ RETURN 0
 					FLAG:도주불가フラグ = 1
 					FLAG:회화불능フラグ = 1
 					FLAG:선제기습취소 = 1
-					CALL SET_ENEMY,8,3211,16,0,1
+					CALL SET_ENEMY,8,[[キャラ:엠프레스]],16,0,1
 					ABL:(CHARANUM-1):아이템1 = 1012
 					ABL:(CHARANUM-1):입수확률1 = 100
 					ABL:(CHARANUM-1):스킬3 = 604;패러다임시프트
@@ -1052,7 +1051,7 @@ RETURN 0
 					ABL:(CHARANUM-1):스킬8 = 2404
 					CALL SYNC_STATUS,(CHARANUM-1)
 					CALL HEALTH_CHARA,(CHARANUM-1)
-					CALL SET_ENEMY,10,3255,16,0,1
+					CALL SET_ENEMY,10,[[キャラ:엠퍼러]],16,0,1
 					ABL:(CHARANUM-1):아이템1 = 1013
 					ABL:(CHARANUM-1):입수확률1 = 100
 					ABL:(CHARANUM-1):스킬2 = 208
@@ -1093,7 +1092,7 @@ RETURN 0
 					DA:(FLAG:現X):(FLAG:現Y) = 1
 				ELSE
 					PRINTL 
-					PRINTL 무수한 강철의 검이 철책처럼 길을 막고 있다…….
+					PRINTL 무수한 강철의 검이 철책처럼 길을 막고 있다……
 					PRINTL 아무래도 지금은 탐색할 수 있을 것 같지 않다.
 					PRINTW 
 					FLAG:現X -= 1
@@ -1112,8 +1111,8 @@ RETURN 0
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
-				CALL SET_ENEMY,9,3256,24,0,1
-				CSTR:(CHARANUM-1):사고패턴 = 3256
+				CALL SET_ENEMY,9,[[キャラ:하이에로펀트]],24,0,1
+				CSTR:(CHARANUM-1):사고패턴 = 3325
 				CFLAG:(CHARANUM-1):行動횟수 = 2
 				ABL:(CHARANUM-1):스킬8 = 2413
 				ABL:(CHARANUM-1):아이템1 = 1011
@@ -1127,8 +1126,8 @@ RETURN 0
 				PRINTL 러버즈 가 나타났다!
 				PRINTW 
 				FLAG:不意打ちフラグ = 1
-				CALL SET_ENEMY,9,3212,25,0,1
-				CSTR:(CHARANUM-1):사고패턴 = 3212
+				CALL SET_ENEMY,9,[[キャラ:러버즈]],25,0,1
+				CSTR:(CHARANUM-1):사고패턴 = 3326
 				CFLAG:(CHARANUM-1):行動횟수 = 2
 				ABL:(CHARANUM-1):스킬6 = 2402
 				ABL:(CHARANUM-1):스킬7 = 2405
@@ -1228,12 +1227,12 @@ RETURN 0
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
-				CALL SET_ENEMY,9,3261,32,0,1
+				CALL SET_ENEMY,9,[[キャラ:체리옷]],32,0,1
 				ABL:(CHARANUM-1):아이템1 = 1010
 				ABL:(CHARANUM-1):입수확률1 = 100
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
-				CALL SET_ENEMY,14,3262,32,0,1
+				CALL SET_ENEMY,14,[[キャラ:저스티스]],32,0,1
 				ABL:(CHARANUM-1):아이템1 = 1014
 				ABL:(CHARANUM-1):입수확률1 = 100
 				CALL SYNC_STATUS,(CHARANUM-1)
@@ -1257,7 +1256,7 @@ RETURN 0
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
-				CALL SET_ENEMY,9,3219,40,0,1
+				CALL SET_ENEMY,9,[[キャラ:허밋]],40,0,1
 				CFLAG:(CHARANUM-1):行動횟수 = 2
 				ABL:(CHARANUM-1):아이템1 = 1011
 				ABL:(CHARANUM-1):입수확률1 = 100
@@ -1272,7 +1271,7 @@ RETURN 0
 				ABL:(CHARANUM-1):공격상성 = 1
 				ABL:(CHARANUM-1):최저공격횟수 = 1
 				ABL:(CHARANUM-1):최대공격횟수 = 1
-				ABL:(CHARANUM-1):사거리= 3
+				ABL:(CHARANUM-1):사거리 = 3
 				ABL:(CHARANUM-1):공격범위 = 3
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
@@ -1295,7 +1294,7 @@ RETURN 0
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
-				CALL SET_ENEMY,9,3221,47,0,1
+				CALL SET_ENEMY,9,[[キャラ:스트렝스]],47,0,1
 				CFLAG:(CHARANUM-1):行動횟수 = 2
 				ABL:(CHARANUM-1):아이템1 = 1010
 				ABL:(CHARANUM-1):입수확률1 = 100
@@ -1312,7 +1311,7 @@ RETURN 0
 				MAXBASE:(CHARANUM-1):전술 = -50
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
-				CALL SET_ENEMY,14,3220,47,0,1
+				CALL SET_ENEMY,14,[[キャラ:포츈]],47,0,1
 				CFLAG:(CHARANUM-1):行動횟수 = 2
 				ABL:(CHARANUM-1):아이템1 = 1015
 				ABL:(CHARANUM-1):입수확률1 = 100
@@ -1469,22 +1468,22 @@ RETURN 0
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
 				CALL SET_ENEMY,7,3229,50,1,0
-				CALL SET_ENEMY,8,3230,50,0,0
+				CALL SET_ENEMY,8,[[キャラ:석상]],50,0,0
 				ABL:(CHARANUM-1):스킬1=703
-				CALL SET_ENEMY,9,3230,50,0,0
+				CALL SET_ENEMY,9,[[キャラ:석상]],50,0,0
 				ABL:(CHARANUM-1):스킬1=903
 				MAXBASE:(CHARANUM-1):인내력 += 5
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
-				CALL SET_ENEMY,10,3230,50,0,0
+				CALL SET_ENEMY,10,[[キャラ:석상]],50,0,0
 				ABL:(CHARANUM-1):스킬1=803
 				CALL SET_ENEMY,11,3229,50,1,0
 				CALL SET_ENEMY,12,3229,50,1,0
 				CALL SET_ENEMY,13,3229,50,1,0
 				CALL SET_ENEMY,15,3229,50,1,0
 				CALL SET_ENEMY,16,3229,50,1,0
-				CALL SET_ENEMY,14,3277,64,0,1
-				CSTR:(CHARANUM-1):사고패턴 = 3277
+				CALL SET_ENEMY,14,[[キャラ:행드맨]],64,0,1
+				CSTR:(CHARANUM-1):사고패턴 = 3332
 				CFLAG:(CHARANUM-1):行動횟수 = 2
 				ABL:(CHARANUM-1):스킬1 = 2402
 				ABL:(CHARANUM-1):스킬2 = 2406
@@ -1579,6 +1578,10 @@ RETURN 0
 				PRINTW 의뢰 달성의 보수로 \500000 받았다.
 				PRINTL 
 				MONEY+=500000
+				;여왕의가면입수
+				PRINTW 여왕의가면을 손에 넣었다。
+				ITEM: 여왕의가면 += 1
+				PRINTL 
 				던전フラグ:70:1 = 10
 				FLAG:탈출=1
 				DA:(FLAG:現X):(FLAG:現Y) = 1
@@ -1763,7 +1766,7 @@ RETURN 0
 					던전フラグ:70:90 = 0
 					던전フラグ:70:91 = 0
 					IF ITEM:무색의가면 == 0
-						PRINTW ＞マテリアルカード【무색의가면】を손に入れた
+						PRINTW ＞마테리얼 카드【무색의가면】을 손에 넣었다
 						PRINTL  
 						ITEM:무색의가면 = 1
 					ENDIF
@@ -2079,7 +2082,7 @@ IF RAND:100 < FLAG:エンカウント率
 			FLAG:회화불능フラグ = 0
 			FLAG:선제기습취소 = 0
 		ELSE
-			PRINTW ＞악마를 그냥 보냈다….
+			PRINTW ＞악마를 그냥 보냈다…
 		ENDIF
 		FLAG:未遭遇歩数 = 0
 		RETURN 0
@@ -2141,7 +2144,9 @@ IF 던전フラグ:70:(50) > 0 && 던전フラグ:70:(50) < 4
 		CASE IS < 85
 			;10%で좀비쨩
 			RETURN 1001, 8
-		;CASE IS < 90
+		CASE IS < 90
+			;5%で悪霊폴터가이스트
+			RETURN 1057, 5
 		CASEELSE
 			;10%で라타토스크
 			RETURN 813, 8
@@ -2202,12 +2207,15 @@ ELSEIF 던전フラグ:70:(50) > 14 &&던전フラグ:70:(50) < 19
 		CASE IS < 75
 			;11%で광기의성전
 			RETURN 3209, 21
-		CASE IS < 83
-			;8%で요마랴난시
+		CASE IS < 80
+			;5%で요마랴난시
 			RETURN 403, 21
-		CASE IS < 91
-			;8%で지모신프레이아
+		CASE IS < 85
+			;5%で지모신프레이아
 			RETURN 2, 29
+		CASE IS < 91
+			;5%で외도사다코
+			RETURN 1059, 23
 		CASE IS < 100
 			;9%で천사아크엔젤
 			RETURN 359, 27
@@ -2240,18 +2248,21 @@ ELSEIF 던전フラグ:70:(50) > 19 &&던전フラグ:70:(50) < 24
 ELSEIF 던전フラグ:70:(50) > 24 &&던전フラグ:70:(50) < 29
 	;２６～２９Ｆでの遭遇
 	SELECTCASE RAND:100
-		CASE IS < 24
-			;24%で정의의검
+		CASE IS < 20
+			;20%で정의의검
 			RETURN 3260, 32
-		CASE IS < 47
-			;23%で팬텀마담
+		CASE IS < 40
+			;20%で팬텀마다ム
 			RETURN 3215, 36
-		CASE IS < 70
-			;23%で미노타우로스四号
+		CASE IS < 60
+			;20%で미노타우로스四号
 			RETURN 3264, 37
-		CASE IS < 95
+		CASE IS < 75
 			;15%で정신의다이스
 			RETURN 3218, 33
+		CASE IS < 95
+			;20%で타천사발로그
+			RETURN 1732, 35
 		CASE IS < 100
 			;15%で마수타마모
 			RETURN 807, 41
@@ -3551,7 +3562,7 @@ RETURN 0
 ;みみっく
 ;=======================================================================
 @GET_TREASUREHUNT
-	PRINT 상자가 놓여있다.
+	PRINTL 상자가 놓여있다.
 	CALL INPUT_YN,"연다","열지않는다"
 	PRINTL
 	IF RESULT == 0
@@ -3966,7 +3977,7 @@ ENDIF
 ;=======================================================================
 ;프리스티스パターン
 ;=======================================================================
-@SET_ACTION_3210,ARG
+@SET_ACTION_3322,ARG
 #LOCALSIZE 1
 IF CFLAG:ARG:行動した횟수 > 0
 	LOCAL = RAND:10
@@ -4016,7 +4027,7 @@ ENDIF
 ;=======================================================================
 ;하이에로펀트パターン
 ;=======================================================================
-@SET_ACTION_3256,ARG
+@SET_ACTION_3325,ARG
 #LOCALSIZE 1
 IF CFLAG:ARG:行動した횟수 > 0
 	IF (BASE:ARG:ＨＰ)*100/(MAXBASE:ARG:ＨＰ) <= 25
@@ -4082,7 +4093,7 @@ ENDIF
 ;=======================================================================
 ;러버즈パターン
 ;=======================================================================
-@SET_ACTION_3212,ARG
+@SET_ACTION_3326,ARG
 #LOCALSIZE 1
 IF FLAG:経過ターン数 == 0
 	CALL CHECK_ACTIONABLE,ARG,1213
@@ -4122,7 +4133,7 @@ RETURN 0
 ;=======================================================================
 ;행드맨パターン
 ;=======================================================================
-@SET_ACTION_3277,ARG
+@SET_ACTION_3332,ARG
 #LOCALSIZE 1
 IF CPOS(ARG) > 11
 	;後衛
@@ -4177,13 +4188,13 @@ RETURN 0
 ;6 = [[스킬:디아라한]]
 ;7 = [[스킬:컨센트레이트]]
 ;8 = [[스킬:텐타라후]]
-;CFLAG:ARG:１moreフラグ == 2 || CFLAG:ARG:集中フラグ == 0
+;CFLAG:ARG:１moreフラグ > 0 || CFLAG:ARG:集中フラグ == 0
 ;CFLAG:ARG:行動した횟수 == 0
 ;CHECK_WEAKNESS(ARG)
 ;(CHECK_WEAKNESS(MEMORIZE_WEAKNESS(ARG, LOCAL:10, "〇〇")) < -1)
 @SET_ACTION_미츠루,ARG
 #LOCALSIZE 2
-; 一人でもPANICがいたら即パニッシュメント
+; 一人でもPANICがいたら即퍼니시먼트
 FOR LOCAL,1,7
 	IF POS(LOCAL) > -1 && CFLAG:(POS(LOCAL)):ステート == GET_STATE_NUM("PANIC")
 		CALL CHECK_ACTIONABLE,ARG,[[스킬:퍼니시먼트]]
@@ -5804,7 +5815,7 @@ RETURN 0
 		$INPUT_LOOP_TARMEET1
 		CUSTOMDRAWLINE =
 		IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
-		PRINTW 모르는 소녀형의 검은 로봇
+			PRINTW 모르는 소녀형의 검은 로봇
 		ELSE
 			PRINTL
 			CALL TARTAR_NAMECALL
@@ -5834,7 +5845,7 @@ RETURN 0
 		CUSTOMDRAWLINE =
 			PRINT 『
 			IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
-			PRINTW 소녀형의 검은 로봇
+				PRINTW 소녀형의 검은 로봇
 			ELSE
 				CALL TARTAR_NAMECALL
 			ENDIF
@@ -5844,7 +5855,7 @@ RETURN 0
 			PRINTW …
 			IF RAND:3 == 1
 				IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
-				PRINTW 소녀형의 검은 로봇
+					PRINTW 소녀형의 검은 로봇
 				ELSE
 					CALL TARTAR_NAMECALL
 				ENDIF
@@ -5855,8 +5866,8 @@ RETURN 0
 				CALL TARTAR_NAMECALL
 				PRINTW 는 어떻게든 이겨낸 모야이다.
 				IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
-				PRINTW 당신을 눈치챈 소녀형의 검은 로봇은 메티스라고 이름을 밝혔다.
-				던전フラグ:70:(21) = 2
+					PRINTW 당신을 눈치챈 소녀형의 검은 로봇은 메티스라고 이름을 밝혔다.
+					던전フラグ:70:(21) = 2
 				ENDIF
 				GOTO INPUT_LOOP_TARMEETBYE
 			ENDIF
@@ -5870,10 +5881,10 @@ RETURN 0
 	$INPUT_LOOP_TARMEET3
 	PRINTL
 	IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
-	PRINTW 모르는 소녀형의 검은 로봇
+		PRINTW 모르는 소녀형의 검은 로봇
 	ELSE
-	PRINTL
-	CALL TARTAR_NAMECALL
+		PRINTL
+		CALL TARTAR_NAMECALL
 	ENDIF
 	PRINTW 이 있다.
 	PRINTL [0]적당히 대화한다
@@ -5885,18 +5896,18 @@ RETURN 0
 		PRINTL
 		PRINTFORM %CALLNAME:MASTER%は
 		IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
-		PRINTW 소녀형의 검은 로봇
+			PRINTW 소녀형의 검은 로봇
 		ELSE
-		PRINTL
-		CALL TARTAR_NAMECALL
+			PRINTL
+			CALL TARTAR_NAMECALL
 		ENDIF
-		PRINT 과 가볍게 이야기를 나누었다…….
+		PRINT 과 가볍게 이야기를 나누었다……
 		CALL 전투참가가능포인트
 		PRINTL
 		IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
-		PRINTW 소녀형의 검은 로봇은 메티스라고 이름을 밝혔다.
-		던전フラグ:70:(21) = 2
-		PRINTW 
+			PRINTW 소녀형의 검은 로봇은 메티스라고 이름을 밝혔다.
+			던전フラグ:70:(21) = 2
+			PRINTW 
 		ENDIF
 
 		GOTO INPUT_LOOP_TARMEETBYE
@@ -5905,10 +5916,10 @@ RETURN 0
 		PRINTL
 		PRINTFORM %CALLNAME:MASTER%は
 		IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
-		PRINTW 소녀형의 검은 로봇
+			PRINTW 소녀형의 검은 로봇
 		ELSE
-		PRINTL
-		CALL TARTAR_NAMECALL
+			PRINTL
+			CALL TARTAR_NAMECALL
 		ENDIF
 		PRINT 을 덮쳤다!!
 		PRINTL
@@ -6411,8 +6422,8 @@ RETURN 0
 	IF 던전フラグ:70:93 == 11 && 던전フラグ:70:(21) == 1
 	PRINTW 소녀형의 검은 로봇
 	ELSE
-	PRINTL
-	CALL TARTAR_NAMECALL
+		PRINTL
+		CALL TARTAR_NAMECALL
 	ENDIF
 	PRINTW 이 쓰러져있다.
 	PRINTW 어떡할까?
@@ -6425,7 +6436,7 @@ RETURN 0
 	ELSEIF RESULT == 1
 		PRINTL
 		CALL TARTAR_NAMECALL
-		PRINTW 를 손에 넣었다.
+		PRINTW 를 손에 넣었다
 	$TARGETSLAVE
 		IF 던전フラグ:70:93 == 1
 			CALL ADD_NEW_COMPANION,[[キャラ:P3남주인공]],200

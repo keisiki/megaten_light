@@ -19,7 +19,7 @@ IF TEQUIP:30 == 1
 	
 ELSE
 	;前のプ레이が배면좌위かつ조교者の기교3이상의 場合、挿入局所責めへ派生。
-	IF PREVCOM == 69 && (ABL:PLAYER:2 > 2)
+	IF PREVCOM == 69 && (ABL:PLAYER:2 > 2) && TFLAG:60 != 0
 		CALL COM_ABLE_COMMON, 506
 		SIF RESULT == 1
 			RETURN 506
@@ -39,7 +39,7 @@ TSTR:0 = 배면좌위
 
 ;V경험を伴うコマンドの플래그(처녀膜재생対応)
 TFLAG:19 = 1
-SIF (TALENT:3 || TALENT:6) && ASSIPLAY == 0 && EXP:0 == 0
+SIF (TALENT:3 || TALENT:6) && ASSIPLAY == 0 && TALENT:처녀 == 1 ;EXP:0 == 0
 	TFLAG:20 = 1
 
 ;처녀상실時のテ키스ト用処理
@@ -348,7 +348,7 @@ RETURN 1
 ;V경험を伴うコマンドの플래그(처녀膜재생対応)
 TFLAG:19 = 1
 
-PRINTL ＜인서트중＞
+PRINTL ＜배면좌위 인서트중＞
 
 ;-------------------------------------------------
 ;사정ゲージ체크

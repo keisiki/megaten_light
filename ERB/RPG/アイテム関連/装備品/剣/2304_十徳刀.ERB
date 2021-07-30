@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2304
 RETURN GET_EQUIPNUM("검")
 
+;산바람
+@장비추가스킬_2304,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 1
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -68,6 +78,9 @@ PRINTL 장비조건：LV10～
 
 @장비해설_2304
 PRINTL 통상의 양손검보다 훨씬 긴 양손검
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：산바람
+RESETCOLOR
 
 RETURN 0
 

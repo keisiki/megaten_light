@@ -3,12 +3,8 @@
 
 ;스킬名
 @SKILL_NAME_2002,ARG
-;ファントムが사용する場合N・ブラスターに
-IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-	RESULTS = N・블래스터
-ELSE
-	RESULTS = 메기도라
-ENDIF
+RESULTS = 메기도라
+
 
 ;　명중
 @SKILL_HITRATE_2002, ARG
@@ -16,11 +12,8 @@ RETURN 90
 
 ;　위력
 @SKILL_POWER_2002, ARG
-IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-	RETURN 220
-ELSE
-	RETURN 295
-ENDIF
+RETURN 295
+
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_2002,ARG
@@ -37,11 +30,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_2002,ARG
-IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-	RETURN 30
-ELSE
-	RETURN 35
-ENDIF
+RETURN 35
 
 ;　相性
 @SKILL_TYPE_2002,ARG
@@ -49,12 +38,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2002
+@SKILL_DECIDE_TYPE_2002, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2002
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2002, ARG
 RETURN 2
 
 
@@ -139,11 +128,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2002
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2002
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:팬텀]]
-	PRINTL [후열] 적 전체에 만능속성 중 마법데미지. 정식명칭은 「뉴트론・블래스터」
-ELSE
-	PRINTL [후열] 적 전체에 만능속성 대 마법데미지.
-ENDIF
+PRINTL [후열] 적 전체에 만능속성 대 마법데미지.
 
 ;継承に필요な部位
 @継承部位_2002,ARG

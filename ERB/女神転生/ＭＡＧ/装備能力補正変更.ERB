@@ -23,8 +23,8 @@ $ONE_MORE
 DRAWLINE
 PRINTL □장비능력보정변경
 DRAWLINE
-PRINTFORML 보정値を변경してください（합계:66）
-PRINTFORML 능력(기본치)　　　　 변경後
+PRINTFORML 보정값을 변경해주십시오（합계:66）
+PRINTFORML 능력(기본치)　　　　 변경후
 DO
 	PRINTFORML 공격장비보정(9)　　　{LOCAL:0, 2}　[ 0]+　[ 8]-
 	PRINTFORML 명중장비보정(7)　　　{LOCAL:1, 2}　[ 1]+　[ 9]- 
@@ -34,14 +34,14 @@ DO
 	PRINTFORML 마법효과장비보정(7)　{LOCAL:5, 2}　[ 5]+　[13]- 
 	PRINTFORML 총공격장비보정(9)　　{LOCAL:6, 2}　[ 6]+　[14]- 
 	PRINTFORML 총명중장비보정(7)　　{LOCAL:7, 2}　[ 7]+　[15]- 
-	;　　　　　　　　　　보정値합계:
+	;　　　　　　　　　　보정값합계:
 	;----------------------------------------------------------
-	;　　　　　[99]決定　　　[100]돌아간다
+	;　　　　　[99]결정　　　[100]돌아간다
 	LOCAL:8 = 0
 	FOR COUNT ,0,8
 		LOCAL:8 += LOCAL:COUNT
 	NEXT
-	PRINTFORM 　　　　　보정値합계:
+	PRINTFORM 　　　　　보정값합계:
 	SIF LOCAL:8 != 66
 		SETCOLOR COLOR("red")
 	PRINTFORML {LOCAL:8, 2}
@@ -49,7 +49,7 @@ DO
 	
 	DRAWLINE
 	IF LOCAL:8 == 66
-		PRINTFORM [99]決定　　　
+		PRINTFORM [99]결정　　　
 	ELSE
 		PRINTFORM 　　　　　　　
 	ENDIF
@@ -66,7 +66,7 @@ DO
 	ENDIF
 LOOP RESULT != 100 && (RESULT != 99 || LOCAL:8 != 66)
 IF RESULT == 99
-	PRINTFORML これで좋습니까？
+	PRINTFORML 이걸로좋습니까？
 	PRINTFORML 공격장비보정　　　{LOCAL:0, 2}
 	PRINTFORML 명중장비보정　　　{LOCAL:1, 2}
 	PRINTFORML 방어장비보정  　　{LOCAL:2, 2}
@@ -76,7 +76,7 @@ IF RESULT == 99
 	PRINTFORML 총공격장비보정　　{LOCAL:6, 2}
 	PRINTFORML 총명중장비보정　　{LOCAL:7, 2}
 	PRINTFORML
-	PRINTFORML [0]はい　[1]いいえ
+	PRINTFORML [0]네　[1]아니오
 	INPUT
 	IF RESULT == 0
 		CFLAG:ARG:1040 = LOCAL:0

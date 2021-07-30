@@ -31,16 +31,16 @@ RETURN 30
 
 ;　相性
 @SKILL_TYPE_2612,ARG
-RETURN 13
+RETURN 17
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2612
+@SKILL_DECIDE_TYPE_2612, ARG
 RETURN 2
 
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2612
+@SKILL_DAMAGETYPE_2612, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬변화？用랭크
 @SKILL_RANK_2612
-RETURN 15
+RETURN 16
 
 ;テン플레이트用、추가효과シ리즈
 ;추가효과스테이터스
@@ -114,9 +114,10 @@ RETURN 0
 
 CFLAG:ARG:공격강화 = MIN(32, CFLAG:ARG:공격강화 + 8)
 CFLAG:ARG:마법위력강화 = MIN(32, CFLAG:ARG:마법위력강화 + 4)
+CFLAG:ARG:마법효과강화 = MIN(32, CFLAG:ARG:마법효과강화 + 4)
 
 
-PRINTFORML %CALLNAME:ARG%の공격력と마법위력이(가) 올랐다！
+PRINTFORML %CALLNAME:ARG%의 공격력과 마법위력이 올랐다！
 
 ;====================================================
 ;実行内容ここまで
@@ -124,8 +125,8 @@ PRINTFORML %CALLNAME:ARG%の공격력と마법위력이(가) 올랐다！
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2612
-PRINTL 闇の힘を体に取り込み공격력と마법위력を上昇させる。
-PRINTL 영웅　明羅の技。
+PRINTL 어둠의 힘을 몸에 담아 공격력과 마법위력을 올린다。
+PRINTL 영웅　메이라의 기술。
 
 ;継承に필요한部位
 @継承部位_2612,ARG

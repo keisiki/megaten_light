@@ -3,8 +3,13 @@
 ;-----------------------------------------
 @SHOPCOMABLE_116
 RESULT:1 = 3
-RESULTS = 아이템합성
-RETURN 1
+IF EXTRA強化(4) || FLAG:DEBUG
+	RESULTS = 아이템합성
+	RETURN 1
+ELSE
+	RESULTS = ？？？？？
+	RETURN 0
+ENDIF
 
 @SHOP_COM_116
 PRINTL 어느 쪽을 고르시겠습니까？
@@ -75,10 +80,10 @@ PRINTFORM [21]
 CALL ITEM_GOUSEI_표시("방천화극・改", "방천화극", 1,"꿈의물방울", 4, "달의돌", 4)
 
 PRINTFORM [22] 
-CALL ITEM_GOUSEI_표시("독고저", "다마스커스동", 2,"운철", 2, "흑요석",2)
+CALL ITEM_GOUSEI_표시("삼고저", "다마스커스동", 2,"운철", 2, "흑요석",2)
 
 PRINTFORM [23] 
-CALL ITEM_GOUSEI_표시("금강저", "다마스커스동", 3,"꿈의물방울", 2, "미스릴은", 2)
+CALL ITEM_GOUSEI_표시("오고저", "다마스커스동", 3,"꿈의물방울", 2, "미스릴은", 2)
 
 PRINTFORM [24] 
 CALL ITEM_GOUSEI_표시("카르마", "다마스커스동", 4,"무지개조각", 2, "달의돌", 2)
@@ -87,12 +92,18 @@ PRINTFORM [25]
 CALL ITEM_GOUSEI_표시("야타의거울", "흑요석", 10, "태양의돌", 7, "히히이로카네", 7)
 
 PRINTFORM [30] 
-CALL ITEM_GOUSEI_표시("강화서바이벌베스트", "서바이벌베스트", 2, "마석", 10)
+CALL ITEM_GOUSEI_표시("시제서바이벌베스트", "서바이벌베스트", 2, "마석", 10)
 
-IF ITEM:[[아이템:강화서바이벌베스트]] > 7
+IF ITEM:[[아이템:시제서바이벌베스트]] > 7
 	PRINTFORM [31] 
-	CALL ITEM_GOUSEI_표시("융합의 의식", "강화서바이벌베스트", 8)
+	CALL ITEM_GOUSEI_표시("융합의 의식", "시제서바이벌베스트", 8)
 ENDIF
+
+PRINTFORM [32] 
+CALL ITEM_GOUSEI_표시("강화서바이벌베스트", "슬라임베스트", 1, "비밀의방어구상자", 1, "보옥", 1)
+
+PRINTFORM [33] 
+CALL ITEM_GOUSEI_표시("하드택티컬코트", "강화서바이벌베스트", 1, "비밀의방어구상자", 1, "보옥", 5)
 
 IF ABL:MASTER:기교 >= 2
 	PRINTFORM [40] 
@@ -156,7 +167,7 @@ PRINTFORM [57]
 CALL ITEM_GOUSEI_표시("프로스트수트", "꽝인복권", 2)
 
 PRINTFORM [58] 
-CALL ITEM_GOUSEI_표시("빛나는눈", "꽝인복권", 2)
+CALL ITEM_GOUSEI_표시("눈꽃", "꽝인복권", 2)
 
 IF ABL:MASTER:기교 >= 4
 	PRINTFORM [59] 
@@ -400,11 +411,11 @@ ELSEIF RESULT == 15
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 16
 	IF ITEM:[[아이템:십자형창]] > 0 && ITEM:[[아이템:다마스커스동]] > 1 && ITEM:[[아이템:운철]] > 1
-		PRINTFORML 십자형창・改を製作しますか？
+		PRINTFORML 십자형창・改를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 십자형창・改を製作しました
+		PRINTFORMW 십자형창・改를 제작했습니다
 		ITEM:[[아이템:십자형창・改]] += 1
 		ITEM:[[아이템:십자형창]] -= 1
 		ITEM:[[아이템:다마스커스동]] -= 2
@@ -415,11 +426,11 @@ ELSEIF RESULT == 16
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 17
 	IF ITEM:[[아이템:십자형창・改]] > 0 && ITEM:[[아이템:미스릴은]] > 4 && ITEM:[[아이템:무지개조각]] > 3
-		PRINTFORML 인간무골を製作しますか？
+		PRINTFORML 인간무골을 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 인간무골を製作しました
+		PRINTFORMW 인간무골을 제작했습니다
 		ITEM:[[아이템:인간무골]] += 1
 		ITEM:[[아이템:십자형창・改]] -= 1
 		ITEM:[[아이템:미스릴은]] -= 5
@@ -430,11 +441,11 @@ ELSEIF RESULT == 17
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 18
 	IF ITEM:[[아이템:인간무골]] > 0 && ITEM:[[아이템:오리하르콘]] > 4 && ITEM:[[아이템:메테오라이트s]] > 3
-		PRINTFORML 인간무골・改を製作しますか？
+		PRINTFORML 인간무골・改를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 인간무골・改を製作しました
+		PRINTFORMW 인간무골・改를 제작했습니다
 		ITEM:[[아이템:인간무골・改]] += 1
 		ITEM:[[아이템:인간무골]] -= 1
 		ITEM:[[아이템:오리하르콘]] -= 5
@@ -445,11 +456,11 @@ ELSEIF RESULT == 18
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 19
 	IF ITEM:[[아이템:톤보기리]] > 0 && ITEM:[[아이템:히히이로카네]] > 4 && ITEM:[[아이템:비욘다이트]] > 3
-		PRINTFORML 아메노누보코を製作しますか？
+		PRINTFORML 아메노누보코를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 아메노누보코を製作しました
+		PRINTFORMW 아메노누보코를 제작했습니다
 		ITEM:[[아이템:아메노누보코]] += 1
 		ITEM:[[아이템:톤보기리]] -= 1
 		ITEM:[[아이템:히히이로카네]] -= 5
@@ -460,11 +471,11 @@ ELSEIF RESULT == 19
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 20
 	IF ITEM:[[아이템:톤보기리]] > 0 && ITEM:[[아이템:메테오라이트s]] > 3 && ITEM:[[아이템:달의돌]] > 5
-		PRINTFORML 톤보기리・改を製作しますか？
+		PRINTFORML 톤보기리・改를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 톤보기리・改を製作しました
+		PRINTFORMW 톤보기리・改를 제작했습니다
 		ITEM:[[아이템:톤보기리・改]] += 1
 		ITEM:[[아이템:톤보기리]] -= 1
 		ITEM:[[아이템:달의돌]] -= 6
@@ -475,11 +486,11 @@ ELSEIF RESULT == 20
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 21
 	IF ITEM:[[아이템:방천화극]] > 0 && ITEM:[[아이템:꿈의물방울]] > 3 && ITEM:[[아이템:달의돌]] > 3
-		PRINTFORML 방천화극・改を製作しますか？
+		PRINTFORML 방천화극・改를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 방천화극・改を製作しました
+		PRINTFORMW 방천화극・改를 제작했습니다
 		ITEM:[[아이템:방천화극・改]] += 1
 		ITEM:[[아이템:방천화극]] -= 1
 		ITEM:[[아이템:달의돌]] -= 4
@@ -490,12 +501,12 @@ ELSEIF RESULT == 21
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 22
 	IF ITEM:[[아이템:다마스커스동]] > 1 && ITEM:[[아이템:운철]] > 1 && ITEM:[[아이템:흑요석]] > 1
-		PRINTFORML 독고저を製作しますか？
+		PRINTFORML 삼고저를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 독고저を製作しました
-		ITEM:[[아이템:독고저]] += 1
+		PRINTFORMW 독고저를 제작했습니다
+		ITEM:[[아이템:삼고저]] += 1
 		ITEM:[[아이템:다마스커스동]] -= 2
 		ITEM:[[아이템:운철]] -= 2
 		ITEM:[[아이템:흑요석]] -= 2
@@ -505,12 +516,12 @@ ELSEIF RESULT == 22
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 23
 	IF ITEM:[[아이템:다마스커스동]] > 2 && ITEM:[[아이템:꿈의물방울]] > 1 && ITEM:[[아이템:미스릴은]] > 1
-		PRINTFORML 금강저を製作しますか？
+		PRINTFORML 오고저를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 금강저を製作しました
-		ITEM:[[아이템:금강저]] += 1
+		PRINTFORMW 오고저를 제작했습니다
+		ITEM:[[아이템:오고저]] += 1
 		ITEM:[[아이템:다마스커스동]] -= 3
 		ITEM:[[아이템:꿈의물방울]] -= 2
 		ITEM:[[아이템:미스릴은]] -= 2
@@ -520,11 +531,11 @@ ELSEIF RESULT == 23
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 24
 	IF ITEM:[[아이템:다마스커스동]] > 3 && ITEM:[[아이템:무지개조각]] > 1 && ITEM:[[아이템:달의돌]] > 1
-		PRINTFORML 카르마を製作しますか？
+		PRINTFORML 카르마를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 카르마を製作しました
+		PRINTFORMW 카르마를 제작했습니다
 		ITEM:[[아이템:카르마]] += 1
 		ITEM:[[아이템:다마스커스동]] -= 4
 		ITEM:[[아이템:무지개조각]] -= 2
@@ -535,11 +546,11 @@ ELSEIF RESULT == 24
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 25
 	IF ITEM:[[아이템:흑요석]] > 9 && ITEM:[[아이템:태양의돌]] > 6 && ITEM:[[아이템:히히이로카네]] > 6
-		PRINTFORML 흑요석10個、태양의돌7個、히히이로카네7個を使って야타의거울を製作しますか？
+		PRINTFORML 흑요석10개、태양의돌7개、히히이로카네7개를 사용해 야타의거울을 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 야타의거울を製作しました
+		PRINTFORMW 야타의거울을 제작했습니다
 		ITEM:[[아이템:야타의거울]] += 1
 		ITEM:[[아이템:흑요석]] -= 10
 		ITEM:[[아이템:태양의돌]] -= 7
@@ -550,37 +561,68 @@ ELSEIF RESULT == 25
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 30
 	IF ITEM:[[아이템:마석]] == 10 && ITEM:[[아이템:서바이벌베스트]] > 1
-		PRINTFORML 서바이벌베스트2個、마석10個を使って강화서바이벌베스트を製作しますか？
+		PRINTFORML 서바이벌베스트2개、마석10개를 사용해 시제서바이벌베스트를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 강화서바이벌베스트を製作しました
-		ITEM:[[아이템:강화서바이벌베스트]] += 1
+		PRINTFORMW 시제서바이벌베스트를 제작했습니다
+		ITEM:[[아이템:시제서바이벌베스트]] += 1
 		ITEM:[[아이템:서바이벌베스트]] -= 2
 		ITEM:[[아이템:마석]] -= 10
 	ELSE
-		PRINTFORMW 강화서바이벌베스트を作るには서바이벌베스트2個、마석10個が필요です(現在소지数:{ITEM:[[아이템:서바이벌베스트]]} {ITEM:[[아이템:마석]]})
+		PRINTFORMW 시제서바이벌베스트를 만드려면 서바이벌베스트2개、마석10개가 필요합니다(현재의 소지수:{ITEM:[[아이템:서바이벌베스트]]} {ITEM:[[아이템:마석]]})
 	ENDIF
 	GOTO INPUT_LOOP
 
 ELSEIF RESULT == 31
-	IF ITEM:[[아이템:강화서바이벌베스트]]  < 8
-		PRINTFORMW 正しい数値を입력してください
+	IF ITEM:[[아이템:시제서바이벌베스트]]  < 8
+		PRINTFORMW 올바른 수치를 입력해주세요
 		GOTO INPUT_LOOP
 	ENDIF
-	IF ITEM:[[아이템:강화서바이벌베스트]] > 7
-		PRINTFORML 강화서바이벌베스트8個を融合しますか？
+	IF ITEM:[[아이템:시제서바이벌베스트]] > 7
+		PRINTFORML 시제서바이벌베스트8개를 합성합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 강화서바이벌베스트が合体して슬라임베스트に進化しました
+		PRINTFORMW 시제서바이벌베스트가 합성되어 슬라임베스트로 진화하였습니다
 		ITEM:[[아이템:슬라임베스트]] += 1
-		ITEM:[[아이템:강화서바이벌베스트]] -= 8
+		ITEM:[[아이템:시제서바이벌베스트]] -= 8
 	ELSE
 		PRINTFORMW 
 	ENDIF
 	GOTO INPUT_LOOP
 
+ELSEIF RESULT == 32
+	IF ITEM:[[아이템:슬라임베스트]] > 0 && ITEM:[[아이템:비밀의방어구상자]] > 0 && ITEM:[[아이템:보옥]] > 0
+		PRINTFORML 슬라임베스트、비밀의방어구상자、보옥을 사용해 강화서바이벌베스트를 제작합니까？
+		PRINTFORML ※슬라임베스트는 소비되지 않습니다※
+		CALL INPUT_YN("네", "아니오")
+		SIF RESULT == 1
+			GOTO INPUT_LOOP
+		PRINTFORMW 강화서바이벌베스트를 제작했습니다
+		ITEM:[[아이템:강화서바이벌베스트]] += 1
+		ITEM:[[아이템:비밀의방어구상자]] -= 1
+		ITEM:[[아이템:보옥]] -= 1
+	ELSE
+		PRINTFORMW 強化サバイバルベストを作るにはスライムベスト1個、秘密の防具箱1個、보옥1個が必要です(現在所持数:{ITEM:[[아이템:슬라임베스트]]} {ITEM:[[아이템:비밀의방어구상자]]} {ITEM:[[아이템:보옥]]})
+	ENDIF
+	GOTO INPUT_LOOP
+
+ELSEIF RESULT == 33
+	IF ITEM:[[아이템:강화서바이벌베스트]] > 0 && ITEM:[[아이템:비밀의방어구상자]] > 0 && ITEM:[[아이템:보옥]] > 4
+		PRINTFORML 강화서바이벌베스트、비밀의방어구상자、보옥5개를 사용해 하드택티컬코트를 제작합니까？
+		PRINTFORML ※강화서바이벌베스트는 소비되지 않습니다※
+		CALL INPUT_YN("はい", "いいえ")
+		SIF RESULT == 1
+			GOTO INPUT_LOOP
+		PRINTFORMW ハードタクティカルコートを製作しました
+		ITEM:[[아이템:하드택티컬코트]] += 1
+		ITEM:[[아이템:비밀의방어구상자]] -= 1
+		ITEM:[[아이템:보옥]] -= 5
+	ELSE
+		PRINTFORMW ハードタクティカルコートを作るには強化サバイバルベスト1個、秘密の防具箱1個、보옥5個が必要です(現在所持数:{ITEM:[[아이템:강화서바이벌베스트]]} {ITEM:[[아이템:비밀의방어구상자]]} {ITEM:[[아이템:보옥]]})
+	ENDIF
+	GOTO INPUT_LOOP
 	
 ELSEIF RESULT == 40
 	IF ABL:MASTER:기교 < 2
@@ -904,7 +946,7 @@ ELSEIF RESULT == 58
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
 		PRINTFORMW 빛나는 눈을 제작했습니다
-		ITEM:[[아이템:빛나는눈]] += 1
+		ITEM:[[아이템:눈꽃]] += 1
 		ITEM:[[아이템:꽝인복권]] -= 2
 	ELSE
 		PRINTFORMW 빛나는 눈을 만들려면 꽝인 복권 2개가 필요합니다(현재의 소지수:{ITEM:[[아이템:꽝인복권]]})
@@ -934,16 +976,16 @@ ELSEIF RESULT == 60
 		GOTO INPUT_LOOP
 	ENDIF
 	IF ITEM:[[아이템:스킬카드【메・디아라마】]] > 0 && ITEM:[[아이템:비밀의방어구상자]] > 0
-		PRINTFORML 스킬카드【메・디아라마】1個、비밀의방어구상자1個を使って프레이아の날개옷を製作しますか？
+		PRINTFORML 스킬카드【메・디아라마】1개、비밀의방어구상자1개를 사용해 프레이아의날개옷를 제작합니까？
 		CALL INPUT_YN("네", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 프레이아の날개옷製作しました
+		PRINTFORMW 프레이아의날개옷을 제작했습니다
 		ITEM:[[아이템:프레이아의날개옷]] += 1
 		ITEM:[[아이템:스킬카드【메・디아라마】]] -= 1
 		ITEM:[[아이템:비밀의방어구상자]] -= 1
 	ELSE
-		PRINTFORMW 프레이아の날개옷を作るには스킬카드【메・디아라마】1個、비밀의방어구상자1個が필요です(現在소지数:{ITEM:[[아이템:스킬카드【메・디아라마】]]} {ITEM:[[아이템:비밀의방어구상자]]})
+		PRINTFORMW 프레이아의날개옷을 만드려면 스킬카드【메・디아라마】1개、비밀의방어구상자1개가 필요합니다(현재의 소지수:{ITEM:[[아이템:스킬카드【메・디아라마】]]} {ITEM:[[아이템:비밀의방어구상자]]})
 	ENDIF
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 61
@@ -1154,16 +1196,16 @@ ELSEIF RESULT == 74
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 75
 	IF ITEM:[[아이템:꿈의물방울]] > 2 && ITEM:[[아이템:히히이로카네]] > 0
-		PRINTFORMW 야사카의곡옥を製作しますか？
+		PRINTFORMW 야사카의곡옥를 제작합니까？
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 야사카의곡옥を製作しました
+		PRINTFORMW 야사카의곡옥를 제작했습니다
 		ITEM:[[아이템:야사카의곡옥]] += 1
 		ITEM:[[아이템:꿈의물방울]] -= 3
 		ITEM:[[아이템:히히이로카네]] -= 1
 	ELSE
-		PRINTFORMW 소재が발りない
+		PRINTFORMW 소재가 부족합니다
 	ENDIF
 	GOTO INPUT_LOOP
 ELSEIF RESULT == 76
@@ -1172,7 +1214,7 @@ ELSEIF RESULT == 76
 		CALL INPUT_YN("예", "아니오")
 		SIF RESULT == 1
 			GOTO INPUT_LOOP
-		PRINTFORMW 얼티밋애로を製作しました
+		PRINTFORMW 얼티밋애로를 제작했습니다
 		ITEM:[[아이템:얼티밋애로]] += 1
 		ITEM:[[아이템:컴파운드보우]] -= 1
 		ITEM:[[아이템:전사의증거]] -= 10
@@ -1181,6 +1223,67 @@ ELSEIF RESULT == 76
 		PRINTFORMW 얼티밋애로를 만들려면 컴파운드보우 1개、전사의증거 10개、금메달 3개가 필요합니다(현재의 소지수:{ITEM:[[아이템:컴파운드보우]]} {ITEM:[[아이템:전사의증거]]} {ITEM:[[아이템:금메달]]})
 	ENDIF
 	GOTO INPUT_LOOP	
+	;ELSEIF RESULT == 97
+ELSEIF RESULT == 97 && RESULT == 98
+	MONEY:1 -= 1
+		ITEM:[[아이템:스킬카드【충의의참격】]] += 10
+		ITEM:[[아이템:스킬카드【충의의총격】]] += 10
+		ITEM:[[아이템:스킬카드【충의의권】]] += 10
+		ITEM:[[아이템:스킬카드【충의의업】]] += 10
+
+		ITEM:[[아이템:스킬카드【회전베기】]] += 10
+		ITEM:[[아이템:스킬카드【이검난무】]] += 10
+		ITEM:[[아이템:스킬카드【게이・볼그】]] += 10
+		ITEM:[[아이템:스킬카드【백발침】]] += 10
+
+		ITEM:[[아이템:스킬카드【디아】]] += 10
+		ITEM:[[아이템:스킬카드【파트라】]] += 10
+		ITEM:[[아이템:스킬카드【리캄】]] += 10
+
+		ITEM:[[아이템:스킬카드【타루・카쟈】]] += 10
+		ITEM:[[아이템:스킬카드【스쿠・카쟈】]] += 10
+		ITEM:[[아이템:스킬카드【마카・카쟈】]] += 10
+		ITEM:[[아이템:스킬카드【라쿠・카쟈】]] += 10
+		ITEM:[[아이템:스킬카드【사마・카쟈】]] += 10
+
+		ITEM:[[아이템:스킬카드【타룬・다】]] += 10
+		ITEM:[[아이템:스킬카드【스쿤・다】]] += 10
+		ITEM:[[아이템:스킬카드【마칸・다】]] += 10
+		ITEM:[[아이템:스킬카드【라쿤・다】]] += 10
+		ITEM:[[아이템:스킬카드【사만・다】]] += 10
+
+		ITEM:[[아이템:스킬카드【데・카쟈】]] += 10
+		ITEM:[[아이템:스킬카드【데・쿤다】]] += 10
+		ITEM:[[아이템:스킬카드【테트라쟈】]] += 10
+		ITEM:[[아이템:스킬카드【테트라칸】]] += 10
+		ITEM:[[아이템:스킬카드【마카라칸】]] += 10
+
+		ITEM:[[아이템:스킬카드【아기】]] += 10
+		ITEM:[[아이템:스킬카드【지오】]] += 10
+		ITEM:[[아이템:스킬카드【부후】]] += 10
+		ITEM:[[아이템:스킬카드【잔】]] += 10
+		ITEM:[[아이템:스킬카드【코우하】]] += 10
+		ITEM:[[아이템:스킬카드【한마】]] += 10
+		ITEM:[[아이템:스킬카드【에이하】]] += 10
+		ITEM:[[아이템:스킬카드【무도】]] += 10
+		ITEM:[[아이템:스킬카드【마그나】]] += 10
+		ITEM:[[아이템:스킬카드【아쿠아】]] += 10
+		ITEM:[[아이템:스킬카드【갈】]] += 10
+		ITEM:[[아이템:스킬카드【그라이】]] += 10
+		ITEM:[[아이템:스킬카드【프레이】]] += 10
+		ITEM:[[아이템:스킬카드【메기도】]] += 10
+
+		ITEM:[[아이템:스킬카드【일할의활천】]] += 10
+		ITEM:[[아이템:스킬카드【일할의마맥】]] += 10
+		ITEM:[[아이템:스킬카드【코칭】]] += 10
+		ITEM:[[아이템:스킬카드【어드바이스】]] += 10
+		ITEM:[[아이템:스킬카드【토라에스트】]] += 10
+		ITEM:[[아이템:스킬카드【트라프리】]] += 10
+		ITEM:[[아이템:스킬카드【리베라마】]] += 10
+		ITEM:[[아이템:스킬카드【에스트마】]] += 10
+		ITEM:[[아이템:스킬카드【라이트마】]] += 10
+		ITEM:[[아이템:스킬카드【리프트마】]] += 10
+
 ELSEIF RESULT == 98
 	IF MONEY:1 > 200
 		PRINTFORML 복권을 뽑을 횟수를 입력하십시오。 (MAX {MIN(99,MONEY:1 / 100)})
@@ -1215,7 +1318,7 @@ ELSEIF RESULT == 100
 	PRINTL 소재의 이름		입수장소
 	PRINTL 비밀의방어구상자	마카복권
 	PRINTL 티타노마키아		타르타로스에 출현하는 피의헤카톤케이르가 드랍
-	PRINTL 네코마타의목방울		네코마타がドロップ
+	PRINTL 네코마타의목방울		네코마타가 드랍
 	PRINTL 네코마타의모옥		네코마타가 드랍
 	PRINTL 오래된헝겊조각		타르타로스２～５층의 적이 드랍
 	PRINTL 장인의꿰메는바늘	타르타로스６～１０층의 적이 드랍
@@ -1230,20 +1333,20 @@ ELSEIF RESULT == 100
 	PRINTL 기계의조각Ａ		에코빌딩의 적이 드랍
 	PRINTL 기계의조각Ｂ		에코빌딩의 적이 드랍
 	PRINTL 기계의조각Ｃ		에코빌딩의 적이 드랍
-	PRINTL 운철		라그의가게で보석와 교환
-	PRINTL 다마스커스동		라그의가게で보석와 교환
-	PRINTL 미스릴은		라그의가게で보석와 교환
-	PRINTL 흑요석		라그의가게で보석와 교환
-	PRINTL 무지개조각		라그의가게で보석와 교환
-	PRINTL 꿈의물방울		라그의가게で보석와 교환
-	PRINTL 달의돌		라그의가게で보석와 교환
-	PRINTL 태양의돌		라그의가게で보석와 교환
-	PRINTL 오리하르콘		라그의가게で보석와 교환
-	PRINTL 히히이로카네		라그의가게で보석와 교환
-	PRINTL 비욘다이트		라그의가게で보석와 교환
-	PRINTL 메테오라이트s		라그의가게で보석와 교환
+	PRINTL 운철		라그의가게에서 보석과 교환
+	PRINTL 다마스커스동		라그의가게에서 보석과 교환
+	PRINTL 미스릴은		라그의가게에서 보석과 교환
+	PRINTL 흑요석		라그의가게에서 보석과 교환
+	PRINTL 무지개조각		라그의가게에서 보석과 교환
+	PRINTL 꿈의물방울		라그의가게에서 보석과 교환
+	PRINTL 달의돌		라그의가게에서 보석과 교환
+	PRINTL 태양의돌		라그의가게에서 보석과 교환
+	PRINTL 오리하르콘		라그의가게에서 보석과 교환
+	PRINTL 히히이로카네		라그의가게에서 보석과 교환
+	PRINTL 비욘다이트		라그의가게에서 보석과 교환
+	PRINTL 메테오라이트s		라그의가게에서 보석과 교환
 	PRINTL 태그링		로카파라의 적이 저확률로 드랍（점술 효과）
-	PRINTL 헤드셋について	헤드셋은 조수가 착용하면
+	PRINTL 헤드셋에 관하여	헤드셋은 조수가 착용하면
 	PRINTL				전투시 네비게이션 멘트를 해주는 장비입니다
 	PRINTL				단、 조수가 파티내에 있으면 작동하지 않습니다
 	PRINTL				파티 리더를 어떻게 부르는가는、조수의 리더에 대한 이인칭이 그대로 적용됩니다
@@ -1251,31 +1354,31 @@ ELSEIF RESULT == 100
 	WAIT
 	DRAWLINE
 	PRINTL 리빙・엣지
-	PRINTL 장비者の能力によって強さが変わる
-	PRINTL ちょっとしたデメリット付き
+	PRINTL 장비자의 능력에 따라 강함이 달라진다
+	PRINTL 약간의 단점 포함
 	PRINTL 야타의거울
-	PRINTL 魔法よりの武具、強힘なので레벨、마력が高くないと장비できない
+	PRINTL 마법 성향의 무기、강력하기 때문에 레벨、마력이 높지 않으면 장비할 수 없다
 	PRINTL 
 	PRINTL 인간무골
-	PRINTL 物理よりの武具
-	PRINTL 공격、명중がとても上がるが힘がないと장비できない
+	PRINTL 물리적인 무구
+	PRINTL 공격、명중이 많이 오르지만 힘이 부족하면 장비할 수 없다
 	PRINTL 
 	PRINTL 아메노누보코
-	PRINTL オール마이ティな武具、지혜が高くないと장비できない
-	PRINTL 特技が使えるものには、多数の공격스킬が付き
-	PRINTL 使えないものには、通常공격が강화される
+	PRINTL 올 마이티 무구、지혜가 높지 않으면 장비할 수 없다
+	PRINTL 장비 스킬이 있으며、다수의 공격스킬이 있음
+	PRINTL 사용할 수 없는 경우、통상 공격이 강화된다
 	PRINTL 
 	PRINTL 톤보기리・改
-	PRINTL 명중よりにパラメータが上がる
-	PRINTL 발以外の장비を外すと、회피、명중が上がる
+	PRINTL 명중부터 파라미터가 올라간다
+	PRINTL 발 이외의 장비를 벗으면、회피、명중이 올라간다
 	PRINTL 
 	PRINTL 방천화극・改
-	PRINTL 마법위력、마법효과が全く上がらないが、その分공격、명중がかなり
-	PRINTL 공격、명중がとても上がるが힘がないと장비できない
+	PRINTL 마법위력、마법효과이 전혀 오르지 않지만、그만큼 공격、명중이 높다
+	PRINTL 공격、명중이 많이 오르지만 힘이 부족하면 장비할 수 없다
 	PRINTL 
-	PRINTL 독고저　금강저　카르마
-	PRINTL 魔法よりの武具、右に行くほど強힘
-	PRINTL 마력がないと장비できない
+	PRINTL 삼고저　오고저　카르마
+	PRINTL 마법적인 무기、오른쪽으로 갈수록 강력
+	PRINTL 마력이 없으면 장비할 수 없다
 	PRINTL 
 	
 	WAIT
@@ -1327,60 +1430,66 @@ ENDIF
 RETURN 0
 
 @KUZI,ARG
-#DIM ITEMID = 1010,1011,1012,1013,1014,1015,1008,1009,1007,1004,1031,1032,1033,1034,1035,1036,1040,1110,1111,1115,1116,1117,1118,5511,5513,5514,5503,5504,40,41,1402,3204,3608,5203,1412
-#DIM ITEMNUM,35 
+#DIM ITEMID = 3204,3608,5203,1402,1010,1011,1012,1013,1014,1015,1029,1025,1026,1027,1104,1106,1108,1122,1124,1126,1128,1130,1132,1007,1050,1051,1052,1053,1041,1047,1100,1030,1008,1009,1007,1004,1031,1032,1033,1034,1035,1036,1040,1103,1105,1107,1109,1110,1111,1112,1120,1115,1116,1117,1118,5512,5521,41,40,5503,5504,5509,5510,5505,5506,5507,5508,5515,5500,5501,5502,5511,5513,5514,5516,5517,5518,5519,5520,1412
+#DIM ITEMNUM,80 
 #DIM LCOUNT
 
 VARSET ITEMNUM,0
 LOCAL = 0
 FOR LCOUNT,0,ARG
-	LOCAL = RAND:95
+	LOCAL = RAND:100
 	SELECTCASE LOCAL
-		CASE IS < 10
-			;10/95 で장비箱
-			ITEMNUM:30 += 1
-		CASE IS < 60
-			;50/95 で何か아이템
-			LOCAL = RAND:30
+		CASE IS < 5
+			;5/100でレア装備
+			LOCAL = RAND:3
 			SELECTCASE LOCAL
-				CASE 29
-					;ITEM:41 미약 x10
+				CASE 0
+					;휴대용헤드폰
+					ITEMNUM:0 += 1
+				CASE 1
+					;프로스트수트
+					ITEMNUM:1 += 1
+				CASEELSE
+					;눈꽃
+					ITEMNUM:2 += 1
+				ENDSELECT
+		CASE IS < 15
+			;10/95 で장비箱
+			ITEMNUM:3 += 1
+		CASE IS < 65
+			;50/100 で何かアイテム
+			;25％で（＝総計10％で）レアアイテムを含むテーブル
+			IF RAND:5 == 0
+				LOCAL = RAND:76 + 4
+			ELSE
+				LOCAL = RAND:52 + 28
+			ENDIF
+			SELECTCASE LOCAL
+				CASE 55 TO 57
+					;만능탄、천마의탄환、미약
 					ITEMNUM:LOCAL += 10
-				CASE IS >= 26
-					;ITEM:5503 성스러운탄환 ITEM:5504 저주의탄환 ITEM:40 로션  x50
+				CASE 58 TO 67
+					;로션、破魔呪殺、状態異常系弾丸
 					ITEMNUM:LOCAL += 50
-				CASE IS >= 23
-					;ITEM:5511 코로나샷 ITEM:5513 프로스트탄 ITEM:5514 랜턴탄  x25
+				CASE 68 TO 78
+					;属性系弾丸
 					ITEMNUM:LOCAL += 25
 				CASEELSE
 					;そのほか  x1
 					ITEMNUM:LOCAL += 1
 			ENDSELECT
-		CASE IS < 65
-			;5/95で레어장비
-			LOCAL = RAND:3
-			SELECTCASE LOCAL
-				CASE 0
-					;휴대용헤드폰
-					ITEMNUM:31 += 1
-				CASE 1
-					;프로스트수트
-					ITEMNUM:32 += 1
-				CASEELSE
-					;빛나는눈
-					ITEMNUM:33 += 1
-			ENDSELECT
-		;5/95で 1 MORE!
-		CASE IS < 70
+		;10/100で 1 MORE!
+		CASE IS < 75
 			PRINTW 1 MORE！
 			LCOUNT -= 2
 		CASEELSE
-			;25/95で꽝인복권
-			ITEMNUM:34 += 1
+			;25/100ではずれくじ
+			ITEMNUM:79 += 1
 	ENDSELECT
 NEXT
 
-FOR LCOUNT,0,35
+
+FOR LCOUNT,0,80
 	IF ITEMNUM:LCOUNT > 0
 		PRINTFORML %ITEMNAME:(ITEMID:LCOUNT)%ｘ{ITEMNUM:LCOUNT}が当たりました！
 		CALL CHECK_ITEMMAX,ITEMID:LCOUNT
@@ -1403,9 +1512,9 @@ RETURN 0
 ;	ARGS:1 = 一つ눈の소재아이템名
 ;	ARGS:2 = 二つ눈の소재아이템名
 ;	ARGS:3 = 三つ눈の소재아이템名
-;	ARG:1  = 一つ눈の소재아이템の필요個数
-;	ARG:2  = 二つ눈の소재아이템の필요個数
-;	ARG:3  = 三つ눈の소재아이템の필요個数
+;	ARG:1  = 一つ눈の소재아이템の필요개数
+;	ARG:2  = 二つ눈の소재아이템の필요개数
+;	ARG:3  = 三つ눈の소재아이템の필요개数
 ;
 ;<戻り値>
 ;	なし
@@ -1440,7 +1549,8 @@ IF 아이템소지数:1 >= ARG:1
 ELSEIF 아이템소지数:1 < ARG:1
 	SETCOLOR COLOR("붉은색")
 ENDIF
-PRINTFORM (필요한 소재:%ARGS:1,30,LEFT%({아이템소지数:1}/{ARG:1})
+;PRINTFORM (필요한 소재:%ARGS:1,30,LEFT%({아이템소지数:1}/{ARG:1})
+PRINTFORM (%ARGS:1,30,LEFT%({아이템소지数:1}/{ARG:1})
 IF ARGS:2 == ""
 	PRINTL )
 ;	PRINTL 

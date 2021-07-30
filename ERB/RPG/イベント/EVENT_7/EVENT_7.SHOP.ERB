@@ -8,13 +8,16 @@
 ;	Modification Data:
 ;
 ;	Edit	Date			Author					Reason
-;	001		2011/XX/XX		P						新規作成
-;	002		2011/11/17		旅人					統合整備（스킬카드関連調整）
+;	001		2011/XX/XX		P						新規작성
+;	002		2011/11/17		旅人					統合整備（스킬카드관련調整）
 ;	002		2012/ 3/ 4		P						스킬카드の所属相性を계승타입ではなくIDによって判別するように
-;	004		2012/ 9/15								時間城で스킬카드구입時に스킬の説明が出るように
-;	005		2013/11/30		ひみつ					스킬속성표시の適用範囲拡大1000마카切ったら最初に戻す様に追記
-;	006		2019/07/02		JK好き					時間城でカード구입後1000마카切ったら最初に戻す様に追記
-;	007		2019/09/29		なんとなくの人			時間城で渡していない스킬카드を一括で渡すコマンドを추가
+;	004		2012/ 9/15								時間城で스킬카드구입時に스킬の설명が出るように
+;	005		2013/11/30		ひみつ					스킬속성표시の適用범위拡大1000마카切ったら최초に戻す様に追記
+;	006		2019/07/02		JK好き					時間城で카드구입後1000마카切ったら최초に戻す様に追記
+;	007		2019/09/29		なんとなくの人			時間城で渡していない스킬카드を一括で渡す커맨드を추가
+;	008		2020/08/15		마리ーちゃんの中の人	벨벳룸から時間城に直通させた。（조건：時間城初回済みor周回済み）
+;	009		2020/08/16		마리ーちゃんの中の人	1000마카でEXP카드。녹림의카드を구입가능にした。
+;	010		2021/02/13		NEO						時間城で「ちょっとじっくり見たい」選択肢を挿入
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 @SHOP_LONDON
@@ -187,9 +190,11 @@ ELSE
 	RETURN -1
 ENDIF
 GOTO START_LOSA
+
+;2020/08/15　改修　벨벳룸分岐を用意した
 @CASTLE_OF_WATCH
 DRAWLINE
-IF !STRFLAG_EV("時間城初回", 1)
+IF !STRFLAG_EV("時間城初回", 1) && 이벤트フラグ:5:2 == 0
 	PRINTL 백작:
 	PRINTW 「어서 오시게, 시간성에…… 그 눈은 무언가를 원하는 것 같지만」
 	PRINTW 「아니. 사람은 항상 무언가를 요구하고 있다. 그저 대개는 자신이 뭘 원하는지 알아채지 못할 뿐」
@@ -204,7 +209,21 @@ IF !STRFLAG_EV("時間城初回", 1)
 	PRINTW 「내가 책임을 지고 그 카드를 얼마든지 복제해주지」
 	PRINTW 「물론, 그때에는 그만한 대가를 받겠지만」
 	PRINTW 「자, 용건을 들어볼까」
-ELSEIF STRFLAG_NUM_EV("ニャル進行", , , , [[이벤트:페르소나２]]) == 4 && GETCHARA([[キャラ:니알랏토텝]]) >= 0
+	
+;벨벳룸経由の場合は時間城内の台詞を이벤트フラグで差し替える
+;벨벳룸から入る조건は時間城初回か周回済みである事
+ELSEIF 이벤트フラグ:5:1 == 0 && 이벤트フラグ:5:2 == 1 && (STRFLAG_EV("時間城初回", 1) || FLAG:周回횟수 > 0 || FLAG:DEBUG) 
+	PRINTW 「스킬카드, 그것은 악마와의 인연의 단편」
+	PRINTW 「그것은 덧없이 사라지는, 여린 인연」
+	PRINTW 「물론, 이 시간의 흐름 속에서 무에서 유가 태어날 수는 없는 법이지요」
+	PRINTW 「우선 당신이 견본으로로 저에게 카드를 주셔야 합니다.」
+	PRINTW 「그러면 책임지고 해당 카드를 복제해드립니다.」
+	PRINTW 「물론 그에 상응하는 대가를 받게 되겠지요.」
+	PRINTW 「자, 용건을 여쭙겠습니다」
+	이벤트フラグ:5:1 = 1
+
+;벨벳룸経由であれば弾く
+ELSEIF STRFLAG_NUM_EV("ニャル進行", , , , [[이벤트:페르소나２]]) == 4 && GETCHARA([[キャラ:니알랏토텝]]) >= 0 && 이벤트フラグ:5:2 == 0
 	CALLF STRFLAG_NUM_EV("ニャル進行", "=", , 5, [[이벤트:페르소나２]])
 	LOCAL = GETCHARA([[キャラ:니알랏토텝]])
 	PRINTFORML %CALLNAME:LOCAL%:
@@ -293,37 +312,79 @@ ELSEIF STRFLAG_NUM_EV("ニャル進行", , , , [[이벤트:페르소나２]]) ==
 		PRINTW 「당초의 목적대로… 할 수는 없겠지만, 즐길 수는 있겠지」
 		PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 그렇게 말을 남기고 사라졌다…
 		CALL キャラ삭제(LOCAL)
-		CALLF STRFLAG_EV("伯爵消滅", 1)
+		CALLF STRFLAG_EV("백작消滅", 1)
 		RETURN -1
 	ENDIF
 ELSE
-	PRINTL 백작:
-	PRINTW 「어서 오시게, 시간성에……. 시간의 흐름은 빠르고, 망설이지 않지. 자아, 용건을 들어보지」
+	IF 이벤트フラグ:5:1 == 1 && 이벤트フラグ:5:2 == 1
+		PRINTW 「스킬카드를 찾는건가」
+	ELSE
+		PRINTL 백작:
+		PRINTW 「어서 오시게, 시간성에……. 시간의 흐름은 빠르고, 망설이지 않지. 자아, 용건을 들어보지」
+	ENDIF
 ENDIF
 DRAWLINE
 $START_WATCH
 PRINTFORML 어떻게 하겠습니까?		 마카{MONEY:1}
 PRINTL [0] 스킬카드를 산다(1000마카)
-PRINTL [1] 스킬카드를 건네준다
-SIF STRFLAG_NUM_EV("수정 두개골의 소문") == 2
+PRINTL [1] 스킬카드를 건내준다
+;벨벳룸経由なら弾く
+SIF STRFLAG_NUM_EV("수정 두개골의 소문") == 2 && 이벤트フラグ:5:2 == 0
 	PRINTL [2] 수정 두개골에 대해서
 PRINTL [3] 넘기지 않은 스킬카드를 모두 넘긴다
-PRINTL [9] 가게를 나간다
-CALL INPUTINT(0, 1, 2, 3, 9)
+PRINTL [4] EXP카드를 산다(1000마카)
+
+IF 이벤트フラグ:7:1 == 0
+	PRINTL [5] 좀 천천히 보고 싶다
+ELSE
+	PRINTL [5] 얘기하면서 보고 싶다
+ENDIF
+IF 이벤트フラグ:7:2 == 0
+	PRINTL [6] 복수 교환하고 싶다
+ELSE
+	PRINTL [6] 하나씩 교환하고 싶다
+ENDIF
+
+IF 이벤트フラグ:5:2 == 1
+	PRINTL [9] 돌아간다
+ELSE
+	PRINTL [9] 가게를 나간다
+ENDIF
+CALL INPUTINT(0, 1, 2, 3, 4, 9)
 DRAWLINE
 LOCAL:1 = 0
 SELECTCASE RESULT
 	CASE 0
 		IF MONEY:1 < 1000
-			PRINTL 백작:
-			PRINTW 「시간은 빈부격차 따위는 상관하지 않고 흘러간다」
-			PRINTW 「자네에게 충분한 돈이 없는 것은 애석하지만」
-			PRINTW 「그러나 시간이 용서해 준다…라는 일은 없을테지」
+			IF 이벤트フラグ:5:2 == 1
+				PRINTW 「조금 마카가 부족한 것 같네요」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「시간은 빈부격차 따위는 상관하지 않고 흘러간다」
+				PRINTW 「자네에게 충분한 돈이 없는 것은 애석하지만」
+				PRINTW 「그러나 시간이 용서해 준다…라는 일은 없을테지」
+			ENDIF
 			GOTO START_WATCH
 		ENDIF
-		PRINTL 백작:
-		PRINTW 「그러면、카드를 선택하게」
+
+		IF 이벤트フラグ:5:2 == 1
+			IF 이벤트フラグ:7:1 == 1
+				PRINTW 「그럼 카드를 골라보도록 하겠습니다.」
+			ELSE
+				PRINTW 「그러면、카드를 선택하게」
+			ENDIF
+		ELSE
+			PRINTL 백작:
+			IF 이벤트フラグ:7:1 == 1
+				PRINTW 「그러면、나는 사색에 잠기도록 하지」
+			ELSE
+				PRINTW 「그러면、카드를 선택하게」
+			ENDIF
+
+		ENDIF
+		;できれば「剣撃の2ページ目を開いてたらそこに戻る」としたかったがMURIくさい
 		$BUY_WATCH
+		DRAWLINE
 		CALL SHOW_MAKE_SKILL
 		SIF RESULT == -1
 			GOTO START_WATCH
@@ -336,51 +397,203 @@ SELECTCASE RESULT
 			CALL SKILL_EXPLAIN_PERFORMANCE, LOCAL:4, -1
 		TRYCALLFORM SKILL_EXPLAIN_{LOCAL:4}
 		DRAWLINE
-		PRINTL 백작:
-		PRINTFORML 「%ITEMNAME:LOCAL%인가. 정말 이 카드로 되겠는가?」
-		CALL INPUT_YN
-		IF RESULT == 0
-			PRINTL 백작:
-			PRINTW 「좋아, 알았네. 가져가도 좋아」
-			PRINTL 
-			PRINTFORMW ＞%조사처리(ITEMNAME:LOCAL,"를")% 손에 넣었다
-			MONEY:1 -= 1000
-			ITEM:LOCAL += 1
-			;1000마카切ったら最初に戻す様に追記
-			IF MONEY:1 < 1000
-				GOTO START_WATCH
-			ENDIF
+		;複数枚交換モード
+		IF 이벤트フラグ:7:2 == 1
+			;おひとりモード
+			IF 이벤트フラグ:7:1 == 1
+			;	PRINTFORML ＞何枚用意してもらおうか……
+			ELSEIF 이벤트フラグ:5:2 == 1
+				PRINTFORML 「%ITEMNAME:LOCAL%. 정말 이 카드로 좋으신가요?」
+				PRINTFORML 　
 		ELSE
 			PRINTL 백작:
-			PRINTW 「망설이는가」
-			PRINTW 「물론, 복제를 원할지 말지는 자네 자유일세」
-			PRINTW 「그러나 이렇게 주저하는 동안에도 시시각각 시간이 흘러 간다는 것은 잊지 말게」
+			PRINTFORML 「%ITEMNAME:LOCAL%인가. 정말 이 카드로 되겠는가?」
+				PRINTFORML 　
 		ENDIF
-		DRAWLINE
-		GOTO BUY_WATCH
+			;念のため初期化
+			이벤트フラグ:7:3 = 0
+			$INPUT_LOOP_7_TC_0
+			PRINTFORML 몇 개 교환하시겠습니까?？ （현재 {ITEM:LOCAL}개 소지）
+			PRINTL [1～99] 매수 선택
+			PRINTL [100] 그만둔다
+			INPUT
+			;一度に交換可能なのは1-99枚
+			IF RESULT > 0 && RESULT < 100 
+				;お金が足りるかチェック
+				IF MONEY:1 < (1000 * RESULT)
+					;おひとりモード
+					IF 이벤트フラグ:7:1 == 1
+						PRINTFORML ＞마카가 부족하다……
+					ELSEIF 이벤트フラグ:5:2 == 1
+						PRINTW 「조금 마화가 부족한 것 같네요」
+					ELSE
+						PRINTW 「시간은 빈부격차 따위는 상관하지 않고 흘러간다」
+						PRINTW 「자네에게 충분한 돈이 없는 것은 애석하지만」
+						PRINTW 「그러나 시간이 용서해 준다…라는 일은 없을테지」
+						SIF RESULT != 1
+							PRINTW 「조금 더 절제하게」
+					ENDIF
+					GOTO INPUT_LOOP_7_TC_0
+				;マッカが足りてる
+				ELSE
+					이벤트フラグ:7:3 = RESULT
+					;おひとりモード
+					IF 이벤트フラグ:7:1 == 1
+						PRINTFORML ＞%ITEMNAME:LOCAL%を{RESULT}枚でいいだろうか？
+					ELSEIF 이벤트フラグ:5:2 == 1
+						PRINTFORML 「%ITEMNAME:LOCAL%を{RESULT}枚で宜しいのですね？」
+					ELSE
+						PRINTL 백작:
+						PRINTFORML 「%ITEMNAME:LOCAL%を{RESULT}枚……これで合っているか？」
+					ENDIF
+					CALL INPUT_YN
+					IF RESULT == 0
+						;おひとりモード、一行くらい入れようかと思ったがやめとく
+						IF 이벤트フラグ:7:1 == 1
+;							IF 이벤트フラグ:5:2 == 1
+;								PRINTL ＞スキルカードを用意してもらった
+;							ELSE
+;								PRINTL ＞백작を呼び、スキルカードを用意してもらった
+;							ENDIF
+						ELSEIF 이벤트フラグ:5:2 == 1
+							PRINTL 「받아 주십시오」
+						ELSE
+							PRINTL 백작:
+							PRINTL 「よし、わかった。受け取るがいい」
+						ENDIF
+						PRINTL 
+						PRINTFORMW ＞%ITEMNAME:LOCAL%を{이벤트フラグ:7:3}枚手に入れた
+						MONEY:1 -= (1000 * (이벤트フラグ:7:3))
+						ITEM:LOCAL += 이벤트フラグ:7:3
+						;1000魔貨切ったら最初に戻す様に追記
+						IF MONEY:1 < 1000
+							GOTO START_WATCH
+						ENDIF
+					ELSE
+						IF 이벤트フラグ:7:1 == 1
+							;ここだよここ、なにも言わねぇようにした
+						ELSEIF 이벤트フラグ:5:2 == 1
+							PRINTL 「考え直しますか」
+							PRINTW 「それも良いでしょう」
+						ELSE
+							PRINTL 백작:
+							PRINTW 「ふむ、躊躇うか」
+							PRINTW 「もちろん、複製を望むかどうかは君次第だ」
+							PRINTW 「しかし、こうして躊躇う間にも刻々と時が過ぎゆくことは忘れるな」
+						ENDIF
+					ENDIF
+				ENDIF
+			;枚数選択のときの「やめる」
+			ELSEIF RESULT == 100
+				IF 이벤트フラグ:7:1 == 1
+					;ここだよここ、なにも言わねぇようにした
+				ELSEIF 이벤트フラグ:5:2 == 1
+					PRINTL 「考え直しますか」
+					PRINTW 「それも良いでしょう」
+				ELSE
+					PRINTL 백작:
+					PRINTW 「ふむ、躊躇うか」
+					PRINTW 「もちろん、複製を望むかどうかは君次第だ」
+					PRINTW 「しかし、こうして躊躇う間にも刻々と時が過ぎゆくことは忘れるな」
+				ENDIF
+			ELSE
+				GOTO INPUT_LOOP_7_TC_0
+			ENDIF
+
+			GOTO BUY_WATCH
+
+		;単数モード
+		ELSE
+			;おひとりモード
+			IF 이벤트フラグ:7:1 == 1
+				PRINTFORML ＞%ITEMNAME:LOCAL%でいいだろうか？
+			ELSEIF 이벤트フラグ:5:2 == 1
+				PRINTFORML 「%ITEMNAME:LOCAL%。本当にこのカードで宜しいのですね？」
+			ELSE
+				PRINTL 백작:
+				PRINTFORML 「%ITEMNAME:LOCAL%か。本当にこのカードでいいのかね？」
+			ENDIF
+		CALL INPUT_YN
+		IF RESULT == 0
+				IF 이벤트フラグ:7:1 == 1
+;					IF 이벤트フラグ:5:2 == 1
+;						PRINTL ＞スキルカードを用意してもらった
+;					ELSE
+;						PRINTL ＞백작を呼び、スキルカードを用意してもらった
+;					ENDIF
+				ELSEIF 이벤트フラグ:5:2 == 1
+					PRINTL 「받아 주십시오」
+				ELSE
+					PRINTL 백작:
+					PRINTW 「좋아, 알았네. 가져가도 좋아」
+				ENDIF
+				PRINTL 
+				PRINTFORMW ＞%조사처리(ITEMNAME:LOCAL,"를")% 손에 넣었다
+				MONEY:1 -= 1000
+				ITEM:LOCAL += 1
+				;1000마카切ったら최초に戻す様に追記
+				IF MONEY:1 < 1000
+					GOTO START_WATCH
+				ENDIF
+			ELSE
+				IF 이벤트フラグ:7:1 == 1
+				;無言
+				ELSEIF 이벤트フラグ:5:2 == 1
+					PRINTL 「다시 생각하시겠습니까」
+					PRINTW 「그것도 괜찮겠지요」
+				ELSE
+					PRINTL 백작:
+					PRINTW 「망설이는가」
+					PRINTW 「물론, 복제를 원할지 말지는 자네 자유일세」
+					PRINTW 「그러나 이렇게 주저하는 동안에도 시시각각 시간이 흘러 간다는 것은 잊지 말게」
+				ENDIF
+			ENDIF
+			DRAWLINE
+
+			GOTO BUY_WATCH
+		ENDIF
 	CASE 1
 		;---- EDIT 002 ADD START -------------------------
 		$SHOW_TRADE
 		;---- EDIT 002 ADD END ---------------------------
-		PRINTL 백작:
-		PRINTL 「그럼 어느 카드를 양도해줄 텐가?」
+		IF 이벤트フラグ:5:2 == 1
+			PRINTL 「그럼 어느 카드를 양도해주실 수 있으신가요?」
+		ELSE
+			PRINTL 백작:
+			PRINTL 「그럼 어느 카드를 양도해줄 텐가?」
+		ENDIF
+		PRINTL 
 		CALL SHOW_MAKE_SKILL, 1
 		SIF RESULT == -1
 			GOTO START_WATCH
 		LOCAL = 10000+RESULT
-		PRINTL 백작:
-		PRINTFORML 「%ITEMNAME:LOCAL%인가. 정말로 받아도 괜찮겠나?」
+		IF 이벤트フラグ:5:2 == 1
+			PRINTFORML 「양도해주시는 것은 %ITEMNAME:LOCAL%입니까」
+			PRINTFORML 「정말로 받아도 괜찮을련지요？」
+		ELSE
+			PRINTL 백작:
+			PRINTFORML 「%ITEMNAME:LOCAL%인가. 정말로 받아도 괜찮겠나?」
+		ENDIF
 		CALL INPUT_YN
 		IF RESULT == 0
-			PRINTL 백작:
-			PRINTW 「알았다. 그럼, 이 카드를 유구한 시간의 일원에 가세하게 해 주지」
+			IF 이벤트フラグ:5:2 == 1
+				PRINTW 「알겠습니다. 그럼 이 카드를 보편적무의식의 바다로 돌려보내겠습니다.」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「알았다. 그럼, 이 카드를 유구한 시간의 일원에 가세하게 해 주지」
+			ENDIF
 			ITEM:LOCAL -= 1
 			CALLF ABLE_MAKESKILLCARD(LOCAL-10000, 1)
 		ELSE
-			PRINTL 백작:
-			PRINTW 「망설이는가」
-			PRINTW 「물론, 복제를 원할지 말지는 자네의 자유일세」
-			PRINTW 「그러나 이렇게 주저하는 동안에도 시시각각 시간이 흘러 간다는 것은 잊지 말게」
+			IF 이벤트フラグ:5:2 == 1
+				PRINTL 「생각이 바뀌셨습니까」
+				PRINTW 「그것도 괜찮겠지요」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「망설이는가」
+				PRINTW 「물론, 복제를 원할지 말지는 자네의 자유일세」
+				PRINTW 「그러나 이렇게 주저하는 동안에도 시시각각 시간이 흘러 간다는 것은 잊지 말게」
+			ENDIF
 		ENDIF
 		;---- EDIT 002 MOD START -------------------------
 		DRAWLINE
@@ -492,7 +705,7 @@ SELECTCASE RESULT
 					PRINTL 
 					PRINTW ＞그렇게 말하면, 백작은 사라져 버렸다……
 					PRINTFORMW ＞눈물을 흘리면서, 감사의 말을 말하는 %조사처리(LOCALS,"를")% 따르게 하고는, 가게를 뒤로 했다…		
-					CALLF STRFLAG_EV("伯爵消滅", 1)
+					CALLF STRFLAG_EV("백작消滅", 1)
 					RETURN -1
 				ELSE
 					;DCに大きく傾く。とはいっても、まだ固定はしない
@@ -558,6 +771,7 @@ SELECTCASE RESULT
 					TALENT:(LOCAL:3):절벽 = TALENT:LOCAL:절벽
 					TALENT:(LOCAL:3):거유 = TALENT:LOCAL:거유
 					TALENT:(LOCAL:3):폭유 = TALENT:LOCAL:폭유
+					TALENT:(LOCAL:3):魔乳 = TALENT:LOCAL:魔乳
 					TALENT:(LOCAL:3):큰체형 = TALENT:LOCAL:큰체형
 					TALENT:(LOCAL:3):거체 = TALENT:LOCAL:거체
 					TALENT:(LOCAL:3):회복빠름 = TALENT:LOCAL:회복빠름
@@ -640,7 +854,7 @@ SELECTCASE RESULT
 				PRINTW 「매우 유감이지만, 자네와는 여기까지인 것 같다」
 				PRINTL 
 				PRINTW ＞그렇게 말하면, 백작은 사라져 버렸다……
-				CALLF STRFLAG_EV("伯爵消滅", 1)
+				CALLF STRFLAG_EV("백작消滅", 1)
 				RETURN -1
 			ENDIF
 		ELSEIF STRFLAG_NUM_EV("ニャル進行", , , ,  [[이벤트:페르소나２]]) == 3
@@ -657,55 +871,271 @@ SELECTCASE RESULT
 			GOTO START_WATCH
 		ENDIF
 	CASE 3
-		PRINTL 백작:
-		PRINTW 「호오…복제할 수 없다는 카드를 전부 내게 넘기고 싶다는 건가？」
+		IF 이벤트フラグ:5:2 == 1
+			PRINTW 「복제할 수 없는 카드 전부를 양도해주시는 겁니까？」
+		ELSE
+			PRINTL 백작:
+			PRINTW 「호오…복제할 수 없다는 카드를 전부 내게 넘기고 싶다는 건가？」
+		ENDIF
 		CALL SKL_CARD_ALL_YIELD(-1)
 		IF RESULT < 1
-			PRINTW 「그 기상은 훌륭하다만、공교롭게도 넘길 카드가 없는 것 같다… 정말 유감이야」
+			IF 이벤트フラグ:5:2 == 1
+				PRINTW 「공교롭게도 양도받을 카드가 없는 것 같습니다」
+			ELSE
+				PRINTW 「그 기상은 훌륭하다만、공교롭게도 넘길 카드가 없는 것 같다… 정말 유감이야」
+			ENDIF
 			DRAWLINE
 			GOTO START_WATCH
 		ENDIF
-			
-		PRINTFORMW 「흠… 다해서 {RESULT}장 정도 있는 것 같지만、정말로 전부 넘겨도 상관없는가？」
+		IF 이벤트フラグ:5:2 == 1
+			PRINTFORMW 「……합계는 {RESULT}장. 정말로 모든 카드를 양도해주시는 겁니까?」
+		ELSE
+			PRINTFORMW 「흠… 다해서 합계 {RESULT}장 정도 있는 것 같지만、정말로 전부 넘겨도 상관없는가？」
+		ENDIF
 		PRINTFORML --- 대상스킬카드 ---
 		CALL SKL_CARD_ALL_YIELD(-1, 1)
 		DRAWLINE		
 		CALL INPUT_YN
 		IF RESULT == 1
-			PRINTL 백작:
-			PRINTW 「참으로 현명한 판단이다」
-			PRINTW 「자네의 운명이 여신의 장난감이 된다고 할 지라도、그 길은 자네가 선택하고、자네가 짊어지는 거니까」
-			PRINTW 「부외자는 이렇게 적당히 억지를 부린다고 하자」
+			IF 이벤트フラグ:5:2 == 1
+				PRINTL 「생각이 바뀌셨습니까」
+				PRINTW 「그것도 괜찮겠지요」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「참으로 현명한 판단이다」
+				PRINTW 「자네의 운명이 여신의 장난감이 된다고 할 지라도、그 길은 자네가 선택하고、자네가 짊어지는 거니까」
+				PRINTW 「부외자는 이렇게 적당히 억지를 부린다고 하자」
+			ENDIF
 			DRAWLINE
 			GOTO START_WATCH
 		ENDIF
-
-		PRINTL 백작:
-		PRINTW 「이런이런、만약을 위해서다。다시 한 번 확인해볼까」
-		PRINTW 「정말로 이것들을 내게 넘겨도 괜찮다는 건가？ 나중에 돌려달라 말해도 모른다만？」
+		IF 이벤트フラグ:5:2 == 1
+			PRINTW 「다시 한번 확인 부탁드립니다.」
+			PRINTW 「정말로 카드를 물려주실건지요？」
+		ELSE
+			PRINTL 백작:
+			PRINTW 「이런이런、만약을 위해서다。다시 한 번 확인해볼까」
+			PRINTW 「정말로 이것들을 내게 넘겨도 괜찮다는 건가？ 나중에 돌려달라 말해도 모른다만？」
+		ENDIF
 		CALL INPUT_YN
 		IF RESULT == 1
-			PRINTL 伯爵:
-			PRINTW 「그렇게 물러나도、또 하나의 흥」
-			PRINTW 「시간은 무한히 있다、비록 이 세상이 신과 악마의 싸움으로 끝난다 할 지라도、그것은 결코 변하지 않는 것이네」
-			PRINTW 「발버둥 치게나 정명한 자여」
+			IF 이벤트フラグ:5:2 == 1
+				PRINTL 「생각이 바뀌셨습니까」
+				PRINTW 「그것도 괜찮겠지요」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「그렇게 물러나도、또 하나의 흥」
+				PRINTW 「시간은 무한히 있다、비록 이 세상이 신과 악마의 싸움으로 끝난다 할 지라도、그것은 결코 변하지 않는 것이네」
+				PRINTW 「발버둥 치게나 정명한 자여」
+			ENDIF
 			DRAWLINE
 			GOTO START_WATCH
 		ENDIF
-
-		PRINTL 백작:
-		PRINTW 「참으로 굉장한 물건이다」
-		PRINTW 「그러면 내 장난감 콜렉션에… 아아 이런、유구한 여행의 일원들을 환영하지 않겠나」
+		IF 이벤트フラグ:5:2 == 1
+			PRINTW 「알겠습니다. 그럼 이 카드를 보편적무의식의 바다로 돌려보내겠습니다」
+		ELSE
+			PRINTL 백작:
+			PRINTW 「참으로 굉장한 물건이다」
+			PRINTW 「그러면 내 장난감 콜렉션에… 아아 이런、유구한 여행의 일원들을 환영하지 않겠나」
+		ENDIF
 		CALL SKL_CARD_ALL_YIELD(-1, 2)
 		DRAWLINE
 		GOTO START_WATCH
-	CASE 9
-		PRINTL 백작:
-		PRINTW 「내일이 "밝은 날"이라는 것은 누가 정했지? 그것이 있는 한, 사람은 불안에서 벗어날 수 없지」
-		PRINTW 「평온함은 머나먼 그 날에야말로 있다고 생각하지 않나?」
-		PRINTW 「하지만 오늘, 당장의 평온함을 추구하는데 내가 도움이 된다면 나는 언제라도 여기서 자네는 기다리겠네」
+	CASE 4
+		IF MONEY:1 < 1000
+			IF 이벤트フラグ:5:2 == 1
+				PRINTW 「조금 마카가 부족한 것 같네요」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「시간은 빈부격차 따위는 상관하지 않고 흘러간다」
+				PRINTW 「자네에게 충분한 돈이 없는 것은 애석하지만」
+				PRINTW 「그러나 시간이 용서해 준다…라는 일은 없을테지」
+			ENDIF
+			GOTO START_WATCH
+		ENDIF
 		DRAWLINE
-		RETURN -1
+
+		;複数枚選択モード
+		IF 이벤트フラグ:7:2 == 1
+			IF 이벤트フラグ:5:2 == 1
+				PRINTFORML 「녹림의카드。何枚ご用意いたしましょうか？」
+			ELSE
+				PRINTL 백작:
+				PRINTFORML 「緑林のカードか。さて、何枚用立てる？」
+			ENDIF
+			;念のため初期化
+			이벤트フラグ:7:3 = 0
+			$INPUT_LOOP_7_TC_4
+			PRINTFORML 　
+			PRINTFORML いくつ交換しますか？ （現在 {ITEM:[[아이템:녹림의카드]]}個所持）
+			PRINTL [1～99] 枚数選択
+			PRINTL [100] やめる
+
+			INPUT
+			;一度に交換可能なのは1-99枚
+			IF RESULT > 0 && RESULT < 100 
+				;お金が足りるかチェック
+				IF MONEY:1 < (1000 * RESULT)
+					IF 이벤트フラグ:5:2 == 1
+						PRINTW 「少々魔貨が足りないようですな」
+					ELSE
+						PRINTW 「時は貧富の差など構わず進む」
+						PRINTW 「君が十分な金をもっていないのは不憫に思うが」
+						PRINTW 「だからといって、時が容赦してくれる…ということはないのだよ」
+						SIF RESULT != 1
+							PRINTW 「もう少し控えめな枚数にしたまえ」
+					ENDIF
+					GOTO INPUT_LOOP_7_TC_4
+				;マッカが足りてる
+				ELSE
+					이벤트フラグ:7:3 = RESULT
+					IF 이벤트フラグ:5:2 == 1
+						PRINTFORML 「緑林のカードを{RESULT}枚で宜しいのですね？」
+					ELSE
+						PRINTL 백작:
+						PRINTFORML 「緑林のカードを{RESULT}枚……この枚数で合っているか？」
+					ENDIF
+					CALL INPUT_YN
+					IF RESULT == 0
+						IF 이벤트フラグ:5:2 == 1
+							PRINTW 「받아 주십시오」
+						ELSE
+							PRINTL 백작:
+							PRINTW 「よし、わかった。受け取るがいい」
+						ENDIF
+						PRINTL 
+						PRINTFORMW 
+						PRINTFORMW ＞緑林のカードを{이벤트フラグ:7:3}枚手に入れた
+						MONEY:1 -= (1000 * (이벤트フラグ:7:3))
+						ITEM:[[아이템:녹림의카드]] += 이벤트フラグ:7:3
+						;1000魔貨切ったら最初に戻す様に追記
+						IF MONEY:1 < 1000
+							GOTO START_WATCH
+						ENDIF
+					ELSE
+						IF 이벤트フラグ:5:2 == 1
+							PRINTL 「考え直しますか」
+							PRINTW 「それも良いでしょう」
+						ELSE
+							PRINTL 백작:
+							PRINTW 「ふむ、躊躇うか」
+							PRINTW 「もちろん、複製を望むかどうかは君次第だ」
+							PRINTW 「しかし、こうして躊躇う間にも刻々と時が過ぎゆくことは忘れるな」
+						ENDIF
+					ENDIF
+					;ここでやめた場合は時間城トップへ
+				ENDIF
+			;枚数選択のときの「やめる」
+			ELSEIF RESULT == 100
+				IF 이벤트フラグ:5:2 == 1
+					PRINTL 「考え直しますか」
+					PRINTW 「それも良いでしょう」
+				ELSE
+					PRINTL 백작:
+					PRINTW 「ふむ、躊躇うか」
+					PRINTW 「もちろん、複製を望むかどうかは君次第だ」
+					PRINTW 「しかし、こうして躊躇う間にも刻々と時が過ぎゆくことは忘れるな」
+				ENDIF
+			ELSE
+				GOTO INPUT_LOOP_7_TC_4
+			ENDIF
+		ELSE
+			IF 이벤트フラグ:5:2 == 1
+			PRINTFORML 「녹림의카드. 정말 이 카드로 좋으신지요？」
+		ELSE
+			PRINTL 백작:
+			PRINTFORML 「녹림의카드인가. 정말 이 카드면 되겠는가？」
+		ENDIF
+		CALL INPUT_YN
+		IF RESULT == 0
+			IF 이벤트フラグ:5:2 == 1
+				PRINTW 「받아 주십시오」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「그래, 알았어. 받는 것이 좋겠지.」
+			ENDIF
+			PRINTL 
+			PRINTFORMW 
+			PRINTFORMW ＞녹림의카드을 손에 넣었다
+			MONEY:1 -= 1000
+			ITEM:[[아이템:녹림의카드]] += 1
+			;1000마카切ったら최초に戻す様に追記
+			IF MONEY:1 < 1000
+				GOTO START_WATCH
+				ENDIF
+			ELSE
+				IF 이벤트フラグ:5:2 == 1
+					PRINTL 「考え直しますか」
+					PRINTW 「それも良いでしょう」
+				ELSE
+					PRINTL 백작:
+					PRINTW 「ふむ、躊躇うか」
+					PRINTW 「もちろん、複製を望むかどうかは君次第だ」
+					PRINTW 「しかし、こうして躊躇う間にも刻々と時が過ぎゆくことは忘れるな」
+				ENDIF
+			ENDIF
+		ENDIF
+		DRAWLINE
+		GOTO START_WATCH
+	CASE 5
+		;ちょっとゆっくり見たいんじゃが
+		IF 이벤트フラグ:7:1 == 0
+			IF 이벤트フラグ:5:2 == 1
+				PRINTW 「かしこまりました。ご用件がありましたらいつでもお声がけを」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「ああ、分かった。私もひとりで見て回ることにしよう」
+			ENDIF
+			이벤트フラグ:7:1 = 1
+		;一緒に見たいな
+		ELSE
+			IF 이벤트フラグ:5:2 == 1
+				PRINTW 「かしこまりました。ご用件がありましたらいつでもお声がけを」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「ああ、共に見て回ることとしよう」
+			ENDIF
+			이벤트フラグ:7:1 = 0
+		ENDIF
+		DRAWLINE
+		GOTO START_WATCH
+	CASE 6
+		;たくさんほしい
+		IF 이벤트フラグ:7:2 == 0
+			IF 이벤트フラグ:5:2 == 1
+				PRINTW 「かしこまりました。いくらか取り揃えておきましょう」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「剛毅なことだ。だがそれも人間らしい」
+			ENDIF
+			이벤트フラグ:7:2 = 1
+		;いちまいづつ
+		ELSE
+			IF 이벤트フラグ:5:2 == 1
+				PRINTL 「생각이 바뀌셨습니까」
+				PRINTW 「그것도 괜찮겠지요」
+			ELSE
+				PRINTL 백작:
+				PRINTW 「망설이는가」
+				PRINTW 「물론, 복제를 원할지 말지는 자네의 자유일세」
+				PRINTW 「그러나 이렇게 주저하는 동안에도 시시각각 시간이 흘러 간다는 것은 잊지 말게」
+			ENDIF
+			이벤트フラグ:7:2 = 0
+		ENDIF
+		DRAWLINE
+		GOTO START_WATCH
+
+	CASE 9
+		IF 이벤트フラグ:5:2 == 1
+			RETURN 1
+		ELSE
+			PRINTL 백작:
+			PRINTW 「내일이 "밝은 날"이라는 것은 누가 정했지? 그것이 있는 한, 사람은 불안에서 벗어날 수 없지」
+			PRINTW 「평온함은 머나먼 그 날에야말로 있다고 생각하지 않나?」
+			PRINTW 「하지만 오늘, 당장의 평온함을 추구하는데 내가 도움이 된다면 나는 언제라도 여기서 자네는 기다리겠네」
+			DRAWLINE
+			RETURN -1
+		ENDIF
 ENDSELECT
 @GARCON_OF_RESTAURANT
 CUSTOMDRAWLINE =
@@ -869,8 +1299,13 @@ INPUT
 
 SELECTCASE RESULT
 	CASE 100
-		PRINTL 백작:
-		PRINTW 「그만두는 건가. 그도 좋겠지」
+		IF 이벤트フラグ:5:1 == 1
+			PRINTL 「생각이 바뀌셨습니까」
+			PRINTW 「그것도 괜찮겠지요」
+		ELSE
+			PRINTL 백작:
+			PRINTW 「그만두는 건가. 그도 좋겠지」
+		ENDIF
 		RETURN -1
 	CASE 999
 

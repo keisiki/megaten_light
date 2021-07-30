@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2300
 RETURN GET_EQUIPNUM("검")
 
+;타루・카쟈
+@장비추가스킬_2300,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 501
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -69,6 +79,9 @@ PRINTL 장비조건：LV10～
 @장비해설_2300
 PRINTL 「진군하는 자」라는 뜻을 가진、양날로 찌르기 용이한 검。
 PRINTL 로마 신화에서 민중으로부터의 신앙이 두터웠던 군신 마르스의 별명이기도 하다。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：타루・카쟈
+RESETCOLOR
 
 RETURN 0
 

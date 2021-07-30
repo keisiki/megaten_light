@@ -30,7 +30,7 @@ RETURN 3
 @SKILL_COST_2093,ARG
 RETURN 35
 
-;　相性 공격상성のうち、もっともダメージが高くなるものになる
+;　相性 공격상성のうち、もっとも데미지が高くなるものになる
 ;크레센트미러ノコピペ
 @SKILL_TYPE_2093, ARG
 #LOCALSSIZE 19
@@ -85,12 +85,12 @@ NEXT
 RETURN GET_TYPE_NUM(LOCALS)
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2093
+@SKILL_DECIDE_TYPE_2093, ARG
 RETURN 1
 ;EXTRA
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2093
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2093, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -170,7 +170,10 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2093
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2093
-PRINTL [전열] 전열의 적 1체에 만능속성 대 마법데미지. 반드시 상대의 약점을 찌른다. 인간 이능자 스킬.
+PRINTL 
+PRINTL [전열] 어국을 적대하는 괴력난신을 조복할 수 있도록 만들어진, 음양도의 깊숙한 곳에 두문불출의 저주.
+PRINTL 전열의 적 1체에 만능속성 대 마법데미지. 반드시 상대의 약점을 찌른다.
+PRINTL 인간　이능자 전용 스킬. 
 
 ;継承に필요な部位
 @継承部位_2093,ARG

@@ -28,14 +28,10 @@ RETURN 0
 
 @방어상성_8221,ARG,ARG:1 = -1
 SELECTCASE GET_TYPE(ARG)
-	CASE "파마","신경","정신","지변"
+	CASE "파마"
 		RETURN 0
 	CASE "타격"
 		RETURN 200
-	CASE "비구","중력"
-		RETURN 125
-	CASE "화염","빙결","전격","충격","주살","검격"
-		RETURN 50
 ENDSELECT
 RETURN 100
 

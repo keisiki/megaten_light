@@ -1,7 +1,7 @@
 ﻿
 ;스킬名
 @SKILL_NAME_1032,ARG
-RESULTS = 충격가드브레이커
+RESULTS = 충격가드브레이크
 
 ;　명중
 @SKILL_HITRATE_1032, ARG
@@ -34,12 +34,12 @@ RETURN GET_TYPE_NUM("충격")
 ;충격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1032
+@SKILL_DECIDE_TYPE_1032, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1032
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1032, ARG
 RETURN 0
 
 

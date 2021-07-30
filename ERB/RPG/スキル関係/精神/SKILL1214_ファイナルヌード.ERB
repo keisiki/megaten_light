@@ -35,12 +35,12 @@ RETURN 9
 ;정신
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1214
+@SKILL_DECIDE_TYPE_1214, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1214
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1214, ARG
 RETURN 0
 
 
@@ -152,25 +152,25 @@ SETCOLOR 0xFF33FF
 								PRINT 손가락으로 부드럽게 
 							ENDIF
 								IF RAND:4 == 0
-									PRINTL 문질렀다.
+									PRINT 문질렀다.
 								ELSEIF RAND:3 == 0
-									PRINTL 감싸쥐었다.
+									PRINT 감싸쥐었다.
 								ELSEIF RAND:2 == 0
-									PRINTL 어루만졌다.
+									PRINT 어루만졌다.
 								ELSE
-									PRINTL 쓰다듬었다.
+									PRINT 쓰다듬었다.
 								ENDIF
 						IF RAND:3 == 0
 							IF TALENT :(ARG):109
-								PRINTFORM ＞그런 다음 발기한 유두를 필사적으로 문지르며, 애처로운 눈빛으로 
+								PRINT ＞그런 다음 발기한 유두를 필사적으로 문지르며, 애처로운 눈빛으로 
 							ELSEIF TALENT :(ARG):110
-								PRINTFORM ＞그런 다음 귀여운 가슴에 열심히 페니스를 문지르며, 애처로운 눈빛으로 
+								PRINT ＞그런 다음 귀여운 가슴에 열심히 페니스를 문지르며, 애처로운 눈빛으로 
 							ELSEIF TALENT :(ARG):111
-								PRINTFORM ＞그런 다음 풍만한 가슴 사이에 페니스를 끼워넣고, 애처로운 눈빛으로 
+								PRINT ＞그런 다음 풍만한 가슴 사이에 페니스를 끼워넣고, 애처로운 눈빛으로 
 							ELSEIF TALENT :(ARG):112
-								PRINTFORM ＞그런 다음 거대한 가슴 사이에 페니스를 파묻고, 애처로운 눈빛으로 
+								PRINT ＞그런 다음 거대한 가슴 사이에 페니스를 파묻고, 애처로운 눈빛으로 
 							ELSE
-								PRINTFORM ＞그런 다음 가슴 사이에 페니스를 끼워넣고, 애처로운 눈빛으로 
+								PRINT ＞그런 다음 가슴 사이에 페니스를 끼워넣고, 애처로운 눈빛으로 
 							ENDIF
 						ELSEIF RAND:2 == 0
 						PRINT ＞그러면서 자신에게 페니스가 침범하자 
@@ -275,17 +275,17 @@ SETCOLOR 0xFF33FF
 							PRINT 다양한 크기의 페니스를 보고 
 						ENDIF
 							IF RAND:6 == 0
-								PRINTL 굉장히 흥분했다.
+								PRINT 굉장히 흥분했다.
 							ELSEIF RAND:5 == 0
-								PRINTL 요염하게 미소지었다.
+								PRINT 요염하게 미소지었다.
 							ELSEIF RAND:4 == 0
-								PRINTL 숨을 삼켰다.
+								PRINT 숨을 삼켰다.
 							ELSEIF RAND:3 == 0
-								PRINTL 한층 더 젖어들었다.
+								PRINT 한층 더 젖어들었다.
 							ELSEIF RAND:2 == 0
-								PRINTL 황홀한 표정을 지었다.
+								PRINT 황홀한 표정을 지었다.
 							ELSE
-								PRINTL 자기도 모르게 가랑이를 문질렀다.
+								PRINT 자기도 모르게 가랑이를 문질렀다.
 							ENDIF
 								IF RAND:5 == 0
 									PRINT ＞그리고는 입으로 가까이 있던 페니스를 삼키며 

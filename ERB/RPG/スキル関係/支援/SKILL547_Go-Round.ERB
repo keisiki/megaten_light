@@ -61,12 +61,12 @@ ENDIF
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_547
+@SKILL_DECIDE_TYPE_547, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_547
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_547, ARG
 RETURN 0
 
 
@@ -97,6 +97,9 @@ SIF ARG == 1
 @SKILL_SUCCESSION_TYPE_547
 RETURN 5
 ;지원
+
+@継承不能_547
+RETURN 1
 
 ;속도보정
 @SKILL_SPEED_547, ARG = -1
@@ -152,15 +155,29 @@ ENDIF
 FOR LOCAL,LOCAL:1,LOCAL:2
 	SIF POS(LOCAL) < 0
 		CONTINUE
-	CFLAG:POS(LOCAL):명중강화 = MIN(32, CFLAG:POS(LOCAL):명중강화 + 16)
-	CFLAG:POS(LOCAL):회피강화 = MIN(32, CFLAG:POS(LOCAL):회피강화 + 16)
+	IF ABL:ARG:가창기능 == 10
+		;4段階上昇
+		CFLAG:POS(LOCAL):명중강화 = MIN(32, CFLAG:POS(LOCAL):명중강화 + 16)
+		CFLAG:POS(LOCAL):회피강화 = MIN(32, CFLAG:POS(LOCAL):회피강화 + 16)
+	ELSEIF ABL:ARG:가창기능 > 6
+		;3段階上昇
+		CFLAG:POS(LOCAL):명중강화 = MIN(32, CFLAG:POS(LOCAL):명중강화 + 12)
+		CFLAG:POS(LOCAL):회피강화 = MIN(32, CFLAG:POS(LOCAL):회피강화 + 12)
+	ELSEIF ABL:ARG:가창기능 > 3
+		;2段階上昇
+		CFLAG:POS(LOCAL):명중강화 = MIN(32, CFLAG:POS(LOCAL):명중강화 + 8)
+		CFLAG:POS(LOCAL):회피강화 = MIN(32, CFLAG:POS(LOCAL):회피강화 + 8)
+	ELSE
+		;1段階上昇
+		CFLAG:POS(LOCAL):명중강화 = MIN(32, CFLAG:POS(LOCAL):명중강화 + 4)
+		CFLAG:POS(LOCAL):회피강화 = MIN(32, CFLAG:POS(LOCAL):회피강화 + 4)
+	ENDIF
 NEXT
-PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 명중률・회피율이 매우 크게 올라갔다!
-
-
-
-
-
+IF ABL:ARG:가창기능 > 3
+    PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 명중률・회피율이 매우 크게 올라갔다!
+ELSE
+    PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 명중률・회피율이 올라갔다!
+ENDIF
 
 ;====================================================
 ;実行内容ここまで
@@ -178,7 +195,30 @@ PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@ 전체의 명중률�
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_547
-PRINTL [특수] 아군 전체의 명중률･회피율을 매우 크게 상승시킨다. 가창기능이 높을수록 필요한 MP가 감소한다.
+;ステータス画面からはこっち表示
+IF CFLAG:(CHARANUM-1):PTフラグ || U < 0 || U >= CHARANUM
+	PRINTL [특수] 未来を掴む子供たちの歌。味方の命中・回避率を上昇させる。
+	PRINTL 가창기능이 높을수록 아군 전체의 명중률･회피율을 크게 상승시키고, 필요한 MP가 감소한다.
+	PRINTL 　
+	PRINTL 歌唱技能Lv10　 ：味方の命中・回避率　４段階上昇
+	PRINTL 歌唱技能Lv7以上：味方の命中・回避率　３段階上昇
+	PRINTL 歌唱技能Lv4以上：味方の命中・回避率　２段階上昇
+	PRINTL それ以外　　　 ：味方の命中・回避率　１段階上昇
+;戦闘中はこっち表示
+ELSE
+	PRINTL [특수] 未来を掴む子供たちの歌。
+    PRINTL 가창기능이 높을수록 아군 전체의 명중률･회피율을 크게 상승시키고, 필요한 MP가 감소한다.
+	IF ABL:U:가창기능 == 10
+		PRINTL 味方の命中・回避率を４段階上昇。
+	ELSEIF ABL:U:가창기능 > 6
+		PRINTL 味方の命中・回避率を３段階上昇。
+	ELSEIF ABL:U:가창기능 > 3
+		PRINTL 味方の命中・回避率を２段階上昇。
+	ELSE
+		PRINTL 味方の命中・回避率を１段階上昇。
+	ENDIF
+ENDIF
+
 
 ;継承に필요な部位
 @継承部位_547,ARG

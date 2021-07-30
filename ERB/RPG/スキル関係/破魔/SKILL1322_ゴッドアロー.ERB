@@ -2,7 +2,11 @@
 
 ;스킬名
 @SKILL_NAME_1322,ARG
-RESULTS = 갓애로우
+IF SKILL_CHANGE(ARG, [[キャラ:T씨]])
+	RESULTS = 아버지가 물려준 부적
+ELSE
+	RESULTS = 갓애로우
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_1322, ARG
@@ -35,12 +39,12 @@ RETURN 10
 ;파마
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1322
+@SKILL_DECIDE_TYPE_1322, ARG
 RETURN 1
 ;EXTRA
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1322
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1322, ARG
 RETURN 0
 
 

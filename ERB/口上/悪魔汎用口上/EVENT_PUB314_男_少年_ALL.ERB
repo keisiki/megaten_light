@@ -10,15 +10,15 @@
 ;	+----+----+-------------------------------+
 ;	|   2| ○ | 구상の誤字・脱字の수정        |
 ;	+----+----+-------------------------------+
-;	|   3| ○ | 구상まとめへの収録            |
+;	|   3| ○ | 口上まとめへの収録             |
 ;	+----+----+-------------------------------+
-;	|   4| ○ | 구상の新規추가                |
+;	|   4| ○ | 口上の新規追加                 |
 ;	+----+----+-------------------------------+
-;	|   5| ○ | 既存구상の改変                |
+;	|   5| ○ | 既存口上の改変                |
 ;	+----+----+-------------------------------+
-;	|   6| ○ | 改変した구상の自由な再配布    |
+;	|   6| ○ | 改変した口上の自由な再配布   |
 ;	+----+----+-------------------------------+
-;	|   7| ○ | 구상内容の転載                |
+;	|   7| ○ | 口上内容の転載                |
 ;	+----+----+-------------------------------+
 ;-------------------------------------------------
 
@@ -49,7 +49,7 @@
 SIF ARG == 1
 	RETURN 0
 ;구상名
-PRINTFORML 汎用男・소년구상
+PRINTFORML 범용남・소년구상
 ;구상설명文
 PRINTFORML    
 
@@ -166,7 +166,7 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 			PRINTFORMW %조사처리(CALLNAME,"는")% 말을 걸어놓고、고개를 숙인채 뺨을 붉히면서 손가락을 빙글빙글 돌리고 있다.
 			PRINTFORMW 목소리는 평소와는 다른 낮고 조심스러웠다.
 			PRINTFORMW 좀더 큰 소리로 말하라고 재촉했지만 횡설수설한채 대화를 이어나가지 못하고 있었던 그때,
-			PRINTFORMW 「…있잖아、그……%CSTR:11%%CSTR:12%를、좋、좋……」
+			PRINTFORMW 「…있잖아、그……%CSTR:11%%조사처리(CSTR:12,"를")%、좋、좋……」
 			PRINTL 
 			PRINTL 
 			PRINTFORMW 「좋ーー아ー해ー！！ 좋아한다구ー！！ 어떡할거야 책임져 바보！」
@@ -178,16 +178,16 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 	;음란
 	ELSEIF TALENT:4
 		PRINTFORMW %조사처리(CALLNAME:MASTER,"가")% 방에 발을 디딜때、짙은 밤꽃 향기가 코를 찔렀다.
-		PRINTFORMW 문득 주위를 둘러봤을때 、%CALLNAME:MASTER%는 %CALLNAME%를 찾아냈다. %CALLNAME%는 필사적으로 매달려 왔다.
+		PRINTFORMW 문득 주위를 둘러봤을때 、%조사처리(CALLNAME:MASTER,"는")% %조사처리(CALLNAME,"를")% 찾아냈다. %조사처리(CALLNAME,"는")% 필사적으로 매달려 왔다.
 		PRINTFORMW 「저、저기、빨리 기분 좋은걸 해줘！ 이대로、이대로는 %CSTR:11%……」
-		PRINTFORMW 완전히 개발당한 %CALLNAME%은 다른 무엇보다 가장 빨리 자신의 흥분을 가라앉히는 것에 필사적이다.
+		PRINTFORMW 완전히 개발당한 %조사처리(CALLNAME,"는")% 다른 무엇보다 가장 빨리 자신의 흥분을 가라앉히는 것에 필사적이다.
 		PRINTFORMW 「뭐라도 빨리...어서……」
 		PRINTFORMW 쾌락을 얻기 위해서라면、설령 어떠한 명령도 들을것 같다...
 	;복종
 	ELSEIF TALENT:5
-		PRINTFORMW 오늘도 %CALLNAME%를 조교하기위해 접근、%조사처리(CALLNAME,"는")% 완전히 공포에 빠져버렸다.
+		PRINTFORMW 오늘도 %조사처리(CALLNAME,"를")% 조교하기위해 접근、%조사처리(CALLNAME,"는")% 완전히 공포에 빠져버렸다.
 		PRINTFORMW 「히익……！ 오、오지맛……！」
-		PRINTFORMW 그 무서워 하는 태도에서、%CALLNAME:MASTER%은 경외를 간파했다.
+		PRINTFORMW 그 무서워 하는 태도에서、%조사처리(CALLNAME:MASTER,"는")% 경외를 간파했다.
 		PRINTFORMW 더 이상、%CALLNAME:MASTER%에게 반항하지 않을것 같다.
 		PRINTFORMW 이 상태라면, 충분히 노예 애호가들이 좋아할 것이다.
 	ENDIF
@@ -246,7 +246,7 @@ ELSEIF MARK:2 == 0 && (CFLAG:202 < 1 || FLAG:7 == 2)
 	CFLAG:202 = 1
 ;굴복각인Lv1
 ELSEIF MARK:2 == 1 && (CFLAG:202 < 2 || FLAG:7 == 2)
-	PRINTFORMW 「무려ー %CSTR:12%가 오는걸 예상하고 있었다 호ー」
+	PRINTFORMW 「무려ー %조사처리(CSTR:12,"가")% 오는걸 예상하고 있었다 호ー」
 	PRINTFORMW 「난 역시 대단해ー」
 	CFLAG:202 = 2
 ;굴복각인Lv2
@@ -271,12 +271,12 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 		;랜덤で구상が변화する（使わない場合はすべて同じにすればよい）
 		K:1 = RAND:3
 		IF K:1 == 0
-			PRINTFORML 「%CSTR:11%를 만나러 왔어? 역시 인기있는 남자는 어려워～♪」
+			PRINTFORML 「%조사처리(CSTR:11,"를")% 만나러 왔어? 역시 인기있는 남자는 어려워～♪」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 들떠있다.
 		ELSEIF K:1 == 1
 			PRINTFORMW %조사처리(CALLNAME,"는")%、%조사처리(CALLNAME:MASTER,"가")% 방에 들어오려고 하면 먼저 다가와 서 있었다.
 			PRINTFORMW 「에헤헤ー、%CSTR:12% 좋아해♪」
-			PRINTFORMW %CALLNAME:MASTER%는 %CALLNAME%의 입술에 키스를 한 뒤、%CALLNAME%를 침대로 이끌었다.
+			PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% %CALLNAME%의 입술에 키스를 한 뒤、%조사처리(CALLNAME,"를")% 침대로 이끌었다.
 		ELSE
 			PRINTFORMW 「%조사처리(CSTR:12,"는")% 이런 내가 좋아ー……？」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 붙잡고 있는 팔에 힘을 주었다.
@@ -287,11 +287,11 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 		K:1 = RAND:3
 		IF K:1 == 0
 			PRINTFORML 「제대로 말 잘들으면……좋은 보상 줄거야？」
-			PRINTFORMW %조사처리(CALLNAME,"는")% 아첨하는 듯한 자세로 %CALLNAME:MASTER%를 유혹했다.
+			PRINTFORMW %조사처리(CALLNAME,"는")% 아첨하는 듯한 자세로 %조사처리(CALLNAME:MASTER,"를")% 유혹했다.
 		ELSEIF K:1 == 1
 			PRINTFORMW 「더 이상 참을 수 없어ー、어서 우리 둘만의 파티를 시작하자구！」
 		ELSE
-			PRINTFORMW 「%CSTR:12%이 이상한 짓만 시키니까 그러지.. 어서 책임져줘!」
+			PRINTFORMW 「%조사처리(CSTR:12,"가")% 이상한 짓만 시키니까 그러지.. 어서 책임져줘!」
 		ENDIF
 	;복종、예속
 	ELSEIF TALENT:5 || TALENT:8
@@ -334,7 +334,7 @@ RETURN 0
 DRAWLINE
 ;반발각인Lv3
 IF MARK:3 == 3 && (CFLAG:217 < 1 || FLAG:7 == 2)
-	PRINTFORMW 「아무리 관대한 %CSTR:11%라도、한도라는 게 있다고ー！！」
+	PRINTFORMW 「아무리 관대한 %조사처리(CSTR:11,"라")%도、한도라는 게 있다고ー！！」
 	PRINTFORMW 「두 번 다시 오지 마ー！」
 	CFLAG:217 = 1
 ;굴복각인Lv1以下
@@ -470,7 +470,7 @@ SELECTCASE SELECTCOM
 		;初めて
 		IF CFLAG:301 == 0
 			PRINTFORMW 「히！？ 바、바보！ 그런곳 핥는거 아니야ー！」
-			PRINTFORMW %조사처리(CALLNAME,"는")%%CALLNAME:MASTER%을 통통하고 두드렸다.
+			PRINTFORMW %조사처리(CALLNAME,"는")% %조사처리(CALLNAME:MASTER,"를")% 통통하고 두드렸다.
 			CFLAG:301 = 1
 		;二回눈以降
 		ELSE
@@ -608,7 +608,7 @@ SELECTCASE SELECTCOM
 		ELSE
 			;Ａ경험100이상＋욕망のPALAMLV3이상
 			IF PALAM:6 >= PALAMLV:3 && ABL:5 >= 3
-				PRINTFORMW 느슨한 입에서 환희의 목소리를 흘리는 %CALLNAME%는, 입에서 침이 줄줄나온다.
+				PRINTFORMW 느슨한 입에서 환희의 목소리를 흘리는 %조사처리(CALLNAME,"는")%, 입에서 침이 줄줄나온다.
 				PRINTFORMW 그상태로 손가락을 물렸다.
 				PRINTFORMW 「…！ 응！！우웅、 후우웅！ 웅…！！!」
 				PRINTFORMW %조사처리(CALLNAME,"는")% 전율을 느낀듯 허리를 덜덜떨면서 골반을 튕기고 있었다.
@@ -632,7 +632,7 @@ SELECTCASE SELECTCOM
 		IF CFLAG:306 == 0
 			PRINTFORMW 「가슴을 주무르고 싶은데 그럴수 없는거야？」
 			PRINTFORMW 「……너무 비참하니까 %CSTR:11%의 가슴 만지는 걸까?」
-			PRINTFORMW %조사처리(CALLNAME,"는")%、불쌍하다는 눈빛으로 %CALLNAME:MASTER%를 응시하고 있었다.
+			PRINTFORMW %조사처리(CALLNAME,"는")%、불쌍하다는 눈빛으로 %조사처리(CALLNAME:MASTER,"를")% 응시하고 있었다.
 			CFLAG:306 = 1
 		;二回눈以降
 		ELSE
@@ -998,14 +998,14 @@ CASE 14
 ;-------------------------------------------------
 	CASE 22
 		CALL TRAIN_MESSAGE
-			PRINTFORMW 「앙？ %CSTR:11%랑 대화ー？ 들어 주는거야？」
+			PRINTFORMW 「앙？ %조사처리(CSTR:11,"랑")% 대화ー？ 들어 주는거야？」
 ;-------------------------------------------------
 ;23,프레젠트　연모、친애のみ
 ;-------------------------------------------------
 	CASE 23
 		;初めて
 		IF CFLAG:315 == 0
-			PRINTFORMW 「헤～、%CSTR:11%한테 프레젠트주는 거야？気 %CSTR:11%는 좋아ー！」
+			PRINTFORMW 「헤～、%CSTR:11%한테 프레젠트주는 거야？気 %조사처리(CSTR:11,"는")% 좋아ー！」
 			CFLAG:315 = 1
 		;二回눈以降
 		ELSEIF CFLAG:315 < 2 || FLAG:7 == 2
@@ -1018,7 +1018,7 @@ CASE 14
 			PRINTFORMW 「……에、어라아？ 프레젠트는……」
 		ELSEIF TFLAG:17 == 1
 			PRINTFORMW 「히ー호ー！！ 술이다 야호ー！！」
-			PRINTFORMW 「이거 %CSTR:11%가 좋아하는거야ー！」
+			PRINTFORMW 「이거 %조사처리(CSTR:11,"가")% 좋아하는거야ー！」
 		ELSEIF TFLAG:17 == 2
 			PRINTFORMW 「이거 가짜같은데ー」
 			PRINTFORMW 「……농담！ 농담이야！ 그런 무서운 눈 하지마ー！」
@@ -1052,7 +1052,7 @@ CASE 14
 		CALL TRAIN_MESSAGE
 		;初めて
 		IF CFLAG:317 == 0
-			PRINTFORMW 둘이서 단지 가만히 앉아있을때、%CALLNAME%가 갑자기 소리치기 시작했다.
+			PRINTFORMW 둘이서 단지 가만히 앉아있을때、%조사처리(CALLNAME,"가")% 갑자기 소리치기 시작했다.
 			PRINTFORMW 「……아ー！ 섹스하고 싶다ー！」
 			CFLAG:317 = 1
 		;二回눈以降
@@ -2363,7 +2363,7 @@ CASE 14
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:345 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW %CALLNAME:MASTER%가 고개를 흔들고 있는 %CALLNAME%의 머리를 쓰다듬자 %조사처리(CALLNAME,"는")% 쑥스러운지 조금 웃었다.
+					PRINTFORMW %조사처리(CALLNAME:MASTER,"가")% 고개를 흔들고 있는 %CALLNAME%의 머리를 쓰다듬자 %조사처리(CALLNAME,"는")% 쑥스러운지 조금 웃었다.
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
 					PRINTFORMW 「……후화、응응、쥬릅、후에……」
@@ -2488,7 +2488,7 @@ CASE 14
 		IF CFLAG:349 == 0
 			PRINTFORMW 「우ー……발로 문지르라고 해도ー」
 			PRINTFORMW 「손으로 움직이라는 것도 아니고……」
-			PRINTFORMW %조사처리(CALLNAME,"는")% 발을 꼼지락거리며 %CALLNAME:MASTER%를 주춤주춤 흥분시켰다…
+			PRINTFORMW %조사처리(CALLNAME,"는")% 발을 꼼지락거리며 %조사처리(CALLNAME:MASTER,"를")% 주춤주춤 흥분시켰다…
 			CFLAG:349 = 1
 		;二回눈以降
 		ELSE
@@ -3158,7 +3158,7 @@ CASE 14
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:360 < 3 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「또、묶는거야ー…… %CSTR:12%이 하고 싶다면 상관은 없지만ー」
+						PRINTFORMW 「또、묶는거야ー…… %조사처리(CSTR:12,"가")% 하고 싶다면 상관은 없지만ー」
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
 						PRINTFORMW 
@@ -3196,7 +3196,7 @@ CASE 14
 				;복종、예속
 				IF TALENT:5 || TALENT:8
 					PRINTFORMW 「휴、후항……！」
-					PRINTFORMW %조사처리(CALLNAME,"는")% 용서해 달라는 눈으로 %CALLNAME:MASTER%을 바라보고 있다
+					PRINTFORMW %조사처리(CALLNAME,"는")% 용서해 달라는 눈으로 %조사처리(CALLNAME:MASTER,"를")% 바라보고 있다
 					CFLAG:361 = 4
 				;それ以外
 				ELSEIF CFLAG:361 < 2 || FLAG:7 == 2
@@ -4552,9 +4552,9 @@ CASE 14
 			;初めて
 			IF CFLAG:400 == 0
 				PRINTFORMW 「먼저 샤워받고 올까、아니면 나중에ー？」
-				PRINTFORMW 「%CSTR:11%는 레이 호ー보이 구나ー」
+				PRINTFORMW 「%조사처리(CSTR:11,"는")% 레이 호ー보이 구나ー」
 				SIF TALENT:MASTER:남자 == 0
-				PRINTFORMW 「……호？ 그렇지만%CSTR:11%는 여자니까……오오오？」
+				PRINTFORMW 「……호？ 그렇지만%조사처리(CSTR:11,"는")% 여자니까……오오오？」
 				CFLAG:400 = 1
 			;二回눈以降
 				IF CFLAG:400 < 2 || FLAG:7 == 2
@@ -4569,7 +4569,7 @@ CASE 14
 		ELSE
 			IF CFLAG:400 == 1 || FLAG:7 == 2
 				CALL TRAIN_MESSAGE
-				PRINTFORMW %CALLNAME:MASTER%은 젖어있는 %CALLNAME%의 신체를 깨끗하게 닦았다.
+				PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 젖어있는 %CALLNAME%의 신체를 깨끗하게 닦았다.
 				IF TALENT:5 || TALENT:8
 					PRINTFORMW %조사처리(CALLNAME,"는")% 석상처럼 가만히 있는 상태에서 아무것도 하지 않는다.
 				ELSE
@@ -4587,7 +4587,7 @@ CASE 14
 			CALL TRAIN_MESSAGE
 			;初めて
 			IF CFLAG:401 == 0
-				PRINTFORMW 「이걸하자구ー？ %CSTR:11%랑 소꿉놀이 하고 싶은거야ー？」
+				PRINTFORMW 「이걸하자구ー？ %조사처리(CSTR:11,"랑")% 소꿉놀이 하고 싶은거야ー？」
 				PRINTFORMW 「휴 완전히 아이구나～、어쩔수 없이 어울려 주지 호ー」
 				PRINTFORMW %조사처리(CALLNAME,"는")% 어깨를 으쓱하고 기가막힌 얼굴을 했다.
 				CFLAG:401 = 1
@@ -4808,7 +4808,7 @@ CASE 14
 		CALL TRAIN_MESSAGE
 		;初めて
 		IF CFLAG:437 == 0
-			PRINTFORMW 조금씩 %CALLNAME%과의 거리가 좁혀졌다.
+			PRINTFORMW 조금씩 %조사처리(CALLNAME,"과")%의 거리가 좁혀졌다.
 			PRINTL 
 			PRINTFORMW 「……이거 굉장히 싫은느낌……」
 			CFLAG:437 = 1
@@ -6583,7 +6583,7 @@ SELECTCASE TFLAG:13
 			CALL EVENT_MESSAGE
 			IF CFLAG:263 < 1 || FLAG:7 == 2
 				PRINTFORMW 「……안녕、%CSTR:12%」
-				PRINTFORMW %CALLNAME:MASTER%는 %CALLNAME%에게 입맞춤을 하고、하루 준비를 했다……。
+				PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% %CALLNAME%에게 입맞춤을 하고、하루 준비를 했다……。
 				CFLAG:263 = 1
 			ENDIF
 

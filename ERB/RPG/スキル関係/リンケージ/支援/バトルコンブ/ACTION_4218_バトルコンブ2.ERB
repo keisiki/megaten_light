@@ -8,7 +8,7 @@
 #DIM PCOUNT, 2
 
 	SIF FLAG:DEBUG
-	PRINTFORMW ARGが{ARG}、ARG:1が{ARG:1}、
+		PRINTFORMW ARG가 {ARG}、ARG:1가 {ARG:1}、
 
 	IF CFLAG:(ARG):PTフラグ == 0
 		GOTO MISSED_BATTLECOMB
@@ -18,7 +18,7 @@
 	ENDIF
 
 	SIF FLAG:DEBUG
-		PRINTFORMW PTフラグ抜けた
+		PRINTFORMW PT플래그 없어짐
 
 	LOCAL:3 = -1
 	LOCAL:4 = -1
@@ -29,7 +29,7 @@
 			CONTINUE
 		;ボスが混じってたり変な종족がいたり소재のLVが사용者より高かったり解析率발りてなかったりそいつ死体なら即실패
 			SIF FLAG:DEBUG
-				PRINTFORML ボス？{CFLAG:POS(LOCAL):ボスフラグ} || 인간以下？{ABL:POS(LOCAL):종족 <= 0} || 종족45이상?{ABL:POS(LOCAL):종족 > 45} || LV差{BASE:POS(LOCAL):LV} > {BASE:ARG:LV}は× || 解析率は？{FLAG:(20000+NO:POS(LOCAL)) < 100} || 死体？{GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"}
+				PRINTFORML 보스？{CFLAG:POS(LOCAL):ボスフラグ} || 인간이하？{ABL:POS(LOCAL):종족 <= 0} || 종족45이상?{ABL:POS(LOCAL):종족 > 45} || LV차이{BASE:POS(LOCAL):LV} > {BASE:ARG:LV}와× || 해석률은？{FLAG:(20000+NO:POS(LOCAL)) < 100} || 시체？{GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"}
 
 		SIF CFLAG:POS(LOCAL):ボスフラグ || ABL:POS(LOCAL):종족 <= 0 || ABL:POS(LOCAL):종족 > 45 || BASE:POS(LOCAL):LV > BASE:ARG:LV || FLAG:(20000+NO:POS(LOCAL)) < 100 || GET_STATE(CFLAG:POS(LOCAL):ステート) == "DYING"
 			GOTO MISSED_BATTLECOMB
@@ -53,7 +53,7 @@
 		ENDIF
 		;ここまで抜けると３体눈がいるので실패
 			SIF FLAG:DEBUG
-				PRINTFORMW ３体눈引っかかって실패
+				PRINTFORMW ３명째에 걸려서 실패
 
 		GOTO MISSED_BATTLECOMB
 	NEXT
@@ -70,7 +70,7 @@
 	CALL RESULT_FUSION,소재:1,소재:2,소재:3
 	LOCAL:5 = RESULT
 		SIF FLAG:DEBUG
-			PRINTFORMW 합체 결과と{RESULT}
+			PRINTFORMW 합체 결과를 {RESULT}
 	SIF LOCAL:5 <= 0
 		GOTO MISSED_BATTLECOMB
 
@@ -124,12 +124,12 @@
 	CALL HEALTH_CHARA,完成品:1
 
 	PRINTFORM %종족명(소재:1)%　　
-	PRINTFORM %CALLNAME:(소재:1)%　　と
+	PRINTFORM %CALLNAME:(소재:1)%　　를(을)
 	PRINTFORM %종족명(소재:2)%　　
-	PRINTFORM %CALLNAME:(소재:2)%　　を 합체하여 
+	PRINTFORM %CALLNAME:(소재:2)%　　와(과) 합체하여 
 	U = 完成品:1
 	PRINTFORM %종족명(U)%　　
-	PRINTFORML %CALLNAME:U%　　が 나타났다！
+	PRINTFORML %CALLNAME:U%　　이(가) 나타났다！
 
 	CALL キャラ삭제,完成品
 

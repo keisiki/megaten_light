@@ -56,7 +56,8 @@ RETURN GET_EQUIPNUM("검")
 IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
 	SELECTCASE ARG
 		CASE 0
-			RETURN 2420
+			RETURN 53
+			;RETURN 2420
 	ENDSELECT
 ENDIF
 RETURN 0
@@ -81,6 +82,9 @@ PRINTL 장비조건：LV35～
 @장비해설_2091
 PRINTL 용자 페르세우스가 고르곤3자매 중 메두사를 쓰러트릴 때 쓴 황금의 검 하르페。
 PRINTL 신화에 따라 몸에 지니는 것으로、석화에 대한 내성을 얻을 수 있다。
+SETCOLOR 0x87ceeb
+PRINTL 《헤르메스의샌들》《제마의투구》
+RESETCOLOR
 SETCOLOR 0xdc143c
 PRINTL 반마인 추가스킬존재
 RESETCOLOR
@@ -88,6 +92,6 @@ RESETCOLOR
 RETURN 0
 
 @검타입_2091
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 RETURN 4

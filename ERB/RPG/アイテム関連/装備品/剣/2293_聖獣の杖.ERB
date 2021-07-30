@@ -47,7 +47,14 @@ RETURN 1
 @장비箇所_2293
 RETURN GET_EQUIPNUM("검")
 
+;펨파트라
 @장비추가스킬_2293,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 409
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -71,6 +78,9 @@ PRINTL 장비조건：LV25～
 
 @장비해설_2293
 PRINTL 성수聖獸의 갈기를 사용한 지팡이
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：펨파트라
+RESETCOLOR
 
 RETURN 0
 

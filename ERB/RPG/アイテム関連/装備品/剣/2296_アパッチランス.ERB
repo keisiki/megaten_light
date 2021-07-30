@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2296
 RETURN GET_EQUIPNUM("검")
 
+;돌격
+@장비추가스킬_2296,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 201
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -68,6 +78,9 @@ PRINTL 장비조건：LV10～
 
 @장비해설_2296
 PRINTL 군대에서 쓰이는 창
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：돌격
+RESETCOLOR
 
 RETURN 0
 

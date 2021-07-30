@@ -6,7 +6,7 @@
 RESULTS = 아이템 숙련
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2430
+@SKILL_DECIDE_TYPE_2430, ARG
 RETURN 0
 ;どちらでもない
 
@@ -30,6 +30,7 @@ RETURN 0
 ;　 설명文の표시
 @SKILL_EXPLAIN_2430
 PRINTL [자동] 소비아이템의 사용 가능한 폭을 넓히고, 효과를 강화한다. 이 스킬은 2개까지 중복습득이 가능하다.
+PRINTL 계약이 완료된 경우에 한해 사용 폭을 넓힐 목적으로 3개까지 중복 가능하다.
 
 
 @SKILL_ACTIONABLE_BATTLE_2430
@@ -39,7 +40,7 @@ RETURN 0
 @継承部位_2430,ARG
 RETURN 1
 
-@重複습득数_2430,ARG
+@重複習得数_2430,ARG
 SIF ARG == -1
 	RETURN 1
 RETURN 2

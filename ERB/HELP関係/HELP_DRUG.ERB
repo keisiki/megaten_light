@@ -42,7 +42,8 @@ IF RESULT == 1000
 ELSEIF RESULT < 0 || RESULT > 22
 	GOTO INPUT_LOOP
 ENDIF
-TRYCALLFORM DICTIONARY_DRUG_{RESULT}
+Q = RESULT
+TRYCALLFORM DICTIONARY_DRUG_{Q}
 GOTO PRINT_LIST
 
 ;--------------------------------------------------
@@ -161,7 +162,134 @@ PRINTW [임신중],[육아중]의 사람에게는 투여할 수 없습니다.
 ;=============================================================================
 ;用語辞典――OPTION
 ;=============================================================================
+;--------------------------------------------------
+;OPTION해설メインページ
+;--------------------------------------------------
+@DICTIONARY_CONFIG_MAIN
+P = 0
+$PRINT_LIST
+DRAWLINE
+PRINTL eraMegaten에 준비된 OPTION에 관한 대략의 설명입니다.
+PRINTFORML 내용을 알고 싶은 항목의 번호를 입력해 주세요. 
+DRAWLINE
+	;SHOP・이벤트확장
+	PRINTL [ 1] 텍스트 설정(작성중)
+	PRINTL [ 2] 사정 장소 설정(작성중)
+	PRINTL [ 3] 착의 관련 설정(작성중)
+	PRINTL [ 4] 임신 기능 바꾸기(작성중)
+	PRINTL [ 5] 입력 모드 바꾸기(작성중)
+	PRINTL [ 6] 궁합의 컬러 설정(작성중)
+	PRINTL [ 7] 우후후 전개 바꾸기(작성중)
+	PRINTL [ 8] 출산 기능 변환
+	PRINTL [ 9] SM확장 기능 바꾸기(작성중)
+DRAWLINE
+PRINTLC [1000]돌아온다
+$INPUT_LOOP
+INPUT
+IF RESULT == 1000
+	RETURN 0
+ELSEIF RESULT < 1 || RESULT > 9
+	GOTO INPUT_LOOP
+ENDIF
+Q = RESULT
+TRYCALLFORM DICTIONARY_CONFIG_{Q}
+GOTO PRINT_LIST
 
+;--------------------------------------------------
+;CONFIG해설
+;--------------------------------------------------
+;………………………………………………
+;SHOP・이벤트확장
+;………………………………………………
+;텍스트설정
+@DICTIONARY_CONFIG_1
+PRINTL ＜텍스트 설정＞
+PRINTL HELP미작성
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTW 
+
+;사정箇所설정
+@DICTIONARY_CONFIG_2
+PRINTL ＜사정 장소 설정＞
+PRINTL HELP미작성
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTW 
+
+;착의関連설정
+@DICTIONARY_CONFIG_3
+PRINTL ＜착의 관련 설정＞
+PRINTL HELP미작성
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTW 
+
+;임신기능바꾸기
+@DICTIONARY_CONFIG_4
+PRINTL ＜임신 기능 변환＞
+PRINTL HELP미작성
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTW 
+
+;입력모드바꾸기
+@DICTIONARY_CONFIG_5
+PRINTL ＜입력 모드 변환＞
+PRINTL HELP미작성
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTW 
+
+;相性의 칼라설정
+@DICTIONARY_CONFIG_6
+PRINTL ＜궁합의 칼라 설정＞
+PRINTL HELP미작성
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTW 
+
+;ムフフ전개바꾸기
+@DICTIONARY_CONFIG_7
+PRINTL ＜무후후 전개 변환＞
+PRINTL HELP미작성
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTW 
+
+;출산기능바꾸기
+@DICTIONARY_CONFIG_8
+PRINTL ＜출산 기능 변환＞
+PRINTL 이 기능을 ON로 하면 아이가 태어나게 됩니다.
+PRINTL 태어난 아이가 어느 정도 성장하면 동료마가 되어,
+PRINTL 조교해 매각하거나 전투에 참가시킬 수 있게 됩니다.
+PRINTL 덧붙여 육아중인 캐릭터는 조교할 수 없게 됩니다.
+PRINTL 
+PRINTW 
+
+;ＳＭ확장기능바꾸기
+@DICTIONARY_CONFIG_9
+PRINTL ＜SM확장 기능 변환＞
+PRINTL HELP미작성
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTL 
+PRINTW 
 
 ;=============================================================================
 ;用語辞典――初心者Ｑ＆Ａ
@@ -282,11 +410,24 @@ PRINTW 마화로 살 수 있는 아이템은 강력하고 특수한 것이 많�
 @DICTIONARY_EASY_8
 PRINTL ＜다른 공략 정보의 안내＞
 PRINTL 이 게임에는 악마 조교전 외에도, 여러가지 공략의 도움이 되는 것이 있습니다.
+PRINTL 한층 더 자세한 해설을 보고 싶은 분은 읽어 보면 좋을 것입니다.
+PRINTL 그 다음은, 공략 텍스트
+PRINTL 이것은 미리니름이 많아서, 아직 쓰여 있지 않은 것도 있습니다만
+PRINTL 지하 감옥의 제작자님이나 유시가 써준것으로 매우 참고가 됩니다.
 PRINTW 정말 진행이 막혔을때 참고로 하면 좋을 것입니다.
 
 ;最後に…
 @DICTIONARY_EASY_9
 PRINTL ＜마지막으로…＞
-PRINTL 이건 아직도 개발중의 게임입니다.
-PRINTW 버그나면 보고 하세요
+PRINTL eraMegaten는 아직도 개발중의 게임입니다.
+PRINTL 그 때문에, 예기치 못한 불편이나 에러가 일어나는 경우도 있습니다.
+PRINTL 그러한 경우에는 자신의 eraMegaten의 버젼이 최신인 것을 확인한 뒤
+PRINTL 본스레의"버그 보고 템플릿"의 순서에 따라서 보고해 주시면 됩니다..
+PRINTL 
+PRINTL 또, 자신의 PC의 OS가 Vista의 경우, 덮어쓰기에서는 패치가 잘 맞지 않는 경우가 있는 것 같습니다.
+PRINTL 패치를 도입할 때는［Shift］를 누르면서 드래그 하면 잘 되는것 같습니다.
+PRINTL 보고를 하기 전에 한 번 시도해보면 어떨까요?
+PRINTL 
+PRINTL 여기까지 봐주셔서 감사합니다.
+PRINTW 그러면 좋은 악마 소환 라이프를!
 

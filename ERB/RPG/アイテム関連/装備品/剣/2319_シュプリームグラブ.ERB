@@ -23,9 +23,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2319,ARG,ARG:1 = -1
-RETURN 0
-
 @방어상성_2319,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -61,6 +58,16 @@ RETURN 0
 @장비箇所_2319
 RETURN GET_EQUIPNUM("검")
 
+;브레인쉐이크
+@장비추가스킬_2319,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 213
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -82,6 +89,9 @@ PRINTL 장비조건：LV45～
 
 @장비해설_2319
 PRINTL 최고의 기술로 만들어진 글러브
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：브레인쉐이크
+RESETCOLOR
 
 RETURN 0
 

@@ -8,11 +8,10 @@
 
 
 @기본능력수정_2226,ARG,ARG:1 = -1
-IF ARG:1 != -1
+SIF ARG:1 == -1
+	RETURN 0
 SIF TALENT:(ARG:1):페르소나구사자
 	RETURN 5
-ENDIF
-
 SELECTCASE ARG
 	;힘5
 	CASE 1
@@ -72,10 +71,15 @@ RETURN 0
 @장비箇所_2226
 RETURN GET_EQUIPNUM("검")
 
+;프라라야、뉴클리어미사일、천벌
 @장비추가스킬_2226,ARG,ARG:1 = -1
 SELECTCASE ARG
 	CASE 0
 		RETURN 19
+	CASE 1
+		RETURN 1905
+	CASE 2
+		RETURN 2024
 ENDSELECT
 RETURN 0
 
@@ -97,11 +101,14 @@ RETURN 0
 
 
 @장비조건설명_2226
-PRINTL 장비조건：힘・속도の 합계 90 이상　［창술］소지時 힘・속도の 합계75 이상
+PRINTL 장비조건：힘・속도의 합계 90 이상　［창술］소지시 힘・속도의 합계 75 이상
 
 @장비해설_2226
 PRINTL 파괴신 시바가 소지한 삼지창
 PRINTL 페르소나구사자가 장비하면 모든 스테이터스 상승
+SETCOLOR 0xdc143c
+PRINTL 追加スキルあり
+RESETCOLOR
 
 @引継ぎ可不可_2226
 RETURN 1

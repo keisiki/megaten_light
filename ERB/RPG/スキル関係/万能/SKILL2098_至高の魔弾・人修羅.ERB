@@ -5,6 +5,8 @@ RESULTS = 지고의마탄・인수라
 
 ;　명중
 @SKILL_HITRATE_2098, ARG
+SIF ARG == -1
+	RETURN 150
 SIF CFLAG:ARG:ボスフラグ
 	RETURN 300
 RETURN 150
@@ -18,7 +20,7 @@ SIF CFLAG:ARG:ボスフラグ
 RETURN 640
 
 ;クリティカル率
-@SKILL_CRITICAL_RATE_2098
+@SKILL_CRITICAL_RATE_2098, ARG
 RETURN 10
 
 ;　최저공격횟수
@@ -44,12 +46,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2098
+@SKILL_DECIDE_TYPE_2098, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2098
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2098, ARG
 RETURN 1
 
 
@@ -139,7 +141,8 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2098
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2098
-PRINTL [후열] 적 1체에 만능속성 궁극 물리데미지. 명중률이 높다.
+PRINTL [후열] 모든 것을 꿰뚫는 마탄을 쏴, 적 1체에 만능속성 궁극 물리데미지. 
+PRINTL 명중률과 크리티컬율이 높다. 인수라전용.
 
 ;継承に필요な部位
 @継承部位_2098,ARG

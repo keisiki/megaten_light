@@ -2,66 +2,74 @@
 ;======================================================
 ;장비品の데이터
 ;카우부츠
-;火に弱く、水に強い
-;약점のほうが大きめなのは발防具が無내성ばっかりなので
-;Lv20장비までは내성が기본　기본능력に합계+2まで
 ;======================================================
 
 @기본능력수정_4524,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_4524,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 4
-	CASE "회피"
-		RETURN 8
-	CASE "마법효과"
-		RETURN 2
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 13
+	CASE 3
+		RETURN 23
+	CASE 5
+		RETURN 5
 ENDSELECT
 RETURN 0
 
 @방어상성_4524,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "검격"
-		RETURN 95
-	CASE "수격","질풍"
-		RETURN 80
-	CASE "화염"
-		RETURN 125
+;火に弱く、水に強い
+;약점のほうが大きめなのは발防具が無내성ばっかりなので
+SELECTCASE ARG
+	CASE 4 , 6
+		RETURN 150
+	CASE 13
+		RETURN 50
 ENDSELECT
 RETURN 100
 
-@バステ내성_4524,ARG,ARG:1 = -1
-SELECTCASE GET_STATE(ARG)
-	CASE "HEAT"
-		RETURN 25
-ENDSELECT
-RETURN 0
+@공격상성_4524, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_4524, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_4524, ARG = -1
+
+RETURN 1
+
+@사거리_4524, ARG = -1
+
+RETURN 1
+
+@공격범위_4524, ARG = -1
+
+RETURN 1
 
 @장비箇所_4524
 RETURN GET_EQUIPNUM("발")
 
 @필요레벨_4524
-RETURN 8
+RETURN 25
 
+@장비해설_4524
+PRINTL 외국풍의 세련된 부츠
+PRINTL 뛰어난 내수성을 자랑하여 비오는 날에도 안심할 수 있는 일품
 @장비조건_4524,ARG
-SIF BASE:ARG:LV < 8
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+SIF BASE:ARG:LV < 25
 	RETURN 0
 RETURN 1
 
 @장비조건설명_4524
-PRINTL 장비조건：♂ LV8～
-
-@장비해설_4524
-PRINTL 외국풍의 세련된 부츠
-PRINTL 　　　　　　　　抜群の耐水性をほこり、雨の日でも安心な逸品
-
-
+PRINTL 장비조건：♂ LV25～
 @구입조건_4524
-RETURN 0
-
-@引継ぎ可不可_4524
 RETURN 0

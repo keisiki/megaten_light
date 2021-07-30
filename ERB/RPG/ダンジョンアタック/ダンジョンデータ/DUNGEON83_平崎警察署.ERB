@@ -16,7 +16,7 @@
 ;攻略조건
 ;=======================================================================
 @PREREQUISITE_DUNGEON_83
-IF  던전フラグ:79:0 == 1 & !던전フラグ:83:0
+IF  의뢰フラグ:5:0 == 3 & !던전フラグ:83:0
 	RETURN 1
 ENDIF
 
@@ -465,7 +465,7 @@ ENDIF
 CFLAG:ARG:입력行動 = -1
 CFLAG:ARG:ターゲット = -1
 
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF RAND:2 == 0
 CFLAG:ARG:입력行動 = [[스킬:대냉계]]
 	ELSE

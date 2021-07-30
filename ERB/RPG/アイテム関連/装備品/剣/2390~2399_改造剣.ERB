@@ -1,5 +1,5 @@
 ﻿;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비0
 ;======================================================
  
@@ -21,29 +21,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:0 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:0) / 100
-		ELSE
-			LOCAL += プラス数:0
-		ENDIF
+		LOCAL += プラス数:0
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:0 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:0) / 100
-		ELSE
-			LOCAL += プラス数:0 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:0 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:0) / 100
-		ENDIF
+		LOCAL += プラス数:0 / 2
 ENDSELECT
-LOCAL += 能力値강화:0:ARG * 10 * (100 + プラス数:0) / 100
+LOCAL += 能力値강화:0:ARG * 10
 RETURN LOCAL
  
 @방어상성_2390,ARG,ARG:1 = -1
@@ -169,7 +151,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:0}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(0)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -178,9 +160,9 @@ IF 軽量化数(0)
 	SIF 장비パラ値軽量化:0
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:0 * 10}　
 	SIF 장비男女軽量化:0
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:0
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -189,7 +171,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:0}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:0)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:0)%
 RETURN 0
  
 @引継ぎ可不可_2390
@@ -199,8 +181,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2390
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:0}
 	RETURN RESULT
 CATCH
@@ -209,7 +191,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비1
 ;======================================================
  
@@ -231,29 +213,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:1 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:1) / 100
-		ELSE
-			LOCAL += プラス数:1
-		ENDIF
+		LOCAL += プラス数:1
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:1 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:1) / 100
-		ELSE
-			LOCAL += プラス数:1 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:1 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:1) / 100
-		ENDIF
+		LOCAL += プラス数:1 / 2
 ENDSELECT
-LOCAL += 能力値강화:1:ARG * 10 * (100 + プラス数:1) / 100
+LOCAL += 能力値강화:1:ARG * 10
 RETURN LOCAL
  
 @방어상성_2391,ARG,ARG:1 = -1
@@ -379,7 +343,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:1}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(1)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -388,9 +352,9 @@ IF 軽量化数(1)
 	SIF 장비パラ値軽量化:1
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:1 * 10}　
 	SIF 장비男女軽量化:1
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:1
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -399,7 +363,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:1}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:1)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:1)%
 RETURN 0
  
 @引継ぎ可不可_2391
@@ -409,8 +373,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2391
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:1}
 	RETURN RESULT
 CATCH
@@ -419,7 +383,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비2
 ;======================================================
  
@@ -441,29 +405,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:2 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:2) / 100
-		ELSE
-			LOCAL += プラス数:2
-		ENDIF
+		LOCAL += プラス数:2
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:2 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:2) / 100
-		ELSE
-			LOCAL += プラス数:2 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:2 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:2) / 100
-		ENDIF
+		LOCAL += プラス数:2 / 2
 ENDSELECT
-LOCAL += 能力値강화:2:ARG * 10 * (100 + プラス数:2) / 100
+LOCAL += 能力値강화:2:ARG * 10
 RETURN LOCAL
  
 @방어상성_2392,ARG,ARG:1 = -1
@@ -589,7 +535,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:2}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(2)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -598,9 +544,9 @@ IF 軽量化数(2)
 	SIF 장비パラ値軽量化:2
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:2 * 10}　
 	SIF 장비男女軽量化:2
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:2
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -609,7 +555,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:2}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:2)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:2)%
 RETURN 0
  
 @引継ぎ可不可_2392
@@ -619,8 +565,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2392
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:2}
 	RETURN RESULT
 CATCH
@@ -629,7 +575,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비3
 ;======================================================
  
@@ -651,29 +597,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:3 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:3) / 100
-		ELSE
-			LOCAL += プラス数:3
-		ENDIF
+		LOCAL += プラス数:3
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:3 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:3) / 100
-		ELSE
-			LOCAL += プラス数:3 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:3 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:3) / 100
-		ENDIF
+		LOCAL += プラス数:3 / 2
 ENDSELECT
-LOCAL += 能力値강화:3:ARG * 10 * (100 + プラス数:3) / 100
+LOCAL += 能力値강화:3:ARG * 10
 RETURN LOCAL
  
 @방어상성_2393,ARG,ARG:1 = -1
@@ -799,7 +727,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:3}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(3)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -808,9 +736,9 @@ IF 軽量化数(3)
 	SIF 장비パラ値軽量化:3
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:3 * 10}　
 	SIF 장비男女軽量化:3
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:3
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -819,7 +747,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:3}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:3)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:3)%
 RETURN 0
  
 @引継ぎ可不可_2393
@@ -829,8 +757,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2393
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:3}
 	RETURN RESULT
 CATCH
@@ -839,7 +767,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비4
 ;======================================================
  
@@ -861,29 +789,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:4 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:4) / 100
-		ELSE
-			LOCAL += プラス数:4
-		ENDIF
+		LOCAL += プラス数:4
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:4 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:4) / 100
-		ELSE
-			LOCAL += プラス数:4 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:4 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:4) / 100
-		ENDIF
+		LOCAL += プラス数:4 / 2
 ENDSELECT
-LOCAL += 能力値강화:4:ARG * 10 * (100 + プラス数:4) / 100
+LOCAL += 能力値강화:4:ARG * 10
 RETURN LOCAL
  
 @방어상성_2394,ARG,ARG:1 = -1
@@ -1009,7 +919,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:4}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(4)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -1018,9 +928,9 @@ IF 軽量化数(4)
 	SIF 장비パラ値軽量化:4
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:4 * 10}　
 	SIF 장비男女軽量化:4
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:4
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1029,7 +939,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:4}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:4)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:4)%
 RETURN 0
  
 @引継ぎ可不可_2394
@@ -1039,8 +949,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2394
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:4}
 	RETURN RESULT
 CATCH
@@ -1049,7 +959,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비5
 ;======================================================
  
@@ -1071,29 +981,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:5 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:5) / 100
-		ELSE
-			LOCAL += プラス数:5
-		ENDIF
+		LOCAL += プラス数:5
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:5 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:5) / 100
-		ELSE
-			LOCAL += プラス数:5 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:5 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:5) / 100
-		ENDIF
+		LOCAL += プラス数:5 / 2
 ENDSELECT
-LOCAL += 能力値강화:5:ARG * 10 * (100 + プラス数:5) / 100
+LOCAL += 能力値강화:5:ARG * 10
 RETURN LOCAL
  
 @방어상성_2395,ARG,ARG:1 = -1
@@ -1219,7 +1111,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:5}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(5)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -1228,9 +1120,9 @@ IF 軽量化数(5)
 	SIF 장비パラ値軽量化:5
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:5 * 10}　
 	SIF 장비男女軽量化:5
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:5
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1239,7 +1131,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:5}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:5)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:5)%
 RETURN 0
  
 @引継ぎ可不可_2395
@@ -1249,8 +1141,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2395
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:5}
 	RETURN RESULT
 CATCH
@@ -1259,7 +1151,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비6
 ;======================================================
  
@@ -1281,29 +1173,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:6 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:6) / 100
-		ELSE
-			LOCAL += プラス数:6
-		ENDIF
+		LOCAL += プラス数:6
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:6 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:6) / 100
-		ELSE
-			LOCAL += プラス数:6 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:6 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:6) / 100
-		ENDIF
+		LOCAL += プラス数:6 / 2
 ENDSELECT
-LOCAL += 能力値강화:6:ARG * 10 * (100 + プラス数:6) / 100
+LOCAL += 能力値강화:6:ARG * 10
 RETURN LOCAL
  
 @방어상성_2396,ARG,ARG:1 = -1
@@ -1429,7 +1303,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:6}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(6)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -1438,9 +1312,9 @@ IF 軽量化数(6)
 	SIF 장비パラ値軽量化:6
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:6 * 10}　
 	SIF 장비男女軽量化:6
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:6
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1449,7 +1323,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:6}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:6)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:6)%
 RETURN 0
  
 @引継ぎ可不可_2396
@@ -1459,8 +1333,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2396
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:6}
 	RETURN RESULT
 CATCH
@@ -1469,7 +1343,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비7
 ;======================================================
  
@@ -1491,29 +1365,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:7 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:7) / 100
-		ELSE
-			LOCAL += プラス数:7
-		ENDIF
+		LOCAL += プラス数:7
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:7 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:7) / 100
-		ELSE
-			LOCAL += プラス数:7 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:7 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:7) / 100
-		ENDIF
+		LOCAL += プラス数:7 / 2
 ENDSELECT
-LOCAL += 能力値강화:7:ARG * 10 * (100 + プラス数:7) / 100
+LOCAL += 能力値강화:7:ARG * 10
 RETURN LOCAL
  
 @방어상성_2397,ARG,ARG:1 = -1
@@ -1639,7 +1495,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:7}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(7)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -1648,9 +1504,9 @@ IF 軽量化数(7)
 	SIF 장비パラ値軽量化:7
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:7 * 10}　
 	SIF 장비男女軽量化:7
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:7
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1659,7 +1515,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:7}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:7)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:7)%
 RETURN 0
  
 @引継ぎ可不可_2397
@@ -1669,8 +1525,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2397
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:7}
 	RETURN RESULT
 CATCH
@@ -1679,7 +1535,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비8
 ;======================================================
  
@@ -1701,29 +1557,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:8 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:8) / 100
-		ELSE
-			LOCAL += プラス数:8
-		ENDIF
+		LOCAL += プラス数:8
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:8 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:8) / 100
-		ELSE
-			LOCAL += プラス数:8 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:8 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:8) / 100
-		ENDIF
+		LOCAL += プラス数:8 / 2
 ENDSELECT
-LOCAL += 能力値강화:8:ARG * 10 * (100 + プラス数:8) / 100
+LOCAL += 能力値강화:8:ARG * 10
 RETURN LOCAL
  
 @방어상성_2398,ARG,ARG:1 = -1
@@ -1849,7 +1687,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:8}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(8)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -1858,9 +1696,9 @@ IF 軽量化数(8)
 	SIF 장비パラ値軽量化:8
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:8 * 10}　
 	SIF 장비男女軽量化:8
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:8
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -1869,7 +1707,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:8}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:8)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:8)%
 RETURN 0
  
 @引継ぎ可不可_2398
@@ -1879,8 +1717,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2398
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:8}
 	RETURN RESULT
 CATCH
@@ -1889,7 +1727,7 @@ ENDCATCH
  
  
 ;======================================================
-;장비品の데이터
+;장비품の데이터
 ;개조검장비9
 ;======================================================
  
@@ -1911,29 +1749,11 @@ CATCH
 ENDCATCH
 SELECTCASE ARG
 	CASE 0,1,4
-		IF 200 < LOCAL
-			LOCAL += プラス数:9 * 2
-		ELSEIF 99 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:9) / 100
-		ELSE
-			LOCAL += プラス数:9
-		ENDIF
+		LOCAL += プラス数:9
 	CASE 5
-		IF 200 < LOCAL
-			LOCAL += プラス数:9 * 2
-		ELSEIF 49 < LOCAL
-			LOCAL = LOCAL * (100 + プラス数:9) / 100
-		ELSE
-			LOCAL += プラス数:9 / 2
-		ENDIF
-	CASEELSE
-		IF 200 < LOCAL
-			LOCAL += プラス数:9 * 2
-		ELSE
-			LOCAL = LOCAL * (100 + プラス数:9) / 100
-		ENDIF
+		LOCAL += プラス数:9 / 2
 ENDSELECT
-LOCAL += 能力値강화:9:ARG * 10 * (100 + プラス数:9) / 100
+LOCAL += 能力値강화:9:ARG * 10
 RETURN LOCAL
  
 @방어상성_2399,ARG,ARG:1 = -1
@@ -2059,7 +1879,7 @@ TRYCCALLFORM 필요레벨_{ベース장비番号:9}
 		PRINTFORM LV{RESULT}～　
 CATCH
 ENDCATCH
-PRINTFORML 인간、반마인のみ
+PRINTFORML 인간、반마인만
 IF 軽量化数(9)
 	SETCOLOR 0xffde86
 	PRINTFORM 軽量化　:
@@ -2068,9 +1888,9 @@ IF 軽量化数(9)
 	SIF 장비パラ値軽量化:9
 		PRINTFORM 필요パラメータ -{장비パラ値軽量化:9 * 10}　
 	SIF 장비男女軽量化:9
-		PRINTFORM 性別制限無視　
+		PRINTFORM 성별制限무시　
 	SIF 장비アライメント軽量化:9
-		PRINTFORM LD,LC속성無視　
+		PRINTFORM LD,LC속성무시　
 	PRINTL
 ENDIF
 RESETCOLOR
@@ -2079,7 +1899,7 @@ RESETCOLOR
 TRYCCALLFORM 장비해설_{ベース장비番号:9}
 CATCH
 ENDCATCH
-PRINTFORML ベース：%ITEMNAME:(ベース장비番号:9)%
+PRINTFORML 베이스：%ITEMNAME:(ベース장비番号:9)%
 RETURN 0
  
 @引継ぎ可不可_2399
@@ -2089,8 +1909,8 @@ RETURN 1
 RETURN 1
  
 @검타입_2399
-;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
-;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+;1 = 도검　2 =레이피어　3 = 활　　　　4 = 검　5 = 창　　　6 = 부、둔기
+;7 = 채찍　8 =투구　　　9 = 지팡이、제사도구　10= 곤　11= 권투구
 TRYCCALLFORM 검타입_{ベース장비番号:9}
 	RETURN RESULT
 CATCH

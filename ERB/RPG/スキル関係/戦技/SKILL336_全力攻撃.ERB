@@ -3,7 +3,13 @@
 
 ;스킬名
 @SKILL_NAME_336,ARG
-RESULTS = 전력공격
+
+IF SKILL_CHANGE(ARG, 5051)
+	RESULTS = 못다 이룬 꿈을 잡는 삿짱 암
+	;見果てぬ夢を掴むさっちんアーム
+ELSE
+	RESULTS = 전력공격
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_336, ARG
@@ -36,12 +42,12 @@ RETURN 3
 ;전술
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_336
+@SKILL_DECIDE_TYPE_336, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_336
+@SKILL_DAMAGETYPE_336, ARG
 RETURN 1
 
 

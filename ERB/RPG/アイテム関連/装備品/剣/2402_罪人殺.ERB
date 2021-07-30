@@ -89,13 +89,7 @@ SIF ARG:1 == -1
 	ELSE
 		SELECTCASE ARG
 			CASE 0
-				IF ABL:ARG:속성LC == 1
-					RETURN 3519
-				ELSEIF ABL:ARG:속성LC == 2
-					RETURN 3518
-				ELSE
-					RETURN 3517
-				ENDIF
+				RETURN 3518
 		ENDSELECT
 	ENDIF
 RETURN 0
@@ -114,7 +108,7 @@ RETURN 0
 RETURN 60
 
 @장비조건설명_2402
-PRINTL 장비조건：속성Dark LV60〜
+PRINTL 장비조건：속성Dark LV60～
 
 @장비해설_2402
 PRINTL 칼날이 세 개 붙어있고 중앙에 손잡이가 있는 큰 원반을 긴 쇠사슬로 왼팔에 이은 무기

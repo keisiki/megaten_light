@@ -602,7 +602,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) % 10
 						NAME:(RESULT:1) = ダスト
 						CALLNAME:(RESULT:1) = ダスト
 						BASE:(RESULT:1):LV = 16
-						BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
+						BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3*5/4
 						BASE:(RESULT:1):힘 = 13
 						BASE:(RESULT:1):지혜 = 3 
 						BASE:(RESULT:1):마력 = 4
@@ -621,7 +621,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) % 10
 			ENDIF
 		ENDIF
 	CASE 30
-			IF 던전フラグ:62:1 == 1
+		IF 던전フラグ:62:1 == 1
 			CALL MESSAGE_WINDOW_D, "네코마타", "헬 부하인 놈에게 억지로 여기로 끌려왔어……/이대로 여기에 있다가는……"
 		ELSEIF 던전フラグ:62:1 == 2 && 던전フラグ:62:3 == 0
 			CALL MESSAGE_WINDOW_D, "네코마타", "여기서 나갈 거면 같이 데려가 줘"
@@ -648,7 +648,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) % 10
 						NAME:(RESULT:1) = ダスト
 						CALLNAME:(RESULT:1) = ダスト
 						BASE:(RESULT:1):LV = 16
-						BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3
+						BASE:(RESULT:1):ＥＸＰ = 5*(BASE:(RESULT:1):LV - 1)*(BASE:(RESULT:1):LV)*(BASE:(RESULT:1):LV + 1)/3*5/4
 						BASE:(RESULT:1):힘 = 13
 						BASE:(RESULT:1):지혜 = 3 
 						BASE:(RESULT:1):마력 = 4

@@ -65,12 +65,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_121
+@SKILL_DECIDE_TYPE_121, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_121
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_121, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -159,7 +159,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,121
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_121
-PRINTL [후열] 적 1체에 복합속성(비구+파마) 특대 물리데미지. (보통 확률로 CLOSE)
+PRINTL [후열] 빠른 속도로 총알을 튕겨 적 1체에 복합속성(비구+파마) 특대 물리데미지. (보통 확률로 CLOSE)
 
 ;継承に필요な部位
 @継承部位_121,ARG

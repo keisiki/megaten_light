@@ -47,7 +47,7 @@ FOR LCOUNT, 1, 7
 		CONTINUE
 	LOCAL:2 ++
 NEXT
-;発情しているキャラ一人につき-1〜-5
+;発情しているキャラ一人につき-1～-5
 IF LOCAL:2
 	LOCAL:1 = LOCAL:2 + RAND:((LOCAL:2*5)-(LOCAL:2-1))
 ENDIF
@@ -125,6 +125,15 @@ ELSE
 ENDIF
 
 LOCAL:1 += TALENT:(ARG:1):수수께끼의매력 * 20
+LOCAL:1 += TALENT:(ARG:1):크고아름다움 * 20
+LOCAL:1 += TALENT:(ARG:1):매혹 * 15
+LOCAL:1 += TALENT:(ARG:1):매력 * 15
+LOCAL:1 += TALENT:(ARG:1):인기 * 15
+LOCAL:1 += TALENT:(ARG:1):금단의지식 * 20
+LOCAL:1 += TALENT:(ARG:1):깨달음 * 20
+LOCAL:1 += ABL:(ARG:1):순종 * 2
+LOCAL:1 += ABL:(ARG:1):봉사정신 * 4
+LOCAL:1 += ABL:(ARG:1):마조끼 * 5
 
 LOCAL:1 -= TALENT:ARG:정조관념 * 20
 LOCAL:1 -= TALENT:ARG:자제심 * 15
@@ -149,7 +158,7 @@ LOCAL:1 += ABL:ARG:노출증 * 5
 LOCAL:1 += ABL:ARG:새드끼 * 5
 LOCAL:1 += ABL:ARG:정액중독 * 10
 SIF FLAG:月齢 == 8
-	LOCAL:1 += 20
+	LOCAL:1 += 80
 
 ;格好の보정
 
@@ -238,6 +247,14 @@ ELSE
 ENDIF
 
 LOCAL:1 += TALENT:(ARG:1):수수께끼의매력 * 20
+LOCAL:1 += TALENT:(ARG:1):크고아름다움 * 20
+LOCAL:1 += TALENT:(ARG:1):매혹 * 15
+LOCAL:1 += TALENT:(ARG:1):매력 * 15
+LOCAL:1 += TALENT:(ARG:1):인기 * 15
+LOCAL:1 += TALENT:(ARG:1):금단의지식 * 20
+LOCAL:1 += TALENT:(ARG:1):깨달음 * 20
+LOCAL:1 += ABL:(ARG:1):기교 * 2
+LOCAL:1 += ABL:(ARG:1):새드끼 * 5
 
 LOCAL:1 -= TALENT:ARG:정조관념 * 20
 LOCAL:1 -= TALENT:ARG:자제심 * 15
@@ -262,7 +279,7 @@ LOCAL:1 += ABL:ARG:노출증 * 5
 LOCAL:1 += ABL:ARG:마조끼 * 5
 LOCAL:1 += ABL:ARG:정액중독 * 10
 SIF FLAG:月齢 == 8
-	LOCAL:1 += 20
+	LOCAL:1 += 80
 
 ;山羊角の네츠케を장비しているとLOCAL:1が10未満の場合に70％の확률で交渉しだい、30％の確率で無조건でヤらせてもらえる
 ;조건次第の場合は無조건になる
@@ -287,7 +304,6 @@ ELSEIF EQUIP:(ARG:1):악세사리 == 5052 & TALENT:ARG:남자
 		LOCAL:1 = 100
 	ENDIF
 ENDIF
-
 
 ;格好の보정
 
@@ -690,17 +706,17 @@ ENDIF
 ;처녀관통履歴用
 IF CHARA == MASTER && TALENT:DEMON:처녀
 	SETBIT FLAG:(50000+NO:DEMON), 7
-	;처녀奪取人数カウント
+	;처녀탈취人数カウント
 	FLAG:처녀탈취人数 += 1
 ENDIF
 
 ;===================================
-;敗北時の処理
+;패배시의 처리
 ;===================================
 @SEXTALK_LOSE,ARG
-PRINTFORML その後、%CALLNAME:MASTER%は二度と해방される事は無かった……
+PRINTFORML 그 후、%조사처리(CALLNAME:MASTER,"가")% 두 번 다시 해방 되는 일은 없었다……
 PRINTW 
-PRINTW 　　　　　　　　――  Bad Ending No.020 ( 全滅END -饗宴の果てのハテ- )
+PRINTW 　　　　　　　　――  Bad Ending No.020 ( 전멸 END -향연의 끝의 끝- )
 CALL GLOBAL_BADEND_SET(20)
 JUMP GAME_OVER
 
@@ -847,210 +863,210 @@ PALAM:ARG:욕정 = 0
 ;탐색中のソース체크
 ;===================================
 @SOURCE_CHECK_DUNGEON, ARG , ARG:1 =  -1
-	FOR LOCAL:2 , 0 , 4
-		SELECTCASE LOCAL:2
-			CASE 0
-				LOCALS = Ｃ
-			CASE 1
-				LOCALS = Ｖ
-			CASE 2
-				LOCALS = Ａ
-			CASE 3
-				LOCALS = Ｂ
-		ENDSELECT
-		SIF TALENT:ARG:(LOCALS + "둔감")
+FOR LOCAL:2 , 0 , 4
+	SELECTCASE LOCAL:2
+		CASE 0
+			LOCALS = Ｃ
+		CASE 1
+			LOCALS = Ｖ
+		CASE 2
+			LOCALS = Ａ
+		CASE 3
+			LOCALS = Ｂ
+	ENDSELECT
+	SIF TALENT:ARG:(LOCALS + "둔감")
+		TIMES SOURCE:ARG:("쾌" + LOCALS) , 0.50
+	SIF TALENT:ARG:(LOCALS + "민감")
+		TIMES SOURCE:ARG:("쾌" + LOCALS) , 2.00
+	SELECTCASE ABL:ARG:(LOCALS + "감각")
+		CASE  0
 			TIMES SOURCE:ARG:("쾌" + LOCALS) , 0.50
-		SIF TALENT:ARG:(LOCALS + "민감")
-			TIMES SOURCE:ARG:("쾌" + LOCALS) , 2.00
-		SELECTCASE ABL:ARG:(LOCALS + "감각")
-			CASE  0
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 0.50
-			CASE  1
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 1.80
-			CASE  2
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 3.00
-			CASE  3
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 5.00
-			CASE  4
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 7.00
-			CASE  5
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 9.00
-			CASE  6
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 11.00
-			CASE  7
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 13.00
-			CASE  8
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 15.00
-			CASE  9
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 17.00
-			CASEELSE
-				TIMES SOURCE:ARG:("쾌" + LOCALS) , 20.00
-		ENDSELECT
-		SIF TALENT:ARG:오토코노코 && (LOCAL:2 == 2 || LOCAL:2 == 3)
-			TIMES SOURCE:ARG:("쾌" + LOCALS) , 1.50
-		
-		SIF 위험일(ARG) == 2
-			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.80
-		IF LOCAL:2 == 1 || LOCAL:2 == 2
-			;EXP:ARG:経験をみる
-			IF EXP:ARG:(LOCAL:2 -1) < EXPLV:1
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 0.20
-			ELSEIF EXP:ARG:(LOCAL:2 -1) < EXPLV:2
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 0.60
-			ELSEIF EXP:ARG:(LOCAL:2 -1) < EXPLV:3
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.00
-			ELSEIF EXP:ARG:(LOCAL:2 -1) < EXPLV:4
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.20
-			ELSEIF EXP:ARG:(LOCAL:2 -1) < EXPLV:5
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.30
-			ELSEIF EXP:ARG:(LOCAL:2 -1) >= EXPLV:5
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.40
-			ENDIF
-			;PALAM:윤활をみる
-			IF PALAM:ARG:윤활 < PALAMLV:1
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 0.10
-			ELSEIF PALAM:ARG:윤활 < PALAMLV:2
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 0.40
-			ELSEIF PALAM:ARG:윤활 < PALAMLV:3
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.00
-			ELSEIF PALAM:ARG:윤활 < PALAMLV:4
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.10
-			ELSEIF PALAM:ARG:윤활 >= PALAMLV:4
-				TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.20
-			ENDIF
+		CASE  1
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 1.80
+		CASE  2
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 3.00
+		CASE  3
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 5.00
+		CASE  4
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 7.00
+		CASE  5
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 9.00
+		CASE  6
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 11.00
+		CASE  7
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 13.00
+		CASE  8
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 15.00
+		CASE  9
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 17.00
+		CASEELSE
+			TIMES SOURCE:ARG:("쾌" + LOCALS) , 20.00
+	ENDSELECT
+	SIF TALENT:ARG:오토코노코 && (LOCAL:2 == 2 || LOCAL:2 == 3)
+		TIMES SOURCE:ARG:("쾌" + LOCALS) , 1.50
+
+	SIF 위험일(ARG) == 2
+		TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.80
+	IF LOCAL:2 == 1 || LOCAL:2 == 2
+			;EXP:ARG:경험をみる
+		IF EXP:ARG:(LOCAL:2 -1) < EXPLV:1
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 0.20
+		ELSEIF EXP:ARG:(LOCAL:2 -1) < EXPLV:2
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 0.60
+		ELSEIF EXP:ARG:(LOCAL:2 -1) < EXPLV:3
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.00
+		ELSEIF EXP:ARG:(LOCAL:2 -1) < EXPLV:4
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.20
+		ELSEIF EXP:ARG:(LOCAL:2 -1) < EXPLV:5
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.30
+		ELSEIF EXP:ARG:(LOCAL:2 -1) >= EXPLV:5
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.40
 		ENDIF
-		
-		LOCAL = SOURCE:ARG:("쾌"+ LOCALS)
+			;PALAM:윤활をみる
+		IF PALAM:ARG:윤활 < PALAMLV:1
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 0.10
+		ELSEIF PALAM:ARG:윤활 < PALAMLV:2
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 0.40
+		ELSEIF PALAM:ARG:윤활 < PALAMLV:3
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.00
+		ELSEIF PALAM:ARG:윤활 < PALAMLV:4
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.10
+		ELSEIF PALAM:ARG:윤활 >= PALAMLV:4
+			TIMES SOURCE:ARG:("쾌"+ LOCALS) , 1.20
+		ENDIF
+	ENDIF
+
+	LOCAL = SOURCE:ARG:("쾌"+ LOCALS)
 
 		;PALAM:욕정をみる
-		IF PALAM:ARG:욕정 < PALAMLV:1
-			TIMES LOCAL , 0.80
-		ELSEIF PALAM:ARG:욕정 < PALAMLV:2
-			TIMES LOCAL , 1.10
-		ELSEIF PALAM:ARG:욕정 < PALAMLV:3
-			TIMES LOCAL , 1.40
-		ELSEIF PALAM:ARG:욕정 < PALAMLV:4
-			TIMES LOCAL , 1.70
-		ELSEIF PALAM:ARG:욕정 >= PALAMLV:4
-			TIMES LOCAL , 2.00
-		ENDIF
+	IF PALAM:ARG:욕정 < PALAMLV:1
+		TIMES LOCAL , 0.80
+	ELSEIF PALAM:ARG:욕정 < PALAMLV:2
+		TIMES LOCAL , 1.10
+	ELSEIF PALAM:ARG:욕정 < PALAMLV:3
+		TIMES LOCAL , 1.40
+	ELSEIF PALAM:ARG:욕정 < PALAMLV:4
+		TIMES LOCAL , 1.70
+	ELSEIF PALAM:ARG:욕정 >= PALAMLV:4
+		TIMES LOCAL , 2.00
+	ENDIF
 
 		LOCAL:1 = SOURCE:ARG:("쾌" + LOCALS)
 		;ABL:욕망をみる
-		SELECTCASE ABL:ARG:욕망
-			CASE 0
-				TIMES LOCAL:1 , 0.75
-			CASE 1
-				TIMES LOCAL:1 , 0.80
-			CASE 2
-				TIMES LOCAL:1 , 0.85
-			CASE 3
-				TIMES LOCAL:1 , 0.90
-			CASE 4
-				TIMES LOCAL:1 , 0.95
-			CASE 5
-				TIMES LOCAL:1 , 1.00
-			CASE 6
-				TIMES LOCAL:1 , 1.05
-			CASE 7
-				TIMES LOCAL:1 , 1.10
-			CASE 8
-				TIMES LOCAL:1 , 1.15
-			CASE 9
-				TIMES LOCAL:1 , 1.20
-			CASEELSE
-				TIMES LOCAL:1 , 1.40
-		ENDSELECT
+	SELECTCASE ABL:ARG:욕망
+		CASE 0
+			TIMES LOCAL:1 , 0.75
+		CASE 1
+			TIMES LOCAL:1 , 0.80
+		CASE 2
+			TIMES LOCAL:1 , 0.85
+		CASE 3
+			TIMES LOCAL:1 , 0.90
+		CASE 4
+			TIMES LOCAL:1 , 0.95
+		CASE 5
+			TIMES LOCAL:1 , 1.00
+		CASE 6
+			TIMES LOCAL:1 , 1.05
+		CASE 7
+			TIMES LOCAL:1 , 1.10
+		CASE 8
+			TIMES LOCAL:1 , 1.15
+		CASE 9
+			TIMES LOCAL:1 , 1.20
+		CASEELSE
+			TIMES LOCAL:1 , 1.40
+	ENDSELECT
 		;소인체형
-		IF TALENT:ARG:소인체형 && (LOCAL:2 == 1 || LOCAL:2 == 2)
-			TIMES LOCAL , 0.50
-			TIMES LOCAL:1 , 1.50
-		ENDIF
-		CUP:ARG:("쾌" + LOCALS) += LOCAL
-		CUP:ARG:욕정 += LOCAL:1 / 10
+	IF TALENT:ARG:소인체형 && (LOCAL:2 == 1 || LOCAL:2 == 2)
+		TIMES LOCAL , 0.50
+		TIMES LOCAL:1 , 1.50
+	ENDIF
+	CUP:ARG:("쾌" + LOCALS) += LOCAL
+	CUP:ARG:욕정 += LOCAL:1 / 10
 
-	NEXT
+NEXT
 	;-------------------------------------------------
 	;쾌감을부정は、쾌ソースの数値に応じて、억울増加（음란、창부で無効）
 	;-------------------------------------------------
-	SIF TALENT:ARG:71 && (TALENT:ARG:4 == 0 && TALENT:ARG:7 == 0)
-		SOURCE:ARG:울굴 += (CUP:ARG:쾌Ｃ+UP:1+CUP:ARG:쾌Ａ+CUP:ARG:쾌Ｂ)/10
+SIF TALENT:ARG:71 && (TALENT:ARG:4 == 0 && TALENT:ARG:7 == 0)
+	SOURCE:ARG:울굴 += (CUP:ARG:쾌Ｃ+UP:1+CUP:ARG:쾌Ａ+CUP:ARG:쾌Ｂ)/10
 
 
 	;-------------------------------------------------
 	;함락素質
 	;-------------------------------------------------
 	;음란
-	IF TALENT:ARG:음란
-		TIMES CUP:ARG:쾌Ｃ , 1.20
-		TIMES CUP:ARG:쾌Ｖ , 1.20
-		TIMES CUP:ARG:쾌Ａ , 1.20
-		TIMES CUP:ARG:쾌Ｂ , 1.20
-	ENDIF
+IF TALENT:ARG:음란
+	TIMES CUP:ARG:쾌Ｃ , 1.20
+	TIMES CUP:ARG:쾌Ｖ , 1.20
+	TIMES CUP:ARG:쾌Ａ , 1.20
+	TIMES CUP:ARG:쾌Ｂ , 1.20
+ENDIF
 
 	;창부
-	IF TALENT:ARG:창부
-		TIMES CUP:ARG:쾌Ｃ , 1.50
-		TIMES CUP:ARG:쾌Ｖ , 1.50
-		TIMES CUP:ARG:쾌Ａ , 1.50
-		TIMES CUP:ARG:쾌Ｂ , 1.50
-	ENDIF
+IF TALENT:ARG:창부
+	TIMES CUP:ARG:쾌Ｃ , 1.50
+	TIMES CUP:ARG:쾌Ｖ , 1.50
+	TIMES CUP:ARG:쾌Ａ , 1.50
+	TIMES CUP:ARG:쾌Ｂ , 1.50
+ENDIF
 
 	;-------------------------------------------------
 	;素質
 	;-------------------------------------------------
 	;자제심
-	IF TALENT:ARG:20
-		TIMES CUP:ARG:쾌Ｃ , 0.70
-		TIMES CUP:ARG:쾌Ｖ , 0.90
-		TIMES CUP:ARG:쾌Ａ , 1.00
-		TIMES CUP:ARG:쾌Ｂ , 0.70
-	ENDIF
+IF TALENT:ARG:20
+	TIMES CUP:ARG:쾌Ｃ , 0.70
+	TIMES CUP:ARG:쾌Ｖ , 0.90
+	TIMES CUP:ARG:쾌Ａ , 1.00
+	TIMES CUP:ARG:쾌Ｂ , 0.70
+ENDIF
 
 	;즉각함락
-	IF TALENT:ARG:73
-		TIMES CUP:ARG:쾌Ｃ , 2.00
-		TIMES CUP:ARG:쾌Ｖ , 2.00
-		TIMES CUP:ARG:쾌Ａ , 2.00
-		TIMES CUP:ARG:쾌Ｂ , 2.00
-	ENDIF
+IF TALENT:ARG:73
+	TIMES CUP:ARG:쾌Ｃ , 2.00
+	TIMES CUP:ARG:쾌Ｖ , 2.00
+	TIMES CUP:ARG:쾌Ａ , 2.00
+	TIMES CUP:ARG:쾌Ｂ , 2.00
+ENDIF
 	;자위광
-	SIF TALENT:ARG:74
-		TIMES CUP:ARG:쾌Ｃ , 1.20
+SIF TALENT:ARG:74
+	TIMES CUP:ARG:쾌Ｃ , 1.20
 	;섹스광い
-	SIF TALENT:ARG:75
-		TIMES CUP:ARG:쾌Ｖ , 1.20
+SIF TALENT:ARG:75
+	TIMES CUP:ARG:쾌Ｖ , 1.20
 	;애널광
-	SIF TALENT:ARG:76
-		TIMES CUP:ARG:쾌Ａ , 1.20
+SIF TALENT:ARG:76
+	TIMES CUP:ARG:쾌Ａ , 1.20
 	;음유
-	SIF TALENT:ARG:77
-		TIMES CUP:ARG:쾌Ｂ , 1.20
+SIF TALENT:ARG:77
+	TIMES CUP:ARG:쾌Ｂ , 1.20
 
 	;남자
-	IF IS_MALE(ARG)
-		TIMES CUP:ARG:쾌Ａ , 1.30
-	ENDIF
+IF IS_MALE(ARG)
+	TIMES CUP:ARG:쾌Ａ , 1.30
+ENDIF
 
 	;-------------------------------------------------
 	;애액処理
 	;-------------------------------------------------
-	LOCAL = CUP:ARG:쾌Ｃ + CUP:ARG:쾌Ｖ + CUP:ARG:쾌Ａ + CUP:ARG:쾌Ｂ
-	;쾌Ｃ＋쾌Ｖ＋쾌Ａ＋쾌Ｂが合わせて100以上上昇ならその20%の액체のソースが加わる（남자はダメ）
-	IF LOCAL > 100
+LOCAL = CUP:ARG:쾌Ｃ + CUP:ARG:쾌Ｖ + CUP:ARG:쾌Ａ + CUP:ARG:쾌Ｂ
+	;쾌Ｃ＋쾌Ｖ＋쾌Ａ＋쾌Ｂが合わせて100이상上昇ならその20%の액체의 소스が加わる（남자はダメ）
+IF LOCAL > 100
 		;젖기쉬움と젖기어려움はここで処理
-		SIF TALENT:ARG:42
-			TIMES LOCAL , 3.00
-		SIF TALENT:ARG:43
-			TIMES LOCAL , 0.40
-		CUP:ARG:윤활 += LOCAL / 5
-	ENDIF
+	SIF TALENT:ARG:42
+		TIMES LOCAL , 3.00
+	SIF TALENT:ARG:43
+		TIMES LOCAL , 0.40
+	CUP:ARG:윤활 += LOCAL / 5
+ENDIF
 	;-------------------------------------------------
 	;액체のソース
 	;-------------------------------------------------
-	LOCAL = SOURCE:ARG:액체
+LOCAL = SOURCE:ARG:액체
 
-	CUP:ARG:윤활 += SOURCE:ARG:액체
+CUP:ARG:윤활 += SOURCE:ARG:액체
 
 	;-------------------------------------------------
 	;욕정のソース
@@ -1062,35 +1078,35 @@ PALAM:ARG:욕정 = 0
 	;SOURCE:ARG:욕정 *= LOCAL
 	;SOURCE:ARG:욕정 /= 500
 
-	LOCAL = SOURCE:ARG:욕정
+LOCAL = SOURCE:ARG:욕정
 
 	;욕망を見る
-	SELECTCASE ABL:ARG:욕망
-		CASE 0
-			TIMES LOCAL , 0.10
-		CASE 1
-			TIMES LOCAL , 0.40
-		CASE 2
-			TIMES LOCAL , 0.80
-		CASE 3
-			TIMES LOCAL , 1.20
-		CASE 4
-			TIMES LOCAL , 1.60
-		CASE 5
-			TIMES LOCAL , 2.00
-		CASE 6
-			TIMES LOCAL , 2.40
-		CASE 7
-			TIMES LOCAL , 2.80
-		CASE 8
-			TIMES LOCAL , 3.20
-		CASE 9
-			TIMES LOCAL , 3.60
-		CASEELSE
-			TIMES LOCAL , 5.00
-	ENDSELECT
-		
-	CUP:ARG:욕정 += LOCAL
+SELECTCASE ABL:ARG:욕망
+	CASE 0
+		TIMES LOCAL , 0.10
+	CASE 1
+		TIMES LOCAL , 0.40
+	CASE 2
+		TIMES LOCAL , 0.80
+	CASE 3
+		TIMES LOCAL , 1.20
+	CASE 4
+		TIMES LOCAL , 1.60
+	CASE 5
+		TIMES LOCAL , 2.00
+	CASE 6
+		TIMES LOCAL , 2.40
+	CASE 7
+		TIMES LOCAL , 2.80
+	CASE 8
+		TIMES LOCAL , 3.20
+	CASE 9
+		TIMES LOCAL , 3.60
+	CASEELSE
+		TIMES LOCAL , 5.00
+ENDSELECT
+
+CUP:ARG:욕정 += LOCAL
 IF 위험일(ARG) >= 2
 	CUP:ARG:쾌Ｃ *= 2
 	CUP:ARG:쾌Ｖ *= 2
@@ -1147,8 +1163,9 @@ IF ARG:2 == 1
 	LOCAL:1 /= 2
 	LOCAL:2/= 2
 ENDIF
-CALL SOURCE_CHECK_DUNGEON , ARG:1, ARG
-CALL SHOW_ADD_EXP, ARG:1
+;一番最後に移動
+;CALL SOURCE_CHECK_DUNGEON , ARG:1, ARG
+;CALL SHOW_ADD_EXP, ARG:1
 
 CFLAG:(ARG:1):NTRフラグ += 1
 
@@ -1189,14 +1206,14 @@ ENDIF
 ;체력・기력소비
 ;기력が残っている場合の체력の소비は『성교횟수*10』、残っていない場合は『성교횟수*30』
 ;기력の소비はそれぞれの중독を上げることで軽減できる『획득질사경험*(20-정액중독LV)』『획득절정경험*(50-섹스중독LV*3)』『획득수간경험*(50-수간중독LV*5)』
-;０になっている場合は체력はＨＰ、기력はＭＰに、それぞれの최대値の１０％分のダメージを受ける
+;０になっている場合は체력はＨＰ、기력はＭＰに、それぞれの최대値の１０％分の데미지を受ける
 
 
 ;기력が0になってしまう場合は、체력から差分の半分の値を引く
 ;発情している場合は기력の소비が減る
 SIF 위험일(ARG:1) == 2
 	LOCAL:2 /= 2
-	
+
 ;체력の표시
 ;체력が０、若しくは０になる
 IF BASE:(ARG:1):체력 == 0 || BASE:(ARG:1):체력 < LOCAL:1 || (BASE:(ARG:1):기력 < LOCAL:2 && BASE:(ARG:1):체력 < LOCAL:1 + (LOCAL:2 - BASE:(ARG:1):기력) / 2)
@@ -1338,7 +1355,7 @@ IF FLAG:ＮＴＲハードモード
 	LOCAL = 5
 	SIF CFLAG:(ARG:1):던전内発情用욕정치 >= 3100
 		LOCAL = (CFLAG:(ARG:1):던전内発情用욕정치 - 3000) / 100
-		
+
 	SIF TALENT:(ARG:1):ＮＴＲ == 2
 		LOCAL += 20
 	SIF TALENT:(ARG:1):음란 || TALENT:(ARG:1):창부
@@ -1533,6 +1550,8 @@ IF CFLAG:(ARG:1):ステート == GET_STATE_NUM("DYING") || CFLAG:(ARG:1):ステ�
 		ENDIF
 	ENDIF
 ENDIF
+CALL SOURCE_CHECK_DUNGEON , ARG:1, ARG
+CALL SHOW_ADD_EXP, ARG:1
 
 RETURN LOCAL:3
 

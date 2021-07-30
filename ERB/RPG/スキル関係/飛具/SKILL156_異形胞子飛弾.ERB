@@ -38,12 +38,12 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_156
+@SKILL_DECIDE_TYPE_156, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_156
+@SKILL_DAMAGETYPE_156, ARG
 RETURN 1
 
 
@@ -151,6 +151,7 @@ CALL ATTACK_RAND,ARG,ARG:1,156
 ;　 설명文の표시
 @SKILL_EXPLAIN_156
 PRINTL [후열] 적 전체에 5～10회(1인 최대 4회) 비구속성 소 물리데미지. 명중률이 조금 높다. (보통 확률로 무작위 상태이상)
+PRINTL 大霊 カドクラ 大霊 マニトゥの得意技
 
 ;継承に필요한部位
 @継承部位_156,ARG

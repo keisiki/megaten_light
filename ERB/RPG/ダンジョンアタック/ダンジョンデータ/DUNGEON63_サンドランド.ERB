@@ -698,7 +698,6 @@ IF 던전フラグ:63:4 == 0
 			CALL MESSAGE_WINDOW_D, "", "＞아바돈이 동료마로 들어왔다"
 			CALL ADD_NEW_COMPANION,[[キャラ:아바돈（데빌칠드런）]],300
 			던전フラグ:63:4 = 1
-			FLAG:10275 = 1
 		ELSE
 			CALL MESSAGE_WINDOW_D, "아바돈", "그런가… 어쩔 수 없는가…"
 		ENDIF
@@ -919,7 +918,9 @@ SELECTCASE RAND:100
 		RETURN [[キャラ:잔트만]], 32
 	CASE IS < 60
 		RETURN [[キャラ:아에로]], 32
-	CASE IS < 75
+	CASE IS < 66
+		RETURN [[キャラ:와이번]], 32
+	CASE IS < 72
 		RETURN [[キャラ:피샤차]], 32
 	CASE IS < 83
 		RETURN [[キャラ:맨이터]],33

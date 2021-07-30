@@ -28,12 +28,10 @@ RETURN 0
 
 @방어상성_8207,ARG,ARG:1 = -1
 SELECTCASE GET_TYPE(ARG)
-	CASE "전격","신경","파마"
+	CASE "전격"
 		RETURN 0
 	CASE "빙결"
 		RETURN 200
-	CASE "정신"
-		RETURN 50
 ENDSELECT
 RETURN 100
 
@@ -85,5 +83,5 @@ RETURN 0
 
 @장비해설_8207
 PRINTL 곡옥「루나카미」。인수라만 장비할 수 있다.
-PRINTL 　・전격마법을 중심으로 습득한다
-PRINTL 　・전격무효、빙결에 약하다
+PRINTL 　・전격 마법을 중심으로 습득한다
+PRINTL 　・전격 무효、빙결에 약하다

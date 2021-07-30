@@ -3,7 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_2879,ARG
-RESULTS = 신구「모리야의쇠바퀴」 
+RESULTS = 신구「모리야의쇠바퀴」
 
 ;　명중
 @SKILL_HITRATE_2879, ARG
@@ -36,12 +36,12 @@ RETURN GET_TYPE_NUM("검격")
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2879
+@SKILL_DECIDE_TYPE_2879, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2879
+@SKILL_DAMAGETYPE_2879, ARG
 RETURN 1
 
 
@@ -125,7 +125,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,8
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2879
-PRINTL 앞의 적 1줄을 설시의 신구로 베어 넘겨 공격 。뒷줄 사용 가능。
+PRINTL 앞의 적 1줄을 설시의 신구로 베어 넘겨 공격。뒷줄 사용 가능。
 PRINTL 베인 상태에서는 저주로 몸이 움직이지 않는다。
 PRINTL 사신　모리야 스와코의 스펠카드
 

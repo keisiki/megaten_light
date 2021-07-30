@@ -60,12 +60,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2705
+@SKILL_DECIDE_TYPE_2705, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2705
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2705, ARG
 RETURN 1
 
 
@@ -181,8 +181,8 @@ ENDIF
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2705
-PRINTL 적전체に만능+타격複合ダメージ、使った後999ダメージを受ける
-PRINTL ブラウンの必殺技
+PRINTL 적 전체에 만능+타격 복합 데미지、사용후 999의 피해를 받는다
+PRINTL 브라운의 필살기
 
 ;継承に필요な部位
 @継承部位_2705,ARG

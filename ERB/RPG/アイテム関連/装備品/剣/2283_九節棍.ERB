@@ -47,7 +47,14 @@ RETURN 1
 @장비箇所_2283
 RETURN GET_EQUIPNUM("검")
 
+;사랑의채찍
 @장비추가스킬_2283,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 20
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -71,6 +78,9 @@ PRINTL 장비조건：LV25～
 
 @장비해설_2283
 PRINTL 아홉개의 곤을 연결한 무기。마디가 많아 채찍처럼 다룬다。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：사랑의채찍
+RESETCOLOR
 
 RETURN 0
 

@@ -52,7 +52,11 @@ ELSE
 ENDIF
 ;CALL KOJO_MESSAGE_COM
 
-;조교者→조교대상
+;着脱の処理、浣腸中だと漏らす。地の文との兼ね合いで実際に外すのは地の文の後。
+SIF TEQUIP:21 == 1
+	CALL ADDS_ABNORMAL_EXP("관장배설", TARGET)
+
+;調教者→調教対象
 TFLAG:28 = 2
 ;-------------------------------------------------
 ;ソース추가処理
@@ -186,7 +190,38 @@ ELSE
 	PRINTW 몸을 비틀며、기절했다……
 ENDIF
 
-
+;浣腸器＋プラグ装着時
+IF TEQUIP:21
+	IF IS_MALE(TARGET)
+	PRINTFORM 睾丸
+	ELSE
+	PRINTFORM 股間
+	ENDIF
+	PRINTFORML への衝撃のあまり、%CALLNAME:TARGET%から肛門栓が勢いよく抜け、腸内の汚物を肛門から撒き散らした。
+	;마조끼
+	IF ABL:9 == 0
+		PRINTFORMW %CALLNAME:TARGET%は苦悶と恥辱の表情を浮かべている。
+	ELSEIF ABL:9 == 1
+		PRINTFORMW %CALLNAME:TARGET%は脂汗を浮かべ、いまだ下腹に残る排泄感に堪えている。
+	ELSEIF ABL:9 == 2
+		PRINTFORMW %CALLNAME:TARGET%は恥ずかしがりながらも、開放感にほっとした表情を浮かべている。
+	ELSEIF ABL:9 == 3
+		PRINTFORMW %CALLNAME:TARGET%は肛門を通り過ぎる排泄物の感覚に時折艶っぽい喘ぎ声を上げている。
+	ELSEIF ABL:9 == 4
+		PRINTFORMW %CALLNAME:TARGET%はうっとりした表情を浮かべ、排泄感を愉しんでいる。
+	ELSEIF ABL:9 >= 5
+		PRINTFORML %CALLNAME:TARGET%は排泄感と恥辱を心ゆくまで味わっている。
+		PRINTFORML %CALLNAME:TARGET%の表情は快感にだらしなく緩み、肛門から汚物をひりだすと同時に、
+		;オトコかどうかで分岐
+		IF IS_MALE(TARGET)
+			PRINTW ペニスからも我慢汁をダラダラと垂れ流している。
+		ELSE
+			PRINTW 膣口からも愛液をボタボタと滴らせている。
+		ENDIF
+	ENDIF
+;ここで浣腸器を外す
+TEQUIP:21 = 0
+ENDIF
 
 
 ;===================================================

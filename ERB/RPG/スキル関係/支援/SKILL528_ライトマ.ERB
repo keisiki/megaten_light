@@ -36,12 +36,12 @@ RETURN 10
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_528
+@SKILL_DECIDE_TYPE_528, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_528
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_528, ARG
 RETURN 0
 
 
@@ -71,7 +71,7 @@ SIF ARG == 1
 ;계승타입
 @SKILL_SUCCESSION_TYPE_528
 RETURN 5
-@継承조건無視_528
+@継承条件無視_528
 RETURN 1
 ;誰でも
 

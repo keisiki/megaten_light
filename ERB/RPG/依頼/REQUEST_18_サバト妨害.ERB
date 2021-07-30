@@ -241,7 +241,9 @@ ELSE
 			EXP:LOCAL:정액경험 = 5
 			EXP:LOCAL:펠라경험 = 10
 			EXP:LOCAL:고통쾌락경험 = 5
-			EXP:LOCAL:이상경험 = 2
+			EXP:LOCAL:긴박경험 = 5
+			CALL ADDS_ABNORMAL_EXP("처녀상실（강간）", LOCAL)
+			CALL SHOW_ABNORMAL_EXP , LOCAL, 0
 		ENDIF
 	ELSE
 		PRINTFORMW 움직일 수 있는 학생들은 어느 사이에 도망가고 있었다.

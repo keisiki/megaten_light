@@ -41,7 +41,7 @@ RETURN 0
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_3131
+@SKILL_DAMAGETYPE_3131, ARG
 RETURN 2
 
 
@@ -53,7 +53,7 @@ RETURN 1
 @SKILL_RANGE_3131,ARG
 RETURN 3
 
-;　범위　11명　2１열　3전체　4　적아군전체
+;　범위　1１체　2１열　3전체　4　적아군전체
 @SKILL_SPHERE_3131,ARG
 RETURN 1
 
@@ -112,7 +112,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,3131
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_3131
-PRINTL 적 하나에게 강력한 핵열 相性 데미지
+PRINTL 적 하나에게 강력한 핵열 상성 데미지
 
 @최대소지수_3131
 RETURN 10

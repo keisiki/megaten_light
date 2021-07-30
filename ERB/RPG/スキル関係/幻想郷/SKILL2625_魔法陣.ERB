@@ -31,16 +31,16 @@ RETURN 30
 
 ;　相性
 @SKILL_TYPE_2625,ARG
-RETURN 13
+RETURN 17
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2625
+@SKILL_DECIDE_TYPE_2625, ARG
 RETURN 2
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2625
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2625, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2625
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -113,9 +113,10 @@ RETURN 0
 
 
 CFLAG:ARG:방어강화 = MIN(32, CFLAG:ARG:방어강화 + 8)
+CFLAG:ARG:마법효과강화 = MIN(32, CFLAG:ARG:마법효과강화 + 4)
 
 
-PRINTFORML %CALLNAME:ARG%の방어힘が上がった！
+PRINTFORML %CALLNAME:ARG%의 방어력이 올랐다！
 
 ;====================================================
 ;実行内容ここまで
@@ -123,8 +124,8 @@ PRINTFORML %CALLNAME:ARG%の방어힘が上がった！
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2625
-PRINTL 魔法陣を전개し自身の방어힘を高める。
-PRINTL 요귀　サラの技。
+PRINTL 마법진을 전개하여 자신의 방어력을 올린다。
+PRINTL 요귀　사라의 기술。
 
 ;継承に필요な部位
 @継承部位_2625,ARG

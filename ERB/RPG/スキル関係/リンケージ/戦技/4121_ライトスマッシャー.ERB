@@ -36,11 +36,11 @@ SIF FLAG:공격횟수 == 1
 RETURN GET_TYPE_NUM("전술")
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4121
+@SKILL_DECIDE_TYPE_4121, ARG
 RETURN 0
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_4121
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_4121, ARG
 SIF FLAG:공격횟수 == 1
 	RETURN 2
 RETURN 1
@@ -77,7 +77,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4121, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4121,ARG
@@ -126,7 +126,7 @@ CALL ATTACK_SINGLE,ARG,POS(ARG:1),4121
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_4121
-PRINTL 적一体に전술相性＋파마相性のダメージ
+PRINTL 적 일체에 전술상성＋파마상성의 데미지
 
 ;継承に필요な部位
 @継承部位_4121,ARG
@@ -153,9 +153,9 @@ RETURN 1
 @참가조건표시_4121,ARG
 SELECTCASE ARG
 	CASE 1
-		PRINTFORM 파마系魔法
+		PRINTFORM 파마계마법
 	CASE 2
-		PRINTFORM 전술系1체物理
+		PRINTFORM 전술계 1체 물리
 ENDSELECT
 
 @発動者조건_4121 , ARG

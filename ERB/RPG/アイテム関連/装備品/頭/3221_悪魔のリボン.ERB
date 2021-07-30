@@ -23,6 +23,8 @@ RETURN 0
 @방어상성_3221,ARG,ARG:1 = -1
 
 SELECTCASE GET_TYPE(ARG)
+	CASE "파마"
+		RETURN 150
 	CASE "주살"
 		RETURN -100
 	CASE "화염"
@@ -30,8 +32,6 @@ SELECTCASE GET_TYPE(ARG)
 	CASE "빙결"
 		RETURN 75
 	CASE "전격"
-		RETURN 75
-	CASE "질풍"
 		RETURN 75
 ENDSELECT
 RETURN 100
@@ -105,11 +105,11 @@ RETURN 0
 RETURN 1
 
 @장비조건설명_3221
-PRINTL 장비조건：속성LC軸でCで女性でありLV40以上
+PRINTL 장비조건：속성LC축에서 C이고 여성이며 LV40이상
 
 @장비해설_3221
 ;説明
 
-PRINTL 주살を흡수し、魔法四속성への내성を持つ리본。
-PRINTL 마왕　幻月の수태아이템。
+PRINTL 주살을 흡수、마법 3속성에 내성을 가진 리본。파마에 약하다。
+PRINTL 마왕 겐게츠의 수태아이템。
 

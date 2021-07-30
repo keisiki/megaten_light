@@ -1,7 +1,7 @@
 ﻿
 ;스킬名
 @SKILL_NAME_1232,ARG
-RESULTS = 정신가드브레이커
+RESULTS = 정신가드브레이크
 
 ;　명중
 @SKILL_HITRATE_1232, ARG
@@ -34,12 +34,12 @@ RETURN GET_TYPE_NUM("정신")
 ;정신
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1232
+@SKILL_DECIDE_TYPE_1232, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1232
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1232, ARG
 RETURN 0
 
 

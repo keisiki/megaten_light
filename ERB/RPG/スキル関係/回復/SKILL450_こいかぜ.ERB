@@ -2,7 +2,7 @@
 
 ;스킬名
 @SKILL_NAME_450,ARG
-RESULTS = 연풍
+RESULTS = 코이카제
 
 ;　명중
 @SKILL_HITRATE_450, ARG
@@ -59,12 +59,12 @@ ENDIF
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_450
+@SKILL_DECIDE_TYPE_450, ARG
 RETURN 2
 ;声は魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_450
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_450, ARG
 RETURN 0
 
 
@@ -209,7 +209,7 @@ WAIT
 ;　 説明文の표시
 @SKILL_EXPLAIN_450
 PRINTL [회복] 아군 전체의 HP를 모두 회복하고, DYING을 제외한 상태이상을 치료한다.
-PRINTL 라이브로 「연풍」을 부른다. 가창능력에 따라 비용이 감소한다.
+PRINTL 라이브로 「코이카제」를 부른다. 가창능력에 따라 비용이 감소한다.
 
 ;継承に필요な部位
 @継承部位_450,ARG

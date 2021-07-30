@@ -4,15 +4,13 @@
 ;======================================================
 @기본능력수정_8052,ARG,ARG:1 = -1
 SELECTCASE GET_BASESTATUS(ARG)
-	CASE "인내력"
-		RETURN 2
 	CASE "속도"
-		RETURN 4
+		RETURN 12
 ENDSELECT
 RETURN 0
 
 @증가CP_8052
-RETURN 60
+RETURN 80
 
 @전투능력수정_8052,ARG,ARG:1 = -1
 SELECTCASE ARG
@@ -43,7 +41,7 @@ RETURN 1
 RETURN 0
 
 @필요레벨_8052
-RETURN 50
+RETURN 30
 
 @장비조건_8052,ARG
 RETURN 1
@@ -52,4 +50,4 @@ RETURN 1
 RETURN 0
 
 @장비해설_8052
-PRINTL 인내력과 속도가 오른다
+PRINTL 속도가 대폭 오른다

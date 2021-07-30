@@ -9,7 +9,7 @@ RESULTS = 열조
 RETURN 100
 
 ;高クリティカル
-@SKILL_CRITICAL_RATE_3508
+@SKILL_CRITICAL_RATE_3508, ARG
 RETURN 20
 
 ;　위력
@@ -39,12 +39,12 @@ RETURN GET_TYPE_NUM("전술")
 ;전술
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3508
+@SKILL_DECIDE_TYPE_3508, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3508
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3508, ARG
 RETURN 1
 
 
@@ -134,7 +134,7 @@ CALL DAMAGE_1,ARG,ARG,800,3,-100
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3508
-PRINTL 적と自分に전술속성の超特大ダメージ
+PRINTL 적과 자신에게 전술속성의 초특대 데미지
 ;継承に필요な部位
 @継承部位_3508,ARG
 RETURN 1

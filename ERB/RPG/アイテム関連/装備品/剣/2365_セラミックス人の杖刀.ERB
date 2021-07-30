@@ -21,10 +21,10 @@ SELECTCASE ARG
 ;회피
 	CASE 3
 		RETURN 30
-;魔法공격
+;마법공격
 	CASE 4
 		RETURN 120
-;魔法방어
+;마법방어
 	CASE 5
 		RETURN 40
 ENDSELECT
@@ -78,7 +78,7 @@ RETURN GET_EQUIPNUM("검")
 
 
 @장비조건_2365,ARG
-;指定레벨以下장비不可フラグ
+;指定레벨以下장비불가フラグ
 SIF BASE:ARG:LV < 50
 	RETURN 0
 RETURN 1
@@ -98,9 +98,13 @@ RETURN 1
 
 @장비해설_2365
 ;説明
-PRINTL 장비조건：Lv50〜　지변내성
-PRINTL 内側に刀を仕込んだ杖。特筆する기능はないが頑強で사거리が広い。
+PRINTL 장비조건：Lv50～　지변내성
+PRINTL 안쪽에 칼을 박은 지팡이。 특필할 능력은 없지만 완강하고 사거리가 넓다。
 PRINTL 
-PRINTL 병장　조토구 마유미の수태아이템。
+PRINTL 병장　조토구 마유미의 수태아이템。
 
 
+@검타입_2365
+;1 = 刀　2 =레이피어　3 = 弓　　　　4 = 검　5 = 槍　　　6 = 斧、鈍器
+;7 = 채찍　8 =投具　　　9 = 杖、祭具　10= 棍　11= 拳闘具
+RETURN 1

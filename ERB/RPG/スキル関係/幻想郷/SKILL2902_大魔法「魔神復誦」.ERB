@@ -39,13 +39,13 @@ RETURN 45
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2902
+@SKILL_DECIDE_TYPE_2902, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2902
-RETURN 0
+@SKILL_DAMAGETYPE_2902, ARG
+RETURN 2
 
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -149,7 +149,7 @@ PRINTFORMW 　　TARGET:[{ARG,2}] %CALLNAME:ARG,20,LEFT%　>>>>>>　전 능력 �
 ;　 설명文の표시
 @SKILL_EXPLAIN_2902
 PRINTL 자신의 전능력을 상승시키고、다음에 행하는 공격의 위력이 2.5배가 된다
-PRINTL 초인　히지리 뱌큐렌의 스펠카드（승계）
+PRINTL 초인　히지리 뱌큐렌의 스펠카드（전용）
 
 ;継承に필요한部位
 @継承部位_2902,ARG

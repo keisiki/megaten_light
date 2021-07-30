@@ -139,13 +139,13 @@ ENDSELECT
 CALLF STRFLAG_NUM_D("조사선位置", "=", , 0)
 IF STRFLAG_NUM_D("슈바르츠바스進行度") == 0
 	CALL MESSAGE_WINDOW_D, "", "………………/…………/……/"
-	CALL MESSAGE_WINDOW_D, "", "＞슈바르츠바스에 돌입할 수 있게 된 모양이다。/＞아무래도 미팅이 시작될 것같다…。"
+	CALL MESSAGE_WINDOW_D, "", "＞슈바르츠바스에 돌입할 수 있게 된 모양이다。/＞아무래도 미팅이 시작될 것 같다…。"
 	CALL MESSAGE_WINDOW_D, "조사대대장", "제군、내가 슈바르츠바스 조사대의 대장이다。/우리의 임무는 섹터・카리나의 양자 터널로 가는 길의 확보다。/조심해서 가라。"
 	CALLF STRFLAG_NUM_D("슈바르츠바스進行度", "+=", , 1)
 ELSEIF STRFLAG_NUM_D("슈바르츠바스進行度") == 7
 	CALL MESSAGE_WINDOW_D, "", "………………/…………/……/"
-	CALL MESSAGE_WINDOW_D, "", "＞슈바르츠바스に突入できたようだ。/＞どうやらミーティングが始まるようだ…。"
-	CALL MESSAGE_WINDOW_D, "調査隊隊長", @"来たか、%CALLNAME:MASTER%。/聞いていると思うが、我々の목적はロゼッタ:Delの確保だ。/すでに調査に向かっているものもいる。準備ができ次第、調査に行きたまえ。"
+	CALL MESSAGE_WINDOW_D, "", "＞슈바르츠바스에 돌입할 수 있게 된 모양이다。/＞아무래도 미팅이 시작될 것 같다…。"
+	CALL MESSAGE_WINDOW_D, "조사대대장", @"왔는가、%CALLNAME:MASTER%。/이미 들었다고는 생각하지만、우리의 임무는 로제타:Del의 확보이다。/이미 조사하러 간 인원들도 있다。준비가 되는 대로、조사에 합류할 수 있도록 해라。"
 	CALLF STRFLAG_NUM_D("슈바르츠바스進行度", "+=", , 1)
 	CALLF STRFLAG_D("デルファイナス가능", 1)
 	
@@ -253,7 +253,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 100000
 			CALL MESSAGE_WINDOW_D, "남자", "어이、너！/자살이라도 할 생각이냐？/나쁘게 말하는게 아니니、터미널에서 데모니카를 기동하고 와"
 					FLAG:現X -= 1
 				ELSEIF STRFLAG_NUM_D("조사선位置") != 0
-					PRINTW 탐색に行きますか？
+					PRINTW 탐색에 나가시겠습니까？
 					CALL INPUT_YN
 					IF RESULT == 0
 				CALL MESSAGE_WINDOW_D, "남자", "조심해서 다녀와라/"
@@ -441,31 +441,31 @@ SELECTCASE ARG / 10000
 			;------------------------------
 			CASE 1800
 				IF STRFLAG_NUM_D("크르스니크") == 2
-					CALL MESSAGE_WINDOW_D, "크르스니크", "よく来てくれました。/この奥に쿠드락がいます。/準備はよろしいですか？"
-					CALL MESSAGE_WINDOW_D, "", "＞部屋に突入しますか？"
+					CALL MESSAGE_WINDOW_D, "크르스니크", "잘 와주셨습니다。/이 안쪽에 쿠드락이 있습니다。/준비는 되셨습니까？"
+					CALL MESSAGE_WINDOW_D, "", "＞방에 돌입하시겠습니까？"
 					CALL INPUT_YN_D
 					IF RESULT == 0
-						CALL MESSAGE_WINDOW_D, "크르스니크", "よし、行きましょう！"
-						CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%は쿠드락と共に部屋に入った。"
+						CALL MESSAGE_WINDOW_D, "크르스니크", "자、들어가도록 합시다！"
+						CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%은 크르스니크와 함께 방으로 들어갔다。"
 						CALL SHOW_FORCEMOVE, "RR", "D", , ,  ""
 						CALLFORM EVENT_ENTER_DUNGEON_{FLAG:現던전},0
 					ELSE
-						CALL MESSAGE_WINDOW_D, "크르스니크", "準備ができたら声をかけてください。"
+						CALL MESSAGE_WINDOW_D, "크르스니크", "준비가 되신다면 저에게 말을 걸어 주십시오。"
 						RETURN 0
 					ENDIF
 				ENDIF
 			CASE 1801
 				IF STRFLAG_NUM_D("쿠드락") == 2
-					CALL MESSAGE_WINDOW_D, "", "＞쿠드락の의뢰を受けている今、/크르스니크に会うのは危険だろう…。"
-					CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%は引き返した…。"
+					CALL MESSAGE_WINDOW_D, "", "＞쿠드락의 의뢰를 받은 지금、/크르스니크에게 접근하는 것은 위험하겠지…。"
+					CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%는 발길을 돌렸다…。"
 					RETURN 0
 				ENDIF
 			CASE 2100
 				IF STRFLAG_NUM_D("아수라入입") < 4
-					CALL MESSAGE_WINDOW_D, "", "＞扉は閉じられている…。"
+					CALL MESSAGE_WINDOW_D, "", "＞방은 굳게 닫혀있다…。"
 					RETURN 0
 				ELSEIF STRFLAG_NUM_D("아수라入입") == 4
-					CALL MESSAGE_WINDOW_D, "", "＞この先から恐ろしい気配を感じる…。/＞先に進みますか？"
+					CALL MESSAGE_WINDOW_D, "", "＞이 앞에서부터 무서운 기색이 느껴진다…。/＞앞으로 나아가시겠습니까？"
 					CALL INPUT_YN_D
 					SIF RESULT
 						RETURN 0
@@ -479,8 +479,8 @@ SELECTCASE ARG / 10000
 		IF STRFLAG_NUM_D(@"隠し扉{LOCAL}") == 0
 			RETURN 0
 		ELSEIF STRFLAG_NUM_D(@"隠し扉{LOCAL}") == 1 && EQUIP:MASTER:게이트서치 == 1
-			CALL MESSAGE_WINDOW_D, "", "＞데모니카アプリが壁に反応している…。"
-			CALL MESSAGE_WINDOW_D, "", "＞隠されていた扉を発見した！"
+			CALL MESSAGE_WINDOW_D, "", "＞데모니카 어플리케이션이 벽에 반응하고 있다…。"
+			CALL MESSAGE_WINDOW_D, "", "＞숨겨진 문을 발견했습니다！"
 			CALLF STRFLAG_NUM_D(@"隠し扉{LOCAL}", "+=", , 1)
 			RETURN 0
 		ELSEIF STRFLAG_NUM_D(@"隠し扉{LOCAL}") == 2
@@ -536,7 +536,7 @@ ELSEIF LOCALS == "마카"
 ELSEIF LOCALS == "MAG" || LOCALS == "ＭＡＧ"
 	CALL GET_TREASURE_MAG, 0, LOCAL, FLAG:現던전, FLAG:現M + 25, (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100
 ELSEIF LOCALS == "덫"
-	;LOCALS:1 종류 LOCAL ダメージ量or확률 LOCALS:2 相性
+	;LOCALS:1 종류 LOCAL 데미지量or확률 LOCALS:2 相性
 	CALL GET_TREASURE_TRAP, LOCALS:1, LOCAL, GET_TYPE_NUM(LOCALS:2), FLAG:現던전, FLAG:現M + 25, (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100
 ELSE
 	IF GETNUM(ITEM, LOCALS) == -1
@@ -672,7 +672,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL MESSAGE_WINDOW_D, "", "＞아무래도 힘으로 빼앗을 수 밖엔 없는 것 같다…。/억지로 빼앗습니까？？/"
 			CALL INPUT_YN_D
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "아귀", "あ？/やる気かオラァ！/いいぜ、かかってこいやぁ！"
+				CALL MESSAGE_WINDOW_D, "아귀", "앙？/해보자는 거냐！/좋다고、덤벼 보시던가！"
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
@@ -694,24 +694,25 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL MESSAGE_WINDOW_D, "", "＞쓰레기의 산이 있다。/＞도움이 될 만한 건 없었다"
 		ENDIF
 	CASE 1601
-		IF !STRFLAG_D("쿠・훌린撃破")
-			IF !STRFLAG_D("쿠・훌린初回")
+		IF !STRFLAG_D("쿠･훌린撃破")
+			IF !STRFLAG_D("쿠･훌린初回")
 				CALL MESSAGE_WINDOW_D, "", "＞아름다운 용모의 남자가 있다"
-				CALL MESSAGE_WINDOW_D, "남자", "흠、인간입니까/나는 쿠・훌린/그림자 나라에서 수련중인 기사 중 한 명입니다"
-				CALL MESSAGE_WINDOW_D, "쿠・훌린", "그런데 이런 땅에 있는 이상、/당신도 상응하는 솜씨를 가지고 있을거라 판단됩니다/"
+				CALL MESSAGE_WINDOW_D, "남자", "흠、인간입니까/나는 쿠･훌린/그림자 나라에서 수련중인 기사 중 한 명입니다"
+				CALL MESSAGE_WINDOW_D, "쿠･훌린", "그런데 이런 땅에 있는 이상、/당신도 상응하는 솜씨를 가지고 있을거라 판단됩니다/"
 				CALL MESSAGE_WINDOW_D, "", "실은 제 스승의 생명을 노리는 무리와 일전을 치뤘으나、/기대에 못 미쳤던터라/투쟁에 목마른 반신의 피가 다스려지지 않아/주체를 못하고 있습니다"
 				CALL MESSAGE_WINDOW_D, "", "괜찮다면、한 수 부탁해도 되겠습니까？/만약 나를 패배시키면 상응하는 답례도 해드리겠습니다"
+				CALLF STRFLAG_D("쿠･훌린初回", 1)
 			ELSE
-				CALL MESSAGE_WINDOW_D, "쿠・훌린", "이런、기분이 바뀌셨습니까？"
-				IF STRFLAG_D("쿠・훌린食事")
+				CALL MESSAGE_WINDOW_D, "쿠･훌린", "이런、기분이 바뀌셨습니까？"
+				IF STRFLAG_D("쿠･훌린食事")
 					CALL MESSAGE_WINDOW_D, "", "그렇지 않으면 또 다시、나에게 맹세를 지키게 만들려는 꿍꿍이인 겁니까？"
-					CALL MESSAGE_WINDOW_D, "", "＞쿠・훌린은 쿡쿡 웃고 있다"
+					CALL MESSAGE_WINDOW_D, "", "＞쿠･훌린은 쿡쿡 웃고 있다"
 				ENDIF
 			ENDIF
 			CALL INPUT_SELECT_D, "[0] Yes/[1] No/[2] 식사를 권한다"
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "쿠・훌린", "그럼、쿨란의 맹견이라 불린 내 힘과 기술、보여드리지요！"
-				CALL MESSAGE_WINDOW_D, "", "＞영웅 쿠・훌린이 １체 나타났다！"
+				CALL MESSAGE_WINDOW_D, "쿠･훌린", "그럼、쿨란의 맹견이라 불린 내 힘과 기술、보여드리지요！"
+				CALL MESSAGE_WINDOW_D, "", "＞영웅 쿠･훌린이 １체 나타났다！"
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
@@ -727,27 +728,27 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
 				CALL SHOW_PICTURE, "D"
-				CALL MESSAGE_WINDOW_D, "쿠・훌린", "……훌륭합니다/피가 끓고 근육이 춤을 추게 만든다는 것이 바로 이런것이군요。/즐거웠습니다"
+				CALL MESSAGE_WINDOW_D, "쿠･훌린", "……훌륭합니다/피가 끓고 근육이 춤을 추게 만든다는 것이 바로 이런것이군요。/즐거웠습니다"
 				CALL MESSAGE_WINDOW_D, "", "그래、내가 패했으니 약속을 지키지 않으면 안되겠군요/이것을 드리겠습니다。받아주시겠습니까？"
-				CALL MESSAGE_WINDOW_D, "", @"＞이렇게 말하며 쿠・훌린은 무언가를 꺼내 내밀었다/＞%플레이어는()% 내민 것을 받았다"
+				CALL MESSAGE_WINDOW_D, "", @"＞이렇게 말하며 쿠･훌린은 무언가를 꺼내 내밀었다/＞%플레이어는()% 내민 것을 받았다"
 				CALL MESSAGE_WINDOW_D, "", "＞힘의 향을 받았다."
-				CALL MESSAGE_WINDOW_D, "쿠・훌린", "그럼、/또 머지않아 볼 일이 있겠지요"
-				CALL MESSAGE_WINDOW_D, "", "＞그렇게 말하며 쿠・훌린은 떠나갔다…。"
+				CALL MESSAGE_WINDOW_D, "쿠･훌린", "그럼、/또 머지않아 볼 일이 있겠지요"
+				CALL MESSAGE_WINDOW_D, "", "＞그렇게 말하며 쿠･훌린은 떠나갔다…。"
 				CALL GET_ITEMS, "힘의향", 1
-				CALLF STRFLAG_D("쿠・훌린撃破", 1)
+				CALLF STRFLAG_D("쿠･훌린撃破", 1)
 				DA:(FLAG:現X):(FLAG:現Y) = 1
 			ELSEIF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "쿠・훌린", "유감입니다/만약 기분이 바뀌신다면 이곳을 방문해 주세요/잠시 여기에 있을 생각인지라"
-				CALLF STRFLAG_D("쿠・훌린初回", 1)
+				CALL MESSAGE_WINDOW_D, "쿠･훌린", "유감입니다/만약 기분이 바뀌신다면 이곳을 방문해 주세요/잠시 여기에 있을 생각인지라"
+				CALLF STRFLAG_D("쿠･훌린初回", 1)
 			ELSE
-				IF !STRFLAG_D("쿠・훌린食事")
-					CALL MESSAGE_WINDOW_D, "쿠・훌린", "……흠/설마 내 맹약이 알려져 있을 줄이야/내가 기사고、당신이 세상에 사는 민초인 이상、거절할 수 없습니다/그럼、갑시다。/사람과 함께하는 식사는 언제든 즐겁습니다"
-					CALL MESSAGE_WINDOW_D, "", "＞쿠・훌린과 식사를 즐겼다"
+				IF !STRFLAG_D("쿠･훌린食事")
+					CALL MESSAGE_WINDOW_D, "쿠･훌린", "……흠/설마 내 맹약이 알려져 있을 줄이야/내가 기사고、당신이 세상에 사는 민초인 이상、거절할 수 없습니다/그럼、갑시다。/사람과 함께하는 식사는 언제든 즐겁습니다"
+					CALL MESSAGE_WINDOW_D, "", "＞쿠･훌린과 식사를 즐겼다"
 				ELSE
-					CALL MESSAGE_WINDOW_D, "쿠・훌린", "크、거절할 수 없다는 걸 알고 있으면서 비겁한/……이랄 줄 알았나。그런 시치미 떼는 점은 싫어하진 않아요/그럼 갑시다"
+					CALL MESSAGE_WINDOW_D, "쿠･훌린", "크、거절할 수 없다는 걸 알고 있으면서 비겁한/……이랄 줄 알았나。그런 시치미 떼는 점은 싫어하진 않아요/그럼 갑시다"
 				ENDIF
-				CALLF STRFLAG_D("쿠・훌린初回", 1)
-				CALLF STRFLAG_D("쿠・훌린食事", 1)
+				CALLF STRFLAG_D("쿠･훌린初回", 1)
+				CALLF STRFLAG_D("쿠･훌린食事", 1)
 				FLAG:탈출 = 1
 			ENDIF
 		ENDIF
@@ -756,11 +757,11 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	;デルファイナス
 	;------------------------------
 	CASE 1700, 2200, 2201, 2300, 2303
-		CALL MESSAGE_WINDOW_D, "", "＞スイッチがある/＞押しますか？"
+		CALL MESSAGE_WINDOW_D, "", "＞스위치가 있다/＞누르시겠습니까？"
 		CALL INPUT_YN
 		IF RESULT == 0
-			CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%はスイッチを押した…"
-			CALL MESSAGE_WINDOW_D, "", "＞ズゥゥゥン…/＞どこかで大きな音がした…"
+			CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는 스위치를 눌렀다…"
+			CALL MESSAGE_WINDOW_D, "", "＞즈우우웅…/＞어디선가 큰 소리가 들렸다…"
 			IF STRFLAG_NUM_D(@"Ｄスイッチ{FLAG:現M}") == 0
 				CALLF STRFLAG_NUM_D(@"Ｄスイッチ{FLAG:現M}", "=", , 1)
 			ELSEIF STRFLAG_NUM_D(@"Ｄスイッチ{FLAG:現M}") == 1
@@ -769,17 +770,17 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL SHOW_FLOOR
 			CALL AUTOMAP
 		ELSEIF RESULT == 1
-			CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%はスイッチを押さなかった"
+			CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는 스윗치를 누르지 않았다"
 		ENDIF
 	CASE 1701
 		IF STRFLAG_NUM_D("크르스니크") == 2
-			CALL MESSAGE_WINDOW_D, "크르스니크", "쿠드락よ、/今日この場が、オマエの墓場だ！"
-			CALL MESSAGE_WINDOW_D, "쿠드락", "…き、キサマ…？/…キサマぁあああぁぁぁ！？/なぜ…何ゆえにぃいいいっ…！"
-			CALL MESSAGE_WINDOW_D, "", "オレは、まだここで終わりたくない！/死ぬなんて、死んでもゴメンだぁぁ！/殺されるくらいなら死んだほうがマシだぁ！"
-			CALL MESSAGE_WINDOW_D, "크르스니크", "……何を逃げようとしている？/白き羊膜の힘を感じ取ったか？/そこを動くな！わが宿命、今こそ終わらせる！"
-			CALL MESSAGE_WINDOW_D, "", "待て、逃がさんぞ！/쿠드락！"
-			CALL MESSAGE_WINDOW_D, "쿠드락", "イカン、イカン、イカン！これはまことにイカンぞぉぉぉ！/こんな地は、もうオサラバ！オマエとオレと、どのオサラバが早いか、/いざ勝負ぅぅぅぅ！"
-			CALL MESSAGE_WINDOW_D, "", "＞유귀　쿠드락が一体出た！"
+			CALL MESSAGE_WINDOW_D, "크르스니크", "쿠드락이여、/오늘 이 자리가、너의 무덤이다！"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "…네、네녀석…？/…네녀석이이이이이！？/어째…어째서냐아아앗…！"
+			CALL MESSAGE_WINDOW_D, "", "나는、아직 여기서 끝나고 싶지 않다！/네녀석에게 살해당한다니、죽는다해도 사절이다아앗！/살해당할 바에야 죽는 편이 낫다아！"
+			CALL MESSAGE_WINDOW_D, "크르스니크", "……어째서 도망치려고 하는 거지？/백색의 양맥의 힘을 알아챈 것인가？/거기에서 움직이지 마라！나의 숙명、이번에야말로 끝내주마！"
+			CALL MESSAGE_WINDOW_D, "", "기다려라、놓치지 않겠다！/쿠드락！"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "유감、유감、유감스럽기 짝이 없다！이건 정말 유감스럽기 짝이 없는 일이다아앗！/이런 땅 따위、이제 작별이다！네녀석과 나、어느 쪽이 세상에서 빨리 작별하는지、/지금 승부하자아아！"
+			CALL MESSAGE_WINDOW_D, "", "＞유귀　쿠드락이 1기 출현했다！"
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
@@ -788,15 +789,15 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				FLAG:도주불가フラグ = 0
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
-			CALL MESSAGE_WINDOW_D, "쿠드락", "な…크르스니크ぅぅぅ！/オレは…オレはぁぁぁぁぁっ！/死ぬるぷしゅ…！"
-			CALL MESSAGE_WINDOW_D, "크르스니크", "さらばだ、쿠드락…。"
-			CALL MESSAGE_WINDOW_D, "", "…終わったな。/貴方たちには世話になった。/私の役눈は終わったが…。"
-			CALL MESSAGE_WINDOW_D, "", "お礼ですが、私の힘をお貸しする、というのはいかがでしょうか？/당신の힘になれると思いますが、いかがでしょうか？"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "으…크르스니크으으！/나는…나아아느은！/죽는푸슈우…！"
+			CALL MESSAGE_WINDOW_D, "크르스니크", "작별이다、쿠드락…。"
+			CALL MESSAGE_WINDOW_D, "", "…끝났군。/그대에게도 신세졌습니다。/저의 역할은 끝났습니다만…。"
+			CALL MESSAGE_WINDOW_D, "", "답례라고 하기는 뭐하지만、저의 힘을 빌려드린다는 것은 어떻습니까？/당신에게 힘이 될수 있다고 생각합니다만, 어떠신지요？"
 			CALL INPUT_YN("歓迎する","断る")
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "크르스니크", "ありがとうございます。では、改めまして、"
-				CALL MESSAGE_WINDOW_D, "", "私の名は크르스니크、今後ともよろしく…"
-				CALL MESSAGE_WINDOW_D, "", "＞크르스니크が仲間になった。"
+				CALL MESSAGE_WINDOW_D, "크르스니크", "감사합니다。그렇다면、다시 한번、"
+				CALL MESSAGE_WINDOW_D, "", "제 이름은 크르스니크、앞으로도 잘 부탁드립니다…"
+				CALL MESSAGE_WINDOW_D, "", "＞크르스니크가 동료마가 되었다。"
 				CALL ADD_NEW_COMPANION, 468, 2000, 1
 				BASE:(RESULT:1):LV = 44
 				BASE:(RESULT:1):힘 += 6
@@ -805,134 +806,142 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				BASE:(RESULT:1):인내력 += 6
 				BASE:(RESULT:1):속도 += 6
 				BASE:(RESULT:1):운 += 6
+				MAXBASE:(RESULT:1):힘 += 6
+				MAXBASE:(RESULT:1):마력 += 6
+				MAXBASE:(RESULT:1):지혜 += 6
+				MAXBASE:(RESULT:1):인내력 += 6
+				MAXBASE:(RESULT:1):속도 += 6
+				MAXBASE:(RESULT:1):운 += 6
 			ELSEIF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "크르스니크", "そうですか…。/わかりました。では、私は당신の調査がよくなる事をお祈りします。/またどこかでお会いしましょう。"
-				CALL MESSAGE_WINDOW_D, "", "＞크르스니크は去って行った…。"
+				CALL MESSAGE_WINDOW_D, "크르스니크", "그렇습니까…。/알겠습니다。그렇다면、저는 당신의 조사가 잘 되어가기를 기도하겠습니다。/다시 어디선가 만납시다。"
+				CALL MESSAGE_WINDOW_D, "", "＞크르스니크가 떠나갔다…。"
 				CALLF STRFLAG_D("크르스니크非仲魔", 1)
 			ENDIF
 			CALLF STRFLAG_NUM_D("크르스니크", "+=", , 1)
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 		ELSEIF STRFLAG_NUM_D("쿠드락") == 0
 			CALLF STRFLAG_NUM_D("쿠드락", "+=", , 1)
-			CALL MESSAGE_WINDOW_D, "악마", "ククク…。またニンゲンがやってくるとはねぇ。/当面の危機を脱したら、その危機を힘にしようとはねぇ…。/実に罪深いねぇ、ククク。"
-			CALL MESSAGE_WINDOW_D, "", "まぁ、だからこそニンゲン、とも言えるなァ。/この쿠드락様も関心するよ、本当に。"
-			CALL MESSAGE_WINDOW_D, "쿠드락", "ところでニンゲンよ、このオレ様の의뢰を受けないか？/ここより東側に、크르스니크ってヤツがいるんだが、/そいつはオレ様とかみたいな흡혈귀を狩る흡혈귀ハンターなんだ。"
-			CALL MESSAGE_WINDOW_D, "", "普段なら返り討ちにしちまうんだが、今はちょっとマズイんだ。/前にニンゲンどもがやってきたときに、ホーソンスピアを손に入れてやがる。/あれでとどめをさされると、オレ様は復活できないんだ。"
-			CALL MESSAGE_WINDOW_D, "", "こっちの무기はヤツとやりあったときに壊れちまった。/そこで、ちょっと손をかりたいんだが、いいか？/"
-			CALL MESSAGE_WINDOW_D, "", "전염병생산っつー스킬카드があるんだが、それを손に入れて欲しい。/입수が大変なのはわかっている。だが、それに見合う礼はしよう。"
-			CALL MESSAGE_WINDOW_D, "", "＞쿠드락の의뢰を受けますか？"
+			CALL MESSAGE_WINDOW_D, "악마", "크크큭…。다시 인간이 찾아올줄이야。/당면한 위기를 벗어난다면、그 위기를 힘으로 만드는 족속이지…。/정말로 죄에 찌들어 있는 듯한 몰골이군、크크큭。"
+			CALL MESSAGE_WINDOW_D, "", "뭐어、그러니까 인간이겠지、라고도 말할 수 있겠군。/이 쿠드락님께서도 너에게 관심이 많다고、정말로。"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "그래서 인간이여、이몸의 의뢰를 받지 않겠는가？/여기서 동쪽으로 가면、크르스니크라고 불리는 녀석이 있다만、/그녀석은 이몸과 같은 흡혈귀를 사냥하는 뱀파이어 헌터다。"
+			CALL MESSAGE_WINDOW_D, "", "평소라면 나에게 복수를 하려다가 도리어 보복당해 죽겠지만、오늘은 조금 위험하다。/전에 인간 놈들이 왔다갔을 때、호손 스피어를 놈에게 건네준 듯하다。/저것으로 결정타를 맞는다면、이몸이라도 부활이 불가능하다。"
+			CALL MESSAGE_WINDOW_D, "", "이쪽의 무기는 녀석과 붙었을 때 부서져 버렸다。/그래서、조금 손을 빌리고 싶다만、좋은가？/"
+			CALL MESSAGE_WINDOW_D, "", "전염병생산의 스킬카드를 가지고 있다면、그것을 손에 넣고 싶다。/입수가 힘들다는 것은 알고 있다。하지만、그 가치와 합당한 보상은 하겠다。"
+			CALL MESSAGE_WINDOW_D, "", "＞쿠드락의 의뢰를 받겠습니까？"
 			CALL INPUT_YN_D
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "쿠드락", "ククク、ありがたい。/それじゃ、스킬카드を持ってきてくれ。"
+				CALL MESSAGE_WINDOW_D, "쿠드락", "크크큭、고맙군。/그럼、스킬카드를 가져다 다오。"
 				CALLF STRFLAG_NUM_D("쿠드락", "+=", , 1)
 				IF ITEM:12075 >= 1
-					CALL MESSAGE_WINDOW_D, "", "＞쿠드락に스킬카드【전염병생산】を渡しますか？"
+					CALL MESSAGE_WINDOW_D, "", "＞쿠드락에게 스킬카드【전염병생산】을 건네주시겠습니까？"
 					CALL INPUT_YN_D
 					IF RESULT == 0
-						CALL MESSAGE_WINDOW_D, "쿠드락", "ほほぅ、これが…。ありがたく使わせてもらおう。/よくやったな。これでオレ様はあの크르스니크に勝つことができる。"
-						CALL MESSAGE_WINDOW_D, "", "よし、これからヤツを倒すため、ヤツのところに乗り込むか。/この戦いはおれ様の勝利で幕を下ろす。/そして疫病に満ちた黒き混沌の세계が始まるのさ。/ククククク…。"
-						CALL MESSAGE_WINDOW_D, "", "後から追いかけてこい。/最高の瞬間を見せてやる。/ククククク…。"
-						CALL MESSAGE_WINDOW_D, "", "＞쿠드락は去っていった…。/쿠드락の後を追いかければ、「最高の瞬間」が見られるとのことだ…"
+						CALL MESSAGE_WINDOW_D, "쿠드락", "흐흐、이것이…。고맙게 쓰도록 하지。/잘해주었구나。이걸로 이몸은 그 크르스니크에게 이길 수 있을 것이다。"
+						CALL MESSAGE_WINDOW_D, "", "좋아、이제 녀석을 쓰러트리기 위해、녀석의 거처를 급습하도록 할까。/이 싸움은 이몸의 승리로 막을 내릴 것이다。/그리고 역병에 가득찬 흑색의 혼돈의 세계의 시작이겠지。/크크크크큭…。"
+						CALL MESSAGE_WINDOW_D, "", "뒤에서 쫒아오도록 해라。/최고의 순간을 보여주겠다。/크크크크큭…。"
+						CALL MESSAGE_WINDOW_D, "", "＞쿠드락은 떠나갔다…。/쿠드락의 뒤를 쫒아가면、「최고의 순간」를 볼 수 있다고 했었다…"
 						CALLF STRFLAG_NUM_D("쿠드락", "+=", , 1)
 						ITEM:12075 -= 1
 						DA:(FLAG:現X):(FLAG:現Y) = 1
 					ELSE
-						CALL MESSAGE_WINDOW_D, "", "どうした？스킬카드は손に入ったか？/期待はしてないこともないぞ。"
+						CALL MESSAGE_WINDOW_D, "", "뭐냐？스킬카드는 입수했는가？/기대를 하지 않은 것도 아니었다만。"
 					ENDIF
 				ELSE
-					CALL MESSAGE_WINDOW_D, "", "期待はしてないこともないぞ。"
+					CALL MESSAGE_WINDOW_D, "", "기대를 하지 않은 것도 아니었다만。"
 				ENDIF
 			ELSE
-				CALL MESSAGE_WINDOW_D, "쿠드락", "何！？オレ様の頼みを拒否するのか…。/長生きできないぞ、ククク…。"
+				CALL MESSAGE_WINDOW_D, "쿠드락", "뭐라고！？이몸의 부탁을 거절하는 것인가…。/오래 살지 못할 거라고、크크큭…。"
 			ENDIF
 		ELSEIF STRFLAG_NUM_D("쿠드락") == 1
-			CALL MESSAGE_WINDOW_D, "쿠드락", "気が変わったか？/크르스니크のヤツを倒すのに전염병생산の스킬카드が필요だ。/입수が大変なのはわかっている。だが、それに見合う礼はしよう。"
-			CALL MESSAGE_WINDOW_D, "", "＞쿠드락の의뢰を受けますか？"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "생각이 바뀌었는가？/크르스니크 녀석을 쓰러트리는 데에 전염병생산의 스킬카드가 필요하다。/입수가 힘들다는 것은 알고 있다。하지만、그 가치와 합당한 보상은 하겠다。"
+			CALL MESSAGE_WINDOW_D, "", "＞쿠드락의 의뢰를 받겠습니까？"
 			CALL INPUT_YN_D
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "쿠드락", "ククク、ありがたい。/それじゃ、스킬카드を持ってきてくれ。"
+				CALL MESSAGE_WINDOW_D, "쿠드락", "크크큭、고맙군。/그럼、스킬카드를 가져다 다오。"
 				CALLF STRFLAG_NUM_D("쿠드락", "+=", , 1)
 				IF ITEM:12075 >= 1
-					CALL MESSAGE_WINDOW_D, "", "＞쿠드락に스킬카드【전염병생산】を渡しますか？"
+					CALL MESSAGE_WINDOW_D, "", "＞쿠드락에게 스킬카드【전염병생산】을 건네주시겠습니까？"
 					CALL INPUT_YN_D
 					IF RESULT == 0
-						CALL MESSAGE_WINDOW_D, "쿠드락", "ほほぅ、これが…。ありがたく使わせてもらおう。/よくやったな。これでオレ様はあの크르스니크に勝つことができる。"
-						CALL MESSAGE_WINDOW_D, "", "よし、これからヤツを倒すため、ヤツのところに乗り込むか。/この戦いはおれ様の勝利で幕を下ろす。/そして疫病に満ちた黒き混沌の세계が始まるのさ。/ククククク…。"
-						CALL MESSAGE_WINDOW_D, "", "後から追いかけてこい。/最高の瞬間を見せてやる。/ククククク…。"
-						CALL MESSAGE_WINDOW_D, "", "＞쿠드락は去っていった…。/쿠드락の後を追いかければ、「最高の瞬間」が見られるとのことだ…"
+						CALL MESSAGE_WINDOW_D, "쿠드락", "흐흐、이것이…。고맙게 쓰도록 하지。/잘해주었구나。이걸로 이몸은 그 크르스니크에게 이길 수 있을 것이다。"
+						CALL MESSAGE_WINDOW_D, "", "좋아、이제 녀석을 쓰러트리기 위해、녀석의 거처를 급습하도록 할까。/이 싸움은 이몸의 승리로 막을 내릴 것이다。/그리고 역병에 가득찬 흑색의 혼돈의 세계의 시작이겠지。/크크크크큭…。"
+						CALL MESSAGE_WINDOW_D, "", "뒤에서 쫒아오도록 해라。/최고의 순간을 보여주겠다。/크크크크큭…。"
+						CALL MESSAGE_WINDOW_D, "", "＞쿠드락은 떠나갔다…。/쿠드락의 뒤를 쫒아가면、「최고의 순간」를 볼 수 있다고 했었다…"
 						CALLF STRFLAG_NUM_D("쿠드락", "+=", , 1)
 						ITEM:12075 -= 1
 						DA:(FLAG:現X):(FLAG:現Y) = 1
 					ELSE
-						CALL MESSAGE_WINDOW_D, "", "どうした？스킬카드は손に入ったか？/期待はしてないこともないぞ。"
+						CALL MESSAGE_WINDOW_D, "", "뭐냐？스킬카드를 입수했는가？/기대를 하지 않은 것도 아니었다만。"
 					ENDIF
 				ELSE
-					CALL MESSAGE_WINDOW_D, "", "期待はしてないこともないぞ。"
+					CALL MESSAGE_WINDOW_D, "", "기대를 하지 않은 것도 아니었다만。"
 				ENDIF
 			ELSE
-				CALL MESSAGE_WINDOW_D, "쿠드락", "何！？オレ様の頼みを拒否するのか…。/長生きできないぞ、ククク…。"
+				CALL MESSAGE_WINDOW_D, "쿠드락", "뭐라고！？이몸의 부탁을 거절하는 것인가…。/오래 살지 못할 거라고、크크큭…。"
 			ENDIF
 		ELSEIF STRFLAG_NUM_D("쿠드락") == 2
-			CALL MESSAGE_WINDOW_D, "쿠드락", "うむ。キサマか。/どうだ、손に入ったか？"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "음。네놈인가。/어떤가、입수했는가？"
 			IF ITEM:12075 >= 1
-				CALL MESSAGE_WINDOW_D, "", "＞쿠드락に스킬카드【전염병생산】を渡しますか？"
+				CALL MESSAGE_WINDOW_D, "", "＞쿠드락에게 스킬카드【전염병생산】을 건네주시겠습니까？"
 				CALL INPUT_YN_D
 				IF RESULT == 0
-					CALL MESSAGE_WINDOW_D, "쿠드락", "ほほぅ、これが…。ありがたく使わせてもらおう。/よくやったな。これでオレ様はあの크르스니크に勝つことができる。"
-					CALL MESSAGE_WINDOW_D, "", "よし、これからヤツを倒すため、ヤツのところに乗り込むか。/この戦いはオレ様の勝利で幕を下ろす。/そして疫病に満ちた黒き混沌の세계が始まるのさ。/ククククク…。"
-					CALL MESSAGE_WINDOW_D, "", "後から追いかけてこい。/最高のショーを見せてやる。/ククククク…。"
-					CALL MESSAGE_WINDOW_D, "", "＞쿠드락は去っていった…。/쿠드락の後を追いかければ、「最高のショー」が見られるとのことだ…"
+					CALL MESSAGE_WINDOW_D, "쿠드락", "흐흐、이것이…。고맙게 쓰도록 하지。/잘해주었구나。이걸로 이몸은 그 크르스니크에게 이길 수 있을 것이다。"
+					CALL MESSAGE_WINDOW_D, "", "좋아、이제 녀석을 쓰러트리기 위해、녀석의 거처를 급습하도록 할까。/이 싸움은 이몸의 승리로 막을 내릴 것이다。/그리고 역병에 가득찬 흑색의 혼돈의 세계의 시작이겠지。/크크크크큭…。"
+					CALL MESSAGE_WINDOW_D, "", "뒤에서 쫒아오도록 해라。/최고의 쇼를 보여주겠다。/크크크크큭…。"
+					CALL MESSAGE_WINDOW_D, "", "＞쿠드락은 떠나갔다…。/쿠드락의 뒤를 쫒아가면、「최고의 쇼」를 볼 수 있다고 했었다…"
 					CALLF STRFLAG_NUM_D("쿠드락", "+=", , 1)
 					ITEM:12075 -= 1
 					DA:(FLAG:現X):(FLAG:現Y) = 1
 				ELSE
-					CALL MESSAGE_WINDOW_D, "", "どうした？스킬카드は손に入ったか？/期待はしてないこともないぞ。"
+					CALL MESSAGE_WINDOW_D, "", "뭐냐？스킬카드는 입수했는가？/기대를 하지 않은 것도 아니었다만。"
 				ENDIF
 			ELSE
-				CALL MESSAGE_WINDOW_D, "", "期待はしてないこともないぞ。"
+				CALL MESSAGE_WINDOW_D, "", "기대를 하지 않은 것도 아니었다만。"
 			ENDIF
 		ENDIF
 	CASE 1702
 		IF STRFLAG_NUM_D("쿠드락") == 3
-			CALL MESSAGE_WINDOW_D, "쿠드락", "お、おぉぉ、おぉぉぉぉ！/会いたかったぞ、크르스니크ぅぅぅ！"
-			CALL MESSAGE_WINDOW_D, "", "げひゃははははぁっ！/死んで、死ぬまで、死に合おうぜぇ！"
-			CALL MESSAGE_WINDOW_D, "크르스니크", "何故ここに貴様がいる！/返り討ちにしてくれましょう！"
-			CALL MESSAGE_WINDOW_D, "", "＞크르스니크は쿠드락に공격をしかけた！/だが、あまり効果はないようだ…。"
-			CALL MESSAGE_WINDOW_D, "쿠드락", "くっ…。건방짐な…。/でもぉぉおお、その程度の공격なら何度食らっても大したことないぃぃぃ！/今のおれ様は一味も二味も違うぞ…違うぞぉぉぉおおお！"
-			CALL MESSAGE_WINDOW_D, "", "＞쿠드락は반격を行った。/わずか一撃で크르스니크をふっ飛ばした。"
-			CALL MESSAGE_WINDOW_D, "크르스니크", "……！？/こ、この공격は…！？/まずい…！このままでは、ヤツに…！/…ここはひとまず出直すことが賢明…。"
-			CALL MESSAGE_WINDOW_D, "쿠드락", "おい、おいおい、おいぃぃぃ！/逃げるのか？逃げちゃうのか？/なぁなぁ、ブッ飛んじまうのかぁぁ？"
-			CALL MESSAGE_WINDOW_D, "", "この色は赤信号だぜ、止まれよ待てよぉぉ！/웨이트・ア・もーめぇぇんっっっつ！"
-			CALL MESSAGE_WINDOW_D, "크르스니크", "く、クソッ…。/もう…힘が…。"
-			CALL MESSAGE_WINDOW_D, "", "＞크르스니크は倒れ、消え去った…。"
-			CALL MESSAGE_WINDOW_D, "쿠드락", "おお、크르스니크よ！死んでしまうとは何事だ！/もっとベリーハードな死合いを楽しめると思っていたのに！/実に情けないぞぉぉ！/何と！こんなにもアッサリと！オレ様の天下だぁぁぁぁぁ！"
-			CALL MESSAGE_WINDOW_D, "", "＞쿠드락はこちらに気づき、話しかけてきた。"
-			CALL MESSAGE_WINDOW_D, "쿠드락", "キサマか。/どうだ、最高のショーだっただろう。/それでは約束の報酬だ、遠慮せず受け取れ。"
-			CALL MESSAGE_WINDOW_D, "", "＞스킬카드【전염병생산】を１枚손に入れた。/ボロボロの鎌を손に入れた。"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "오、오오오、오오오오오！/만나고 싶었다고、크르스니크으으으！"
+			CALL MESSAGE_WINDOW_D, "", "게햐아아아악！/죽어서、죽을 때까지、죽자구！"
+			CALL MESSAGE_WINDOW_D, "크르스니크", "왜 여기에 네놈이 있는 거냐！/원수를 갚아주도록 하겠다！"
+			CALL MESSAGE_WINDOW_D, "", "＞크르스니크는 쿠드락에게 공격을 시작했다！/하지만、별로 효과는 없는 듯하다…。"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "큿…。건방지구나…。/그런데에에、그 정도의 공격이라면 몇번이나 맞아도 대수롭지 않다아아！/지금의 이몸은 첫번째도 두번째와도 다르다고…다르단 말이다아아！"
+			CALL MESSAGE_WINDOW_D, "", "＞쿠드락은 반격했다。/단 일격에 크르스니크를 날려보냈다。"
+			CALL MESSAGE_WINDOW_D, "크르스니크", "……！？/이、이 공격은…！？/위험해…！이대로라면、녀석에…！/…여기서는 일단 후퇴하는 편이 현명…。"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "어이、어이어이、어이이이！/도망치는 거냐？도망가버리는 거냐？/저기저기、갑자기 날아가버리는 건가아？"
+			CALL MESSAGE_WINDOW_D, "", "이번 신호는 빨간불이라고、멈춰라기다려라아아！/Wait a moment----！"
+			CALL MESSAGE_WINDOW_D, "크르스니크", "제、젠자앙…。/더 이상…힘이…。"
+			CALL MESSAGE_WINDOW_D, "", "＞크르스니크는 쓰러져、사라져갔다…。"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "오오、크르스니크여！죽어버리다니 웬말이냐！/좀더 베리-하드한 죽음을 즐길 수 있게 해줄 생각이었는데！/정말로 한심하기 짝이 없다아！/어째서！이렇게나 쉽다고는！이몸의 세상이다아아아아아아！"
+			CALL MESSAGE_WINDOW_D, "", "＞쿠드락은 이쪽을 눈치채고、말을 걸어 왔다。"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "네놈인가。/어떠냐、최고의 쇼였지 않았나。/그럼 약속했던 보상이다、사양말고 받아둬라。"
+			CALL MESSAGE_WINDOW_D, "", "＞스킬카드【전염병생산】를 1개 입수했다。/너덜너덜한 낫을 입수했다。"
 			ITEM:12075 += 1
-			CALL MESSAGE_WINDOW_D, "쿠드락", "스킬카드か？/크르스니크を倒した時に強くなり、生み出せたものだ。"
-			CALL MESSAGE_WINDOW_D, "", "무기のほうは、以前ニンゲンからもらったものだ。/크르스니크との闘いでボロボロになったが、鍛えなおしたらまた使えるだろう。"
-			CALL MESSAGE_WINDOW_D, "", "報酬としては悪くはないだろう。/何か言いたいことはあるか？"
-			CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、先ほどと입調が大きく異なる事を聞いてみた。"
-			CALL MESSAGE_WINDOW_D, "쿠드락", "입調が違うってか？/この입調は以前、黒い鎧を着たニンゲンどもに体を弄られた結果、だな。/他の악마のパーツをつけられたりしてな…。/크르스니크を前にすると、本来の입調に戻るようだな。"
-			CALL MESSAGE_WINDOW_D, "", "さて、用がないならそろそろオレ様は行くぜ。/크르스니크のいないこの地にはもう用はないからな。"
-			CALL MESSAGE_WINDOW_D, "", "＞仲魔にならないか誘いますか？"
-			CALL INPUT_YN("誘う","誘わない")
+			CALL MESSAGE_WINDOW_D, "쿠드락", "스킬카드 말이냐？/크르스니크를 쓰러트렸을 때 강해져서、만들어 낼 수 있었다。"
+			CALL MESSAGE_WINDOW_D, "", "무기의 쪽은、예전에 인간으로부터 얻은 것이다。/크르스니크와의 싸움에서 너덜너덜해졌지만、수리한다면 다시 쓸 수 있겠지。"
+			CALL MESSAGE_WINDOW_D, "", "보상으로 받기에는 나쁘지 않을 것이다。/뭔가 하고 싶은 말이라도 있는가？"
+			CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는、조금 전과 말투가 크게 다른 이유를 물어보았다。"
+			CALL MESSAGE_WINDOW_D, "쿠드락", "말하는 방식이 틀리다고？/이 말하는 방식은 이전에、검은 옷을 입은 인간들에게 부상을 당했던 잔재、랄까。/다른 악마의 파츠를 붙여지거나 해서 말이야…。/크르스니크의 앞에 설 때만、원래의 말투로 돌아가는 것 같군。"
+			CALL MESSAGE_WINDOW_D, "", "그러면、용무가 없다면 슬슬 이몸께서는 간다고。/크르스니크가 없는 이 땅에는 더 이상 볼일이 없으니까 말이야。"
+			CALL MESSAGE_WINDOW_D, "", "＞동료마가 되도록 권유하겠습니까？"
+			CALL INPUT_YN("권유한다","권유하지 않는다")
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "쿠드락", "仲魔にか？そうだな…。/それも面白そうだな。いいだろう。交渉成立だな。/俺様の名は쿠드락、コンゴトモヨロシク…。"
+				CALL MESSAGE_WINDOW_D, "쿠드락", "동료마인가？그런가…。/그것도 재미있을것 같군。좋다。교섭 성립이구만。/이몸의 이름은 쿠드락、앞으로도 잘 부탁한다고…。"
 				CALL ADD_NEW_COMPANION,1085, 2000,1
 				IF RESULT
 					LOCAL = RESULT:1
 					BASE:(RESULT:1):LV += 3
 					BASE:(RESULT:1):마력 += 2
 					BASE:(RESULT:1):지혜 += 4
+					MAXBASE:(RESULT:1):마력 += 2
+					MAXBASE:(RESULT:1):지혜 += 4
 					ABL:LOCAL:스킬3 = 1111
 					ABL:LOCAL:스킬4 = 1133
 					ABL:LOCAL:스킬5 = 2075
 				ENDIF
 			ELSE
-				CALL MESSAGE_WINDOW_D, "쿠드락", "では、サラバだ…。"
-				CALL MESSAGE_WINDOW_D, "", "쿠드락は去って行った…。"
+				CALL MESSAGE_WINDOW_D, "쿠드락", "그럼、작별이다…。"
+				CALL MESSAGE_WINDOW_D, "", "쿠드락은 떠나갔다…。"
 				CALLF STRFLAG_D("쿠드락非仲魔", 1)
 			ENDIF
 			CALLF STRFLAG_NUM_D("쿠드락", "+=", , 1)
@@ -940,44 +949,44 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		
 		ELSEIF STRFLAG_NUM_D("크르스니크") == 0
 			CALLF STRFLAG_NUM_D("크르스니크", "+=", , 1)
-			CALL MESSAGE_WINDOW_D, "악마", "おや、この세계にニンゲンが再び…。/こんな珍しい事もあるものですね。/私の名は크르스니크。以後、お見知りおきを。"
-			CALL MESSAGE_WINDOW_D, "크르스니크", "당신は、以前この세계に来たニンゲンとは違うようですね…。/ニンゲンの세계は、相変わらず移り変わりが早いですね…。/失礼、私は元々ニンゲンだったもので。"
-			CALL MESSAGE_WINDOW_D, "", "…同じニンゲンという事で、당신に聞いていただきたい事があるのですが…。/쿠드락、という흡혈귀を御存じですか？"
-			CALL MESSAGE_WINDOW_D, "", "私と対になる흡혈귀でして、ヤツと戦う事が私の宿命です。/ヤツがここより西側の小部屋にいるのです。"
-			CALL MESSAGE_WINDOW_D, "", "ヤツは不死身で、正しい손順で倒さないと、より強くなって復活します。/これを繰り返すと奴の힘は際限なく高まり、/誰にも止められなってしまいます。"
-			CALL MESSAGE_WINDOW_D, "", "ホーソンスピア、という무기でとどめを刺すことで、復活できなくなるのですが、/私の技量が발りないのか、ヤツに致命傷を与えることができていません。"
-			CALL MESSAGE_WINDOW_D, "", "そこでお願いがあります。/쿠드락にダメージを与え、隙をつくっていただけますか？/元ニンゲンとしてのお願いです。"
-			CALL MESSAGE_WINDOW_D, "", "＞크르스니크の의뢰を受けますか？"
+			CALL MESSAGE_WINDOW_D, "악마", "어라、이 세계에 인간이 다시…。/이런 드문 일도 다 있군요。/제 이름은 크르스니크。앞으로、잘 알아두시길。"
+			CALL MESSAGE_WINDOW_D, "크르스니크", "당신은、이전에 이 세계에 왔었던 인간과는 다른 것 같군요…。/인간의 세계는、변함없이 변하는 속도가 빠르네요…。/실례、저는 원래 인간이었습니다만。"
+			CALL MESSAGE_WINDOW_D, "", "…같은 인간이라는 점에서、당신에게 여쭙고 싶은 말이 있습니다만…。/쿠드락、이라고 하는 흡혈귀를 알고 계십니까？"
+			CALL MESSAGE_WINDOW_D, "", "저랑 대립하고 있는 흡혈귀로、그놈과 싸우는 것은 저의 숙명입니다。/녀석은 여기서부터 서쪽에 있는 작은 방에 있습니다。"
+			CALL MESSAGE_WINDOW_D, "", "녀석은 불사신으로、올바른 방식으로 쓰러트리지 않으면、더 강해져서 부활합니다。/이를 반복하면 녀석의 힘은 끝없이 높아져서、/누구도 멈출 수 없게 되어 버립니다。"
+			CALL MESSAGE_WINDOW_D, "", "호손 스피어、라는 무기로 숨통을 끊어야만、부활을 할 수 없게 됩니다만、/제 기량이 부족한 것인지、놈에게 치명상을 입히지 못하고 있습니다。"
+			CALL MESSAGE_WINDOW_D, "", "그래서 부탁하고 싶은 것이 있습니다。/쿠드락에게 데미지를 주어서、녀석의 틈을 만들어 주실 수 있으십니까？/이전에 인간이었던 자로서의 부탁입니다。"
+			CALL MESSAGE_WINDOW_D, "", "＞크르스니크의 의뢰를 받겠습니까？"
 			CALL INPUT_YN_D
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "크르스니크", "ありがとうございます。/白き勝利の栄光を貴方と私で分かち合いましょう。"
-				CALL MESSAGE_WINDOW_D, "", "それではさっそくですが、쿠드락の所へ向かいましょう！/部屋の前でお待ちしています。"
-				CALL MESSAGE_WINDOW_D, "", "＞크르스니크は去って行った…。/準備ができたら、쿠드락の所へ行こう。"
+				CALL MESSAGE_WINDOW_D, "크르스니크", "감사합니다。/하얀 승리의 영광을 당신과 제가 함께 나눕시다。"
+				CALL MESSAGE_WINDOW_D, "", "그럼 바로입니다만、쿠드락이 있는 곳으로 향하도록 하죠！/방의 앞에서 기다리고 있겠습니다。"
+				CALL MESSAGE_WINDOW_D, "", "＞크르스니크는 떠나갔다…。/준비가 된다면、쿠드락이 있는 장소로 향하자。"
 				CALLF STRFLAG_NUM_D("크르스니크", "+=", , 1)
 				DA:(FLAG:現X):(FLAG:現Y) = 1
 			ELSE
-				CALL MESSAGE_WINDOW_D, "크르스니크", "そうですか…。/お忙しいでしょうし、お気になさらずに。/ですがもし、受けていただける事になりましたら、私の所まで来てください。"
+				CALL MESSAGE_WINDOW_D, "크르스니크", "그렇습니까…。/바쁘실 테고、신경 쓰지 말아주세요。/그런데 혹시、부탁을 들어주신다고 마음을 바꾸신다면、제가 있는 장소에 와주십시오。"
 			ENDIF
 		ELSEIF STRFLAG_NUM_D("크르스니크") == 1
-			CALL MESSAGE_WINDOW_D, "크르스니크", "おや、당신は…。もしかして、의뢰を受けてくださるのですか？/쿠드락を倒すのに協힘していただきたいのですが。"
-			CALL MESSAGE_WINDOW_D, "", "＞크르스니크の의뢰を受けますか？"
+			CALL MESSAGE_WINDOW_D, "크르스니크", "어라、당신은…。혹시、의뢰를 받아주시는 겁니까？/쿠드락을 쓰러트리는 데에 협조해주셨으면 합니다만。"
+			CALL MESSAGE_WINDOW_D, "", "＞크르스니크의 의뢰를 받겠습니까？"
 			CALL INPUT_YN_D
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "크르스니크", "ありがとうございます。/白き勝利の栄光を貴方と私で分かち合いましょう。"
-				CALL MESSAGE_WINDOW_D, "", "それではさっそくですが、쿠드락の所へ向かいましょう！/部屋の前でお待ちしています。"
-				CALL MESSAGE_WINDOW_D, "", "＞크르스니크は去って行った…。/準備ができたら、쿠드락の所へ行こう。"
+				CALL MESSAGE_WINDOW_D, "크르스니크", "감사합니다。/하얀 승리의 영광을 당신과 제가 함께 나눕시다。"
+				CALL MESSAGE_WINDOW_D, "", "그럼 바로입니다만、쿠드락이 있는 곳으로 향하도록 하죠！/방의 앞에서 기다리고 있겠습니다。"
+				CALL MESSAGE_WINDOW_D, "", "＞크르스니크는 떠나갔다…。/준비가 된다면、쿠드락이 있는 장소로 향하자。"
 				CALLF STRFLAG_NUM_D("크르스니크", "+=", , 1)
 				DA:(FLAG:現X):(FLAG:現Y) = 1
 			ELSE
-				CALL MESSAGE_WINDOW_D, "크르스니크", "そうですか…。/お忙しいでしょうし、お気になさらずに。/ですがもし、受けていただける事になりましたら、私の所まで来てください。"
+				CALL MESSAGE_WINDOW_D, "크르스니크", "그렇습니까…。/바쁘실 테고、신경 쓰지 말아주세요。/그런데 혹시、부탁을 들어주신다고 마음을 바꾸신다면、제가 있는 장소에 와주십시오。"
 			ENDIF
 		ENDIF
 	
 	CASE 1800, 1900, 1901, 2302, 2402
 		IF STRFLAG_NUM_D("아수라入입") == 0
-			CALL MESSAGE_WINDOW_D, "", "＞눈の前に、謎の악마がいる…。/実体のない、霊魂のような악마だ…。"
-			CALL MESSAGE_WINDOW_D, "謎の악마", "ホゥ、マサカコノ地ニ再ビ인간が現レヨウトハ…。/闘神ナル我ガ힘ノ飛躍ニ一役買ッテモラオウカ。"
-			CALL MESSAGE_WINDOW_D, "", "＞謎の악마が襲い掛かってきた！"
+			CALL MESSAGE_WINDOW_D, "", "＞눈 앞에、알 수 없는 악마가 있다…。/실체가 없는、영혼과도 같은 악마다…。"
+			CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "호오、설마 이 땅에 두번째의 인간이 나타난다고는…。/투신인 나의 힘의 비약에 한몫 거들어 줘야겠다。"
+			CALL MESSAGE_WINDOW_D, "", "＞수수께끼의 악마가 덤벼들었다！"
 			
 			FLAG:도주불가フラグ = 1
 			FLAG:회화불능フラグ = 1
@@ -986,26 +995,26 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CFLAG:(CHARANUM-1):ＨＰ보정 += 300
 			CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
 			CFLAG:(CHARANUM-1):行動횟수 = 2
-			NAME:(CHARANUM-1) = 謎の악마
-			CALLNAME:(CHARANUM-1) = 謎の악마	
+			NAME:(CHARANUM-1) = 수수께끼의 악마
+			CALLNAME:(CHARANUM-1) = 수수께끼의 악마	
 			CALL SYNC_STATUS,(CHARANUM-1)
 			CALL HEALTH_CHARA,(CHARANUM-1)
-			BASE:LOCAL:타격 = 100
-			BASE:LOCAL:전술 = 100
-			BASE:LOCAL:빙결 = 250
-			BASE:LOCAL:신경 = 100
-			BASE:LOCAL:정신 = 999
-			BASE:LOCAL:지변 = 150
-			BASE:LOCAL:수격 = 250
-			MAXBASE:LOCAL:타격 = 100
-			MAXBASE:LOCAL:전술 = 100
-			MAXBASE:LOCAL:빙결 = 250
-			MAXBASE:LOCAL:신경 = 100
-			MAXBASE:LOCAL:정신 = 999
-			MAXBASE:LOCAL:파마 = 100
-			MAXBASE:LOCAL:주살 = 100
-			MAXBASE:LOCAL:지변 = 150
-			MAXBASE:LOCAL:수격 = 250
+			BASE:(CHARANUM-1):타격 = 100
+			BASE:(CHARANUM-1):전술 = 100
+			BASE:(CHARANUM-1):빙결 = 250
+			BASE:(CHARANUM-1):신경 = 100
+			BASE:(CHARANUM-1):정신 = 999
+			BASE:(CHARANUM-1):지변 = 150
+			BASE:(CHARANUM-1):수격 = 250
+			MAXBASE:(CHARANUM-1):타격 = 100
+			MAXBASE:(CHARANUM-1):전술 = 100
+			MAXBASE:(CHARANUM-1):빙결 = 250
+			MAXBASE:(CHARANUM-1):신경 = 100
+			MAXBASE:(CHARANUM-1):정신 = 999
+			MAXBASE:(CHARANUM-1):파마 = 100
+			MAXBASE:(CHARANUM-1):주살 = 100
+			MAXBASE:(CHARANUM-1):지변 = 150
+			MAXBASE:(CHARANUM-1):수격 = 250
 			LOCAL:3 = FLAG:20263	;아수라の解析度を保存
 			FLAG:20263 = 0
 			CALL BATTLE_START
@@ -1014,16 +1023,16 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			FLAG:선제기습취소 = 0
 			FLAG:20263 = LOCAL:3
 			CALL SHOW_PICTURE, "D"
-			CALL MESSAGE_WINDOW_D, "謎の악마", "見事ダ…인간ヨ…。/次ナル場所ニテ待ツ…。/貴様ラノ望ムモノガ欲シイナラバ来ルガヨイ…。"
-			CALL MESSAGE_WINDOW_D, "", "＞謎の악마は消え去った…。/どうやら、別の場所で待っているようだ。/望む物とはおそらくロゼッタ多様体の事だろう。"
-			CALL MESSAGE_WINDOW_D, "", "その事を知っているという事は、おそらく待ち構えているのは/아수라であろう。/こちらを倒し、힘をつけようとしているのだろう。/깨달음悟をせねば…。"
-			CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%はその場を後にした…。"
+			CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "훌륭하다…인간이여…。/다음 장소에서 기다리고 있겠다…。/네놈들이 원하는 것을 가지고 싶다면 오는 것이 좋을 것이다…。"
+			CALL MESSAGE_WINDOW_D, "", "＞수수께끼의 악마는 사라져갔다…。/아무래도、다른 장소에서 기다리고 있는 듯하다。/원하는 물건이라면 틀림없이 로제타 다양체를 말하는 것이겠지。"
+			CALL MESSAGE_WINDOW_D, "", "그 일을 알고 있다는 것은、아마 기다리고 있는 것은/아수라겠지。/이쪽을 쓰러트려、힘을 기르려고 하는 것이겠지。/깨달음을 얻지 않으면…。"
+			CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는 그 장소를 뒤로 했다…。"
 			CALLF STRFLAG_NUM_D("아수라入입", "+=", , 1)
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 		ELSEIF STRFLAG_NUM_D("아수라入입") < 4
-			CALL MESSAGE_WINDOW_D, "", "＞눈の前に、謎の악마がいる…。/実体のない、霊魂のような악마だ…。/以前遭遇したのと同じ악마と思われる…。"
-			CALL MESSAGE_WINDOW_D, "謎の악마", "ヨクキタナ、強キ인간ヨ。/ソノ힘、我ニ見セテミヨ。"
-			CALL MESSAGE_WINDOW_D, "", "＞謎の악마が襲い掛かってきた！"
+			CALL MESSAGE_WINDOW_D, "", "＞눈 앞에、알 수 없는 악마가 있다…。/실체가 없는、영혼과도 같은 악마다…。/이전에 조우했던 것과 같은 악마라고 생각되어진다…。"
+			CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "잘 왔도다、강한 인간이여。/그 힘을 나에게 보여주도록 해라。"
+			CALL MESSAGE_WINDOW_D, "", "＞수수께끼의 악마가 덤벼들었다！"
 			
 			FLAG:도주불가フラグ = 1
 			FLAG:회화불능フラグ = 1
@@ -1035,91 +1044,91 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CFLAG:(CHARANUM-1):行動횟수 = 2
 			CALL SYNC_STATUS,(CHARANUM-1)
 			CALL HEALTH_CHARA,(CHARANUM-1)
-			NAME:(CHARANUM-1) = 謎の악마
-			CALLNAME:(CHARANUM-1) = 謎の악마
+			NAME:(CHARANUM-1) = 수수께끼의 악마
+			CALLNAME:(CHARANUM-1) = 수수께끼의 악마
 			
 			SELECTCASE STRFLAG_NUM_D("아수라入입")
 				CASE 1
-					BASE:LOCAL:검격 = 50
-					BASE:LOCAL:비구 = 50
-					BASE:LOCAL:타격 = 100
-					BASE:LOCAL:전술 = 100
-					BASE:LOCAL:화염 = 100
-					BASE:LOCAL:빙결 = 999
-					BASE:LOCAL:전격 = 999
-					BASE:LOCAL:충격 = 250
-					BASE:LOCAL:신경 = 125
-					BASE:LOCAL:정신 = 50
-					BASE:LOCAL:파마 = 150
-					BASE:LOCAL:주살 = 0
-					BASE:LOCAL:지변 = 250
-					BASE:LOCAL:수격 = 999
-					BASE:LOCAL:질풍 = 100
-					BASE:LOCAL:중력 = 999
-					BASE:LOCAL:핵열 = 150
-					MAXBASE:LOCAL:검격 = 50
-					MAXBASE:LOCAL:비구 = 50
-					MAXBASE:LOCAL:타격 = 100
-					MAXBASE:LOCAL:전술 = 100
-					MAXBASE:LOCAL:화염 = 100
-					MAXBASE:LOCAL:빙결 = 999
-					MAXBASE:LOCAL:전격 = 999
-					MAXBASE:LOCAL:충격 = 250
-					MAXBASE:LOCAL:신경 = 125
-					MAXBASE:LOCAL:정신 = 50
-					MAXBASE:LOCAL:파마 = 150
-					MAXBASE:LOCAL:주살 = 0
-					MAXBASE:LOCAL:지변 = 250
-					MAXBASE:LOCAL:수격 = 999
-					MAXBASE:LOCAL:질풍 = 100
-					MAXBASE:LOCAL:중력 = 999
-					MAXBASE:LOCAL:핵열 = 150
+					BASE:(CHARANUM-1):검격 = 50
+					BASE:(CHARANUM-1):비구 = 50
+					BASE:(CHARANUM-1):타격 = 100
+					BASE:(CHARANUM-1):전술 = 100
+					BASE:(CHARANUM-1):화염 = 100
+					BASE:(CHARANUM-1):빙결 = 999
+					BASE:(CHARANUM-1):전격 = 999
+					BASE:(CHARANUM-1):충격 = 250
+					BASE:(CHARANUM-1):신경 = 125
+					BASE:(CHARANUM-1):정신 = 50
+					BASE:(CHARANUM-1):파마 = 150
+					BASE:(CHARANUM-1):주살 = 0
+					BASE:(CHARANUM-1):지변 = 250
+					BASE:(CHARANUM-1):수격 = 999
+					BASE:(CHARANUM-1):질풍 = 100
+					BASE:(CHARANUM-1):중력 = 999
+					BASE:(CHARANUM-1):핵열 = 150
+					MAXBASE:(CHARANUM-1):검격 = 50
+					MAXBASE:(CHARANUM-1):비구 = 50
+					MAXBASE:(CHARANUM-1):타격 = 100
+					MAXBASE:(CHARANUM-1):전술 = 100
+					MAXBASE:(CHARANUM-1):화염 = 100
+					MAXBASE:(CHARANUM-1):빙결 = 999
+					MAXBASE:(CHARANUM-1):전격 = 999
+					MAXBASE:(CHARANUM-1):충격 = 250
+					MAXBASE:(CHARANUM-1):신경 = 125
+					MAXBASE:(CHARANUM-1):정신 = 50
+					MAXBASE:(CHARANUM-1):파마 = 150
+					MAXBASE:(CHARANUM-1):주살 = 0
+					MAXBASE:(CHARANUM-1):지변 = 250
+					MAXBASE:(CHARANUM-1):수격 = 999
+					MAXBASE:(CHARANUM-1):질풍 = 100
+					MAXBASE:(CHARANUM-1):중력 = 999
+					MAXBASE:(CHARANUM-1):핵열 = 150
 				CASE 2
-					BASE:LOCAL:비구 = 50
-					BASE:LOCAL:전술 = 100
-					BASE:LOCAL:빙결 = 100
-					BASE:LOCAL:전격 = 250
-					BASE:LOCAL:신경 = 100
-					BASE:LOCAL:정신 = 100
-					BASE:LOCAL:지변 = 999
-					BASE:LOCAL:수격 = 150
-					BASE:LOCAL:질풍 = 100
-					BASE:LOCAL:핵열 = 250
-					MAXBASE:LOCAL:비구 = 50
-					MAXBASE:LOCAL:전술 = 100
-					MAXBASE:LOCAL:빙결 = 100
-					MAXBASE:LOCAL:전격 = 250
-					MAXBASE:LOCAL:신경 = 100
-					MAXBASE:LOCAL:정신 = 100
-					MAXBASE:LOCAL:지변 = 999
-					MAXBASE:LOCAL:수격 = 150
-					MAXBASE:LOCAL:질풍 = 100
-					MAXBASE:LOCAL:핵열 = 250
+					BASE:(CHARANUM-1):비구 = 50
+					BASE:(CHARANUM-1):전술 = 100
+					BASE:(CHARANUM-1):빙결 = 100
+					BASE:(CHARANUM-1):전격 = 250
+					BASE:(CHARANUM-1):신경 = 100
+					BASE:(CHARANUM-1):정신 = 100
+					BASE:(CHARANUM-1):지변 = 999
+					BASE:(CHARANUM-1):수격 = 150
+					BASE:(CHARANUM-1):질풍 = 100
+					BASE:(CHARANUM-1):핵열 = 250
+					MAXBASE:(CHARANUM-1):비구 = 50
+					MAXBASE:(CHARANUM-1):전술 = 100
+					MAXBASE:(CHARANUM-1):빙결 = 100
+					MAXBASE:(CHARANUM-1):전격 = 250
+					MAXBASE:(CHARANUM-1):신경 = 100
+					MAXBASE:(CHARANUM-1):정신 = 100
+					MAXBASE:(CHARANUM-1):지변 = 999
+					MAXBASE:(CHARANUM-1):수격 = 150
+					MAXBASE:(CHARANUM-1):질풍 = 100
+					MAXBASE:(CHARANUM-1):핵열 = 250
 				CASE 3
-					BASE:LOCAL:검격 = 50
-					BASE:LOCAL:타격 = 100
-					BASE:LOCAL:화염 = 250
-					BASE:LOCAL:빙결 = 100
-					BASE:LOCAL:전격 = 999
-					BASE:LOCAL:신경 = 50
-					BASE:LOCAL:정신 = 0
-					BASE:LOCAL:파마 = 150
-					BASE:LOCAL:주살 = 0
-					BASE:LOCAL:지변 = 999
-					BASE:LOCAL:수격 = 100
-					BASE:LOCAL:핵열 = 250
-					MAXBASE:LOCAL:검격 = 50
-					MAXBASE:LOCAL:타격 = 100
-					MAXBASE:LOCAL:화염 = 250
-					MAXBASE:LOCAL:빙결 = 100
-					MAXBASE:LOCAL:전격 = 999
-					MAXBASE:LOCAL:신경 = 50
-					MAXBASE:LOCAL:정신 = 0
-					MAXBASE:LOCAL:파마 = 150
-					MAXBASE:LOCAL:주살 = 0
-					MAXBASE:LOCAL:지변 = 999
-					MAXBASE:LOCAL:수격 = 100
-					MAXBASE:LOCAL:핵열 = 250
+					BASE:(CHARANUM-1):검격 = 50
+					BASE:(CHARANUM-1):타격 = 100
+					BASE:(CHARANUM-1):화염 = 250
+					BASE:(CHARANUM-1):빙결 = 100
+					BASE:(CHARANUM-1):전격 = 999
+					BASE:(CHARANUM-1):신경 = 50
+					BASE:(CHARANUM-1):정신 = 0
+					BASE:(CHARANUM-1):파마 = 150
+					BASE:(CHARANUM-1):주살 = 0
+					BASE:(CHARANUM-1):지변 = 999
+					BASE:(CHARANUM-1):수격 = 100
+					BASE:(CHARANUM-1):핵열 = 250
+					MAXBASE:(CHARANUM-1):검격 = 50
+					MAXBASE:(CHARANUM-1):타격 = 100
+					MAXBASE:(CHARANUM-1):화염 = 250
+					MAXBASE:(CHARANUM-1):빙결 = 100
+					MAXBASE:(CHARANUM-1):전격 = 999
+					MAXBASE:(CHARANUM-1):신경 = 50
+					MAXBASE:(CHARANUM-1):정신 = 0
+					MAXBASE:(CHARANUM-1):파마 = 150
+					MAXBASE:(CHARANUM-1):주살 = 0
+					MAXBASE:(CHARANUM-1):지변 = 999
+					MAXBASE:(CHARANUM-1):수격 = 100
+					MAXBASE:(CHARANUM-1):핵열 = 250
 				ENDSELECT
 			LOCAL:3 = FLAG:20263	;아수라の解析度を保存
 			FLAG:20263 = 0
@@ -1131,43 +1140,43 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALLF STRFLAG_NUM_D("아수라入입", "+=", , 1)
 			CALL SHOW_PICTURE, "D"
 			IF STRFLAG_NUM_D("아수라入입") < 4
-				CALL MESSAGE_WINDOW_D, "謎の악마", "見事ダ…인간ヨ…。/ソノ調子デ…我ヲ…楽シマセテ…ミヨ…。"
-				CALL MESSAGE_WINDOW_D, "", "＞謎の악마は消え去った。/謎の악마も、先ほどより強くなっていた。/입ぶりからして、どうやらこちらを試しているらしい。"
-				CALL MESSAGE_WINDOW_D, "", "아수라自身が相손する価値があるかどうか、見極めようとでもいうのか…。/こちらを嘗めているのなら後悔させてやろう…。"
-				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%はその場を後にした…。"			
+				CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "훌륭하다…인간이여…。/그 기세로... 나를 ... 즐겁게 해주도록 ... 해라…。"
+				CALL MESSAGE_WINDOW_D, "", "＞수수께끼의 악마는 사라져갔다。/수수께끼의 악마도、전보다 더욱 강해지고 있었다。/말투로 보아、아무래도 이쪽을 시험하고 있는 듯하다。"
+				CALL MESSAGE_WINDOW_D, "", "아수라 자신이 상대할 가치가 있는지 없는지、확인해보겠다는 것인가…。/이쪽을 얕보고 있다면 후회하게 해주겠어…。"
+				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는 그 장소를 뒤로 했다…。"			
 			ELSE
-				CALL MESSAGE_WINDOW_D, "", "＞謎の악마は消え去った。/今回は何も言わずに消えたようだ…。"
-				CALL MESSAGE_WINDOW_D, "", "＞どこからか声が聞こえる…。"
-				CALL MESSAGE_WINDOW_D, "謎の声", "見所ノアル…인간ヨ…我ガ…所マデ…クルガヨイ…。"
-				CALL MESSAGE_WINDOW_D, "", "＞どうやら姿を見せる気になったようだ。/どこかで待ち構えているのだろう。/探し出さねば…。"
+				CALL MESSAGE_WINDOW_D, "", "＞수수께끼의 악마는 사라져갔다。/이번에는 아무 말 없이 사라진 듯하다…。"
+				CALL MESSAGE_WINDOW_D, "", "＞어디선가 목소리가 들려온다…。"
+				CALL MESSAGE_WINDOW_D, "수수께끼의 목소리", "장래성이 있는…인간이여…내가 ... 있는 장소까지 ... 오는 것이 좋다 …。"
+				CALL MESSAGE_WINDOW_D, "", "＞아무래도 모습을 보여준다는 것이 신경쓰였던 모앙이다。/어디선가 기다리고 있는 것일테지。/찾아내지 않으면…。"
 			ENDIF
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 		ELSEIF STRFLAG_NUM_D("아수라入입") >= 4
-			CALL MESSAGE_WINDOW_D, "", "＞誰もいない…。"
+			CALL MESSAGE_WINDOW_D, "", "＞아무도 없다…。"
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 		ENDIF
 	
 	CASE 2000
 		IF STRFLAG_NUM_D("슈바르츠바스進行度") == 9
-			CALL MESSAGE_WINDOW_D, "악마", "ようこそ、我が神聖武道場へ。/我が虚像をことごとく打ち破った인간どもよ。/謁見を認めてやろう。"
-			CALL MESSAGE_WINDOW_D, "", "我は…かつて인간どもが「아수라」と称し、/畏敬をもって奉った천마である。"
-			CALL MESSAGE_WINDOW_D, "아수라", "我を…永遠の戦いを担いし光明神と、/知ってか知らずか…。"
-			CALL MESSAGE_WINDOW_D, "", "我に刃を向ける意味を理解しておろうな、/身の程知らずの인간よ。/震えて…死ね！"
+			CALL MESSAGE_WINDOW_D, "악마", "어서 와라、나의 신성무도장에。/나의 허상을 모조리 무찌른 인간들이여。/알현을 허락해 주도록 하마。"
+			CALL MESSAGE_WINDOW_D, "", "나는 과거에 인간들이 「아수라」라고 칭하고、/경외하며 받들어 모신 천마이니라。"
+			CALL MESSAGE_WINDOW_D, "아수라", "나는…영원한 싸움을 짊어진 광명신이라고도、/알고 있는건지 모르는 건지…。"
+			CALL MESSAGE_WINDOW_D, "", "나에게 칼을 향한다는 의미를 이해하고 있을테지、/분수를 모르는 인간이여。/떨면서…죽어라！"
 			;ルシファーがパーティにいる場合、전투회피
 			IF FINDCHARA_B([[キャラ:루시퍼]]) == 2
-				CALL MESSAGE_WINDOW_D, "", "＞ルシファーが회화に割って入った。"
-				CALL MESSAGE_WINDOW_D, "루시퍼", "アシュラ王よ。/貴公の本来の姿を現したまえ！"
-				CALL MESSAGE_WINDOW_D, "", "＞ルシファーが声をかけると、아수라の姿が変化した！"
-				CALL MESSAGE_WINDOW_D, "아후라마즈다", "おお、光の君ルシファーよ。/私は何もかも思い出した！"
-				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%よ、/私も仲間に入れてくれるかな？"
-				CALL MESSAGE_WINDOW_D, "", "＞마신　アフラマズダは仲魔になった。"
+				CALL MESSAGE_WINDOW_D, "", "＞루시퍼가 대화에 끼어들어 왔다。"
+				CALL MESSAGE_WINDOW_D, "루시퍼", "아수라 왕이여。/귀공의 본모습을 드러내소서！"
+				CALL MESSAGE_WINDOW_D, "", "＞루시퍼가 말을 걸자、아수라의 모습이 변화했다！"
+				CALL MESSAGE_WINDOW_D, "아후라마즈다", "오오、빛나는 그대 、루시퍼여。/나는 모든 것을 기억해냈다！"
+				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%이여、/나도 동료로 받아들여줄 수 있겠나？"
+				CALL MESSAGE_WINDOW_D, "", "＞마신 아후라마즈다가 동료마가 되었다。"
 				CALL ADD_NEW_COMPANION, 1530, 2000
-				CALL MESSAGE_WINDOW_D, "아후라마즈다", "そうだ、これも渡しておこう。/この地のロゼッタ多様体だ。/今の私には不要となったからな。"
-				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%は、ロゼッタ:Delを손に入れた。"
+				CALL MESSAGE_WINDOW_D, "아후라마즈다", "그렇다、이것도 건네주도록 하마。/이 지역의 로제타 다양체이다。/지금의 나에게는 불필요해졌으니。"
+				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%는、로제타:Del을 입수했다。"
 				CALLF STRFLAG_NUM_D("슈바르츠바스進行度", "+=", , 1)
 				CALLF STRFLAG_D("アフラマズダ復活", 1)
 			ELSE
-				CALL MESSAGE_WINDOW_D, "", "＞마왕　아수라が一体出た！"
+				CALL MESSAGE_WINDOW_D, "", "＞마왕　아수라가 1기 출현했다！"
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
@@ -1183,43 +1192,43 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
 				CALL SHOW_PICTURE, "D"
-				CALL MESSAGE_WINDOW_D, "아수라", "ぬぅっ…！/こ…この我が…打ち倒される…とは…"
-				CALL MESSAGE_WINDOW_D, "", @"＞아수라を撃破した。/＞%CALLNAME:MASTER%はロゼッタ:Delを손に入れた。"
-				CALL MESSAGE_WINDOW_D, "", "＞これで、섹터・델파이너스での任務は달성した。/調査船に帰り、報告しよう。"
+				CALL MESSAGE_WINDOW_D, "아수라", "느읏…！/이…이 내가…꺾인다…고는…"
+				CALL MESSAGE_WINDOW_D, "", @"＞아수라를 격파했다。/＞%CALLNAME:MASTER%는 로제타:Del을 손에 넣었다。"
+				CALL MESSAGE_WINDOW_D, "", "＞이것으로、섹터・델파이너스에서의 임무는 달성했다。/조사선에 돌아가서、보고하자。"
 				CALLF STRFLAG_NUM_D("슈바르츠바스進行度", "+=", , 1)
 			ENDIF
 		ENDIF
 	CASE 2202
-		IF !STRFLAG_D("ア벨初回")
-			CALL MESSAGE_WINDOW_D, "女악마", "こんな所に인간なんて珍しいですわね。/당신方、クー・フーリンを見かけませんでした？"
-			IF !STRFLAG_D("クー・フーリン初回")
-				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は見ていないことを伝えた…。"
-				CALL MESSAGE_WINDOW_D, "女악마", "あら、そうですの。わかりました。/もう、どこにいるのでしょう…。"
-				CALL MESSAGE_WINDOW_D, "", "＞악마は去って行った…。"
+		IF !STRFLAG_D("에메르初回")
+			CALL MESSAGE_WINDOW_D, "여악마", "이런 장소에 인간이라니 드문 일이네요。/그대、쿠･훌린을 보지 못하셨나요？"
+			IF !STRFLAG_D("쿠･훌린初回")
+				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%은 만나지 못했다고 말하였다…。"
+				CALL MESSAGE_WINDOW_D, "여악마", "어머、그런가요。알겠습니다。/정말、어디로 가버린걸까…。"
+				CALL MESSAGE_WINDOW_D, "", "＞악마는 떠나갔다…。"
 				DA:(FLAG:現X):(FLAG:現Y) = 1
-			ELSEIF !STRFLAG_D("クー・フーリン撃破")
-				CALL MESSAGE_WINDOW_D, "女악마", "セクター・カリーナにいたのですか？/そうですか、それならばいいのです。教えていただき、ありがとうございます。/では、わたくしはこれで失礼いたします。"
-				CALL MESSAGE_WINDOW_D, "", "＞악마は去って行った…。"
+			ELSEIF !STRFLAG_D("쿠･훌린撃破")
+				CALL MESSAGE_WINDOW_D, "여악마", "섹터 카리나에 있었나요？/그렇군요、그렇다면 다행입니다。가르쳐 주셔서 감사합니다。/그럼、저는 이만 실례하겠습니다。"
+				CALL MESSAGE_WINDOW_D, "", "＞악마는 떠나갔다…。"
 				DA:(FLAG:現X):(FLAG:現Y) = 1
 			ELSE
-				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%は、セクター・カリーナで戦ったことを伝えた…。"
-				CALL MESSAGE_WINDOW_D, "女악마", "えっ、まさか、わたくしの남편に勝ったのですか？/いくらモリーアンに呪いをかけられているとはいえ…。"
-				CALL MESSAGE_WINDOW_D, "", "あ、失礼しました。/わたくしの名はア벨。/クー・フーリンの아내です。"
-				CALL MESSAGE_WINDOW_D, "ア벨", "당신方の힘をお借りしたいです。/남편、クー・フーリンは魔女に呪いをかけられています。その呪いを解いていただきたいのです。"
-				CALL MESSAGE_WINDOW_D, "", "呪いをかけた魔女、モリーアンはこの地のどこかにいます。/探して、呪いを解くよう頼んでいただきたいのです。"
-				CALLF STRFLAG_D("ア벨初回", 1)
+				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%는、섹터 카리나에서 싸웠음을 전했다…。"
+				CALL MESSAGE_WINDOW_D, "여악마", "엣、설마、제 남편에게서 이긴 건가요？/아무리 모리안의 저주에 걸렸다고는 하지만…。"
+				CALL MESSAGE_WINDOW_D, "", "앗、실례했습니다。/제 이름은 에메르。/쿠･훌린의 아내입니다。"
+				CALL MESSAGE_WINDOW_D, "에메르", "그대의 힘을 빌려주셨으면 합니다。/남편、쿠･훌린은 마녀의 저주를 받고 있습니다。그 저주를 푸는 것을 도와주세요。"
+				CALL MESSAGE_WINDOW_D, "", "저주를 건 마녀、모리안은 이 지역의 어딘가에 있습니다。/찾아서、저주를 풀어달라고 설득해 주세요。"
+				CALLF STRFLAG_D("에메르初回", 1)
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "ア벨", "呪いの件、どうかお願いいたします。/モリーアンを探し出して、解くよう頼んでください。"
+			CALL MESSAGE_WINDOW_D, "에메르", "저주의 건을 맡아주신 것、정말 감사합니다。/모리안을 찾아내서 해주의 건을 부탁드립니다。"
 		ENDIF
 	
 	CASE 2301
-		IF STRFLAG_D("ア벨初回")
-			CALL MESSAGE_WINDOW_D, "女악마", "フッ、ア벨に頼まれたか、인간め。"
-			CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%は、なぜわかったのかを尋ねた。"
-			CALL MESSAGE_WINDOW_D, "女악마", "戦いの魔女と무서움られるこのモリーアンの下へ、/誰が好んで訪れようものか。"
-			CALL MESSAGE_WINDOW_D, "", @"＞こちらが訪ねた理由もわかっているならば話が早い。/クー・フーリンにかけている呪いを解くよう/%CALLNAME:MASTER%は頼んだ…。"
-			CALL MESSAGE_WINDOW_D, "モリーアン", "しかし、인간などにこの私を倒せるとでも思ったのか。/ずいぶんと甘く見られたものだ。"
+		IF STRFLAG_D("에메르初回")
+			CALL MESSAGE_WINDOW_D, "여악마", "흥、에메르의 부탁을 받고 왔는가、인간놈。"
+			CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%는、어떻게 알았는지를 물었다。"
+			CALL MESSAGE_WINDOW_D, "여악마", "싸움의 마녀라고 두려움의 대상이 되고 있는 이 모리안의 거처에、/어느 누구라도 재미로 방문할 리가 없지。"
+			CALL MESSAGE_WINDOW_D, "", @"＞이쪽이 찾아간 이유를 이미 알고 있다면、이야기도 빨라진다。/쿠･훌린에게 건 저주를 풀라고/%CALLNAME:MASTER%는 부탁했다…。"
+			CALL MESSAGE_WINDOW_D, "모리안", "하지만、인간 따위로 이 나를 쓰러트릴 수 있다고 생각하였는가。/꽤나 만만하게 보인 것 같구나。"
 				CALL SET_ENEMY,9,908,52,0,1
 				CFLAG:(CHARANUM-1):ＨＰ보정 += 3000
 				CFLAG:(CHARANUM-1):ＭＰ보정 += 5000
@@ -1231,43 +1240,43 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
 				CALL SHOW_PICTURE, "D"
-			CALL MESSAGE_WINDOW_D, "モリーアン", "たかが인간と見くびった私の誤算か…。/とどめを刺すがよい。/私がかけた呪いも解かれよう。"
-			CALL MESSAGE_WINDOW_D, "","＞モリーアンにとどめを刺しますか？"
+			CALL MESSAGE_WINDOW_D, "모리안", "고작 인간이라고 얕본 나의 실수인가…。/나의 목숨을 거둬가도록 해라。/내가 내린 저주도 풀릴 것이다。"
+			CALL MESSAGE_WINDOW_D, "","＞모리안의 숨통을 끊겠습니까？"
 			CALL INPUT_YN
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%はとどめを刺そうと무기をかまえた……。"
+				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%는 숨통을 끊기 위해서 무기를 꺼냈다……。"
 				CALL INCREASE_LD, -2
 			ELSE
-				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%は拒否した…。"
-				CALL MESSAGE_WINDOW_D, "モリーアン", "このモリーアンに情けをかけるのか？/だが、この場でとどめを刺さねば/呪いは解かぬぞ！"
+				CALL MESSAGE_WINDOW_D, "", @"%CALLNAME:MASTER%는 거부했다…。"
+				CALL MESSAGE_WINDOW_D, "모리안", "이 모리안을 동정하는 것이냐？/하지만、이곳에서 나의 목숨을 끊지 않으면/저주는 풀리지 않을 거다！"
 				CALL INCREASE_LD, 2
 			ENDIF
-			CALL MESSAGE_WINDOW_D, "男の声", "お待ちいただきたい。"
-			CALL MESSAGE_WINDOW_D, "", "＞どこからともなくクー・フーリンが現れた。"
-			CALL MESSAGE_WINDOW_D, "モリーアン", "クー・フーリン…。/この私の無様な姿を見物に来たのか？"
-			CALL MESSAGE_WINDOW_D, "クー・フーリン", "お久しぶりですね。/モリーアンにかけた情けに感謝します。"
-			CALL MESSAGE_WINDOW_D, "", "モリーアンよ。/私の呪いを解こうとも解かぬとも/お前の好きにするがいい。"
-			CALL MESSAGE_WINDOW_D, "モリーアン", "何を企んでいる？/なぜ、私を？"
-			CALL MESSAGE_WINDOW_D, "クー・フーリン", "企みなどない。/私は能力を奪われた事により悟ったのだ。/無駄な힘がなければ、途方もない野心は生まれぬ。"
-			CALL MESSAGE_WINDOW_D, "", "今、私はア벨と共に平穏に暮らしている。/もし私に以前のような能力があれば、/힘の魔性に振りまわされ、大切なものを失っていたかもしれぬ。/大切なものを守る힘さえあればいいのだ。"
-			CALL MESSAGE_WINDOW_D, "モリーアン", "それが、私が愛した영웅クー・フーリンの言葉か。/失望したぞ…。"
-			CALL MESSAGE_WINDOW_D, "クーフーリン", "私の눈を깨달음ましたのはお前だ、モリーアン。"
-			CALL MESSAGE_WINDOW_D, "モリーアン", "馬鹿なことを…。/野心を失った당신にはすでに何の매력も感じぬ。/好きにするがよい。"
-			CALL MESSAGE_WINDOW_D, "", "＞そう言ってモリーアンはクー・フーリンの呪いを解き、去って行った…。"
-			CALL MESSAGE_WINDOW_D, "クー・フーリン", "モリーアン…。"
-			CALL MESSAGE_WINDOW_D, "", "またお世話になりましたね。/私の아내が迷惑をかけました。/ですが、おかげさまで私の힘が戻りました。/また機会があればお会いしましょう。"
-			CALL MESSAGE_WINDOW_D, "", "＞そういってクーフーリンは去って行った…。"
+			CALL MESSAGE_WINDOW_D, "남성의 목소리", "기다려주셨으면 합니다。"
+			CALL MESSAGE_WINDOW_D, "", "＞어디선가 쿠･훌린이 나타났다。"
+			CALL MESSAGE_WINDOW_D, "모리안", "쿠･훌린…。/이 나의 추태라도 구경하러 온 것인가？"
+			CALL MESSAGE_WINDOW_D, "쿠･훌린", "오랜만이군요。/모리안에게 베풀어주신 인정에 감사드립니다。"
+			CALL MESSAGE_WINDOW_D, "", "모리안이여。/나의 저주를 해주하거나 풀지 않거나/네가 원하는 대로 해도 좋아。"
+			CALL MESSAGE_WINDOW_D, "모리안", "무슨 흉계를 꾸미고 있는거야？/어째서、나를？"
+			CALL MESSAGE_WINDOW_D, "쿠･훌린", "꾸미고 있는 일 따위 없어。/나는 내 능력을 빼앗긴 것에서 알게 된거야。/쓸데없는 힘이 없다면、터무니없는 야심도 생기지 않는다는 것을。"
+			CALL MESSAGE_WINDOW_D, "", "지금、나는 에메르와 함께 평온하게 살고 있어。/만약 나에게 이전과 같은 능력이 있다면、/힘의 마성에 휘둘려、소중한 것을 잃게 되었을지도 몰라。/나는 소중한 것을 지킬 힘만 있으면 돼。"
+			CALL MESSAGE_WINDOW_D, "모리안", "그것이、내가 사랑했던 영웅 쿠･훌린의 대답인가。/실망했다…。"
+			CALL MESSAGE_WINDOW_D, "쿠･훌린", "내 눈을 뜨게 만들었던 건 바로 너야、모리안。"
+			CALL MESSAGE_WINDOW_D, "모리안", "바보같은 소리를…。/야심을 잃은 당신에게는 전혀 어떤 매력도 느낄 수 없어。/마음대로 하도록 해。"
+			CALL MESSAGE_WINDOW_D, "", "＞그렇게 말한 모리안은 쿠･훌린의 저주를 풀고、떠나갔다…。"
+			CALL MESSAGE_WINDOW_D, "쿠･훌린", "모리안…。"
+			CALL MESSAGE_WINDOW_D, "", "또 신세를 지게 되었습니다。/제 아내가 폐를 끼쳤습니다。/그렇지만、덕분에 제 힘이 돌아왔습니다。/다음에 기회가 있으면 다시 만납시다。"
+			CALL MESSAGE_WINDOW_D, "", "＞그렇게 말하고 쿠･훌린는 떠나갔다…。"
 			DA:(FLAG:現X):(FLAG:現Y) = 1
-			CALLF STRFLAG_D("クー・フーリン강화", 1)
+			CALLF STRFLAG_D("쿠･훌린강화", 1)
 		ENDIF
 		
 	CASE 2400
 		IF STRFLAG_NUM_D("아수라入입") == 0
-			CALL MESSAGE_WINDOW_D, "", "＞눈の前で、천사の集団と타천사の集団が争っている…。/どちらの集団もこちらに気づいていないようだ…。/今なら数は多いが、不意討ちできそうだ。/もう少しまてば、数は減るだろう。"
-			CALL MESSAGE_WINDOW_D, "", "＞戦いますか？"
-			CALL INPUT_YN("戦う","もう少し様子を見る")
+			CALL MESSAGE_WINDOW_D, "", "＞눈 앞에、천사의 무리와 타천사의 무리가 다투고 있다…。/어느 쪽의 무리도 이쪽을 눈치채지 못한 듯하다…。/지금이라면 수는 많지만、기습할 수 있을 듯하다。/조금 더 기다린다면、그들의 수는 줄어들겠지。"
+			CALL MESSAGE_WINDOW_D, "", "＞싸우시겠습니까？"
+			CALL INPUT_YN("예","좀더 상황을 지켜본다")
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、악마の集団に突入した！"
+				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는、악마의 무리에 돌진해 갔다！"
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
@@ -1288,17 +1297,17 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
 				CALL SHOW_PICTURE, "D"
-				CALL MESSAGE_WINDOW_D, "", "＞악마の集団を殲滅した。/악마の体から、実体のない、霊魂のような악마が現れた。"
-				CALL MESSAGE_WINDOW_D, "謎の악마", "ホゥ、誰ガ我ガ贄ヲ横取リシタカト思エバ인간カ。/面白イ。/ココハ引カセテモラウガ、次ハ코우하イカナイ。/깨달음悟スルガイイ"
-				CALL MESSAGE_WINDOW_D, "", "＞そう言って악마は消え去った。/別の場所で、先ほどの악마が待ち構えているらしい。/気を引き締めねば…。"
+				CALL MESSAGE_WINDOW_D, "", "＞악마의 무리를 섬멸했다。/악마의 몸에서부터、실체가 없는、영혼과도 같은 악마가 나타났다。"
+				CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "호오、누가 내 제물을 가져갔는지 보았더니 인간인가。/재미있군。/이번에는 물러가겠지만、다음은 이렇게 되지는 않을 것이다。/명심하는 것이 좋다"
+				CALL MESSAGE_WINDOW_D, "", "＞그렇게 말한 악마는 사라져갔다。/다른 장소에서、전의 악마가 기다리고 있는 듯하다。/정신을 확실히 차리지 않으면…。"
 			ELSE
-				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、しばらく様子を見ることにした…。"
+				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는、잠시 상황을 지켜보기로 했다…。"
 				CALL MESSAGE_WINDOW_D, "", "…/……/………"
-				CALL MESSAGE_WINDOW_D, "", "＞どうやら、악마は半分ほどまで減ったようだ。しかし、まだ천사も악마も同じぐらい残っている。/もう少し待てば、さらに数は減るだろう。"
-				CALL MESSAGE_WINDOW_D, "", "＞戦いますか？"
-				CALL INPUT_YN("戦う","もう少し様子を見る")
+				CALL MESSAGE_WINDOW_D, "", "＞아무래도、악마는 반쯤으로 줄어든 듯하다。하지만、아직 천사와 악마도 비슷한 수로 남아 있다。/좀 더 기다리면 수는 더욱 줄어들 것이다。"
+				CALL MESSAGE_WINDOW_D, "", "＞싸우시겠습니까？"
+				CALL INPUT_YN("戦う","좀더 상황을 지켜본다")
 				IF RESULT == 0
-					CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、악마の集団に突入した！"
+					CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、악마의 무리에 돌진해 갔다！"
 					FLAG:도주불가フラグ = 1
 					FLAG:회화불능フラグ = 1
 					FLAG:선제기습취소 = 1
@@ -1315,16 +1324,16 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 					FLAG:회화불능フラグ = 0
 					FLAG:선제기습취소 = 0
 					CALL SHOW_PICTURE, "D"
-					CALL MESSAGE_WINDOW_D, "", "＞악마の集団を殲滅した。/악마の体から、実体のない、霊魂のような악마が現れた。"
-					CALL MESSAGE_WINDOW_D, "謎の악마", "ホゥ、誰ガ我ガ贄ヲ横取リシタカト思エバ인간カ。/面白イ。/ココハ引カセテモラウガ、次ハ코우하イカナイ。/깨달음悟スルガイイ"
-					CALL MESSAGE_WINDOW_D, "", "＞そう言って악마は消え去った。/別の場所で、先ほどの악마が待ち構えているらしい。/気を引き締めねば…。"
+					CALL MESSAGE_WINDOW_D, "", "＞악마의 무리를 섬멸했다。/악마의 몸에서부터、실체가 없는、영혼과도 같은 악마가 나타났다。"
+					CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "호오、누가 내 제물을 가져갔는지 보았더니 인간인가。/재미있군。/이번에는 물러가겠지만、다음은 이렇게 되지는 않을 것이다。/명심하는 것이 좋다"
+					CALL MESSAGE_WINDOW_D, "", "＞그렇게 말한 악마는 사라져갔다。/다른 장소에서、전의 악마가 기다리고 있는 듯하다。/정신을 확실히 차리지 않으면…。"
 				ELSE
-					CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、しばらく様子を見ることにした…。"
+					CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는、잠시 상황을 지켜보기로 했다…。"
 					CALL MESSAGE_WINDOW_D, "", "…/……/………"
 					IF RAND:2 == 0
-						CALL MESSAGE_WINDOW_D, "", "＞どうやら、決着がついたようだ。/勝ち残ったのは、１体の천사だ。/천사が何かを言っているようだ…。"
-						CALL MESSAGE_WINDOW_D, "천사", "ヨウヤク贄ガデキタカ…。/早速喰ライタイガ、ソノ前ニ覗キ魔の処理ダナ！"
-						CALL MESSAGE_WINDOW_D, "", "＞천사が急に襲い掛かってきた！"
+						CALL MESSAGE_WINDOW_D, "", "＞아무래도、결판이 난 듯 하다。/이겨서 남은 쪽은、1명의 천사쪽이다。/천사가 무언가를 말하는 듯하다…。"
+						CALL MESSAGE_WINDOW_D, "천사", "겨우 제물이 바쳐졌는가…。/빨리 먹어치우고 싶지만、그 전에 염탐꾼의 처리부터 해야겠군！"
+						CALL MESSAGE_WINDOW_D, "", "＞천사가 갑자기 덤벼들어 왔다！"
 						FLAG:도주불가フラグ = 1
 						FLAG:회화불능フラグ = 1
 						FLAG:선제기습취소 = 1
@@ -1333,9 +1342,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 						CALL HEALTH_CHARA,(CHARANUM-1)
 						CALL BATTLE_START
 					ELSE
-						CALL MESSAGE_WINDOW_D, "", "＞どうやら、決着がついたようだ。/勝ち残ったのは、１体の타천사だ。/타천사が何かを言っているようだ…。"
-						CALL MESSAGE_WINDOW_D, "타천사", "ヨウヤク贄ガデキタカ…。/早速喰ライタイガ、ソノ前ニ覗キ魔の処理ダナ！"
-						CALL MESSAGE_WINDOW_D, "", "＞타천사が急に襲い掛かってきた！"
+						CALL MESSAGE_WINDOW_D, "", "＞아무래도、결판이 난 듯 하다。/이겨서 남은 쪽은、1명의 타천사 쪽이다。/타천사가 무언가를 말하는 듯하다…。"
+						CALL MESSAGE_WINDOW_D, "타천사", "겨우 제물이 바쳐졌는가…。/빨리 먹어치우고 싶지만、그 전에 염탐꾼의 처리부터 해야겠군！"
+						CALL MESSAGE_WINDOW_D, "", "＞타천사가 갑자기 덤벼들어 왔다！"
 						FLAG:도주불가フラグ = 1
 						FLAG:회화불능フラグ = 1
 						FLAG:선제기습취소 = 1
@@ -1348,19 +1357,19 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 					FLAG:회화불능フラグ = 0
 					FLAG:선제기습취소 = 0
 					CALL SHOW_PICTURE, "D"
-					CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は襲い掛かってきた악마を倒した。/倒した악마から、実体のない、霊魂のような악마が現れた。"
-					CALL MESSAGE_WINDOW_D, "謎の악마", "我ガ贄ヲ倒ストハナ。/良イ糧トナリソウダ。/次ノ時ハ我ガ힘ヲ見テヤロウ。"
-					CALL MESSAGE_WINDOW_D, "", @"＞そう言い残し、謎の악마は消え去った。/どこかで%CALLNAME:MASTER%の事を試すらしい。/後悔させてやろう、と決意し、その場を後にした…。"
+					CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는 공격해 온 악마를 쓰러트렸다。/쓰러트린 악마에게서、실체가 없는、영혼과도 같은 악마가 나타났다。"
+					CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "내 제물을 쓰러트릴 줄이야。/좋은 영양분이 될 것 같구나。/다음 번에는 내 힘을 보여주겠다。"
+					CALL MESSAGE_WINDOW_D, "", @"＞그런 말을 남긴、수수께끼의 악마는 사라져갔다。/어딘가로부터 %CALLNAME:MASTER%를 시험하려는 듯하다。/후회하게 해주마、라고 결심하며、그 장소를 뒤로 했다…。"
 				ENDIF
 			ENDIF
 			CALLF STRFLAG_NUM_D("아수라入입", "+=", , 1)
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 		ELSEIF STRFLAG_NUM_D("아수라入입") < 4
-			CALL MESSAGE_WINDOW_D, "", "＞눈の前で、천사の集団と타천사の集団が争っている…。/どちらの集団もこちらに気づいていないようだ…。/もうすぐ決着がつきそうだ。/今なら、不意討ちでるし、もう少しまてば、決着はつくだろう。"
-			CALL MESSAGE_WINDOW_D, "", "＞戦いますか？"
-			CALL INPUT_YN("戦う","もう少し様子を見る")
+			CALL MESSAGE_WINDOW_D, "", "＞눈 앞에、천사의 무리과 타천사의 무리이 다투고 있다…。/어느 쪽의 무리도 이쪽을 눈치채지 못한 듯하다…。/곧 결판이 날 듯하다。/지금이라면、급습을 할 수 있고、조금 더 기다리면、결판이 나겠지。"
+			CALL MESSAGE_WINDOW_D, "", "＞싸우시겠습니까？"
+			CALL INPUT_YN("戦う","좀더 상황을 지켜본다")
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、악마の集団に突入した！"
+				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、악마의 무리에 돌진해 갔다！"
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
@@ -1378,23 +1387,23 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				FLAG:선제기습취소 = 0
 				CALLF STRFLAG_NUM_D("아수라入입", "+=", , 1)
 				CALL SHOW_PICTURE, "D"
-				CALL MESSAGE_WINDOW_D, "", "＞악마の集団を殲滅した。/악마の体から、実体のない、霊魂のような악마が現れた。/以前倒したのと同じ악마と思われる。"
+				CALL MESSAGE_WINDOW_D, "", "＞악마의 무리를 섬멸했다。/악마의 몸에서부터、실체가 없는、영혼과도 같은악마가 나타났다。/저번에 쓰러뜨린 것과 같은 악마라고 생각되어진다。"
 				IF STRFLAG_NUM_D("아수라入입") < 4
-					CALL MESSAGE_WINDOW_D, "謎の악마", "ホゥ、完成シテナイトハイエ我ガ贄ヲ倒スカ。/面白イ。/ココハ引カセテモラオウ。"
-					CALL MESSAGE_WINDOW_D, "", "＞そう言って악마は消え去った。/別の場所で、先ほどの악마が待ち構えているらしい。/気を引き締めねば…。"
+					CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "호오、완성되지는 않았다고 하나 내 제물을 쓰러트리다니。/재미있군。/이번엔 물러나도록 하지。"
+					CALL MESSAGE_WINDOW_D, "", "＞그렇게 말하며 악마는 사라져갔다。/다른 장소에서、전의 악마가 기다리고 있는 듯하다。/정신을 확실히 차리지 않으면…。"
 				ELSE
-					CALL MESSAGE_WINDOW_D, "", "＞謎の악마は消え去った。/今回は何も言わずに消えたようだ…。"
-					CALL MESSAGE_WINDOW_D, "", "＞どこからか声が聞こえる…。"
-					CALL MESSAGE_WINDOW_D, "謎の声", "見所ノアル…인간ヨ…我ガ…所マデ…クルガヨイ…。"
-					CALL MESSAGE_WINDOW_D, "", "＞どうやら姿を見せる気になったようだ。/どこかで待ち構えているのだろう。/探し出さねば…。"
+					CALL MESSAGE_WINDOW_D, "", "＞수수께끼의 악마는 사라져갔다。/이번에는 아무 말 없이 사라진 듯하다…。"
+					CALL MESSAGE_WINDOW_D, "", "＞어디선가 목소리가 들려온다…。"
+					CALL MESSAGE_WINDOW_D, "수수께끼의 목소리", "장래성이 있는…인간이여…내가 ... 있는 장소까지 ... 오는 것이 좋다 …。"
+					CALL MESSAGE_WINDOW_D, "", "＞아무래도 모습을 보여준다는 것이 신경쓰였던 모앙이다。/어디선가 기다리고 있는 것일테지。/찾아내지 않으면…。"
 				ENDIF
 			ELSE
-				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%は、しばらく様子を見ることにした…。"
+				CALL MESSAGE_WINDOW_D, "", @"＞%CALLNAME:MASTER%는、잠시 상황을 지켜보기로 했다…。"
 				CALL MESSAGE_WINDOW_D, "", "…/……/………"
 				IF RAND:2 == 0
-					CALL MESSAGE_WINDOW_D, "", "＞どうやら、決着がついたようだ。/勝ち残ったのは、１体の천사だ。/천사が何かを言っているようだ…。"
-					CALL MESSAGE_WINDOW_D, "천사", "ヨウヤク贄ガデキタカ…。/早速喰ライタイガ、ソノ前ニ覗キ魔の処理ダナ！"
-					CALL MESSAGE_WINDOW_D, "", "＞천사が急に襲い掛かってきた！"
+					CALL MESSAGE_WINDOW_D, "", "＞아무래도、결판이 난 듯 하다。/이겨서 남은 쪽은、1명의 천사쪽이다。/천사가 무언가를 말하는 듯하다…。"
+					CALL MESSAGE_WINDOW_D, "천사", "겨우 제물이 바쳐졌는가…。/빨리 먹어치우고 싶지만、그 전에 염탐꾼의 처리부터 해야겠군！"
+					CALL MESSAGE_WINDOW_D, "", "＞천사가 갑자기 덤벼들어 왔다！"
 					FLAG:도주불가フラグ = 1
 					FLAG:회화불능フラグ = 1
 					FLAG:선제기습취소 = 1
@@ -1403,9 +1412,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 					CALL HEALTH_CHARA,(CHARANUM-1)
 					CALL BATTLE_START
 				ELSE
-					CALL MESSAGE_WINDOW_D, "", "＞どうやら、決着がついたようだ。/勝ち残ったのは、１体の타천사だ。/타천사が何かを言っているようだ…。"
-					CALL MESSAGE_WINDOW_D, "타천사", "ヨウヤク贄ガデキタカ…。/早速喰ライタイガ、ソノ前ニ覗キ魔の処理ダナ！"
-					CALL MESSAGE_WINDOW_D, "", "＞타천사が急に襲い掛かってきた！"
+					CALL MESSAGE_WINDOW_D, "", "＞아무래도、결판이 난 듯 하다。/이겨서 남은 쪽은、1명의 타천사 쪽이다。/타천사가 무언가를 말하는 듯하다…。"
+					CALL MESSAGE_WINDOW_D, "타천사", "겨우 제물이 바쳐졌는가…。/빨리 먹어치우고 싶지만、그 전에 염탐꾼의 처리부터 해야겠군！"
+					CALL MESSAGE_WINDOW_D, "", "＞타천사가 갑자기 덤벼들어 왔다！"
 					FLAG:도주불가フラグ = 1
 					FLAG:회화불능フラグ = 1
 					FLAG:선제기습취소 = 1
@@ -1420,23 +1429,23 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CALLF STRFLAG_NUM_D("아수라入입", "+=", , 1)
 				DA:(FLAG:現X):(FLAG:現Y) = 1
 				CALL SHOW_PICTURE, "D"
-				CALL MESSAGE_WINDOW_D, "", "＞악마の集団を殲滅した。/악마の体から、実体のない、霊魂のような악마が現れた。/以前倒したのと同じ악마と思われる。"
+				CALL MESSAGE_WINDOW_D, "", "＞악마의 무리를 섬멸했다。/악마의 몸에서부터、실체가 없는、영혼과도 같은악마가 나타났다。/저번에 쓰러뜨린 것과 같은 악마라고 생각되어진다。"
 				IF STRFLAG_NUM_D("아수라入입") < 4
-					CALL MESSAGE_WINDOW_D, "謎の악마", "ホゥ、完成シテナイトハイエ我ガ贄ヲ倒スカ。/面白イ。/ココハ引カセテモラオウ。"
-					CALL MESSAGE_WINDOW_D, "", "＞そう言って악마は消え去った。/別の場所で、先ほどの악마が待ち構えているらしい。/気を引き締めねば…。"
+					CALL MESSAGE_WINDOW_D, "수수께끼의 악마", "호오、완성되지는 않았다고 하나 내 제물을 쓰러트리다니。/재미있군。/이번엔 물러나도록 하지。"
+					CALL MESSAGE_WINDOW_D, "", "＞그렇게 말한악마는 사라져갔다。/다른 장소에서、전의 악마가 기다리고 있는 듯하다。/정신을 확실히 차리지 않으면…。"
 				ELSE
-					CALL MESSAGE_WINDOW_D, "", "＞謎の악마は消え去った。/今回は何も言わずに消えたようだ…。"
-					CALL MESSAGE_WINDOW_D, "", "＞どこからか声が聞こえる…。"
-					CALL MESSAGE_WINDOW_D, "謎の声", "見所ノアル…인간ヨ…我ガ…所マデ…クルガヨイ…。"
-					CALL MESSAGE_WINDOW_D, "", "＞どうやら姿を見せる気になったようだ。/どこかで待ち構えているのだろう。/探し出さねば…。"
+					CALL MESSAGE_WINDOW_D, "", "＞수수께끼의 악마는 사라져갔다。/이번에는 아무 말 없이 사라진 듯하다…。"
+					CALL MESSAGE_WINDOW_D, "", "＞어디선가 목소리가 들려온다…。"
+					CALL MESSAGE_WINDOW_D, "수수께끼의 목소리", "장래성이 있는…인간이여…내가 ... 있는 장소까지 ... 오는 것이 좋다 …。"
+					CALL MESSAGE_WINDOW_D, "", "＞아무래도 모습을 보여준다는 것이 신경쓰였던 모앙이다。/어디선가 기다리고 있는 것일테지。/찾아내지 않으면…。"
 				ENDIF
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "＞誰もいない…。/周囲には争った跡が残されている。"
+			CALL MESSAGE_WINDOW_D, "", "＞아무도 없다…。/주위에는 다툰 흔적이 남아 있다。"
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 		ENDIF
 	CASE 2401
-		CALL MESSAGE_WINDOW_D, "", "＞誰もいない…。"
+		CALL MESSAGE_WINDOW_D, "", "＞아무도 없다…。"
 	
 	
 	ENDSELECT
@@ -1462,7 +1471,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		PRINTL ＞落とし穴だ！
 		TWAIT 1000, 1
 		CALL DUNGEON_WORP, FLAG:現M-1, FLAG:現X,  FLAG:現Y
-	;HPダメージ(H)
+	;HP데미지(H)
 	CASE 2
 		CALL DUNGEON_TRAP_HP, 10 + RAND:11
 ENDSELECT
@@ -1531,21 +1540,21 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL MESSAGE_WINDOW_D, "", "＞스페이스 스캐너를 손에 넣었다。/관제포인트에서、숨겨진 공간으로 이동할 수 있습니다。"
 			CALLF STRFLAG_NUM_D("슈바르츠바스進行度", "+=", , 1)
 		ELSEIF STRFLAG_NUM_D("슈바르츠바스進行度") >= 6 && ITEM:538 != 1
-			CALL MESSAGE_WINDOW_D, "男", "この間回収した데모니카수트から、게이트서치のアプリが回収できたぞ。/と言っても、外で出回っているものと殆ど同레벨でしかないがな…。/600マッカでよければ今すぐにCOMPにいれてやるが、どうする？"
-			CALL MESSAGE_WINDOW_D, "", "＞게이트서치をいれてもらいますか？"
+			CALL MESSAGE_WINDOW_D, "남자", "요전에 회수했던 데모니카수트로부터、게이트서치의 애플리케이션이 회수되었어。/라고 말해도、시중에서 판매되고 있는 것들과 거의 같은 레벨이지 않으려나…。/600마카로 괜찮다면 지금 바로 COMP에 넣어주겠지만、어떻게 할래？"
+			CALL MESSAGE_WINDOW_D, "", "＞게이트서치의 기능을 넣겠습니까？"
 			CALL INPUT_YN_D
 			IF RESULT == 0
-				CALL MESSAGE_WINDOW_D, "男", "そうか、ならCOMPを少し借りるぞ。"
+				CALL MESSAGE_WINDOW_D, "남자", "그런가、그러면 COMP를 잠시 빌릴게。"
 				CALL MESSAGE_WINDOW_D, "", "＞…。/……。/………。"
-				CALL MESSAGE_WINDOW_D, "男", "待たせたな。/インス토르はしていないから、필요ならターミナルで설정しな。"
-				CALL MESSAGE_WINDOW_D, "", "＞男に600マッカ支払った。/게이트서치を손に入れた。"
+				CALL MESSAGE_WINDOW_D, "남자", "기다렸지。/인스톨은 하지 않았으니까、필요하다면 터미널에서 설정하도록 해。"
+				CALL MESSAGE_WINDOW_D, "", "＞남자에게 600마카를 지불했다。/게이트서치 기능을 입수했다。"
 				ITEM:538 = 1
 				MONEY:1 -=600
 			ELSE
-				CALL MESSAGE_WINDOW_D, "男", "そうか、わかった。/万が一필요になったら言ってくれ。"
+				CALL MESSAGE_WINDOW_D, "남자", "그런가、알았다。/만약에 필요해진다면 말을 걸어줘。"
 			ENDIF
 		ELSE
-			CALL MESSAGE_WINDOW_D, "男", "すまない、アプリの回収は難航している/開発も、フォルマがあればできるんだがな…"
+			CALL MESSAGE_WINDOW_D, "남자", "미안해、어플리케이션의 회수에 난항을 겪고 있어/개발도、フォルマ가 있으면 할 수 있을텐데…"
 		
 		ENDIF
 	CASE 1
@@ -1615,24 +1624,24 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL MESSAGE_WINDOW_D, "", "무사히 이동했어"
 			CALLF STRFLAG_NUM_D("조사선位置", "=", , 5)
 		ELSEIF RESULT == 6
-			CALL MESSAGE_WINDOW_D, "男", "わかった、セクター･フォルナクスだな/"
+			CALL MESSAGE_WINDOW_D, "男", "알았다、섹터ー･フォルナクス랬지/"
 			CALL MESSAGE_WINDOW_D, "", "………………/…………/……/"
-			CALL MESSAGE_WINDOW_D, "", "無事移動できたぞ"
+			CALL MESSAGE_WINDOW_D, "", "무사히 이동했어"
 			CALLF STRFLAG_NUM_D("조사선位置", "=", , 6)
 		ELSEIF RESULT == 7
-			CALL MESSAGE_WINDOW_D, "男", "わかった、セクター･グルースだな/"
+			CALL MESSAGE_WINDOW_D, "男", "알았다、섹터ー･グルース랬지/"
 			CALL MESSAGE_WINDOW_D, "", "………………/…………/……/"
-			CALL MESSAGE_WINDOW_D, "", "無事移動できたぞ"
+			CALL MESSAGE_WINDOW_D, "", "무사히 이동했어"
 			CALLF STRFLAG_NUM_D("조사선位置", "=", , 7)
 		ELSEIF RESULT == 8
-			CALL MESSAGE_WINDOW_D, "男", "わかった、セクター･ホロジウムだな/"
+			CALL MESSAGE_WINDOW_D, "男", "알았다、섹터ー･ホロジウム랬지/"
 			CALL MESSAGE_WINDOW_D, "", "………………/…………/……/"
-			CALL MESSAGE_WINDOW_D, "", "無事移動できたぞ"
+			CALL MESSAGE_WINDOW_D, "", "무사히 이동했어"
 			CALLF STRFLAG_NUM_D("조사선位置", "=", , 8)
 		ELSEIF RESULT == 9
-			CALL MESSAGE_WINDOW_D, "男", "わかった、だな/"
+			CALL MESSAGE_WINDOW_D, "男", "알았다、랬지/"
 			CALL MESSAGE_WINDOW_D, "", "………………/…………/……/"
-			CALL MESSAGE_WINDOW_D, "", "無事移動できたぞ"
+			CALL MESSAGE_WINDOW_D, "", "무사히 이동했어"
 			CALLF STRFLAG_NUM_D("조사선位置", "=", , 9)
 
 		ENDIF
@@ -1653,7 +1662,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CASE 5
 				CALL MESSAGE_WINDOW_D, "대장", "양자터널로 가는 길을 확보한 모양이군/수고했다/로제타 다양체의 회수에 성공한 모양이군"
 				CALL MESSAGE_WINDOW_D, "", "양자장 자체가 조금 변화되어 있어서、/로제타 다양체가 없다면 돌입할 수 없는 곳이다"
-				CALL MESSAGE_WINDOW_D, "", "자、일단 지상에 돌아가자나중에 또 연락해라"
+				CALL MESSAGE_WINDOW_D, "", "자、일단 지상에 돌아가자 나중에 또 연락해라"
 				CALLF STRFLAG_NUM_D("슈바르츠바스進行度", "+=", , 1)
 				FLAG:탈출스킬禁止 = 0
 				FLAG:탈출 = 1

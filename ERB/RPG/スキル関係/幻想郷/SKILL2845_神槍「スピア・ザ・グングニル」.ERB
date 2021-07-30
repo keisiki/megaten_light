@@ -1,5 +1,4 @@
-﻿;통상공격
-;스킬のテン플레이트になっています
+﻿;20210702	名無	陥落時に攻撃回数を増加させる処理追加
 
 ;스킬名
 @SKILL_NAME_2845,ARG
@@ -16,16 +15,25 @@ RETURN 400
 RETURN 320
 
 ;　크리티컬률
-@SKILL_CRITICAL_RATE_2845
+@SKILL_CRITICAL_RATE_2845, ARG
 RETURN 50
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_2845,ARG
-RETURN 1
-
+IF SKILL_CHANGE(ARG, [[キャラ:레밀리아]]) && (TALENT:ARG:연모 || TALENT:ARG:친애)
+	LOCAL = (ABL:ARG:순종 + ABL:ARG:욕망 + ABL:ARG:기교)/6
+	RETURN LOCAL
+ELSE
+	RETURN 1
+ENDIF
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_2845,ARG
-RETURN 1
+IF SKILL_CHANGE(ARG, [[キャラ:레밀리아]]) && (TALENT:ARG:연모 || TALENT:ARG:친애)
+	LOCAL = (ABL:ARG:순종 + ABL:ARG:욕망 + ABL:ARG:기교)/6
+	RETURN LOCAL
+ELSE
+	RETURN 1
+ENDIF
 
 ;　ＨＰ2を支払うかＭＰ3を支払うか
 @SKILL_COSTTYPE_2845, ARG
@@ -42,12 +50,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2845
+@SKILL_DECIDE_TYPE_2845, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2845
+@SKILL_DAMAGETYPE_2845, ARG
 RETURN 1
 
 
@@ -122,9 +130,29 @@ RETURN 0
 LOCAL = POS(ARG:1)
 CALL ATTACK_SINGLE,ARG,LOCAL,2845
 
-
-
-
+IF SKILL_CHANGE(ARG, [[キャラ:레밀리아]]) && (TALENT:ARG:연모 || TALENT:ARG:친애)
+	IF (ABL:ARG:순종 + ABL:ARG:욕망 + ABL:ARG:기교) >= 12
+		SETCOLOR COLOR ("red")
+		SELECTCASE RAND:3
+			CASE 0
+				ABL:ARG:순종 -= 1
+				PRINTFORML 
+				PRINTFORMW ＞レミリアの従順Lvが下がった
+				PRINTFORML 
+			CASE 1
+				ABL:ARG:욕망 -= 1
+				PRINTFORML 
+				PRINTFORMW ＞レミリアの欲望Lvが下がった
+				PRINTFORML 
+			CASE 2
+				ABL:ARG:기교 -= 1
+				PRINTFORML 
+				PRINTFORMW ＞レミリアの技巧Lvが下がった
+				PRINTFORML 
+		ENDSELECT
+		RESETCOLOR
+	ENDIF
+ENDIF
 
 
 ;====================================================
@@ -135,7 +163,13 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2845
 @SKILL_EXPLAIN_2845
 PRINTL 모든 운명을 왜곡시켜 급소를 관통하는 마창을 적 1명에게 내던진다。（위력：대）
 PRINTL 명중률・크리티컬률이 비정상적으로 높다。
+IF TALENT:U:친애 || TALENT:U:연모
+	PRINTL 순종・욕망・技巧が十分に高いと、これらを消費して攻撃回数が増える。
+ELSE
+	PRINTL 연모 or 親愛陥落していると…
+ENDIF
 PRINTL 마왕　레밀리아・스칼렛의 스펠카드
+
 
 ;継承に필요한部位
 @継承部位_2845,ARG

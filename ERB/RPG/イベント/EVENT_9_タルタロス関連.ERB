@@ -76,7 +76,8 @@ IF 이벤트フラグ:9:0 == 0
 		ENDIF
 		던전フラグ:70:(94)=1
 		CALL ADD_NEW_COMPANION, [[キャラ:P3남주인공]],500
-			LOCAL = GETCHARA([[キャラ:P3남주인공]])
+		;新規加入したかどうか
+		LOCAL = RESULT
 	ELSE
 		IF TALENT:MASTER:남자
 			PRINTW 「역시 그렇지」
@@ -87,45 +88,60 @@ IF 이벤트フラグ:9:0 == 0
 		ENDIF
 		던전フラグ:70:(94)=2
 		CALL ADD_NEW_COMPANION, [[キャラ:P3여주인공]],500
-		LOCAL = GETCHARA([[キャラ:P3여주인공]])
+		;新規加入したかどうか
+		LOCAL = RESULT
 	ENDIF
 	PRINTW 「응, 그러면 나중에 여기로 데려오도록 하지」
-	PRINTW 「그래서, 이름이지만…」
-	PRINTL 노예의 이름과 애칭을 정해주세요
-	$INPUT_LOOP
-	PRINTL 노예의 이름을 입력해주세요
-	INPUTS
-	NAME:LOCAL = %RESULTS%
-	PRINTL 노예의 애칭을 입력해주세요
-	INPUTS
-	CALLNAME:LOCAL = %RESULTS%
-	VARSET LOCALS
-	IF NAME:LOCAL == LOCALS && CALLNAME:LOCAL == LOCALS
-		IF 던전フラグ:70:(94) == 1
-			IF RAND:2
-				NAME:LOCAL = 아리사토 미나토
-				CALLNAME:LOCAL = 미나토
+	;新規加入した場合
+	IF LOCAL
+		PRINTW 「그래서, 이름이지만…」
+		PRINTL 노예의 이름과 애칭을 정해주세요
+		$INPUT_LOOP
+		PRINTL 노예의 이름을 입력해주세요
+		INPUTS
+		NAME:(RESULT:1) = %RESULTS%
+		PRINTL 노예의 애칭을 입력해주세요
+		INPUTS
+		CALLNAME:(RESULT:1) = %RESULTS%
+		VARSET LOCALS
+		IF NAME:(RESULT:1) == LOCALS && CALLNAME:(RESULT:1) == LOCALS
+			IF 던전フラグ:70:(94) == 1
+				IF RAND:2
+					NAME:(RESULT:1) = 아리사토 미나토
+					CALLNAME:(RESULT:1) = 미나토
+				ELSE
+					NAME:(RESULT:1) = 유키 마코토
+					CALLNAME:(RESULT:1) = 마코토
+				ENDIF
 			ELSE
-				NAME:LOCAL = 유키 마코토
-				CALLNAME:LOCAL = 마코토
+				NAME:(RESULT:1) = 시오미 코토네
+				CALLNAME:(RESULT:1) = 코토네
 			ENDIF
-		ELSE
-			NAME:LOCAL = 시오미 코토네
-			CALLNAME:LOCAL = 코토네
 		ENDIF
+		PRINTFORML 이름　%NAME:(RESULT:1)%
+		PRINTFORML 애칭　%CALLNAME:(RESULT:1)%
+		PRINTL 이걸로 좋습니까？？
+		CALL INPUT_YN
+		SIF RESULT == 1
+			GOTO INPUT_LOOP
 	ENDIF
-	PRINTFORML 이름　%NAME:LOCAL%
-	PRINTFORML 애칭　%CALLNAME:LOCAL%
-	PRINTL 이걸로 좋습니까？
-	CALL INPUT_YN
-	SIF RESULT == 1
-		GOTO INPUT_LOOP
-
 	PRINTW ………
 	PRINTW ……
 	PRINTW …
 	PRINTW 이쿠츠키는 타르타로스과 그곳에 사는 쉐도우에 대한,설렁한 농담을 설명하고는 돌아갔다…
-	PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 타르타로스 답파지령을 받고, %NAME:LOCAL%을 얻었다.
+	PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 타르타로스 답파지령을 받고, %조사처리(NAME:(RESULT:1),"를")% 얻었다.
+	;新規加入した＆난이도ノーマル以下＆たけし이외
+	IF LOCAL && FLAG:전투난이도 < 3 && CFLAG:MASTER:당신の専攻分野 != 9
+	;전투난이도がNOMAL以下の場合、戦힘として加入させることが出来る
+		PRINTFORML 입수한 노예를 전력으로 사용합니까？
+		CALL INPUT_YN("예","아니오")
+		IF RESULT == 0
+			PRINTFORMW 그는\@ 던전フラグ:70:(94) == 1 ?  # 그녀는 \@は\@ 던전フラグ:70:(94) == 1 ? 처단되는 것 # 노리개가 되는 것 \@보다는 …라며 마지못해 승낙했다
+			CFLAG:(RESULT:1):전투참가불가능 = -1
+		ELSE
+			PRINTFORMW 입수한 노예를 노예방에 던져넣었다.
+		ENDIF
+	ENDIF
 
 	이벤트フラグ:9:0 = 1
 

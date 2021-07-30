@@ -6,17 +6,16 @@
 
 @기본능력수정_3542,ARG,ARG:1 = -1
 ;1.힘　2.지혜　3.마력　4.인내력　5.속도　6.운
-SELECTCASE ARG
-	CASE 4
+SELECTCASE GET_BASESTATUS(ARG)
+	CASE "힘", "지혜", "마력", "인내력", "속도", "운"
 		IF ARG:1 > -1
 			IF EQUIP:(ARG:1):머리 == 3031 && EQUIP:(ARG:1):몸통 == 3542 && EQUIP:(ARG:1):팔 == 4024 && EQUIP:(ARG:1):발 == 4527
-				;耐+4
-				RETURN 4
-			ELSE
-				RETURN 0
+				LOCAL = BASE:(ARG:1):LV / 10 + 1
+				IF LOCAL > 10
+					LOCAL = 10
+				ENDIF
+				RETURN LOCAL
 			ENDIF
-		ELSE
-			RETURN 0
 		ENDIF
 ENDSELECT
 RETURN 0
@@ -101,7 +100,7 @@ RETURN 0
 RETURN 0
 
 @장비조건설명_3542
-PRINTL 장비조건：♀ LV30〜
+PRINTL 장비조건：♀ LV30～
 
 @장비해설_3542
 SETCOLOR 0x87ceeb

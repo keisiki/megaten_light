@@ -34,12 +34,12 @@ RETURN 18
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2313
+@SKILL_DECIDE_TYPE_2313, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2313
+@SKILL_DAMAGETYPE_2313, ARG
 RETURN 1
 
 
@@ -92,7 +92,7 @@ RETURN 0
 
 $PRINT_LIST
 DRAWLINE
-PRINTFORML 어느 相性을 방어합니까？
+PRINTFORML 어느 상성을 방어합니까？
 DRAWLINE
 PRINTL [0]  검격 [1]  비구 [2]  타격 [3]  전술
 PRINTL [4]  화염 [5]  빙결 [6]  전격 [7]  충격
@@ -619,7 +619,7 @@ ENDIF
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2313
-PRINTL 임의의 相性을 한번만 무효화하는 플라즈마 장갑을 광범위하게 전개한다。사용 후 수트는 오버ー히트
+PRINTL 임의의 상성을 한번만 무효화하는 플라즈마 장갑을 광범위하게 전개한다。사용 후 수트는 오버ー히트
 
 ;사용조건
 @SKILL_SPECIAL_ACTIONABLE_2313,ARG

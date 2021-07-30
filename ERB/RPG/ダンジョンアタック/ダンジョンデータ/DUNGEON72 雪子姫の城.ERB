@@ -437,7 +437,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 				CFLAG:MASTER:秩混치 -= 8
 				
 				PRINTL 곰에게는 미안하지만 그림자 쪽을 거들기로 하자.
-
+				PRINTL 
 				PRINTL 「에？　이、이상하잖아、어째서 나를 향해서――」
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
@@ -454,7 +454,6 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 				FLAG:도주불가フラグ = 0
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
-				PRINTW
 				PRINTL 「유키코……미안……미안해……」
 				PRINTW
 				PRINTL ＞정진정명、단순한 인간인 모양이다。
@@ -486,7 +485,6 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 					TARGET = GETCHARA(3270)
 				ENDIF
 				FLAG:던전内조교 = 1
-				PRINTW
 				PRINTL 『앞으로 잘 부탁해라고 하던가?』
 				RETURN 1
 			ELSEIF RESULT == 1
@@ -500,7 +498,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 				FLAG:선제기습취소 = 1
 				CUSTOMDRAWLINE =
 				WAIT
-				CALL SET_ENEMY,9,3270,15,0,1
+				CALL SET_ENEMY,9,[[キャラ:치에의그림자]],15,0,1
 				CFLAG:(CHARANUM-1):行動횟수 = 2
 				MAXBASE:(CHARANUM-1):파마 = 0
 				MAXBASE:(CHARANUM-1):주살 = 0
@@ -551,31 +549,33 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 				CFLAG:MASTER:秩混치 -= 8
 				PRINTL 
 				PRINTL 「에!? 싫어! 잠깐! 그러지 마」
-				PRINTW 
-				CALL ADD_NEW_COMPANION,4560,100
-				LOCAL = RESULT:1
-				TALENT:LOCAL:처녀 = 0
-				ABL:LOCAL:Ｃ감각 = 1
-				ABL:LOCAL:Ｖ감각 = 2
-				ABL:LOCAL:Ａ감각 = 1
-				ABL:LOCAL:Ｂ감각 = 1
-				ABL:LOCAL:노출증 = 1
-				ABL:LOCAL:마조끼 = 1
-				MARK:LOCAL:반발각인 = 2
-				EXP:LOCAL:Ｖ경험 = 5
-				EXP:LOCAL:Ａ경험 = 5
-				EXP:LOCAL:키스경험 += 1
-				EXP:LOCAL:절정경험 = 1
-				EXP:LOCAL:성교경험 = 5
-				EXP:LOCAL:펠라경험 = 2
-				EXP:LOCAL:고통쾌락경험 = 5
-				EXP:LOCAL:긴박경험 = 5
-				CALL ADDS_ABNORMAL_EXP("처녀상실（강간）", LOCAL)
-				IF HAVE_PENIS(MASTER)
-					EXP:LOCAL:정액경험 = 10
-					EXP:LOCAL:질사경험 = 5
+					PRINTW 
+					CALL ADD_NEW_COMPANION,4560,100
+					IF RESULT == 1
+					LOCAL = RESULT:1
+					TALENT:LOCAL:처녀 = 0
+					ABL:LOCAL:Ｃ감각 = 1
+					ABL:LOCAL:Ｖ감각 = 2
+					ABL:LOCAL:Ａ감각 = 1
+					ABL:LOCAL:Ｂ감각 = 1
+					ABL:LOCAL:노출증 = 1
+					ABL:LOCAL:마조끼 = 1
+					MARK:LOCAL:반발각인 = 2
+					EXP:LOCAL:Ｖ경험 = 5
+					EXP:LOCAL:Ａ경험 = 5
+					EXP:LOCAL:키스경험 += 1
+					EXP:LOCAL:절정경험 = 1
+					EXP:LOCAL:성교경험 = 5
+					EXP:LOCAL:펠라경험 = 2
+					EXP:LOCAL:고통쾌락경험 = 5
+					EXP:LOCAL:긴박경험 = 5
+					CALL ADDS_ABNORMAL_EXP("처녀상실（강간）", LOCAL)
+					IF HAVE_PENIS(MASTER)
+						EXP:LOCAL:정액경험 = 10
+						EXP:LOCAL:질사경험 = 5
+					ENDIF
+					CALL SHOW_ABNORMAL_EXP , LOCAL, 0
 				ENDIF
-				CALL SHOW_ABNORMAL_EXP , LOCAL, 0
 				PRINTW ………
 				PRINTW ……
 				PRINTW …
@@ -668,7 +668,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 					FLAG:선제기습취소 = 1
 					CUSTOMDRAWLINE =
 					WAIT
-					CALL SET_ENEMY,9,3271,18,0,1
+					CALL SET_ENEMY,9,[[キャラ:유키코의그림자]],18,0,1
 					CFLAG:(CHARANUM-1):行動횟수 = 2
 					MAXBASE:(CHARANUM-1):파마 = 0
 					MAXBASE:(CHARANUM-1):주살 = 0
@@ -729,15 +729,15 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 						FLAG:선제기습취소 = 1
 						CUSTOMDRAWLINE =
 						WAIT
-						CALL SET_ENEMY,8,3271,18,0,1
+						CALL SET_ENEMY,8,[[キャラ:유키코의그림자]],18,0,1
 						CFLAG:(CHARANUM-1):行動횟수 = 2
 						MAXBASE:(CHARANUM-1):파마 = 0
 						MAXBASE:(CHARANUM-1):주살 = 0
 						CALL SYNC_STATUS,(CHARANUM-1)
 						CALL HEALTH_CHARA,(CHARANUM-1)
 						
-						CALL SET_ENEMY,10,3272,18,0,1
-						CSTR:(CHARANUM-1):사고패턴 = 3272
+						CALL SET_ENEMY,10,[[キャラ:백마탄왕자님]],18,0,1
+						CSTR:(CHARANUM-1):사고패턴 = 3341
 						MAXBASE:(CHARANUM-1):파마 = 0
 						MAXBASE:(CHARANUM-1):주살 = 0
 						CALL SYNC_STATUS,(CHARANUM-1)
@@ -804,11 +804,11 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 					PRINTW 　스포트라이트와 함께、제대로 안만들어진 장난감 같은、2.5등신의“왕자님”이 나타났다！
 					PRINTL 
 					PRINTW 「이런게…이런게 유키코의 왕자님이었다고？
-					PRINTW 　이런 건 잘못됬어！　はぁっ！　ドーン！！！」
+					PRINTW 　이런 모조품이 아냐! 하아악!」
 					;왕자님은 멀리 날아가버렸다ー
 					PRINTL 
-					PRINTW ドーン！
-					PRINTW 치에の、怒りに任せた一撃が、“王子様”の머리を吹き飛ばした！
+					PRINTW 토~옹！
+					PRINTW 치에의 분노에 맡긴 일격이 왕자님의 머리를 날려버렸다!
 					PRINTL 
 					PRINTL 『왕자님! 왕자님!? 어쩜 이럴 수가…』
 					PRINTW 
@@ -818,7 +818,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 					FLAG:선제기습취소 = 1
 					CUSTOMDRAWLINE =
 					WAIT
-					CALL SET_ENEMY,9,3271,18,0,1
+					CALL SET_ENEMY,9,[[キャラ:유키코의그림자]],18,0,1
 					CFLAG:(CHARANUM-1):行動횟수 = 2
 					MAXBASE:(CHARANUM-1):파마 = 0
 					MAXBASE:(CHARANUM-1):주살 = 0
@@ -927,17 +927,17 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 						FLAG:선제기습취소 = 1
 						CUSTOMDRAWLINE =
 						WAIT
-						CALL SET_ENEMY,8,3271,18,0,1
+						CALL SET_ENEMY,8,[[キャラ:유키코의그림자]],18,0,1
 						CFLAG:(CHARANUM-1):行動횟수 = 2
 						MAXBASE:(CHARANUM-1):파마 = 0
 						MAXBASE:(CHARANUM-1):주살 = 0
 						CALL SYNC_STATUS,(CHARANUM-1)
 						CALL HEALTH_CHARA,(CHARANUM-1)
 						
-						CALL SET_ENEMY,10,3272,18,0,1
+						CALL SET_ENEMY,10,[[キャラ:백마탄왕자님]],18,0,1
 						MAXBASE:(CHARANUM-1):파마 = 0
 						MAXBASE:(CHARANUM-1):주살 = 0
-						CSTR:(CHARANUM-1):사고패턴 = 3272
+						CSTR:(CHARANUM-1):사고패턴 = 3341
 						CALL SYNC_STATUS,(CHARANUM-1)
 						CALL HEALTH_CHARA,(CHARANUM-1)
 						CALL BATTLE_START
@@ -1109,7 +1109,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 						FLAG:선제기습취소 = 1
 						CUSTOMDRAWLINE =
 						WAIT
-						CALL SET_ENEMY,9,3271,18,0,1
+						CALL SET_ENEMY,9,[[キャラ:유키코의그림자]],18,0,1
 						CFLAG:(CHARANUM-1):行動횟수 = 2
 						MAXBASE:(CHARANUM-1):파마 = 0
 						MAXBASE:(CHARANUM-1):주살 = 0
@@ -1158,7 +1158,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 					PRINTW 　대대로 내려오는 전통？　마을의 자랑？　
 					PRINTW 　그런 거、엿이나 처먹으라 그래！』
 					PRINTL 
-					PRINTW 「違う！　私はそんなこと……、당신なんか……私じゃない！」
+					PRINTW 「아니야! 나는 그런 일..., 당신따위... 내가 아니야!」
 					PRINTL 
 					PRINTW ＞부정의 말을 한 직후、
 					PRINTW 　치에 때랑 똑같이、유키코의 그림자에 검은 그림자가 뒤덮이고、그 형태를 바꾸기 시작한다……
@@ -1415,15 +1415,15 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 						FLAG:선제기습취소 = 1
 						CUSTOMDRAWLINE =
 						WAIT
-						CALL SET_ENEMY,8,3271,18,0,1
+						CALL SET_ENEMY,8,[[キャラ:유키코의그림자]],18,0,1
 						CFLAG:(CHARANUM-1):行動횟수 = 2
 						MAXBASE:(CHARANUM-1):파마 = 0
 						MAXBASE:(CHARANUM-1):주살 = 0
 						CALL SYNC_STATUS,(CHARANUM-1)
 						CALL HEALTH_CHARA,(CHARANUM-1)
 						
-						CALL SET_ENEMY,10,3272,18,0,1
-						CSTR:(CHARANUM-1):사고패턴 = 3272
+						CALL SET_ENEMY,10,[[キャラ:백마탄왕자님]],18,0,1
+						CSTR:(CHARANUM-1):사고패턴 = 3341
 						MAXBASE:(CHARANUM-1):파마 = 0
 						MAXBASE:(CHARANUM-1):주살 = 0
 						CALL SYNC_STATUS,(CHARANUM-1)
@@ -1639,7 +1639,7 @@ RETURN 1
 ;사고패턴
 ;=================================
 ;王子様の디아라마ウザいお
-@SET_ACTION_3272,ARG
+@SET_ACTION_3341,ARG
 IF RAND:2 > 0
 	CALL CHECK_ACTIONABLE,ARG,402
 	SIF RESULT == 0

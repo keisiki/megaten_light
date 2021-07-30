@@ -1,7 +1,11 @@
 ﻿; 신공파(마가렛戦)
 
 @SKILL_NAME_1725, ARG
-RESULTS = 신공파
+IF SKILL_CHANGE(ARG, [[キャラ:P1주인공]]) && ABL:GETCHARA([[キャラ:P1주인공]]):초기페르소나 == [[キャラ:진・비슈누（페르소나）]]
+	RESULTS = 진공파
+ELSE
+	RESULTS = 신공파
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_1725, ARG
@@ -33,12 +37,12 @@ RETURN 45
 RETURN GET_TYPE_NUM("질풍")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1725
+@SKILL_DECIDE_TYPE_1725, ARG
 RETURN 1
 
 ;魔法
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1725
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1725, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か

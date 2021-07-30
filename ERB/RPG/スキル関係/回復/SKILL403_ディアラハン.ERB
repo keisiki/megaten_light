@@ -3,8 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_403,ARG
-RESULTS = 디아라한
-
+IF SKILL_CHANGE(ARG, [[キャラ:T씨]])
+	RESULTS = 야붓(破っ)!
+ELSE
+	RESULTS = 디아라한
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_403, ARG
@@ -36,12 +39,12 @@ RETURN 30
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_403
+@SKILL_DECIDE_TYPE_403, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_403
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_403, ARG
 RETURN 0
 
 

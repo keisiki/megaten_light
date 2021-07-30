@@ -1,7 +1,10 @@
 ﻿;스킬名
 @SKILL_NAME_1514,ARG
-RESULTS = 어스브레이커
-
+IF SKILL_CHANGE(ARG, 3118)
+	RESULTS = 알라우네수격(樹撃)
+ELSE
+	RESULTS = 어스브레이크
+ENDIF
 ;　명중
 @SKILL_HITRATE_1514, ARG
 RETURN 85
@@ -32,11 +35,11 @@ RETURN 12
 RETURN GET_TYPE_NUM("지변")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1514
+@SKILL_DECIDE_TYPE_1514, ARG
 RETURN 1
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1514
+@SKILL_DAMAGETYPE_1514, ARG
 RETURN 1
 
 
@@ -124,8 +127,12 @@ ENDIF
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_1514
-PRINTL [후열] 전열의 적 1체에 지변속성 중 물리데미지. 명중률이 조금 낮고, HIT한 적의 방어력을 감소시킨다.
-
+IF U > 0 && U < CHARANUM && NO:U == 3118
+	PRINTL 요마　アルラウネを召喚し、敵を地上に叩きつける。
+	PRINTL 地変相性物理데미지＋防御力低下。後列使用可能。
+ELSE
+	PRINTL [후열] 전열의 적 1체에 지변속성 중 물리데미지. 명중률이 조금 낮고, HIT한 적의 방어력을 감소시킨다.
+ENDIF
 ;継承に필요한部位
 @継承部位_1514,ARG
 RETURN 1

@@ -40,242 +40,161 @@ CUSTOMDRAWLINE =
 	PRINTW 「다만、실력은 시험해보겠지만.」
 	PRINTW 그러고선 미마는 이쪽을 품평 하듯이 응시했다.
 	PRINTL 
-	IF BASE:MASTER:LV > 64
+	;最強形態は삭제、中間形態はいったん封印 
+	;IF BASE:MASTER:LV > 64
 		;本気モード　스킬系統を강화してある程度強くなったので暇なときに遊んでください
-		PRINTW 「…너、상당히 실력 있잖아.」
-		PRINTW 「…응、이렇게 되면 진심으로 싸워주지！」
-		PRINTW 「너희들、빨리 나와！」
-		PRINTL 
-		PRINTW 그 외침에 따라 미마의 옆으로부터 두 사람의 그림자가 뛰쳐나왔다.
-		PRINTW 「확실히 강한 듯 하네요….하지만、이몸의 전차의 적은 아니에요！」
-		PRINTW 백의로 몸을 감싼 땋은 머리의 소녀가 전차로부터 얼굴을 내밀곤 외쳤다.
-		PRINTW 「…과연、우리의 주인이 경계할만 하군. 진심을 다해주마！」
-		PRINTW 또 한사람의 여자 사무라이가 칼에 손을 얹었다.
-		PRINTL 
-		PRINTW 「거기에 덤이에요！이몸의 자신작인 바케바케를 보여주겠어요！」
-		PRINTW 전차를 탄 소녀가 신호를 내리자 어디선가 유령과 같은 것이 3마리 나타났다！
-		PRINTW …이쪽으로써도 전력으로 맞서 싸울 수 밖에 없을 것 같다.
-		PRINTW 당신은 악마를 소환하면서 자신의 무기를 쥐었다.
-		PRINTL 외도　미마가 1체 출현했다！
-		PRINTL 영웅　리카가 1체 출현했다！
-		PRINTL 영웅　메이라가 1체 출현했다！
-		PRINTL 외도　바케바케가 3체 출현했다！
-		PRINTW 　　　　　　　　　　　　　　　　　　　　　　　　♪전차소녀가꾸는꿈♪
+		;PRINTW 「…너、상당히 실력 있잖아.」
+		;PRINTW 「…응、이렇게 되면 진심으로 싸워주지！」
+		;PRINTW 「너희들、빨리 나와！」
+		;PRINTL 
+		;PRINTW 그 외침에 따라 미마의 옆으로부터 두 사람의 그림자가 뛰쳐나왔다.
+		;PRINTW 「확실히 강한 듯 하네요….하지만、이몸의 전차의 적은 아니에요！」
+		;PRINTW 백의로 몸을 감싼 땋은 머리의 소녀가 전차로부터 얼굴을 내밀곤 외쳤다.
+		;PRINTW 「…과연、우리의 주인이 경계할만 하군. 진심을 다해주마！」
+		;PRINTW 또 한사람의 여자 사무라이가 칼에 손을 얹었다.
+		;PRINTW 당신は악마を召還すると自らも무기を構えた。
+		;PRINTL 외도　미마が一体出た！
+		;PRINTL 영웅　리카(TH)が一体出た！
+		;PRINTL 영웅　메이라が一体出た！
+		;PRINTW 　　　　　　　　　　　　　　　　　　　　　　　　♪Complete Darkness♪
+		;CUSTOMDRAWLINE =
+		;WAIT
+		
+		;CALL SET_ENEMY,9,6806,45,0,1
+		;CALL SYNC_STATUS,(CHARANUM-1)
+		;ABL:(CHARANUM-1):스킬1 = [[스킬:주살가드브레이크]]
+		;ABL:(CHARANUM-1):스킬2 = [[스킬:천년의저주]]
+		;ABL:(CHARANUM-1):스킬3 = [[스킬:마하・지오다인]]
+		;ABL:(CHARANUM-1):스킬4 = 0
+		;ABL:(CHARANUM-1):스킬5 = 0
+		;ABL:(CHARANUM-1):스킬6 = 0
+		;ABL:(CHARANUM-1):스킬7 = 0
+		;LOCAL = CHARANUM-1
+		;CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		;CALL SET_ENEMY,8,6809,50,0,1
+		;CALL SYNC_STATUS,(CHARANUM-1)
+		;ABL:(CHARANUM-1):스킬1 = [[스킬:집중탄막사출]]
+		;ABL:(CHARANUM-1):스킬2 = [[스킬:지오다인]]
+		;ABL:(CHARANUM-1):스킬3 = [[스킬:마카・카쟈]]
+		;ABL(CHARANUM-1):스킬4 = 0
+		;ABL:(CHARANUM-1):스킬5 = 0
+		;ABL:(CHARANUM-1):스킬6 = 0
+		;ABL:(CHARANUM-1):스킬7 = 0
+		;LOCAL = CHARANUM-1
+		;CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		;CALL SET_ENEMY,10,6810,45,0,1
+		;CALL SYNC_STATUS,(CHARANUM-1)
+		;ABL:(CHARANUM-1):스킬1 = [[스킬:기합]]
+		;ABL:(CHARANUM-1):스킬2 = [[스킬:번개찌르기]]
+		;ABL:(CHARANUM-1):스킬3 = [[스킬:토르해머]]
+		;ABL:(CHARANUM-1):스킬4 = 0
+		;ABL:(CHARANUM-1):스킬5 = 0
+		;ABL:(CHARANUM-1):스킬6 = 0
+		;ABL:(CHARANUM-1):스킬7 = 0
+		;LOCAL = CHARANUM-1
+		;CALL HEALTH_CHARA,(CHARANUM-1)
+		
+		;CALL BATTLE_START
+		;CUSTOMDRAWLINE =
+		;PRINTL 「…ふむ、こんなものだね」
+		;PRINTL 미마は戦いの손を止めた。
+		;CUSTOMDRAWLINE =
+		;WAIT
+		;PRINTW  「実힘の程は確かめさせてもらった、気に入ったよ。」
+		;PRINTW 미마はそう言うとディスクを渡してきた。 
+		;PRINTW 「これは『요악단의역사』。"幻想郷"の古の猛者達の記録さ。」
+		;PRINTW 「あんたならこいつを使いこなせるかもね」
+		;PRINTW 「ついでにこの카드を渡しておくよ。何かの役に立つかもしれないわ。」
+		;PRINTW そう言うと미마は立ち去った…
+		;PRINTL 
+		;PRINTW 「거기에 덤이에요！이몸의 자신작인 바케바케를 보여주겠어요！」
+		;PRINTW 전차를 탄 소녀가 신호를 내리자 어디선가 유령과 같은 것이 3마리 나타났다！
+		;PRINTW …이쪽으로써도 전력으로 맞서 싸울 수 밖에 없을 것 같다.
+		;PRINTW 당신은 악마를 소환하면서 자신의 무기를 쥐었다.
+		;PRINTL 외도　미마가 1체 출현했다！
+		;PRINTL 영웅　리카가 1체 출현했다！
+		;PRINTL 영웅　메이라가 1체 출현했다！
+		;PRINTL 외도　바케바케가 3체 출현했다！
+		;PRINTW 　　　　　　　　　　　　　　　　　　　　　　　　♪전차소녀가꾸는꿈♪
 		;미마「あたしのテーマ曲じゃないんかい！」리카「EXボスのあたいのほうが偉いのです！」
-		CUSTOMDRAWLINE =
-		WAIT
 		
-		;行動パターン作りたかったけど諦めた…
-		;魅魔さま　내성を消して専用技や주원で痛打を狙う
-		CALL SET_ENEMY,14,6806,65,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:주살가드브레이크]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:천년의저주]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:번개의난무]]
-		ABL:(CHARANUM-1):스킬4 = [[스킬:컨센트레이트]]
-		ABL:(CHARANUM-1):스킬5 = [[스킬:유환난무]]
-		ABL:(CHARANUM-1):스킬6 = 0
-		ABL:(CHARANUM-1):스킬7 = 0
-		ABL:(CHARANUM-1):스킬8 = 0
-		CFLAG:(CHARANUM-1):行動횟수 = 2
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		;리카　1체공격おおめの魔法어택커ー
-		CALL SET_ENEMY,13,6809,60,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:집중탄막사출]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:마하・지오다인]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:기가리온]]
-		ABL:(CHARANUM-1):스킬4 = [[스킬:대염상]]
-		ABL:(CHARANUM-1):스킬5 = [[스킬:전차소녀가꾸는꿈]]
-		ABL:(CHARANUM-1):스킬6 = 0
-		ABL:(CHARANUM-1):스킬7 = 0
-		ABL:(CHARANUM-1):스킬8 = 0
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		;明羅さん　三人組唯一の物理어택커ー、高火힘の검격を使う
-		CALL SET_ENEMY,15,6810,60,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:토르해머]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:베어내기]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:허공참파]]
-		ABL:(CHARANUM-1):스킬4 = [[스킬:소닉무버]]
-		ABL:(CHARANUM-1):스킬5 = [[스킬:어둠의힘]]
-		ABL:(CHARANUM-1):스킬6 = 0
-		ABL:(CHARANUM-1):스킬7 = 0
-		ABL:(CHARANUM-1):스킬8 = 0
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		;ばけばけA　バフ
-		CALL SET_ENEMY,8,6829,55,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:히트라이저]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:파워브레스]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:다크브레스]]
-		ABL:(CHARANUM-1):스킬4 = [[스킬:축시의참배]]
-		ABL:(CHARANUM-1):스킬5 = [[스킬:마카카쟈오토]]
-		ABL:(CHARANUM-1):스킬6 = 0
-		ABL:(CHARANUM-1):스킬7 = 0
-		ABL:(CHARANUM-1):스킬8 = 0
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		;ばけばけB　デバフ
-		CALL SET_ENEMY,10,6829,55,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:데・카쟈]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:랜더마이저]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:포그브레스]]
-		ABL:(CHARANUM-1):스킬4 = [[스킬:무거운공기]]
-		ABL:(CHARANUM-1):스킬5 = [[스킬:혼탁의장기]]
-		ABL:(CHARANUM-1):스킬6 = [[스킬:축시의참배]]
-		ABL:(CHARANUM-1):스킬7 = [[스킬:테트라칸]]
-		ABL:(CHARANUM-1):스킬7 = [[스킬:라쿠카쟈오토]]
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		;ばけばけC　盾ばけばけ
-		CALL SET_ENEMY,9,6829,57,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:스쿠카쟈오토]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:리캄]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:하이퍼카운터]]
-		ABL:(CHARANUM-1):스킬4 = [[스킬:메・디아라한]]
-		ABL:(CHARANUM-1):스킬5 = [[스킬:데・쿤다]]
-		ABL:(CHARANUM-1):스킬6 = [[스킬:축시의참배]]
-		ABL:(CHARANUM-1):스킬7 = [[스킬:마카라칸]]
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		CALL BATTLE_START
-		CUSTOMDRAWLINE =
-		PRINTL 「꽤 하잖아…」
-		PRINTL 미마는 전의를 잃었다.
-		CUSTOMDRAWLINE =
-		WAIT
-		PRINTW  「…설마 이 정도의 맹자일줄은、마음에 들었다.」
-		PRINTW 미마는 그렇게 말하면서 디스크를 건네주었다. 
-		PRINTW 「이것은 「요악단의역사」."환상시골"의 옛 맹자들의 기록이다.」
-		PRINTW 「너라면 이녀석을 가지고 있어도 별 문제 없겠지.」
-		PRINTW 「하는 김에 이 카드를 건네주지. 어디선가 도움이 될지도 모르니.」
-		PRINTW 그렇게 말하면서 미마는 떠나갔다…
-		PRINTL 
-	ELSEIF BASE:MASTER:LV > 49
-		PRINTW 「…호오、뭐 급제점은 되겠군.」
-		PRINTW 「죽어 버리진 않을 정도로 때려눞혀 주지.」
-		PRINTW 「너희들、빨리 나와」
-		PRINTL 
-		PRINTW 그 외침과 동시에 미마의 옆으로부터 2개의 그림자가 떠올랐다。
-		PRINTW 「당신이 소문의 서머너씨군요！조금 빠르지만 갑니다！」
-		PRINTW 백의를 입은 소녀가 외쳤다。
-		PRINTW 「호오、네놈이 그…、뭐 좋다、나의 칼의 녹이 되어 줘야겠어」
-		PRINTW 또 한사람의 여자 사무라이가 칼을 뽑았다。
-		PRINTW 당신은 악마를 소환하고 무기를 들었다.
-		PRINTL 외도　미마가 1체 출현했다！
-		PRINTL 영웅　리카가 1명 등장했다！
-		PRINTL 영웅　메이라가 1명 등장했다！
-		PRINTW 　　　　　　　　　　　　　　　　　　　　　　　　♪Complete Darkness♪
-		CUSTOMDRAWLINE =
-		WAIT
-		
-		CALL SET_ENEMY,9,6806,45,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:주살가드브레이크]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:천년의저주]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:마하・지오다인]]
-		ABL:(CHARANUM-1):스킬4 = 0
-		ABL:(CHARANUM-1):스킬5 = 0
-		ABL:(CHARANUM-1):스킬6 = 0
-		ABL:(CHARANUM-1):스킬7 = 0
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		CALL SET_ENEMY,8,6809,50,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:집중탄막사출]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:지오다인]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:마카・카쟈]]
-		ABL:(CHARANUM-1):스킬4 = 0
-		ABL:(CHARANUM-1):스킬5 = 0
-		ABL:(CHARANUM-1):스킬6 = 0
-		ABL:(CHARANUM-1):스킬7 = 0
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		CALL SET_ENEMY,10,6810,45,0,1
-		CALL SYNC_STATUS,(CHARANUM-1)
-		ABL:(CHARANUM-1):스킬1 = [[스킬:기합]]
-		ABL:(CHARANUM-1):스킬2 = [[스킬:번개찌르기]]
-		ABL:(CHARANUM-1):스킬3 = [[스킬:토르해머]]
-		ABL:(CHARANUM-1):스킬4 = 0
-		ABL:(CHARANUM-1):스킬5 = 0
-		ABL:(CHARANUM-1):스킬6 = 0
-		ABL:(CHARANUM-1):스킬7 = 0
-		LOCAL = CHARANUM-1
-		CALL HEALTH_CHARA,(CHARANUM-1)
-		
-		CALL BATTLE_START
-		CUSTOMDRAWLINE =
-		PRINTL 「…흠、 이정도인가」
-		PRINTL 「미마는 싸움을 멈췄다。」
-		CUSTOMDRAWLINE =
-		WAIT
-		PRINTW  「실력은 확인했다、마음에 들었어。」
-		PRINTW 미마는 그렇게 말하면서 디스크를 건네주었다. 
-		PRINTW 「이것은 「요악단의역사」."환상시골"의 옛 맹자들의 기록이다.」
-		PRINTW 「너라면 이녀석을 가지고 있어도 별 문제 없겠지.」
-		PRINTW 「하는 김에 이 카드를 건네주지. 어디선가 도움이 될지도 모르니.」
-		PRINTW 그렇게 말하면서 미마는 떠나갔다…
-		PRINTL 
-	ELSE
-		
-	PRINTW 「…흠、지금은 미숙하지만 장래는 기대할 만 하겠군。」
-	PRINTW 「다만 내가 직접 나서면 죽여버릴지 모르겠고…」
-	PRINTW 「그럼 내 부하들을 상대해 봐라！자아、나와라！」
+	PRINTW 「…ふん、今はまだ未熟だけど伸びしろはありそうね。」
+	PRINTW 「ただ私が直接出ると殺しちゃいそうだし…」
+	PRINTW 「じゃあ私の部下を倒してみな！さあ、出ておいで！」
 	PRINTL 
-	PRINTW 그 외침과 동시에 미마의 옆으로부터 2개의 그림자가 떠올랐다。
-	PRINTW 「당신이 소문의 서머너씨군요！조금 빠르지만 갑니다！」
-	PRINTW 백의를 입은 소녀가 외쳤다。
-	PRINTW 「호오、네놈이 그…、뭐 좋다、나의 칼의 녹이 되어 줘야겠어」
-	PRINTW 또 한사람의 여자 사무라이가 칼을 뽑았다。
-	PRINTL 영웅　리카가 1명 등장했다！
-	PRINTL 영웅　메이라가 1명 등장했다！
+	PRINTW その一声と共に미마の横から二つの影が躍り出た。
+	PRINTW 「당신が噂の서머너さんですね！早速だけど逝くなのです！」
+	PRINTW 백의に身を包んだ소녀が叫ぶ。
+	PRINTW 「ほう、お前があの…、ま아이い、私の도검の錆になってもらうぞ」
+	PRINTW もう一人の女侍が도검を抜く。
+	PRINTW …どこからともなくお化けのようなものまで出てきた！
+	PRINTL 외도　바케바케가 1체 출현했다！
+	PRINTL 영웅　리카가 1체 출현했다！
+	PRINTL 영웅　메이라가 1체 출현했다！
 	PRINTW 　　　　　　　　　　　　　　　　　　　　　　　　♪어둠의힘♪
 	
 	CUSTOMDRAWLINE =
 	WAIT
-	
-	CALL SET_ENEMY,8,6809,25,0,1
+
+	CALL SET_ENEMY,8,6829,25,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
+	ABL:(CHARANUM-1):스킬1 = [[스킬:마카빔]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:무도]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:메・디아]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	ABL:(CHARANUM-1):스킬6 = 0
+	ABL:(CHARANUM-1):스킬7 = 0
+	ABL:(CHARANUM-1):스킬8 = 0
+	LOCAL = CHARANUM-1
+	CALL HEALTH_CHARA,(CHARANUM-1)
+		
+	CALL SET_ENEMY,9,6809,25,0,1
+	CALL SYNC_STATUS,(CHARANUM-1)
+	ABL:(CHARANUM-1):스킬1 = [[스킬:집중탄막사출]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:지온가]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:마카・카쟈]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	ABL:(CHARANUM-1):스킬6 = 0
+	ABL:(CHARANUM-1):스킬7 = 0
+	ABL:(CHARANUM-1):스킬8 = 0
 	LOCAL = CHARANUM-1
 	CALL HEALTH_CHARA,(CHARANUM-1)
 	
-	CALL SET_ENEMY,9,6810,25,0,1
+	CALL SET_ENEMY,10,6810,25,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
+	ABL:(CHARANUM-1):스킬1 = [[스킬:회전베기]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:마하무도]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:베어내기]]
+	ABL:(CHARANUM-1):스킬4 = 0
+	ABL:(CHARANUM-1):스킬5 = 0
+	ABL:(CHARANUM-1):스킬6 = 0
+	ABL:(CHARANUM-1):스킬7 = 0
+	ABL:(CHARANUM-1):스킬8 = 0
 	LOCAL = CHARANUM-1
 	CALL HEALTH_CHARA,(CHARANUM-1)
 
-CALL BATTLE_START
-CUSTOMDRAWLINE =
-PRINTL 「당해버린 겁니다」
-PRINTL 「이제 봐줘～」
-PRINTL 두 명은 도주했다。
-CUSTOMDRAWLINE =
-WAIT
-PRINTW  「그 두 명을 쓰러뜨린다니 꽤 하잖아、마음에 들었어」
-PRINTW 미마는 그렇게 말하면서 디스크를 건네주었다。 
-PRINTW 「이것은『요악단의역사』。"환상향"의 옛 맹자들의 기록이야。」
-PRINTW 「너라면 이걸 잘 다룰 수 있겠지。기대할게。」
-PRINTW 「하는 김에 이 카드를 건네주지. 어디선가 도움이 될지도 모르니.」
-PRINTW 그렇게 말하면서 미마는 떠나갔다…
-PRINTL 
-ENDIF
-PRINTFORMW 의뢰달성에 따라、계좌에 ￥50000가 입금되었다。
-MONEY += 50000
-PRINTFORMW 인스톨 소프트「요악단의역사」와 스킬카드2장을 손에 넣었다。
+	CALL BATTLE_START
+		CUSTOMDRAWLINE =
+	PRINTL 「당해버린 겁니다」
+	PRINTL 「이제 봐줘～」
+	PRINTL 두 명은 도주했다。
+	CUSTOMDRAWLINE =
+	WAIT
+	PRINTW  「그 두 명을 쓰러뜨린다니 꽤 하잖아、마음에 들었어」
+	PRINTW 미마는 그렇게 말하면서 디스크를 건네주었다。 
+	PRINTW 「이것은『요악단의역사』。"환상향"의 옛 맹자들의 기록이야。」
+	PRINTW 「너라면 이걸 잘 다룰 수 있겠지。기대할게。」
+	PRINTW 「하는 김에 이 카드를 건네주지. 어디선가 도움이 될지도 모르니.」
+	PRINTW 그렇게 말하면서 미마는 떠나갔다…
+	PRINTL 
+	;ENDIF
+PRINTFORMW 의뢰달성에 따라、계좌에 ￥20000가 입금되었다。
+MONEY += 20000
+PRINTFORMW 인스톨소프트「요악단의역사」와 스킬카드 2장을 손에 넣었다。
 ITEM:요악단의역사 = 1
 ITEM:스킬카드【확산탄막사출】 = 1
 ITEM:스킬카드【집중탄막사출】 = 1

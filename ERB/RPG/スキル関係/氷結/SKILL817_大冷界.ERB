@@ -14,8 +14,12 @@ RETURN 90
 ;複数いる場合は최대値にひっかからなければ350が期待値。複数回なので凍結を取りやすい…はず
 ;릴리즈제일・니플헤임よりはきっと弱い
 @SKILL_POWER_817, ARG
-RETURN 140
-
+;氷結版데들리번
+IF SKILL_CHANGE(ARG, [[キャラ:미츠루]]) && BASE:ARG:LV >= 50 && EQUIP:ARG:장비페르소나 == 0 && DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("NO") == 3952
+	RETURN 420
+ELSE
+	RETURN 140
+ENDIF
 ;최저がここで渋いのは同랭크にあたるマハ系が최대5HITしかできないから
 ;적総数の판정を全후열합계にできるという強みもあるので、ここで少し絞っといても総HIT数は割合稼げる…はず
 ;최저공격횟수
@@ -24,15 +28,26 @@ RETURN 1
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_817,ARG
-RETURN 16
-
+IF SKILL_CHANGE(ARG, [[キャラ:미츠루]]) && BASE:ARG:LV >= 50 && EQUIP:ARG:장비페르소나 == 0 && DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("NO") == 3952
+	RETURN 1
+ELSE
+	RETURN 16
+ENDIF
 ;一体辺りの최대ＨＩＴ数
 @SKILL_MAXATK_PER_817,ARG
-RETURN 5
+IF SKILL_CHANGE(ARG, [[キャラ:미츠루]]) && BASE:ARG:LV >= 50 && EQUIP:ARG:장비페르소나 == 0 && DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("NO") == 3952
+	RETURN 1
+ELSE
+	RETURN 5
+ENDIF
 
 ;一体辺りの최저ＨＩＴ数
 @SKILL_MINATK_PER_817,ARG
-RETURN 0
+IF SKILL_CHANGE(ARG, [[キャラ:미츠루]]) && BASE:ARG:LV >= 50 && EQUIP:ARG:장비페르소나 == 0 && DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("NO") == 3952
+	RETURN 1
+ELSE
+	RETURN 0
+ENDIF
 
 ;　ＨＰ2を支払うかＭＰ3を支払うか
 @SKILL_COSTTYPE_817, ARG
@@ -41,7 +56,11 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_817,ARG
-RETURN 44
+IF SKILL_CHANGE(ARG, [[キャラ:미츠루]]) && BASE:ARG:LV >= 50 && EQUIP:ARG:장비페르소나 == 0 && DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("NO") == 3952
+	RETURN 35
+ELSE
+	RETURN 44
+ENDIF
 
 ;　相性
 @SKILL_TYPE_817,ARG
@@ -49,12 +68,12 @@ RETURN GET_TYPE_NUM("빙결")
 ;화염
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_817
+@SKILL_DECIDE_TYPE_817, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_817
+@SKILL_DAMAGETYPE_817, ARG
 RETURN 2
 
 
@@ -116,7 +135,11 @@ RETURN GET_TYPE_NUM("빙결")
 
 ;추가효과기본부여확률
 @SKILL_ADDTIONAL_BASE_RATE_817,ARG
-RETURN 20
+IF SKILL_CHANGE(ARG, [[キャラ:미츠루]]) && BASE:ARG:LV >= 50 && EQUIP:ARG:장비페르소나 == 0 && DITEMTYPE:(CFLAG:ARG:초기페르소나ナンバー):페르소나("NO") == 3952
+	RETURN 30
+ELSE
+	RETURN 20
+ENDIF
 
 ;추가효과부여확률上限
 @SKILL_ADDTIONAL_MAX_RATE_817,ARG
@@ -138,8 +161,11 @@ CALL ATTACK_RAND,ARG,ARG:1,817
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_817
-PRINTL [후열] 적 전체에 1～16회(1인 최대 5회) 빙결속성 소 마법데미지. (낮은 확률로 FREEZE)
-
+IF U > 0 && U < CHARANUM && NO:U == [[キャラ:미츠루]]
+	PRINTL 적 전체에 빙결 속성으로 대위력의 의 공격을 준다。동결의 추가효과。
+ELSE
+	PRINTL [후열] 적 전체에 1～16회(1인 최대 5회) 빙결속성 소 마법데미지. (낮은 확률로 FREEZE)
+ENDIF
 ;継承に필요한部位
 @継承部位_817,ARG
 RETURN 1

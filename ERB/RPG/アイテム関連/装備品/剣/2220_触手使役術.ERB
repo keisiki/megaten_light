@@ -14,65 +14,13 @@ RETURN 0
 @전투능력수정_2220,ARG,ARG:1 = -1
 SELECTCASE ARG
 	CASE 0
-		IF ARG:1 > -1
-			IF TEQUIP:(ARG:1):전신복 == 340 || TEQUIP:(ARG:1):전신속옷 == 722
-				RETURN 44 + ABL:(ARG:1):23 * 4 + FLAG:촉수레벨
-			ELSE
-				RETURN 44 + (ABL:(ARG:1):23 * 4 + ((FLAG:촉수레벨) / 4))
-			ENDIF
-		ELSE
-			RETURN 44
-		ENDIF
+		RETURN 44
 	CASE 1
-		IF ARG:1 > -1
-			IF TEQUIP:(ARG:1):전신복 == 340 || TEQUIP:(ARG:1):전신속옷 == 722
-				RETURN 22 + (ABL:(ARG:1):23 * 2 + ((FLAG:촉수레벨) / 2))
-			ELSE
-				RETURN 22 + (ABL:(ARG:1):23 * 2 + ((FLAG:촉수레벨) / 8))
-			ENDIF
-		ELSE
-			RETURN 22
-		ENDIF
-	CASE 2
-		IF ARG:1 > -1
-			IF TEQUIP:(ARG:1):전신복 == 340 || TEQUIP:(ARG:1):전신속옷 == 722
-				RETURN -4 + (ABL:(ARG:1):23 * 4 + ((FLAG:촉수레벨) / 8))
-			ELSE
-				RETURN -4
-			ENDIF
-		ELSE
-			RETURN -4
-		ENDIF
-	CASE 3
-		IF ARG:1 > -1
-			IF TEQUIP:(ARG:1):전신복 == 340 || TEQUIP:(ARG:1):전신속옷 == 722
-				RETURN -4 + (ABL:(ARG:1):23 * 2 + ((FLAG:촉수레벨) / 16))
-			ELSE
-				RETURN -4
-			ENDIF
-		ELSE
-			RETURN -4
-		ENDIF
-	CASE 4
-		IF ARG:1 > -1
-			IF TEQUIP:(ARG:1):전신복 == 340 || TEQUIP:(ARG:1):전신속옷 == 722
-				RETURN 4 + (ABL:(ARG:1):23 * 4 + ((FLAG:촉수레벨) / 2))
-			ELSE
-				RETURN 4 + (ABL:(ARG:1):23 * 4 + ((FLAG:촉수레벨) / 8))
-			ENDIF
-		ELSE
-			RETURN 2
-		ENDIF
-	CASE 5
-		IF ARG:1 > -1
-			IF TEQUIP:(ARG:1):전신복 == 340 || TEQUIP:(ARG:1):전신속옷 == 722
-				RETURN 2 + (ABL:(ARG:1):23 * 2 + ((FLAG:촉수레벨) / 4))
-			ELSE
-				RETURN 2 + (ABL:(ARG:1):23 * 2 + ((FLAG:촉수레벨) / 16))
-			ENDIF
-		ELSE
-			RETURN 1
-		ENDIF
+		RETURN 22
+        CASE 2
+                RETURN -4
+        CASE 3
+                RETURN -4
 ENDSELECT
 RETURN 0
 
@@ -88,12 +36,6 @@ RETURN 2
 RETURN 1
 
 @최대공격횟수_2220, ARG = -1
-	IF ARG:1 > -1
-		SIF TEQUIP:(ARG:1):전신복 == 340 && TEQUIP:(ARG:1):전신속옷 == 722
-			RETURN 3
-		SIF TEQUIP:(ARG:1):전신복 == 340 || TEQUIP:(ARG:1):전신속옷 == 722
-			RETURN 2
-	ENDIF
 RETURN 1
 
 @사거리_2220, ARG = -1
@@ -125,7 +67,6 @@ PRINTL 장비조건：촉수사역술
 @장비해설_2220
 PRINTL 자신의 팔을 촉수로 바꿔 공격한다.
 PRINTL 팔이 뻗어나가기 때문에 그곳을 공격받을 위험이 있다.
-PRINTL 전신복: 촉수갑옷 or 전신속옷: 촉수수트를 입으면?
 
 RETURN 0
 

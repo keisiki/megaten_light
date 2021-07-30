@@ -52,7 +52,7 @@ ELSEIF TFLAG:전회の조교者 != PLAYER
 	ENDIF
 ENDIF
 ;전회が커닐링구스・펠라한다・식스나인・69파이즈리の時、식스나인へ
-IF GROUPMATCH(PREVCOM, 1, 2 , 501, 508)
+IF GROUPMATCH(PREVCOM, 1, 2 , 501, 508) && !(TFLAG:61 > 0)
 	CALL COM_ABLE_COMMON, 501
 	SIF RESULT == 1
 		RETURN 501
@@ -173,11 +173,20 @@ SOURCE:TARGET:불결 = Y*10 + 60
 
 ;조교者に쾌Ｃ
 SOURCE:PLAYER:0 = 120
+
+;舌を使う調教では舌使いによって、快感のソース増加
+SIF TALENT:혀놀림
+	TIMES SOURCE:PLAYER:쾌Ｃ , 1.50
+
+;猫舌で増加
+SIF TALENT:고양이혀
+	TIMES SOURCE:PLAYER:쾌Ｃ , 1.50
+
 ;-------------------------------------------------
 ;特殊ソース処理
 ;-------------------------------------------------
 ;억압、저항持ちには、억울ソース추가
-SIF TALENT:32 || TALENT:34
+SIF TALENT:억압 || TALENT:저항
 	SOURCE:TARGET:울굴 += 400
 
 ;-------------------------------------------------
@@ -197,8 +206,7 @@ TFLAG:704 = 1
 CALL MOVE_STAIN("입", TARGET, "페니스", PLAYER)
 
 ;봉사정신ＬＶ２이상、기교ＬＶ２이상なら불결をなめ取る（볼재갈사용時は除く）
-IF ABL:7 >= 2 && ABL:2 >= 2 && TEQUIP:20 == 0
-	;STAIN:PLAYER:2 = 2
+IF ABL:봉사정신 >= 2 && ABL:기교 >= 2 && TEQUIP:볼재갈 == 0
 	;タイミングをずらす
 	TFLAG:お掃除フェラ発生 = 1
 	TFLAG:8 = 1
@@ -251,9 +259,9 @@ ENDIF
 TFLAG:33 = 1
 
 ;의존도보정値(主人かつ연모、음란、복종で1。친애、창부、예속で2）
-IF (TALENT:3 || TALENT:4 || TALENT:5) && ASSIPLAY == 0
+IF (TALENT:연모 || TALENT:음란 || TALENT:복종) && ASSIPLAY == 0
 	TFLAG:30 += 1
-ELSEIF (TALENT:6 || TALENT:7 || TALENT:8) && ASSIPLAY == 0
+ELSEIF (TALENT:친애 || TALENT:창부 || TALENT:예속) && ASSIPLAY == 0
 	TFLAG:30 += 2
 ENDIF
 
@@ -273,7 +281,6 @@ CALL ADD_COM_ORDER, "ABL", "봉사정신", 4, ARG, ARG:1
 CALL ADD_COM_ORDER, "ABL", "정액중독", 3, ARG, ARG:1
 CALL ADD_COM_ORDER, "MARK", "쾌락각인", 1, ARG, ARG:1
 CALL ADD_COM_ORDER, "PALAM", "욕정", 1, ARG, ARG:1
-
 CALL ADD_COM_ORDER, "TALENT", "부끄럼쟁이", -1, ARG, ARG:1
 CALL ADD_COM_ORDER, "TALENT", "악취둔감", 1, ARG, ARG:1
 CALL ADD_COM_ORDER, "TALENT", "악취민감", -3, ARG, ARG:1

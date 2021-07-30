@@ -31,16 +31,16 @@ RETURN 30
 
 ;　相性
 @SKILL_TYPE_2621,ARG
-RETURN 13
+RETURN 17
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2621
+@SKILL_DECIDE_TYPE_2621, ARG
 RETURN 2
 
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2621
+@SKILL_DAMAGETYPE_2621, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬변화？用랭크
 @SKILL_RANK_2621
-RETURN 15
+RETURN 16
 
 ;テン플레이트用、추가효과シ리즈
 ;추가효과스테이터스
@@ -113,6 +113,7 @@ RETURN 0
 
 
 CFLAG:ARG:마법위력강화 = MIN(32, CFLAG:ARG:마법위력강화 + 8)
+CFLAG:ARG:마법효과강화 = MIN(32, CFLAG:ARG:마법효과강화 + 8)
 
 
 PRINTFORML %CALLNAME:ARG%의 마법 위력이 올랐다！

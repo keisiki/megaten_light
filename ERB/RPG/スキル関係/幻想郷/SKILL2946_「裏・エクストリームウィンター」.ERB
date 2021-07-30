@@ -16,7 +16,7 @@ RETURN 98
 RETURN 390
 
 ;　クリティカル率
-@SKILL_CRITICAL_RATE_2946
+@SKILL_CRITICAL_RATE_2946, ARG
 RETURN 40
 
 ;　최저공격횟수
@@ -41,12 +41,12 @@ RETURN 20
 RETURN GET_TYPE_NUM("핵열")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2946
+@SKILL_DECIDE_TYPE_2946, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2946
+@SKILL_DAMAGETYPE_2946, ARG
 RETURN 1
 
 
@@ -127,7 +127,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2946
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2946
-PRINTL 적 한명에게 핵열 속성으로 특大 위력의 물리 공격을 1회 실시한다。
+PRINTL 적 한명에게 핵열 속성으로 특대 위력의 물리 공격을 1회 실시한다。
 PRINTL 추가효과：높은 크리티컬율・빙결 속성 동결。
 PRINTL 마리사에게 모으게 했던 겨울의 마력을 사용한 흉악한 동결 레이저 공격。
 PRINTL 비신　마타라 오키나의 스펠 카드（전용）

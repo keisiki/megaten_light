@@ -2,86 +2,78 @@
 ;======================================================
 ;장비品の데이터
 ;드래곤클로
-;Lv51장비からは흡수有り　기본능력に합계+8まで
 ;======================================================
 
 @기본능력수정_4022,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "힘"
-		RETURN 2
-	CASE "지혜"
-		RETURN 2
-	CASE "마력"
-		RETURN 3
-	CASE "인내력"
+
+SELECTCASE ARG
+	CASE 1
 		RETURN 1
 ENDSELECT
 RETURN 0
 
 @전투능력수정_4022,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "공격"
-		RETURN 6
-	CASE "마법위력"
-		RETURN 6
-	CASE "방어"
-		RETURN 41
-	CASE "회피"
+
+SELECTCASE ARG
+	CASE 0
+		RETURN 4
+	CASE 2
+		RETURN 34
+	CASE 3
+		RETURN 9
+	CASE 5
 		RETURN 10
-	CASE "마법효과"
-		RETURN 21
 ENDSELECT
 RETURN 0
 
 @방어상성_4022,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "검격","타격","비구"
-		RETURN 50
-	CASE "화염","핵열"
-		RETURN 25
-	CASE "빙결"
-		RETURN 0
-	CASE "신경"
+
+SELECTCASE ARG
+	CASE 4,16
+		RETURN 999
+	CASE 13,14,15
 		RETURN 200
-	CASE "수격","중력"
-		RETURN 130
 ENDSELECT
 RETURN 100
 
-@バステ내성_4022,ARG,ARG:1 = -1
-SELECTCASE GET_STATE(ARG)
-	CASE "HEAT"
-		RETURN -100
-	CASE "CHARM","HAPPY"
-		RETURN 25
-ENDSELECT
-RETURN 0
+@공격상성_4022, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_4022, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_4022, ARG = -1
+
+RETURN 1
+
+@사거리_4022, ARG = -1
+
+RETURN 1
+
+@공격범위_4022, ARG = -1
+
+RETURN 1
 
 @장비箇所_4022
 RETURN GET_EQUIPNUM("팔")
 
 @필요레벨_4022
-RETURN 59
+RETURN 50
 
 @장비조건_4022,ARG
 SIF !IS_LOOKSLIKE_MALE(ARG)
 	RETURN 0
-SIF BASE:ARG:LV < 59
+SIF BASE:ARG:LV < 50
+	RETURN 0
+RETURN 1
+
+
+@구입조건_4022
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 3110000
 	RETURN 0
 RETURN 1
 
 @장비조건설명_4022
-PRINTL 장비조건：♂ LV59～
-
-@장비해설_4022
-PRINTL イギリスの赤火竜の爪を模した토시。
-PRINTL 　　　　　　　　
-
-
-@구입조건_4022
-SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 3000000
-	RETURN 0
-RETURN 1
-
-@引継ぎ可不可_4022
-RETURN 0
+PRINTL 장비조건：♂ LV50～

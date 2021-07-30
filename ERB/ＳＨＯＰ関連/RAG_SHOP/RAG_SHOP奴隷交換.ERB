@@ -24,11 +24,16 @@ PRINTL 「그럼 원하는 걸 골라봐」
 PRINTL
 IF LCOUNT == 1
 	;EXTRAキャラ枠
-	CALL RAG_DOREI_EXCHANGE_표시(1,[[キャラ:시아노]], "사파이어", 3, "가넷", 3, "아쿠아마린", 3)
+;	CALL RAG_DOREI_EXCHANGE_표시(1,[[キャラ:시아노]], "사파이어", 3, "가넷", 3, "아쿠아마린", 3)
 	CALL RAG_DOREI_EXCHANGE_표시(2,[[キャラ:루이제트]], "아메지스트", 3, "터키석", 3, "진주", 3)
-	;九龍キャラ枠
+		IF ABL:MASTER:가창기능 >= 8
+			CALL RAG_DOREI_EXCHANGE_표시(3,[[キャラ:치키（＃FE）]], "아메지스트", 1, "터키석", 1, "진주", 1)
+		ENDIF	
+		;九龍キャラ枠
 	CALL RAG_DOREI_EXCHANGE_표시(10,[[キャラ:미나카미]], "사파이어", 3, "가넷", 3, "아쿠아마린", 3)
 	CALL RAG_DOREI_EXCHANGE_표시(11,[[キャラ:야치호]], "아메지스트", 3, "터키석", 3, "진주", 3)
+	;PSO2キャラ枠
+	CALL RAG_DOREI_EXCHANGE_표시(20,[[キャラ:제네]], "에메랄드", 3, "오팔", 3, "가넷", 3)
 ELSE
 	;通常キャラ枠
 	CALL RAG_DOREI_EXCHANGE_표시(1,[[キャラ:아사히]], "에메랄드", 1, "아메지스트", 1)
@@ -36,6 +41,7 @@ ELSE
 	CALL RAG_DOREI_EXCHANGE_표시(3,[[キャラ:나나시]], "오닉스", 3, "오팔", 1)
 	CALL RAG_DOREI_EXCHANGE_표시(4,[[キャラ:히미카]],"아메지스트", 2, "아쿠아마린", 1, "오닉스", 3 ) 
 	CALL RAG_DOREI_EXCHANGE_표시(5,[[キャラ:바기트]], "오팔", 1, "터키석", 3, "아메지스트", 2)
+	CALL RAG_DOREI_EXCHANGE_표시(6,[[キャラ:이즈나]], "사파이어", 2, "진주", 1, "루비", 1)
 ENDIF
 	PRINTL
 	PRINTFORM [999] 돌아간다　

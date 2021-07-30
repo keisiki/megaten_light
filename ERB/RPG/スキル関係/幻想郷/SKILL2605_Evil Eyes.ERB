@@ -14,7 +14,7 @@ RETURN 100
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_2605,ARG
-RETURN 2
+RETURN 1
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_2605,ARG
@@ -35,12 +35,12 @@ RETURN 9
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2605
+@SKILL_DECIDE_TYPE_2605, ARG
 RETURN 2
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2605
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2605, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2605
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -100,7 +100,7 @@ RETURN 9
 
 ;추가효과기본부여확률
 @SKILL_ADDTIONAL_BASE_RATE_2605,ARG
-RETURN 65
+RETURN 75
 
 ;추가효과부여확률上限
 @SKILL_ADDTIONAL_MAX_RATE_2605,ARG
@@ -110,7 +110,7 @@ RETURN 80
 ;스킬及び行動の実行
 ;====================================================
 @ACTION_2605,ARG,ARG:1
-CALL FIELD_BADSTATE,ARG,ARG:1,2605
+CALL ATTACK_FIELD,ARG,ARG:1,2605
 
 
 ;====================================================
@@ -119,8 +119,8 @@ CALL FIELD_BADSTATE,ARG,ARG:1,2605
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2605
-PRINTL 五つの邪眼で적を睨み付け様々な災いをもたらす。
-PRINTL 요마　YuugenMaganの技。
+PRINTL 다섯 가지 부정한 눈으로 적을 노려 여러 가지 재앙을 초래한다。
+PRINTL 요마　YuugenMagan의 기술。
 
 ;継承に필요な部位
 @継承部位_2605,ARG

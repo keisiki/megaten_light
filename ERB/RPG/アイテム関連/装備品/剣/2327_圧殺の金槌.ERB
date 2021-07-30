@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2327
 RETURN GET_EQUIPNUM("검")
 
+;머리깨기
+@장비추가스킬_2327,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 360
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -68,6 +78,9 @@ PRINTL 장비조건：LV25～
 
 @장비해설_2327
 PRINTL 흉악한 파괴력을 가진 망치。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：머리깨기
+RESETCOLOR
 
 RETURN 0
 

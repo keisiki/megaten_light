@@ -38,12 +38,12 @@ RETURN ABL:ARG:공격상성
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2484
+@SKILL_DECIDE_TYPE_2484, ARG
 RETURN 0
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2484
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2484, ARG
 RETURN 1
 
 
@@ -112,7 +112,10 @@ RETURN 0
 ;カウンター発動조건
 ;====================================================
 @SKILL_COUNTER_ACTIONABLE_2484,ARG,ARG:1
-SIF !GETBIT(CFLAG:ARG:受けフラグ,18) && !GETBIT(CFLAG:ARG:受けフラグ,19)
+;SIF !GETBIT(CFLAG:ARG:受けフラグ,18) && !GETBIT(CFLAG:ARG:受けフラグ,19)
+;SIF !RECEIVE_CHECK(ARG,"물리") && !RECEIVE_CHECK(ARG,"마법")
+;자신에게 공격이 안오면 NG
+SIF !RECEIVE_CHECK(ARG,"공격")
 	RETURN 0
 SIF CFLAG:ARG:회피실패
 	RETURN 0

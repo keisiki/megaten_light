@@ -86,7 +86,7 @@ NEXT
 ;攻略サイトではマハ라기다인も持ってると書いてるけど、動画で확인しても使ってるのみなかった。
 ;짐승の眼光라쿠・카쟈2猛反撃ない代わりに타룬다と메기도라온　せっかくだからたまにマハ라기다인
 @SET_ACTION_1759,ARG
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	CALL CHECK_ACTIONABLE,ARG,2086
 		SIF RESULT == 0
 			GOTO DECIDE_ACTION

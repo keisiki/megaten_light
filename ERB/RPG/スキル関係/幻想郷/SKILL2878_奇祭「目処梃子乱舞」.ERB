@@ -11,7 +11,8 @@ RETURN 100
 
 ;　위력
 @SKILL_POWER_2878, ARG
-RETURN 120
+RETURN 150
+;RETURN 120
 
 ;최저공격횟수
 @SKILL_MINATTACKNUMBER_2878,ARG
@@ -19,11 +20,13 @@ RETURN 3
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_2878,ARG
-RETURN 5
+RETURN 8
+;RETURN 5
 
 ;一体辺りの최대ＨＩＴ数
 @SKILL_MAXATK_PER_2878,ARG
-RETURN 3
+RETURN 4
+;RETURN 3
 
 ;一体辺りの최저ＨＩＴ数
 @SKILL_MINATK_PER_2878,ARG
@@ -36,7 +39,8 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_2878,ARG
-RETURN 15
+RETURN 45
+;RETURN 15
 
 ;　相性
 @SKILL_TYPE_2878,ARG
@@ -44,12 +48,12 @@ RETURN GET_TYPE_NUM("타격")
 ;타격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2878
+@SKILL_DECIDE_TYPE_2878, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2878
+@SKILL_DAMAGETYPE_2878, ARG
 RETURN 1
 
 
@@ -134,7 +138,7 @@ CALL ATTACK_RAND,ARG,ARG:1,2878
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2878
-PRINTL 하늘(건)을 창조할 정도의 능력에 따른 、기둥이 적의 머리 위에 뿌려진다。(물리속성・타격공격)
+PRINTL 하늘(건)을 창조할 정도의 능력에 따른、기둥이 적의 머리 위에 뿌려진다。(물리속성・타격공격)
 PRINTL 귀신　야사카 카나코의 스펠카드
 
 ;継承に필요한部位

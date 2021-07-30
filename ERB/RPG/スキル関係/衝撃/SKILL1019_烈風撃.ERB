@@ -1,13 +1,7 @@
 ﻿
 ;스킬名
 @SKILL_NAME_1019,ARG
-;双葉はんが사용する場合Determinaterに
-;IF ARG > 0 && NO:ARG == [[キャラ:후타바（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:후타바（무대소녀）]]) == 1
-	RESULTS = Determinater
-ELSE
-	RESULTS = 열풍격
-ENDIF
+RESULTS = 열풍격
 
 
 ;　명중
@@ -45,12 +39,12 @@ RETURN 7
 ;충격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1019
+@SKILL_DECIDE_TYPE_1019, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1019
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1019, ARG
 RETURN 1
 
 
@@ -137,13 +131,8 @@ CALL ATTACK_SPREAD,ARG,ARG:1,1019
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1019
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:후타바（무대소녀）]]
-	PRINTL 소녀のキラめきから鋳造された하루バード。
-	PRINTL 全힘全開の一撃を放ち、대상とその周辺に충격相性の物理大ダメージ+転倒。
-	PRINTL 사거리が短い。
-ELSE
-	PRINTL [전열] 적 1체와 주변의 적에게 충격속성 대 마법데미지. (낮은 확률로 SLIP)
-ENDIF
+PRINTL [전열] 적 1체와 주변의 적에게 충격속성 대 마법데미지. (낮은 확률로 SLIP)
+
 
 ;継承に필요な部位
 @継承部位_1019,ARG

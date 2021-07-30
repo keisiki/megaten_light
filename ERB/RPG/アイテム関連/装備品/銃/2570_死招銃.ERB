@@ -11,7 +11,10 @@ RETURN 0
 
 
 @전투능력수정_2570,ARG,ARG:1 = -1
+;原作におけるショットの위력は+10%だけど輪廻との住み分けで火힘特化にする為に輪廻と同じボーナスに
 SELECTCASE ARG
+	CASE 4
+		RETURN 50
 ENDSELECT
 RETURN 0
 
@@ -26,10 +29,10 @@ RETURN 100
 RETURN 1
 
 @최저공격횟수_2570, ARG = -1
-RETURN 1
+RETURN 2
 
 @최대공격횟수_2570, ARG = -1
-RETURN 1
+RETURN 2
 
 @사거리_2570, ARG = -1
 RETURN 2
@@ -44,8 +47,8 @@ RETURN GET_EQUIPNUM("총")
 RETURN 60
 
 @장비해설_2570
-PRINTL 持ち主の生命힘を糧にする死の散弾총。
-PRINTL 強靭な心を持たない者が손にすると、その魂と肉体をたちまち奪われる。
+PRINTL 주인의 생명을 담보로 하는 죽음의 산탄총。
+PRINTL 강인한 마음이 없는 자가 손에 쥐면 그 영혼과 육체를 금세 빼앗긴다.。
 RESETCOLOR
 
 @장비조건_2570,ARG
@@ -59,7 +62,7 @@ RETURN 1
 
 @장비조건설명_2570
 PRINTL 장비조건：[이능자]or[달인]or[식노]
-PRINTL 장비조건：힘・인내력の합계35이상+LV60이상
+PRINTL 장비조건：힘・인내력 합계35이상+LV60이상
 
 @구입조건_2570
 RETURN 0

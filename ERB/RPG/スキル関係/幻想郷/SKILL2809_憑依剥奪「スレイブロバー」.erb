@@ -36,12 +36,12 @@ RETURN GET_TYPE_NUM("전술")
 ;전술
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2809
-RETURN 2
+@SKILL_DECIDE_TYPE_2809, ARG
+RETURN 1
 
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2809
+@SKILL_DAMAGETYPE_2809, ARG
 RETURN 1
 
 
@@ -125,7 +125,7 @@ IF POS(ARG:1) > 0 && LOCAL:1 > BASE:POS(ARG:1):ＨＰ && GET_STATE(CFLAG:POS(ARG
 		CFLAG:POS(ARG:1):마법효과강화 = MAX(-16, CFLAG:POS(ARG:1):마법효과강화 - 4)
 		CFLAG:POS(ARG:1):명중강화 = MAX(-16, CFLAG:POS(ARG:1):명중강화 - 4)
 		CFLAG:POS(ARG:1):회피강화 = MAX(-16, CFLAG:POS(ARG:1):회피강화 - 4)
-	PRINTFORML 　　적の모든 능력がダウン！
+	PRINTFORML 　　적의 모든 능력이 다운！
 ENDIF
 
 ;====================================================
@@ -135,10 +135,10 @@ ENDIF
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2809
-PRINTL 적 1명에게 전술속성で大위력の물리공격을1回行う。
-PRINTL 추가효과：명중時대상の모든 능력を1단계下げる。
-PRINTL 渾身の힘を込めて突進し능력を奪う。本人はス레이ブや金を奪い取れず不満らしい。
-PRINTL 질병신　요리가미 조온のスペルカード（専用）
+PRINTL 적 1명에게 전술속성으로 대 위력의 물리공격을 1회 실행。
+PRINTL 추가효과：명중시 대상의 모든 능력을 1단계 떨어뜨린다。
+PRINTL 혼신의 힘을 다해 돌진하여 능력을 뺴았는다。본인은 슬레이브나 돈을 빼앗지 못해 불만인 것 같다。
+PRINTL 질병신　요리가미 조온의 스펠카드（전용）
 ;本当は강화されていればより奪うとか奪った分自分を강화とかしたかったけど技術的に断念
 
 ;継承に필요한部位

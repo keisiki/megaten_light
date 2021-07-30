@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2294
 RETURN GET_EQUIPNUM("검")
 
+;리캄
+@장비추가스킬_2294,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 417
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -68,6 +78,9 @@ PRINTL 장비조건：LV35～
 
 @장비해설_2294
 PRINTL 용의 뼈로 만들어진 지팡이
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：리캄
+RESETCOLOR
 
 RETURN 0
 

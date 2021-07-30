@@ -32,8 +32,7 @@ C = 0
 D = 0
 G = 0
 
-;コンサートで歌う奴隷を選択
-CALL INPUT_CHARA_LIST("炭鉱で働く奴隷を選択してください", "CASTING_TANKOU")
+CALL INPUT_CHARA_LIST("탄광에서 일할 노예를 선택하세요", "CASTING_TANKOU")
 SIF RESULT == 1000
 	RETURN 0
 A = RESULT
@@ -124,16 +123,16 @@ ELSE
 	PRINTFORMW 利潤が見込めないため、中止します
 	RETURN 0
 ENDIF
-PRINTFORML %CALLNAME:A%を炭鉱で働かせますか？
+PRINTFORML %조사처리(CALLNAME:A, "를")% 탄광에서 일하게 합니까?
 ;---- EDIT INPUT_YN추가対応(2011/02/03) MOD START -------------------------
-CALL INPUT_YN, "実行する", "やめる"
+CALL INPUT_YN, "일하게 한다", "그만둔다"
 ;PRINTL [0] -   実行する
 ;PRINTL [100] - やめる
 ;$INPUT_LOOP_3
 ;INPUT
 ;---- EDIT INPUT_YN추가対応(2011/02/03) MOD END ---------------------------
 IF RESULT == 0
-	PRINTFORML %CALLNAME:A%は炭鉱に行きました
+	PRINTFORML %조사처리(CALLNAME:A, "는")% 탄광에 갔습니다
 	;評判판정
 	;F = 1
 	;Z = S
@@ -175,7 +174,7 @@ IF RESULT == 0
 	;	CFLAG:A:아이돌인기 -= G
 	;	PRINTFORML 아이돌인기－{G}
 	;ENDIF
-	PRINTFORMW 炭鉱で働いた結果、￥{S}の利潤が得られました
+	PRINTFORMW 탄광에서 일한 결과、￥{S}의 이윤을 얻었습니다
 	MONEY += S
 	;CALL 帳簿閲覧_노역, A, S, 0, 6
 	
@@ -209,7 +208,7 @@ IF RESULT == 0
 		SIF RAND:100 < V
 			E += 1
 	NEXT
-	PRINTFORMW あらゆる方法で宝石を손に入れた
+	PRINTFORMW 온갖 방법으로 보석을 손에 넣었다
 	PRINTFORML ・
 	PRINTFORML ・・
 	PRINTFORML ・・・
@@ -274,11 +273,11 @@ IF RESULT == 0
 	FOR LOCAL,0,20
 		IF LOCAL:(LOCAL + 1)
 			IF LOCAL < 12
-				ITEM:(274 + LOCAL) ++
-				PRINTFORML %ITEMNAME:(274 + LOCAL)%を{LOCAL:(LOCAL + 1)}個손に入れた
+				ITEM:(274 + LOCAL) += LOCAL:(LOCAL + 1)
+				PRINTFORML %ITEMNAME:(274 + LOCAL)%を{LOCAL:(LOCAL + 1)}개 입수했다
 			ELSE
-				ITEM:(246 + LOCAL) ++
-				PRINTFORML %ITEMNAME:(246 + LOCAL)%を{LOCAL:(LOCAL + 1)}個손に入れた
+				ITEM:(246 + LOCAL) += LOCAL:(LOCAL + 1)
+				PRINTFORML %ITEMNAME:(246 + LOCAL)%を{LOCAL:(LOCAL + 1)}개 입수했다
 			ENDIF
 		ENDIF
 	NEXT

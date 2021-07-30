@@ -21,9 +21,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2147,ARG,ARG:1 = -1
-RETURN 0
-
 @방어상성_2147,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -47,6 +44,16 @@ RETURN 1
 @장비箇所_2147
 RETURN GET_EQUIPNUM("검")
 
+;전광석화
+@장비추가스킬_2147,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 327
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -67,7 +74,10 @@ RETURN 1
 PRINTL 장비조건：LV35～
 
 @장비해설_2147
-PRINTL 칼날이 물결 모양인 서양검。　그 칼날의 모양이 불길(플랑부아양flamboyant)과도 같아 그런 이름이 붙여졌다。
+PRINTL 칼날이 물결 모양인 서양검。그 칼날의 모양이 불길(플랑부아양flamboyant)과도 같아 그런 이름이 붙여졌다。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：전광석화
+RESETCOLOR
 
 RETURN 0
 

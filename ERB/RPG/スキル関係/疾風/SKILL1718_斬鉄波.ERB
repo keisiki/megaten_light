@@ -3,7 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_1718,ARG
-RESULTS = 참철파
+IF SKILL_CHANGE(ARG, [[キャラ:사이버스터]]) || SKILL_CHANGE(ARG, [[キャラ:우즈키]]) || FINDCHARA_M(U, [[キャラ:사이버스터]], [[キャラ:우즈키]])
+	RESULTS = 하이패밀리어
+ELSE
+	RESULTS = 참철파
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_1718, ARG
@@ -36,12 +40,12 @@ RETURN 14
 ;질풍
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1718
+@SKILL_DECIDE_TYPE_1718, ARG
 RETURN 1
 ;特技
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1718
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1718, ARG
 RETURN 1
 
 
@@ -146,7 +150,11 @@ NEXT
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1718
-PRINTL [후열] 적 전열에 질풍속성 소 물리데미지. HIT한 적의 공격력을 감소시킨다.
+IF FINDCHARA_M(U, [[キャラ:사이버스터]], [[キャラ:우즈키]])
+	PRINTL 패밀리아라는 원격조종 포대를 날려、적 일렬에 질풍 상성의 물리 중 데미지+공격력 저하
+ELSE
+	PRINTL [후열] 적 전열에 질풍속성 소 물리데미지. HIT한 적의 공격력을 감소시킨다.
+ENDIF
 
 ;継承に필요な部位
 @継承部位_1718,ARG

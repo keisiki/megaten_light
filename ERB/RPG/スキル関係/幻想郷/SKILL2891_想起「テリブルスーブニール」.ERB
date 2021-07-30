@@ -38,12 +38,12 @@ RETURN 9
 ;정신
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2891
+@SKILL_DECIDE_TYPE_2891, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2891
+@SKILL_DAMAGETYPE_2891, ARG
 RETURN 2
 
 
@@ -138,7 +138,7 @@ WAIT
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2891
-PRINTL 상대의 트라우마를 상기시켜 데미지를 준다。（위력：中）
+PRINTL 상대의 트라우마를 상기시켜 데미지를 준다。（위력：중）
 PRINTL 억지로 정신내성을 무너뜨려 PANIC 시킨다。
 PRINTL 마왕 코메이지 사토리의 스펠카드（승계불가）
 

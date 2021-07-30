@@ -75,9 +75,13 @@ SELECTCASE ARG
 	CASE 0
 		IF ABL:(ARG:1):종족 == 36
 			RETURN 2418
-		ELSEIF TALENT:(ARG:1):페르소나구사자
-			RETURN 2455
+		; ELSEIF TALENT:(ARG:1):페르소나구사자
+		; 	RETURN 2455
 		ENDIF
+	CASE 1
+		IF ABL:(ARG:1):종족 == 36
+			RETURN 2419
+		ENDIF		
 ENDSELECT
 RETURN 0
 
@@ -104,7 +108,7 @@ PRINTL 장비조건：♂ LV65～
 PRINTL 빙결속성의 수갑。지모신 퀴벨레의 수태아이템。
 SETCOLOR 0xdc143c
 PRINTL 반마인 추가스킬존재
-PRINTL 페르소나구사자 추가스킬존재
+; PRINTL 페르소나구사자 추가스킬존재
 RESETCOLOR
 
 @引継ぎ可不可_2338

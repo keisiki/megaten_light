@@ -1,76 +1,71 @@
 ﻿
 ;======================================================
 ;장비品の데이터
-;유구의갑옷
-;Lv51장비からは흡수有り　기본능력に합계+8まで
 ;======================================================
 
 @기본능력수정_3568,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "마력"
-		RETURN 6
-	CASE "인내력"
-		RETURN 2
-	CASE "운"
-		RETURN 2
+SELECTCASE ARG
+	CASE 3
+		RETURN 3
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3568,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 87
-	CASE "회피"
+SELECTCASE ARG
+	;방어
+	CASE 2
+		RETURN 50
+	;회피
+	CASE 3
 		RETURN 15
-	CASE "마법효과"
-		RETURN 28
+	;마법효과
+	CASE 5
+		RETURN 30
 ENDSELECT
 RETURN 0
 
 @방어상성_3568,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "타격","충격"
-		RETURN 65
-	CASE "검격","비구"
-		RETURN 30
-	CASE "파마"
-		RETURN 0
-	CASE "화염"
-		RETURN 999
-	CASE "핵열"
-		RETURN -100
-	CASE "수격"
-		RETURN 250
-	CASE "빙결"
-		RETURN 150
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@공격상성_3568, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3568, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3568, ARG = -1
+
+RETURN 1
+
+@사거리_3568, ARG = -1
+
+RETURN 1
+
+@공격범위_3568, ARG = -1
+
+RETURN 1
 
 @장비箇所_3568
 RETURN GET_EQUIPNUM("몸통")
 
 @필요레벨_3568
-RETURN 88
+RETURN 50
 
 @장비조건_3568,ARG
-SIF BASE:ARG:인내력 < 15
-	RETURN 0
 SIF IS_LOOKSLIKE_MALE(ARG)
 	RETURN 0
-SIF BASE:ARG:LV < 88
+SIF BASE:ARG:LV < 50
 	RETURN 0
 RETURN 1
 
-@장비조건설명_3568
-PRINTL 장비조건：♀ LV88～
-
-@장비해설_3568
-PRINTL 소문では悠久の時を過ごす태양의돌から作られたと言われる鎧。
-PRINTL 　　　　　　　　
-
-
 @구입조건_3568
+
 RETURN 0
 
-@引継ぎ可不可_3568
-RETURN 0
+
+@장비조건설명_3568
+PRINTL 장비조건：♀ LV50～

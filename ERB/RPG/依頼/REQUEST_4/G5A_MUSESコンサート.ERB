@@ -512,6 +512,9 @@ IF STRFLAG_REQ("ギンコゲット", -1)
 	CALL ADD_NEW_COMPANION, [[キャラ:리사]],500
 	IF RESULT == 1 
 		LOCAL = GETCHARA([[キャラ:리사]])
+		;こっちのルートなら가창경험증가＆라이브경험부여
+		EXP:LOCAL:가창경험 = 50
+		EXP:LOCAL:라이브경험 = 50
 		;매춘의 소문を流していた場合は、加入フラグ2に
 		IF STRFLAG_NUM_EV("아이돌매춘의 소문", , , , [[이벤트:소문]]) == 2
 			CFLAG:LOCAL:이벤트加入 = 2
@@ -1227,7 +1230,7 @@ LOCALS = 특수탄{RAND:2+1}
 ;1more時の行動
 LOCAL:3 = FLAG:전투난이도 - 3 > 0 ? 10 + (FLAG:전투난이도 - 3) * 2 # 10
 ;1more時はFreischutzを撃ちこんでくる
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	CALL SET_BATTLE_STATUS(ARG, 10 * LOCAL:3, "총공격")
 	CFLAG:ARG:ターゲット = 17 + RAND:2
 	CFLAG:ARG:입력行動 = [[스킬:Freischutz]]

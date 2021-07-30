@@ -1,9 +1,8 @@
 ﻿
 ;스킬名
 @SKILL_NAME_113,ARG
-;ナハトが사용する場合 S・ク레이モアに
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+;나하트が사용する場合 S・ク레이モアに
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RESULTS =  S・클레이모어
 ELSE
 	RESULTS = 산탄사격
@@ -39,12 +38,12 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_113
+@SKILL_DECIDE_TYPE_113, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_113
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_113, ARG
 RETURN 1
 
 
@@ -78,8 +77,7 @@ RETURN 1
 
 ;속도보정
 @SKILL_SPEED_113, ARG = -1
-;IF ARG > 0 && NO:ARG == [[キャラ:나하트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나하트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:나하트]])
 	RETURN 3
 ELSE
 	RETURN 0
@@ -137,7 +135,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,113
 ;　 説明文の표시
 @SKILL_EXPLAIN_113
 IF U > 0 && U < CHARANUM && NO:U == [[キャラ:나하트]]
-	PRINTL [후열] 적 전열에 비구속성 소 물리데미지. 명중률이 조금 높다. 정식명칭은 「실드・클레이모어」
+	PRINTL 적전열에 왼팔의 실드에서 쏘는 티타늄 베어링 탄을 기습적으로 퍼붓다。
+	PRINTL 정식명칭은 「실드・클레이모어
 ELSE
 	PRINTL [후열] 적 전열에 비구속성 소 물리데미지. 명중률이 조금 높다.
 ENDIF

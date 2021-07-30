@@ -47,7 +47,7 @@ SELECTCASE RESULT
 		IF 무기소질수(ARG) > 0
 			DRAWLINE
 			PRINTL □무기소질형변경
-			PRINTL 변경する素質を選んでください
+			PRINTL 변경하는 소질을 고르세요
 			FOR LOCAL,1,12
 				IF TALENT:ARG:(249 + LOCAL) > 0
 					PRINTFORML [{LOCAL,2}]%TALENTNAME:(249 + LOCAL),16,LEFT%　현재의 형:%WEAPON_TYPE_NAME(LOCAL,TALENT:ARG:(249 + LOCAL))%
@@ -68,14 +68,30 @@ GOTO INPUT_LOOP
 @무기素質부여,ARG
 #LOCALSIZE 21
 #DIM LCOUNT
+#DIM 変数A
+変数A = 0
 ;VARSET Q,0
 IF (ARG == 0 && 무기소질수(ARG) > 10) || (ARG > 0 && 무기소질수(ARG) > 1)
-	PRINTW これ以上素質を持てません
+	PRINTW 이 이상 소질을 가질 수 없습니다
 	RETURN 0
 ENDIF
 
 PRINTL □무기소질부여
 PRINTL 조건:숙련도1000이상　당신이외에는 한 개 까지만
+PRINT 現在:
+FOR LCOUNT,0,11
+	IF TALENT:ARG:(250 + LCOUNT)
+		SIF 変数A > 0
+			PRINT 、
+		PRINTFORM %조사처리(TALENTNAME:(250 + LCOUNT),"를")%
+		変数A += 1
+	ENDIF
+NEXT
+IF 変数A > 0
+	PRINTL 취득
+ELSE
+	PRINTL 소질없음
+ENDIF
 FOR LCOUNT,0,11
 	SIF TALENT:ARG:(250 + LCOUNT)
 		CONTINUE
@@ -302,7 +318,7 @@ SELECTCASE ARG:1
 	CASE 11
 		LOCALS = 권갑
 ENDSELECT
-PRINTL %LOCALS% 수련
+PRINTFORML %LOCALS% 수련
 PRINTFORML 숙련도:{CFLAG:ARG:(1049+ARG:1)}
 PRINTFORML 체력　:{BASE:ARG:체력}
 PRINTFORM [ 1]교수선택
@@ -435,25 +451,25 @@ SELECTCASE ARG:1
 		;레이피어
 		PRINTFORML [ 1]%WEAPON_TYPE_NAME(ARG:1,1)%　무기의 강함에 따라 지혜、속도、운이 올라간다
 		SETBIT LCOUNT,1
-		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　크리티컬 데미지가 올라간다
+		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　크리티컬 데미지가 11\% 올라간다
 		SETBIT LCOUNT,2
 	CASE 3
 		;弓
 		PRINTFORML [ 1]%WEAPON_TYPE_NAME(ARG:1,1)%　무기의 강함에 따라 힘、마력、속도가 올라간다
 		SETBIT LCOUNT,1
-		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　약점 데미지가 올라간다
+		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　약점 데미지가 11\% 올라간다
 		SETBIT LCOUNT,2
 	CASE 4
 		;검
 		PRINTFORML [ 1]%WEAPON_TYPE_NAME(ARG:1,1)%　무기 무기의 강함에 따라 힘、인내력、속도、운이 올라간다
 		SETBIT LCOUNT,1
-		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　크리티컬과 약점 데미지가 조금 올라간다（중복 가능）
+		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　크리티컬과 약점 데미지가 8\%씩 상승한다）
 		SETBIT LCOUNT,2
 	CASE 5
 		;槍
 		PRINTFORML [ 1]%WEAPON_TYPE_NAME(ARG:1,1)%　무기 무기의 강함에 따라 힘、인내력、운이 올라간다
 		SETBIT LCOUNT,1
-		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　전열 대상 물리공격의 위력이 내려가지 않는다
+		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　후열로부터의 물리 공격이 3\% 올라, 후열의 물리 공격 위력이 떨어지지 않게 되다
 		SETBIT LCOUNT,2
 	CASE 6
 		;斧、鈍器
@@ -465,13 +481,13 @@ SELECTCASE ARG:1
 		;채찍
 		PRINTFORML [ 1]%WEAPON_TYPE_NAME(ARG:1,1)%　무기 무기의 강함에 따라 지혜、마력、인내력이 올라간다
 		SETBIT LCOUNT,1
-		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　마법공격의 피격데미지를 낮춘다
+		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　마법공격의 피격데미지를 0.85배 낮춘다
 		SETBIT LCOUNT,2
 	CASE 8
 		;投具
 		PRINTFORML [ 1]%WEAPON_TYPE_NAME(ARG:1,1)%　무기 무기의 강함에 따라 지혜、마력、속도가 올라간다
 		SETBIT LCOUNT,1
-		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　전열 대상 마법공격의 위력이 내려가지 않는다
+		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　후열로부터의 마법 공격이 3\% 올라, 후열의 마법 공격 위력이 떨어지지 않게 되다
 		SETBIT LCOUNT,2
 	CASE 9
 		;杖、祭具
@@ -483,13 +499,13 @@ SELECTCASE ARG:1
 		;棍
 		PRINTFORML [ 1]%WEAPON_TYPE_NAME(ARG:1,1)%　무기 무기의 강함에 따라 지혜、인내력、속도が 올라간다
 		SETBIT LCOUNT,1
-		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　모든 공격의 피격데미지를 낮춘다
+		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　모든 공격의 피격데미지를 0.91배 낮춘다
 		SETBIT LCOUNT,2
 	CASE 11
 		;拳闘具
 		PRINTFORML [ 1]%WEAPON_TYPE_NAME(ARG:1,1)%　무기 무기의 강함에 따라 힘、인내력、속도が 올라간다
 		SETBIT LCOUNT,1
-		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　물리공격의 피격데미지를 낮춘다
+		PRINTFORML [ 2]%WEAPON_TYPE_NAME(ARG:1,2)%　물리공격의 피격데미지를 0.85배 낮춘다
 		SETBIT LCOUNT,2
 ENDSELECT
 PRINTL

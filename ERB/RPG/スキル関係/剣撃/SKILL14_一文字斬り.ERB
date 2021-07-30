@@ -3,8 +3,9 @@
 
 ;스킬名
 @SKILL_NAME_14,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:카타나코]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카타나코]]) == 1
+;SIF SKILL_CHANGE(ARG, [[キャラ:사이버스터]]) || SKILL_CHANGE(ARG, [[キャラ:우즈키]]) || FINDCHARA_M(U, [[キャラ:사이버스터]], [[キャラ:우즈키]])
+	;RESULTS = 난무의 태도
+IF SKILL_CHANGE(ARG, [[キャラ:카타나코]])
 	RESULTS = 가사베기
 ELSE
 	RESULTS = 일문자베기
@@ -18,7 +19,7 @@ RETURN 140
 @SKILL_POWER_14, ARG
 RETURN 120
 
-@SKILL_CRITICAL_RATE_14
+@SKILL_CRITICAL_RATE_14, ARG
 RETURN 30
 
 
@@ -37,7 +38,11 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_14,ARG
-RETURN 3
+IF SKILL_CHANGE(ARG, [[キャラ:사이버스터]]) || SKILL_CHANGE(ARG, [[キャラ:우즈키]])
+	RETURN 30
+ELSE
+	RETURN 3
+ENDIF
 
 ;　相性
 @SKILL_TYPE_14,ARG
@@ -45,12 +50,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_14
+@SKILL_DECIDE_TYPE_14, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_14
+@SKILL_DAMAGETYPE_14, ARG
 RETURN 1
 
 
@@ -134,6 +139,8 @@ CALL ATTACK_SINGLE,ARG,LOCAL,14
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_14
+;SIF FINDCHARA_M(U, [[キャラ:사이버스터]], [[キャラ:우즈키]])
+	;PRINTL 『神祇無窮流』の技の一つ。적前一体を적を縦横無尽に切り裂む。
 PRINTL [전열] 전열의 적 1체에 검격속성 소 물리데미지. 명중률이 높고, 크리티컬이 발생하기 쉽다.
 
 ;継承に필요한部位

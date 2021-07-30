@@ -49,7 +49,7 @@ RETURN 1
 RETURN 1
 
 @공격범위_2342, ARG = -1
-IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+IF ARG != -1 && ABL:ARG:종족 == 36
 	RETURN 2
 ELSE
 	RETURN 1

@@ -19,28 +19,28 @@
 ;                               ↑この辺灰色　　　　↑この辺白
 ;といった感じに표시される。
 ;--------------------------------------------------------------------
-#DIMS DYNAMIC 입력退避 , 100
-#DIMS DYNAMIC 입력
-#DIMS DYNAMIC LEFT
-#DIMS DYNAMIC RIGHT
-#DIMS DYNAMIC 표시
-#DIM DYNAMIC 行
-#DIM DYNAMIC 표시行数
-#DIMS DYNAMIC ログ , 50
-#DIMS DYNAMIC フォント , 2
-#DIM DYNAMIC 色 , 2
-#DIM DYNAMIC 開始位置
-#DIMS DYNAMIC 挿入文字列
-#DIM DYNAMIC 分割開始位置
-#DIM DYNAMIC 分割종료位置
-#DIM DYNAMIC 分割開始ブロック
-#DIM DYNAMIC 分割종료ブロック
-#DIM DYNAMIC 文字カウント
-#DIMS DYNAMIC 分割用속성置場
-#DIMS DYNAMIC 分割文字列 , 2
-#DIMS DYNAMIC 左文字列
-#DIMS DYNAMIC 右文字列
-#DIMS DYNAMIC 行데이터 , 200
+#DIMS 입력退避 , 100
+#DIMS 입력
+#DIMS LEFT
+#DIMS RIGHT
+#DIMS 표시
+#DIM 行
+#DIM 표시行数
+#DIMS ログ , 50
+#DIMS フォント , 2
+#DIM 色 , 2
+#DIM 開始位置
+#DIMS 挿入文字列
+#DIM 分割開始位置
+#DIM 分割종료位置
+#DIM 分割開始ブロック
+#DIM 分割종료ブロック
+#DIM 文字カウント
+#DIMS 分割用속성置場
+#DIMS 分割文字列 , 2
+#DIMS 左文字列
+#DIMS 右文字列
+#DIMS 行데이터 , 200
 ;生成される描画데이터は、上書きされない左部分＋추가する文字列＋上書きされない右部分
 SELECTCASE 표시
 	CASE "소거"
@@ -217,6 +217,36 @@ SELECTCASE 표시
 					NEXT
 					ログ:行 = % 左文字列 + 입력 + "_" + 右文字列 %
 			ENDIF
+			
+			;統合処理予定地
+			;LOCAL:1 = STRCOUNT(ログ:行 , "_") + 1
+			;FOR LOCAL , 0 , LOCAL:1
+			;	SIF LOCAL:1 <= LOCAL +1
+			;		BREAK
+			;	LOCALS = %AUTO_SPLIT(ログ:行 , "_" , LOCAL)%
+			;	LOCALS:1 = %AUTO_SPLIT(LOCALS , "," , 0)%
+			;	LOCALS:2 = %AUTO_SPLIT(LOCALS , LOCALS:1 , 1)%
+			;	LOCALS:3 = %AUTO_SPLIT(ログ:行 , "_" , LOCAL+1)%
+			;	LOCALS:4 = %AUTO_SPLIT(LOCALS:3 , "," , 0)%
+			;	LOCALS:5 = %AUTO_SPLIT(LOCALS:3 , LOCALS:4 , 1)%
+			;	;PRINTW ここは？
+			;	IF LOCALS:2 != "" && LOCALS:2 == LOCALS:5
+			;		
+			;		;PRINTW 返還前
+			;		ログ:行 = %CHANGE_SPLIT(ログ:行 , "_" , LOCAL , , LOCALS:1+LOCALS:4+LOCALS:2)%
+			;		ログ:行 = %CHANGE_SPLIT(ログ:行 , "_" , LOCAL+1 , , "")%
+			;		;PRINTW じゃあここは？
+			;		LOCAL = 0
+			;		LOCAL:1 --
+			;		ログ:行 = %REPLACE(ログ:行 , "__" , "_")%
+			;		
+			;	ENDIF
+			;NEXT
+			;PRINTFORML {LOCAL:1}
+			;IF LOCAL:1
+			;	PRINTW hoge
+			;ENDIF
+			
 		ENDIF
 ENDSELECT
 

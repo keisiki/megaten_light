@@ -1,17 +1,19 @@
 ﻿
 ;스킬名
 @SKILL_NAME_206,ARG
-;ファントムが사용する場合究極！ゲシュペンストキックに
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+;팬텀が사용する場合究極！ゲシュペンス토키ックに
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
 	RESULTS = 궁극！게슈펜스트킥
+ELSEIF SKILL_CHANGE(ARG, 5054)
+	RESULTS = 시엘사마
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:레이무]])
+	RESULTS = 승천각
 ELSE
 	RESULTS = 섬머솔트
 ENDIF
 ;　명중
 @SKILL_HITRATE_206, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
 	RETURN 110
 ELSE
 	RETURN 85
@@ -19,8 +21,7 @@ ENDIF
 
 ;　威힘
 @SKILL_POWER_206, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
 	RETURN 480
 ELSE
 	RETURN 210
@@ -41,9 +42,9 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_206,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
-	RETURN 24
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	;比較的早く使える代わりに소비は他に比べて重め
+	RETURN 48
 ELSE
 	RETURN 4
 ENDIF
@@ -53,14 +54,13 @@ RETURN 2
 ;타격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_206
+@SKILL_DECIDE_TYPE_206, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_206
-RETURN 1
-
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_206, ARG
+	RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
 @SKILL_TARGET_206
@@ -92,8 +92,7 @@ RETURN 2
 
 ;속도보정
 @SKILL_SPEED_206, ARG = -1
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
 	RETURN 1
 ELSE
 	RETURN 0
@@ -147,8 +146,9 @@ CALL ATTACK_SINGLE,ARG,LOCAL,206
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_206
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:팬텀]]
-	PRINTL [후열] 적 1체에 타격속성 초특대 물리데미지.
+IF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	PRINTL 뛰어오르며、적 1체에 타격속성의 궁극 발차기。후열사용가능、후열공격가능。
+	PRINTL 또한 원래는 발동코드가 음성 입력이기 때문에、외치는 것이 약속인것 같지만 본작에서는 따로 외치지 않아도Ok。
 ELSE
 	PRINTL [후열] 적 1체에 타격속성 중 물리데미지. 명중률이 조금 낮다.
 ENDIF

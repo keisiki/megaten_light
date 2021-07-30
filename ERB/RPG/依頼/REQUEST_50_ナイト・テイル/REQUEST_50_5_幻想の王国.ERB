@@ -231,7 +231,6 @@ PRINTFORMW 코시로는 아쉬워하며 끌려간다（타암저엉씨이이이�
 PRINTFORMW 마야가 아이스크림을 핥으면서 그 뒤를 따라간다。
 PRINTFORMW 카야의 속마음이 신경쓰였지만、뭐、어떻게 구르더라도、평소대로 나아갈 뿐이다。
 PRINTFORMW 상황을 보고 생각하기로 하자――
-
 PRINTFORML 
 PRINTFORML 
 PRINTFORML 
@@ -394,8 +393,8 @@ PRINTFORMW 라는 대답이 돌아왔다。
 PRINTFORML 
 PRINTFORMW ……호오。
 PRINTFORML 
-PRINTFORMW “ご婦人は高貴な存在とお見受けしたが、そのような卑屈な態度を取られるとは、どうやら思い違いであったようだ”
-PRINTFORMW そんな内容で、軽く女を도발してみると、彼女は思った以上にあっさりと、顔を真っ赤にして激昂を始めた。
+PRINTFORMW “ご婦人은 고귀한 존재라고 생각했지만、그런 비굴한 태도를 하는 것을 보니、 아무래도 착각이었던 것 같다”
+PRINTFORMW 그런 내용으로 가볍게 여자를 도발하자、그녀는 생각보다 시원스럽게 얼굴을 새빨갛게하고 격앙했다.
 PRINTFORML 
 PRINTFORMW 「긍지높은 다난의 기사에게 어찌 그런 말을……！」
 PRINTFORML 
@@ -436,6 +435,7 @@ PRINTFORML
 			IF LOCAL == -1
 				CALL ADD_GUEST_COMPANION([[キャラ:유우키]], 100, 1)
 				CFLAG:(CHARANUM-1):전투참가불가능 = -1
+				CFLAG:(CHARANUM-1):ゲスト加入フラグ = 0
 				LOCAL = GETCHARA([[キャラ:유우키]])
 				BASE:LOCAL:LV = 45
 				BASE:LOCAL:힘 = 2

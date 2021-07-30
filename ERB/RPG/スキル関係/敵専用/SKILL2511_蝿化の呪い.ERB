@@ -35,11 +35,11 @@ RETURN 10
 RETURN GET_TYPE_NUM("만능")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2511
+@SKILL_DECIDE_TYPE_2511, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2511
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2511, ARG
 RETURN 0
 
 
@@ -128,7 +128,7 @@ SIF CFLAG:ARG:PTフラグ > 0
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2511
-PRINTL 적一体に회피不能のFLY
+PRINTL 적 1체에 회피불능의 FLY
 
 ;継承に필요な部位
 @継承部位_2511,ARG

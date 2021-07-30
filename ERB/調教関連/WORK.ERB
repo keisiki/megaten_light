@@ -25,6 +25,8 @@
 ;	012		2019/01/28		JK好き					道場で수련추가
 ;	013		2019/04/28		ドワ鍛冶の作者			炭鉱を추가
 ;	014		2020/03/17		(ﾟдﾟ)					라이브하우스・무도관の구입を추가
+;	015		2020/06/15		JK好き					周回횟수5이상で노역による당신の善悪치変動を표시するように
+;	016		2021/06/30		木綿豆腐				집단라이브追加/집단라이브と乱交ライブの番号を入れ替えた
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 @SHOPCOMABLE_112
 RESULT:1 = 1
@@ -69,8 +71,34 @@ CUSTOMDRAWLINE =
 ;어령出現処理
 SIF 이벤트フラグ:33:1 == 4
 	이벤트フラグ:15:4 = MONEY
-
 PRINTFORML 소지금：￥%TOSTR(MONEY, "#,##0")% / %TOSTR(MONEY:1, "#,##0")%마카
+IF FLAG:周回횟수 >= 2
+	LOCAL:10 = 0
+	FOR LCOUNT, 0, CHARANUM
+		IF CFLAG:(LCOUNT):노역フラグ == 1
+			LOCAL:10 += 1
+		ELSEIF CFLAG:(LCOUNT):노역フラグ == 2
+			LOCAL:10 -= 2
+		ELSEIF INRANGE(CFLAG:(LCOUNT):노역フラグ ,10 ,19)
+			SELECTCASE [[점포:종류]]:(CFLAG:(LCOUNT):노역フラグ-10)
+				CASE 10	;공중변소
+					LOCAL:10 -= 3
+			ENDSELECT
+		ENDIF
+	NEXT
+	IF LOCAL:10 > 0
+		PRINTFORM  / 노역에 의한 주인 선악 변동값
+		SETCOLOR  0, 0, 255
+		PRINTFORM  +{LOCAL:10}
+		RESETCOLOR
+	ELSEIF LOCAL:10 < 0
+		PRINTFORM  / 노역에 의한 주인 선악 변동값
+		SETCOLOR 255, 0, 0
+		PRINTFORM  {LOCAL:10}
+		RESETCOLOR
+	ENDIF
+ENDIF
+PRINTL 
 PRINTL [0]  - 매각
 	IF ITEM:식당
 		PRINTL [1]  - 식당에서 일한다
@@ -86,8 +114,13 @@ PRINTL [0]  - 매각
 	ELSE
 		PRINTL [2]  - 창관에서 아르바이트
 	ENDIF
-SIF TIME == 0
+IF TIME == 0
 	PRINTL [3]  - 노예의 렌탈
+ELSE
+	SETCOLOR 0x2e2e41
+	PRINTL [-]  - 노예의 렌탈（아침에만 실행 가능）
+	RESETCOLOR
+ENDIF
 IF 이벤트フラグ:32:0 == 0 && TIME == 3
 	PRINTL [4]  - 콘서트
 ELSEIF 이벤트フラグ:32:0 == 0 && TIME != 3
@@ -97,12 +130,29 @@ ELSEIF 이벤트フラグ:32:0 == 0 && TIME != 3
 	RESETCOLOR
 ;--- 014 MOD END---
 ENDIF
-;SIF F
-	PRINTL [5]  - 난교 라이브
+IF 이벤트フラグ:32:0 == 0 && TIME == 3
+	PRINTL └[5]- 집단라이브
+ELSEIF 이벤트フラグ:32:0 == 0 && TIME != 3
+;--- 014 MOD START---
+	SETCOLOR 0x2e2e41
+	PRINTL └[-]- 집단라이브　　（夜のみ実行可能）
+	RESETCOLOR
+;--- 014 MOD END---
+ENDIF
+; 뱅드림+P5 모드
+IF ITEM:라이브하우스 == 1 || ITEM:무도관 == 1
+	PRINTL └ [25] - 악기 연습 & 리허설
+ELSE
+	SETCOLOR 0x2e2e41
+	PRINTL └ [ x] - 악기 연습 & 리허설 (라이브하우스나 무도관 필요)
+	RESETCOLOR
+ENDIF
 ;SIF G
 	PRINTL [6]  - 도장에서 수련
 SIF 이벤트フラグ:33:1 == 4
 	PRINTL [7]  - 탄광에서 노동
+;SIF F
+	PRINTL [5]  - 난교 라이브
 
 PRINTL [20]  - 노역해제
 ;--- 014 MOD START---
@@ -131,15 +181,21 @@ ELSEIF RESULT == 2
 ELSEIF RESULT == 3 && TIME == 0
 	CALL RENTAL_SLAVE
 ELSEIF RESULT == 4 && 이벤트フラグ:32:0 == 0 && TIME == 3
-	CALL CONCERT
-;ELSEIF RESULT == 5 && F
-ELSEIF RESULT == 5
-	CALL PROMISCUOUS_SEX_LIVE
+;콘서트 유형 선택지가 뜬다
+	CALL CHOOSE_CONCERT_TYPE
+	;CALL CONCERT
+;---- EDIT 016 ADD START -------------------------
+ELSEIF RESULT == 5 && 이벤트フラグ:32:0 == 0 && TIME == 3
+	CALL GROUP_LIVE
+;---- EDIT 016 ADD END  ---------------------------
 ;ELSEIF RESULT == 6 && G
 ELSEIF RESULT == 6
 	CALL DOJO
 ELSEIF RESULT == 7 && 이벤트フラグ:33:1 == 4
 		CALL TANKOU
+;ELSEIF RESULT == 5 && F
+ELSEIF RESULT == 8
+	CALL PROMISCUOUS_SEX_LIVE
 ELSEIF RESULT == 20
 	CALL CANCEL_WORK
 ELSEIF RESULT == 21
@@ -153,13 +209,16 @@ ELSEIF RESULT == 23
 	CALL MANAGEMENT
 ELSEIF RESULT == 24
 	CALL DEAL_CHARA
+ELSEIF RESULT == 25 && (ITEM:라이브하우스 == 1 || ITEM:무도관 == 1)
+;악기연습/리허설
+	CALL MUSIC_PRACTICE_CHOOSE
 ELSE
 	GOTO INPUT_LOOP
 ENDIF
 ;노역で어령出現
 IF MONEY > 이벤트フラグ:15:4 && 이벤트フラグ:33:1 == 4
 	IF !RAND:20
-		PRINTW 어령を見たという情報が入った！
+		PRINTW 어령을 봤다는 정보가 들어왔다!
 		이벤트フラグ:15:0 ++
 	ENDIF
 ENDIF
@@ -1115,7 +1174,10 @@ ELSEIF FLAG:4 == 3
 ENDIF
 
 TFLAG:36 += ビデオ가격
-TFLAG:70 = 0
+
+;이 변수는 이제 비디오 내용기록에 대한 연산에 사용될 필요가 있으니 0으로 초기화되지 않는다
+;TFLAG:70 = 0
+
 ;ビデオタイトル用内容가운語
 IF TFLAG:48 == 0
 	IF (ビデオ봉사 > ビデオ被虐) && (ビデオ봉사 > ビデオ肛虐) && (ビデオ봉사 > 2)
@@ -1131,6 +1193,19 @@ ENDIF
 
 @SELL_VIDEO
 #DIM LCOUNT
+#DIMS DYNAMIC TITLE_NAME ;비디오 제목
+#DIM DYNAMIC TEMPCHAR ;캐릭번호 저장변수
+
+;만약 현 조교대상과 마지막으로 찍은 비디오의 주인공이 다를 경우 → 노예와 조수를 교대한다
+IF LASTVIDEO_HERO > 0 && (LASTVIDEO_HERO != TARGET)
+	TEMPCHAR = TARGET ;임시변수에다 조교대상의 캐릭번호를 저장
+	TARGET = ASSI ;조수를 조교대상으로 변경
+	ASSI = TEMPCHAR ;전 조교대상을 조수로 삼음
+ENDIF
+
+;이 변수를 초기화
+LASTVIDEO_HERO = 0
+
 ;조교時に録画したビデオの매각
 ;TODO 가격설정再考・状況による가격をプラスできるか(처녀開通時など)
 
@@ -1145,119 +1220,17 @@ ENDIF
 SIF TFLAG:36 == 0
 	RETURN 0
 
-
 ;PRINTFORML 録画したビデオは￥{TFLAG:36}程度の値が付きそうだ
+PRINTL
+DRAWLINE
 PRINT 녹화된 비디오「
-SELECTCASE RAND:10
-	CASE 0
-		;朝
-		IF TIME == 0
-			PRINT 아침의 
-		;昼
-		ELSEIF TIME == 1
-			PRINT 대낮의 
-		;夕
-		ELSEIF TIME == 2
-			PRINT 황혼의 
-		;夜
-		ELSE
-			PRINT 한밤중의 
-		ENDIF
-	CASE 1
-		IF TALENT:TARGET:연모 || TALENT:TARGET:친애
-			PRINT 사랑의
-		ELSEIF TALENT:TARGET:음란 || TALENT:TARGET:창부
-			PRINT 음란
-		ELSEIF TALENT:TARGET:복종 || TALENT:TARGET:예속
-			PRINT 예속
-		ELSE
-			PRINT 노예 
-		ENDIF
-	CASE 2
-		PRINT 붙잡힌 
-	CASE 3
-		PRINT 음옥의 
-	CASE 4
-		PRINT 더럽혀진 
-	CASE 5
-		PRINT 애수의 
-	CASE 6
-		PRINT 범해진 
-	CASE 7
-		PRINT 속아버린 
-	CASE 8
-		PRINT 함정에 빠진 
-	CASE 9
-		PRINT 초변태 
-ENDSELECT
-;タイトルが無ければ종족명
-IF CSTR:タイトル == ""
-	PRINTFORM %STR:(ABL:종족)%
-ELSE
-	PRINTFORM %CSTR:タイトル%
-ENDIF
-IF RAND:10 == 0
-		PRINT ＶＳ
-		IF TALENT:MASTER:서머너 == 5
-			PRINT 다크서머너
-		ELSEIF TALENT:MASTER:페르소나구사자
-			PRINT 어둠의 페르소나구사자 
-		ELSEIF TALENT:MASTER:이능자
-			PRINT 이능자
-		ELSEIF TALENT:MASTER:식노
-			PRINT 식노
-		ELSEIF TALENT:MASTER:달인
-			PRINT 달인
-		ELSEIF ABL:MASTER:종족 == 36
-			PRINT 악마 사냥꾼 
-		ELSEIF TALENT:MASTER:데빌시프터
-			PRINT 데빌시프터
-		ELSEIF ABL:MASTER:종족 == 73
-			PRINT 악마인
-		ELSEIF ABL:MASTER:종족 == 10
-			PRINT 타케시
-		ELSE
-			PRINT 일반인
-		ENDIF
-ENDIF
-IF TFLAG:48 == 1
-	PRINT 처녀
-ELSEIF TFLAG:48 == 2
-	PRINT 촉수
-ELSEIF TFLAG:48 == 3
-	PRINT 노출
-ELSEIF TFLAG:48 == 4
-	PRINT 긴박
-ELSEIF TFLAG:48 == 5
-	PRINT 미약
-ELSEIF TFLAG:48 == 6
-	PRINT 봉사
-ELSEIF TFLAG:48 == 7
-	PRINT 피학
-ELSEIF TFLAG:48 == 8
-	PRINT 항학
-ELSEIF TFLAG:48 == 9
-	PRINT 능욕
-ENDIF
+;비디오 타이틀 짓는 함수 실행
+CALL VIDEO_TITLE_NAMING
 
+;처녀판정 변수 원래대로 되돌림
 TFLAG:48 = 0
 
-SELECTCASE RAND:6
-	CASE 0
-		PRINT 조교
-	CASE 1
-		PRINT 의 비밀
-	CASE 2
-		PRINT 의 덫
-	CASE 3
-		PRINT 의 옥션
-	CASE 4
-		PRINT 의 성생활
-	CASEELSE
-		PRINT 의 일상
-ENDSELECT
-
-PRINTFORML 」은(는) ￥{TFLAG:36} 정도의 가격이 붙을 것 같다
+PRINTFORML %TSTR:4%」은(는) ￥{TFLAG:36} 정도의 가격이 붙을 것 같다
 PRINTL 녹화한 비디오를 어떻게할 지 선택해주세요
 PRINTL [0] - 판다
 PRINTL [1] - 수중에 남긴다
@@ -1266,29 +1239,43 @@ DRAWLINE
 $INPUT_LOOP
 INPUT
 IF RESULT == 0
+	;입력된 비디오 타이틀명을 지움
+	TSTR:4 = 
 	PRINTFORML 조교시에 녹화한 비디오를 팔아、￥{TFLAG:36} 입수했습니다
 	MONEY += TFLAG:36
 	CFLAG:TARGET:ビデオ매각数 += 1
 	CFLAG:TARGET:ビデオ매각합계金額 += TFLAG:36
 	TFLAG:36 = 0
+	;촬영 경과횟수 초기화
+	TFLAG:70 = 0
 	;이벤트구상呼び出し(ビデオ매각時）
 	TFLAG:13 = 19
 	CALL KOJO_MESSAGE_EVENT
 ELSEIF RESULT == 1
 	PRINTFORML 조교시에 녹화한 비디오를 수중에 남겨두었습니다
-	CFLAG:20 += 1
-	
+	;CFLAG:20 += 1
 ;---- EDIT 007 ADD START -----------------
 	;TCVARの内容をCFLAGに移動する
+	;최근 찍은 비디오의 커맨드 실행 순서를 CFLAG에 저장
 	FOR LCOUNT, 0, 10
 		CFLAG:(1500 + LCOUNT) = TCVAR:(110 + LCOUNT)
 	NEXT
 ;---- EDIT 007 ADD END -----------------
-	
-	;이벤트구상呼び出し(ビデオ保有時）
-	TFLAG:13 = 23
-	CALL KOJO_MESSAGE_EVENT
+	;방금 찍은 비디오 정보 출력
+	PRINTL
+	CUSTOMDRAWLINE =
+	PRINTFORML 저장할 슬롯을 선택해주세요
+	PRINTFORML 비디오 추정가격: ￥{TFLAG:36}
+	PRINTL
+	CALL VIDEO_DETAIL_PRINT
+	CUSTOMDRAWLINE =
+	;비디오 슬롯들 표시 & 슬롯을 선택하여 비디오를 최종적으로 저장한다!
+	CALL VIDEO_LIST_PRINT_AND_SAVE
+	;촬영 경과횟수 초기화
+	TFLAG:70 = 0
 ELSE
+	CLEARLINE 1
+	REUSELASTLINE
 	GOTO INPUT_LOOP
 ENDIF
 DRAWLINE

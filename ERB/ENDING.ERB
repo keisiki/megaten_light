@@ -1,13 +1,14 @@
 ﻿
-
 @CHECK_ENDING
 #DIM LENDING_CONDITION
+#DIM LENDING_CONDITION_1
+#DIM LENDING_CONDITION_2
 #DIM LCOUNT
 LOCAL:10 = TARGET
 ;ファントムED
 ;---- EDIT005 MOD START --------------------------
 ;이벤트フラグ:1:1 = 마요네様の警告を受けたかのフラグ( -1이벤트소거 0未発生 1～2警告이벤트発生 )
-IF (FLAG:所属組織 == 0 && FLAG:組織貢献度 >= 3500000 && GETBIT(FLAG:취소된ED,0) == 0 && 이벤트フラグ:1:1 < 1) || 던전フラグ:85:0 == 1
+IF (FLAG:所属組織 == 0 && FLAG:組織貢献度 >= 3500000 && GETBIT(FLAG:취소된ED,0) == 0 && 이벤트フラグ:1:1 < 1) || (던전フラグ:85:0 == 1 && GETBIT(FLAG:취소된ED,0) == 0 )
 ;---- EDIT005 MOD END   --------------------------
 	SETBIT FLAG:취소된ED,0
 	PRINTFORMW ＞메일이 도착해 있다
@@ -44,7 +45,6 @@ IF (FLAG:所属組織 == 0 && FLAG:組織貢献度 >= 3500000 && GETBIT(FLAG:취
 			PRINTFORMW 다음으로 양손을 꿰뚫었다
 			PRINTFORMW 남자는 돼지같이 코로 소리를 내며 괴로운 신음소리를 내질렀다
 			PRINTFORMW 그리고 어깨、팔꿈치、무릎 같은 치명상이 되지 않는 곳을 겨누고 차례대로 탄환을 쏘았다
-			;それにしてもこの上司、割とタフである
 			PRINTFORMW 거기까지 해놓고 %조사처리(CALLNAME:MASTER,"는")% 남자의 재갈을 풀어주었다
 			PRINTFORMW 남자는 온몸을 덮치는 격통때문에 숨이 끊어질 것처럼 굴면서도 %CALLNAME:MASTER%에게 사죄의 말을 꺼냈다
 			PRINTFORMW 「기、기다려 쏘지마! 지금까지의 일은 잘못했다구」
@@ -87,14 +87,15 @@ IF (FLAG:所属組織 == 0 && FLAG:組織貢献度 >= 3500000 && GETBIT(FLAG:취
 			PRINTFORMW 
 			PRINTFORMW 　　　　　　　　―― Ending No.000 (팬텀 간부 END)
 		ENDIF
-		
+		;파트너選択
+		;;표시させるキャラを抽出（Q:*に표시するキャラの등록번호、LOCAL:2に人数）
 		
 		FLAG:5 = 9
 		SETBIT FLAG:発見ED,0
 		GOTO CONTINUE_2
-		
 	ENDIF
 ENDIF
+
 
 ;조교사 END
 IF FLAG:조교師名声 >= 400 && GETBIT(FLAG:취소된ED,2) == 0 && 이벤트フラグ:1:1 < 1
@@ -109,6 +110,8 @@ IF FLAG:조교師名声 >= 400 && GETBIT(FLAG:취소된ED,2) == 0 && 이벤트�
 		VARSET Q, -1
 		A = 0
 		FOR LCOUNT, 0, CHARANUM
+			SIF LCOUNT == MASTER
+				CONTINUE
 			SIF 계약(LCOUNT) == 0
 				CONTINUE
 			SIF CFLAG:LCOUNT:この場に居ないフラグ == 1
@@ -190,6 +193,8 @@ IF FLAG:조교師名声 >= 2000 && GETBIT(FLAG:취소된ED,3) == 0 && 이벤트�
 		VARSET Q, -1
 		A = 0
 		FOR LCOUNT, 0, CHARANUM
+			SIF LCOUNT == MASTER
+				CONTINUE
 			SIF TALENT:LCOUNT:남편 || TALENT:LCOUNT:아내 || TALENT:LCOUNT:노리개
 				CONTINUE
 			SIF CFLAG:LCOUNT:この場に居ないフラグ == 1
@@ -275,6 +280,8 @@ IF FLAG:요리인기 >= 1500 && GETBIT(FLAG:취소된ED,10) == 0 && 이벤트フ
 		VARSET Q, -1
 		A = 0
 		FOR LCOUNT, 0, CHARANUM
+			SIF LCOUNT == MASTER
+				CONTINUE
 			SIF 계약(LCOUNT) == 0
 				CONTINUE
 			SIF CFLAG:LCOUNT:この場に居ないフラグ == 1
@@ -388,6 +395,8 @@ IF FLAG:매춘인기 >= 1500 && GETBIT(FLAG:취소된ED,12) == 0 && 이벤트フ
 		VARSET Q, -1
 		A = 0
 		FOR LCOUNT, 0, CHARANUM
+			SIF LCOUNT == MASTER
+				CONTINUE
 			SIF 계약(LCOUNT) == 0
 				CONTINUE
 			SIF CFLAG:LCOUNT:この場に居ないフラグ == 1
@@ -479,9 +488,9 @@ ENDIF
 ;
 ;	PRINTL
 ;	IF TALENT:MASTER:남자
-;		CALL INPUT_YN,"(流浪の男娼END)",""
+;		CALL INPUT_YN,"(방랑의 창남END)",""
 ;	ELSE
-;		CALL INPUT_YN,"(流浪の창부END)",""
+;		CALL INPUT_YN,"(방랑의 창부END)",""
 ;	ENDIF
 ;	IF RESULT == 0
 ;		SETBIT FLAG:発見ED,14
@@ -527,6 +536,105 @@ IF ABL:MASTER:욕망 >= 10 && EXP:MASTER:매춘경험 + EXP:MASTER:변기경험 
 	ENDIF
 ENDIF
 
+
+;No.17ロリハーレムEND
+;エンドを취소していないこと、納金が300万이상（幹部よりちょっと少ない）、問題行動は起こしていない
+;※이벤트フラグ:1:1 = 마요네様の警告を受けたかのフラグ( -1이벤트소거 0未発生 1～2警告이벤트発生 )
+;かつ、以下の포인트が20포인트이상になったら発生
+;앨리스、モーショボー、나쟈、유킨코、……などロリキャラが上位함락で+3포인트
+;（ただしひとり이상は必須）
+;「小柄かつ女性」キャラが조수가능で+1、上位함락ならさらに+1
+;さらに소악마であれば+1
+;およそ「메인となるロリが4名」＋「함락・조수ロリが4～5名」＝20포인트越えという感じ
+IF GETBIT(FLAG:취소된ED,17) == 0 && FLAG:組織貢献度 >= 3000000 && 이벤트フラグ:1:1 < 1
+	LENDING_CONDITION_1 = 0
+	LENDING_CONDITION_2 = 0
+
+	FOR LCOUNT, 0, CHARANUM
+		IF LCOUNT >= 1
+			;まず特定キャラを체크
+			;他にもいたら加筆してほしい
+			IF 0
+			;앨리스
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:앨리스]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;ショボたん
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:모・쇼보]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;나쟈
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:나쟈]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;유킨코
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:유킨코]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;미라이
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:미라이]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;こだいちゃん
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:코시로]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;ナナコン！！！！
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:나나코]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;에리카
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:에리카]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;마이코
+			ELSEIF TALENT:LCOUNT:친애 && GETCHARA([[キャラ:마이코]]) > -1
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;아이（業が深い）
+			ELSEIF TALENT:LCOUNT:친애 && TALENT:LCOUNT:아이 && TALENT:LCOUNT:남자 == 0 
+				LENDING_CONDITION_1 += 3
+				LENDING_CONDITION_2 += 1
+			;以下汎用キャラ
+			ELSE
+				;小柄かつ女性のキャラを체크
+				IF TALENT:LCOUNT:유아체형 && TALENT:LCOUNT:남자 == 0 
+					;上位함락なら+2
+					IF TALENT:LCOUNT:친애
+						LENDING_CONDITION_1 += 2
+					;조수가능なら+1
+					ELSEIF CFLAG:LCOUNT:매각가능 < 2 || TALENT:LCOUNT:연모
+						LENDING_CONDITION_1 += 1
+						;소악마なら추가で+1
+						SIF TALENT:LCOUNT:소악마
+							LENDING_CONDITION_1 += 1
+						;유치ならさらに+1
+						;これをそもそもの조건にしないのは合法ロリとかもアリなのかなって思ったからです
+						SIF TALENT:LCOUNT:유치 
+							LENDING_CONDITION_1 += 1
+					ENDIF
+				ELSE
+				;남자とか큰체형女性がいたら마이ナスしようかと思ったけどやめます
+				ENDIF
+			ENDIF
+		ENDIF
+
+
+	NEXT
+	;ロリキャラたちが一定이상＋必須キャラが存在
+	IF LENDING_CONDITION_1 > 20 
+		IF LENDING_CONDITION_2 > 0
+		SETBIT FLAG:취소된ED,17
+		CALL ENDING_NO17
+		SIF RESULT == 1
+			GOTO CONTINUE_1
+		ENDIF
+	ENDIF
+	
+ENDIF
+
+
+
 ;No.20武断派ハーレムEND
 ;;친애が10人以上＋主人のLVが60以上になったため、部隊を率いることができる実힘者と認められたということにします。
 IF GETBIT(FLAG:취소된ED,20) == 0 && BASE:MASTER:LV > 60 && 이벤트フラグ:1:1 < 1
@@ -549,6 +657,8 @@ IF GETBIT(FLAG:취소된ED,20) == 0 && BASE:MASTER:LV > 60 && 이벤트フラグ
 	ENDIF
 	
 ENDIF
+
+
 
 ;벨벳룸を開いてる상태で、시바르바で퓌러を撃破する
 IF GETBIT(FLAG:취소된ED,30) == 0 && 던전フラグ:55:99
@@ -717,6 +827,11 @@ IF GETBIT(FLAG:취소된ED,22) == 0 && BASE:MASTER:LV >= 60
 			GOTO CONTINUE_1
 	ENDIF
 ENDIF
+
+
+
+
+
 
 ;借金返せ無かったよEND
 IF MONEY < 0 
@@ -1047,11 +1162,51 @@ RETURN 1
 
 ;エン디무ング파트너選択
 @SELECT_PARTNER
-CALL INPUT_CHARA_LIST("連れ添う파트너を選択してください", "", "", "", "", "選ばない")
+CALL INPUT_CHARA_LIST("동행할 파트너를 선택해주세요", "", "", "", "", "선택하지 않는다")
 IF RESULT != 1000
 	RETURN RESULT
 	ENDIF
 RETURN 0
+
+
+@ENDING_NO17
+;ロリハーレムエンド
+;ロリと一定이상ラブラブになれ
+	PRINTFORML ＞%CALLNAME:MASTER%はついにやった――あるいはやらかした。
+	PRINTFORML ＞少女、否、童女たちのハーレムを作り上げたのだ。
+	PRINTFORML ＞お父さん、お兄ちゃん、パパ、マスター……様々な呼び方で彼女たちは%CALLNAME:MASTER%を慕ってくれている。
+	PRINTFORML ＞あるいはこの幸せに浴するのもひとつの終わりだろう……
+	PRINTFORMW ＞それでよかっただろうか？
+	PRINTL
+CALL INPUT_YN, "YES(ロリハーレムEND)", "NO"
+IF RESULT == 0
+	PRINTFORML …
+	PRINTFORML ……
+	PRINTFORML ………
+	PRINTFORML 　
+	PRINTFORML %CALLNAME:MASTER%はとうとう、やりとげてしまった。
+	PRINTFORMW %CALLNAME:MASTER%の周囲には常に少女、童女、幼女が侍る。
+	PRINTFORML 最初は戦闘力や奴隷としての売れ筋を考えていた気もするのだが、今ではすっかり、慈善事業のようになってしまっている。
+	PRINTFORMW そして彼女たちは皆、%CALLNAME:MASTER%のことが大好きなのだ。
+	PRINTFORML %CALLNAME:MASTER%に寄りかかって眠る少女たちの頭を撫でていると、外で遊んでいる少女たちが、きゃあ、と声をあげたのが聞こえた。
+	PRINTFORML 『あーっ！　赤おじさんと黒おじさんだー！』
+	PRINTFORML 『わぁい、おみやげなーにー！？』
+	PRINTFORML ……どうやら客人らしい。
+	PRINTFORMW %CALLNAME:MASTER%は眠る少女たちを起こさぬように、立ち上がる。
+	PRINTFORML あの二人が来たということは、また少女絡みでなにかあったと言うことだろう。
+	PRINTFORMW それに、あのロリコンどもから、愛する少女たちを守護らねばならない。
+	PRINTFORMW %CALLNAME:MASTER%は同好の士を出迎えるため、歩き出した……
+	PRINTFORML 　
+	PRINTFORMW 　　　　　　　　―― Ending No.017 (ロリハーレムエンド)
+	FLAG:5 = 9
+	SETBIT FLAG:発見ED,17
+	RETURN 1
+ELSE
+	PRINTFORML ＞……いや。
+	PRINTFORML ＞世界にはまだ見ぬ少女、童女、幼女がいる……
+	PRINTFORMW ＞%CALLNAME:MASTER%はしっかりちょっと下を向き、またロリを探すための旅路についた……
+	RETURN 0
+ENDIF
 
 @ENDING_NO20
 
@@ -1108,19 +1263,21 @@ IF RESULT == 0
 	PRINTFORMW ……한 빌딩의 방。%플레이어가()% 자신들의 근거지로서 통째로 소유한 건물의 한 방에서, 음란한 물소리가 울려퍼졌다。
 ;	とりあえず主人にチンポがあるパターンだけ。奴隷に男が混じっててもいいように、질내とかの表現は敢えて避けた。
 	IF (TALENT:MASTER:남자 == 1 || TALENT:MASTER:오토코노코 == 1 || TALENT:MASTER:후타나리 == 1)
-		PRINTFORMW 『우응……아직 부족합니다……주인님……』
-		PRINTFORMW 『슈릅……으응…… 그렇게 냈는데, 아직도 이렇게 커……』
+		;PRINTFORMW 『우응……아직 부족합니다……주인님……』
+		;PRINTFORMW 『슈릅……으응…… 그렇게 냈는데, 아직도 이렇게 커……』
 		PRINTFORMW %조사처리(CALLNAME:(LOCAL:11),"과")% %조사처리(CALLNAME:(LOCAL:12),"가")% 의자에 앉아 있는 %CALLNAME:MASTER%의 다리 곁에 무릎 꿇고 앉아 둘이서 거대한 존재에게 봉사하고 있다。
 		PRINTFORMW %CALLNAME:MASTER%의 양손의 손가락은 각각 %조사처리(CALLNAME:(LOCAL:13),"과")% %CALLNAME:(LOCAL:14)%의 비부에 닿아 찌걱찌걱하고 음란한 소리를 울리고 있다。
 		PRINTFORMW %조사처리(CALLNAME:(LOCAL:13),"과")% %조사처리(CALLNAME:(LOCAL:14),"는")% 안타까운 것 같은 얼굴로 서로의 손을 서로 맞잡고, 쾌감으로 젖은 눈동자로 사랑하는 %플레이어를()% 응시하고 있다。
-		PRINTFORMW 『츄읍……츕……쪼옥……』
-		PRINTFORMW 『맛있습니다, 주인님……♪』
+		;PRINTFORMW 『츄읍……츕……쪼옥……』
+		;PRINTFORMW 『맛있습니다, 주인님……♪』
 		PRINTFORMW %조사처리(CALLNAME:(LOCAL:11),"과")% %CALLNAME:(LOCAL:12)%의 옆에서는 %조사처리(CALLNAME:(LOCAL:15),"과")% %조사처리(CALLNAME:(LOCAL:16),"가")% 나란히、%CALLNAME:MASTER%의 발가락을 음란한 표정으로 빨고 있었다。
 		PRINTFORMW 부하……아니, 노예들의 봉사에 몸을 맡기고 있던 %조사처리(CALLNAME:MASTER,"는")%, 문득 가장 사랑하는 노예의 이름을 불렀다。
 		PRINTFORMW 자위에 빠져 있던 %조사처리(CALLNAME:(LOCAL:10),"를")% 위해 다른 노예들이 길을 양보하며, 선망의 시선으로 그 모습을 우러러 봤다。
 		PRINTFORMW %조사처리(CALLNAME:(LOCAL:10),"은")% %CALLNAME:MASTER%의 무릎 위에 앉아 몸을 기대고、키스를 하면서 늠름하게 발기한 페니스를 받아들였다。
-		PRINTFORMW 『아앙……♪ 몹시 늠름합니다, 주인님……』
-		PRINTFORMW 평상시는 부대장으로서 늠름한 표정을 보이는 %CALLNAME:(LOCAL:10)%。그런 그녀가 사랑하는 사람에게 안겨 쾌락에 녹은 눈동자로 키스를 받으면서 음란하게 허리를 흔들고 있다。
+		;PRINTFORMW 『아앙……♪ 몹시 늠름합니다, 주인님……』
+		;PRINTFORMW 평상시는 부대장으로서 늠름한 표정을 보이는 %CALLNAME:(LOCAL:10)%。그런 그녀가 사랑하는 사람에게 안겨 쾌락에 녹은 눈동자로 키스를 받으면서 음란하게 허리를 흔들고 있다。
+		PRINTFORMW 평상시는 부대장으로서 늠름한 표정을 보이는 %CALLNAME:(LOCAL:10)%。。
+		PRINTFORMW 사랑하는 사람에게 안겨 쾌락에 녹은 눈동자로 키스를 받으면서 음란하게 허리를 흔들고 있다。
 		PRINTFORMW 그런 대장과 부대장의 결합부에 %조사처리(CALLNAME:(LOCAL:11),"과")% %조사처리(CALLNAME:(LOCAL:12),"는")% 혀를 대어 흘러나오는 애액과 쿠퍼액이 섞인 액체를 앞다투어 빨고 핥고 있었다。
 		PRINTFORMW 그들의 치태를 부러운 듯이 보면서、%조사처리(CALLNAME:(LOCAL:17),"과")% %조사처리(CALLNAME:(LOCAL:18),"과")% %조사처리(CALLNAME:(LOCAL:19),"는")% 세 명이서 서로의 몸을 위로하고 있다。
 		PRINTFORMW 그것은 준비。언제 %CALLNAME:MASTER%에게 불려가도 좋도록 열심히 비부를 적셔, 주인으로부터의 총애를 받는 것을 기다리고 있다……。
@@ -1253,7 +1410,7 @@ ENDIF
 	PRINTFORMW ＞지금이라면 %CALLNAME:MASTER%에게 충성을 맹세하는 혈족들로 신세력을 세울 수 있을지도 모른다……。
 	PRINTFORMW ＞새로운 세력을 구축하겠습니까?
 	PRINTL
-CALL INPUT_YN,"YES(娘ハーレムEND)","NO"
+CALL INPUT_YN,"YES(딸 하렘END)","NO"
 IF RESULT == 0
 	;一番의존도の高いキャラ登録番号を変数Aに入れる：의존도が同じなときは登録番号が早いほうになるけど、ほぼないはず
 	VARSET LOCAL

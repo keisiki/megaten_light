@@ -191,7 +191,7 @@ RETURN 1
 
 ;네메시스사고패턴
 @SET_ACTION_6200,ARG
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	CFLAG:ARG:입력行動 = [[스킬:전광석화]]
 ELSEIF CFLAG:ARG:行動した횟수 == 0
 	CFLAG:ARG:입력行動 = [[스킬:우뢰의세례]]

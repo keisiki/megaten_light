@@ -6,7 +6,7 @@
 @PLAYABLE_COLOSSEUM_85
 ;IF (투기장フラグ:4:0 == 1 || 투기장フラグ:3:0 == 1) && 투기장フラグ:5:0 == 0
 ;	IF GETCHARA(4507) > -1 || FLAG:34507 > 0
-IF 투기장フラグ:85:0 == 0 && 이벤트フラグ:98:0 == 5
+IF 투기장フラグ:85:0 == 0 && 이벤트フラグ:98:0 >= 5
 			RESULTS = 여기서는 오크의 언어로 말해라
 			RETURN 1
 ;	ELSE
@@ -61,7 +61,7 @@ FLAG:도주불가フラグ = 0
 FLAG:회화불능フラグ = 0
 FLAG:선제기습취소 = 0
 PRINTW ＞붉은 랜서는 환상이었던 것처럼 사라져갔다…
-;CALL ADD_NEW_COMPANION,5072,500,1
+CALL ADD_NEW_COMPANION,5072,500,1
 PRINTW ￥300000과 명성10을 획득했다
 MONEY += 300000
 FLAG:名声 += 10

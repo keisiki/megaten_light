@@ -3,8 +3,8 @@
 
 ;스킬名
 @SKILL_NAME_2895,ARG
-;나나미が사용する場合보물찾기に
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나나미]]) == 1
+;나나미が사용する場合宝探しに
+IF SKILL_CHANGE(ARG, [[キャラ:나나미]])
 	RESULTS = 보물찾기
 ELSE
 	RESULTS = 재보「골드러시」
@@ -14,7 +14,7 @@ SIF  GETBIT (FLAG:カスタムゲーム화면,1)
 	RESULTS = 재보「골드러시」
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2895
+@SKILL_DECIDE_TYPE_2895, ARG
 RETURN 0
 ;どちらでもない
 

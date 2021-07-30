@@ -3,7 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_1608,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:니토리]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:니토리]])
 	RESULTS = 수부｢워터 카펫｣
 ELSE
 	RESULTS = 피어트렌트
@@ -40,12 +40,12 @@ RETURN 13
 ;빙결
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1608
+@SKILL_DECIDE_TYPE_1608, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1608
+@SKILL_DAMAGETYPE_1608, ARG
 IF (U > 0 && U < CHARANUM && NO:U == [[キャラ:니토리]]) || ((FLAG:行動順1) > 0 && NO:(FLAG:行動順1) == [[キャラ:니토리]])
 	RETURN 1
 ELSE
@@ -102,7 +102,7 @@ RETURN 0
 ;テン플레이트用、추가효과シリーズ
 ;추가효과스테이터스
 @SKILL_ADDTIONAL_STATE_1608,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:니토리]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:니토리]])
 	RETURN 3
 ELSE
 	RETURN 5
@@ -110,7 +110,7 @@ ENDIF
 
 ;추가효과상성
 @SKILL_ADDTIONAL_TYPE_1608,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:니토리]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:니토리]])
 	RETURN 9
 ELSE
 	RETURN 13
@@ -142,8 +142,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,1608
 ;　 説明文の표시
 @SKILL_EXPLAIN_1608
 IF U > 0 && U < CHARANUM && NO:U == [[キャラ:니토리]]
-	PRINTL 怒涛の水流で적전체を押し流して수격相性の物理大ダメージ＋低확률で混乱。
-	PRINTL 요귀　河城にとりのスペルカード。
+	PRINTL 거센 물살로 적전체를 밀고 수격 상성의 물리 대 데미지＋낮은 확률로 혼란。
+	PRINTL 요귀　카와시로 니토리의 스펠카드。
 ELSE
 	PRINTL [후열] 적 전체에 수격속성 대 마법데미지. (낮은 확률로 CLOSE)
 ENDIF

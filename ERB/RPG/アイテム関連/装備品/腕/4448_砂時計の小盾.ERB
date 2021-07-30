@@ -5,28 +5,28 @@
 ;
 ;ほむほむ수태아이템
 ;素の性能自体は３０레벨
-;함락した魔法소녀を소지していると能力上昇
+;함락した마법소녀を소지していると능력上昇
 ;	마도카	魔＋２、파마반감
-;	호무라	知＋２、주살一回無効
+;	호무라	知＋２、주살一回무효
 ;	마미	운＋２、신경반감
 ;	사야카	体＋２、自動治癒（中）
 ;	교코	速＋２、정신반감
-;	유마	충격無効
-;	おりこ	핵열無効
-;	키리카	힘＋２、物理にゆるい내성
+;	유마	충격무효
+;	おりこ	핵열무효
+;	키리카	힘＋２、물리にゆるい내성
 ;	여신まど	만능にゆるい내성
-;	そして魔法소녀一人ごとに盾の레벨＋１０
-;本当はゆまは라쿠카쟈오토、おりこは스쿠카쟈오토だったが
+;	そして마법소녀一人ごとに盾の레벨＋１０
+;本当は유마は라쿠카쟈오토、おりこは스쿠카쟈오토だったが
 ;どうしても기능しないため내성부여
 ;
-;기능するように修正して내성소거、안경호무라に対応させて引き継ぎ可能に
-;기본性能が高すぎたため計算式を변경、조마でも레벨が上っていたためそちらも修正
+;기능するように수정して내성소거、안경호무라に対応させて引き継ぎ가능に
+;기본性能が高すぎたため計算式を변경、조마でも레벨が上っていたためそちらも수정
 ;======================================================
 
 @기본능력수정_4448,ARG,ARG:1 = -1
 IF ARG:1 > -1
 	SELECTCASE GET_BASESTATUS(ARG)
-		;キ리카함락時、힘＋２
+		;키리카함락時、힘＋２
 		CASE "힘"
 			LOCAL = GETCHARA([[キャラ:키리카]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
@@ -38,25 +38,25 @@ IF ARG:1 > -1
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
 				RETURN 2
 			ENDIF
-		;まどか함락時、魔＋２
+		;마도카함락時、魔＋２
 		CASE "마력"
 			LOCAL = GETCHARA([[キャラ:마도카]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
 				RETURN 2
 			ENDIF
-		;さやか함락時、体＋２
+		;사야카함락時、体＋２
 		CASE "인내력"
 			LOCAL = GETCHARA([[キャラ:사야카]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
 				RETURN 2
 			ENDIF
-		;杏子함락時、速＋２
+		;교코함락時、速＋２
 		CASE "속도"
 			LOCAL = GETCHARA([[キャラ:교코]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
 				RETURN 2
 			ENDIF
-		;マミ함락時、운＋２
+		;마미함락時、운＋２
 		CASE "운"
 			LOCAL = GETCHARA([[キャラ:마미]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
@@ -71,7 +71,7 @@ RETURN 0
 LOCAL:1 = 0
 LOCAL:2 = 30
 IF ARG:1 > -1
-	;함락している魔法소녀１人毎に레벨＋１０
+	;함락している마법소녀１人毎に레벨＋１０
 	;（＋５に변경）
 	FOR LOCAL, 4390, 4399
 		LOCAL:1 = GETCHARA(LOCAL)
@@ -110,25 +110,25 @@ RETURN 0
 @방어상성_4448,ARG,ARG:1 = -1
 IF ARG:1 > -1
 	SELECTCASE GET_TYPE(ARG)
-		;キ리카함락時、物理に薄い내성
+		;키리카함락時、물리に薄い내성
 		CASE "검격", "비구", "타격", "전술"
 			LOCAL = GETCHARA([[キャラ:키리카]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
 				RETURN 90
 			ENDIF
-		;マミ함락時、신경반감
+		;마미함락時、신경반감
 		CASE "신경"
 			LOCAL = GETCHARA([[キャラ:마미]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
 				RETURN 50
 			ENDIF
-		;杏子함락時、정신반감
+		;교코함락時、정신반감
 		CASE "정신"
 			LOCAL = GETCHARA([[キャラ:교코]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
 				RETURN 50
 			ENDIF
-		;まどか함락時、파마반감
+		;마도카함락時、파마반감
 		CASE "파마"
 			LOCAL = GETCHARA([[キャラ:마도카]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
@@ -178,9 +178,9 @@ RETURN 1
 RETURN 0
 
 @장비해설_4448
-PRINTL 最高の友達を守る、その祈りが形となった盾。
-PRINTL これは時こそ操れぬが、魔法소녀達の因果を受けて成長してゆく。
-PRINTL 魔法소녀　아케미 호무라　の수태아이템
+PRINTL 가장 친한 친구를 지킨다、그 기도가 형상이 된 방패。
+PRINTL 이것은 시간은 조종할 수 없으나、마법소녀들의 인과를 받아 성장해 간다。
+PRINTL 마법소녀　아케미 호무라의 수태아이템
 
 ;마카交換可能か
 @EQUIP_EXCHANGE_4448
@@ -196,13 +196,13 @@ ENDIF
 @장비추가스킬_4448, ARG, ARG:1 = -1
 IF ARG:1 > -1
 	SELECTCASE ARG
-		;さやか함락時、自動治癒（中）추가
+		;사야카함락時、自動治癒（中）추가
 		CASE 0
 			LOCAL = GETCHARA([[キャラ:사야카]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
 				RETURN 2409
 			ENDIF
-		;ゆま함락時、라쿠카쟈오토추가
+		;유마함락時、라쿠카쟈오토추가
 		CASE 1
 			LOCAL = GETCHARA([[キャラ:유마]])
 			IF LOCAL > 0 && FAVORITE_1(LOCAL) == ARG:1 && 함락(LOCAL)
@@ -222,4 +222,4 @@ RETURN 0
 RETURN 1
 
 @장비조건설명_4448
-PRINTL 特殊조건: 魔法소녀と関係が深いものが장비するときのみ性能が変化する
+PRINTL 특수조건: 마법소녀와 관계가 깊은 것을 장비할 때만 성능이 변화한다

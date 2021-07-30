@@ -58,7 +58,7 @@ LOCAL:4 = 650 - (LOCAL:3 * 50)
 RETURN LOCAL:4
 
 ;高クリティカル
-@SKILL_CRITICAL_RATE_2085
+@SKILL_CRITICAL_RATE_2085, ARG
 RETURN 20
 
 ;　최저공격횟수
@@ -91,12 +91,12 @@ RETURN 60
 RETURN GET_TYPE_NUM("만능")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2085
+@SKILL_DECIDE_TYPE_2085, ARG
 RETURN 1
 ;EXTRA
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2085
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2085, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -179,7 +179,8 @@ CALL ATTACK_RAND,ARG,ARG:1,2085
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2085
-PRINTL [후열] 적 전체에 5회(1인 최대 1회) 만능속성 특대 물리데미지. 명중률이 높다. 적이 적을수록 위력이 증가한다.
+PRINTL [후열] 상대에게 작열의 창을 쏘아 죽음에 이르게 한다. 사신 루그의 필살기
+PRINTL 적 전체에 5회(1인 최대 1회) 만능속성 특대 물리데미지. 명중률이 높다. 적이 적을수록 위력이 증가한다.
 
 ;継承に필요な部位
 @継承部位_2085,ARG

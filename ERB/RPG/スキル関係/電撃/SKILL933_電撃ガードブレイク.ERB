@@ -3,7 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_933,ARG
-RESULTS = 전격가드브레이커
+RESULTS = 전격가드브레이크
 
 ;　명중
 @SKILL_HITRATE_933, ARG
@@ -36,12 +36,12 @@ RETURN GET_TYPE_NUM("전격")
 ;전격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_933
+@SKILL_DECIDE_TYPE_933, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_933
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_933, ARG
 RETURN 0
 
 

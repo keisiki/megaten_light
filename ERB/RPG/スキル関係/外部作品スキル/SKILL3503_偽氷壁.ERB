@@ -28,7 +28,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_3503,ARG
-RETURN 10
+RETURN 7
 
 ;　相性
 @SKILL_TYPE_3503,ARG
@@ -36,12 +36,12 @@ RETURN 17
 ;빙결
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3503
+@SKILL_DECIDE_TYPE_3503, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3503
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3503, ARG
 RETURN 0
 
 
@@ -116,7 +116,7 @@ RETURN 0
 @ACTION_3503,ARG,ARG:1
 CFLAG:ARG:무효フラグ = 1
 CFLAG:ARG:방어フラグ = 1
-PRINTFORMW %CALLNAME:ARG%は偽氷で盾を作り방어態勢になった
+PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 가짜 얼음으로 방패를 만들어 방어 태세가 되었다
 
 
 
@@ -128,8 +128,8 @@ PRINTFORMW %CALLNAME:ARG%は偽氷で盾を作り방어態勢になった
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3503
-PRINTL 偽氷で盾を作り　一度だけ공격を무효화し、방어態勢になる
-PRINTL 스킬の発生がかなり早い
+PRINTL 가짜 얼음으로 방패를 만들어 한 번만 공격을 무효화하고、방어 태세가 된다
+PRINTL 스킬의 발생이 무척 빠르다
 
 ;継承に필요な部位
 @継承部位_3503,ARG

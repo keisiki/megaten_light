@@ -24,7 +24,7 @@ FOR L_INDEX,0,20
 		IF !GETBIT(이벤트フラグ:10:L_INDEX,LOCAL+32)
 			SETBIT 이벤트フラグ:10:L_INDEX,LOCAL+32
 			CALLFORM EVENT_10_TITLELIST_{L_INDEX} , LOCAL
-			LOCALS = 掛け合い이벤트【%RESULTS%】が出現！
+			LOCALS = 교섭 이벤트 【%RESULTS%】 출현！
 			CALL MESSAGE_B(1, LOCALS)
 		ENDIF
 		;まだ見てない이벤트の数をカウント
@@ -34,9 +34,9 @@ FOR L_INDEX,0,20
 	NEXT
 NEXT
 IF LOCAL:1 > 0
-	RESULTS = 掛け合い이벤트\(新着{LOCAL:1}個\)
+	RESULTS = 교섭 이벤트 \(新着{LOCAL:1}個\)
 ELSE
-	RESULTS = 掛け合い이벤트
+	RESULTS = 교섭 이벤트
 ENDIF
 SIF LOCAL:2
 	RETURN 1
@@ -47,7 +47,7 @@ SIF LOCAL:2
 @SHOPCOM_EVENT_10
 #DIM L_INDEX
 CUSTOMDRAWLINE =
-PRINTFORML どの掛け合い이벤트を見ますか？
+PRINTFORML 어떤 교섭 이벤트를 봅니까？
 CUSTOMDRAWLINE =
 
 FOR L_INDEX,0,20
@@ -75,7 +75,7 @@ SIF RESULT == 9999
 LOCAL:3 = RESULT / 100
 LOCAL:4 = RESULT % 100
 TRYCCALLFORM EVENT_10_PLAYABLE_{LOCAL:3} , LOCAL:4
-	SIF !RESULT && !GETBIT(이벤트フラグ:10:L_INDEX,LOCAL)
+	SIF !RESULT && !GETBIT(이벤트フラグ:10:(LOCAL:3),LOCAL:4)
 		GOTO END_EVENT
 	CALLFORM EVENT_10_MAINEVENT_{LOCAL:3} , LOCAL:4
 	PRINTL
@@ -88,3 +88,70 @@ ENDCATCH
 $END_EVENT
 CLEARLINE 1
 GOTO INPUT_LOOP
+
+;====================
+;出現チェック関数
+;====================
+@EVENT10_APP_CHECK,ARG,ARG:1
+#FUNCTION
+RETURNF GETBIT(이벤트フラグ:10:ARG,ARG:1+32)
+
+;====================
+;既読チェック関数
+;====================
+@EVENT10_READ_CHECK,ARG,ARG:1
+#FUNCTION
+RETURNF GETBIT(이벤트フラグ:10:ARG,ARG:1)
+
+;------
+;使用例
+;------
+;雰囲気の違う足使い達1をクリアしたかどうか
+;SIF EVENT10_READ_CHECK(0,1)
+;	RETURN 1
+
+;====================
+;出現チェック関数(タイトルで)
+;====================
+@EVENT10_APP_CHECK_T,ARGS = ""
+#DIM L_INDEX,2
+SIF ARGS == ""
+	RETURN 0
+FOR L_INDEX,0,20
+	FOR L_INDEX:1,0,32
+		TRYCCALLFORM EVENT_10_TITLELIST_{L_INDEX} , L_INDEX:1
+			SIF ARGS == RESULTS
+				RETURN GETBIT(이벤트フラグ:10:L_INDEX,L_INDEX:1+32)
+		CATCH
+			BREAK
+		ENDCATCH
+	NEXT
+NEXT
+RETURN 0
+
+;====================
+;既読チェック関数(タイトルで)
+;====================
+@EVENT10_READ_CHECK_T,ARGS = ""
+#DIM L_INDEX,2
+SIF ARGS == ""
+	RETURN 0
+FOR L_INDEX,0,20
+	FOR L_INDEX:1,0,32
+		TRYCCALLFORM EVENT_10_TITLELIST_{L_INDEX} , L_INDEX:1
+			SIF ARGS == RESULTS
+				RETURN GETBIT(이벤트フラグ:10:L_INDEX,L_INDEX:1)
+		CATCH
+			BREAK
+		ENDCATCH
+	NEXT
+NEXT
+RETURN 0
+
+;------
+;使用例
+;------
+;雰囲気の違う足使い達1を既読したかどうか
+;CALL EVENT10_READ_CHECK_T("雰囲気の違う足使い達1")
+;SIF RESULT
+;	RETURN 1

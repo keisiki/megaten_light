@@ -1178,7 +1178,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			GOTO LATOS
 		ELSE
 			REDRAW 1
-			CALL SHOW_FORCEMOVE, "RR", "D", , , @"＞%CALLNAME:MASTER%は像を残し、部屋をでた"
+			CALL SHOW_FORCEMOVE, "RR", "D", , , @"＞%CALLNAME:MASTER%은(는) 상(像)을 남기고、방을 나왔다"
 		ENDIF
 		REDRAW 1
 	CASE 3001
@@ -1947,7 +1947,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL MESSAGE_WINDOW_D, "최면술사", "그런가/나는 언제라도 여기에 있으니/힘이 필요하면 언제라도 와도 좋다"
 			PRINTW 「」
 		ELSEIF RESULT == 2
-			IF STRFLAG_D("催眠術師協힘")
+			IF STRFLAG_D("최면술사協힘")
 				IF FINDCHARA_B([[キャラ:헬]]) > 0 || FINDCHARA_B([[キャラ:펜리르]]) > 0
 					IF 함락(RESULT:1)
 						IF NO:(RESULT:1) == [[キャラ:헬]]
@@ -1999,10 +1999,10 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CALLF STRFLAG_NUM_D("催眠術師(性格)", "=", , LOCAL:3)
 				LOCAL:4 = RAND:11 + 1
 				CALLF STRFLAG_NUM_D("최면술사(종족)", "=", , LOCAL:4)
-				CALL MESSAGE_WINDOW_D, "최면술사", @"내가 여자 취향이 좀 까다로워/우선 가슴은 %\@LOCAL:2 == 113 ? 정도가 적당하고 #%TALENTNAME:(LOCAL:2)%\@%에/%TALENTNAME:(LOCAL:3)% 라는 느낌의 아가씨로/종족은 %STR:(LOCAL:4)%로 해서 이것만은 절대로 양보할 수 없네"
+				CALL MESSAGE_WINDOW_D, "최면술사", @"내가 여자 취향이 좀 까다로워/우선 가슴은 %\@LOCAL:2 == 113 ? 적당한 크기#%TALENTNAME:(LOCAL:2)%\@%에/%TALENTNAME:(LOCAL:3)% 라는 느낌의 아가씨로/종족은 %STR:(LOCAL:4)%로 해서 이것만은 절대로 양보할 수 없네"
 				CALL MESSAGE_WINDOW_D, "최면술사", "좋아/노예를 데려오면 부적을 만드는 방법을 가르쳐주겠어"
 			ELSE
-				CALL MESSAGE_WINDOW_D, "최면술사", @"그런데 가슴이 %\@STRFLAG_NUM_D("최면술사(가슴)") == 113 ? 정도면 적당하고 #%TALENTNAME:STRFLAG_NUM_D("최면술사(가슴)")%\@% 에 %TALENTNAME:STRFLAG_NUM_D("최면술사(性格)")% 로、%STR:STRFLAG_NUM_D("최면술사(종족)")% 라면야…"
+				CALL MESSAGE_WINDOW_D, "최면술사", @"그런데 가슴이 %\@STRFLAG_NUM_D("催眠術師(가슴)") == 113 ? 적당한 크기#%TALENTNAME:STRFLAG_NUM_D("催眠術師(가슴)")%\@%에 %TALENTNAME:STRFLAG_NUM_D("催眠術師(性格)")% 로、%STR:STRFLAG_NUM_D("최면술사(종족)")% 라면야…"
 				LOCALS = 
 				FOR LOCAL, 1, 7
 					LOCAL:LOCAL = 9
@@ -2025,14 +2025,14 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 					ENDIF
 					SIF TALENT:POS(LOCAL):STRFLAG_NUM_D("催眠術師(性格)") == 0
 						CONTINUE
-					SIF ABL:POS(LOCAL):종족 != STRFLAG_NUM_D("催眠術師(종족)")
+					SIF ABL:POS(LOCAL):종족 != STRFLAG_NUM_D("최면술사(종족)")
 						CONTINUE
 					LOCALS += @"[{LOCAL}] %CALLNAME:POS(LOCAL)%/"
 				NEXT
 				IF LOCALS != ""
 					$SAIMIN_CHOICE
 					CALL MESSAGE_WINDOW_D, "", "＞건내줄 노예를 선택해 주세요"
-					LOCALS += "[9] やめる"
+					LOCALS += "[9] 그만둔다"
 					CALL INPUT_SELECT_D, LOCALS
 					IF RESULT == 9
 						CALL MESSAGE_WINDOW_D, "최면술사", "허면/노예를 주지 않는건가？/말해 두지만 나는 노예를 줄 때까지 협력할 생각이 없어"

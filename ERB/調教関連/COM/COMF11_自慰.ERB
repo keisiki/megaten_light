@@ -231,7 +231,7 @@ ELSE
 	;PRINTL 조교자위경험＋１
 ENDIF
 ;공개オナニー時は이상경험付加
-IF TEQUIP:28
+IF TEQUIP:28 || TEQUIP:46
 	CALL ADDS_ABNORMAL_EXP("공개자위", TARGET)
 ;	EXP:50 += 1
 ;	PRINTL 이상경험＋１

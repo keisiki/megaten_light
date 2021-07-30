@@ -1,62 +1,85 @@
-﻿@BATTLE_EVENT_ATTACK, ARG , ARG:1, ARG:2, ARG:3
-;TFLAG:전투이벤트に以下の値を代入して、@EVENT_BATTLE_Kを呼び出す
-;範囲系は封印。흡수반사회피も1체でしかでない
-;11.与ダメージ(1체)
-;12.被ダメージ(1체)
-;13.与ダメージ(範囲・랜덤)
-;14.被ダメージ(範囲・랜덤)
-;15.반사された
-;16.반사した
-;17.회피された
-;18.회피した
-;19,적아군전체공격
+﻿@BATTLE_EVENT_ATTACK, ARG , ARG:1 = -1, ARG:2, ARG:3
+#DIM 個別전투이벤트,16
+#DIM 個別キャラ番号,16
+#DIM 個別与데미지,16
+#DIM CHARA
+;TFLAG:戦闘イベントに以下の値を代入して、@EVENT_BATTLE_Kを呼び出す
+;範囲系は封印。吸収反射回避も単体でしかでない
+;11.与데미지(単体)
+;12.被데미지(単体)
+;13.与데미지(範囲・ランダム)
+;14.与데미지(範囲・ランダム 撃破あり)                                          14.被데미지(範囲・ランダム)
+;15.反射された
+;16.反射した
+;17.回避された
+;18.回避した
+;19,敵味方全体攻撃
 ;20,반격を発動した
-;21.아군に対して与ダメージ(1체)
-;22.아군に対して被ダメージ(1체)
-;23.아군に対して与ダメージ(範囲・랜덤)
-;24.아군に対して被ダメージ(範囲・랜덤)
-;25.아군に対して반사された
-;26.아군に対して반사した
-;27.아군に対して회피された
-;28.아군に対して회피した
+;21,トリガーを発動した                                          21.味方に対して与데미지(単体)
+;22,バッドステータスになった                                    22.味方に対して被데미지(単体)
+;23,이악물기等で耐えた                                        23.味方に対して与데미지(範囲・ランダム)
+;24,回復してもらった                                          24.味方に対して被데미지(範囲・ランダム)
+;25,状態異常を直してもらった                                          25.味方に対して反射された
+;                                          26.味方に対して反射した
+;                                          27.味方に対して回避された
+;                                          28.味方に対して回避した
 
 ;ARG 공격者
 ;ARG:1 被공격者
-;ARG:2 ダメージ量
+;ARG:2 데미지量
 ;ARG:3 1の時、受け渡し用にLOCALを立てる,2の時はミスしたというフラグになる。-1は반사発生
+;　　　4の時バステを受けたとき、5이악물기で耐えたとき、6HP回復してもらったとき
+;　　　7の時バステを治して貰った時
 SIF FLAG:RPG구상
 	RETURN 0
 ;とりあえず、範囲は仕様で悩むので封印しておく
 ;特殊な스킬で変わったたーげっとが投げ込まれた場合に対処
 IF ARG:3
-	IF CFLAG:ARG:ターゲット > 16
-		LOCAL = 0
-		LOCAL:1 = 0
-		LOCAL:2 = 0
-		LOCAL:3 = 0
-		RETURN 0
-	ELSE
+	;IF CFLAG:ARG:ターゲット > 16
+	;	LOCAL = 0
+	;	LOCAL:1 = 0
+	;	LOCAL:2 = 0
+	;	LOCAL:3 = 0
+	;	RETURN 0
+	;ELSE
+	IF 1
+	;ARG != ARG:1
+		CHARA = FINDELEMENT(個別キャラ番号 , ARG:1)
+		IF CHARA < 0
+			CHARA = FINDELEMENT(個別キャラ番号 , -1)
+			SIF ARG != ARG:1
+				LOCAL:4 ++
+		ENDIF
 		;링케이지참가の場合はフラグ更新しない
-		SIF CFLAG:ARG:링케이지참가
+		SIF CFLAG:ARG:링케이지참가 || CHARA < 0
 			RETURN 0
 		LOCAL = ARG
 		LOCAL:1 = ARG:1
 		LOCAL:2 = ARG:2
+		個別キャラ番号:CHARA = ARG:1
+		個別与데미지:CHARA += ARG:2
 		;반사はSKILL_TEMP時点で-1をいれて、それからDAMAGE関数で3をいれる
-		IF LOCAL:3 == -1
+		IF 個別전투이벤트:CHARA == -1
 			LOCAL:3 = 3
+			個別전투이벤트:CHARA = 3
 		ELSE
 			LOCAL:3 = ARG:3
+			SIF 個別전투이벤트:CHARA != 5 || ARG:3 != 1
+				個別전투이벤트:CHARA = ARG:3
+			SIF 個別전투이벤트:CHARA == 7
+				個別与데미지:CHARA = ARG:2
 		ENDIF
+		
 	ENDIF
 	RETURN 0
 ENDIF
-;이상な数値が来てしまうのを회피
-IF LOCAL >= CHARANUM || LOCAL:1 >= CHARANUM || LOCAL == 0
-	LOCAL = 0
+;이상な수치が来てしまうのを회피
+IF LOCAL >= CHARANUM || LOCAL:1 >= CHARANUM || LOCAL == -1
+	LOCAL = -1
 	LOCAL:1 = 0
 	LOCAL:2 = 0
 	LOCAL:3 = 0
+	LOCAL:4 = 0
 	RETURN 0
 ENDIF
 
@@ -64,22 +87,44 @@ ENDIF
 ;적아군전체공격
 IF CFLAG:LOCAL:ターゲット == 23
 	TFLAG:전투이벤트 = 19
-ELSE
+;범위
+ELSEIF LOCAL:4 > 1
+	TFLAG:전투이벤트 = 13
+	LOCAL:5 = 0;死亡数
+	LOCAL:6 = 0;무효数
+	FOR CHARA,0,16
+		SIF 個別キャラ番号:CHARA < 0
+			BREAK
+		SIF 個別キャラ番号:CHARA >= CHARANUM
+			CONTINUE
+		SIF 個別キャラ番号:CHARA == LOCAL
+			CONTINUE
+		IF BASE:(個別キャラ番号:CHARA):ＨＰ < 1
+			TFLAG:전투이벤트 = 14
+			LOCAL:5 ++
+		ELSEIF 個別与데미지:CHARA < 1
+			LOCAL:6 ++
+		ENDIF
+	NEXT
+	LOCAL:1 = LOCAL:4
+	LOCAL:2 = LOCAL:6
+	SIF TFLAG:전투이벤트 == 14
+		LOCAL:2 = LOCAL:5
+;１체
+ELSEIF LOCAL:4 == 1
+	SIF FINDELEMENT(個別キャラ番号 , LOCAL:1)
+		LOCAL:2 = 個別与데미지:(FINDELEMENT(個別キャラ番号 , LOCAL:1))
+	IF LOCAL:3 == 1 || LOCAL:2 > 0
+		TFLAG:전투이벤트 = 11
 	;ミス
-	IF LOCAL:3 == 2
+	ELSEIF LOCAL:3 == 2
 		TFLAG:전투이벤트 = 17
 	;반사
 	ELSEIF LOCAL:3 == 3
 		TFLAG:전투이벤트 = 15
-	;範囲
-	ELSEIF CFLAG:LOCAL:ターゲット > 16
-		TFLAG:전투이벤트 = 13
-	;1체
-	ELSE
-		TFLAG:전투이벤트 = 11
 	ENDIF
-	SIF CFLAG:LOCAL:PTフラグ == CFLAG:(LOCAL:1):PTフラグ
-		TFLAG:전투이벤트 += 10
+	;SIF CFLAG:LOCAL:PTフラグ == CFLAG:(LOCAL:1):PTフラグ
+	;	TFLAG:전투이벤트 += 10
 ENDIF
 ;TARGETを保存し、구상内でTARGETを使えるように
 LOCAL:99 = TARGET
@@ -93,37 +138,59 @@ IF CFLAG:LOCAL:입력行動 > -1
 		CALL 구상呼び出し , "BATTLE_EVENT" , LOCAL , LOCAL , LOCAL:1 , LOCAL:2
 	ENDIF
 ENDIF
-TARGET = LOCAL:1
-;방어側메시지
-;ミス
-IF LOCAL:3 == 2
-	TFLAG:전투이벤트 = 18
-;반사
-ELSEIF LOCAL:3 == 3
-	TFLAG:전투이벤트 = 16
-;範囲
-ELSEIF CFLAG:(LOCAL:1):ターゲット > 16
-	TFLAG:전투이벤트 = 14
-;1체
-ELSE
-	TFLAG:전투이벤트 = 12
-ENDIF
-SIF CFLAG:LOCAL:PTフラグ == CFLAG:(LOCAL:1):PTフラグ
-	TFLAG:전투이벤트 += 10
-;방어側
-IF CFLAG:(LOCAL:1):PTフラグ == 0
-	SETCOLOR 0xff0033
-	CALL 구상呼び出し , "ENEMY_BATTLE_EVENT" , LOCAL:1 , LOCAL:1 , LOCAL , LOCAL:2
-ELSE
-	SETCOLOR 0x33ffcc
-	CALL 구상呼び出し , "BATTLE_EVENT" , LOCAL:1 , LOCAL:1 , LOCAL , LOCAL:2
-ENDIF
-RESETCOLOR
+FOR CHARA,0,16
+	SIF 個別キャラ番号:CHARA < 0 || 個別キャラ番号:CHARA >= CHARANUM
+		CONTINUE
+	SIF 個別キャラ番号:CHARA == LOCAL
+		CONTINUE
+	TARGET = 個別キャラ番号:CHARA
+	;防御側メッセージ
+	;バッドステータスを受けた
+	IF 個別전투이벤트:CHARA == 4
+		TFLAG:전투이벤트 = 22
+	;이악물기等で耐えた
+	ELSEIF 個別전투이벤트:CHARA == 5 && BASE:TARGET:ＨＰ > 0
+		TFLAG:전투이벤트 = 23
+	;回復してもらった
+	ELSEIF 個別전투이벤트:CHARA == 6 && 個別与데미지:CHARA < 0
+		TFLAG:전투이벤트 = 24
+		個別与데미지:CHARA = -個別与데미지:CHARA
+	;状態異常を直してもらった
+	ELSEIF 個別전투이벤트:CHARA == 7 && 個別与데미지:CHARA > 0
+		TFLAG:전투이벤트 = 25
+	;単体
+	ELSEIF 個別전투이벤트:CHARA == 1 || 個別与데미지:CHARA > 0
+		TFLAG:전투이벤트 = 12
+	;ミス
+	ELSEIF 個別전투이벤트:CHARA == 2
+		TFLAG:전투이벤트 = 18
+	;反射
+	ELSEIF 個別전투이벤트:CHARA == 3
+		TFLAG:전투이벤트 = 16
+	ENDIF
+	;SIF CFLAG:LOCAL:PTフラグ == CFLAG:(LOCAL:1):PTフラグ
+	;	TFLAG:전투이벤트 += 10
+	;防御側
+	IF CFLAG:TARGET:PTフラグ == 0
+		SETCOLOR 0xff0033
+		;CALL 구상呼び出し , "ENEMY_BATTLE_EVENT" , LOCAL:1 , LOCAL:1 , LOCAL , LOCAL:2
+		CALL 구상呼び出し , "ENEMY_BATTLE_EVENT" , TARGET , TARGET , LOCAL , 個別与데미지:CHARA
+	ELSE
+		SETCOLOR 0x33ffcc
+		;CALL 구상呼び出し , "BATTLE_EVENT" , LOCAL:1 , LOCAL:1 , LOCAL , LOCAL:2
+		CALL 구상呼び出し , "BATTLE_EVENT" , TARGET , TARGET , LOCAL , 個別与데미지:CHARA
+	ENDIF
+	RESETCOLOR
+NEXT
 TFLAG:전투이벤트 = 0
-LOCAL = 0
+LOCAL = -1
 LOCAL:1 = 0
 LOCAL:2 = 0
 LOCAL:3 = 0
+LOCAL:4 = 0
+VARSET 個別전투이벤트,0
+VARSET 個別キャラ番号,-1
+VARSET 個別与데미지,0
 ;TARGETを戻す
 TARGET = LOCAL:99
 
@@ -182,11 +249,11 @@ TARGET = LOCAL:99
 ;
 ;SELECTCASE LOCAL:1
 ;	CASE 1
-;		;物理ダメージを与える行動で、영맹持ちの충성도が上昇
+;		;物理데미지を与える行動で、영맹持ちの충성도が上昇
 ;		SIF TALENT:ARG:영맹 && LOCAL:2 == 1
 ;			LOCAL:9 = GETNUM(TALENT,"영맹")
 ;
-;		;魔法ダメージを与える行動で、교활持ちの충성도が上昇
+;		;魔法데미지を与える行動で、교활持ちの충성도が上昇
 ;		SIF TALENT:ARG:교활 && LOCAL:2 == 2
 ;			LOCAL:9 = GETNUM(TALENT,"교활")
 ;
@@ -271,11 +338,28 @@ TARGET = LOCAL:99
 ;TCVAR:ARG:획득충성도 += LOCAL:10
 
 @BATTLE_EVENT, ARG
-;전투이벤트全般の発生時に呼び出され、個別の전투구상を呼び出す関数
-;TFLAG:전투이벤트の値は呼び出し側で事前にセットしておく필요あり
+;戦闘イベント全般の発生時に呼び出され、個別の戦闘口上を呼び出す関数
+;TFLAG:戦闘イベントの値は呼び出し側で事前にセットしておく必要あり
 ;
-;ARG：이벤트発生者の奴隷番号（ＣＳＶ番号でなく、現リスト内での通し番号）
+;ARG：イベント発生者の奴隷番号（ＣＳＶ番号でなく、現リスト内での通し番号）
 
+;TFLAG:전투이벤트
+;47.戦闘中イって행동불능にならず耐えた(ムフフ展開時のみ)
+;48.行動中イって행동불능になった(ムフフ展開時のみ 50%の確率でHAPPYに)
+;50.ターン終了時状態異常が自然回復した
+;51,ターン終了時の自分の状態の口上
+;52.ターン終了時ORGYがHEATになった(機械の乙女専用)
+;53.ターン終了時エクスリンケージ装備時のイベント口上(ムフフ展開時のみ)
+;53.ターン終了時エクスリンケージ装備時のイベント口上2(ムフフ展開時のみ)
+
+;90.バトルに勝利した
+;91,レベルアップした
+;92.도주に成功した
+;93,도주に失敗した
+;94,戦闘開始時
+;95,バックアタックを受けた
+;96,敵の先制攻撃を受けた
+;100,リンケージに参加した
 IF CFLAG:ARG:PTフラグ
 	;아군の場合
 	CALL 구상呼び出し , "BATTLE_EVENT" , ARG , ARG

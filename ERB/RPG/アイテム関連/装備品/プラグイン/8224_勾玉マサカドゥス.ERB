@@ -27,15 +27,59 @@ ENDSELECT
 RETURN 0
 
 @방어상성_8224,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "검격","화염","빙결","전격","충격","신경","정신","파마","주살"
-		RETURN 0
-	CASE "지변","중력"
-		RETURN 200
-	CASE "만능"
-		RETURN 150
-ENDSELECT
+;장비者がいない場合
+IF ARG == -1
+	SELECTCASE GET_TYPE(ARG)
+		CASE "신경","정신","파마","주살"
+			RETURN 0
+		CASE "검격","비구","타격","전술","화염","빙결","전격","충격"
+			RETURN 100
+		CASE "지변","수격","질풍","중력","핵열","만능"
+			RETURN 150
+	ENDSELECT
+;80より上
+ELSEIF BASE:(ARG:1):30 > 79
+	SELECTCASE GET_TYPE(ARG)
+		CASE "검격","비구","타격","전술","화염","빙결","전격","충격","신경","정신","파마","주살"
+			RETURN 0
+		CASE "지변","수격","질풍","중력","핵열","만능"
+			RETURN 100
+	ENDSELECT
+;51Lv以降
+ELSEIF BASE:(ARG:1):30 > 50
+	SELECTCASE GET_TYPE(ARG)
+		CASE "신경","정신","파마","주살"
+			RETURN 0
+		CASE "검격","비구","타격","전술","화염","빙결","전격","충격"
+			RETURN 50
+		CASE "지변","수격","질풍","중력","핵열","만능"
+			RETURN 125
+	ENDSELECT
+;26Lv以降
+ELSEIF BASE:(ARG:1):30 > 25
+	SELECTCASE GET_TYPE(ARG)
+		CASE "신경","정신","파마","주살"
+			RETURN 0
+		CASE "검격","비구","타격","전술","화염","빙결","전격","충격"
+			RETURN 75
+		CASE "지변","수격","질풍","중력","핵열","만능"
+			RETURN 150
+	ENDSELECT
+;25Lv以下
+ELSE
+	SELECTCASE GET_TYPE(ARG)
+		CASE "신경","정신","파마","주살"
+			RETURN 0
+		CASE "검격","비구","타격","전술","화염","빙결","전격","충격"
+			RETURN 100
+		CASE "지변","수격","질풍","중력","핵열","만능"
+			RETURN 150
+	ENDSELECT
+ENDIF
 RETURN 100
+;"검격","비구","타격","전술"
+;"화염","빙결","전격","충격","신경","정신","파마","주살",
+;"지변","수격","질풍","중력","핵열","만능"
 
 @공격상성_8224, ARG = -1
 RETURN 0
@@ -56,7 +100,8 @@ RETURN 1
 RETURN 0
 
 @필요레벨_8224
-RETURN 80
+RETURN 0
+;RETURN 80
 
 @P습득스킬_8224,ARG
 LOCAL = 0
@@ -83,4 +128,7 @@ RETURN 0
 @장비해설_8224
 PRINTL 곡옥「마사카두스」。인수라만 장비할 수 있다.
 PRINTL 　・궁극의 힘을 감추고 있는 마가타마
-PRINTL 　・여러가지 相性을 무효、그 외에 약하다
+;PRINTL 　・여러가지 상성을 무효、그 외에는 약하다
+PRINTL 　・알맞은 그릇에 깃들면 여러 내성을 소화할 정도가 되지만
+PRINTL 　・분수에 맞지 않는 자가 장비하면 약점을 만들 수도 있다
+

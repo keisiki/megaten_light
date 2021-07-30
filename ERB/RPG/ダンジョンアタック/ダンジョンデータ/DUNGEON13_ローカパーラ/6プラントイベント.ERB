@@ -6,15 +6,15 @@
 ;ARG、ARG:1はそれぞれ대상のマスのX、Y座標を表しています。
 ;この던전ではエレベーターの扉が一度右側から開けておかないと左側からは開けられない、という処理に사용しています。
 SELECTCASE FLAG:現M
-	CASE 35
-		IF ARG == 16 && ARG:1 == 9 && 던전フラグ:13:15 < 7
-			CALL MESSAGE_WINDOW_D, "", "＞０５のマークの扉は閉ざされている"
+	CASE 43
+		IF ARG:1 == 0
+			CALL MESSAGE_WINDOW_D, "", "＞05의 마크의 문은 닫혀 있다"
 			RETURN 0
 		ENDIF
 	CASE 9
 		IF ARG == 3 && ARG:1 == 4 && 던전フラグ:13:4 < 14
-			CALL MESSAGE_WINDOW_D, "", "＞エレベーターだ"
-			CALL MESSAGE_WINDOW_D, "", "＞扉は閉ざされている"
+			CALL MESSAGE_WINDOW_D, "", "＞엘리베이터다"
+			CALL MESSAGE_WINDOW_D, "", "＞문은 닫혀 있다"
 			RETURN 0
 		ENDIF
 		
@@ -102,68 +102,68 @@ ENDSELECT
 
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 4000
-		CALL MESSAGE_WINDOW_D, "", "外の連中はいったん退却しやがったが…/すぐ引き返してくるだろうな "
-		CALL MESSAGE_WINDOW_D, "", "ま　そのときはまた/追い返してやるさ "
+		CALL MESSAGE_WINDOW_D, "", "다른 적들은 일단 물러났지만…/곧 되돌아오겠지 "
+		CALL MESSAGE_WINDOW_D, "", "뭐 그때는 또/되돌려보내주자 "
 	CASE 4001
-		CALL MESSAGE_WINDOW_D, "", "ここは俺たちが食い止める "
-		CALL MESSAGE_WINDOW_D, "", "早く行ってテクノシャーマンを連れてきてくれ "
+		CALL MESSAGE_WINDOW_D, "", "여기는 우리가 막는다 "
+		CALL MESSAGE_WINDOW_D, "", "빨리 가서 테크노 샤먼을 데려와 줘 "
 	CASE 4002
-			CALL MESSAGE_WINDOW_D, "ア디무ル", "恐らく　追撃部隊は/엔젤本人が指揮してくるだろう"
-			CALL MESSAGE_WINDOW_D, "ア디무ル", "だが　神に賭けてお前たちには届かせん"
-			CALL MESSAGE_WINDOW_D, "ア디무ル", "私の生まれた国では/同朋の死には　己が命で報いるのが慣わしだ"
+			CALL MESSAGE_WINDOW_D, "아딜", "아마도 추격대는/엔젤 본인이 지휘해 올 것이다"
+			CALL MESSAGE_WINDOW_D, "아딜", "하지만 신에게 걸고 너희들에게는 닿지 못하게 하겠다"
+			CALL MESSAGE_WINDOW_D, "아딜", "내가 태어난 나라에서는/친우의 죽음에는 자신이 목숨으로 보답하는 것이 관례이다"
 	CASE 4209
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 	CASE 4208
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 		IF 던전フラグ:13:17 < 2
-			CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
-			CALL MESSAGE_WINDOW_D, "", "どこかで扉の開く音がした "
+			CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
+			CALL MESSAGE_WINDOW_D, "", "어디선가 문 열리는 소리가 났다 "
 			던전フラグ:13:17 = 2
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 		ENDIF
 	CASE 4207
-		CALL MESSAGE_WINDOW_D, "게일", "なるほど　情報か…/電気信号も情報ならば　人の意思もまた然り "
-		CALL MESSAGE_WINDOW_D, "게일", "僅かだが　神とやらが見えてきたな "
+		CALL MESSAGE_WINDOW_D, "게일", "그렇군 정보인가…/전기신호도 정보라면 사람의 의사도 마찬가지 "
+		CALL MESSAGE_WINDOW_D, "게일", "얼마 안 되지만 신이라는 것이 보이기 시작했군 "
 	
-		CALL INPUT_SELECT_D, "[1]仲間を入れ替える/[0]何でもない "
+		CALL INPUT_SELECT_D, "[1]동료를 교체한다/[0]아무것도 아니다 "
 		SIF RESULT == 1
 			CALL RECONSTRUCTION
 	CASE 4206
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
-		CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
+		CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
 		INVERTBIT 던전フラグ:13:18,0
 		IF GETBIT(던전フラグ:13:18,0)
-			CALL MESSAGE_WINDOW_D, "", "すると손前の扉が開き/奥の扉が閉まった "
+			CALL MESSAGE_WINDOW_D, "", "그러자 앞문이 열리고/안쪽의 문이 닫혔다 "
 		ELSE
-			CALL MESSAGE_WINDOW_D, "", "すると奥の扉が開き/손前の扉が閉まった "
+			CALL MESSAGE_WINDOW_D, "", "그러자 안쪽의 문이 열리고/앞의 문이 닫혔다 "
 		ENDIF
 		CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 		IF GETBIT(던전フラグ:13:18,1) == 0
-			CALL MESSAGE_WINDOW_D, "로알드", "くそっ！ "
-			CALL MESSAGE_WINDOW_D, "로알드", "손前の隔壁と奥の隔壁が/連動しているようだ "
-			CALL MESSAGE_WINDOW_D, "로알드", "손前に開けと命令すると/奥が閉まってしまう "
-			CALL MESSAGE_WINDOW_D, "로알드", "奥に開けと命令すると/손前が閉まるだろう…　厄介だな "
+			CALL MESSAGE_WINDOW_D, "로알드", "빌어먹을！ "
+			CALL MESSAGE_WINDOW_D, "로알드", "앞쪽 격벽과 안쪽 격벽이/연동되어 있는 것 같다 "
+			CALL MESSAGE_WINDOW_D, "로알드", "앞으로 열라고 명령하면/안쪽이 닫혀버린다 "
+			CALL MESSAGE_WINDOW_D, "로알드", "안으로 열라고 명령하면/앞이 닫히겠지… 귀찮네 "
 			SETBIT 던전フラグ:13:18,1
 		ENDIF
 	CASE 4205
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 		IF GETBIT(던전フラグ:13:18,2) == 0
-			CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
+			CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
 			SETBIT 던전フラグ:13:18,2
 			IF GETBIT(던전フラグ:13:18,4)
-				CALL MESSAGE_WINDOW_D, "", "どこかで扉の開く音がした "
+				CALL MESSAGE_WINDOW_D, "", "어디선가 문 열리는 소리가 났다 "
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 			ELSE
-				CALL MESSAGE_WINDOW_D, "로알드", "どうやら　この装置の扉は制御する場所が/二つあるみたいだ "
-				CALL MESSAGE_WINDOW_D, "로알드", "もう一つの装置も探そう/反対側にあるはずだ "
+				CALL MESSAGE_WINDOW_D, "로알드", "아무래도 이 장치의 문은 제어하는 장소가/두 개 있는 것 같다. "
+				CALL MESSAGE_WINDOW_D, "로알드", "또 하나의 장치도 찾자/반대편에 있을 것이다 "
 			ENDIF
 		ENDIF
 	CASE 4204
 		IF GETBIT(던전フラグ:13:18,3) == 0
 			PRINTL ヒールスポットがある。
-			CALL INPUT_YN,"使う（一度使うと消えます）","使わない"
+			CALL INPUT_YN,"쓴다（한번 사용하면 사라집니다）","쓰지 않는다"
 			IF RESULT == 0
-				PRINTFORMW %CALLNAME:MASTER%達は회복した
+				PRINTFORMW %CALLNAME:MASTER%들은 회복했다
 				FOR LOCAL, 1, 7
 					SIF POS(LOCAL) > -1
 						CALL HEALTH_CHARA, POS(LOCAL)
@@ -173,48 +173,48 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			ENDIF
 		ENDIF
 	CASE 4203
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 		IF GETBIT(던전フラグ:13:18,4) == 0
-			CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
+			CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
 			SETBIT 던전フラグ:13:18,4
 			IF GETBIT(던전フラグ:13:18,2)
-				CALL MESSAGE_WINDOW_D, "", "どこかで扉の開く音がした "
+				CALL MESSAGE_WINDOW_D, "", "어디선가 문 열리는 소리가 났다 "
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 			ELSE
-				CALL MESSAGE_WINDOW_D, "로알드", "どうやら　この装置の扉は制御する場所が/二つあるみたいだ "
-				CALL MESSAGE_WINDOW_D, "로알드", "もう一つの装置も探そう/反対側にあるはずだ "
+				CALL MESSAGE_WINDOW_D, "로알드", "아무래도 이 장치의 문은 제어하는 장소가/두 개 있는 것 같다 "
+				CALL MESSAGE_WINDOW_D, "로알드", "또 하나의 장치도 찾자/반대편에 있을 것이다 "
 			ENDIF
 		ENDIF
 	CASE 4202
-		CALL MESSAGE_WINDOW_D, "서프", "大きい隔壁を開けたな "
-		CALL MESSAGE_WINDOW_D, "서프", "ということは　この向こうには/重要なものがあるだろうな "
+		CALL MESSAGE_WINDOW_D, "서프", "큰 격벽을 열었군 "
+		CALL MESSAGE_WINDOW_D, "서프", "그렇다면 이 너머에는/중요한 것이 있겠지 "
 	
-		CALL INPUT_SELECT_D, "[1]仲間を入れ替える/[0]何でもない "
+		CALL INPUT_SELECT_D, "[1]동료를 교체한다/[0]아무것도 아니다 "
 		SIF RESULT == 1
 			CALL RECONSTRUCTION
 	CASE 4200
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 		IF GETBIT(던전フラグ:13:18,5) == 0
-			CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
-			CALL MESSAGE_WINDOW_D, "", "どこかで扉の開く音がした "
+			CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
+			CALL MESSAGE_WINDOW_D, "", "어디선가 문 열리는 소리가 났다 "
 			SETBIT 던전フラグ:13:18,5
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 		ENDIF
 	CASE 4201
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
-		CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
-		CALL MESSAGE_WINDOW_D, "", "すると　隔壁の向こうにはクリシュナの姿があった "
-		CALL MESSAGE_WINDOW_D, "크리슈나", "やあ　君たちまた会ったね "
-		CALL MESSAGE_WINDOW_D, "시에로", "げえ　お前は… "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
+		CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
+		CALL MESSAGE_WINDOW_D, "", "그러자 격벽 너머로 크리슈나의 모습이 보였다 "
+		CALL MESSAGE_WINDOW_D, "크리슈나", "야아 너희들 또 만났구나 "
+		CALL MESSAGE_WINDOW_D, "시에로", "게엑 너는… "
 		CALL MESSAGE_WINDOW_D, "안", "크리슈나… "
-		CALL MESSAGE_WINDOW_D, "크리슈나", "やはり来たか　あの娘も映像にちらつかせたから/必ず来ると思っていたたよ "
-		CALL MESSAGE_WINDOW_D, "게일", "あの娘とはフタバの事か "
-		CALL MESSAGE_WINDOW_D, "크리슈나", "あの娘はとても優秀な子だよ　多神連合のために/とても貢献してくれているよ "
-		CALL MESSAGE_WINDOW_D, "마코토", "そんなの嘘よ！ "
-		CALL MESSAGE_WINDOW_D, "류지", "そうだぜ！　아이つがお前らなんかに働くはずがねえ！ "
-		CALL MESSAGE_WINDOW_D, "크리슈나", "冗談ではないよ　彼女には奥で/僕たちのために　働いてもらっているからね "
-		CALL MESSAGE_WINDOW_D, "크리슈나", "奥に行ってみてみるかい？/彼女の存在の有無を "
-		CALL MESSAGE_WINDOW_D, "크리슈나", "まあ　僕を倒せれたらの話だけどねえ "
+		CALL MESSAGE_WINDOW_D, "크리슈나", "역시 왔나 그 아가씨도 영상에 흘깃거렸으니까/꼭 오리라고 생각했었어 "
+		CALL MESSAGE_WINDOW_D, "게일", "그 아가씨는 후타바를 말하는 것인가 "
+		CALL MESSAGE_WINDOW_D, "크리슈나", "그 아가씨는 매우 훌륭한 아이야 다신연합을 위해서/매우 공헌해 주고 있어 "
+		CALL MESSAGE_WINDOW_D, "마코토", "그런 건 거짓말이야！ "
+		CALL MESSAGE_WINDOW_D, "류지", "그렇지！ 그 녀석이 너희들 따위를 위해 일할 리가 없어！ "
+		CALL MESSAGE_WINDOW_D, "크리슈나", "농담이 아니야 그녀는 안쪽에서/우리를 위해 일하고 있으니까 "
+		CALL MESSAGE_WINDOW_D, "크리슈나", "안쪽으로 가볼래？/그녀의 존재여부를 "
+		CALL MESSAGE_WINDOW_D, "크리슈나", "뭐 날 쓰러뜨릴 수 있다면 말이지 "
 		
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
@@ -294,71 +294,71 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			FLAG:未遭遇歩数 = 0
 				;バトル
 			CALL DUNGEON_WORP,(FLAG:現M),12,9
-		CALL MESSAGE_WINDOW_D, "크리슈나", "僕の負けか "
-		CALL MESSAGE_WINDOW_D, "크리슈나", "ま아이い　ここを通るがいい/僕は帰らせてもらうよ "
-		CALL MESSAGE_WINDOW_D, "", "クリシュナはその場から姿を消した "
-		CALL MESSAGE_WINDOW_D, "시에로", "ふう　意外と손強かったな… "
-		CALL MESSAGE_WINDOW_D, "", "すると　로알드の無線機から通信が入った "
-		CALL MESSAGE_WINDOW_D, "로알드", "ア디무ルか　どうした "
-		CALL MESSAGE_WINDOW_D, "ア디무ルの声", "神よ…　なんだこいつは "
-		CALL MESSAGE_WINDOW_D, "ア디무ルの声", "うおおおおぉぉぉぉ……！！！！ "
-		CALL MESSAGE_WINDOW_D, "로알드", "ア디무ル　おいア디무ル！ "
-		CALL MESSAGE_WINDOW_D, "謎の声", "イン…　ドラ… "
-		CALL MESSAGE_WINDOW_D, "春", "ど　どうしたんですか？ "
-		CALL MESSAGE_WINDOW_D, "로알드", "防衛線が突破された "
-		CALL MESSAGE_WINDOW_D, "유스케", "向こうに何があったんだ？ "
-		CALL MESSAGE_WINDOW_D, "로알드", "わからん/何かとんでもない奴が来る "
-		CALL MESSAGE_WINDOW_D, "", "そういうと로알드は/隔壁の向こう側に行った "
-		CALL MESSAGE_WINDOW_D, "로알드", "ここは食い止める/君たちは先に行け "
-		CALL MESSAGE_WINDOW_D, "", "로알드は制御パネルに손を突っ込む/隔壁がゆっくり閉じていく "
+		CALL MESSAGE_WINDOW_D, "크리슈나", "내가 졌구나 "
+		CALL MESSAGE_WINDOW_D, "크리슈나", "뭐 좋다 여기를 지나가도 좋아/나는 돌아가겠어 "
+		CALL MESSAGE_WINDOW_D, "", "크리슈나는 그 자리에서 사라졌다 "
+		CALL MESSAGE_WINDOW_D, "시에로", "후우 의외로 만만치 않더군… "
+		CALL MESSAGE_WINDOW_D, "", "그러자 로알드의 무전기에서 통신이 들어왔다 "
+		CALL MESSAGE_WINDOW_D, "로알드", "아딜인가 어떻게 된 거야 "
+		CALL MESSAGE_WINDOW_D, "아딜의 목소리", "신이여… 뭐냐 이건 "
+		CALL MESSAGE_WINDOW_D, "아딜의 목소리", "우오오오오오오오오……！！！！ "
+		CALL MESSAGE_WINDOW_D, "로알드", "아딜　이봐 아딜！ "
+		CALL MESSAGE_WINDOW_D, "수수께끼의 목소리", "인…　드라… "
+		CALL MESSAGE_WINDOW_D, "하루", "어 어떻게 된 거에요？ "
+		CALL MESSAGE_WINDOW_D, "로알드", "방위선이 뚫렸다 "
+		CALL MESSAGE_WINDOW_D, "유스케", "저쪽에 무슨 일이 있었지？ "
+		CALL MESSAGE_WINDOW_D, "로알드", "몰라/뭔가 터무니없는 녀석이 온다 "
+		CALL MESSAGE_WINDOW_D, "", "그렇게 말하며 로알드는/격벽 너머로 갔다 "
+		CALL MESSAGE_WINDOW_D, "로알드", "여기는 막겠다/너희들은 먼저 가라 "
+		CALL MESSAGE_WINDOW_D, "", "로알드가 제어판에 손을 넣자/격벽이 천천히 닫혔다 "
 		CALL MESSAGE_WINDOW_D, "서프", "로알드… "
-		CALL MESSAGE_WINDOW_D, "로알드", "大丈남편だ　悪지혜には長けてる/せいぜい引きずり回してやるさ "
-		CALL MESSAGE_WINDOW_D, "알지라", "로알드/エンブリオンの色は　敗北に染まらない/だから… "
-		CALL MESSAGE_WINDOW_D, "", "로알드は振り返らず손を振って向こうに行った "
-		CALL MESSAGE_WINDOW_D, "", "隔壁が閉じた "
+		CALL MESSAGE_WINDOW_D, "로알드", "괜찮다 나쁜음모에는 능하다/기껏 끌고 다닌 값을 해야지 "
+		CALL MESSAGE_WINDOW_D, "알지라", "로알드/엠브리온의 색깔은 패배로 물들지 않아/그러니까… "
+		CALL MESSAGE_WINDOW_D, "", "로알드는 뒤돌아보지 않고 손을 흔들며 저쪽으로 갔다 "
+		CALL MESSAGE_WINDOW_D, "", "격벽이 닫혔다 "
 		;IF GETBIT(던전フラグ:13:18,5) == 0
 		;ENDIF
-		;CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		;CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 	CASE 4100
 		IF GETBIT(던전フラグ:13:18,8) == 0
-			CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
-			CALL MESSAGE_WINDOW_D, "", "どこかで扉の開く音がした "
+			CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
+			CALL MESSAGE_WINDOW_D, "", "어디선가 문 열리는 소리가 났다 "
 			SETBIT 던전フラグ:13:18,8
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 		ENDIF
 	CASE 4101
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 		IF GETBIT(던전フラグ:13:18,9) == 0
-			CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
-			CALL MESSAGE_WINDOW_D, "", "どこかで扉の開く音がした "
+			CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
+			CALL MESSAGE_WINDOW_D, "", "어디선가 문 열리는 소리가 났다 "
 			SETBIT 던전フラグ:13:18,9
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 		ENDIF
 	CASE 4102
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 		IF GETBIT(던전フラグ:13:18,10) == 0
-			CALL MESSAGE_WINDOW_D, "", "로알드は装置に손を突っ込んだ "
-			CALL MESSAGE_WINDOW_D, "", "どこかで扉の開く音がした "
+			CALL MESSAGE_WINDOW_D, "", "로알드는 장치에 손을 넣었다 "
+			CALL MESSAGE_WINDOW_D, "", "어디선가 문 열리는 소리가 났다 "
 			SETBIT 던전フラグ:13:18,10
 			CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
 		ENDIF
 	
 	CASE 4300
 		CALL MESSAGE_WINDOW_D, "후타바", "… "
-		CALL MESSAGE_WINDOW_D, "", "返事がない/気を失っているようだ "
+		CALL MESSAGE_WINDOW_D, "", "대답이 없다/정신을 잃은 것 같다 "
 	CASE 4301
-		CALL MESSAGE_WINDOW_D, "마코토", "大丈남편かな…/何か苦しい顔してるわ… "
+		CALL MESSAGE_WINDOW_D, "마코토", "괜찮을까…/뭔가 괴로운 얼굴을 하고 있어… "
 	CASE 4302
-		CALL MESSAGE_WINDOW_D, "", "壊れた制御パネルがある "
+		CALL MESSAGE_WINDOW_D, "", "고장난 제어판이 있다 "
 	CASE 4303
-		CALL MESSAGE_WINDOW_D, "로알드", "実は　黒머리카락の소년に助けられたんだ/その소년が奴の머리に矢を찔러넣기てな "
-		CALL MESSAGE_WINDOW_D, "로알드", "刺した後　早く아군を呼んでやっつけろと言うから/急いで君たちを呼んだんだ/…彼はどこに行ったんだろうな "
+		CALL MESSAGE_WINDOW_D, "로알드", "실은 검은 머리카락 소년의 도움을 받은 거야/그 소년이 놈의 머리에 화살을 쏘아서 말이지 "
+		CALL MESSAGE_WINDOW_D, "로알드", "명중시킨 후에 빨리 아군을 불러 해치우라고 하기에/급히 너희들을 불렀어/그 소년은 어디로 갔을까 "
 	CASE 4304
 		IF GETBIT(던전フラグ:13:18,3) == 0
 			PRINTL ヒールスポットがある。
-			CALL INPUT_YN,"使う（一度使うと消えます）","使わない"
+			CALL INPUT_YN,"쓴다（한번 사용하면 사라집니다）","쓰지 않는다"
 			IF RESULT == 0
-				PRINTFORMW %CALLNAME:MASTER%達は회복した
+				PRINTFORMW %CALLNAME:MASTER%들은 회복했다
 				FOR LOCAL, 1, 7
 					SIF POS(LOCAL) > -1
 						CALL HEALTH_CHARA, POS(LOCAL)
@@ -368,25 +368,25 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			ENDIF
 		ENDIF
 	CASE 4305
-		CALL MESSAGE_WINDOW_D, "서프", "準備はできたか？ "
-		CALL INPUT_SELECT_D, "[1]はい/[0] いいえ"
+		CALL MESSAGE_WINDOW_D, "서프", "준비됐어？ "
+		CALL INPUT_SELECT_D, "[1]네/[0] 아니오"
 			IF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "서프", "じゃあ　行こうか "
-				CALL MESSAGE_WINDOW_D, "", "扉の向こうに行った "
-				CALL MESSAGE_WINDOW_D, "", "するとそこには巨大な악마がいた "
-				CALL MESSAGE_WINDOW_D, "巨大な악마", "イン…ドラ…　グガガ… "
-				CALL MESSAGE_WINDOW_D, "", "악마の머리には矢のようなものが突き刺さっており/とても苦しそうにしている "
-				CALL MESSAGE_WINDOW_D, "로알드", "奴は不死身の악마だ　재생能力を持っている "
-				CALL MESSAGE_WINDOW_D, "로알드", "半端な공격だと奴には通用しないぞ "
+				CALL MESSAGE_WINDOW_D, "서프", "그럼 갈까 "
+				CALL MESSAGE_WINDOW_D, "", "문 너머로 갔다 "
+				CALL MESSAGE_WINDOW_D, "", "그러자 거기에는 거대한 악마가 있었다 "
+				CALL MESSAGE_WINDOW_D, "거대한 악마", "인…드라…　구가가… "
+				CALL MESSAGE_WINDOW_D, "", "악마의 머리에는 화살 같은 것이 꽂혀 있으며/매우 괴로워하고 있다 "
+				CALL MESSAGE_WINDOW_D, "로알드", "녀석은 불사신의 악마다 재생 능력을 가지고 있다 "
+				CALL MESSAGE_WINDOW_D, "로알드", "어중간한 공격은 놈에게는 통하지 않을 거야 "
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
 				
 				
 				CALL SET_ENEMY,9,[[キャラ:인드라지트]],61,0,2
-				NAME:(CHARANUM-1) = メーガナーダ
-				CALLNAME:(CHARANUM-1) = メーガナーダ
-				CSTR:(CHARANUM-1):사고패턴 = メーガナーダ
+				NAME:(CHARANUM-1) = 메가나타
+				CALLNAME:(CHARANUM-1) = 메가나타
+				CSTR:(CHARANUM-1):사고패턴 = 메가나타
 				CFLAG:(CHARANUM-1):行動횟수 = 3
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 				BASE:(CHARANUM-1):전술 = 0
@@ -400,7 +400,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				ABL:(CHARANUM-1):스킬6 = 204
 				ABL:(CHARANUM-1):스킬7 = 242
 				ABL:(CHARANUM-1):스킬8 = [[스킬:치유촉진(중)]]
-				BASE:(CHARANUM-1):공격 *= 3
+				CFLAG:(CHARANUM-1):공격보정 = MAXBASE:(CHARANUM-1):공격*4/3
 				CALL SYNC_STATUS,(CHARANUM-1)
 				CALL HEALTH_CHARA,(CHARANUM-1)
 				
@@ -412,77 +412,77 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				FLAG:エンカウント率 = 0
 				FLAG:未遭遇歩数 = 0
 				던전フラグ:13:1 = 9
-				CALL MESSAGE_WINDOW_D, "メーガナーダ", "グアアアアアァァァァァ… "
-				CALL MESSAGE_WINDOW_D, "로알드", "よし　やつを倒すことができた "
-				CALL MESSAGE_WINDOW_D, "", "すると　プラント内の電気が消えて真っ暗になった "
-				CALL MESSAGE_WINDOW_D, "알지라", "え？　どうしたの？ "
-				CALL MESSAGE_WINDOW_D, "류지", "な　なんだこりゃ/完全に暗くて見えねえ！ "
-				CALL MESSAGE_WINDOW_D, "안", "ちょっと！変なところ触んないでよ！ "
-				CALL MESSAGE_WINDOW_D, "시에로", "痛でェーー！ "
-				CALL MESSAGE_WINDOW_D, "", "로알드は持っていた懐中電灯をつけた "
-				CALL MESSAGE_WINDOW_D, "서프", "何が起こったんだ？ "
-				CALL MESSAGE_WINDOW_D, "로알드", "わからない　普通の停電なら/緊急の電灯がつくはずなんだが… "
-				CALL MESSAGE_WINDOW_D, "로알드", "とりあえずここを탈출しよう "
+				CALL MESSAGE_WINDOW_D, "메가나타", "구아아아아아아아아아아… "
+				CALL MESSAGE_WINDOW_D, "로알드", "좋아 놈을 쓰러뜨릴 수 있었다 "
+				CALL MESSAGE_WINDOW_D, "", "그러자 플랜트 안의 전기가 나가 캄캄해졌다 "
+				CALL MESSAGE_WINDOW_D, "알지라", "에？　무슨 일이야？ "
+				CALL MESSAGE_WINDOW_D, "류지", "뭐 뭐야 이건/완전 어두워서 보이지 않네！ "
+				CALL MESSAGE_WINDOW_D, "안", "야！ 이상한 데 건드리지 마！ "
+				CALL MESSAGE_WINDOW_D, "시에로", "아파ーー！ "
+				CALL MESSAGE_WINDOW_D, "", "로알드는 들고 있던 손전등을 켰다 "
+				CALL MESSAGE_WINDOW_D, "서프", "무슨 일이 일어났지？ "
+				CALL MESSAGE_WINDOW_D, "로알드", "알 수 없어 보통 정전이라면/긴급 전등이 켜질 텐데… "
+				CALL MESSAGE_WINDOW_D, "로알드", "우선 이 곳을 탈출하자 "
 				CALL DUNGEON_WORP,14,5,5
-				CALL MESSAGE_WINDOW_D, "", "外に出ると　カルマシティの外には巨大な卵の塊があった "
-				CALL MESSAGE_WINDOW_D, "알지라", "な…　何これ… "
-				CALL MESSAGE_WINDOW_D, "クリシュナの声", "宇宙の卵だよ/この세계には石の中に魂がたくさんあったからね/シェーシャも楽に魂を食らうことができたよ "
-				CALL MESSAGE_WINDOW_D, "", "クリシュナの声の方に눈を向けると/クリシュナと一緒に세라と見慣れない黒머리카락の소년がいた/クリシュナ以外は気を失っているようだ "
+				CALL MESSAGE_WINDOW_D, "", "밖을 나서니 카르마시티 밖에는 거대한 계란 덩어리가 있었다 "
+				CALL MESSAGE_WINDOW_D, "알지라", "이…　이게 뭐야… "
+				CALL MESSAGE_WINDOW_D, "크리슈나의 목소리", "우주의 알이야/이 세계는 돌 안에 영혼이 많았으니까/셰샤도 편하게 영혼을 먹을 수 있었어 "
+				CALL MESSAGE_WINDOW_D, "", "크리슈나의 목소리 쪽으로 눈을 돌리면/크리슈나와 함께 세라와 낯선 검은머리 소년이 있었다/크리슈나 말고는 정신을 잃은 듯하다 "
 				CALL MESSAGE_WINDOW_D, "서프、시에로、알지라、게일", "세라！ "
-				CALL MESSAGE_WINDOW_D, "류지、안、마코토、유스케、春", "雨宮！ "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "あの식노にも役に立ってくれたからねえ/おかげで소년も捕らえることができた "
-				CALL MESSAGE_WINDOW_D, "로알드", "この소년をどうするつもりだ "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "この子は　別세계の구세주だ/僕たちの神殺しになってもらう "
-				CALL MESSAGE_WINDOW_D, "", "しばらくすると세라が苦しみ始めた "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "ほお　そろそろ来るか "
-				CALL MESSAGE_WINDOW_D, "서프", "おい！　세라に何をした "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "この娘にも손伝ってもらうと思ってね/이난나の残滓を入れたんだ "
-				CALL MESSAGE_WINDOW_D, "", "すると一瞬で세라の体は악마に変化した "
-				CALL MESSAGE_WINDOW_D, "이난나", "ワラワは神々の母이난나 "
-				CALL MESSAGE_WINDOW_D, "이난나", "フフ　ようやく現世に戻り/まともな体を손に入れた "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "復活したばかりで恐縮だが/이난나　一つ頼めるかい？ "
-				CALL MESSAGE_WINDOW_D, "", "クリシュナは이난나に魂を一つ差し出した "
-				CALL MESSAGE_WINDOW_D, "이난나", "フム　その魂を産み落とせばよいのだな/よいだろう "
-				CALL MESSAGE_WINDOW_D, "", "이난나は魂を取り込むと악마を産み落とした "
-				CALL MESSAGE_WINDOW_D, "", "そこにいたのは倒したはずのミロク菩薩が出てきた "
-				CALL MESSAGE_WINDOW_D, "미륵보살", "私はミロク…否/私は転生し　新たな存在へと昇華した "
-				CALL MESSAGE_WINDOW_D, "", "するとミロク菩薩の体が光/別の姿になった "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "私は多神連合が一柱　미트라/≪母≫の힘で転生し現世に戻ってきたぞ "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "ミロク…いや　미트라　わかっているな？ "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "御意に… "
-				CALL MESSAGE_WINDOW_D, "", "ミトラ菩薩が合掌すると巨大な卵に結界が出てきた "
-				CALL MESSAGE_WINDOW_D, "시에로", "な…何をしやがったんだ？ "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "君たちの我々の計画を邪魔されては困るからね "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "では…ミトラ例の場所に "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "私は天と地をつなぐ光 "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "現とつながりのある場所に行くことは/たやすいことよ/たとえ人の子の創造した세계でもな "
-				CALL MESSAGE_WINDOW_D, "미트라보살", "その先で汝らが来るのを待っている/汝らが来られればの話だがな… "
-				CALL MESSAGE_WINDOW_D, "", "ミトラ菩薩は姿を消した "
-				CALL MESSAGE_WINDOW_D, "크리슈나", "では僕たちは　宇宙の卵で待っているよ/最も来られればの話だけれどね "
-				CALL MESSAGE_WINDOW_D, "", "クリシュナと이난나も黒머리카락の소년と共に姿を消した "
-				CALL MESSAGE_WINDOW_D, "서프", "くそっ "
-				CALL MESSAGE_WINDOW_D, "마코토", "そんな… "
-				CALL MESSAGE_WINDOW_D, "로알드", "落ち込んでいても仕方がない/とりあえずアジトに戻ろう "
-				CALL MESSAGE_WINDOW_D, "", @"＞名声250を得た"
+				CALL MESSAGE_WINDOW_D, "류지、안、마코토、유스케、하루", "아마미야！ "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "그 식노도 도움이 되어 주었네/덕분에 소년도 잡을 수 있었다 "
+				CALL MESSAGE_WINDOW_D, "로알드", "그 소년을 어떻게 할 작정인가 "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "이 아이는 다른 세계의 구세주다/우리에게 신살의 도구가 되어 줄거야 "
+				CALL MESSAGE_WINDOW_D, "", "잠시 후 세라가 괴로워하기 시작했다"
+				CALL MESSAGE_WINDOW_D, "크리슈나", "호오 슬슬인가 "
+				CALL MESSAGE_WINDOW_D, "서프", "어이！　세라에게 무슨짓을 했어 "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "이 아이에게도 도움을 받으려고 생각해/이난나의 잔재를 넣었어 "
+				CALL MESSAGE_WINDOW_D, "", "그러자 순식간에 세라의 몸은 악마로 변했다 "
+				CALL MESSAGE_WINDOW_D, "이난나", "이 몸은 신들의 어머니 이난나 "
+				CALL MESSAGE_WINDOW_D, "이난나", "후후 겨우 이승으로 돌아와/온전한 몸을 손아귀에 넣었네 "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "부활한 지 얼마 안 돼서 죄송합니다만/이난나 한 가지 부탁을 할 수 있을까？ "
+				CALL MESSAGE_WINDOW_D, "", "크리슈나는 이난나에게 영혼을 하나 내밀었다 "
+				CALL MESSAGE_WINDOW_D, "이난나", "흠 그 영혼을 갈아엎으면 좋겠다고/좋겠지 "
+				CALL MESSAGE_WINDOW_D, "", "이난나는 혼을 붙잡은 뒤 악마를 도려냈다 "
+				CALL MESSAGE_WINDOW_D, "", "그 영혼에서 튀어나온 것은 쓰러뜨렸을 미록보살이었다 "
+				CALL MESSAGE_WINDOW_D, "미륵보살", "나는 미륵…아니/나는 환생하여 새로운 존재로 승화되었다 "
+				CALL MESSAGE_WINDOW_D, "", "그러자 미륵보살의 몸이 빛나며/다른 모습이 되었다 "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "나는 다신연합의 한 기둥 미트라/≪어머니≫의 힘에 의해 환생하여 현세에 돌아왔다 "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "미륵…아니 미트라 알고있겠지？ "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "분부대로… "
+				CALL MESSAGE_WINDOW_D, "", "미트라보살이 합장하자 거대한 알이 결계에 덮였다 "
+				CALL MESSAGE_WINDOW_D, "시에로", "무…무슨 짓을 한 거야？ "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "자네들의 우리의 계획에 방해가 되어서는 곤란하니까 "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "그러면…미트라 예의 장소에 "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "나는 하늘과 땅을 잇는 빛 "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "현재와 연관이 있는 장소에 가는 것은/쉬운 일이야/비록 사람의 아이가 창조한 세계라도 "
+				CALL MESSAGE_WINDOW_D, "미트라보살", "그 앞에서 너희가 오기를 기다리고 있겠다/너희가 오면의 이야기지만… "
+				CALL MESSAGE_WINDOW_D, "", "미트라보살은 자취를 감추었다 "
+				CALL MESSAGE_WINDOW_D, "크리슈나", "그럼 우리는 우주의 알에서 기다리고 있을게/가장 깊은 곳에 올 수 있을때의 이야기지만 "
+				CALL MESSAGE_WINDOW_D, "", "크리슈나와 이난나도 검은 머리카락의 소년과 함께 자취를 감추었다 "
+				CALL MESSAGE_WINDOW_D, "서프", "빌어먹을 "
+				CALL MESSAGE_WINDOW_D, "마코토", "그런… "
+				CALL MESSAGE_WINDOW_D, "로알드", "침울해져도 어쩔 수 없어/일단 아지트로 돌아가자 "
+				CALL MESSAGE_WINDOW_D, "", @"＞명성 250을 얻었다"
 				FLAG:名声 += 250
 				CALL DUNGEON_WORP,0,14,18
 				
 			ELSE
-				CALL MESSAGE_WINDOW_D, "서프", "急ぎだからな　できるだけ早く済ませてくれ "
+				CALL MESSAGE_WINDOW_D, "서프", "급하니까 가능한 한 빨리 끝내 줘 "
 			ENDIF
 	
 	
 	
 	CASE 3607
-		CALL MESSAGE_WINDOW_D, "春", "…なんか　인간がそのまま石になったような/석상がたくさんあるね… "
-		CALL MESSAGE_WINDOW_D, "유스케", "いや　これはキュヴィエ症候群になった인간だろう/俺はこういうのを外でたくさん見てきたからな "
-		CALL MESSAGE_WINDOW_D, "유스케", "カルマシティから空が見えるだろ？/そこから見える黒い太陽によってこんな姿になったんだ "
-		CALL MESSAGE_WINDOW_D, "春", "…や　やっぱりそうなのね/キュヴィエ症候群は로알드さん達から聞いてるから "
+		CALL MESSAGE_WINDOW_D, "하루", "…왠지 인간이 그냥 돌이 된 것 같은/석상이 많이 있어… "
+		CALL MESSAGE_WINDOW_D, "유스케", "아니 이건 퀴비에 증후군에 걸린 인간이다/난 이런 걸 밖에서 많이 봐왔으니까 "
+		CALL MESSAGE_WINDOW_D, "유스케", "카르마시티에서 하늘이 보이지？/거기서 보이는 검은 태양에 의해 이런 모습이 되었어 "
+		CALL MESSAGE_WINDOW_D, "하루", "…여 역시 그렇구나 퀴비에 증후군은 로알드 씨들에게 들었으니까 "
 	CASE 3608
-		CALL MESSAGE_WINDOW_D, "春", "明智君　どうしちゃったんだろ/前に戦ってた時よりとても怒ってた… "
-		CALL MESSAGE_WINDOW_D, "유스케", "それ以前になぜ彼は生きているんだろうな/아이つはシドウのパレスの中で死んだはずだが… "
-		CALL MESSAGE_WINDOW_D, "유스케", "どうやって復活したんだろうな… "
-		CALL MESSAGE_WINDOW_D, "春", "でも…　なんか私たちの知っている明智君じゃない気がするような…？ "
+		CALL MESSAGE_WINDOW_D, "하루", "아케치군 왜그러지/전에 싸웠을때보다 굉장히 화가났었어… "
+		CALL MESSAGE_WINDOW_D, "유스케", "그 이전에 왜 그는 살아 있을까?/그는 시도의 팰리스에서 죽었을 텐데… "
+		CALL MESSAGE_WINDOW_D, "유스케", "어떻게 부활했을까… "
+		CALL MESSAGE_WINDOW_D, "하루", "하지만… 왠지 우리가 알고 있는 아케치군이 아닌 것 같아…？ "
 ENDSELECT
 
 
@@ -499,7 +499,7 @@ ENDSELECT
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 	CASE 405
 		IF 던전フラグ:13:2 < 7
-			CALL MESSAGE_WINDOW_D, "フレッド", "頼む！/助けてやってくれよ… "
+			CALL MESSAGE_WINDOW_D, "프레드", "부탁해！/도와줘… "
 			;この命令で이벤트は破壊され、ただの床になる
 			DA:(FLAG:現X):(FLAG:現Y) = 1
 			던전フラグ:13:2 = 7
@@ -516,13 +516,13 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		CALL DUNGEON_WORP,(FLAG:現M)-2,3,1
 	CASE 4203
 		IF 던전フラグ:13:17 < 1
-			CALL MESSAGE_WINDOW_D, "", "扉の向こうから物音がする "
-			CALL INPUT_SELECT_D, "[1]進む/[0] 進まない"
+			CALL MESSAGE_WINDOW_D, "", "문 저쪽에서 소리가 난다 "
+			CALL INPUT_SELECT_D, "[1]나아간다/[0] 나아가지 않는다"
 			IF RESULT == 1
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)-2
-				CALL MESSAGE_WINDOW_D, "カルマ兵A", "これで最後の制御パネルだ "
-				CALL MESSAGE_WINDOW_D, "안", "ちょっとあんたたち/何してるのよ！ "
-				CALL MESSAGE_WINDOW_D, "カルマ兵B", "もう遅い/ついでに貴様らもぶっ壊してやる "
+				CALL MESSAGE_WINDOW_D, "카르마병A", "이제 마지막 제어판이다 "
+				CALL MESSAGE_WINDOW_D, "안", "잠깐 너희들/뭐하는거야！ "
+				CALL MESSAGE_WINDOW_D, "카르마병B", "이미 늦었어/하는 김에 너희들도 때려부숴버릴거야 "
 				
 					PRINTW 적が現れた！
 					FLAG:도주불가フラグ = 1
@@ -550,33 +550,33 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			FLAG:エンカウント率 = 0
 			FLAG:未遭遇歩数 = 0
 				;バトル
-				CALL MESSAGE_WINDOW_D, "", "戦いには勝ったが制御パネルが壊れて/先に進めない "
-				CALL MESSAGE_WINDOW_D, "류지", "どーすんだよ/先に進めねーぞ！ "
-				CALL MESSAGE_WINDOW_D, "", "알지라は壊れた制御パネルを見る "
-				CALL MESSAGE_WINDOW_D, "알지라", "こいつか/どうせこれと同じのが/この先たくさんあるんでしょ "
-				CALL MESSAGE_WINDOW_D, "春", "これ　中まで壊されてますよね… "
-				CALL MESSAGE_WINDOW_D, "유스케", "直すのに時間がかかりそうだよな…/できるだけ早く進みたいんだが "
-				CALL MESSAGE_WINDOW_D, "", "로알드が前に出てきた "
-				CALL MESSAGE_WINDOW_D, "로알드", "破壊された回路に代わる何かが/断たれた電気情報を結べばいい "
-				CALL MESSAGE_WINDOW_D, "마코토", "電気情報を…　ですか？ "
-				CALL MESSAGE_WINDOW_D, "로알드", "たとえば… "
-				CALL MESSAGE_WINDOW_D, "", "そういうと로알드はアート머신ボルのある右손を/制御パネルに突っ込んだ "
-				CALL MESSAGE_WINDOW_D, "", "制御パネルから電気や煙が飛び散りまばゆい光を発した "
-				CALL MESSAGE_WINDOW_D, "", "すると　隔壁がゆっくりと開いた "
+				CALL MESSAGE_WINDOW_D, "", "싸움에는 이겼으나 제어판이 망가져/앞으로 나아가지 못했다 "
+				CALL MESSAGE_WINDOW_D, "류지", "어떻게 하지/앞으로 가야하는데！ "
+				CALL MESSAGE_WINDOW_D, "", "알지라는 고장난 제어판을 봤다 "
+				CALL MESSAGE_WINDOW_D, "알지라", "이녀석인가/어차피 이것과 같은 것이/앞으로 많이 있을 거야 "
+				CALL MESSAGE_WINDOW_D, "하루", "이거 안에까지 망가져 있죠… "
+				CALL MESSAGE_WINDOW_D, "유스케", "고치는데 시간이 좀 걸리겠는걸…/최대한 빨리 가고 싶은데 "
+				CALL MESSAGE_WINDOW_D, "", "로알드가 앞으로 나왔다 "
+				CALL MESSAGE_WINDOW_D, "로알드", "파괴된 회로를 대신할 무언가로/끊겨진 전기 정보를 연결하면 된다 "
+				CALL MESSAGE_WINDOW_D, "마코토", "전기 정보를… 입니까？ "
+				CALL MESSAGE_WINDOW_D, "로알드", "예를 들어서… "
+				CALL MESSAGE_WINDOW_D, "", "그런 로알드는 아트마가 있는 오른손을 제어판에 집어넣었다 "
+				CALL MESSAGE_WINDOW_D, "", "제어판에서 전기와 연기가 이리저리 튀어 눈부신 빛을 발했다 "
+				CALL MESSAGE_WINDOW_D, "", "그러자 격벽이 천천히 열렸다 "
 				;이벤트
 				던전フラグ:13:17 = 1
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)
-				CALL MESSAGE_WINDOW_D, "시에로", "すげぇ "
-				CALL MESSAGE_WINDOW_D, "알지라", "ヒュー♪ "
-				CALL MESSAGE_WINDOW_D, "로알드", "”開け”という私の意思を/信号に乗せてみた "
-				CALL MESSAGE_WINDOW_D, "알지라", "悪지혜だけじゃなくて/機転もきくのね "
-				CALL MESSAGE_WINDOW_D, "로알드", "손厳しいな "
-				CALL MESSAGE_WINDOW_D, "알지라", "褒めてるの/ちょっと見直したわ "
-				CALL MESSAGE_WINDOW_D, "", "そう言って로알드にウインクする/それに対して로알드の顔がちょっと笑う "
-				CALL MESSAGE_WINDOW_D, "로알드", "私のアートマは　ライトニングボルト/これくらいなんともないさ "
-				CALL MESSAGE_WINDOW_D, "", "この二人のやり取りに杏は竜司に耳打ちする "
-				CALL MESSAGE_WINDOW_D, "안", "ねえねえ　今の二人/なんかいい雰囲気に見えない？ "
-				CALL MESSAGE_WINDOW_D, "류지", "あぁ？　そうか？ "
+				CALL MESSAGE_WINDOW_D, "시에로", "대단하네 "
+				CALL MESSAGE_WINDOW_D, "알지라", "휴우♪ "
+				CALL MESSAGE_WINDOW_D, "로알드", "”열려라”라고 하는 나의 의사를/신호에 실어 보았다 "
+				CALL MESSAGE_WINDOW_D, "알지라", "나쁜음모뿐만 아니라/재치도 잘하네 "
+				CALL MESSAGE_WINDOW_D, "로알드", "호되구만 "
+				CALL MESSAGE_WINDOW_D, "알지라", "칭찬이야/조금 다시봤어 "
+				CALL MESSAGE_WINDOW_D, "", "그렇게 말하며 알지라는 로알드에게 윙크했고/그에 대해 로알드도 약간 미소지었다 "
+				CALL MESSAGE_WINDOW_D, "로알드", "나의 아트마는 라이트닝 볼트/이 정돈 별 것 아니야 "
+				CALL MESSAGE_WINDOW_D, "", "이 두 사람이 주고받는 말에 안은 류지에게 귓속말을 한다 "
+				CALL MESSAGE_WINDOW_D, "안", "있잖아 지금 두사람/뭔가 좋은 분위기로 보이지 않아？ "
+				CALL MESSAGE_WINDOW_D, "류지", "아아？　그런가？ "
 				
 			ELSE
 				CALL DUNGEON_WORP,(FLAG:現M),(FLAG:現X),(FLAG:現Y)+1
@@ -584,18 +584,18 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		ENDIF
 	CASE 4202
 		IF GETBIT(던전フラグ:13:18,6) == 0
-			CALL MESSAGE_WINDOW_D, "システム", "コード불명者を確認/5分以内に退去してください "
-			CALL MESSAGE_WINDOW_D, "システム", "勧告に従わない場合/強制排除プログラムが発動します "
-			CALL INPUT_SELECT_D, "[1]面白い　やれるものならやってみろ/[0] 立ち去る"
+			CALL MESSAGE_WINDOW_D, "시스템", "코드불명자를 확인/5분 이내에 퇴거해 주십시오 "
+			CALL MESSAGE_WINDOW_D, "시스템", "권고를 따르지 않을시/강제배제프로그램이 발동됩니다 "
+			CALL INPUT_SELECT_D, "[1]재미있네 해 봐/[0] 떠난다"
 			IF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "システム", "コード불명者を排除します "
+				CALL MESSAGE_WINDOW_D, "시스템", "코드불명자를 배제합니다 "
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
 				
 				CALL SET_ENEMY,7,[[キャラ:얼음의체크맨]],54
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:피어트렌트]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・아쿠다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:스플래시레이]]
@@ -606,8 +606,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
 				
 				CALL SET_ENEMY,9,[[キャラ:얼음의체크맨]],54
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:피어트렌트]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・아쿠다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:스플래시레이]]
@@ -618,8 +618,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
 				
 				CALL SET_ENEMY,11,[[キャラ:얼음의체크맨]],54
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:피어트렌트]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・아쿠다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:스플래시레이]]
@@ -631,8 +631,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				
 				CALL SET_ENEMY,12,[[キャラ:천둥의체크맨]],54
 				CFLAG:(CHARANUM-1):속도보정 = 2
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:우뢰의세례]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・지오다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:집뢰격]]
@@ -644,8 +644,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				
 				CALL SET_ENEMY,14,[[キャラ:천둥의체크맨]],54
 				CFLAG:(CHARANUM-1):속도보정 = 2
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:우뢰의세례]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・지오다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:집뢰격]]
@@ -657,8 +657,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				
 				CALL SET_ENEMY,16,[[キャラ:천둥의체크맨]],54
 				CFLAG:(CHARANUM-1):속도보정 = 2
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:우뢰의세례]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・지오다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:집뢰격]]
@@ -682,18 +682,18 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		ENDIF
 	CASE 4201
 		IF GETBIT(던전フラグ:13:18,7) == 0
-			CALL MESSAGE_WINDOW_D, "システム", "コード불명者を確認/5分以内に退去してください "
-			CALL MESSAGE_WINDOW_D, "システム", "勧告に従わない場合/強制排除プログラムが発動します "
-			CALL INPUT_SELECT_D, "[1]面白い　やれるものならやってみろ/[0] 立ち去る"
+			CALL MESSAGE_WINDOW_D, "시스템", "코드불명자를 확인/5분 이내에 퇴거해 주십시오 "
+			CALL MESSAGE_WINDOW_D, "시스템", "권고를 따르지 않을시/강제배제프로그램이 발동됩니다 "
+			CALL INPUT_SELECT_D, "[1]재미있네 해 봐/[0] 떠난다"
 			IF RESULT == 1
-				CALL MESSAGE_WINDOW_D, "システム", "コード불명者を排除します "
+				CALL MESSAGE_WINDOW_D, "시스템", "코드불명자를 배제합니다 "
 				FLAG:도주불가フラグ = 1
 				FLAG:회화불능フラグ = 1
 				FLAG:선제기습취소 = 1
 				
 				CALL SET_ENEMY,7,[[キャラ:바람의체크맨]],54
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:극락떨구기]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・마그다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:티타노마키아]]
@@ -704,8 +704,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
 				
 				CALL SET_ENEMY,9,[[キャラ:바람의체크맨]],54
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:극락떨구기]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・마그다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:티타노마키아]]
@@ -716,8 +716,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
 				
 				CALL SET_ENEMY,11,[[キャラ:바람의체크맨]],54
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:극락떨구기]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:마하・마그다인]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:티타노마키아]]
@@ -729,8 +729,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				
 				CALL SET_ENEMY,12,[[キャラ:얼음의체크맨]],54
 				CFLAG:(CHARANUM-1):속도보정 = 2
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:아이온의비]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:절대영도]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:아이시클]]
@@ -742,8 +742,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				
 				CALL SET_ENEMY,14,[[キャラ:얼음의체크맨]],54
 				CFLAG:(CHARANUM-1):속도보정 = 2
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:아이온의비]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:절대영도]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:아이시클]]
@@ -755,8 +755,8 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				
 				CALL SET_ENEMY,16,[[キャラ:얼음의체크맨]],54
 				CFLAG:(CHARANUM-1):속도보정 = 2
-				NAME:(CHARANUM-1) = 警備システム
-				CALLNAME:(CHARANUM-1) = 警備システム
+				NAME:(CHARANUM-1) = 경비시스템
+				CALLNAME:(CHARANUM-1) = 경비시스템
 				ABL:(CHARANUM-1):스킬1 = [[스킬:아이온의비]]
 				ABL:(CHARANUM-1):스킬2 = [[스킬:절대영도]]
 				ABL:(CHARANUM-1):스킬3 = [[스킬:아이시클]]
@@ -779,39 +779,39 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			ENDIF
 		ENDIF
 	CASE 4200
-		CALL MESSAGE_WINDOW_D, "", "コントロール室のようなところに着いた "
-		CALL MESSAGE_WINDOW_D, "", "そこには槍を持った악마と橙色の머리카락をした소녀がいた "
-		CALL MESSAGE_WINDOW_D, "", "소녀は生気のない눈をして/ノートパソコンをカタカタ打っていた "
-		CALL MESSAGE_WINDOW_D, "槍持ちの악마", "ほう　クリシュナの言う通り/この小娘を利用して正解だったな "
-		CALL MESSAGE_WINDOW_D, "", "소녀がノートパソコンを打つ손を止めた "
-		CALL MESSAGE_WINDOW_D, "槍持ちの악마", "終わったか…/確かこの小娘には用はないのだったな "
-		CALL MESSAGE_WINDOW_D, "", "槍を持った악마はそのまま槍を소녀に刺そうとする "
-		CALL MESSAGE_WINDOW_D, "", "しかし　素早く来た서프がそれを阻止した "
-		CALL MESSAGE_WINDOW_D, "서프", "やらせないぞ "
-		CALL MESSAGE_WINDOW_D, "槍持ちの악마", "思ったより早く来たか… "
-		CALL MESSAGE_WINDOW_D, "槍持ちの악마", "ま아이い　この娘はくれてやろう/もう　こいつには用はないからな "
-		CALL MESSAGE_WINDOW_D, "", "槍持ちの악마はその場から姿を消した "
-		CALL MESSAGE_WINDOW_D, "", "橙色の머리카락の소녀はどたりと倒れた "
-		CALL MESSAGE_WINDOW_D, "", "倒れた소녀に真たちは駆け寄る "
+		CALL MESSAGE_WINDOW_D, "", "통제실 같은 곳에 도착했다 "
+		CALL MESSAGE_WINDOW_D, "", "거기에는 창을 든 악마와 주황색 머리카락을 한 소녀가 있었다 "
+		CALL MESSAGE_WINDOW_D, "", "소녀는 생기 없는 눈을 하고/노트북을 딱딱 두드리고 있었다 "
+		CALL MESSAGE_WINDOW_D, "창을 쥔 악마", "호오 크리슈나 말대로/이 계집애를 이용하길 잘한 것 같군 "
+		CALL MESSAGE_WINDOW_D, "", "소녀가 노트북을 치는 손을 멈추었다 "
+		CALL MESSAGE_WINDOW_D, "창을 쥔 악마", "끝난건가…/ 분명 이 계집애에겐 볼일이 없는 거였지 "
+		CALL MESSAGE_WINDOW_D, "", "창을 든 악마는 그대로 소녀를 창으로 찌르려 한다 "
+		CALL MESSAGE_WINDOW_D, "", "그러나 재빠르게 달려온 서프가 그것을 막았다 "
+		CALL MESSAGE_WINDOW_D, "서프", "하게 두지 않는다 "
+		CALL MESSAGE_WINDOW_D, "창을 쥔 악마", "생각보다 빨리 왔군… "
+		CALL MESSAGE_WINDOW_D, "창을 쥔 악마", "뭐 이 아가씨는 주도록 하마/이제 이녀석에게는 볼일이 없으니까 "
+		CALL MESSAGE_WINDOW_D, "", "창을 쥔 악마는 그 자리에서 사라졌다 "
+		CALL MESSAGE_WINDOW_D, "", "주황색 머리카락의 소녀는 털썩 쓰러졌다 "
+		CALL MESSAGE_WINDOW_D, "", "쓰러진 소녀를 향해 마코토들은 달려왔다 "
 		CALL MESSAGE_WINDOW_D, "유스케", "후타바！ "
-		CALL MESSAGE_WINDOW_D, "류지", "生きてるよな… "
-		CALL MESSAGE_WINDOW_D, "마코토", "大丈남편　気を失ってるだけよ "
-		CALL MESSAGE_WINDOW_D, "안", "よ　良かった "
-		CALL MESSAGE_WINDOW_D, "", "その時　無線機から通信が入った "
-		CALL MESSAGE_WINDOW_D, "게일", "로알드か　どうした！ "
-		CALL MESSAGE_WINDOW_D, "로알드の声", "フタバの救出はできたか？/今すぐこちらに来てほしい "
-		CALL MESSAGE_WINDOW_D, "로알드の声", "今じゃないと　奴を倒すことができない！/早く来てくれ "
-		CALL MESSAGE_WINDOW_D, "알지라", "どうしたの？ "
-		CALL MESSAGE_WINDOW_D, "게일", "로알드が来てほしいそうだ/今すぐ行くぞ "
+		CALL MESSAGE_WINDOW_D, "류지", "살아있겠지… "
+		CALL MESSAGE_WINDOW_D, "마코토", "괜찮아 그냥 정신을 잃었을 뿐이야 "
+		CALL MESSAGE_WINDOW_D, "안", "다 다행이다 "
+		CALL MESSAGE_WINDOW_D, "", "그 순간 무전기에서 통신이 들어왔다 "
+		CALL MESSAGE_WINDOW_D, "게일", "로알드인가 어떻게 된 거야！ "
+		CALL MESSAGE_WINDOW_D, "로알드의 목소리", "후타바 구출은 성공했는가？/당장 이리로 와줘 "
+		CALL MESSAGE_WINDOW_D, "로알드의 목소리", "지금이 아니면 놈을 쓰러뜨릴 수 없다！/빨리 와줘 "
+		CALL MESSAGE_WINDOW_D, "알지라", "무슨 일이야？ "
+		CALL MESSAGE_WINDOW_D, "게일", "로알드가 와달래/지금 바로 가자 "
 		CALL DUNGEON_WORP,43,3,0
-		CALL MESSAGE_WINDOW_D, "", "急いで　로알드のところに来た "
-		CALL MESSAGE_WINDOW_D, "서프", "来たぞ　로알드！ "
-		CALL MESSAGE_WINDOW_D, "로알드", "ああ　来てくれたか/カルマ協会があの巨大な化け物を放ったんだ "
-		CALL MESSAGE_WINDOW_D, "春", "その化け物って？ "
-		CALL MESSAGE_WINDOW_D, "로알드", "ああ　EGGの施設に氷漬けにしてあった악마だ "
-		CALL MESSAGE_WINDOW_D, "시에로", "ま　マジかよ！ "
-		CALL MESSAGE_WINDOW_D, "로알드", "だが　意外な助っ人が来たおかげで/奴はかなり弱っている "
-		CALL MESSAGE_WINDOW_D, "로알드", "倒すのは今だ！/奴を野放しにしてはいけない "
+		CALL MESSAGE_WINDOW_D, "", "급히 로알드에게 왔다 "
+		CALL MESSAGE_WINDOW_D, "서프", "왔다 로알드！ "
+		CALL MESSAGE_WINDOW_D, "로알드", "아아 와 주었군/카르마 협회가 그 거대한 괴물을 풀어놨어 "
+		CALL MESSAGE_WINDOW_D, "하루", "그 괴물？ "
+		CALL MESSAGE_WINDOW_D, "로알드", "아아 EGG의 시설에 얼려져있던 악마다 "
+		CALL MESSAGE_WINDOW_D, "시에로", "지 진짜냐！ "
+		CALL MESSAGE_WINDOW_D, "로알드", "그러나 의외의 용병이 온 덕분에/녀석은 상당히 난처해져 있다 "
+		CALL MESSAGE_WINDOW_D, "로알드", "쓰러뜨리는 것은 지금이다！/놈을 놓쳐서는 안 된다 "
 		
 		
 		
@@ -896,7 +896,7 @@ RETURN 1
 ;=======================================================================
 @plant_ENEMY_STATUS,ARG
 
-@SET_ACTION_メーガナーダ,ARG
+@SET_ACTION_메가나타,ARG
 IF RAND:5
 	FOR LOCAL, 1, 7
 		SIF POS(LOCAL) < 0

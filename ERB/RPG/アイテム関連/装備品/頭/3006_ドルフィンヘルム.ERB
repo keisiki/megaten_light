@@ -2,63 +2,79 @@
 ;======================================================
 ;장비品の데이터
 ;돌핀헬름
-;Lv35장비までは무효まで　기본능력に합계+3まで
 ;======================================================
 
 @기본능력수정_3006,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "지혜"
-		RETURN 2
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3006,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 19
-	CASE "회피"
-		RETURN 10
-	CASE "마법효과"
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 18
+	CASE 3
+		RETURN 8
+	CASE 5
 		RETURN 11
 ENDSELECT
 RETURN 0
 
 @방어상성_3006,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "정신"
-		RETURN 0
-	CASE "주살"
-		RETURN 50
-	CASE "전격"
+
+SELECTCASE ARG
+	CASE 6,8,10
 		RETURN 150
-	CASE "파마","신경"
-		RETURN 115
+	CASE 9
+		RETURN 999
+	CASE 11
+		RETURN 50
 ENDSELECT
 RETURN 100
+
+@공격상성_3006, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3006, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3006, ARG = -1
+
+RETURN 1
+
+@사거리_3006, ARG = -1
+
+RETURN 1
+
+@공격범위_3006, ARG = -1
+
+RETURN 1
 
 @장비箇所_3006
 RETURN GET_EQUIPNUM("머리")
 
 @필요레벨_3006
-RETURN 35
+RETURN 25
+
+@장비해설_3006
+PRINTL 정신공격방어에 특화된 투구
+PRINTL 유해한 정신파를 반사한다。
 
 @장비조건_3006,ARG
-SIF BASE:ARG:LV < 35
+SIF BASE:ARG:LV < 25
 	RETURN 0
 RETURN 1
 
 @장비조건설명_3006
-PRINTL 장비조건：LV35～
-
-@장비해설_3006
-PRINTL ドルフィンの입を模した覗き穴の流線型헬멧。정신波を遮断する効果が有る。
-PRINTL 　　　　　　　　下が見づらい。
+PRINTL 장비조건：LV25～
 
 
 @구입조건_3006
-SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 70000
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 210000
 	RETURN 0
 RETURN 1
 
-@引継ぎ可不可_3006
-RETURN 0

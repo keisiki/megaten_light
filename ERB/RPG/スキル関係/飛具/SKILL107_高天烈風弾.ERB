@@ -1,26 +1,23 @@
 ﻿
 ;스킬名
 @SKILL_NAME_107,ARG
-;アーベントが사용する場合P・ランチャーBに
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
-	RESULTS = P・런처 B
+;아벤트が사용する場合P・런처Bに
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
+	RESULTS = P・런처B
 ELSE
 	RESULTS = 고천열풍탄
 ENDIF
 
 ;　명중
 @SKILL_HITRATE_107, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RETURN 90
 ELSE
 	RETURN 95
 ENDIF
 ;　威힘
 @SKILL_POWER_107, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RETURN 140
 ELSE
 	RETURN 410
@@ -28,8 +25,7 @@ ENDIF
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_107,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RETURN 3
 ELSE
 	RETURN 1
@@ -37,8 +33,7 @@ ENDIF
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_107,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RETURN 5
 ELSE
 	RETURN 1
@@ -51,8 +46,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_107,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RETURN 10
 ELSE
 	RETURN 38
@@ -64,12 +58,12 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_107
+@SKILL_DECIDE_TYPE_107, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_107
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_107, ARG
 RETURN 1
 
 
@@ -143,8 +137,7 @@ RETURN 0
 ;스킬及び行動の実行
 ;====================================================
 @ACTION_107,ARG,ARG:1
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	CALL ATTACK_RAND,ARG,ARG:1,107
 ELSE
 	CALL ATTACK_FIELD,ARG,ARG:1,107
@@ -160,7 +153,8 @@ ENDIF
 ;　 説明文の표시
 @SKILL_EXPLAIN_107
 IF U > 0 && U < CHARANUM && NO:U == [[キャラ:아벤트]]
-	PRINTL [후열] 적 전체에 3～5회 비구속성 소 물리데미지. 정식명칭은 「파르티잔・런처 B 모드」
+	PRINTL 적 전체에 특수 철갑탄을 랜덤하게 3～5회 사격해 공격
+	PRINTL 정식명칭 「파르티잔・런처 B 모드」。상단 총신에서 특수 철갑탄을 발사한다。
 ELSE
 	PRINTL [후열] 적 전체에 비구속성 특대 물리데미지.
 ENDIF

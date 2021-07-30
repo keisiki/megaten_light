@@ -11,7 +11,7 @@ RETURN 100
 @SKILL_POWER_2969, ARG
 RETURN 180
 
-;@SKILL_CRITICAL_RATE_2969
+;@SKILL_CRITICAL_RATE_2969, ARG
 ;RETURN 20
 
 ;　최저공격횟수
@@ -36,11 +36,11 @@ RETURN 65
 RETURN GET_TYPE_NUM("타격")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2969
+@SKILL_DECIDE_TYPE_2969, ARG
 RETURN 1
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2969
+@SKILL_DAMAGETYPE_2969, ARG
 RETURN 2
 
 
@@ -130,7 +130,7 @@ IF CFLAG:LOCAL:타격무효화횟수 < 1 && CFLAG:LOCAL:물리반사フラグ < 
 		PRINTFORML [{LOCAL}]%CALLNAME:LOCAL,20% >>>>> 상성을 관통했다！
 ENDIF
 
-CALL ATTACK_SINGLE,ARG,LOCAL,2986
+CALL ATTACK_SINGLE,ARG,LOCAL,2969
 
 CFLAG:ARG:방어반감フラグ = 0
 
@@ -144,9 +144,9 @@ SIF A == 1
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2969
-PRINTL 서번트：玉藻の前が바람撲滅の為に編み出した奥義。　またの名を、一남편多아내去勢拳。
-PRINTL 拳とは言いつつ、連続돌려차기で体勢を崩させ、距離を取っての飛び蹴りで決める蹴り技である。
-PRINTL 내성、無効を無視して관통ダメージを与える。
+PRINTL 서번트：타마모노마에가 바람기를 박멸하기 위해 짜낸 오의。　다른 이름으로는、일부다처거세권(一夫多妻去勢拳)。
+PRINTL 주먹이라고는 하지만、연속 돌려차기로 자세를 흐트러뜨려、거리를 두고 날라차기로 끝장내는 기술이다。
+PRINTL 내성、무효를 무시하고 관통데미지를 입힌다。
 
 ;継承に필요한部位
 @継承部位_2969,ARG

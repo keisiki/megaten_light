@@ -34,7 +34,7 @@ ELSEIF ABL:ARG:가창기능 == 8
 ELSEIF ABL:ARG:가창기능 == 9
 	RETURN 400
 ELSE
-	RETURN 420
+	RETURN 400
 ENDIF
 RETURN 110
 
@@ -76,7 +76,7 @@ ELSEIF ABL:ARG:가창기능 == 8
 ELSEIF ABL:ARG:가창기능 == 9
 	RETURN 41
 ELSE
-	RETURN 43
+	RETURN 45
 ENDIF
 RETURN 9
 
@@ -86,12 +86,12 @@ RETURN 5
 ;빙결
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2831
+@SKILL_DECIDE_TYPE_2831, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2831
+@SKILL_DAMAGETYPE_2831, ARG
 RETURN 2
 
 
@@ -173,7 +173,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2831
 @SKILL_EXPLAIN_2831
 PRINTL 적 １열에게 휘몰아치는 눈보라 같은 노래를 들려줘 타격을 준다。
 PRINTL 사용자의 가창 기능에 따라 위력이 증가한다。
-PRINTL 아득히 먼 連ダコ행성에서 환상향에 전해진、 『 노래 무기 』라 불리는 뛰어난 힘.。
+PRINTL 아득히 먼 렌다코 행성에서 환상향에 전해진、 『 노래 무기 』라 불리는 뛰어난 힘。
 
 ;継承に필요한部位
 @継承部位_2831,ARG

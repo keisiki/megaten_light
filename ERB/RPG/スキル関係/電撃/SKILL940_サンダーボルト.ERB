@@ -3,15 +3,27 @@
 
 ;스킬名
 @SKILL_NAME_940,ARG
-RESULTS = 선더볼
+IF SKILL_CHANGE(ARG, [[キャラ:블레이드(X)]]) && EQUIP:ARG:악세사리 == 5349
+	RESULTS = ｻﾝﾀﾞｰﾎﾞﾙﾄ・碧雷
+ELSE
+	RESULTS = 선더볼
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_940, ARG
-RETURN 90
+IF SKILL_CHANGE(ARG, [[キャラ:블레이드(X)]]) && EQUIP:ARG:악세사리 == 5349
+	RETURN 130
+ELSE
+	RETURN 90
+ENDIF
 
 ;　위력
 @SKILL_POWER_940, ARG
-RETURN 220
+IF SKILL_CHANGE(ARG, [[キャラ:블레이드(X)]]) && EQUIP:ARG:악세사리 == 5349
+	RETURN 330
+ELSE
+	RETURN 220
+ENDIF
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_940,ARG
@@ -28,19 +40,23 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_940,ARG
-RETURN 15
+IF SKILL_CHANGE(ARG, [[キャラ:블레이드(X)]]) && EQUIP:ARG:악세사리 == 5349
+	RETURN 23
+ELSE
+	RETURN 15
+ENDIF
 
 ;　相性
 @SKILL_TYPE_940,ARG
 RETURN GET_TYPE_NUM("전격")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_940
+@SKILL_DECIDE_TYPE_940, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_940
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_940, ARG
 RETURN 1
 
 
@@ -118,6 +134,11 @@ CALL ATTACK_FIELD, ARG, ARG:1, 940
 ;　 説明文の표시
 @SKILL_EXPLAIN_940
 PRINTL [후열] 적 전체에 전격속성 중 물리데미지. (낮은 확률로 SHOCK)
+IF U > 0 && U < CHARANUM && NO:U == [[キャラ:블레이드(X)]] && EQUIP:U:악세사리 == 5349
+	SETCOLOR 0x14ffd7
+	PRINTL 碧色の雷霆装備中　명중・威力強化
+	RESETCOLOR
+ENDIF
 
 ;継承に필요な部位
 @継承部位_940,ARG

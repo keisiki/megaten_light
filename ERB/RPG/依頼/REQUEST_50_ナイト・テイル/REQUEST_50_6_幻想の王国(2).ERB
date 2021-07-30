@@ -8,6 +8,8 @@
 ;											※この변경により、ここでの選択が他ERBでも参照できます。
 ;											修正箇所は日付で検索
 ;2019/11/4			編集者：絹延			記述抜けに対応。
+;2020/05/02			編集者：(ﾟдﾟ)			신뢰ルートに対応、そしてｳﾝ年越しに토르코시로ちゃん강화
+;2021/01/19			編集者：kamedakeisuke(ﾟдﾟ)			ボスがオーバーキルされて段階が吹っ飛ぶアレを回避する処理を入れた
 ;====================
 ;関連フラグリスト
 ;====================
@@ -28,7 +30,7 @@
 PRINTL 
 PRINTFORML ――식신이 날아왔다。
 PRINTFORML 「팡 코우린으로서 부탁드리고 싶은 것이 있습니다
-PRINTFORML 　보수는 최저 ￥100000.-。필요하시다면、젊은 여자 노예도 붙여드리지요。
+PRINTFORML 　보수는 현금 ￥100000.-。필요하시다면、젊은 여자 노예도 붙여드리지요。
 PRINTFORML 　단、가능한 빨리 답장해주세요」
 PRINTFORML 긴급 전언을 마치고、하얀 사람모양의 종이조각은、재가 되어 소멸했다。
 PRINTFORML 내용도 보수도 단순한 일은 아니다。
@@ -272,8 +274,8 @@ PRINTFORML
 ;2019/10/30削除 管理フラグ변경による파워アップフラグリセット処理の撤廃
 
 IF 의뢰フラグ:50:2 == 200
-	;코시로쨩 연모이상으로 파티에 있다
-	IF FINDCHARA_B(4559) == 2 && (TALENT:(RESULT:1):연모 || TALENT:(RESULT:1):친애)
+	;코시로쨩 연모 OR 신뢰이상으로 파티에 있다
+	IF FINDCHARA_B(4559) == 2 && (TALENT:(RESULT:1):연모 || TALENT:(RESULT:1):친애 || TALENT:(RESULT:1):신뢰 || TALENT:(RESULT:1):동료)
 		PRINTFORMW ………막간。
 		PRINTFORML 
 		PRINTFORMW 다른 사람들이 물건을 사러 나가버려서、%플레이어는()%『사에키 탐정사무소』라고 쓰여진 방에서 낮잠을 자고 있었다。
@@ -319,12 +321,24 @@ IF 의뢰フラグ:50:2 == 200
 		IF RESULT == 100
 			PRINTFORMW 코시로는、멍하니 있다가、기쁘게 활짝 웃음을 피웠다。
 			PRINTFORML 
-			PRINTFORMW 「무슨 일이 있어도、내 아군으로 있어줘、날 좋아해줘。
-			PRINTFORMW 　나도、쭈욱 좋아하고 있으니까。당신을 좋아하고 있으니까。
-			PRINTFORMW 　절대 잊지 말아줘、약속이야？」
-			PRINTFORML 
-			PRINTFORMW 부드럽게、%CALLNAME:MASTER%의 뺨에 키스를 하고、코시로는 방을 나갔다。
-			
+			;연모ルートリアクション
+			IF TALENT:(RESULT:1):연모 || TALENT:(RESULT:1):친애
+				PRINTFORMW 「무슨 일이 있어도、내 아군으로 있어줘、날 좋아해줘。
+				PRINTFORMW 　나도、쭈욱 좋아하고 있으니까。당신을 좋아하고 있으니까。
+				PRINTFORMW 　절대 잊지 말아줘、약속이야？」
+				PRINTFORML 
+				PRINTFORMW 부드럽게、%CALLNAME:MASTER%의 뺨에 키스를 하고、코시로는 방을 나갔다。
+			;それ以外（신뢰ルート）リアクション
+			ELSE
+				PRINTFORMW 「니히히、뭔가요 뭔가요오？
+				PRINTFORMW 　탐정씨 주제에、꽤 ウエット한 말을 하잖아요？
+				PRINTFORMW 　……괜찮아요、 무슨 일이 있어도 극복할 수 있어요.
+				PRINTFORMW 　당신이 믿는 만큼、
+				PRINTFORMW 　나도 당신을 믿으니까 」
+				PRINTFORML 
+				PRINTFORMW 코시로는 %CALLNAME:MASTER%에 섬즈업을 한 뒤에、스킵하면서 방을 나갔다.
+			ENDIF
+
 			CFLAG:MASTER:善悪치 += 32
 			CFLAG:MASTER:秩混치 += 32
 			
@@ -613,11 +627,12 @@ IF 의뢰フラグ:50:2 == 200
 		
 		;초기링크악마を토르に변경
 		;2019/10/30修正 キャラ番号取得処理修正に伴う사용変数の변경
-		CFLAG:(LOCAL:1):초기링크악마 = 1406
+		CFLAG:(LOCAL:1):초기링크악마 = 3822
 		ABL:(LOCAL:1):초기링크악마사거리 = 3
 		
-		;지오다인・マハ지오다인　現在레벨＋１で取得
-		ABL:(LOCAL:1):초기변신악마습득스킬5 = 903
+		;토르해머・マハ지오다인　現在레벨＋１で取得
+		;2020/05/02　지오다인⇒토르해머
+		ABL:(LOCAL:1):초기변신악마습득스킬5 = 941
 		ABL:(LOCAL:1):초기변신악마습득LV5 = BASE:(LOCAL:1):LV + 1
 		ABL:(LOCAL:1):초기변신악마습득스킬6 = 906
 		ABL:(LOCAL:1):초기변신악마습득LV6 = BASE:(LOCAL:1):LV + 1
@@ -630,9 +645,20 @@ IF 의뢰フラグ:50:2 == 200
 		ABL:(LOCAL:1):초기변신악마습득스킬8 = 418
 		ABL:(LOCAL:1):초기변신악마습득LV8 = BASE:(LOCAL:1):LV + 3
 		
-		;뇌진왕모의발차기　現在레벨＋８で取得
+		;뇌진왕모의발차기　現在레벨＋５で取得
+		;2020/05/02　습득레벨-2
 		ABL:(LOCAL:1):초기변신악마습득스킬9 = 207
-		ABL:(LOCAL:1):초기변신악마습득LV9 = BASE:(LOCAL:1):LV + 8
+		ABL:(LOCAL:1):초기변신악마습득LV9 = BASE:(LOCAL:1):LV + 5
+		
+		;진리의번개　現在레벨＋７で取得
+		;2020/05/02　추가
+		ABL:(LOCAL:1):초기변신악마습득스킬10 = 938
+		ABL:(LOCAL:1):초기변신악마습득LV10 = BASE:(LOCAL:1):LV + 7
+		
+		;타루카쟈오토　現在레벨＋７で取得
+		;2020/05/02　추가
+		ABL:(LOCAL:1):초기변신악마습득스킬11 = 2414
+		ABL:(LOCAL:1):초기변신악마습득LV11 = BASE:(LOCAL:1):LV + 7
 		
 		;힘と인내력に+1の보정
 		MAXBASE:(LOCAL:1):힘 += 1
@@ -1247,6 +1273,9 @@ IF FLAG:ナイト・テイル進行度 == 600 && 現HP割合(CHARANUM-1) < 75
 	
 	FLAG:ナイト・テイル進行度 = 601
 	
+	BASE:(CHARANUM-1):ＨＰ = (MAXBASE:(CHARANUM-1):ＨＰ)
+	TIMES BASE:(CHARANUM-1):ＨＰ, 0.75
+	
 ELSEIF FLAG:ナイト・テイル進行度 == 601 && 現HP割合(CHARANUM-1) < 50
 	PRINTFORML 
 	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
@@ -1260,6 +1289,10 @@ ELSEIF FLAG:ナイト・テイル進行度 == 601 && 現HP割合(CHARANUM-1) < 5
 	ABL:(CHARANUM-1):스킬3 = 207
 	
 	FLAG:ナイト・テイル進行度 = 602
+	
+	BASE:(CHARANUM-1):ＨＰ = (MAXBASE:(CHARANUM-1):ＨＰ)
+	TIMES BASE:(CHARANUM-1):ＨＰ, 0.50
+	
 	
 ELSEIF FLAG:ナイト・テイル進行度 == 602 && 現HP割合(CHARANUM-1) < 25
 	PRINTFORML 
@@ -1277,6 +1310,9 @@ ELSEIF FLAG:ナイト・テイル進行度 == 602 && 現HP割合(CHARANUM-1) < 2
 	
 	FLAG:ナイト・テイル進行度 = 603
 	
+	BASE:(CHARANUM-1):ＨＰ = (MAXBASE:(CHARANUM-1):ＨＰ)
+	TIMES BASE:(CHARANUM-1):ＨＰ, 0.25
+	
 ;마왕ダゴン　発狂モード
 ELSEIF FLAG:ナイト・テイル進行度 == 620 && 現HP割合(CHARANUM-1) < 75
 	PRINTFORML 
@@ -1290,6 +1326,9 @@ ELSEIF FLAG:ナイト・テイル進行度 == 620 && 現HP割合(CHARANUM-1) < 7
 	
 	
 	FLAG:ナイト・テイル進行度 = 621
+	
+	BASE:(CHARANUM-1):ＨＰ = (MAXBASE:(CHARANUM-1):ＨＰ)
+	TIMES BASE:(CHARANUM-1):ＨＰ, 0.75
 	
 ELSEIF FLAG:ナイト・テイル進行度 == 621 && 現HP割合(CHARANUM-1) < 50
 	PRINTFORML 
@@ -1482,6 +1521,11 @@ ELSEIF FLAG:ナイト・テイル進行度 == 621 && 現HP割合(CHARANUM-1) < 5
 	;ダゴンの포그브레스削除
 	ABL:(CHARANUM-1):스킬2 = 0
 	
+	
+	BASE:(CHARANUM-1):ＨＰ = (MAXBASE:(CHARANUM-1):ＨＰ)
+	TIMES BASE:(CHARANUM-1):ＨＰ, 0.50
+	
+	
 ELSEIF FLAG:ナイト・テイル進行度 == 622 && 現HP割合(CHARANUM-1) < 25
 	PRINTFORML 
 	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━━━━━┓
@@ -1499,6 +1543,9 @@ ELSEIF FLAG:ナイト・テイル進行度 == 622 && 現HP割合(CHARANUM-1) < 2
 	CFLAG:(CHARANUM-1):行動횟수 = 3
 	
 	FLAG:ナイト・テイル進行度 = 623
+	
+	BASE:(CHARANUM-1):ＨＰ = (MAXBASE:(CHARANUM-1):ＨＰ)
+	TIMES BASE:(CHARANUM-1):ＨＰ, 0.25
 	
 ELSEIF FLAG:ナイト・テイル進行度 == 623 && 現HP割合(CHARANUM-1) < 5
 	PRINTFORML 
@@ -1528,4 +1575,8 @@ ELSEIF FLAG:ナイト・テイル進行度 == 623 && 現HP割合(CHARANUM-1) < 5
 	CFLAG:(CHARANUM-1):行動횟수 = 5
 	
 	FLAG:ナイト・テイル進行度 = 624
+	
+	BASE:(CHARANUM-1):ＨＰ = (MAXBASE:(CHARANUM-1):ＨＰ)
+	TIMES BASE:(CHARANUM-1):ＨＰ, 0.05
+	
 ENDIF

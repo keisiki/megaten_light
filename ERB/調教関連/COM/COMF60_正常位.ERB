@@ -35,7 +35,7 @@ IF (GROUPMATCH(PREVCOM, 81, 140, 62, 63, 78, 79, 500 ,513, 514) && TEQUIP:TARGET
 	ENDIF
 ENDIF
 ;前のプ레이が정상위かつ조교者の기교3이상의 場合、挿入局所責めへ派生。
-IF PREVCOM == 60 && (ABL:PLAYER:2 > 2)
+IF PREVCOM == 60 && (ABL:PLAYER:2 > 2) && TFLAG:60 != 0
 	CALL COM_ABLE_COMMON, 506
 	SIF RESULT == 1
 		RETURN 506
@@ -53,7 +53,7 @@ TSTR:0 = 정상위
 
 ;V경험を伴うコマンドの플래그(처녀膜재생対応)
 TFLAG:19 = 1
-SIF (TALENT:3 || TALENT:6) && ASSIPLAY == 0 && EXP:0 == 0
+SIF (TALENT:3 || TALENT:6) && ASSIPLAY == 0 && TALENT:처녀 == 1 ;EXP:0 == 0
 	TFLAG:20 = 1
 
 ;처녀상실時のテ키스ト用処理
@@ -359,7 +359,7 @@ RETURN 1
 ;V경험を伴うコマンドの플래그(처녀膜재생対応)
 TFLAG:19 = 1
 
-PRINTL ＜인서트중＞
+PRINTL ＜정상위 인서트중＞
 
 B = 1500
 

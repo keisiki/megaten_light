@@ -36,12 +36,12 @@ RETURN 50
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_423
+@SKILL_DECIDE_TYPE_423, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_423
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_423, ARG
 RETURN 2
 
 
@@ -115,7 +115,7 @@ RETURN 0
 ;====================================================
 @ACTION_423,ARG,ARG:1
 ;コスト支払い
-CALL PAY_COST,ARG,423
+;CALL PAY_COST,ARG,423
 ;旧仕様
 ;IF ARG:1 == 19
 ;	LOCAL:7 = 1

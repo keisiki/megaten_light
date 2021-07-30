@@ -49,6 +49,15 @@ RETURN 1
 @장비箇所_2309
 RETURN GET_EQUIPNUM("검")
 
+;난심의일도
+@장비추가스킬_2309,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 66
+	ENDSELECT
+ENDIF
+RETURN 0
 
 ;-----------------------------
 ;- SHOP
@@ -71,6 +80,9 @@ PRINTL 장비조건：LV25～
 
 @장비해설_2309
 PRINTL 아와타구치 6형제의 막내인 쿠니츠나가 만든 것
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：난심의일도
+RESETCOLOR
 
 RETURN 0
 

@@ -399,9 +399,9 @@
 		ABL:LOCAL:스킬4 = 540;초래의무도
 		ABL:LOCAL:습득스킬1 = 505;데쿤다
 		ABL:LOCAL:습득LV1 = 91
-		ABL:LOCAL:습득스킬2 = 3604,;안티크톤
+		ABL:LOCAL:습득스킬2 = [[스킬:전용기1]],;안티크톤
 		ABL:LOCAL:습득LV2 = 93
-		ABL:LOCAL:습득스킬3 = 3603,;오메가스트라이크
+		ABL:LOCAL:습득스킬3 = [[스킬:전용기2]],;오메가스트라이크
 		ABL:LOCAL:습득LV3 = 94
 		ABL:LOCAL:습득스킬4 = 2407,;불굴의의지
 		ABL:LOCAL:습득LV4 = 95
@@ -411,8 +411,54 @@
 		ABL:LOCAL:최대공격횟수 = 2
 		ABL:LOCAL:사거리= 3
 		ABL:LOCAL:공격범위 = 3
+
+		CSTR:LOCAL:전용기1 = 안티크론		
+		CSTR:LOCAL:전용기2 = 오메가스트라이크
+		
+	ELSE
+		CALL ADD_NEW_COMPANION,4104,500
+		LOCAL = RESULT:1
+		BASE:LOCAL:LV = 90
+		BASE:LOCAL:힘 = 7
+		BASE:LOCAL:지혜 = 62
+		BASE:LOCAL:마력 = 100
+		BASE:LOCAL:인내력 = 8
+		BASE:LOCAL:속도 = 65
+		BASE:LOCAL:운 = 7
+		BASE:LOCAL:검격 = 125
+		BASE:LOCAL:타격 = 125
+		BASE:LOCAL:전술 = 125
+		BASE:LOCAL:화염 = 50
+		BASE:LOCAL:빙결 = 50
+		BASE:LOCAL:전격 = 50
+		BASE:LOCAL:충격 = 50
+		BASE:LOCAL:파마 = 200
+		BASE:LOCAL:주살 = 999
+		BASE:LOCAL:지변 = 50
+		BASE:LOCAL:수격 = 50
+		ABL:LOCAL:스킬1 = 1408;죽어줄래？
+		ABL:LOCAL:스킬2 = 512;컨센트레이트
+		ABL:LOCAL:스킬3 = 509;데카쟈
+		ABL:LOCAL:스킬4 = 540;초래의무도
+		ABL:LOCAL:습득스킬1 = 505;데쿤다
+		ABL:LOCAL:습득LV1 = 91
+		ABL:LOCAL:습득스킬2 = [[스킬:전용기1]],;안티크톤
+		ABL:LOCAL:습득LV2 = 93
+		ABL:LOCAL:습득스킬3 = [[스킬:전용기2]],;오메가스트라이크
+		ABL:LOCAL:습득LV3 = 94
+		ABL:LOCAL:습득스킬4 = 2407,;불굴의의지
+		ABL:LOCAL:습득LV4 = 95
+		ABL:LOCAL:속성LC = 3
+		ABL:LOCAL:공격상성 = 17
+		ABL:LOCAL:최저공격횟수 = 2
+		ABL:LOCAL:최대공격횟수 = 2
+		ABL:LOCAL:사거리= 3
+		ABL:LOCAL:공격범위 = 3
+
+		CSTR:LOCAL:전용기1 = 안티크론		
+		CSTR:LOCAL:전용기2 = 오메가스트라이크
+
 	ENDIF
-	CALL ADD_NEW_COMPANION,4104,500
 	PRINTFORML
 	PRINTFORMW 「흥, 그럼 돌아가도록 하지.」
 	PRINTFORML

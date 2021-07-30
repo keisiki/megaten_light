@@ -1,4 +1,11 @@
-﻿
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		2021/02/14		J>s!UL@1				派生コマンドの処理、挿入継続時の分岐を追加
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
 @CHECK_COM_ABLE95
 ;애널정상위시킨다実行판정
 
@@ -30,6 +37,17 @@ ENDIF
 
 RETURN 1
 
+@JUMP_COM95
+;-------------------------------------------------
+;特殊派生処理
+;-------------------------------------------------
+;前のプレイがアナル正常位させるかつ対象の技巧3以上の場合、挿入前立腺責めさせるへ派生
+IF PREVCOM == 95 && (ABL:TARGET:2 > 2)
+	CALL COM_ABLE_COMMON, 520
+	SIF RESULT == 1
+		RETURN 520
+ENDIF
+RETURN -1
 
 @ACT_COM95
 ;애널정상위시킨다
@@ -424,7 +442,13 @@ RETURN 1
 
 
 @MESSAGE_COM95
-	IF TEQUIP:주도권
+	;前回の調教がアナル正常位させるであり、入れっぱなしの場合
+	IF TEQUIP:주도권 && TEQUIP:PLAYER:51 && (PREVCOM == 95 || PREVCOM == 520)
+		PRINTFORMW %CALLNAME:TARGET%は%CALLNAME:PLAYER%の菊穴の感触を味わいながら、再び腰を動かし始めた……
+	;同様に前回の調教がアナル後背位かアナル対面座位かアナル背面座位かアナル騎乗位の場合
+	ELSEIF TEQUIP:주도권 && TEQUIP:PLAYER:51 && (PREVCOM == 96 || PREVCOM == 97 || PREVCOM == 902 || PREVCOM == 903)
+		PRINTFORMW %CALLNAME:TARGET%は腸内から抜き去ることなく%CALLNAME:PLAYER%を仰向けに寝かせ、再び腰を動かし始めた……
+	ELSEIF TEQUIP:주도권
 		PRINTFORM %타겟은()% %조사처리(CALLNAME:PLAYER,"를")% \@TALENT:영맹 ? 난폭하게 #\@ 깔아눕혀、
 		PRINTFORML \@ ABL:PLAYER:Ａ감각 > 2 ? 기대로 실룩거리는  #\@ 애널에 페니스를 대고
 		;「TARGETが真性の새드か」「새드끼持ちか」で分岐
@@ -454,12 +478,17 @@ RETURN 1
 		ELSE
 			PRINTFORMW 느긋하게 허리를 앞뒤로 움직였다…
 		ENDIF
+	;前回の調教がアナル正常位させるであり、抜かないフラグがある場合
+	ELSEIF TEQUIP:PLAYER:51 && (PREVCOM == 95 || PREVCOM == 520)
+		PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:TARGET%に腕を伸ばして抱きつくと、もっと動くようにせがんだ……
+	;同様に前回の調教がアナル後背位かアナル対面座位かアナル背面座位かアナル騎乗位の場合
+	ELSEIF TEQUIP:PLAYER:51 && (PREVCOM == 96 || PREVCOM == 97 || PREVCOM == 902 || PREVCOM == 903)
+		PRINTFORMW %CALLNAME:PLAYER%は%CALLNAME:TARGET%のペニスを入れたまま仰向けに寝そべると、自分で腰を揺らし始めた……
 	ELSE
 		PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:TARGET%의 앞에 누워 
 		;조교者が음란
-		IF ABL:PLAYER:욕망 > 3
+		SIF ABL:PLAYER:욕망 > 3
 			PRINTFORM 꿈틀대는 국문을 과시하듯이 크게 다리를 벌려、
-		ENDIF
 		PRINTFORM 발기한 페니스를
 		SIF EXP:PLAYER:Ａ경험 == 0
 			PRINT 남자를 받아들인 적없는

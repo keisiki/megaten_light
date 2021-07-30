@@ -3,7 +3,7 @@
 ;시나가와
 ;0,던전攻略조건フラグ,数値によって出現する적の強さに보정が与えられる
 ;
-;1,하니엘이벤트フラグ	 -1,하니엘撃破, 1,에키드나의뢰保留		2,에키드나의뢰受諾		3,カテドラル保留		4,カテドラル受諾
+;1,하니엘이벤트フラグ	 -1,하니엘撃破, 1,에키드나의뢰保留		2,에키드나의뢰受諾		3,카테드랄保留		4,카테드랄受諾
 ;2,하니엘友好
 ;
 ;10, 初回
@@ -22,6 +22,7 @@
 ;	Edit	Date			Author					Reason
 ;	001		20XX/XX/XX								新規作成
 ;	002		2019/04/22								メシアン系エネミー추가
+;	003		2020/08/20								아이템関連と카테드랄関連を변경
 
 
 ;=======================================================================
@@ -264,7 +265,7 @@ SELECTCASE ARGS
 	;落とし穴
 	CASE "P"
 		RETURN 15
-	;ダメージ罠はMASTERがLAWの時は設置されない
+	;데미지罠はMASTERがLAWの時は設置されない
 	;HP罠
 	CASE "H"
 		IF ABL:MASTER:속성LC == 1
@@ -623,7 +624,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				ELSE
 					CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "빨리 에키드나를 쓰러뜨려주세요/카테드랄이 파괴되면/돌이킬 수 없는 일이 됩니다"
 				ENDIF
-			;カテドラル防衛保留
+			;카테드랄防衛保留
 			CASE 3
 				CALL MESSAGE_WINDOW_D, "하니엘", "인간의 아이여/신을 위해、천년왕국을 위해/힘을 다할지어다/좋은가？"
 				CALL INPUT_SELECT_D, @"[0] 힘을 빌려준다/[1] 거절한다%\@CFLAG:MASTER:秩混치 < 170?/[2] 싸움을 건다#\@%"
@@ -635,7 +636,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 					CALL MESSAGE_WINDOW_D, "하니엘", "어찌 신께 거스르겠다고 말하는가！/그렇다면 이 천사 하니엘 몸소/지옥으로 보내주마！"
 					LOCAL = 1
 				ENDIF
-			;カテドラル侵攻受諾
+			;카테드랄侵攻受諾
 			CASE 4
 				CALL MESSAGE_WINDOW_D, "하니엘", "서둘러 카테드랄로 향할지어다/가이아교도의 마음대로 하게 해서는 안될 것이다"
 		ENDSELECT
@@ -673,14 +674,16 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				$YES
 				CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "그렇습니까/맡아주시는 겁니까/감사합니다"
 				CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "당신은 아직/악마에게 혼을/팔아 넘기지 않으셨군요"
-				CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "그렇다면 이것을 가지고 가주세요/분명 도움이 될 거예요"
-				CALL MESSAGE_WINDOW_D, "", @"＞￥100000을 손에 넣었다%\@ABL:MASTER:속성LC == 1 ? /＞소닉블레이드를 손에 넣었다/＞법의를 손에 넣었다 #\@%"
+				CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "그렇다면 이것을 가지고 가주세요/きっとお役に立つでしょう"
+				;----- 003 ADD  ------- ロウじゃなくても承諾すればもらえるように
+				;CALL MESSAGE_WINDOW_D, "", @"＞￥100000을 손에 넣었다%\@ABL:MASTER:속성LC == 1 ? /＞소닉블레이드을 손에 넣었다/＞법의옷을 손에 넣었다 #\@%"
+				CALL MESSAGE_WINDOW_D, "", "＞￥100000을 손에 넣었다/＞소닉블레이드을 손에 넣었다/＞법의를 손에 넣었다%"
 				MONEY += 100000
-				;ロウのときは소닉블레이드と법의もついてくる
-				IF ABL:MASTER:속성LC == 1
+				;ロウのときは소닉블레이드と법의옷もついてくる
+				;IF ABL:MASTER:속성LC == 1
 					CALL GET_ITEMS, "소닉블레이드", 1
 					CALL GET_ITEMS, "법의", 1
-				ENDIF
+				;ENDIF
 				던전フラグ:(FLAG:現던전):1 = 2
 				CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "그럼 부탁했다구요"
 			;에키드나拒否
@@ -688,9 +691,11 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				$NO
 				CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "그렇습니까……/마음이 바뀌시면/다시 여기로 와주세요"
 				던전フラグ:(FLAG:現던전):1 = 1
-			;カテドラル防衛受諾
+			;카테드랄防衛受諾
 			CASE 20
-				CALL MESSAGE_WINDOW_D, "하니엘", "그럼 카테드랄로 가도록 하거라/긴자의 지하에 가거라"
+				;----- 003 ADD  ------- ギンザを通らなくても카테드랄に行けるように
+				;CALL MESSAGE_WINDOW_D, "하니엘", "では카테드랄へ行くが良い/ギンザの地下に行くがよい"
+				CALL MESSAGE_WINDOW_D, "하니엘", "그럼 카테드랄로 가도록 하거라/우리에게 협력한다면 긴자의 지하를 통할 필요가 없겠지"
 				CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "잘됐네요/하니엘님도 기뻐하십니다"
 				;ロウの場合はここで지저스헬름をもらえる
 				IF ABL:MASTER:속성LC == 1
@@ -704,7 +709,7 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				;시나가와進行フラグ
 				던전フラグ:(FLAG:現던전):1 = 4
 				던전フラグ:20:0 |= 1
-			;カテドラル防衛拒否
+			;카테드랄防衛拒否
 			CASE 21
 				CALL MESSAGE_WINDOW_D, "하니엘", "신을 위해 싸우는 것을 거부하는 것인가？/그러한 일이 용서될거라 생각하는가！"
 				CALL MESSAGE_WINDOW_D, SAVESTR:로우히로コールネーム, "하니엘님、기다려주세요/이 사람은 아직 자신의 운명을 깨닫지 못했을 뿐일 겁니다/곧 신을 위해 싸우지 않으면 안된다는 것을 깨달을 겁니다"
@@ -879,7 +884,7 @@ ELSEIF LOCALS == "마카"
 ELSEIF LOCALS == "MAG" || LOCALS == "ＭＡＧ"
 	CALL GET_TREASURE_MAG, 0, LOCAL, FLAG:現던전, FLAG:現M + 75, (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100
 ELSEIF LOCALS == "ＨＰ" || LOCALS == "ＭＰ" || LOCALS == "POISON" || LOCALS == "PALYZE"
-	;LOCALS:1 종류 LOCAL ダメージ量or확률 LOCALS:2 相性
+	;LOCALS:1 종류 LOCAL 데미지量or확률 LOCALS:2 相性
 	CALL GET_TREASURE_TRAP, LOCALS, LOCAL, GET_TYPE_NUM(LOCALS:1), FLAG:現던전, FLAG:現M + 75, (DA:(FLAG:現X):(FLAG:現Y) / 10) % 100
 ELSE
 	IF GETNUM(ITEM, LOCALS) == -1

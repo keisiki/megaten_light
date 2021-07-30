@@ -723,7 +723,7 @@ RETURN 1
 ;입력行動を-1とターゲットを-1にしておく
 CFLAG:ARG:입력行動 = -1
 CFLAG:ARG:ターゲット = -1
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF RAND:2
 		CFLAG:ARG:입력行動 = [[스킬:롱기누스카피]]
 	ELSE
@@ -770,7 +770,7 @@ RETURN 1
 ;입력行動を-1とターゲットを-1にしておく
 CFLAG:ARG:입력行動 = -1
 CFLAG:ARG:ターゲット = -1
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF RAND:3
 		CFLAG:ARG:입력行動 = [[스킬:롱기누스카피]]
 	ELSEIF RAND:2
@@ -860,7 +860,7 @@ ENDIF
 ;입력行動を-1とターゲットを-1にしておく
 CFLAG:ARG:입력行動 = -1
 CFLAG:ARG:ターゲット = -1
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF !RAND:4
 		CFLAG:ARG:입력行動 = ABL:ARG:스킬1
 	ELSEIF !RAND:3
@@ -919,7 +919,7 @@ RETURN 1
 ;입력行動を-1とターゲットを-1にしておく
 CFLAG:ARG:입력行動 = -1
 CFLAG:ARG:ターゲット = -1
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	SELECTCASE RAND:100
 		CASE IS < 50
 			CFLAG:ARG:입력行動 = [[스킬:가이스티브블릿츠]]
@@ -964,7 +964,7 @@ RETURN 1
 ;입력行動を-1とターゲットを-1にしておく
 CFLAG:ARG:입력行動 = -1
 CFLAG:ARG:ターゲット = -1
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	SELECTCASE RAND:100
 		CASE IS < 50
 			CFLAG:ARG:입력行動 = [[스킬:가이스티브블릿츠]]
@@ -1009,7 +1009,7 @@ RETURN 1
 ;입력行動を-1とターゲットを-1にしておく
 CFLAG:ARG:입력行動 = -1
 CFLAG:ARG:ターゲット = -1
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	CFLAG:ARG:입력行動 = [[스킬:요화열풍]]
 ELSEIF CFLAG:ARG:行動した횟수 == 0
 	IF CFLAG:ARG:集中フラグ

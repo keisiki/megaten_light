@@ -27,7 +27,7 @@ PRINTFORMW 적당히 처리해볼까‥‥。
 ;内容
 ;====================
 @REQUEST_19
-
+#DIM LCOUNT
 #DIM FIND_MID_STU ;여중생 찾아요
 FIND_MID_STU = 0  ;변수 초기화
 
@@ -86,7 +86,7 @@ ELSE
 			PRINTFORMW 하지만、쿄우코라 불린 소녀는 그 자리에 남아있엇다。
 			PRINTFORMW 「‥‥팬텀의 서머너、힘을 빌려줘‥‥」
 			PRINTFORMW 소녀는 조그마한 소리로 도움을 청했다。
-			PRINTFORMW 코바야시와、그녀의 배후에 있는 악마‥‥소녀의 말을 믿는다면 타천사 오세‥‥를 처리하는 건、원래 %CALLNAME:MASTER%의 일이다。
+			PRINTFORMW 코바야시와、그의 배후에 있는 악마‥‥소녀의 말을 믿는다면 타천사 오세‥‥를 처리하는 건、원래 %CALLNAME:MASTER%의 일이다。
 			PRINTFORMW %조사처리(CALLNAME:MASTER,"가")% 고개를 끄덕이니、쿄우코는 안심한듯이 웃었다。
 			PRINTFORMW 먼저 침입한 인간의 구출은 쿄우코에게 맡기고、%조사처리(CALLNAME:MASTER,"는")% 앞으로 나아갔다。
 			PRINTFORMW ‥‥‥‥‥‥
@@ -154,18 +154,18 @@ ELSE
 ENDIF
 ;LOCAL:0 오세강화なし　1 레벨업　스킬추가　2 行動횟수추가
 IF LOCAL == 0
-	CALL SET_ENEMY,9, 1704,40, 0, 1
+	CALL SET_ENEMY,7, 1704,40, 0, 1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
 	CFLAG:(CHARANUM-1):行動횟수 = 2
 ELSEIF LOCAL == 1
-	CALL SET_ENEMY,9, 1704,45, 0, 1
+	CALL SET_ENEMY,7, 1704,45, 0, 1
 	ABL:(CHARANUM-1):스킬5 = 706
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
 	CFLAG:(CHARANUM-1):行動횟수 = 2
 ELSE
-	CALL SET_ENEMY,9, 1704,50, 0, 1
+	CALL SET_ENEMY,7, 1704,50, 0, 1
 	ABL:(CHARANUM-1):스킬5 = 706
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
@@ -222,10 +222,15 @@ IF LOCAL == 0
 		PRINTFORMW 하지만 %CALLNAME:MASTER%에게 있어선 그런 것들 따위는 얼마든지 해결할 능력이 있다.
 		PRINTFORMW 그렇기에 그녀에게 아무것도 걱정할 필요없다고 말했다.
 		PRINTFORMW 「뭐? 하지만… 가이아교는 고아였던 나를 키워준 은혜가 있는걸.」
-		PRINTFORMW 비록 말단이긴 하지만 자신은 팬텀의 서머너다. 연줄도 어느정도 있으니 사소한 문제는 웬만하면 해결할 수 있을 것이다.
+		IF TALENT:MASTER:200 || HAVE_SKILL(MASTER, [[스킬:사바트마]] )
+			PRINTFORMW 비록 말단이긴 하지만 자신은 팬텀의 서머너다. 연줄도 어느정도 있으니 사소한 문제는 웬만하면 해결할 수 있을 것이다.
+		ELSE
+			PRINTFORMW 비록 말단이긴 하지만 자신은 팬텀에서 일하고 있는 데빌 버스터다.
+			PRINTFORMW 연줄도 어느정도 있으니 사소한 문제는 웬만하면 해결할 수 있을 것이다.
+		ENDIF
 		PRINTFORMW 학교의 문제는 비록 전학을 하게 되겠지만 %CALLNAME:MASTER%의 곁에 있더라도 얼마든지 다닐 수 있다.
 		FIND_MID_STU = GETCHARA([[キャラ:코시로]])
-		IF FIND_MID_STU
+		IF FIND_MID_STU > 0
 			PRINTFORMW 당장 %CALLNAME:MASTER%의 주변만 둘러봐도 그런 방식으로 통학하는 말괄량이 여중생이 한 명 딸려있다.
 			PRINTFORMW 더 늘어난다고 해도 별로 큰 문제가 되지는 않을 것이다. 게다가 그 코시로와는 달리 쿄우코는 대하기가 더 편한 인상이다.
 		ENDIF
@@ -304,11 +309,11 @@ ELSEIF LOCAL == 1
 		PRINTFORMW 「%CALLNAME:MASTER%에게 붙는 것은 딱히 상관없겠지」
 		PRINTFORMW 쿠사카 마리카가 동료로 들어왔다。
 		CALL ADD_NEW_COMPANION,4580,500
-		REPEAT CHARANUM
+		FOR LCOUNT, 0, CHARANUM
 			;전투참가可能で加入するが、조교で전투참가불가능になる
-			SIF NO:COUNT == 4580
-				CFLAG:COUNT:전투참가불가능 = -1
-		REND
+			SIF NO:LCOUNT == 4580
+				CFLAG:LCOUNT:전투참가불가능 = -1
+		NEXT
 	ELSE
 		PRINTFORMW 「응、그럼」
 		PRINTFORMW 마리카와 헤어졌다。

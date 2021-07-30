@@ -947,6 +947,10 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 				CALL MESSAGE_WINDOW_D, "미륵보살", "그러나 나는 그런 애처로운 그대들에게 자비를 베푼다/일찌감치 그 고행의 윤회로부터 해방해주마 "
 				CALL MESSAGE_WINDOW_D, "미륵보살", "그것이 내가 그대들에게 해줄 수 있는/최선이자 유일한 구세다 "
 				
+			FLAG:도주불가フラグ = 1
+			FLAG:회화불능フラグ = 1
+			FLAG:선제기습취소 = 1
+			
 			CALL SET_ENEMY,9,[[キャラ:미륵보살]],58,0,2
 				CFLAG:(CHARANUM-1):行動횟수 = 3
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 4000
@@ -966,6 +970,14 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 			CALL HEALTH_CHARA,(CHARANUM-1)
 			
 				CALL BATTLE_START
+				
+			FLAG:先制공격フラグ = 0
+			FLAG:도주불가フラグ = 0
+			FLAG:회화불능フラグ = 0
+			FLAG:선제기습취소 = 0
+			FLAG:エンカウント率 = 0
+			FLAG:未遭遇歩数 = 0
+			
 				CALL MESSAGE_WINDOW_D, "미륵보살", "큭… "
 				CALL MESSAGE_WINDOW_D, "", "미륵보살은 달아나려 한다 "
 				CALL MESSAGE_WINDOW_D, "", "그러나 갑자기 EGG 안에서 나온 서프의 공격을 받는다 "
@@ -1132,9 +1144,9 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		CALL GET_TREASURE, 11815 , 1 , FLAG:現던전, LOCAL , LOCAL:1
 	CASE 3901
 		CALL GET_TREASURE, 11614 , 1 , FLAG:現던전, LOCAL , LOCAL:1
-	CASE 400
+	CASE 4000
 		CALL GET_TREASURE_MONEY , 0 , 20000 , FLAG:現던전, LOCAL , LOCAL:1
-	CASE 401
+	CASE 4001
 		CALL GET_TREASURE, [[아이템:도반옥]] , 3 , FLAG:現던전, LOCAL , LOCAL:1
 
 ENDSELECT
@@ -1227,7 +1239,7 @@ SIF !FINDCHARA_ENEMY([[キャラ:미륵보살]])
 LOCAL= RESULT:1
 
 
-IF RAND:3
+IF !RAND:3
 	LOCAL:1 = CPOS(LOCAL)
 
 	SETCOLOR 0xff0033

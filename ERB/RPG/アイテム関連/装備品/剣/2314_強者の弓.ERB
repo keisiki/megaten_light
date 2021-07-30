@@ -23,9 +23,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2314,ARG,ARG:1 = -1
-RETURN 0
-
 @방어상성_2314,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -61,6 +58,16 @@ RETURN 0
 @장비箇所_2314
 RETURN GET_EQUIPNUM("검")
 
+;미들샷
+@장비추가스킬_2314,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 124
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -82,6 +89,9 @@ PRINTL 장비조건：LV45～
 
 @장비해설_2314
 PRINTL 크게 만들어진 강궁
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：미들샷
+RESETCOLOR
 
 RETURN 0
 

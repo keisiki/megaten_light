@@ -3,7 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_910,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:미샤구지님]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:미샤구지님]])
 	RESULTS = 타타리염전
 ELSE
 	RESULTS = 방전
@@ -15,7 +15,7 @@ RETURN 100
 
 ;　위력
 @SKILL_POWER_910, ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:지고와트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:지고와트]])
 	RETURN 280
 ELSE
 	RETURN 140
@@ -27,7 +27,7 @@ RETURN 1
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_910,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:지고와트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:지고와트]])
 	RETURN 1
 ELSE
 	RETURN 5
@@ -48,12 +48,12 @@ RETURN 6
 ;전격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_910
+@SKILL_DECIDE_TYPE_910, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_910
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_910, ARG
 RETURN 2
 
 
@@ -67,7 +67,7 @@ RETURN 3
 
 ;　範囲　11체　21열　3전체　4　적아군전체
 @SKILL_SPHERE_910,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:지고와트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:지고와트]])
 	RETURN 2
 ELSE
 	RETURN 3
@@ -114,9 +114,9 @@ RETURN 1
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
 @SKILL_ADDTIONAL_STATE_910,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:미샤구지님]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:미샤구지님]])
 	RETURN 10
-ELSEIF SKILL_CHANGE_CHECK(ARG, [[キャラ:지고와트]]) == 1
+ELSEIF SKILL_CHANGE(ARG, [[キャラ:지고와트]])
 	RETURN GET_STATE_NUM("PALYZE")
 ELSE
 	RETURN 2
@@ -124,7 +124,7 @@ ENDIF
 
 ;추가효과상성
 @SKILL_ADDTIONAL_TYPE_910,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:미샤구지님]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:미샤구지님]])
 	RETURN 9
 ELSE
 	RETURN 6
@@ -143,7 +143,7 @@ RETURN 95
 ;스킬及び行動の実行
 ;====================================================
 @ACTION_910,ARG,ARG:1
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:지고와트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:지고와트]])
 	CALL ATTACK_FIELD,ARG,ARG:1,910
 ELSE
 	CALL ATTACK_RAND,ARG,ARG:1,910

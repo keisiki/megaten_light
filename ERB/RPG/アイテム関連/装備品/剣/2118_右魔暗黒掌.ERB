@@ -28,11 +28,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2118,ARG,ARG:1 = -1
-SELECTCASE ARG
-ENDSELECT
-RETURN 0
-
 @방어상성_2118,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -56,6 +51,18 @@ RETURN 1
 @장비箇所_2118
 RETURN GET_EQUIPNUM("검")
 
+;헬스트라이크、만마의일격
+@장비추가스킬_2118,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+			RETURN 241
+		CASE 1
+			RETURN 2062
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -76,6 +83,9 @@ PRINTL 장비조건： LV70〜
 @장비해설_2118
 PRINTL 검게 빛나는 권투구
 PRINTL 철의 거인을 쓰러뜨릴 정도의 힘이 있다
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬존재
+RESETCOLOR
 
 
 @引継ぎ可不可_2118

@@ -658,9 +658,9 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 		PRINTL 
 		PRINTL [0] 구한다
 		PRINTL [1] 무시한다
-		;IF FLAG:DEBUG		
+		IF FLAG:DEBUG		
 			PRINTL [2] 범한다
-		;ENDIF
+		ENDIF
 		$INPUT_LOOP1
 		INPUT
 		IF RESULT == 0
@@ -697,9 +697,9 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 		PRINTL 
 		PRINTL [0] 구한다
 		PRINTL [1] 무시한다
-		;IF FLAG:DEBUG		
+		IF FLAG:DEBUG		
 			PRINTL [2] 범한다
-		;ENDIF
+		ENDIF
 		$INPUT_LOOP2
 		INPUT
 		IF RESULT == 0
@@ -740,9 +740,9 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 		PRINTL 
 		PRINTL [0] 구한다
 		PRINTL [1] 무시한다
-		;IF FLAG:DEBUG		
+		IF FLAG:DEBUG		
 			PRINTL [2] 범한다
-		;ENDIF
+		ENDIF
 		$INPUT_LOOP3
 		INPUT
 		IF RESULT == 0
@@ -909,6 +909,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 
 	;三階　고토우　一度눈
 	ELSEIF FLAG:現M == 3 && FLAG:現X == 8 && FLAG:現Y == 3 && 던전フラグ:40:22 == 0
+
 		PRINTFORML 이치가야 주둔지의 3층
 		PRINTFORML 근대적인 건물가운데에 있는 광대한 전통 일본식 방
 		PRINTFORML 그 중앙에 서 있는 반라의 남자가 당신을 맞이했다.
@@ -919,8 +920,8 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 			PRINTFORMW 「적이 명확한 악마가 되어서, 어쩌면 사람끼리 죽이는 것보다는 낫다고 생각해야 할지도 모르겠다만」
 			;宮下쇼고がパーティに居る場合
 			IF FINDCHARA_B(4630) == 2
-				PRINTFORML ……고토우はチラりと宮下を見た。
-				PRINTFORMW だが、眉の一つも動かさないまま、당신の方へと視線を戻した。
+				PRINTFORML ……고토우는 힐끗 미야시타를 보았다。
+				PRINTFORMW 하지만、눈썹 하나 까딱하지 않은 채、당신 쪽으로 시선을 되돌렸다。
 			ENDIF
 			PRINTFORMW 「어쨌든 간에… 우리들 인간이 가만히 앉아 죽음을 맞이할 수는 없네」
 			PRINTFORMW 「힘이 있는 자네는 이해 못할지도 모르겠다만, 약한 인간은 저항하고 저항할 수밖에 없는 걸세」
@@ -931,8 +932,8 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 			PRINTFORMW 「자네들의 목적은 나를 말살하는 것쯤 되겠지」
 			;宮下쇼고がパーティに居る場合
 			IF FINDCHARA_B(4630) == 2
-				PRINTFORML ……고토우はチラりと宮下を見た。
-				PRINTFORMW だが、眉の一つも動かさないまま、당신の方へと視線を戻した。
+				PRINTFORML ……고토우는 힐끗 미야시타를 보았다。
+				PRINTFORMW 하지만、눈썹 하나 까딱하지 않은 채、당신 쪽으로 시선을 되돌렸다。
 			ENDIF
 			PRINTFORML 「허나… 먼저 내 이야기를 들어주길 바라네」
 			PRINTFORML 「지금… 신의 이름 아래에 천년왕국을 만들어내려는 계획이 진행되고 있다」
@@ -954,8 +955,8 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 		;宮下쇼고がパーティに居る場合
 		IF FINDCHARA_B(4630) == 2
 			PRINTFORML 　
-			PRINTFORML 「五島さん……」
-			PRINTFORMW 　宮下が複雑な表情で俯いている……。
+			PRINTFORML 「고토우 씨……」
+			PRINTFORMW 　미야시타가 복잡한 표정으로 고개를 숙이고 있다……。
 		ENDIF
 		
 	;三階　고토우　ニ度눈
@@ -1029,7 +1030,6 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 			
 			;宮下쇼고がパーティに居る場合
 			IF FINDCHARA_B(4630) == 2
-				
 				PRINTFORMW 끝장을 내려 하는 %조사처리(CALLNAME:MASTER,"를")% 미야시타가 제지했다.
 				
 				PRINTFORMW 「고토우 육장 각하」

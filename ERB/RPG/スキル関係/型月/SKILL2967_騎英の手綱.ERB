@@ -15,7 +15,7 @@ SIF FLAG:拡散フラグ
 	RETURN 400
 RETURN 500
 
-@SKILL_CRITICAL_RATE_2967
+@SKILL_CRITICAL_RATE_2967, ARG
 RETURN 0
 
 ;　최저공격횟수
@@ -42,12 +42,12 @@ RETURN 40
 RETURN GET_TYPE_NUM("타격")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2967
+@SKILL_DECIDE_TYPE_2967, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2967
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2967, ARG
 RETURN 1
 
 
@@ -135,7 +135,7 @@ CALL ATTACK_SPREAD,ARG,ARG:1,2967
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2967
-PRINTL サーヴァント：メドゥーサが呼び出した천마を강화しての몸통박치기。
+PRINTL 서번트：메두사가 불러낸 천마를 강화하여 몸통박치기。
 
 ;継承に필요な部位
 @継承部位_2967,ARG

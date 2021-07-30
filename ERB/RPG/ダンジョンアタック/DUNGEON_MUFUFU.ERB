@@ -14,6 +14,9 @@
 ;													질내と바기나に『불결:애액』がつくように
 ;	003		2019/07/25		JK好き					LOCAL:4がリセットされていないために윤간されていないのに윤간경험が入る不具合を修正
 ;													仲魔の子を임신時に父親が正しく표시されない不具合を修正
+;	004		2021/04/27		JK好き					280行目くらいから～中出し回数に応じてテキトーにCFLAG:子宮現在容量を加算
+;													CALL SHOW_ADD_EXPの後に獲得経験を使う計算をしていた部分をCALL SHOW_ADD_EXPの前に移動
+;	005		2021/06/01		JK好き					屋外輪姦時に対象が存在しない場合の処理を考慮していなかったバグの修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 ;-----------------------------------------------------
@@ -276,7 +279,54 @@ ELSEIF ARG:1 > -1
 ENDIF
 PRINTL 
 
-;임신판정用
+
+IF CFLAG:(ARG):中出し횟수
+	SELECTCASE CFLAG:(ARG):中出し횟수
+		CASE 1 TO 10
+			CFLAG:(ARG):子宮現在容量 += 10
+		CASE 11 TO 20
+			CFLAG:(ARG):子宮現在容量 += 20
+		CASE 21 TO 30
+			CFLAG:(ARG):子宮現在容量 += 30
+		CASE 31 TO 50
+			CFLAG:(ARG):子宮現在容量 += 50
+		CASEELSE
+			IF FLAG:ふたごちゃんフラグ > 0
+				CFLAG:(ARG):子宮現在容量 += 100 + RAND:(CFLAG:(ARG):中出し횟수)
+			ELSE
+				CFLAG:(ARG):子宮現在容量 += 100
+			ENDIF
+	ENDSELECT
+	;디버그용
+	DEBUGPRINTFORML %CALLNAME:(ARG)%中出し횟수{CFLAG:(ARG):中出し횟수}
+	DEBUGPRINTFORML %CALLNAME:(ARG)%子宮現在容量{CFLAG:(ARG):子宮現在容量}
+ENDIF
+
+IF ARG:1 > -1
+	IF CFLAG:(ARG:1):中出し횟수
+		SELECTCASE CFLAG:(ARG:1):中出し횟수
+			CASE 1 TO 10
+				CFLAG:(ARG:1):子宮現在容量 += 10
+			CASE 11 TO 20
+				CFLAG:(ARG:1):子宮現在容量 += 20
+			CASE 21 TO 30
+				CFLAG:(ARG:1):子宮現在容量 += 30
+			CASE 31 TO 50
+				CFLAG:(ARG:1):子宮現在容量 += 50
+			CASEELSE
+				IF FLAG:ふたごちゃんフラグ > 0
+					CFLAG:(ARG:1):子宮現在容量 += 100 + RAND:(CFLAG:(ARG:1):中出し횟수)
+				ELSE
+					CFLAG:(ARG:1):子宮現在容量 += 100
+				ENDIF
+		ENDSELECT
+		;디버그용
+		DEBUGPRINTFORML %CALLNAME:(ARG:1)%中出し횟수{CFLAG:(ARG:1):中出し횟수}
+		DEBUGPRINTFORML %CALLNAME:(ARG:1)%子宮現在容量{CFLAG:(ARG:1):子宮現在容量}
+	ENDIF
+ENDIF
+
+;妊娠判定用
 FOR LOCAL , 0 , 1 + (ARG:1 > -1 && !LOCAL:3)
 	IF PREGNANCY_ABLE((ARG:LOCAL)) && TCVAR:(ARG:LOCAL):획득질사경험
 		IF (ARG:(!LOCAL)) == MASTER
@@ -298,7 +348,7 @@ FOR LOCAL , 0 , 1 + (ARG:1 > -1 && !LOCAL:3)
 			CFLAG:(ARG:LOCAL):顧客の中出氏による임신판정 = TCVAR:(ARG:LOCAL):획득질사경험*2
 			CHARA = -1
 		ENDIF
-		CALL PREGNANCY_CHECK, (ARG:LOCAL),
+		CALL PREGNANCY_CHECK, (ARG:LOCAL)
 		;임신
 		IF RESULT && CHARA > -1
 			CALL SET_FATHERINFO, (ARG:LOCAL), NO:(ARG:(!LOCAL)), CFLAG:CHARA:キャラ固有の번호, CALLNAME:(ARG:(!LOCAL))
@@ -556,7 +606,7 @@ IF TALENT:음란 || TALENT:창부 || ABL:노출증 > 5
 		PRINTFORMW 걸치고 있던 옷을 한 장씩 벗고 그 자리에서 자신의 민감한 장소를 자극하기 시작했다…
 	ENDIF
 ELSE
-	IF 위험일(TARGET) == 2
+	IF 위험일(TARGET) >= 2
 		PRINTFORML 암컷의 냄새를 풍기는 비순을 손으로 필사적으로 억누르면서 참고 있었지만, 
 		PRINTFORM 참을 수 없어졌는지 그 자리에 털썩 주저앉아 
 	ELSE
@@ -599,7 +649,7 @@ FOR LOCAL , 1 , 7
 		仲마인数 ++
 NEXT
 PRINTFORML %조사처리(CALLNAME,"는")% 
-SIF 위험일(TARGET) == 2
+SIF 위험일(TARGET) >= 2
 	PRINTFORM 얼굴을 새빨갛게 물들이면서 
 IF 仲마인数 > 1
 	PRINTFORML 동료마의 곁을 떠나 
@@ -609,7 +659,7 @@ ENDIF
 IF TALENT:음란 || TALENT:창부 || ABL:노출증 > 5
 	PRINTFORML 누군가가 올지도 모른다는 기대에 가슴을 부풀리면서, 
 	PRINTFORMW 조금이라도 오랫동안 이 순간을 즐기기 위해, 자기 몸 이곳저곳을 정성들여 천천히 희롱했다……
-ELSEIF 위험일(TARGET) == 2
+ELSEIF 위험일(TARGET) >= 2
 	IF TEQUIP:유방노출 == -1 && TEQUIP:음순노출 == -1
 		PRINTFORM 드러난 유방과 비순을 난폭하게 더듬고, 
 	ELSE
@@ -762,16 +812,48 @@ IF GROUPMATCH(TFLAG:이벤트구상呼び出し用 , 79 , 80)
 	ENDIF
 	;섹스
 	;PLAYER→TARGET
-	IF CFLAG:TARGET:本番횟수
-		LOCALS:21 = 와(과) 얼싸안으며 {CFLAG:TARGET:本番횟수}회 어울려 
-		LOCALS:22 = 에게 질 안쪽을 자극하는 후배위로 {CFLAG:TARGET:本番횟수}회 괴롭혀져 
-		LOCALS:23 = 에게 껴안기면서 {CFLAG:TARGET:本番횟수}회、정을 나누어 
-		LOCALS:24 = 와(과) {CFLAG:TARGET:本番횟수}회 사랑을 나누어 
-	ELSEIF CFLAG:PLAYER:本番횟수
-		LOCALS:21 = 와(과) 끌어안은 채로 {CFLAG:PLAYER:本番횟수}회 범해져 
-		LOCALS:22 = 에게 공격받는 형태의 후배위로 {CFLAG:PLAYER:本番횟수}회 괴롭혀져 
-		LOCALS:23 = 는(은) %CALLNAME:TARGET%를 밀어넘어뜨리고 탐욕스럽게 {CFLAG:PLAYER:本番횟수}회、정을 주고받아 
-		LOCALS:24 = 와 {CFLAG:PLAYER:本番횟수}회 사랑을 주고받아 
+	IF (TALENT:PLAYER:남자 == 1 && TALENT:TARGET:남자 == 0) || ((TALENT:PLAYER:남자 == 0 && (TALENT:PLAYER:후타나리 == 1 || TALENT:PLAYER:구현 == 1)) && TALENT:TARGET:남자 == 0)
+	;[남/오토코노코 → 여/후타나리/구현] or [후타나리/구현 → 여/후타나리/구현]
+		IF RAND:2 == 0
+		;정상위
+			IF CFLAG:TARGET:本番횟수
+				LOCALS:21 = 와(과) 얼싸안으며 {CFLAG:TARGET:本番횟수}회 어울려 
+				LOCALS:22 = 에게 질 안쪽을 자극하는 정상위로 {CFLAG:TARGET:本番횟수}회 괴롭혀져 
+				LOCALS:23 = 에게 껴안기면서 {CFLAG:TARGET:本番횟수}회、정을 나누어 
+				LOCALS:24 = 와(과) {CFLAG:TARGET:本番횟수}회 사랑을 나누어 
+			ELSEIF CFLAG:PLAYER:本番횟수
+				LOCALS:21 = 와(과) 끌어안은 채로 {CFLAG:PLAYER:本番횟수}회 범해져 
+				LOCALS:22 = 에게 공격받는 형태의 정상위로 {CFLAG:PLAYER:本番횟수}회 괴롭혀져 
+				LOCALS:23 = 는(은) %CALLNAME:TARGET%를 밀어넘어뜨리고 탐욕스럽게 {CFLAG:PLAYER:本番횟수}회、정을 주고받아 
+				LOCALS:24 = 와 {CFLAG:PLAYER:本番횟수}회 사랑을 주고받아 
+			ENDIF
+		ELSE
+		;후배위
+			IF CFLAG:TARGET:本番횟수
+				LOCALS:21 = 와(과) 얼싸안으며 {CFLAG:TARGET:本番횟수}회 어울려 
+				LOCALS:22 = 에게 질 안쪽을 자극하는 후배위로 {CFLAG:TARGET:本番횟수}회 괴롭혀져 
+				LOCALS:23 = 에게 껴안기면서 {CFLAG:TARGET:本番횟수}회、정을 나누어 
+				LOCALS:24 = 와(과) {CFLAG:TARGET:本番횟수}회 사랑을 나누어 
+			ELSEIF CFLAG:PLAYER:本番횟수
+				LOCALS:21 = 와(과) 끌어안은 채로 {CFLAG:PLAYER:本番횟수}회 범해져 
+				LOCALS:22 = 에게 공격받는 형태의 후배위로 {CFLAG:PLAYER:本番횟수}회 괴롭혀져 
+				LOCALS:23 = 는(은) %CALLNAME:TARGET%를 밀어넘어뜨리고 탐욕스럽게 {CFLAG:PLAYER:本番횟수}회、정을 주고받아 
+				LOCALS:24 = 와 {CFLAG:PLAYER:本番횟수}회 사랑을 주고받아 
+			ENDIF
+		ENDIF
+	ELSEIF TALENT:PLAYER:남자 == 0 && (TALENT:TARGET:남자 == 1 || (TALENT:TARGET:남자 == 0 && (TALENT:TARGET:후타나리 == 1 || TALENT:TARGET:구현 == 1)))
+	;[여/후타나리/구현 → 남/오토코노코/후타나리/구현]
+		IF CFLAG:TARGET:本番횟수
+			LOCALS:21 = 와(과) 얼싸안으며 {CFLAG:TARGET:本番횟수}회 어울려 
+			LOCALS:22 = 에게 질 안쪽을 자극하는 기승위로 {CFLAG:TARGET:本番횟수}회 괴롭혀져 
+			LOCALS:23 = 에게 껴안기면서 {CFLAG:TARGET:本番횟수}회、정을 나누어 
+			LOCALS:24 = 와(과) {CFLAG:TARGET:本番횟수}회 사랑을 나누어 
+		ELSEIF CFLAG:PLAYER:本番횟수
+			LOCALS:21 = 와(과) 끌어안은 채로 {CFLAG:PLAYER:本番횟수}회 범해져 
+			LOCALS:22 = 에게 공격받는 형태의 기승위로 {CFLAG:PLAYER:本番횟수}회 괴롭혀져 
+			LOCALS:23 = 는(은) %CALLNAME:TARGET%를 밀어넘어뜨리고 탐욕스럽게 {CFLAG:PLAYER:本番횟수}회、정을 주고받아 
+			LOCALS:24 = 와 {CFLAG:PLAYER:本番횟수}회 사랑을 주고받아 
+		ENDIF
 	ENDIF
 	;애널섹스
  	IF CFLAG:TARGET:애널횟수

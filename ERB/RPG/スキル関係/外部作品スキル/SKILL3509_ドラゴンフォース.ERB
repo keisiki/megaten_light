@@ -35,12 +35,12 @@ RETURN 30
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3509
+@SKILL_DECIDE_TYPE_3509, ARG
 RETURN 1
 ;特技
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3509
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3509, ARG
 RETURN 0
 
 
@@ -118,7 +118,7 @@ CFLAG:ARG:명중강화 = MIN(32, CFLAG:ARG:명중강화 + 4)
 CFLAG:ARG:회피강화 = MIN(32, CFLAG:ARG:회피강화 + 4)
 
 
-PRINTFORMW %CALLNAME:ARG%の방어と공격が大幅に上がり、素早さも上がった
+PRINTFORMW %CALLNAME:ARG%의 방어와 공격이 크게 오르고、민첩성도 높아졌다
 
 
 
@@ -141,7 +141,7 @@ PRINTFORMW %CALLNAME:ARG%の방어と공격が大幅に上がり、素早さも�
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3509
-PRINTL 自身の공격、방어を上げ명중회피も上げる
+PRINTL 자신의 공격、방어를 올리고 명중과 회피도 올린다
 
 ;継承に필요な部位
 @継承部位_3509,ARG

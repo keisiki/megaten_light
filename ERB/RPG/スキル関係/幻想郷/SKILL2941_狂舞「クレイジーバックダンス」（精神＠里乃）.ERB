@@ -2,7 +2,7 @@
 @SKILL_NAME_2941,ARG
 RESULTS = 광무「크레이지백댄스＠정신」
 SIF  GETBIT (FLAG:カスタムゲーム화면,1)
-	RESULTS = 광무「ク레이ジーバッ쿠단ス」
+	RESULTS = 광무「크레이지백댄스＠정신」
 
 
 ;　명중
@@ -35,12 +35,12 @@ RETURN 50
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2941
+@SKILL_DECIDE_TYPE_2941, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2941
+@SKILL_DAMAGETYPE_2941, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か

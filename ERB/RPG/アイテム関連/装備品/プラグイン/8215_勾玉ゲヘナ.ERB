@@ -28,14 +28,10 @@ RETURN 0
 
 @방어상성_8215,ARG,ARG:1 = -1
 SELECTCASE GET_TYPE(ARG)
-	CASE "화염","핵열"
-		RETURN -100
+	CASE "화염"
+		RETURN 0
 	CASE "빙결"
 		RETURN 200
-	CASE "정신","파마"
-		RETURN 0
-	CASE "전격","충격","검격"
-		RETURN 50
 ENDSELECT
 RETURN 100
 

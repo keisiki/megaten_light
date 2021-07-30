@@ -1,5 +1,5 @@
 ﻿;1체を爆弾化する魔法。
-;爆弾化した相손が화염・핵열相性の공격を受けると爆発し、自分と周囲にダメージを与える。
+;爆弾化した相손が화염・핵열相性の공격を受けると爆発し、自分と周囲に데미지を与える。
 
 ;스킬名
 @SKILL_NAME_1127,ARG
@@ -36,12 +36,12 @@ RETURN GET_TYPE_NUM("신경")
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1127
+@SKILL_DECIDE_TYPE_1127, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1127
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1127, ARG
 RETURN 0
 
 

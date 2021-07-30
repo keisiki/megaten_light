@@ -1,82 +1,118 @@
 ﻿
 ;======================================================
 ;장비品の데이터
-;무가의투구
+;마사카도의투구
 ;======================================================
 
 @기본능력수정_3015,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "힘"
-		RETURN 2
-	CASE "지혜"
-		RETURN 5
-	CASE "마력"
-		RETURN 4
-	CASE "인내력"
-		RETURN 2
+SIF ARG:1 < 0 || ABL:(ARG:1):속성LC != 2
+	RETURN 0
+SELECTCASE ARG
+	;CASE 2
+	;	RETURN 5
 ENDSELECT
-RETURN 0
+RETURN 2
 
 @전투능력수정_3015,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 50
-	CASE "회피"
-		RETURN 25
-	CASE "마법효과"
-		RETURN 30
-	CASE "명중"
-		RETURN 5
+#LOCALSIZE 1
+LOCAL = 0
+;94
+SELECTCASE ARG
+	CASE 2
+		LOCAL = 37
+	CASE 3
+		LOCAL = 26
+	CASE 5
+		LOCAL = 34
 ENDSELECT
-RETURN 0
+SIF ARG:1 < 0 || ABL:(ARG:1):속성LC != 2
+	RETURN LOCAL * 4/5
+RETURN LOCAL
+;SELECTCASE ARG
+;	CASE 2
+;		RETURN 48
+;	CASE 3
+;		RETURN 23
+;	CASE 5
+;		RETURN 30
+;ENDSELECT
+;RETURN 0
 
 @방어상성_3015,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "정신"
+
+SELECTCASE ARG
+	;破
+	CASE 10
 		RETURN 0
-	CASE "검격","충격","지변"
-		RETURN 50
-	CASE "파마"
-		RETURN 110
+	;火
+	CASE 4
+		RETURN 40
+	;검呪核
+	CASE 0,11,16
+		RETURN 140
+	;飛
+	CASE 1
+		SIF ARG:1 < 0 || ABL:(ARG:1):속성LC != 2
+			RETURN 100
+		RETURN -100
+;	CASE 9
+;		RETURN 0
+;	CASE 0,7,12
+;		RETURN 50
 ENDSELECT
 RETURN 100
 
 @バステ내성_3015,ARG,ARG:1 = -1
-SELECTCASE GET_STATE(ARG)
-	CASE "SHOCK","FREEZE","PALYZE"
-		RETURN -50
-	CASE "POISON","BIND"
+SELECTCASE ARG
+	CASE GET_STATE_NUM("FREEZE")
 		RETURN -100
-	CASE "HAPPY","STONE"
-		RETURN 25
 ENDSELECT
 RETURN 0
+
+@공격상성_3015, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3015, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3015, ARG = -1
+
+RETURN 1
+
+@사거리_3015, ARG = -1
+
+RETURN 1
+
+@공격범위_3015, ARG = -1
+
+RETURN 1
 
 @장비箇所_3015
 RETURN GET_EQUIPNUM("머리")
 
 @필요레벨_3015
-RETURN 100
+RETURN 80
 
 @장비조건_3015,ARG
-SIF !IS_LOOKSLIKE_MALE(ARG)
-	RETURN 0
+;SIF !IS_LOOKSLIKE_MALE(ARG)
+;	RETURN 0
 SIF ABL:ARG:속성LC != 2
 	RETURN 0
-SIF BASE:ARG:LV < 100
+SIF BASE:ARG:LV < 80
 	RETURN 0
 RETURN 1
-
-@장비조건설명_3015
-PRINTL 장비조건：♂　＆　속성Neutral LV100～
-
-@장비해설_3015
-PRINTL 日ノ本の守護神であり祟り神でもある平将門公の투구。
-PRINTL 　　　　　　　　
 
 
 @구입조건_3015
 RETURN 0
 
 @引継ぎ可不可_3015
-RETURN 0
+RETURN 1
+
+@장비조건설명_3015
+;PRINTL 장비조건：♂　＆　속성Neutral LV８０～
+PRINTL 장비조건：속성Neutral LV８０～
+
+

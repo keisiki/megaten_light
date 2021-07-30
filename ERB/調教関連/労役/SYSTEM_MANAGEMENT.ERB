@@ -11,6 +11,7 @@
 ;	001		20XX/XX/XX		----					新規作成
 ;   002     2013/01/13		TR						노역中のキャラに○をつける部分を수정
 ;	003		2014/09/19		ネトリス				노역：教会の処理を추가
+;	004		2020/07/29		Jガン					변기選択時のエ라수정(@WORKABLE)
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 ;========================================================
@@ -23,7 +24,7 @@ SELECTCASE 점포("종류", ARG)
 	CASE 10
 		PRINTFORML 　점포 종류:공중변소
 		;3行눈には규모と雇用人数
-		PRINTFORML 최대 이용자 수/日:{점포("규모",ARG),4}명　변기 설치 수：{接客人数(ARG),2}/{점포("접객고용",ARG),2}개
+		PRINTFORML 최대 이용자 수/일:{점포("규모",ARG),4}명　변기 설치 수：{接客人数(ARG),2}/{점포("접객고용",ARG),2}개
 		;4行눈には인기と선전효과
 		PRINTFORML 인기　　　　　 :{점포("인기",ARG),5} 　　선전효과：{점포("선전효과",ARG),5}　　\@ 看板변기(ARG) > -1 ? 간판변기:%CALLNAME:看板변기(ARG)% # \@
 		;5行눈には유지비
@@ -64,11 +65,6 @@ SELECTCASE 점포("종류", ARG)
 	CASE 15
 		PRINTFORML 　점포 종류:교회
 		PRINTFORML 주재인원：{接客人数(ARG),2}/{점포("접객고용",ARG),2}명
-;아이마스 모드
-	CASE 99
-		PRINTFORML 　점포 종류:베개 영업 매니져 대기소
-		PRINTFORML 주재인원：{接客人数(ARG),2}/{점포("접객고용",ARG),2}명
-	;
 ENDSELECT
 CUSTOMDRAWLINE ･
 
@@ -154,21 +150,6 @@ SELECTCASE [[점포:종류]]:ARG
 		PRINTL [11] - 봉사 활동 개별 설정
 		C:99 = 1
 		PRINTL [99] - 점포 매각
-	;아이마스 모드
-	CASE 99
-		;규모확장、設置数증가、
-		C:0 = 1
-		PRINTL [0]  - 베개 영업 인원 선택
-		C:1 = 1
-		PRINTL [1]  - 주재 인원 확장
-		C:2 = 1
-		PRINTL [2]  - 개축
-		C:3 = 1
-		PRINTL [3]  - 높은분께 부탁하기
-		C:11 = 1
-		PRINTL [11] - 봉사 활동 개별 설정
-		C:99 = 1
-		PRINTL [99] - 점포 매각
 ENDSELECT
 DRAWLINE
 PRINTL [100] - 돌아간다
@@ -214,12 +195,18 @@ SELECTCASE [[점포:종류]]:ARG
 		RETURNF 1
 
 	CASE 10
+		;맹우だとできない
+		SIF TALENT:(ARG:1):맹우
+			RETURNF 0
 		;縛り上げるだけなので、조건は無い
 		RETURNF 1
 	CASE 11
 		;主人は無理をする
 		SIF ARG:1 == MASTER
 			RETURNF 1
+		;신뢰함락はダメ
+		SIF TALENT:(ARG:1):신뢰 || TALENT:(ARG:1):동료
+			RETURNF 0
 		;노출증がないと無理
 		SIF ABL:(ARG:1):노출증 <= 0
 			RETURNF 0
@@ -231,6 +218,9 @@ SELECTCASE [[점포:종류]]:ARG
 		;主人以外
 		SIF ARG:1 == MASTER
 			RETURNF 0
+		;신뢰함락はダメ
+		SIF TALENT:(ARG:1):신뢰 || TALENT:(ARG:1):동료
+			RETURNF 0
 		SIF IS_LOOKSLIKE_MALE(ARG:1) == 0
 			RETURNF 1
 		;남자はヤる気がないとダメ
@@ -238,6 +228,9 @@ SELECTCASE [[점포:종류]]:ARG
 			RETURNF 1
 	;教会
 	CASE 13, 14, 15
+		;신뢰함락はダメ
+		SIF TALENT:(ARG:1):신뢰 || TALENT:(ARG:1):동료
+			RETURNF 0
 		;男はダメ
 		SIF IS_MALE(ARG:1)
 			RETURNF 0
@@ -245,21 +238,6 @@ SELECTCASE [[점포:종류]]:ARG
 		SIF 함락(ARG:1) == 0
 			RETURNF 0
 		RETURNF 1
-	;아이마스 모드
-	CASE 99
-		;악마 TV출현 전까지 인간만
-		SIF IS_MALE(ARG:1)
-			RETURNF 0
-		IF 이벤트フラグ:95:3 == 0 && ABL:(ARG:1):종족 != 0
-				RETURNF 0
-		ELSE
-			RETURNF 1
-		ENDIF
-		;함락していないとダメ
-		SIF 함락(ARG:1) == 0
-	        RETURNF 0
-		RETURNF 1
-			
 ENDSELECT
 RETURNF 0
 

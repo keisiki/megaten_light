@@ -7,11 +7,13 @@ RESULTS = 전격
 
 ;　명중
 @SKILL_HITRATE_913, ARG
-RETURN 95
+RETURN 100
 
 ;　위력
 @SKILL_POWER_913, ARG
-RETURN 165
+SIF FLAG:拡散フラグ
+	RETURN 62
+RETURN 128
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_913,ARG
@@ -23,6 +25,8 @@ RETURN 1
 
 ;　ＨＰ2を支払うかＭＰ3を支払うか
 @SKILL_COSTTYPE_913, ARG
+SIF FLAG:拡散フラグ
+	RETURN 1
 RETURN 3
 ;소비なし＝1
 
@@ -36,13 +40,13 @@ RETURN 6
 ;전격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_913
+@SKILL_DECIDE_TYPE_913, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_913
-RETURN 2
+@SKILL_DAMAGETYPE_913, ARG
+RETURN 1
 
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -75,29 +79,27 @@ RETURN 9
 
 ;속도보정
 @SKILL_SPEED_913, ARG = -1
-RETURN 5
+RETURN 0
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_913,ARG
 
-;전투時以外に사용できるか
+
+;전투時이외に사용できるか
 @SKILL_ACTIONABLE_FIELD_913
 RETURN 0
 
 ;스킬변화？用랭크
 @SKILL_RANK_913
-RETURN 3
+RETURN 2
 
 @SKILL_RANKUP_913
-;방전
-D:1 = 910
-RETURN 1
+RETURN 0
 
-
-;テン플레이트用、추가효과シリーズ
+;テン플레이트用、추가효과시리즈
 ;추가효과스테이터스
 @SKILL_ADDTIONAL_STATE_913,ARG
-RETURN GET_STATE_NUM("SHOCK")
+RETURN 2
 
 ;추가효과상성
 @SKILL_ADDTIONAL_TYPE_913,ARG
@@ -105,22 +107,22 @@ RETURN 6
 
 ;추가효과기본부여확률
 @SKILL_ADDTIONAL_BASE_RATE_913,ARG
-RETURN 25
+RETURN 30
 
 ;추가효과부여확률上限
 @SKILL_ADDTIONAL_MAX_RATE_913,ARG
 RETURN 95
 
+;拡散공격用추가処理
+@SKILL_SPREAD_913,ARG
+RETURN 1
+;拡散距離:1
 
 ;====================================================
 ;스킬及び行動の実行
 ;====================================================
 @ACTION_913,ARG,ARG:1
-LOCAL = POS(ARG:1)
-CALL ATTACK_SINGLE,ARG,LOCAL,913
-
-
-
+CALL ATTACK_SPREAD,ARG,ARG:1,913
 
 
 
@@ -131,7 +133,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,913
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_913
-PRINTL [후열] 적 1체에 전격속성 중 마법데미지. (낮은 확률로 SHOCk)
+PRINTL [후열] 적 1체에 전격속성 중 물리데미지. (낮은 확률로 SHOCk)
 
 ;継承に필요한部位
 @継承部位_913,ARG

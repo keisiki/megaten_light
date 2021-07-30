@@ -35,12 +35,12 @@ RETURN 2
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2620
+@SKILL_DECIDE_TYPE_2620, ARG
 RETURN 1
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2620
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2620, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2620
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -126,8 +126,8 @@ PRINTFORML %CALLNAME:ARG%의 능력이 올라갔다！
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2620
-PRINTL 힘を해방し공격と방어と회피が上がる。ついでに머리카락が青くなる。
-PRINTL 요귀　オレンジの技。
+PRINTL 힘을 해방해 공격과 방어와 회피를 올린다。덤으로 머리카락도 파래진다。
+PRINTL 요귀　오렌지의 기술。
 
 ;継承に필요な部位
 @継承部位_2620,ARG

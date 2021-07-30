@@ -69,12 +69,12 @@ RETURN GET_TYPE_NUM("정신")
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3517
+@SKILL_DECIDE_TYPE_3517, ARG
 RETURN 1
 ;特技
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3517
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3517, ARG
 RETURN 1
 ;物理
 
@@ -157,7 +157,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,1153
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3517
-PRINTL 情熱と渇望の歌が적전체に정신상성の物理ダメージ＋BOMB。가창기능に応じて威힘が増大。
+PRINTL 열정과 갈망의 노래가 적전체에 정신 상성의 물리 피해＋BOMB。가창기능에 따라서 위력이 증대。
 
 ;継承に필요な部位
 @継承部位_3517,ARG

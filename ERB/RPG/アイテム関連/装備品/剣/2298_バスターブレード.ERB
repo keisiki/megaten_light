@@ -47,7 +47,14 @@ RETURN 1
 @장비箇所_2298
 RETURN GET_EQUIPNUM("검")
 
+;트윈슬래시
 @장비추가스킬_2298,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 13
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -71,6 +78,9 @@ PRINTL 장비조건：LV35～
 
 @장비해설_2298
 PRINTL 통상의 양손검보다 훨씬 긴 양손검
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：트윈슬래시
+RESETCOLOR
 
 RETURN 0
 

@@ -5,9 +5,10 @@
 ;======================================================
 
 @기본능력수정_5006,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "마력"
-		RETURN 1
+
+SELECTCASE ARG
+	CASE 3
+		RETURN 2
 ENDSELECT
 RETURN 0
 
@@ -21,24 +22,46 @@ SELECTCASE ARG
 ENDSELECT
 RETURN 100
 
+@공격상성_5006, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_5006, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_5006, ARG = -1
+
+RETURN 1
+
+@사거리_5006, ARG = -1
+
+RETURN 1
+
+@공격범위_5006, ARG = -1
+
+RETURN 1
+
 @장비箇所_5006
+
 RETURN GET_EQUIPNUM("악세사리")
 
-;-----------------------------
-;- 조건・설명処理
-;-----------------------------
+;마카・카쟈
+@장비추가스킬_5006,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 503
+	ENDSELECT
+ENDIF
+RETURN 0
+
 @필요레벨_5006
 RETURN 1
 
 @장비조건_5006,ARG
 RETURN 1
 
-@장비해설_5006
-PRINTL 마력이 조금 오르는 반지
-
-;-----------------------------
-;- 구입・引き継ぎ
-;-----------------------------
 @구입조건_5006
 RETURN 1
 
@@ -46,5 +69,9 @@ RETURN 1
 @EQUIP_EXCHANGE_5006
 RETURN 0
 
-@引継ぎ可不可_5006
-RETURN 0
+@장비해설_5006
+PRINTL 마력이 2 오르는 반지
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：마카・카쟈
+RESETCOLOR
+

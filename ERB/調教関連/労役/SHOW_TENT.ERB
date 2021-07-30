@@ -17,9 +17,10 @@
 ;
 ;	Edit	Date			Author					Reason
 ;	001		2013/01/11		TR						新規作成
-;	002		2019/03/27		TR						비전투원・페르소나구사자の경험値획득を修正 체력減少を微調整 취득おひねり計算式調整
+;	002		2019/03/27		TR						비전투원・ペルソナ使いの経験値獲得を修正 体力減少を微調整 取得おひねり計算式調整
+;	003		2021/04/27		JK好き					見世物小屋で多胎OP時でも妊娠するように修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
-;
+
 ;==========================================================
 ;==========================================================
 ;@MANAGEMENT_SHOW_TENT
@@ -69,8 +70,8 @@ LINE = LINECOUNT
 FOR ACT, 0 , CHARANUM
 	SIF CFLAG:ACT:노역フラグ != 10+ARG
 		CONTINUE
-	IF BASE:ACT:0 < 500
-		PRINTFORML 체력부족の為%CALLNAME:ACT%の노역を中止しました
+	IF BASE:ACT:체력 < 500
+		PRINTFORML 체력부족 때문에 %CALLNAME:ACT%의 노역을 중지했습니다
 		CONTINUE
 	ENDIF
 	;#;PRINTFORM \@ GETBIT(VAR_점포リザルト,ARG+10) ? %CALLNAME:ACT% IS ENTRY\n # \@
@@ -107,7 +108,7 @@ FOR ACT, 0 , CHARANUM
 NEXT
 
 IF COUNT_ACT:1 < 1
-	PRINTFORMW 참가者がいない為開園を中止しました
+	PRINTFORMW 참가자가 없기 때문에 개원을 중지했습니다
 	RETURN
 ENDIF
 
@@ -121,7 +122,7 @@ FOR LOCAL,0,5
 	SIF !렌탈악마:ARG:LOCAL
 		CONTINUE
 	IF MONEY:1 < COST + SHOW_TENT_RENTAL_COST(VAR_점포번호,LOCAL)
-		PRINTFORML	 資金が부족している為、%SHOW_TENT_ACTNAME(-2-LOCAL)%を렌탈出来ませんでした
+		PRINTFORML	 자금이 부족하기 때문에、%SHOW_TENT_ACTNAME(-2-LOCAL)%를 렌탈할 수 없었습니다
 	ELSE
 		FOR LOCAL:1,0,렌탈악마:ARG:LOCAL
 			C_ACT:(COUNT_ACT++) = -2 - LOCAL
@@ -175,7 +176,7 @@ DO
 		ENDIF
 		IF ACT >= 0 
 			;消耗した체력が최대기력を上回ったなら아무것도안한다　※기력減少は処理に入れてない為暫定処置
-			IF DOWNBASE:ACT:0 > MAXBASE:ACT:1
+			IF DOWNBASE:ACT:체력 > MAXBASE:ACT:기력
 				;#;IF GETBIT(VAR_점포リザルト,ARG+10)
 					;#;PRINTFORML 기력0で行動不能
 					;#;RESETCOLOR
@@ -208,7 +209,7 @@ DO
 				;대상が実行者とは別のキャラで체력があったらそのキャラで決定
 				;限界量は체력-500または최대체력の75%の高い方
 				;체력2000を超えたあたりから노역外しが起きにくくなる筈
-				IF MAX(BASE:(ACT:1):0-500,MAXBASE:(ACT:1):0*3/4) > DOWNBASE:(ACT:1):0 && ACT != ACT:1
+				IF MAX(BASE:(ACT:1):체력-500,MAXBASE:(ACT:1):체력*3/4) > DOWNBASE:(ACT:1):체력 && ACT != ACT:1
 					BREAK
 				;違うならカウントをずらす
 				ELSE
@@ -254,7 +255,7 @@ DO
 			WHILE ( COUNT_MOUSE:LEVEL:11 < COUNT_MOUSE:LEVEL:10 )
 				ACT:1 = COUNT_MOUSE:LEVEL:(COUNT_MOUSE:LEVEL:11)
 				;대상が実行者とは別のキャラで체력があったらそのキャラで決定
-				IF MAX(BASE:(ACT:1):0-500,MAXBASE:(ACT:1):0*3/4) > DOWNBASE:(ACT:1):0 && ACT != ACT:1
+				IF MAX(BASE:(ACT:1):체력-500,MAXBASE:(ACT:1):체력*3/4) > DOWNBASE:(ACT:1):체력 && ACT != ACT:1
 					BREAK
 				;違うならカウントをずらす
 				ELSE
@@ -402,6 +403,9 @@ FOR LOCAL:1,0,COUNT_ACT:1
 			STRESS += TCVAR:ACT:획득질사경험*5 + TCVAR:ACT:획득사정경험*2
 	ENDIF
 
+	;子宮現在容量加算
+	CFLAG:(LOCAL):子宮現在容量 += TCVAR:ACT:획득질사경험 * 10
+
 	CALL SHOW_ADD_EXP, ACT
 	CALL SHOW_ABNORMAL_EXP, ACT
 	
@@ -416,7 +420,7 @@ FOR LOCAL:1,0,COUNT_ACT:1
 	BASE:ACT:ＭＡＧ = LIMIT(BASE:ACT:ＭＡＧ+CMAG,0,MAXBASE:ACT:ＭＡＧ)
 	
 	IF ACT != MASTER
-		SIF DOWNBASE:ACT:0 > BASE:ACT:0
+		SIF DOWNBASE:ACT:체력 > BASE:ACT:체력
 			TIMES STRESS,1.50
 		STRESS *= MAX(0,3-함락(ACT) *2)
 		STRESS /= 1+ABL:ACT:순종+ABL:ACT:욕망+ABL:ACT:봉사정신+ABL:ACT:마조끼
@@ -453,11 +457,11 @@ FOR LOCAL:1,0,COUNT_ACT:1
 	CALL SYNC_STATUS,MASTER
 	
 	;노역ハズレ防止処理は色々考えたけどめんどうなので放置でい
-	PRINTFORM 체력(%CALLNAME:ACT%) -{DOWNBASE:ACT:0}　
-	BASE:ACT:0 -= DOWNBASE:ACT:0
+	PRINTFORM 체력(%CALLNAME:ACT%) -{DOWNBASE:ACT:체력}　
+	BASE:ACT:체력 -= DOWNBASE:ACT:체력
 	
 	SIF CFLAG:ACT:顧客の中出氏による임신판정 > 0 && !TALENT:ACT:임신
-		PRINTFORML %CALLNAME:ACT%の\@ TALENT:ACT:오토코노코 ? 肛内 # 질내 \@には%SHOW_TENT_ACTNAME(CFLAG:ACT:노역中の中出氏による暫定父親)%の정액が貯まっている
+		PRINTFORML %CALLNAME:ACT%의 \@ TALENT:ACT:오토코노코 ? 항문내 # 질내 \@에는 %SHOW_TENT_ACTNAME(CFLAG:ACT:노역中の中出氏による暫定父親)%의 정액이 고여 있다
 
 	;気絶しない筈だけど一応残しておく
 	CALL 気絶処理,ACT
@@ -481,17 +485,17 @@ HEAT = HEAT / 80
 CALL 점포演算("인기",ARG,HEAT,"+")
 
 PRINTL 
-PRINTL 【収支報告】
+PRINTL 【수지 보고】
 ;마카
 
-PRINTFORML ￥   おひねり +{입수￥,6}
+PRINTFORML ￥   오히네리 +{입수￥,6}
 PRINTFORML    점포유지비 -{SHOW_TENT_유지비(ARG),6}
 LOCAL = 입수￥ - SHOW_TENT_유지비(ARG)
 PRINTFORML          합계 \@ LOCAL > 0 ? + # - \@{ABS(LOCAL),6}
 PRINTL 
-PRINTFORML 마카 おひねり +{입수마카,6}
+PRINTFORML 마카 오히네리 +{입수마카,6}
 IF COST
-	PRINTFORML    렌탈料 -{ABS(COST),6}
+	PRINTFORML    렌탈요금 -{ABS(COST),6}
 	LOCAL = 입수마카 - COST
 	PRINTFORML          합계 \@ LOCAL > 0 ? + # - \@{ABS(LOCAL),6}
 ENDIF
@@ -502,26 +506,26 @@ WAIT
 
 ;==========================================================
 @EXTEND_MANAGEMENT_SHOW_TENT
-PRINTFORML 現在、この점포のＬＶは{점포("규모",VAR_점포번호)}です。
+PRINTFORML 현재、이 점포의 ＬＶ은 {점포("규모",VAR_점포번호)}입니다。
 IF 점포("규모",VAR_점포번호) >= 10
-	PRINTFORMW これ以上확장できません
+	PRINTFORMW 이 이상 확장할 수 없습니다。
 	RETURN
 ENDIF
 
 FOR LOCAL,점포("규모",VAR_점포번호)+1,11
 	LOCAL:LOCAL = 1000 * LOCAL
 	LOCAL:12 = SUMARRAY(LOCAL,점포("규모",VAR_점포번호)+1,LOCAL+1)
-	PRINTFORML [{LOCAL,2}] 규모を{LOCAL-점포("규모",VAR_점포번호)}段階확장 ￥{LOCAL:12}
+	PRINTFORML [{LOCAL,2}] 규모를 {LOCAL-점포("규모",VAR_점포번호)}단계 확장 ￥{LOCAL:12}
 NEXT
 
-PRINTL [ 0] キャンセル
+PRINTL [ 0] 취소
 INPUT
 LOCAL:11 = RESULT
 IF RESULT == 0
 	RETURN
 ELSEIF INRANGE(LOCAL:10,점포("규모",VAR_점포번호),10)
 	LOCAL:12 = SUMARRAY(LOCAL,점포("규모",VAR_점포번호)+1,LOCAL:11+1)
-	PRINTFORML 확장には￥{LOCAL:12}필요です。확장しますか？
+	PRINTFORML 확장에는 ￥{LOCAL:12}가 필요합니다。확장하시겠습니까?
 	CALL INPUT_YN("YES","NO")
 	SIF RESULT == 1
 		RETURN
@@ -546,7 +550,7 @@ FOR LOCAL:1,0,5
 NEXT
 CUSTOMDRAWLINE =
 IF SUMARRAY(렌탈악마:VAR_점포번호:0,0,5)
-	PRINT 現在
+	PRINT 현재
 	SIF 렌탈악마:VAR_점포번호:0
 		PRINTFORM 、%SHOW_TENT_ACTNAME(-2)%×{렌탈악마:VAR_점포번호:0}
 	SIF 렌탈악마:VAR_점포번호:1
@@ -557,16 +561,16 @@ IF SUMARRAY(렌탈악마:VAR_점포번호:0,0,5)
 		PRINTFORM 、%SHOW_TENT_ACTNAME(-5)%×{렌탈악마:VAR_점포번호:3}
 	SIF 렌탈악마:VAR_점포번호:4
 		PRINTFORM 、%SHOW_TENT_ACTNAME(-6)%×{렌탈악마:VAR_점포번호:4}
-	PRINTL を렌탈しています
-	PRINTFORML 現在の総렌탈費用：{SHOW_TENT_RENTAL_COST(VAR_점포번호)}마카
+	PRINTL 을(를) 렌탈하고 있습니다
+	PRINTFORML 현재의 총 렌탈비용：{SHOW_TENT_RENTAL_COST(VAR_점포번호)}마카
 ELSE
-	PRINTL 악마を렌탈していません
+	PRINTL 악마를 렌탈하고 있지 않습니다
 ENDIF
 DRAWLINE
 IF LOCAL < 10
-	PRINTFORML どの악마を렌탈しますか？(あと{10-LOCAL}体まで)
+	PRINTFORML 어떤 악마를 렌탈하겠습니까?(앞으로 {10-LOCAL}마리까지)
 ELSE
-	PRINTL これ以上렌탈できません
+	PRINTL 이 이상 렌탈할 수 없습니다
 ENDIF
 DRAWLINE
 CALL SHOW_TENT_RENTAL_LIST(SHOW_TENT_ACTNAME(-2),1,10,LOCAL)
@@ -577,7 +581,7 @@ SIF 점포("규모",VAR_점포번호) >= 4
 	CALL SHOW_TENT_RENTAL_LIST(SHOW_TENT_ACTNAME(-5),50,40,LOCAL)
 SIF 점포("규모",VAR_점포번호) >= 6
 	CALL SHOW_TENT_RENTAL_LIST(SHOW_TENT_ACTNAME(-6),100,50,LOCAL)
-PRINTL [ 9] 全て解雇する
+PRINTL [ 9] 모두 해고한다
 PRINTL [ 0] 돌아간다
 INPUT
 LOCAL:1 = RESULT

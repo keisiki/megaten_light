@@ -72,7 +72,9 @@ RETURN 0
 ;18,사이코
 SELECTCASE ARG
 	CASE 4
-		RETURN 80
+		RETURN -50
+	CASE 2,6
+		RETURN 140
 ENDSELECT
 RETURN 100
 
@@ -113,14 +115,14 @@ SIF BASE:ARG:LV < 55
 RETURN 1
 
 @장비해설_4607
-PRINTFORML 나타태자が발につけていた宝貝
-PRINTFORML 武術を極めた者はこの장비を武具として扱うことができる
+PRINTFORML 나타태자가 발에 차고 있던 보패
+PRINTFORML 무술에 능한 사람은 이 장비를 무구로 취급할 수 있다
 SETCOLOR 0x87ceeb
-PRINTL マーシャルアーツ専用《검：EMPTY》
+PRINTL 마샬아츠전용《검：EMPTY》
 RESETCOLOR
 
 @장비조건설명_4607
-PRINTL 장비조건：인간、반마인 LV55～　속도30以上
+PRINTL 장비조건：인간、반마인 LV55～　속도30이상
 
 @구입조건_4607
 RETURN 0
@@ -131,6 +133,6 @@ RETURN 1
 
 @WIKI備考欄_4607
 ;WIKIの備考欄に記載するもの|は使わないでおく、PRINTL、PRINTFORMLも使わない
-PRINT 검無장비と마샬아츠で~~
+PRINT 검 없이 장비와 마샬아츠로~~
 PRINT 공격：231　명중：178　방어：8~~
-PRINT 魔威：157　魔効：_76　회피：71~~
+PRINT 마위：157　마효：_76　회피：71~~

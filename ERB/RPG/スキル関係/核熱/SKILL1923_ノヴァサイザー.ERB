@@ -5,12 +5,7 @@
 
 ;스킬名
 @SKILL_NAME_1923,ARG
-;クロちゃんが사용する場合C'est moi,la starに
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:클로딘]]) == 1
-	RESULTS = "C'est moi,la star"
-ELSE
 	RESULTS = 노바사이저
-ENDIF
 
 ;　명중
 @SKILL_HITRATE_1923, ARG
@@ -18,12 +13,7 @@ RETURN 100
 
 ;　威힘
 @SKILL_POWER_1923, ARG
-;クロちゃんは威힘低め。たっちゃんを食っちゃだめ
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:클로딘]]) == 1
-	RETURN 410
-ELSE
 	RETURN 515
-ENDIF
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_1923,ARG
@@ -40,14 +30,9 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_1923,ARG
-;クロちゃんが사용する場合소비をチョットだけ減らす
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:클로딘]]) == 1
-	RETURN 30
-ELSE
-	RETURN 35
-ENDIF
+RETURN 35
 
-;　相性 화염・타격・핵열・파마のうち、もっともダメージが高くなるものになる
+;　相性 화염・타격・핵열・파마のうち、もっとも데미지が高くなるものになる
 @SKILL_TYPE_1923,ARG
 #LOCALSSIZE 5
 #LOCALSIZE 4
@@ -64,12 +49,7 @@ LOCAL:2 = -300
 LOCALS = 핵열
 LOCALS:1 = 타격
 LOCALS:2 = 핵열
-;クロちゃんが사용する場合파마⇒전격に
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:클로딘]]) == 1
-	LOCALS:3 = 전격
-ELSE
-	LOCALS:3 = 파마
-ENDIF
+LOCALS:3 = 파마
 LOCALS:4 = 화염
 FOR LOCAL:1, 1, 5
 	;판정用に数値を仕舞う。반사は-200扱い
@@ -92,12 +72,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;핵열
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1923
+@SKILL_DECIDE_TYPE_1923, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1923
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1923, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -188,13 +168,7 @@ CFLAG:ARG:공격강화 -= LOCAL
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1923
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:클로딘]]
-	PRINTL C'est moi,la star！（スタァになるのは、この私！）
-	PRINTL どんな困難も意地と根性とプライドを込めてブン殴る。
-	PRINTL [후열] 적 １체에 복합속성(타격＋화염＋전격＋핵열) 초특대 물리데미지.
-ELSE
-	PRINTL [후열] 적 １체에 복합속성(타격＋화염＋파마＋핵열) 초특대 물리데미지.
-ENDIF
+PRINTL [후열] 적 １체에 복합속성(타격＋화염＋파마＋핵열) 초특대 물리데미지.
 ;타격・화염・神聖・핵열のうちもっとも조건がいい상성になる
 
 ;継承に필요な部位

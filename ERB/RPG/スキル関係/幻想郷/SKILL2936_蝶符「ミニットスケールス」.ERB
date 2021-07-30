@@ -36,12 +36,12 @@ RETURN 20
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2936
+@SKILL_DECIDE_TYPE_2936, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2936
+@SKILL_DAMAGETYPE_2936, ARG
 RETURN 2
 
 
@@ -155,7 +155,7 @@ PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@의 공격력・마법
 @SKILL_EXPLAIN_2936
 PRINTL 적의 공격・마법 공격을 1단계 내린다。
 PRINTL 자신의 날개를 보호하기 위해 휘감은 인분을 뿌려서、적의 공격을 방해한다。
-PRINTL 요정　이터니티 라바의 스펠카드（専用）
+PRINTL 요정　이터니티 라바의 스펠카드（전용）
 
 ;継承に필요한部位
 @継承部位_2936,ARG

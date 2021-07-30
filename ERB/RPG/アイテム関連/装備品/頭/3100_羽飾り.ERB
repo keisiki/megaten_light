@@ -2,59 +2,73 @@
 ;======================================================
 ;장비品の데이터
 ;날개장식
-;Lv20장비までは내성が기본　기본능력に합계+2まで
 ;======================================================
 
 @기본능력수정_3100,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "속도"
+
+SELECTCASE ARG
+	CASE 5
 		RETURN 1
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3100,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "회피"
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 0
+	CASE 3
 		RETURN 10
-	CASE "마법효과"
-		RETURN 7
+	CASE 5
+		RETURN 4
 ENDSELECT
 RETURN 0
 
 @방어상성_3100,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "충격"
+
+SELECTCASE ARG
+	CASE 1,6
+		RETURN 150
+	CASE 7
 		RETURN 50
-	CASE "파마"
-		RETURN 80
-	CASE "전격"
-		RETURN 125
-	CASE "비구"
-		RETURN 115
 ENDSELECT
 RETURN 100
+
+@공격상성_3100, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3100, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3100, ARG = -1
+
+RETURN 1
+
+@사거리_3100, ARG = -1
+
+RETURN 1
+
+@공격범위_3100, ARG = -1
+
+RETURN 1
 
 @장비箇所_3100
 RETURN GET_EQUIPNUM("머리")
 
 @필요레벨_3100
-RETURN 10
-
-@장비조건_3100,ARG
-SIF BASE:ARG:LV < 10
-	RETURN 0
 RETURN 1
 
-@장비조건설명_3100
-PRINTL 장비조건：LV10～
+@장비조건_3100,ARG
+RETURN 1
 
 @장비해설_3100
 PRINTL 새의 날개를 본따서 만든 머리 장식
-PRINTL 　　　　　　　　약간의 마력이 깃들어서 착용자의 속도를 높인다
-
+PRINTL 약간의 마력이 깃들어서 착용자의 속도를 높인다
 
 @구입조건_3100
 RETURN 0
 
 @引継ぎ可不可_3100
-RETURN 0
+RETURN 1

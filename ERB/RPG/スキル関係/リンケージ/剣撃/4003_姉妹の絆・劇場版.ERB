@@ -44,15 +44,15 @@ SIF FLAG:공격횟수 == 7
 RETURN GET_TYPE_NUM("검격")
 
 ;高クリティカル
-@SKILL_CRITICAL_RATE_4003
+@SKILL_CRITICAL_RATE_4003, ARG
 RETURN 10
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_4003
+@SKILL_DECIDE_TYPE_4003, ARG
 RETURN 0
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_4003
+@SKILL_DAMAGETYPE_4003, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -84,7 +84,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4003, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4003,ARG
@@ -133,7 +133,7 @@ CALL ATTACK_SINGLE,ARG,POS(ARG:1),4003
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_4003
-PRINTL 적 １명에게 검격・타격 相性으로 ６～８회 공격. 자매의 협력기.
+PRINTL 적 １명에게 검격・타격 상성으로 ６～８회 공격. 자매의 협력기.
 
 ;継承に필요한部位
 @継承部位_4003,ARG

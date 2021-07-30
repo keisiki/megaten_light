@@ -3,25 +3,22 @@
 
 ;스킬名
 @SKILL_NAME_2001,ARG
-;アーベントが사용する場合P・ランチャーEに
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+;아벤트が사용する場合P・런처Eに
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RESULTS = P・런처E
 ELSE
 	RESULTS = 메기도
 ENDIF
 ;　명중
 @SKILL_HITRATE_2001, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RETURN 100
 ELSE
 	RETURN 90
 ENDIF
 ;　威힘
 @SKILL_POWER_2001, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RETURN 140
 ELSE
 	RETURN 220
@@ -42,8 +39,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_2001,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:아벤트]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:아벤트]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:아벤트]])
 	RETURN 10
 ELSE
 	RETURN 20
@@ -54,12 +50,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2001
+@SKILL_DECIDE_TYPE_2001, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2001
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2001, ARG
 RETURN 2
 
 

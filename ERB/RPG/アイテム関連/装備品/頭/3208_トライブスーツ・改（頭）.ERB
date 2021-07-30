@@ -5,25 +5,27 @@
 ;======================================================
 
 @기본능력수정_3208,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3208,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
+
+SELECTCASE ARG
+	CASE 2
 		SIF ARG:1 == -1
 			RETURN 4
 		RETURN (BASE:(ARG:1):LV + BASE:(ARG:1):인내력 + (BASE:(ARG:1):힘 + BASE:(ARG:1):인내력 * 2) / 2) / 5
-	CASE "회피"
+	CASE 3
 		SIF ARG:1 == -1
 			RETURN 2
 		RETURN (BASE:(ARG:1):LV + BASE:(ARG:1):속도 * 3/2 + BASE:(ARG:1):운 / 2) * 3/20
-	CASE "마법위력"
+	CASE 4
 		SIF ARG:1 == -1
 			RETURN 3
 		RETURN (BASE:(ARG:1):LV * 3/2 + BASE:(ARG:1):마력 * 3/2 + BASE:(ARG:1):지혜) / 20
-	CASE "마법효과"
+	CASE 5
 		SIF ARG:1 == -1
 			RETURN 3
 		RETURN (BASE:(ARG:1):LV + BASE:(ARG:1):지혜 / 2 + BASE:(ARG:1):속도 / 2 + BASE:(ARG:1):운 / 2) / 4
@@ -31,9 +33,29 @@ ENDSELECT
 RETURN 0
 
 @방어상성_3208,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@공격상성_3208, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3208, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3208, ARG = -1
+
+RETURN 1
+
+@사거리_3208, ARG = -1
+
+RETURN 1
+
+@공격범위_3208, ARG = -1
+
+RETURN 1
 
 @장비箇所_3208
 RETURN GET_EQUIPNUM("머리")
@@ -45,9 +67,8 @@ RETURN 1
 RETURN 1
 
 @장비해설_3208
-PRINTL 過酷な『煉獄』を生き抜いた者が着けていた옷
-PRINTL 　　　　　　　　레벨・스테이터스에 따라 수치가 바뀐다
-
+PRINTL 가혹한 '연옥'을 살아낸 자가 착용하고 있던 옷
+PRINTL 레벨・스테이터스에 따라 수치가 바뀐다
 
 @구입조건_3208
 RETURN 0

@@ -1,13 +1,7 @@
 ﻿
 ;스킬名
 @SKILL_NAME_143,ARG
-;純那が사용する場合、翡翠弓に
-;IF ARG > 0 && NO:ARG == [[キャラ:쥰나]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:쥰나]]) == 1
-	RESULTS = 비취궁
-ELSE
-	RESULTS = 안타까움난사
-ENDIF
+RESULTS = 안타까움난사
 
 ;　명중
 @SKILL_HITRATE_143, ARG
@@ -44,11 +38,11 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_143
+@SKILL_DECIDE_TYPE_143, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_143
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_143, ARG
 RETURN 1
 
 
@@ -79,6 +73,9 @@ SIF ARG == 1
 @SKILL_SUCCESSION_TYPE_143
 RETURN 1
 ;비구
+
+@継承不能_143
+RETURN 1
 
 ;속도보정
 @SKILL_SPEED_143, ARG = -1
@@ -131,13 +128,7 @@ CALL ATTACK_RAND,ARG,ARG:1,143
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_143
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:쥰나]]
-	PRINTL 소녀のキラめきが구현化した、一張りの洋弓。
-	PRINTL それは、ほんのわずかな才能を、何度でも空へと打ち上げるために。
-	PRINTL 적전체랜덤に小ダメージ、まれに만능相性の即死
-ELSE
-	PRINTL [후열] 적 전체에 4～12회(1인 최대 4회) 비구속성 극소 물리데미지. 명중률이 조금 높다. (낮은 확률로 즉사)
-ENDIF
+PRINTL [후열] 적 전체에 4～12회(1인 최대 4회) 비구속성 극소 물리데미지. 명중률이 조금 높다. (낮은 확률로 즉사)
 
 ;継承に필요な部位
 @継承部位_143,ARG

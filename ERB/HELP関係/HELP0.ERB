@@ -25,15 +25,15 @@ RETURN 1
 @DICTIONARY_MENU
 DRAWLINE
 PRINTL 어느 항목에 대해서 조사합니까？
-PRINTLC [ 1] 능력
 PRINTLC [ 7] 그 이외의 수치
+PRINTLC [ 9] 조교 아이템
 PRINTLC [10] 체질 변화약
 PRINTLC [11] SHOP 커맨드 설명
-PRINTLC [12] 출산기능변환이란
+PRINTLC [12] OPTION 설명
 PRINTLC [13] 미션 로그
 PRINTLC [14] 함락 이력
 PRINTLC [15] 장부열람
-PRINTLC [98] 미리니름Ｑ＆Ａ
+PRINTLC [98] 미리니름Ｑ＆Ａ(작성중)
 PRINTLC [99] 초심자에게 권고
 PRINTL 
 PRINTL [100]그먄둔다
@@ -42,12 +42,12 @@ $INPUT_LOOP
 INPUT
 IF RESULT == 100
 	RETURN 0
-ELSEIF RESULT == 1
-	;능력
-	CALL DICTIONARY_ABL_MAIN
 ELSEIF RESULT == 7
 	;그외数値
 	CALL DICTIONARY_OTHER_MAIN
+ELSEIF RESULT == 9
+	;아이템
+	CALL DICTIONARY_ITEM_MAIN
 ELSEIF RESULT == 10
 	;体質변화薬
 	CALL DICTIONARY_DRUG_MAIN
@@ -56,11 +56,7 @@ ELSEIF RESULT == 11
 	CALL DICTIONARY_SHOP_COMMAND
 ELSEIF RESULT == 12
 	;OPTION설명
-	PRINTL ＜출산 기능 변환＞
-	PRINTL 이 기능을 ON로 하면 아이가 태어나게 됩니다.
-	PRINTL 태어난 아이가 어느 정도 성장하면 동료마가 되어,
-	PRINTL 조교해 매각하거나 전투에 참가시킬 수 있게 됩니다.
-	PRINTL 덧붙여 육아중인 캐릭터는 조교할 수 없게 됩니다.
+	CALL DICTIONARY_CONFIG_MAIN
 ELSEIF RESULT == 13
 	;ミッションログ
 	CALL DICTIONARY_ENDING_MAIN
@@ -72,7 +68,12 @@ ELSEIF RESULT == 15
 	CALL ACCOUNTING_BOOKS_MAIN
 ELSEIF RESULT == 98
 	;ネタばれＱ＆Ａ
-	CALL DICTIONARY_NETABARE_QA
+	IF FLAG:周回횟수 >= 1 || FLAG:5 == 9
+		CALL DICTIONARY_NETABARE_QA
+	ELSE
+	PRINTW 아직 열람할 수 없습니다.
+	GOTO INPUT_LOOP
+	ENDIF
 ELSEIF RESULT == 99
 	;初心者Ｑ＆Ａ
 	CALL DICTIONARY_EASY_QA
@@ -81,191 +82,7 @@ ELSE
 ENDIF
 RESTART
 
-;=============================================================================
-;用語辞典――능력
-;=============================================================================
-;--------------------------------------------------
-;능력해설メイン페이지
-;--------------------------------------------------
-@DICTIONARY_ABL_MAIN
-DRAWLINE
-PRINTFORML 「능력」에 관한 대략적인 설명입니다.
-DRAWLINE
-;各표시
-FOR LOCAL, 0, 30
-	Q:LOCAL = 0
-	STRLENS ABLNAME:LOCAL
-	IF RESULT > 0
-		PRINTFORMLC [{LOCAL, 2}] %ABLNAME:LOCAL%
-		Q:LOCAL = 1
-	ENDIF
-NEXT
-PRINTL 
-DRAWLINE
-PRINTLC [100]돌아간다
 
-$INPUT_LOOP
-INPUT
-IF RESULT == 100
-	RETURN 0
-ELSEIF RESULT < 0 || RESULT > 100
-	GOTO INPUT_LOOP
-ELSE
-	SIF Q:RESULT == 0
-		GOTO INPUT_LOOP
-	PRINTFORML 【%ABLNAME:RESULT%】
-	TRYCALLFORM DICTIONARY_ABL_{RESULT}
-	RESTART
-ENDIF
-
-;--------------------------------------------------
-;능력해설
-;--------------------------------------------------
-;순종
-@DICTIONARY_ABL_0
-PRINTL 주인을 얼마나 따르려고 하는지를 나타냅니다.
-PRINTL 순종이 낮으면 명령에 따르지 않으며,
-PRINTL 반대로 높다면 주인의 명령을 잘 따릅니다.
-PRINTW 조수로 만들거나, 성노예로써 매각하려면 반드시 올려야 하는 능력입니다.
-
-;욕망
-@DICTIONARY_ABL_1
-PRINTL 캐릭터가 얼마나 섹스에 빠져있는지를 나타냅니다.
-PRINTL 높을수록 모든 성행위에 욕정이 생깁니다.
-PRINTL 강한 쾌락을 느끼게 하거나 미약을 사용함으로써 올릴 수 있습니다.
-PRINTW 성노예로 만들때 필수인 능력입니다.
-
-;기교
-@DICTIONARY_ABL_2
-PRINTL 성에 관련된 테크닉을 얼마나 가지고 있는지를 나타냅니다.
-PRINTL 또, 손재주가 얼마나 좋은지도 나타내고 있습니다.   (?)
-PRINTL 기본적으로 이것이 높을수록 조교의 효과가 잘 나타나기 때문에,
-PRINTW 주인이던 조수던 조교자로서 필수적인 능력이라 할 수 있습니다.
-
-;Ｃ감각
-@DICTIONARY_ABL_3
-PRINTL 클리토니스, 남자라면 페니스로 얼마나 느끼냐를 나타내는 수치입니다.
-PRINTW 로터나 커널링구스(혹은 페라)등으로 상승시킬 수 있습니다.
-
-;Ｖ감각
-@DICTIONARY_ABL_4
-PRINTL 보지로 얼마나 느끼냐를 나타냅니다.
-PRINTL 바이브레이터나 섹스계 조교(정상위 등)으로 상승시킬 수 있습니다.
-PRINTW 당연히 [남자]는 올릴 수 없는 수치입니다.
-
-;Ａ감각
-@DICTIONARY_ABL_5
-PRINTL 애널로 얼마나 느끼냐를 나타내는 수치입니다.
-PRINTL 애널을 조교함으로써 상승시킬 수 있습니다.
-PRINTW 다만 애널로 성행위를 하는것은 비정상적이라는 인식이 강합니다.。
-
-;Ｂ감각
-@DICTIONARY_ABL_6
-PRINTL 가슴으로 얼마나 느끼는지를 나타냅니다. [남자]소유의 캐릭터는 올리기 힘듭니다.
-PRINTL 가슴 애무나 파이즈리 등으로 올릴 수 있습니다.
-PRINTL 다만 가슴에 크기에 따라 올라가는 수치의 량이 다르거나 몇몇 커맨드가 불가능합니다.
-PRINTL 가슴이 작은 경우 예민하지만, 가슴을 사용한 성기술을 사용하기 어렵고,
-PRINTW 가슴이 큰 경우 자극을 느끼기 어렵지만 가슴을 사용한 조교가 쉬워집니다.
-
-;봉사정신
-@DICTIONARY_ABL_7
-PRINTL 남에게 해주는것에 얼마나 쾌감을 느끼는지를 나타냅니다.
-PRINTL 높을수록 조교시 능력치가 잘 상승합니다
-PRINTL 명령을 하지 않아도 스스로 봉사를 하게 됩니다.
-PRINTW 펠라치오나 파이즈리 등으로 상승시킬 수 있습니다.
-
-;노출증
-@DICTIONARY_ABL_8
-PRINTL 부끄러운 모습을 보여줄때 얼마나 흥분하는지를 나타냅니다.
-PRINTL 높으면 자위 등 치정이 오르는 조교를 했을때 욕정이 많이 올라갑니다.
-PRINTL 동시에 부끄러워 하는 것이 줄어들기에 보여질까봐 두려워하는 공포를 느끼기 어려워집니다.
-PRINTW 야외 플레이나 자위를 시킴으로 상승시킬 수 있습니다.
-
-;마조끼
-@DICTIONARY_ABL_9
-PRINTL 고통을 받을때 얼마나 욕정하는지를 나타냅니다.
-PRINTL 높을수록 아픔을 느낄때 욕정이 올라 반감이 잘 안오르며,
-PRINTL 체력과 기력의 소모가 줄어듭니다.
-PRINTL SM계 조교를 주로 실시하는 경우 필수라고 할 수 있을 정도의 능력입니다만,
-PRINTW 동시에 높아질수록 새디즘끼를 올리기 어려워집니다.
-
-;새드끼
-@DICTIONARY_ABL_10
-PRINTL 고통을 주면서 얼마나 욕정하는지를 나타냅니다.
-PRINTL SM계 조교시 높을수록 보다 상대에게 많은 고통을 주게되며,
-PRINTL 조수의 경우 이것이 낮다면 사용할 수 없는 커맨드도 존재합니다.
-PRINTL 조수를 이용해 다른 노예에게 고통을 주게하면
-PRINTL 새로운 것에 눈을 뜨게 되겠지요.
-PRINTW 다만 높을수록 마조끼를 올리기 어려워집니다.
-
-;레즈끼
-@DICTIONARY_ABL_11
-PRINTL 여성끼리의 성애를 얼마나 받아들이는지를 나타냅니다.
-PRINTL 높을수록 동성의 성애 조교를 할때 느끼는 반감등이 내려가고, 쾌감이 오릅니다.
-PRINTW 레즈중독 취득에 필수입니다.
-
-;요리기능
-@DICTIONARY_ABL_12
-PRINTL 요리실력을 나타냅니다.
-PRINTW 높을수록 그만큼 요리의 외형이나 맛이 좋아지며, 주위로부터 좋은 평을 받게 됩니다.
-
-;촬영기능
-@DICTIONARY_ABL_13
-PRINTL 비디오나 사진 촬영에 관한 기술의 높이를 나타냅니다.
-PRINTL 높을수록 좋은 동영상이나 사진을 찍을 수 있게 됩니다.
-PRINTL 그만큼 경험을 쌓을 필요가 있으며, 사진이나 비디오의 가격에 큰 영향을 미칩니다.
-PRINTW 사진촬영과 비디오가 주수입이라면, 이것을 빨리 올리는것을 추천합니다.
-
-;가창기능
-@DICTIONARY_ABL_14
-PRINTL 얼마나 능숙하게 노래를 할수 있는지를 나타냅니다.
-PRINTW 다만 어느정도 가창경험을 쌓지 않는 한 이 기능을 올릴 수 없습니다.
-
-;자위중독
-@DICTIONARY_ABL_15
-PRINTL 자위행위에 얼마나 습관이 되있나를 나타냅니다.
-PRINTL 높으면 조교 종료 후에도 자위를 하기 쉬워지며, 자위 횟수도 증가하게 됩니다.
-PRINTW 상승시키려면 자위 경험이나 조교 자위 경험이 많이 필요합니다.
-
-;정액중독
-@DICTIONARY_ABL_16
-PRINTL 정액의 맛이나 냄새에 얼마나 흥분하는지를 나타냅니다.
-PRINTL 높을수록 정액에 의해 욕정이 오르며, 이벤트 등으로 주를 많이 입수할 수 있게 됩니다.
-PRINTL 다만 상승시키기 위해서 「굴복의 주」를 매우 많이 필요로 합니다.
-PRINTL 만일 정액경험이 높다면 필요한 구가 감소하기 때문에,
-PRINTW 올린다면 정액 경험을 많이 벌고 나서 올리는것이 좋을 것입니다.
-
-;레즈중독
-@DICTIONARY_ABL_17
-PRINTL 여성끼리의 성애에 얼마나 빠져있는지를 나타냅니다.
-PRINTW 높으면 동성의 성애 조교를 했을때의 느끼는 반감등이 내려가며, 쾌감이 오릅니다.
-
-;섹스중독
-@DICTIONARY_ABL_18
-PRINTL 섹스에 얼마나 푹 빠져있는지를 나타냅니다。
-PRINTW 
-
-;분유중독
-@DICTIONARY_ABL_19
-PRINTL 모유를 내는것에 얼마나 흥분하고 있는지를 나타냅니다.
-PRINTL 높으면 조교 종료시 자신의 젖을 짜 주인에게 제공합니다.
-PRINTL 소질 [모유 체질]이 없으면 취득하거나 상승시키는것이 불가능합니다.
-PRINTW 당연히 남성캐릭터는 이 능력을 상승시킬 수 없습니다.
-
-;ＢＬ끼
-@DICTIONARY_ABL_20
-PRINTL 남성끼리의 성애를 얼마나 받아들이는지를 나타냅니다.
-PRINTL 높으면 동성끼리 성애 조교를 했을때 반감등이 내려가고, 쾌감이 오릅니다.
-PRINTW 조교종료시 BL플레이를 행하기 위한 전제 조건인 BL중독을 취득하는데에 필요합니다.
-
-;ＢＬ중독
-@DICTIONARY_ABL_21
-PRINTL 남성끼리와의 성애에 얼마나 푹 빠져 있는지를 나타냅니다.
-PRINTW 높으면 동성 성애 조교를 했을때 느끼는 반감이 내려가고 쾌감이 오릅니다.
-
-;수간중독
-@DICTIONARY_ABL_22
-PRINTW 현재 미실장. 
 
 ;=============================================================================
 ;用語辞典――그외数値
@@ -460,3 +277,5 @@ PRINTL 〔CP〕
 PRINTL 악마가 현실 세계에 체재하기 위해 필요한 MAG의 양을 나타냅니다
 PRINTL 악마가 걸을 때 만큼의 MAG를 소비해, MAG가 부족한 경우는 대미지를 받습니다.
 PRINTW CP의 양은 방어 궁합에 의해 정해져, 내성이 많거나, 약점이 적은 악마는 보다 많은 MAG를 필요로 합니다
+
+

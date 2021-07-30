@@ -2,7 +2,11 @@
 
 ;스킬名
 @SKILL_NAME_1912,ARG
-RESULTS = 플래시봄
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	RESULTS = N・블래스터
+ELSE
+	RESULTS = 플래시봄
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_1912, ARG
@@ -10,9 +14,13 @@ RETURN 80
 
 ;　위력
 @SKILL_POWER_1912, ARG
+SIF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
+	RETURN 200
 RETURN 180
 
-@SKILL_CRITICAL_RATE_1912
+@SKILL_CRITICAL_RATE_1912, ARG
+SIF SKILL_CHANGE(U, [[キャラ:팬텀]]) || SKILL_CHANGE(U, [[キャラ:팻]])
+	RETURN 0
 RETURN -200
 
 ;　최저공격횟수
@@ -37,11 +45,11 @@ RETURN 24
 RETURN GET_TYPE_NUM("핵열")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1912
+@SKILL_DECIDE_TYPE_1912, ARG
 RETURN 1
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1912
+@SKILL_DAMAGETYPE_1912, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -50,11 +58,11 @@ RETURN 1
 
 ;　사거리
 @SKILL_RANGE_1912,ARG
-RETURN 2
+RETURN 3
 
 ;　범위　11명　2１열　3전체　4　적아군전체
 @SKILL_SPHERE_1912,ARG
-RETURN 3
+RETURN 2
 
 ;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복
 @SKILL_EFECT_1912
@@ -107,30 +115,20 @@ RETURN 0
 ;====================================================
 ;스킬及び行動の実行
 ;====================================================
+@SKILL_DAMAGE_EFFECT_1912,ARG,ARG:1
+SIF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
+	RETURN
+PRINT  & 명중・回避低下
+CFLAG:(ARG:1):명중강화 = MAX(-16, CFLAG:(ARG:1):명중강화 - 4)
+CFLAG:(ARG:1):회피강화 = MAX(-16, CFLAG:(ARG:1):회피강화 - 4)
+
+;====================================================
+;スキル及び行動の実行
+;====================================================
 @ACTION_1912,ARG,ARG:1
 #LOCALSIZE 3
-#DIM 前HP
-#DIM 被弾フラグ
-被弾フラグ = 0
-IF ARG:1 == 19
-	LOCAL:1 = 1
-	LOCAL:2 = 4
-ELSE
-	LOCAL:1 = 7
-	LOCAL:2 = 12
-ENDIF
 
-FOR LOCAL,LOCAL:1,LOCAL:2
-	SIF POS(LOCAL) < 0 || CFLAG:POS(LOCAL):ステート == GET_STATE_NUM("DYING")
-		CONTINUE
-	前HP = BASE:POS(LOCAL):ＨＰ
-	CALL ATTACK_SINGLE,ARG,POS(LOCAL),1912
-	IF POS(LOCAL) > -1 && BASE:POS(LOCAL):ＨＰ < 前HP
-		CFLAG:POS(LOCAL):명중강화 = MAX(-16, CFLAG:POS(LOCAL):명중강화 - 4)
-		CFLAG:POS(LOCAL):회피강화 = MAX(-16, CFLAG:POS(LOCAL):회피강화 - 4)
-		PRINTFORML 　　TARGET:[{LOCAL,2}] %CALLNAME:POS(LOCAL),20,LEFT%　>>>>>>　명중률・회피율이 내려갔다!
-	ENDIF
-NEXT
+CALL ATTACK_FIELD,ARG,ARG:1,1912
 
 ;====================================================
 ;実行内容ここまで
@@ -138,7 +136,13 @@ NEXT
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_1912
-PRINTL [후열] 적 전체에 핵열속성 중 물리데미지. 명중률이 조금 낮고, 적 전체의 명중률・회피율을 감소시킨다.
+IF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	PRINTL 가슴부 중앙 에너지 캐논에서 중성자 빔을 발사하여 적 1열에 핵열 상성의 물리데미지를 준다
+	PRINTL 정식 명칭은「뉴트론・블래스터」。
+ELSE
+	PRINTL [후열] 적 일렬에 핵열 상성 중 물리데미지. 명중률이 조금 낮고, 적 전체의 명중률・회피율을 감소시킨다.
+	PRINTL 크리티컬이 발생하지 않는다.
+ENDIF
 
 ;継承に필요한部位
 @継承部位_1912,ARG

@@ -15,7 +15,7 @@ SELECTCASE 투기장フラグ:10:0
 		IF FLAG:闘技場名声 > 200
 			RESULTS = 데빌 콜로세움　Ｄ랭크 매치
 			IF 투기장フラグ:10:5 == 0
-				LOCALS = 투기장 【%RESULTS%】조사만처리(RESULTS, "가") 출현!
+				LOCALS = 투기장 【%RESULTS%】%조사만처리(RESULTS, "가")% 출현!
 				CALL MESSAGE_B(1, LOCALS)
 				투기장フラグ:10:5 = 1
 			ENDIF
@@ -25,7 +25,7 @@ SELECTCASE 투기장フラグ:10:0
 		IF FLAG:闘技場名声 > 500
 			RESULTS = 데빌 콜로세움　Ｃ랭크 매치
 			IF 투기장フラグ:10:5 == 1
-				LOCALS = 투기장 【%RESULTS%】조사만처리(RESULTS, "가") 출현!
+				LOCALS = 투기장 【%RESULTS%】%조사만처리(RESULTS, "가")% 출현!
 				CALL MESSAGE_B(1, LOCALS)
 				투기장フラグ:10:5 = 2
 			ENDIF
@@ -35,7 +35,7 @@ SELECTCASE 투기장フラグ:10:0
 		IF FLAG:闘技場名声 > 1300
 			RESULTS = 데빌 콜로세움　B랭크 매치
 			IF 투기장フラグ:10:5 == 2
-				LOCALS = 투기장 【%RESULTS%】조사만처리(RESULTS, "가") 출현!
+				LOCALS = 투기장 【%RESULTS%】%조사만처리(RESULTS, "가")% 출현!
 				CALL MESSAGE_B(1, LOCALS)
 				투기장フラグ:10:5 = 3
 			ENDIF
@@ -45,7 +45,7 @@ SELECTCASE 투기장フラグ:10:0
 		IF FLAG:闘技場名声 > 2000
 			RESULTS = 데빌 콜로세움　A랭크 매치
 			IF 투기장フラグ:10:5 == 3
-				LOCALS = 투기장 【%RESULTS%】조사만처리(RESULTS, "가") 출현!
+				LOCALS = 투기장 【%RESULTS%】%조사만처리(RESULTS, "가")% 출현!
 				CALL MESSAGE_B(1, LOCALS)
 				투기장フラグ:10:5 = 4
 			ENDIF
@@ -55,7 +55,7 @@ SELECTCASE 투기장フラグ:10:0
 		IF FLAG:闘技場名声 > 2500
 			RESULTS = 데빌 콜로세움　S랭크 매치　전반전
 			IF 투기장フラグ:10:5 == 4
-				LOCALS = 투기장 【%RESULTS%】조사만처리(RESULTS, "가") 출현!
+				LOCALS = 투기장 【%RESULTS%】%조사만처리(RESULTS, "가")% 출현!
 				CALL MESSAGE_B(1, LOCALS)
 				투기장フラグ:10:5 = 5
 			ENDIF
@@ -65,7 +65,7 @@ SELECTCASE 투기장フラグ:10:0
 		IF 투기장フラグ:10:2 > 0 && 투기장フラグ:10:4 == 0
 			RESULTS = 데빌 콜로세움　스페셜 매치
 			IF 투기장フラグ:10:5 == 5
-				LOCALS = 투기장 【%RESULTS%】조사만처리(RESULTS, "가") 출현!
+				LOCALS = 투기장 【%RESULTS%】%조사만처리(RESULTS, "가")% 출현!
 				CALL MESSAGE_B(1, LOCALS)
 				투기장フラグ:10:5 = 6
 			ENDIF
@@ -73,7 +73,7 @@ SELECTCASE 투기장フラグ:10:0
 		ELSEIF DAY > 50
 			RESULTS = 데빌 콜로세움　폐막
 			IF 투기장フラグ:10:5 == 5 || 투기장フラグ:10:5 == 6
-				LOCALS = 투기장 【%RESULTS%】조사만처리(RESULTS, "가") 출현!
+				LOCALS = 투기장 【%RESULTS%】%조사만처리(RESULTS, "가")% 출현!
 				CALL MESSAGE_B(1, LOCALS)
 				투기장フラグ:10:5 = 7
 			ENDIF
@@ -81,7 +81,7 @@ SELECTCASE 투기장フラグ:10:0
 		ELSE
 			RESULTS = 데빌 콜로세움　S랭크 매치　후반전
 			IF 투기장フラグ:10:5 == 5 || 투기장フラグ:10:5 == 6
-				LOCALS = 투기장 【%RESULTS%】조사만처리(RESULTS, "가") 출현!
+				LOCALS = 투기장 【%RESULTS%】%조사만처리(RESULTS, "가")% 출현!
 				CALL MESSAGE_B(1, LOCALS)
 				투기장フラグ:10:5 = 7
 			ENDIF

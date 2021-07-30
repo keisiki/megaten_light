@@ -1,11 +1,6 @@
 ﻿;스킬名
 @SKILL_NAME_346,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:나나]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나나]]) == 1
-	RESULTS = 윤＆무
-ELSE
-	RESULTS = 묵시록
-ENDIF
+RESULTS = 묵시록
 
 ;　명중
 @SKILL_HITRATE_346, ARG
@@ -13,9 +8,8 @@ RETURN 90
 
 ;　威힘
 @SKILL_POWER_346, ARG
-;ばななが사용する場合威힘を盛る（マルカジリ相当
-;IF ARG > 0 && NO:ARG == [[キャラ:나나]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나나]]) == 1
+;ば나나が사용する場合위력を盛る（マルカジリ相当
+IF SKILL_CHANGE(ARG, [[キャラ:나나]])
 	RETURN 410
 ELSE
 	RETURN 325
@@ -36,9 +30,8 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_346,ARG
-;ばななが사용する場合소비を盛る（マルカジリより多い
-;IF ARG > 0 && NO:ARG == [[キャラ:나나]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:나나]]) == 1
+;ば나나が사용する場合소비を盛る（マルカジリより多い
+IF SKILL_CHANGE(ARG, [[キャラ:나나]])
 	RETURN 40
 ELSE
 	RETURN 30
@@ -49,12 +42,12 @@ ENDIF
 RETURN 3
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_346
+@SKILL_DECIDE_TYPE_346, ARG
 RETURN 1
 ;特技
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_346
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_346, ARG
 RETURN 1
 
 
@@ -137,13 +130,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,346
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_346
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:나나]]
-	PRINTL 소녀のキラめきにより鋳造された二つの刃。
-	PRINTL 繊細な心で、大胆な손段で、소녀はたった一つの光り輝く舞台を取り戻しに行く。
-	PRINTL 적전체を공격し、CLOSE상태にする。後列사용可。
-ELSE
-	PRINTL [후열] 적 전체에 전술속성 대 물리데미지. (낮은 확률로 CLOSE)
-ENDIF
+PRINTL [후열] 적 전체에 전술속성 대 물리데미지. (낮은 확률로 CLOSE)
 
 ;継承に필요な部位
 @継承部位_346,ARG

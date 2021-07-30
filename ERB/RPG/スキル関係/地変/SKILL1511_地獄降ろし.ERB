@@ -1,7 +1,7 @@
 ﻿
 ;스킬名
 @SKILL_NAME_1511,ARG
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:스이카]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:스이카]])
 	RESULTS = 췌부「토가쿠시산 던지기」
 ELSE
 	RESULTS = 지옥떨구기
@@ -42,12 +42,12 @@ RETURN 12
 ;지변
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1511
+@SKILL_DECIDE_TYPE_1511, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1511
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1511, ARG
 IF (U > 0 && U < CHARANUM && NO:U == [[キャラ:스이카]]) || ((FLAG:行動順1) > 0 && NO:(FLAG:行動順1) == [[キャラ:스이카]])
 	RETURN 1
 ELSE

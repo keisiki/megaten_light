@@ -59,9 +59,15 @@ RETURN 0
 @장비箇所_2292
 RETURN GET_EQUIPNUM("검")
 
+;파트라
 @장비추가스킬_2292,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 408
+	ENDSELECT
+ENDIF
 RETURN 0
-
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -83,6 +89,9 @@ PRINTL 장비조건：LV15～
 
 @장비해설_2292
 PRINTL 불교 의식에 쓰이는、옥으로 만들어진 꼬챙이
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：파트라
+RESETCOLOR
 
 RETURN 0
 

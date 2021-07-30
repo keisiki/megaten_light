@@ -35,12 +35,12 @@ RETURN 9
 ;정신
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1212
+@SKILL_DECIDE_TYPE_1212, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1212
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1212, ARG
 RETURN 0
 
 
@@ -91,8 +91,10 @@ RETURN 6
 @SKILL_RANKUP_1212
 ;파이널누드
 D:1 = 1214
+;절세의육체
+D:2 = 1215
 ;랭크アップ先は二つ
-RETURN 1
+RETURN 2
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스

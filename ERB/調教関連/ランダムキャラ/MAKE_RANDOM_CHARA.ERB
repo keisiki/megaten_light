@@ -3,6 +3,10 @@
 ;引数は타입, LV, 性別
 ;-------------------------------------------
 ;2019/07/26　JK好き　魔乳に暫定対応
+;2020/03/20　っとっとき　랜덤악마リンク対応。尻소질に対応。계승타입もテキトーに부여させるように対応
+;2020/09/05　っとっとき　一部の処理を別の処理からも사용できるように処理を分割
+;2020/09/12　名無し　排他소질の체크漏れ追記、不具合수정
+;2021/01/05　名無し　ロール外の調整処理を추가
 @MAKE_RANDOM_CHARA, ARG = -1, ARG:1 = 5, ARG:2 = -1
 #DIM CHARA, 1
 #DIM TYPE, 1
@@ -31,7 +35,7 @@ SIF FLAG:DEBUG
 	CFLAG:CHARA:전투참가불가능 = 0
 ;-------------------------
 ;性別
-;랜덤の場合、남자10%　오토코노코5%　女45%　후타나리40%
+;랜덤の場合、남자40%　오토코노코4%　女55%　후타나리1%
 ;-------------------------
 IF ARG:2 >= 0
 	SELECTCASE ARG:2
@@ -45,12 +49,12 @@ IF ARG:2 >= 0
 	ENDSELECT
 ELSE
 	SELECTCASE RAND:100
-		CASE IS < 10
+		CASE IS < 40
 			TALENT:CHARA:남자 = 1
-		CASE IS < 15
+		CASE IS < 44
 			TALENT:CHARA:남자 = 1
 			TALENT:CHARA:오토코노코 = 1
-		CASE IS < 55
+		CASE IS < 45
 			TALENT:CHARA:후타나리 = 1
 	ENDSELECT
 ENDIF
@@ -73,7 +77,8 @@ CFLAG:CHARA:秩混치 = RESULT:1
 ;-------------------------
 ;종족
 ;-------------------------
-ABL:CHARA:종족 = 0
+CALLFORM RANDOMCHARA_{ARG}, "종족", CHARA
+ABL:CHARA:종족 = RESULT
 ;-------------------------
 ;전투소질
 ;-------------------------
@@ -85,7 +90,7 @@ WHILE RESULTS:LOCAL != ""
 	LOCAL++
 WEND
 ;-------------------------
-;스테이터스
+;ステータス
 ;-------------------------
 BASE:CHARA:LV = ARG:1
 BASE:CHARA:ＥＸＰ = 5*(ARG:1-1)*(ARG:1+1)*(ARG:1)/3
@@ -112,17 +117,44 @@ FOR LOCAL, 0, LOCAL:1 / 8
 	BASE:CHARA:GET_BASESTATUS(LOCAL:2) -= 1
 NEXT
 ;---------------------------------------------
+;페르소나
+;---------------------------------------------
+IF TALENT:CHARA:페르소나구사자 >= 1
+	CALLFORM RANDOMCHARA_{ARG}, "초기페르소나", CHARA
+	IF RESULT == 0
+		CALLFORM RANDAM_LINKS, CHARA
+		ABL:CHARA:초기페르소나 = RESULT
+	ELSE
+		ABL:CHARA:초기페르소나 = RESULT
+	ENDIF
+	ABL:CHARA:스킬9 = [[스킬:P・체인지]]
+	
+	;1/2でP3以降の페르소나구사자に
+	IF RAND:2 == 0
+		TALENT:CHARA:페르소나구사자 = 2
+	ELSE
+		TALENT:CHARA:페르소나구사자 = 1
+	ENDIF
+ENDIF
+;---------------------------------------------
 ;링크악마
 ;---------------------------------------------
-CALLFORM RANDOMCHARA_{ARG}, "링크악마", CHARA
-CFLAG:CHARA:초기링크악마 = RESULT
-;링크악마があるときのATTACK설정;後から변경も出来るしとりあえず無難な타격相性に
-IF RESULT
-	ABL:CHARA:초기링크악마공격상성 = 2
-	ABL:CHARA:초기링크악마최저공격횟수 = 1
-	ABL:CHARA:초기링크악마최대공격횟수 = 1
-	ABL:CHARA:초기링크악마사거리= 1
-	ABL:CHARA:초기링크악마공격범위 = 1
+IF TALENT:CHARA:식노 == 1 || TALENT:CHARA:데빌시프터 == 1 || TALENT:CHARA:변신선대응 == 1 
+	CALLFORM RANDOMCHARA_{ARG}, "링크악마", CHARA
+	IF RESULT == 0
+		CALLFORM RANDAM_LINKS, CHARA
+		CFLAG:CHARA:초기링크악마 = RESULT
+	ELSE
+		CFLAG:CHARA:초기링크악마 = RESULT
+	ENDIF
+	;링크악마があるときのATTACK설정;後から변경も出来るしとりあえず無難な타격相性に
+	IF RESULT
+		ABL:CHARA:초기링크악마공격상성 = 2
+		ABL:CHARA:초기링크악마최저공격횟수 = 1
+		ABL:CHARA:초기링크악마최대공격횟수 = 1
+		ABL:CHARA:초기링크악마사거리 = 1
+		ABL:CHARA:초기링크악마공격범위 = 1
+	ENDIF
 ENDIF
 ;-------------------------
 ;스킬
@@ -130,6 +162,7 @@ ENDIF
 ;깨달음えられるか見て落としこむ
 ;-------------------------
 VARSET LSKILLS
+VARSET RESULT
 LOCAL:1 = 0
 ;페르소나구사자は스킬を得ない
 IF !TALENT:CHARA:페르소나구사자
@@ -232,6 +265,9 @@ NEXT
 FOR LOCAL, 0, LOCAL:1
 	SWAP RESULT:LOCAL, RESULT:(RAND:(LOCAL:1))
 NEXT
+LOCAL:3 = 0
+LOCAL:4 = 0
+LOCAL:5 = 0
 ;優先を保存
 FOR LOCAL, 0, 3
 	SIF TALENTNAME:(RESULT:LOCAL) == ""
@@ -245,36 +281,60 @@ CALLFORM RANDOMCHARA_{ARG}, "除外소질", CHARA
 LOCAL:1 = 0
 ;소질は랜덤で5%の확률로発現
 FOR LOCAL, 10, 137
-	;디폴트での除外소질
-	SIF GROUPMATCH(TALENTNAME:LOCAL, "", "弱み", "질투", "즉각함락", "자위광", "섹스광", "애널광", "음유", "고양이혀", "망신", "여우", "요호", "수수께끼의매력", "흡혈귀", "새드", "마조")
+	;デフォルトでの除外소질
+	SIF GROUPMATCH(TALENTNAME:LOCAL, "", "약점", "질투", "즉각함락", "자위광", "섹스광", "애널광", "음유", "고양이혀", "망신", "여우", "요호", "수수께끼의매력", "흡혈귀", "새드", "마조", "好餌")
 		CONTINUE
 	;体型関係はここでは除外
-	SIF GROUPMATCH(TALENTNAME:LOCAL, "유아체형", "큰체형", "거체", "빈유", "절벽", "거유", "폭유")
+	SIF GROUPMATCH(TALENTNAME:LOCAL, "유아체형", "큰체형", "거체", "빈유", "절벽", "거유", "폭유", "魔乳")
+		CONTINUE
+	SIF GROUPMATCH(TALENTNAME:LOCAL, "유생고정", "하얀피부", "갈색피부", "붉은피부", "푸른피부", "小尻", "並尻", "巨尻", "爆尻", "魔尻")
 		CONTINUE
 	;優先は판정しない
-	SIF GROUPMATCH(LOCAL, LOCAL:1, LOCAL:2, LOCAL:3)
+	SIF GROUPMATCH(LOCAL, LOCAL:3, LOCAL:4, LOCAL:5)
 		CONTINUE
 	;除外소질
 	SIF MATCH(RESULT, LOCAL)
 		CONTINUE
-	TALENT:CHARA:LOCAL = RAND:100 > 95
+	;랜덤キャラ4人눈以降は25%で発現
+	IF 이벤트フラグ:88:0 > 2
+		TALENT:CHARA:LOCAL = RAND:100 > 75
+	ELSE
+		TALENT:CHARA:LOCAL = RAND:100 > 95
+	ENDIF
 	;発現소질数を카운트
 	LOCAL:1++
 NEXT
 
 ;この時点での発現소질を調整
 ;LOCAL:2 = RAND(3, 6)
-SELECTCASE RAND:10
-	;殆どの場合 発現소질を3～5個に減らす
-	CASE IS < 5
-		LOCAL:2 = RAND(3, 6)
-	;20%　発現소질を3～10個に減らす
-	CASE IS < 8
-		LOCAL:2 = RAND(3, 11)
-	;10%　フィーバー 3～25
-	CASE IS < 9
-		LOCAL:2 = RAND(3, 26)
-ENDSELECT
+;랜덤キャラ4人눈以降は調整計算を변경
+IF 이벤트フラグ:88:0 > 2
+	SELECTCASE RAND:10
+		CASE IS < 5
+		;0~4
+			LOCAL:2 = RAND(8, 13)
+		CASE IS < 8
+		;5~7
+			LOCAL:2 = RAND(8, 18)
+		CASEELSE
+		;8,9
+			LOCAL:2 = RAND(8, 31)
+	ENDSELECT
+ELSE
+	SELECTCASE RAND:10
+		;殆どの場合 発現소질を3～5個に減らす
+		CASE IS < 7
+		;0~6
+			LOCAL:2 = RAND(3, 6)
+		;20%　発現소질を3～10個に減らす
+		CASE IS < 9
+		;7,8
+			LOCAL:2 = RAND(3, 11)
+		;10%　フィーバー 3～25
+		CASEELSE
+			LOCAL:2 = RAND(3, 26)
+	ENDSELECT
+ENDIF
 WHILE LOCAL:2 < MATCH(TALENT:CHARA:0, 1, 10, 137)
 	LOCAL = RAND(10, 137)
 	SIF !TALENT:CHARA:LOCAL
@@ -292,192 +352,9 @@ FOR LOCAL, 3, 6
 NEXT
 
 ;両立不能な소질を削っていく
-;処理が怪しいので旧来処理はコメントアウト
-;地味に1グループずつ処理する方式に변경
-;LOCAL = 0
-;SPLIT "겁쟁이_꿋꿋함/솔직함_반항적/건방짐_얌전함/프라이드높음_프라이드낮음/무관심_호기심/낙관적_비관적/억압_해방/부끄럼쟁이_부끄럼없음/젖기쉬움_젖기어려움/습득빠름_습득느림/악취둔감_악취민감/쾌감에솔직_쾌감을부정/Ｃ둔감_Ｃ민감/Ｖ둔감_Ｖ민감/Ａ둔감_Ａ민감/Ｂ민감_Ｂ둔감/회복빠름_회복느림/정조관념_정조관결여", "/", RESULTS
-;WHILE RESULTS:LOCAL != ""
-;	LOCAL++
-;	SPLIT RESULTS:LOCAL, "_", LOCALS
-;	IF !TALENT:CHARA:LOCALS || TALENT:CHARA:(LOCALS:1)
-;		LOCAL++
-;		CONTINUE
-;	ENDIF
-;	IF GROUPMATCH(GETNUM(TALENT, LOCALS), LOCAL:3, LOCAL:4, LOCAL:5)
-;		TALENT:CHARA:(LOCALS:1) = 0
-;	ELSEIF GROUPMATCH(GETNUM(TALENT, LOCALS:1), LOCAL:3, LOCAL:4, LOCAL:5)
-;		TALENT:CHARA:LOCALS = 0
-;	ELSE
-;		IF RAND:2
-;			TALENT:CHARA:LOCALS = 0
-;		ELSE
-;			TALENT:CHARA:(LOCALS:1) = 0
-;		ENDIF
-;	ENDIF
-;	LOCAL++
-;WEND
-IF TALENT:CHARA:겁쟁이 == 1 && TALENT:CHARA:꿋꿋함 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:겁쟁이 = 1
-		TALENT:CHARA:꿋꿋함 = 0
-	ELSE
-		TALENT:CHARA:겁쟁이 = 0
-		TALENT:CHARA:꿋꿋함 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:솔직함 == 1 && TALENT:CHARA:반항적 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:솔직함   = 1
-		TALENT:CHARA:반항적 = 0
-	ELSE
-		TALENT:CHARA:솔직함   = 0
-		TALENT:CHARA:반항적 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:건방짐 == 1 && TALENT:CHARA:얌전함 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:건방짐   = 1
-		TALENT:CHARA:얌전함 = 0
-	ELSE
-		TALENT:CHARA:건방짐   = 0
-		TALENT:CHARA:얌전함 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:프라이드높음 == 1 && TALENT:CHARA:프라이드낮음 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:프라이드높음 = 1
-		TALENT:CHARA:프라이드낮음 = 0
-	ELSE
-		TALENT:CHARA:프라이드높음 = 0
-		TALENT:CHARA:프라이드낮음 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:무관심 == 1 && TALENT:CHARA:호기심 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:무관심 = 1
-		TALENT:CHARA:호기심 = 0
-	ELSE
-		TALENT:CHARA:무관심 = 0
-		TALENT:CHARA:호기심 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:낙관적 == 1 && TALENT:CHARA:비관적 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:낙관적 = 1
-		TALENT:CHARA:비관적 = 0
-	ELSE
-		TALENT:CHARA:낙관적 = 0
-		TALENT:CHARA:비관적 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:억압 == 1 && TALENT:CHARA:해방 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:억압 = 1
-		TALENT:CHARA:해방 = 0
-	ELSE
-		TALENT:CHARA:억압 = 0
-		TALENT:CHARA:해방 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:부끄럼쟁이 == 1 && TALENT:CHARA:부끄럼없음 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:부끄럼쟁이 = 1
-		TALENT:CHARA:부끄럼없음   = 0
-	ELSE
-		TALENT:CHARA:부끄럼쟁이 = 0
-		TALENT:CHARA:부끄럼없음   = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:젖기쉬움 == 1 && TALENT:CHARA:젖기어려움 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:젖기쉬움 = 1
-		TALENT:CHARA:젖기어려움 = 0
-	ELSE
-		TALENT:CHARA:젖기쉬움 = 0
-		TALENT:CHARA:젖기어려움 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:습득빠름 == 1 && TALENT:CHARA:습득느림 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:습득빠름 = 1
-		TALENT:CHARA:습득느림 = 0
-	ELSE
-		TALENT:CHARA:습득빠름 = 0
-		TALENT:CHARA:습득느림 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:악취둔감 == 1 && TALENT:CHARA:악취민감 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:악취둔감 = 1
-		TALENT:CHARA:악취민감 = 0
-	ELSE
-		TALENT:CHARA:악취둔감 = 0
-		TALENT:CHARA:악취민감 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:쾌감에솔직 == 1 && TALENT:CHARA:쾌감을부정 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:쾌감에솔직 = 1
-		TALENT:CHARA:쾌감을부정 = 0
-	ELSE
-		TALENT:CHARA:쾌감에솔직 = 0
-		TALENT:CHARA:쾌감을부정 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:Ｃ둔감 == 1 && TALENT:CHARA:Ｃ민감 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:Ｃ둔감 = 1
-		TALENT:CHARA:Ｃ민감 = 0
-	ELSE
-		TALENT:CHARA:Ｃ둔감 = 0
-		TALENT:CHARA:Ｃ민감 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:Ｖ둔감 == 1 && TALENT:CHARA:Ｖ민감 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:Ｖ둔감 = 1
-		TALENT:CHARA:Ｖ민감 = 0
-	ELSE
-		TALENT:CHARA:Ｖ둔감 = 0
-		TALENT:CHARA:Ｖ민감 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:Ａ둔감 == 1 && TALENT:CHARA:Ａ민감 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:Ａ둔감 = 1
-		TALENT:CHARA:Ａ민감 = 0
-	ELSE
-		TALENT:CHARA:Ａ둔감 = 0
-		TALENT:CHARA:Ａ민감 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:Ｂ민감 == 1 && TALENT:CHARA:Ｂ둔감 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:Ｂ민감 = 1
-		TALENT:CHARA:Ｂ둔감 = 0
-	ELSE
-		TALENT:CHARA:Ｂ민감 = 0
-		TALENT:CHARA:Ｂ둔감 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:회복빠름 == 1 && TALENT:CHARA:회복느림 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:회복빠름 = 1
-		TALENT:CHARA:회복느림 = 0
-	ELSE
-		TALENT:CHARA:회복빠름 = 0
-		TALENT:CHARA:회복느림 = 1
-	ENDIF
-ENDIF
-IF TALENT:CHARA:정조관념 == 1 && TALENT:CHARA:정조관결여 == 1
-	IF RAND:2 == 0
-		TALENT:CHARA:정조관념   = 1
-		TALENT:CHARA:정조관결여 = 0
-	ELSE
-		TALENT:CHARA:정조관념  = 0
-		TALENT:CHARA:정조관결여 = 1
-	ENDIF
-ENDIF
+CALLFORM RANDOMTALENT_COMPE_DELETE, CHARA
+
+;(優先소질の関係で바이・남성혐오・여성혐오は別途処理)
 IF TALENT:CHARA:바이 && (TALENT:CHARA:남성혐오 || TALENT:CHARA:여성혐오)
 	IF GROUPMATCH(TALENT:CHARA:바이, LOCAL:3, LOCAL:4, LOCAL:5)
 		TALENT:CHARA:남성혐오 = 0
@@ -493,6 +370,23 @@ IF TALENT:CHARA:바이 && (TALENT:CHARA:남성혐오 || TALENT:CHARA:여성혐�
 		ENDIF
 	ENDIF
 ENDIF
+;-------------------------
+;素質共通処理
+;-------------------------
+;スキル習得に影響を与えない為にここに
+SIF EXTRA強化(3) == 0 && TALENT:CHARA:달인 == 0
+	CALL ロール内필터ー ,CHARA
+;-------------------
+;계승타입
+;-------------------
+;스킬카드を付けやすくするため、계승타입を後付けで설정
+;それぞれ40%の확률で発現させる
+FOR LOCAL, 320, 342
+	TALENT:CHARA:LOCAL = RAND:100 >= 60
+NEXT
+;気休めで랜덤キャラ作成時、MAGを최대まで持たせておく
+BASE:CHARA:ＭＡＧ = MAXBASE:CHARA:ＭＡＧ
+
 ;-------------------
 ;처녀
 ;-------------------
@@ -506,55 +400,14 @@ ENDIF
 ;体型・가슴・形質
 ;-------------------
 CALLFORM RANDOMCHARA_{ARG}, "가슴サイズ", CHARA
-IF RESULT == 0
-	SELECTCASE RAND:100
-		CASE IS < 5
-			TALENT:CHARA:절벽 = 1
-		CASE IS < 25
-			TALENT:CHARA:빈유 = 1
-		CASE IS < 45
-			TALENT:CHARA:거유 = 1
-		CASE IS < 50
-			TALENT:CHARA:폭유 = 1
-		CASE IS < 52
-			TALENT:CHARA:魔乳 = 1
-	ENDSELECT
-ELSE
-	SELECTCASE RESULT
-		CASE 1
-			TALENT:CHARA:절벽 = 1
-		CASE 2
-			TALENT:CHARA:빈유 = 1
-		CASE 4
-			TALENT:CHARA:거유 = 1
-		CASE 5
-			TALENT:CHARA:폭유 = 1
-		CASE 6
-			TALENT:CHARA:魔乳 = 1
-	ENDSELECT
-ENDIF
+CALLFORM RANDOMTALENT_BODY_B, CHARA, RESULT
+
+CALLFORM RANDOMCHARA_{ARG}, "尻", CHARA
+CALLFORM RANDOMTALENT_BODY_H, CHARA, RESULT
+
 CALLFORM RANDOMCHARA_{ARG}, "体型", CHARA
-IF RESULT == 0
-	SELECTCASE RAND:100
-		CASE IS < 15
-			TALENT:CHARA:유아체형 = 1
-		CASE IS < 30
-			TALENT:CHARA:큰체형 = 1
-		CASE IS < 35
-			TALENT:CHARA:거체 = 1
-	ENDSELECT
-ELSE
-	SELECTCASE RESULT
-		CASE 1
-			TALENT:CHARA:소인체형 = 1
-		CASE 2
-			TALENT:CHARA:유아체형 = 1
-		CASE 4
-			TALENT:CHARA:큰체형 = 1
-		CASE 5
-			TALENT:CHARA:거체 = 1
-	ENDSELECT
-ENDIF
+CALLFORM RANDOMTALENT_BODY_W, CHARA, RESULT
+
 CALLFORM RANDOMCHARA_{ARG}, "肉体部位", CHARA
 IF RESULT == 0
 	TALENT:CHARA:머리 = 1
@@ -573,6 +426,7 @@ IF IS_MALE(CHARA)
 	TALENT:CHARA:폭유 = 0
 	TALENT:CHARA:魔乳 = 0
 	SWAP TALENT:CHARA:Ｖ민감,CFLAG:CHARA:元Ｖ민감
+	SWAP TALENT:CHARA:Ｖ둔감,CFLAG:CHARA:元Ｖ둔감
 ENDIF
 
 ;-------------------
@@ -619,64 +473,11 @@ FOR LOCAL, 0, 12
 	CFLAG:CHARA:("초기"+GET_CLOTHESNAME(LOCAL)) = RESULT
 NEXT
 ;-------------------------
-;구상타입決定
 ;とりあえず악마汎用구상を사용しています
 ;-------------------------
 CALLFORM RANDOMCHARA_{ARG}, "회화타입", CHARA
-IF  RESULT == 0
-		IF IS_MALE(CHARA)
-			SELECTCASE RAND:4
-				CASE 0
-					ABL:CHARA:회화타입 = 316
-				CASE 1
-					ABL:CHARA:회화타입 = 317
-				CASE 2
-					ABL:CHARA:회화타입 = 318
-				CASE 3
-					ABL:CHARA:회화타입 = 324
-			ENDSELECT
-		ELSE
-			SELECTCASE RAND:6
-				CASE 0
-					ABL:CHARA:회화타입 = 302
-				CASE 1
-					ABL:CHARA:회화타입 = 303
-				CASE 2
-					ABL:CHARA:회화타입 = 304
-				CASE 3
-					ABL:CHARA:회화타입 = 305
-				CASE 4
-					ABL:CHARA:회화타입 = 306
-				CASE 5
-					ABL:CHARA:회화타입 = 307
-			ENDSELECT
-		ENDIF
-ELSE
-	SELECTCASE RESULT
-		CASE 1
-			ABL:CHARA:회화타입 = 302
-		CASE 2
-			ABL:CHARA:회화타입 = 303
-		CASE 3
-			ABL:CHARA:회화타입 = 304
-		CASE 4
-			ABL:CHARA:회화타입 = 305
-		CASE 5
-			ABL:CHARA:회화타입 = 306
-		CASE 6
-			ABL:CHARA:회화타입 = 307
-		CASE 7
-			ABL:CHARA:회화타입 = 316
-		CASE 8
-			ABL:CHARA:회화타입 = 317
-		CASE 9
-			ABL:CHARA:회화타입 = 329
-		CASE 10
-			ABL:CHARA:회화타입 = 318
-		CASE 11
-			ABL:CHARA:회화타입 = 324
-	ENDSELECT
-ENDIF
+CALLFORM RANDOM_KOJO_TYPE, CHARA, RESULT
+
 ;-------------------------
 ;이름・呼び方
 ;-------------------------
@@ -696,8 +497,559 @@ CALLFORM RANDOMCHARA_{ARG}, "해설", CHARA
 FOR LOCAL, 1, 21
 	CSTR:CHARA:@"해설{LOCAL}" = %RESULTS:(LOCAL-1)%
 NEXT
-
+;-------------------
 CALL SYNC_STATUS, CHARA
 CALL HEALTH_CHARA, CHARA
 ;CALL MESSAGE_B(1, @"%CALLNAME:CHARA%を作成しました")
 RETURN 1, CHARA, ARG
+
+
+;--------------------------------------
+;共通사용処理
+;--------------------------------------
+
+;--------------------------------------
+;両立不能な소질を削っていく
+;(優先소질の関係で바이・남성혐오・여성혐오は別途処理)
+;--------------------------------------
+@RANDOMTALENT_COMPE_DELETE, ARG
+
+;処理が怪しいので旧来処理はコメントアウト
+;地味に1グループずつ処理する方式に변경
+;LOCAL = 0
+;SPLIT "겁쟁이_꿋꿋함/솔직함_반항적/건방짐_얌전함/프라이드높음_프라이드낮음/무관심_호기심/낙관적_비관적/억압_해방/부끄럼쟁이_부끄럼없음/젖기쉬움_젖기어려움/습득빠름_습득느림/악취둔감_악취민감/쾌감에솔직_쾌감을부정/Ｃ둔감_Ｃ민감/Ｖ둔감_Ｖ민감/Ａ둔감_Ａ민감/Ｂ민감_Ｂ둔감/회복빠름_회복느림/정조관념_정조관결여", "/", RESULTS
+;WHILE RESULTS:LOCAL != ""
+;	LOCAL++
+;	SPLIT RESULTS:LOCAL, "_", LOCALS
+;	IF !TALENT:CHARA:LOCALS || TALENT:CHARA:(LOCALS:1)
+;		LOCAL++
+;		CONTINUE
+;	ENDIF
+;	IF GROUPMATCH(GETNUM(TALENT, LOCALS), LOCAL:3, LOCAL:4, LOCAL:5)
+;		TALENT:CHARA:(LOCALS:1) = 0
+;	ELSEIF GROUPMATCH(GETNUM(TALENT, LOCALS:1), LOCAL:3, LOCAL:4, LOCAL:5)
+;		TALENT:CHARA:LOCALS = 0
+;	ELSE
+;		IF RAND:2
+;			TALENT:CHARA:LOCALS = 0
+;		ELSE
+;			TALENT:CHARA:(LOCALS:1) = 0
+;		ENDIF
+;	ENDIF
+;	LOCAL++
+;WEND
+IF TALENT:ARG:아픔에강함 == 1 && TALENT:ARG:아픔에약함 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:아픔에강함 = 1
+		TALENT:ARG:아픔에약함 = 0
+	ELSE
+		TALENT:ARG:아픔에강함 = 0
+		TALENT:ARG:아픔에약함 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:겁쟁이 == 1 && TALENT:ARG:꿋꿋함 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:겁쟁이 = 1
+		TALENT:ARG:꿋꿋함 = 0
+	ELSE
+		TALENT:ARG:겁쟁이 = 0
+		TALENT:ARG:꿋꿋함 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:솔직함 == 1 && TALENT:ARG:반항적 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:솔직함   = 1
+		TALENT:ARG:반항적 = 0
+	ELSE
+		TALENT:ARG:솔직함   = 0
+		TALENT:ARG:반항적 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:건방짐 == 1 && TALENT:ARG:얌전함 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:건방짐 = 1
+		TALENT:ARG:얌전함 = 0
+	ELSE
+		TALENT:ARG:건방짐 = 0
+		TALENT:ARG:얌전함 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:프라이드높음 == 1 && TALENT:ARG:프라이드낮음 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:프라이드높음 = 1
+		TALENT:ARG:프라이드낮음 = 0
+	ELSE
+		TALENT:ARG:프라이드높음 = 0
+		TALENT:ARG:프라이드낮음 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:무관심 == 1 && TALENT:ARG:호기심 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:무관심 = 1
+		TALENT:ARG:호기심 = 0
+	ELSE
+		TALENT:ARG:무관심 = 0
+		TALENT:ARG:호기심 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:낙관적 == 1 && TALENT:ARG:비관적 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:낙관적 = 1
+		TALENT:ARG:비관적 = 0
+	ELSE
+		TALENT:ARG:낙관적 = 0
+		TALENT:ARG:비관적 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:억압 == 1 && TALENT:ARG:해방 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:억압 = 1
+		TALENT:ARG:해방 = 0
+	ELSE
+		TALENT:ARG:억압 = 0
+		TALENT:ARG:해방 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:부끄럼쟁이 == 1 && TALENT:ARG:부끄럼없음 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:부끄럼쟁이 = 1
+		TALENT:ARG:부끄럼없음   = 0
+	ELSE
+		TALENT:ARG:부끄럼쟁이 = 0
+		TALENT:ARG:부끄럼없음   = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:젖기쉬움 == 1 && TALENT:ARG:젖기어려움 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:젖기쉬움 = 1
+		TALENT:ARG:젖기어려움 = 0
+	ELSE
+		TALENT:ARG:젖기쉬움 = 0
+		TALENT:ARG:젖기어려움 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:습득빠름 == 1 && TALENT:ARG:습득느림 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:습득빠름 = 1
+		TALENT:ARG:습득느림 = 0
+	ELSE
+		TALENT:ARG:습득빠름 = 0
+		TALENT:ARG:습득느림 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:악취둔감 == 1 && TALENT:ARG:악취민감 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:악취둔감 = 1
+		TALENT:ARG:악취민감 = 0
+	ELSE
+		TALENT:ARG:악취둔감 = 0
+		TALENT:ARG:악취민감 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:쾌감에솔직 == 1 && TALENT:ARG:쾌감을부정 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:쾌감에솔직 = 1
+		TALENT:ARG:쾌감을부정 = 0
+	ELSE
+		TALENT:ARG:쾌감에솔직 = 0
+		TALENT:ARG:쾌감을부정 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:Ｃ둔감 == 1 && TALENT:ARG:Ｃ민감 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:Ｃ둔감 = 1
+		TALENT:ARG:Ｃ민감 = 0
+	ELSE
+		TALENT:ARG:Ｃ둔감 = 0
+		TALENT:ARG:Ｃ민감 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:Ｖ둔감 == 1 && TALENT:ARG:Ｖ민감 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:Ｖ둔감 = 1
+		TALENT:ARG:Ｖ민감 = 0
+	ELSE
+		TALENT:ARG:Ｖ둔감 = 0
+		TALENT:ARG:Ｖ민감 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:Ａ둔감 == 1 && TALENT:ARG:Ａ민감 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:Ａ둔감 = 1
+		TALENT:ARG:Ａ민감 = 0
+	ELSE
+		TALENT:ARG:Ａ둔감 = 0
+		TALENT:ARG:Ａ민감 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:Ｂ민감 == 1 && TALENT:ARG:Ｂ둔감 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:Ｂ민감 = 1
+		TALENT:ARG:Ｂ둔감 = 0
+	ELSE
+		TALENT:ARG:Ｂ민감 = 0
+		TALENT:ARG:Ｂ둔감 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:회복빠름 == 1 && TALENT:ARG:회복느림 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:회복빠름 = 1
+		TALENT:ARG:회복느림 = 0
+	ELSE
+		TALENT:ARG:회복빠름 = 0
+		TALENT:ARG:회복느림 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:정조관념 == 1 && TALENT:ARG:정조관결여 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:정조관념   = 1
+		TALENT:ARG:정조관결여 = 0
+	ELSE
+		TALENT:ARG:정조관념  = 0
+		TALENT:ARG:정조관결여 = 1
+	ENDIF
+ENDIF
+IF TALENT:ARG:슬렌더 == 1 && TALENT:ARG:포동포동 == 1
+	IF RAND:2 == 0
+		TALENT:ARG:슬렌더   = 1
+		TALENT:ARG:포동포동 = 0
+	ELSE
+		TALENT:ARG:슬렌더  = 0
+		TALENT:ARG:포동포동 = 1
+	ENDIF
+ENDIF
+;--------------------------------------
+;가슴
+;--------------------------------------
+@RANDOMTALENT_BODY_B, ARG, ARG:1
+IF ARG:1 == 0
+	SELECTCASE RAND:100
+		CASE IS < 5
+			TALENT:ARG:절벽 = 1
+		CASE IS < 25
+			TALENT:ARG:빈유 = 1
+		CASE IS < 45
+			TALENT:ARG:거유 = 1
+		CASE IS < 50
+			TALENT:ARG:폭유 = 1
+		CASE IS < 52
+			TALENT:ARG:魔乳 = 1
+	ENDSELECT
+ELSE
+	SELECTCASE ARG:1
+		CASE 1
+			TALENT:ARG:절벽 = 1
+		CASE 2
+			TALENT:ARG:빈유 = 1
+		CASE 4
+			TALENT:ARG:거유 = 1
+		CASE 5
+			TALENT:ARG:폭유 = 1
+		CASE 6
+			TALENT:ARG:魔乳 = 1
+	ENDSELECT
+ENDIF
+;--------------------------------------
+;尻
+;--------------------------------------
+@RANDOMTALENT_BODY_H, ARG, ARG:1
+IF ARG:1 == 0
+	SELECTCASE RAND:100
+		CASE IS < 5
+			TALENT:ARG:小尻 = 1
+		CASE IS < 25
+			TALENT:ARG:並尻 = 1
+		CASE IS < 45
+			TALENT:ARG:巨尻 = 1
+		CASE IS < 50
+			TALENT:ARG:爆尻 = 1
+		CASE IS < 52
+			TALENT:ARG:魔尻 = 1
+	ENDSELECT
+ELSE
+	SELECTCASE ARG:1
+		CASE 1
+			TALENT:ARG:小尻 = 1
+		CASE 2
+			TALENT:ARG:並尻 = 1
+		CASE 4
+			TALENT:ARG:巨尻 = 1
+		CASE 5
+			TALENT:ARG:爆尻 = 1
+		CASE 6
+			TALENT:ARG:魔尻 = 1
+	ENDSELECT
+ENDIF
+;--------------------------------------
+;体格
+;--------------------------------------
+@RANDOMTALENT_BODY_W, ARG, ARG:1
+IF ARG:1 == 0
+	SELECTCASE RAND:100
+		CASE IS < 15
+			TALENT:ARG:유아체형 = 1
+		CASE IS < 30
+			TALENT:ARG:큰체형 = 1
+		CASE IS < 35
+			TALENT:ARG:거체 = 1
+	ENDSELECT
+ELSE
+	SELECTCASE ARG:1
+		CASE 1
+			TALENT:ARG:소인체형 = 1
+		CASE 2
+			TALENT:ARG:유아체형 = 1
+		CASE 4
+			TALENT:ARG:큰체형 = 1
+		CASE 5
+			TALENT:ARG:거체 = 1
+	ENDSELECT
+ENDIF
+;--------------------------------------
+;구상타입결정
+;--------------------------------------
+@RANDOM_KOJO_TYPE, ARG, ARG:1
+IF ARG:1 == 0
+	IF IS_MALE(ARG)
+		SELECTCASE RAND:4
+			CASE 0
+				ABL:ARG:회화타입 = 316
+			CASE 1
+				ABL:ARG:회화타입 = 317
+			CASE 2
+				ABL:ARG:회화타입 = 318
+			CASE 3
+				ABL:ARG:회화타입 = 324
+		ENDSELECT
+	ELSE
+		SELECTCASE RAND:6
+			CASE 0
+				ABL:ARG:회화타입 = 302
+			CASE 1
+				ABL:ARG:회화타입 = 303
+			CASE 2
+				ABL:ARG:회화타입 = 304
+			CASE 3
+				ABL:ARG:회화타입 = 305
+			CASE 4
+				ABL:ARG:회화타입 = 306
+			CASE 5
+				ABL:ARG:회화타입 = 307
+		ENDSELECT
+	ENDIF
+ELSE
+	SELECTCASE ARG:1
+		CASE 1
+			ABL:ARG:회화타입 = 302
+		CASE 2
+			ABL:ARG:회화타입 = 303
+		CASE 3
+			ABL:ARG:회화타입 = 304
+		CASE 4
+			ABL:ARG:회화타입 = 305
+		CASE 5
+			ABL:ARG:회화타입 = 306
+		CASE 6
+			ABL:ARG:회화타입 = 307
+		CASE 7
+			ABL:ARG:회화타입 = 316
+		CASE 8
+			ABL:ARG:회화타입 = 317
+		CASE 9
+			ABL:ARG:회화타입 = 329
+		CASE 10
+			ABL:ARG:회화타입 = 318
+		CASE 11
+			ABL:ARG:회화타입 = 324
+	ENDSELECT
+ENDIF
+
+;--------------------------------------
+;랜덤악마リンク
+;--------------------------------------
+;시아크の処理からパク…参考に作成
+;악마リンクと言いつつ페르소나にも사용
+@RANDAM_LINKS, ARG
+#DIM 악마テーブル, 1000
+#DIM MAXLEVEL, 1
+#DIM TABLE_NUM, 1
+#DIM LCOUNT
+VARSET 악마テーブル
+LOCAL   = 0
+LOCAL:1 = 0 ;레어악마数카운트
+
+;上限を설정
+IF 이벤트フラグ:88:0 > 2
+	;강화フラグがある場合、확률を변경
+	SELECTCASE RAND:10
+		;3割でLv30以下
+		CASE IS < 3
+			MAXLEVEL = 30
+		;5割でLv60以下
+		CASE IS < 8
+			MAXLEVEL = 60
+		;2割でLv100以下(上限なし扱い)
+		CASEELSE
+			MAXLEVEL = 100
+	ENDSELECT
+ELSE
+	SELECTCASE RAND:10
+		;6割でLv30以下
+		CASE IS < 6
+			MAXLEVEL = 30
+		;3割でLv60以下
+		CASE IS < 9
+			MAXLEVEL = 60
+		;1割でLv100以下(上限なし扱い)
+		CASEELSE
+			MAXLEVEL = 100
+	ENDSELECT
+ENDIF
+
+FOR LCOUNT, 1, 1800
+	;CSVがあるか확인、なければ弾く
+	SIF EXISTCSV(LCOUNT, 0) == 0
+		CONTINUE
+	;上限레벨を超える場合は除外
+	SIF CSVBASE(LCOUNT, GETNUM(BASE, "LV")) > MAXLEVEL
+		CONTINUE
+	;당신を超える場合も除外
+	SIF CSVBASE(LCOUNT, GETNUM(BASE, "LV")) > BASE:MASTER:LV
+		CONTINUE
+	;女の場合、男を除外
+	SIF TALENT:ARG:남자 == 0 && CSVTALENT(LCOUNT, GETNUM(TALENT, "남자")) != 0
+		CONTINUE
+	;男の場合、女を除外
+	SIF TALENT:ARG:남자 == 1 && CSVTALENT(LCOUNT, GETNUM(TALENT, "남자")) != 1
+		CONTINUE
+	;解析率が50미만の악마は除外
+	SIF FLAG:(LCOUNT+20000) < 500
+		CONTINUE
+	;特殊合体のみ、合体조건有り、전서소환불가は弾く
+	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "特殊合体のみ")) || CSVCFLAG(LCOUNT, GETNUM(CFLAG, "合体조건有り")) || CSVCFLAG(LCOUNT, GETNUM(CFLAG, "전서소환불가"))
+		CONTINUE
+	악마テーブル:LOCAL = LCOUNT
+	LOCAL ++
+NEXT
+;레어악마処理
+;メガテン系이벤트이외불허가の場合は出現させない
+IF GETBIT(FLAG:EXTRA이벤트설정, 0) > 0
+	FOR LCOUNT, 5000, 5049
+		;CSVがあるか확인、なければ弾く
+		SIF EXISTCSV(LCOUNT, 0) == 0
+			CONTINUE
+		;上限레벨を超える場合は除外
+		SIF CSVBASE(LCOUNT, GETNUM(BASE, "LV")) > MAXLEVEL
+			CONTINUE
+		;당신を超える場合も除外
+		SIF CSVBASE(LCOUNT, GETNUM(BASE, "LV")) > BASE:MASTER:LV
+			CONTINUE
+		;女の場合、男を除外
+		SIF TALENT:ARG:남자 == 0 && CSVTALENT(LCOUNT, GETNUM(TALENT, "남자")) != 0
+			CONTINUE
+		;男の場合、女を除外
+		SIF TALENT:ARG:남자 == 1 && CSVTALENT(LCOUNT, GETNUM(TALENT, "남자")) != 1
+			CONTINUE
+		;解析率が50미만の악마は除外
+		SIF FLAG:(LCOUNT+20000) < 500
+			CONTINUE
+		악마テーブル:LOCAL = LCOUNT
+		LOCAL ++
+		LOCAL:1 ++
+	NEXT
+ENDIF
+
+;랜덤テーブルが10以下の場合に레어枠全てを消す
+IF LOCAL < 11
+	LOCAL -= LOCAL:1
+	LOCAL:1 = 0
+ENDIF
+
+;랜덤テーブルない場合
+IF LOCAL == 0 || LOCAL == LOCAL:1
+	TABLE_NUM = 6
+	악마テーブル:0 = [[キャラ:픽시]]
+	악마テーブル:1 = [[キャラ:하피]]
+	악마テーブル:2 = [[キャラ:아프사라스]]
+	악마テーブル:3 = [[キャラ:노커]]
+	악마テーブル:4 = [[キャラ:춍춍]]
+	악마テーブル:5 = [[キャラ:아귀]]
+	LOCAL:1 = 0
+ELSE
+	TABLE_NUM = LOCAL
+ENDIF
+
+;랜덤テーブルから산출して返却、레벨はＣＳＶの데이터のまま
+LOCAL = RAND:TABLE_NUM
+RETURN 악마テーブル:LOCAL, CSVBASE(악마テーブル:LOCAL, GETNUM(BASE, "LV"))
+
+;--------------------------------------
+;ロール内필터ー
+;--------------------------------------
+;ロール外が無허가であり、元々달인ではない場合、ロール内に調整する
+;なるべくメンテナンスの횟수を減らすため、今後の확장を見越したセーフティも
+@ロール内필터ー, ARG
+;이능자の特殊枠は달인としてだいたい通し
+IF TALENT:ARG:이능자 && (TALENT:ARG:석세서 || TALENT:ARG:건슬링거 || TALENT:ARG:아이템숙련)
+	TALENT:ARG:달인 = 1
+	TALENT:ARG:이능자 = 0
+	RETURN
+ENDIF
+;이능자シフターは서머너세트を消した上で通し。이능자서머너からの後天を想定し、서머너Lv1のみ許容
+IF TALENT:ARG:이능자 && TALENT:ARG:데빌시프터
+	SIF TALENT:ARG:서머너 >= 2
+		TALENT:ARG:서머너 = 1
+	TALENT:ARG:석세서 = 0
+	TALENT:ARG:건슬링거 = 0
+	TALENT:ARG:도구지식 = 0
+	RETURN
+ENDIF
+;実例がないのでセーフティ。이능자シフターと同基準とする
+IF TALENT:ARG:이능자 && TALENT:ARG:식노
+	SIF TALENT:ARG:서머너 >= 2
+		TALENT:ARG:서머너 = 1
+	TALENT:ARG:석세서 = 0
+	TALENT:ARG:건슬링거 = 0
+	TALENT:ARG:도구지식 = 0
+	RETURN
+ENDIF
+
+;이능자서머너に변경、도구지식も変換대상に
+IF TALENT:ARG:이능자 && (TALENT:ARG:서머너 >= 1 || TALENT:ARG:도구지식 >= 1)
+	TALENT:ARG:도구지식 = 0
+	TALENT:ARG:서머너 = 1
+ENDIF
+
+;一律で置き換え、劣化構成はそのまま
+IF TALENT:ARG:데빌시프터 && (TALENT:ARG:서머너 >= 1 || TALENT:ARG:석세서 || TALENT:ARG:건슬링거)
+	TALENT:ARG:서머너 = 0
+	TALENT:ARG:석세서 = 0
+	TALENT:ARG:건슬링거 = 0
+	TALENT:ARG:도구지식 = 3
+ENDIF
+
+IF TALENT:ARG:식노 && (TALENT:ARG:서머너 >= 1 || TALENT:ARG:석세서 || TALENT:ARG:도구지식 >= 1)
+	TALENT:ARG:서머너 = 0
+	TALENT:ARG:도구지식 = 0
+	TALENT:ARG:석세서 = 0
+	TALENT:ARG:건슬링거 = 1
+ENDIF
+
+IF TALENT:ARG:페르소나구사자
+	TALENT:ARG:서머너 = 0
+	TALENT:ARG:도구지식 = 0
+	TALENT:ARG:석세서 = 0
+	TALENT:ARG:건슬링거 = 0
+ENDIF
+
+IF TALENT:ARG:비전투원
+	TALENT:ARG:서머너 = 0
+	TALENT:ARG:석세서 = 0
+	TALENT:ARG:건슬링거 = 0
+	TALENT:ARG:도구지식 = 0
+ENDIF
+
+SIF TALENT:ARG:도구지식 == 0
+	TALENT:ARG:아이템숙련 = 0
+
+RETURN

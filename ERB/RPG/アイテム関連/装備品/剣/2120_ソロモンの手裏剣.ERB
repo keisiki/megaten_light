@@ -28,11 +28,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2120,ARG,ARG:1 = -1
-SELECTCASE ARG
-ENDSELECT
-RETURN 0
-
 @방어상성_2120,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -56,6 +51,18 @@ RETURN 1
 @장비箇所_2120
 RETURN GET_EQUIPNUM("검")
 
+;마하・잔다인、마하・갈다인
+@장비추가스킬_2120,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+			RETURN 1006
+		CASE 1
+			RETURN 1706
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -76,7 +83,9 @@ PRINTL 장비조건： LV70〜
 @장비해설_2120
 PRINTL 오망성 모양의 수리검
 PRINTL 강한 마술이 깃들어있다
-
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬존재
+RESETCOLOR
 
 @引継ぎ可不可_2120
 RETURN 1

@@ -190,7 +190,7 @@ FLAG:現Y = 9
 ;=======================================================================
 @EVENT_DUNGEON_START_44
 IF 던전フラグ:44:90 == 0
-	;IF FLAG:DEBUG 
+	IF FLAG:DEBUG 
 		PRINTFORMW 『어서 오세요、자지랜드에』
 		IF (FINDCHARA_B(4503,0) == 2 || FINDCHARA_B(4503,1) == 2) && (FINDCHARA_B(4508,0) == 2 || FINDCHARA_B(4508,1) == 2)
 			PRINTFORMW 『저기 저기』
@@ -214,13 +214,13 @@ IF 던전フラグ:44:90 == 0
 		PRINTFORMW 「어떤 조교사라 할 지라도 젊음에는 이길 수 없을 것이다、내 자지로 따르게 한 악마의 먹이가 되라」
 		PRINTFORMW 「왓핫핫핫」
 		PRINTFORMW 마신황 하자마는 말하고 싶은대로 지껄이며 입구에 있던 소녀를 데리고 돌아갔다。
-	IF FINDCHARA_B(4508,0) == 2	;ELSEIF FINDCHARA_B(4508,0) == 2
+	ELSEIF FINDCHARA_B(4508) == 2
 		PRINTFORMW 레이코 「지금까지 잠자코 있어서 죄송합니다」
 		PRINTFORMW 「그는…하자마 이데오는 내 오빠입니다……」
 		IF FINDCHARA_B(4503) == 2
-		PRINTFORMW 타마키 『기운 내』
-		PRINTFORMW 『당신의 목소리라면 들어줄지 모릅니다。그를 멈추고、이런 일을 끝내지 않으면』
-		PRINTFORMW 레이코의 말에 타마키가 대답했다。
+			PRINTFORMW 타마키 『기운 내』
+			PRINTFORMW 『당신의 목소리라면 들어줄지 모릅니다。그를 멈추고、이런 일을 끝내지 않으면』
+			PRINTFORMW 레이코의 말에 타마키가 대답했다。
 		ELSE
 			PRINTW 「오빠를…오빠를 구하지 않으면……」
 		ENDIF
@@ -883,7 +883,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 		CASE 0
 			IF FLAG:現X == 12 && FLAG:現Y == 5 && 던전フラグ:44:10 == 0
 				PRINTFORMW ＞하자마가 있다…
-				IF RAND:2 == 0	;IF FLAG:DEBUG
+				IF FLAG:DEBUG
 					PRINTFORMW 「아앗…」
 					PRINTFORMW 「어째서 자위는 이렇게 기분이 좋은 거지」
 					PRINTFORMW 「자지…자지 최고얏！！」
@@ -896,7 +896,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 				던전フラグ:44:10 = 1
 
 			ELSEIF FLAG:現X == 18 && FLAG:現Y == 11 && 던전フラグ:44:0 == 0
-				IF RAND:2 == 0	;IF FLAG:DEBUG
+				IF FLAG:DEBUG
 					PRINTFORMW ＞전라의 마신황 하자마가 자위에 몰두하고 있다
 					PRINTFORMW 「자지、자지 기분 좋앗」
 					IF (FINDCHARA_B(4503,0) == 2 || FINDCHARA_B(4503,1) == 2)
@@ -927,8 +927,8 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 					PRINTFORMW 이것이 정신세계의 하자마。
 					PRINTFORMW 마신황을 자칭하며、사람들을 공포의 수렁에 빠뜨린 마왕의 행동원리는 의존심에 있었다。
 					PRINTFORMW 타인에게 인정받고 싶다는 생각만이 비대화 되어、거절받는 것을 무서워 하는 비뚤어진 정신。
-					IF FINDCHARA_B(4508,0) == 2
-						IF FINDCHARA_B(4508,0) == 2 && (TALENT:(RESULT:1):연모 || TALENT:(RESULT:1):친애)
+					IF FINDCHARA_B(4508) == 2
+						IF TALENT:(RESULT:1):연모 || TALENT:(RESULT:1):친애
 							PRINTFORML 「오빠…」
 							PRINTFORMW ＞레이코는 하자마의 모습에 슬퍼져서 눈을 감았다。
 						ELSE
@@ -970,9 +970,9 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
 				던전フラグ:44:0 = 1
-					PRINTFORMW 단말마를 지르고 쓰러진 마신황、거기에는 전라의 하자마가 쓰러져 있다。
-					PRINTFORMW 정신세계가 요동친다……
-					PRINTFORMW 마신황 하자마가 쓰러져서 정신세계가 붕괴를 시작한 모양이다。
+				PRINTFORMW 단말마를 지르고 쓰러진 마신황、거기에는 전라의 하자마가 쓰러져 있다。
+				PRINTFORMW 정신세계가 요동친다……
+				PRINTFORMW 마신황 하자마가 쓰러져서 정신세계가 붕괴를 시작한 모양이다。
 				IF FINDCHARA_B(4508) == 2 && (TALENT:(RESULT:1):연모 || TALENT:(RESULT:1):친애)
 					PRINTFORML 「오빠…」
 					PRINTFORMW 쓰러진 하자마에게 레이코가 달려 갔다。
@@ -1034,7 +1034,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 		CASE 1
 			IF FLAG:現X == 5 && FLAG:現Y == 6 && 던전フラグ:44:11 == 0
 				PRINTFORMW ＞카루코자카 고교의 교복을 입은 학생들 사이에 하자마가 있다…
-				IF RAND:2 == 0	;IF FLAG:DEBUG
+				IF FLAG:DEBUG
 					PRINTFORMW 『하자마、너 포경 안했더라』
 					PRINTFORMW 『진짜 노 포경！？』
 					PRINTFORMW 『노 포경이 허용되는 건 초등학생까지라고ー 캬하하하』
@@ -1052,7 +1052,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 				던전フラグ:44:11 = 1
 			ELSEIF FLAG:現X == 17 && FLAG:現Y == 1 && 던전フラグ:44:12 == 0
 				PRINTFORMW ＞아카네자와 레이코와 하자마가 있다…
-				IF RAND:2 == 0	;IF FLAG:DEBUG
+				IF FLAG:DEBUG
 					PRINTFORMW 「레이코…섹스해 달라고는 말하지 않겠다」
 					PRINTFORMW 「부탁이니、입으로 해주지 않을래！！」
 					PRINTFORMW 『오빠……』
@@ -1076,18 +1076,18 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 				PRINTFORMW 『나…다른 좋아하는 사람이 있어……』
 				PRINTFORMW 『하지만、친구 사이 정도라면 괜찮아？』
 				PRINTFORML 
-				;IF FLAG:DEBUG
+				IF FLAG:DEBUG
 					PRINTFORMW （젠장、조금 귀엽다고 건방지게 입을 놀리고 있어）
 					PRINTFORMW （언젠가 반드시 육변기로 만들어 버리겠어！！）
-				;ENDIF
+				ENDIF
 				IF 의뢰フラグ:3:0 == 1
 					PRINTFORMW 하자마는 우치다 타마키에게 차인 것같다。
 				ELSE
 					PRINTFORMW 하자마는 여고생에게 차인 것 같다。
 				ENDIF
 				PRINTFORMW 이것도 하자마의 기억인 것 같다。
-				SIF (FINDCHARA_B(4503,0)) == 2
-					PRINTFORMW 「그래…그 일 신경쓰고 있었구나」
+				SIF (FINDCHARA_B(4503)) == 2
+					PRINTW 타마키「그래…그 일 신경쓰고 있었구나」
 				던전フラグ:44:13 = 1
 			ENDIF
 		CASE 3
@@ -1125,7 +1125,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 		CASE 4
 			;RPG的な何か
 			IF FLAG:現X == 2 && FLAG:現Y == 2 && 던전フラグ:44:15 == 0 && 던전フラグ:44:0 == 0
-				IF RAND:2 == 0	;IF FLAG:DEBUG
+				IF FLAG:DEBUG
 					PRINTFORMW ＞전라의 마신황 하자마、그리고……
 					PRINTFORMW 「아아앗…자지、자지 기분 좋아」
 					PRINTFORMW 본 적 있는 세 명의 소녀가 마신황 하자마에게 시중을 들 듯이  봉사에 힘쓰고 있다。
@@ -1305,7 +1305,8 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 							PRINTW 이런 인재를 방치할 순 없다。
 							PRINTW 당신은 교묘하게 하자마를 유도해、당신의 부하로 일하는 계약을 달았다。
 							CALL ADD_NEW_COMPANION,4597,500
-							CFLAG:(RESULT:1):전투참가불가능 = -1
+							SIF RESULT == 1
+								CFLAG:(RESULT:1):전투참가불가능 = -1
 							PRINTW ＞하자마가 중마가 되었다
 						ENDIF
 					ELSE

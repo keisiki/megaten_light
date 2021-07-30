@@ -28,12 +28,10 @@ RETURN 0
 
 @방어상성_8209,ARG,ARG:1 = -1
 SELECTCASE GET_TYPE(ARG)
-	CASE "빙결","수격"
+	CASE "빙결"
 		RETURN 0
 	CASE "화염"
 		RETURN 200
-	CASE "신경","파마","검격"
-		RETURN 50
 ENDSELECT
 RETURN 100
 
@@ -85,5 +83,5 @@ RETURN 0
 
 @장비해설_8209
 PRINTL 곡옥「미아즈마」。인수라만 장비할 수 있다.
-PRINTL 　・빙결마법을 중심으로 습득한다
+PRINTL 　・빙결 마법을 중심으로 습득한다
 PRINTL 　・빙결무효、화염에 약하다

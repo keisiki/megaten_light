@@ -47,7 +47,7 @@ RETURN 0
 RETURN 50
 
 @장비조건_8081,ARG
-;一体まで
+;1체 제한
 LOCAL:1 = 0
 FOR LOCAL,0,CHARANUM
 	SIF EQUIP:LOCAL:악세사리 == 8081
@@ -61,4 +61,4 @@ RETURN 1
 RETURN 0
 
 @장비해설_8081
-PRINTL FREEZE무효를 부여한다 1명제한
+PRINTL FREEZE 무효를 얻는다. 1체 제한

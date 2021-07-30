@@ -730,7 +730,7 @@ RETURN 1
 ;시키오지の사고패턴
 @SET_ACTION_661,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF RAND:2 == 0
 		;마구날뛰기
 		CALL CHECK_ACTIONABLE,ARG,203

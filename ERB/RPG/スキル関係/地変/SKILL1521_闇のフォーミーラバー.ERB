@@ -32,7 +32,7 @@ RETURN 3
 @SKILL_COST_1521,ARG
 RETURN 55
 
-;　相性 지변・神聖・정신のうち、もっともダメージが高くなるものになる
+;　相性 지변・神聖・정신のうち、もっとも데미지が高くなるものになる
 @SKILL_TYPE_1521,ARG
 #LOCALSSIZE 4
 #LOCALSIZE 4
@@ -62,12 +62,12 @@ NEXT
 RETURN GET_TYPE_NUM(LOCALS)
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1521
+@SKILL_DECIDE_TYPE_1521, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1521
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1521, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か

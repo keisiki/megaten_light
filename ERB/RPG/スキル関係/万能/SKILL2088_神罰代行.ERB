@@ -36,12 +36,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2088
+@SKILL_DECIDE_TYPE_2088, ARG
 RETURN 2
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2088
+@SKILL_DAMAGETYPE_2088, ARG
 RETURN 2
 
 
@@ -72,6 +72,9 @@ SIF ARG == 1
 @SKILL_SUCCESSION_TYPE_2088
 RETURN 20
 ;만능
+
+@継承不能_2088
+RETURN 1
 
 ;속도보정
 @SKILL_SPEED_2088, ARG = -1
@@ -122,7 +125,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,2088
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2088
-PRINTL [후열] 적 전체에 만능속성 소 마법데미지. (낮은 확률로 즉사)
+PRINTL [후열] 신봉하는 신의 이름으로 적대적인 모든 것에 벌을 주는 달인 기술.
+PRINTL 적 전체에 만능속성 소 마법데미지. (낮은 확률로 즉사)
 
 ;継承に필요한部位
 @継承部位_2088,ARG

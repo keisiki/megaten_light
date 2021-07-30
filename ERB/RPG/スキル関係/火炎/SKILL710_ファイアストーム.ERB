@@ -36,12 +36,12 @@ RETURN 4
 ;화염
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_710
+@SKILL_DECIDE_TYPE_710, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_710
+@SKILL_DAMAGETYPE_710, ARG
 RETURN 2
 
 
@@ -123,7 +123,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,710
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_710
-PRINTL [후열] 적 전체에 화염속성 중 마법데미지. 명중률이 조금 낮다.
+PRINTL [후열] 적 전체에 화염속성 마법데미지.
 
 ;継承に필요한部位
 @継承部位_710,ARG

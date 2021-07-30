@@ -1,27 +1,27 @@
 
 @EVENT_19_LIST_0(ARG,ARG:1)
-;ARG:1 0 = ƒ^ƒCƒgƒ‹
-;@@@1 = oŒ»ƒ`ƒFƒbƒN
-;@@@2 = ƒCƒxƒ“ƒg
+;ARG:1 0 = «¿«¤«È«ë
+;¡¡¡¡¡¡1 = õóúÞÃ¼Å©
+;¡¡¡¡¡¡2 = ÀÌº¥Æ®
 ;
 SELECTCASE ARG
 CASE 1
 	IF ARG:1 == 0
-		‡@
-		RESULTS = (ƒ^ƒCƒgƒ‹)
+		¨ç
+		RESULTS = («¿«¤«È«ë)
 	ELSEIF ARG:1 == 1
-		‡A
-		;vŒ£“x860000ˆÈã‚¾‚ÆoŒ»@¦vŒ£“x‚É‚Â‚¢‚Ä‚ÍSHOP.ERBŽQÆ
-		SIF FLAG:‘gDvŒ£“x + FLAG:–¼º * 100 >= 860000
+		¨è
+		;Íø?Óø860000ÀÌ»óªÀªÈõóúÞ¡¡¡ØÍø?ÓøªËªÄª¤ªÆªÏSHOP.ERB?ðÎ
+		SIF FLAG:ðÚòÄÍø?Óø + FLAG:Ù£? * 100 >= 860000
 			RETURN 1
 	ELSEIF ARG:1 == 2
-		‡B
-		PRINTFORMW iƒCƒxƒ“ƒgj
-		PRINTFORMW iƒCƒxƒ“ƒgj
-		PRINTFORMW iƒCƒxƒ“ƒgj
-		CALL ADD_NEW_COMPANION, iƒLƒƒƒ‰j, 100
-		SIF RESULT == 0
-			CFLAG:(RESULT:1):í“¬ŽQ‰Á•s‰Â”\ = -1
+		¨é
+		PRINTFORMW £¨ÀÌº¥Æ®£©
+		PRINTFORMW £¨ÀÌº¥Æ®£©
+		PRINTFORMW £¨ÀÌº¥Æ®£©
+		CALL ADD_NEW_COMPANION, £¨«­«ã«é£©, 100
+		SIF RESULT
+			CFLAG:(RESULT:1):ÀüÅõÂü°¡ºÒ°¡´É = -1
 		RETURN 1
 	ENDIF
 CASEELSE
@@ -29,27 +29,27 @@ CASEELSE
 ENDSELECT
 RETURN 0
 
-‡@
-RESULTS ‚Éƒ^ƒCƒgƒ‹‚ð“ü‚ê‚é
+¨ç
+RESULTS ªË«¿«¤«È«ëªòìýªìªë
 
-‡A
-ƒCƒxƒ“ƒg‚ÌoŒ»ðŒ‚ð“ü‚ê‚é
-“¬‹ZêAˆË—ŠAƒCƒxƒ“ƒg‚È‚Ç‚ÌoŒ»ðŒ‚Æ‚â‚è•û‚Íˆê
-RETURN 1‚ÅoŒ»‚·‚é
+¨è
+ÀÌº¥Æ®ªÎõóúÞÁ¶°Çªòìýªìªë
+?ÐüíÞ¡¢ÀÇ·Ú¡¢ÀÌº¥Æ®ªÊªÉªÎõóúÞÁ¶°ÇªÈªäªêÛ°ªÏìé?
+RETURN 1ªÇõóúÞª¹ªë
 
-‡B
-ƒCƒxƒ“ƒg‚ðo‚·
-‚±‚±‚ÅPRINTFORM‚ðŽg‚Á‚½ƒCƒxƒ“ƒg‚â’‡ŠÔ‚ðŽè‚É“ü‚ê‚½‚è‚·‚é
-’‡ŠÔ‚ðŽè‚É“ü‚ê‚é‚Æ‚««
-CALL ADD_NEW_COMPANION, iƒLƒƒƒ‰j, 100
+¨é
+ÀÌº¥Æ®ªòõóª¹
+ª³ª³ªÇPRINTFORMÀ» »ç¿ëÇß´ÙÀÌº¥Æ®ªäñêÊàÀ» ¼Õ¿¡ ³Ö¾ú´Ùªêª¹ªë
+ñêÊàªò¼ÕªËìýªìªëªÈª­¡é
+CALL ADD_NEW_COMPANION, £¨«­«ã«é£©, 100
 SIF RESULT == 0
-	CFLAG:(RESULT:1):í“¬ŽQ‰Á•s‰Â”\ = -1
-RETURN 1 ‚Å“ñ“x–Ú‚ÍoŒ»‚µ‚È‚¢‚æ‚¤‚É‚È‚é
+	CFLAG:(RESULT:1):ÀüÅõÂü°¡ºÒ°¡´É = -1
+RETURN 1 ªÇì£Óø´«ªÏõóúÞª·ªÊª¤ªèª¦ªËªÊªë
 	
 
 
-¦‘S‘Ì“I‚É•’Ê‚ÌƒCƒxƒ“ƒg‚È‚Ç‚Æ‚â‚è•û‚ÍˆêiEVENT_3‚ªŒ‹\ƒVƒ“ƒvƒ‹‚Å•ª‚©‚è‚â‚·‚¢j
-@ˆá‚¢‚Íƒ^ƒCƒgƒ‹‚ÆoŒ»ðŒ‚ª•ª‚©‚ê‚Ä‚¢‚é‚±‚Æ‚­‚ç‚¢
+¡ØÀüÃ¼îÜªËÜÅ÷×ªÎÀÌº¥Æ®ªÊªÉªÈªäªêÛ°ªÏìé?£¨EVENT_3ª¬Ì¿Ï°«·«ó«×«ëªÇÝÂª«ªêªäª¹ª¤£©
+¡¡êÞª¤ªÏ«¿«¤«È«ëªÈõóúÞÁ¶°Çª¬ÝÂª«ªìªÆª¤ªëª³ªÈª¯ªéª¤
 
 
 

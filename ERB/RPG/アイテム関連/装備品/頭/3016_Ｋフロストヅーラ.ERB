@@ -12,12 +12,13 @@ ENDSELECT
 RETURN 0
 
 @전투능력수정_3016,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
+
+SELECTCASE ARG
+	CASE 2
 		RETURN 22
-	CASE "회피"
+	CASE 3
 		RETURN 18
-	CASE "마법효과"
+	CASE 5
 		RETURN 26
 ENDSELECT
 RETURN 0
@@ -35,6 +36,26 @@ SELECTCASE GET_TYPE(ARG)
 ENDSELECT
 RETURN 100
 
+@공격상성_3016, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3016, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3016, ARG = -1
+
+RETURN 1
+
+@사거리_3016, ARG = -1
+
+RETURN 1
+
+@공격범위_3016, ARG = -1
+
+RETURN 1
+
 @장비箇所_3016
 RETURN GET_EQUIPNUM("머리")
 
@@ -44,16 +65,7 @@ RETURN 1
 @장비조건_3016,ARG
 RETURN IS_LOOKSLIKE_MALE(ARG)
 
-@장비조건설명_3016
-PRINTL 장비조건：♂
-
-@장비해설_3016
-PRINTL 킹프로스트がおしゃれで被っている金머리카락横ロールのボリューム溢れるカツラ。
-PRINTL 　　　　　　　　ボリュームゆえか방어력がある。
-
-
 @구입조건_3016
 RETURN 0
-
-@引継ぎ可不可_3016
-RETURN 0
+@장비조건설명_3016
+PRINTL 장비조건：♂

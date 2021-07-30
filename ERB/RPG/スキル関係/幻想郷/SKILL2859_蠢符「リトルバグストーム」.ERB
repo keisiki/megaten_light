@@ -38,12 +38,12 @@ RETURN 3
 ;전술
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2859
+@SKILL_DECIDE_TYPE_2859, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2859
+@SKILL_DAMAGETYPE_2859, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -126,7 +126,7 @@ CALL ATTACK_FIELD,ARG,ARG:1, 2859
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2859
-PRINTL 적전체에 독충이 모여、전술相性의 공격。（위력 : 소）
+PRINTL 적전체에 독충이 모여、전술 상성의 공격。（위력 : 소）
 PRINTL 중 확률로 독을 준다。
 PRINTL 요충　리글・나이트버그의 스펠카드
 

@@ -19,7 +19,7 @@ SELECTCASE ARG
 ;회피
 	CASE 3
 		RETURN 2
-;魔法방어
+;마법방어
 	CASE 5
 		RETURN 1
 ENDSELECT
@@ -27,7 +27,7 @@ RETURN 0
 
 @방어상성_4449,ARG,ARG:1 = -1
 SELECTCASE GET_TYPE(ARG)
-;ベンベン琵琶と同時장비で파마強저항・주살無効
+;벤벤비파と同時장비で파마強저항・주살무효
 	CASE "파마"
 			SIF ARG:1 == -1
 			RETURN 100
@@ -118,10 +118,10 @@ RETURN 1
 
 @장비해설_4449
 ;説明
-PRINTL 이상無効：呪い　特殊効果：ベンベン琵琶と併用で…
-PRINTL 琴を弾くための爪。姉妹を名乗る同士、수태아이템も共鳴するようだ。
+PRINTL 이상무효：저주. 특수효과：벤벤비파와 병용하면…
+PRINTL 거문고를 치기 위한 소도구 가조각。자매를 자칭하는 사이라 그런지、수태아이템도 공명하는듯 하다。
 ;義甲で引いたらギターだとなんだとそうだな
-PRINTL 付喪神　九十九八橋の수태아이템。
+PRINTL 츠쿠모가미　츠쿠모 벤벤의 수태아이템。
 SETCOLOR 0x87ceeb
 PRINTL 《벤벤비파》
 RESETCOLOR

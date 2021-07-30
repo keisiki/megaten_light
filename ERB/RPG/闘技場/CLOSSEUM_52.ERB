@@ -652,8 +652,9 @@ ENDIF
 IF CFLAG:PLAYER:처녀상실フラグ
 	PRINTL 처녀상실
 	CFLAG:PLAYER:처녀상실フラグ = 0
-PRINTL 이상경험　처녀상실(윤간) + 2  
-	EXP:PLAYER:이상경험 += 2
+	;PRINTL 이상경험　처녀상실(윤간) + 2  
+	;EXP:PLAYER:이상경험 += 2
+	CALL ADDS_ABNORMAL_EXP, "처녀상실（윤간）", PLAYER
 ELSEIF CFLAG:PLAYER:재생처녀상실フラグ
 	CFLAG:PLAYER:재생처녀상실フラグ = 0
 	PRINTFORML 재생처녀상실
@@ -661,7 +662,7 @@ ENDIF
 IF NO:POS(14) == 552
 	IF EXP:PLAYER:수간경험 == 0
 		CALL ADDS_ABNORMAL_EXP, "수간", PLAYER
-		PRINTL 이상경험　수간 + 1
+		;PRINTL 이상경험　수간 + 1
 	ENDIF
 	PRINTFORML 수간경험 ＋{LOCAL:2 + LOCAL:2 / 3}
 	EXP:PLAYER:수간경험 += LOCAL:2 + LOCAL:2 / 3
@@ -669,8 +670,9 @@ ENDIF
 
 IF EXP:PLAYER:Ｖ확장경험 == 0 && EXP:PLAYER:Ａ확장경험 == 0
 	CALL ADDS_ABNORMAL_EXP, "확장첫경험", PLAYER
-	PRINTL 이상경험　확장첫경험 + 1
+	;PRINTL 이상경험　확장첫경험 + 1
 ENDIF
+CALL SHOW_ABNORMAL_EXP, PLAYER, 1
 IF LOCAL:7 > 0
 PRINTFORML Ｖ확장경험 ＋{LOCAL:7 / 2}
 EXP:PLAYER:Ｖ확장경험 += LOCAL:7 / 2

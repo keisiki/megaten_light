@@ -3,8 +3,12 @@
 
 ;스킬名
 @SKILL_NAME_2092,ARG
-RESULTS = 금기의 간결리칼
 
+IF SKILL_CHANGE(ARG, 3118)
+	RESULTS = 이치파괴의칼날
+ELSE
+	RESULTS = 금기의간결칼날
+ENDIF
 ;　명중
 @SKILL_HITRATE_2092, ARG
 RETURN 95
@@ -36,12 +40,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2092
+@SKILL_DECIDE_TYPE_2092, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2092
+@SKILL_DAMAGETYPE_2092, ARG
 RETURN 1
 
 
@@ -164,6 +168,15 @@ WAIT
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2092
+IF U > 0 && U < CHARANUM && NO:U == 3118
+	PRINTL 邪神デミウルゴスを召喚し、理を破壊する刃を一閃させる
+	PRINTL 目の前の敵前列に剣撃属性の大데미지。理を破壊することでで剣撃耐性をねじまげ、無効化する。
+ELSE
+
+	PRINTL 비웃는 혼돈의 사신과의 거래를 통해 영혼에 묻힌 성계의 칼.
+	PRINTL 적 전열에 검격속성 특대 물리데미지. 적의 검격속성 내성을 모두 파괴한다.
+	PRINTL 인간 이능자 전용 스킬.
+ENDIF
 PRINTL [전열] 적 전열에 검격속성 특대 물리데미지. 적의 검격속성 내성을 모두 파괴한다. 인간 이능자 스킬.
 
 ;継承に필요한部位

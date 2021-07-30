@@ -3,9 +3,8 @@
 
 ;스킬名
 @SKILL_NAME_304,ARG
-;ファントムが사용する場合G・プラズマカッターに
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+;팬텀が사용する場合G・플라즈마커터に
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
 	RESULTS = G・플라즈마커터
 ELSE
 	RESULTS = 메가클로
@@ -13,8 +12,7 @@ ENDIF
 
 ;　명중
 @SKILL_HITRATE_304, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 100
 ELSE
 	RETURN 95
@@ -22,8 +20,7 @@ ENDIF
 
 ;　威힘
 @SKILL_POWER_304, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 210
 ELSE
 	RETURN 120
@@ -31,8 +28,7 @@ ENDIF
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_304,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 1
 ELSE
 	RETURN 2
@@ -40,8 +36,7 @@ ENDIF
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_304,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 3
 ELSE
 	RETURN 2
@@ -53,8 +48,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_304,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 15
 ELSE
 	RETURN 6
@@ -62,16 +56,20 @@ ENDIF
 
 ;　相性
 @SKILL_TYPE_304,ARG
-RETURN 3
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
+	RETURN 0
+ELSE
 ;전술
+	RETURN 3
+ENDIF
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_304
+@SKILL_DECIDE_TYPE_304, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_304
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_304, ARG
 RETURN 1
 
 
@@ -81,8 +79,7 @@ RETURN 1
 
 ;　사거리
 @SKILL_RANGE_304,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 1
 ELSE
 	RETURN 4
@@ -125,6 +122,8 @@ RETURN 0
 RETURN 4
 
 @SKILL_RANKUP_304
+SIF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	RETURN 0
 D:1 = 337
 ;랭크アップ先は二つ
 RETURN 1
@@ -164,8 +163,9 @@ CALL ATTACK_SINGLE,ARG,LOCAL,304
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_304
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:팬텀]]
-	PRINTL [전열] 전열의 적 1체에 1～3회 전술속성 중 물리데미지. 정식명칭은 「그랑・플라즈마커터」
+IF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	PRINTL 거대한 에너지 날을 발생시키는 플라즈마 커터를 회전시키면서 적 1체에 1～3회 전술속성 중 물리데미지
+	PRINTL 정식명칭은 「그랑・플라즈마커터」。왼팔 프라즈마・스테이크 3개중 중 바깥쪽 스테이크를 뽑아 사용한다。
 ELSE
 	PRINTL [전열] 적 1체에 2회 전술속성 소 물리데미지.
 ENDIF

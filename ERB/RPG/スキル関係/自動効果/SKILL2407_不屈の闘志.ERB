@@ -4,15 +4,17 @@
 ;스킬名
 @SKILL_NAME_2407,ARG
 ;SCP-191は死亡後に再起動
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:SCP-191]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:SCP-191]])
 	RESULTS = 사망 후에 재기동
+ELSEIF SKILL_CHANGE(ARG, 5071)
+	RESULTS = 세 번、낙일을 맞이하더라도
 ELSE
 	RESULTS = 불굴의투지
 ENDIF
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2407
+@SKILL_DECIDE_TYPE_2407, ARG
 RETURN 0
 ;どちらでもない
 
@@ -34,8 +36,12 @@ RETURN 10
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2407
-PRINTL [자동] 전투 중 딱 한번 HP가 0이 되어도 HP 최대로 부활한다.
-
+IF U > 0 && U < CHARANUM && NO:U == 5071
+	PRINTL 인빅투스・스피리투스
+	PRINTL [자동] 전투 중 딱 한번 HP가 0이 되어도 HP 최대로 부활한다.
+ELSE
+	PRINTL [자동] 전투 중 딱 한번 HP가 0이 되어도 HP 최대로 부활한다.
+ENDIF
 
 @SKILL_ACTIONABLE_BATTLE_2407
 RETURN 0

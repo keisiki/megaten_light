@@ -11,7 +11,10 @@ RETURN 0
 
 
 @전투능력수정_2571,ARG,ARG:1 = -1
+;原作におけるショットの위력は+10%だけど輪廻との住み分けで火힘特化にする為に輪廻と同じボーナスに
 SELECTCASE ARG
+	CASE 4
+		RETURN 50
 ENDSELECT
 RETURN 0
 
@@ -29,7 +32,7 @@ RETURN 1
 RETURN 1
 
 @최대공격횟수_2571, ARG = -1
-RETURN 1
+RETURN 3
 
 @사거리_2571, ARG = -1
 RETURN 2
@@ -67,8 +70,8 @@ RETURN 5
 RETURN 1
 
 @장비해설_2571
-PRINTL 持ち主の生命힘を糧にする死の권총。
-PRINTL 強靭な心を持たない者が손にすると、その魂と肉体をたちまち奪われる。
+PRINTL 주인의 생명을 담보로 하는 죽음의 권총。
+PRINTL 강인한 마음이 없는 자가 미끼로 만들면 그 영혼과 육체를 금세 빼앗긴다。
 RESETCOLOR
 
 @장비조건설명_2571

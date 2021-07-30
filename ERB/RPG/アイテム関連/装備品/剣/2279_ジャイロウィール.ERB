@@ -47,7 +47,14 @@ RETURN 1
 @장비箇所_2279
 RETURN GET_EQUIPNUM("검")
 
+;잔마
 @장비추가스킬_2279,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 1002
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -71,6 +78,9 @@ PRINTL 장비조건：LV25～
 
 @장비해설_2279
 PRINTL 위협스런 회전력을 가진 부메랑
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：잔마
+RESETCOLOR
 
 RETURN 0
 

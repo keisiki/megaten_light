@@ -316,7 +316,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 						CALL MESSAGE_WINDOW_D, "", "………………/…………/……"
 						CALL SHOW_PICTURE, "EMPTY"
 						CALL SHOW_PICTURE, "NONFLOORD", @"%CALLNAME:MASTER%의 방"
-						CALL MESSAGE_WINDOW_D, "", "……잠시 후에, 팬텀으로부터 DEVA 시스템의 해체의 보고와/＞그 조사에 의해 얻을 수 있던 기술에 대한 자료가 도착했다/＞하지만, 거기에는 소녀에 대한 기술은 아무것도 없었다……"
+						CALL MESSAGE_WINDOW_D, "", "/＞……잠시 후에, 팬텀으로부터 DEVA 시스템의 해체의 보고와/＞그 조사에 의해 얻을 수 있던 기술에 대한 자료가 도착했다/＞하지만, 거기에는 소녀에 대한 기술은 아무것도 없었다……"
 						CALL MESSAGE_WINDOW_D, "", "이 건의 보수로서 ￥100000이 지불되었다"
 						MONEY += 100000
 						던전フラグ:(FLAG:現던전):0 = 10
@@ -328,7 +328,7 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 				ELSEIF 던전フラグ:(FLAG:現던전):1 == 1 && 던전フラグ:(FLAG:現던전):5 == 0
 					;마키이벤트クリア後
 					CALL MESSAGE_WINDOW_D, "마이", "……고마워요……"
-					CALL MESSAGE_WINDOW_D, "", "＞마키의 상태가 좋아진 것을 아는 것일까/＞마이는 가냘픈 목소리로 %CALLNAME:MASTER%에 감사를 표했다"
+					CALL MESSAGE_WINDOW_D, "", @"＞마키의 상태가 좋아진 것을 아는 것일까/＞마이는 가냘픈 목소리로 %CALLNAME:MASTER%에 감사를 표했다"
 					CALL MESSAGE_WINDOW_D, "마이", "……이것으로 당분간은 괜찮다고 생각되요……/＞……그 사이에, 가장 나쁜 나를……"
 					CALL MESSAGE_WINDOW_D, "", "＞……그 동안。마이를 계속 혼자 여기에 남겨둬야 할까?"
 					CALL INPUT_YN_D("숲의 밖을 권한다", "방치한다")

@@ -36,12 +36,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_605
+@SKILL_DECIDE_TYPE_605, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_605
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_605, ARG
 RETURN 0
 
 
@@ -99,23 +99,15 @@ RETURN 1
 ;コスト支払い
 ;CALL VAR_MP,ARG,-45,0
 
-IF ARG:1 == 19
-	LOCAL:7 = 1
-	LOCAL:8 = 7
-ELSE
-	LOCAL:7 = 7
-	LOCAL:8 = 17
-ENDIF
+;実行
+
+CFLAG:ARG:물리반사フラグ = 1
+CFLAG:ARG:마법반사フラグ = 1
+PRINTFORMW TARGET:ENEMY >>>>>> 물리공격을 반사！
+PRINTFORMW TARGET:ENEMY >>>>>> 마법공격을 반사！
+
 
 ;実行
-FOR LOCAL,LOCAL:7,LOCAL:8
-	LOCALS = 포지션{LOCAL}
-	IF FLAG:LOCALS > -1
-		CFLAG:(FLAG:LOCALS):물리반사フラグ = 1
-		CFLAG:(FLAG:LOCALS):마법반사フラグ = 1
-	ENDIF
-NEXT
-PRINTFORMW 　　TARGET:\@ ARG:1 == 19  ? PARTY # ENEMY \@ >>>>>> 상대의 물리, 마법공격을 반사하는 결계를 쳤다!
 
 
 

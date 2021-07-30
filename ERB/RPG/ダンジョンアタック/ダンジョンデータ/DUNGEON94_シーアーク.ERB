@@ -16,6 +16,8 @@
 ;	006		2016/05/12		ああああ				레어枠악마とエンカウント時に出現する종류の数で無限ループのエ라になるのを회피の為出現する악마の종류が十以下の場合레어枠は一切出現しない点を徹底化
 ;	007		2016/08/19		ああああ				エンカウント時に악마の選出の度に出現する악마のリストアップをしていたのをエンカウントの最初にリストアップしてその中から選ぶように변경、4Fまで入れる상태で4F右下の階段のところまで行くと탈출不能になるのを수정
 ;	008		2017/06/26		ああああ				악마の증가に伴い10Fで出現する악마の配列をはみ出す가능性が出たので配列のサイズを倍に
+;	009		2020/05/05		がめら					エンカウントで1800番以降の악마も出るように。ダークおやじの選択肢パターン추가。ラン란다ンジョンによるエンカウント反転バグの修正。
+;	010		2020/06/19		JK好き					던전フラグ:94:4をシーアーク装備品支給フラグに使うって書いただけ
 
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=======================================================================
@@ -31,6 +33,7 @@
 ;던전フラグ:94: 1 = 탐색허가フラグ:フラグが進むごとに시아크内の鍵が開いていく
 ;던전フラグ:94: 2 = ダークおやじフラグ:악마の出現변경を이용しているかどうか、이용している場合はどちらを이용しているか판정
 ;던전フラグ:94: 3 = 악마が出現が0,する　1,しない
+;던전フラグ:94: 4 = シーアーク装備品支給フラグ
 ;던전フラグ:94:10 = 다크서머너
 ;던전フラグ:94:11 = 소악마리리스
 ;=======================================================================
@@ -162,11 +165,6 @@ SELECTCASE DA:ARG:(ARG:1)
 			CALL MESSAGE_WINDOW_D, "", "＞열쇠가 걸려있다/＞이 앞의 탐색은 아직 허용 되지 않은 모양이다"
 			RETURN 0
 			LOCAL:1 = 0
-		;악마出現フラグ
-		ELSEIF 던전フラグ:94:3 == 0
-			던전フラグ:94:3 = 1
-		ELSEIF 던전フラグ:94:3 == 1
-			던전フラグ:94:3 = 0
 		ENDIF
 
 ENDSELECT
@@ -546,7 +544,7 @@ SELECTCASE ARG
 	CASE 4 TO 9
 		DA:(ARG:1):(ARG:2) = FLAG:現M *1000 + LOCAL:ARG * 10 + ARG
 		LOCAL:ARG++
-	
+
 ENDSELECT
 
 
@@ -565,6 +563,10 @@ CALL EVENT_DUNGEON_94, ARG , 0
 RETURN RESULT
 
 @EVENT_DUNGEON_94, ARG, ARG:1
+;악마出現フラグ切り替え扉
+SIF DA:(FLAG:現X):(FLAG:現Y) == 12
+	던전フラグ:94:3 = !던전フラグ:94:3
+
 SELECTCASE DA:(FLAG:現X):(FLAG:現Y) % 10
 
 ;==========
@@ -618,41 +620,73 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y) / 10
 		ENDIF
 	CASE 2
 	;ダークおやじ
-		CALL MESSAGE_WINDOW_D, "다크서머너", "거기의 너/남악마만 발생하게 된다면 곤란하지 않겠어？"
-		CALL MESSAGE_WINDOW_D, "다크서머너", "나에게 맡겨준다면/남악마가 출현하지 않도록 할수 있지"
-		CALL MESSAGE_WINDOW_D, "다크서머너", @"물론 공짜는 아니지만/너라면…{던전フラグ:94:1*50}마카정도"
-		CALL MESSAGE_WINDOW_D, "다크서머너", "어떡할래？"
-		$마카부족
-		;CALL INPUT_SELECT_D, "\@!던전フラグ:94:2 == 1?[0] 여악마만 나오게 한다/#\@\@!던전フラグ:94:2 == 2?[1] 남악마만 나오게 한다/#\@\@던전フラグ:94:2?[2] 元に戻す/#\@[3] 그만둔다"
+		IF 던전フラグ:94:2 == 0
+			CALL MESSAGE_WINDOW_D, "다크서머너", "거기의 너/남악마만 발생하게 된다면 곤란하지 않겠어？"
+			CALL MESSAGE_WINDOW_D, "다크서머너", "나에게 맡겨준다면/남악마가 출현하지 않도록 할수 있지"
+			CALL MESSAGE_WINDOW_D, "다크서머너", @"물론 공짜는 아니지만/너라면…{던전フラグ:94:1*50}마카정도"
+			CALL MESSAGE_WINDOW_D, "다크서머너", "어떡할래？"
+		ELSEIF 던전フラグ:94:2 == 1
+			CALL MESSAGE_WINDOW_D, "ダークおやじ", "やあオマエサンか/オンナ악마とばかり会う気分は最高だろ？"
+			CALL MESSAGE_WINDOW_D, "ダークおやじ", "もし飽きてきたなら/両性出てくるよう元に戻してやれるぞ"
+			CALL MESSAGE_WINDOW_D, "ダークおやじ", @"もちろんタダではないがな/オマエサンなら…{던전フラグ:94:1*50}마카だな"
+			CALL MESSAGE_WINDOW_D, "ダークおやじ", "どうする？"
+		ELSEIF 던전フラグ:94:2 == 2
+			CALL MESSAGE_WINDOW_D, "ダークおやじ", "あっオマエサン！/남자악마とばかり会う気分は最悪だよ！"
+			CALL MESSAGE_WINDOW_D, "ダークおやじ", "お願いだから/オンナ악마だけにさせてくれないか？"
+			CALL MESSAGE_WINDOW_D, "ダークおやじ", @"タダではできないんだが…/オマエサンなら…{던전フラグ:94:1*50}마카だな"
+			CALL MESSAGE_WINDOW_D, "ダークおやじ", "どうする？"
+		ENDIF
+		$再選択
 		SELECTCASE 던전フラグ:94:2
 			;통상
 			CASE 0
 				CALL INPUT_SELECT_D, "[0] 여악마만 나오게 한다/[1] 남악마만 나오게 한다/[3] 그만둔다"
 			;女악마のみ설정中
 			CASE 1
-				CALL INPUT_SELECT_D, "[1] 남악마만 나오게 한다/[3] 그만둔다"
+				CALL INPUT_SELECT_D, "[1] 남악마만 나오게 한다/[2] 취소/[3] 그만둔다"
 			;男악마のみ설정中
 			CASE 2
-				CALL INPUT_SELECT_D, "[0] 여악마만 나오게 한다/[3] 그만둔다"
+				CALL INPUT_SELECT_D, "[0] 여악마만 나오게 한다/[2] 취소/[3] 그만둔다"
 		ENDSELECT
 		IF RESULT < 3 && MONEY:1 < 던전フラグ:94:1*50
 			CALL MESSAGE_WINDOW_D, "", "마카가 부족하다"
-			GOTO 마카부족
+			GOTO 再選択
 		ENDIF
 		SELECTCASE RESULT
 			;出現악마をオンナ악마だけに
 			CASE 0
-				CALL MESSAGE_WINDOW_D, "다크서머너", "좋아좋아、출현하는 악마를 여악마만으로 했어！/어이 얼른 가라、바빠질꺼야"
+				SIF 던전フラグ:94:2 == 1
+					GOTO 再選択
+
+				IF 던전フラグ:94:2 == 0
+					CALL MESSAGE_WINDOW_D, "다크서머너", "좋아좋아、출현하는 악마를 여악마만으로 했어！/어이 얼른 가라、바빠질꺼야"
+				ELSEIF 던전フラグ:94:2 == 2
+					CALL MESSAGE_WINDOW_D, "ダークおやじ", "ありがとうよ、これでまたオンナ악마に会える…/ほら行った行った、これから忙しいんだ"
+				ENDIF
 				MONEY:1 -= 던전フラグ:94:1*50
 				던전フラグ:94:2 = 1
 			;出現악마を남자악마だけに
 			CASE 1
-				CALL MESSAGE_WINDOW_D, "다크서머너", "…어이、이걸로 남악마가 푸짐해졌어/빨리 끝내줘…투덜투덜"
+				SIF 던전フラグ:94:2 == 2
+					GOTO 再選択
+
+				IF 던전フラグ:94:2 == 0
+					CALL MESSAGE_WINDOW_D, "다크서머너", "…어이、이걸로 남악마가 푸짐해졌어/빨리 끝내줘…투덜투덜"
+				ELSEIF 던전フラグ:94:2 == 1
+					CALL MESSAGE_WINDOW_D, "ダークおやじ", "オンナの次は남자か/もしやオマエサン寝取らせ趣味かい？/さっさと済ませてくれよ…ﾌﾞﾂﾌﾞﾂ"
+				ENDIF
 				MONEY:1 -= 던전フラグ:94:1*50
 				던전フラグ:94:2 = 2
 			;元に戻す
 			CASE 2
-				CALL MESSAGE_WINDOW_D, "다크서머너", "좋아、취소했어/또 언제든지 와줘"
+				SIF 던전フラグ:94:2 == 0
+					GOTO 再選択
+
+				IF 던전フラグ:94:2 == 1
+					CALL MESSAGE_WINDOW_D, "다크서머너", "좋아、취소했어/또 언제든지 와줘"
+				ELSEIF 던전フラグ:94:2 == 2
+					CALL MESSAGE_WINDOW_D, "ダークおやじ", "ありがたい、元に戻したぞ/また何時でもきてくれよ"
+				ENDIF
 				MONEY:1 -= 던전フラグ:94:1*50
 				던전フラグ:94:2 = 0
 			;아무것도안한다
@@ -697,7 +731,7 @@ SIF 던전フラグ:94:3 == 1
 	FLAG:エンカウント率 = 0
 ;=======================================================================
 ;필요레벨눈安
-;권장LV 雑물고기최저LV 雑물고기最高LV ボスLV 
+;권장LV 雑물고기최저LV 雑물고기最高LV ボスLV
 ;=======================================================================
 @GET_DUNGEON_LV_94
 RETURN 5, 3, 9, 10
@@ -769,6 +803,17 @@ SELECTCASE FLAG:現M
 	CASE 9
 		RETURN ENEMY_NUM_COMMON("最上級", ARG)
 ENDSELECT
+;=======================================================================
+;적스테이터스설정
+;=======================================================================
+@SET_ENEMY_STATUS_94,ARG
+ABL:ARG:아이템1 = 0
+ABL:ARG:입수확률1 = 0
+ABL:ARG:아이템2 = 0
+ABL:ARG:입수확률2 = 0
+ABL:ARG:아이템3 = 0
+ABL:ARG:입수확률3 = 0
+
 ;=======================================================================
 ;적の종류
 ;=======================================================================
@@ -851,26 +896,53 @@ SELECTCASE FLAG:現M
 		出現최저레벨 = 58
 ENDSELECT
 
-FOR LCOUNT, 1, 1800
+FOR LCOUNT, 1, 6900
 	;- 악마出現능력판정部 -------------------------------------------------------------------------
+
+	;メガテン系이벤트以外불허가の場合は영웅以降は판정생략
+	SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 && LCOUNT > 4400
+		BREAK
+
+	;クラスを弾く
+	SIF LCOUNT > 4700 && LCOUNT < 4761
+		CONTINUE
+
 	;CSVがあるか확인、なければ弾く
 	SIF EXISTCSV(LCOUNT, 0) == 0
 		CONTINUE
+
+	;エンカウントしてはいけない종족は弾く
+	SIF SEA_ARCH_VALIDATE_RACE(CSVABL(LCOUNT, GETNUM(ABL, "종족"))) == 0
+		CONTINUE
+
+	;비전투원は弾く
+	SIF CSVTALENT(LCOUNT, GETNUM(TALENT, "비전투원"))
+		CONTINUE
+
+	;全書소환불가は弾く
+	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "전서소환불가")) || CSVCFLAG(LCOUNT, GETNUM(CFLAG, "소환불가"))
+		CONTINUE
+
 	;레벨がフ로어に合わない場合は弾く
 	SIF CSVBASE(LCOUNT, GETNUM(BASE, "LV")) > 出現最高레벨 || CSVBASE(LCOUNT, GETNUM(BASE, "LV")) < 出現최저레벨
 		CONTINUE
 
-	;一部特殊악마は조건次第で出現させる
-	SIF LCOUNT == [[キャラ:하루트]]
-		GOTO SET_ENEMYS_NO
-	SIF LCOUNT == [[キャラ:마루트]]
-		GOTO SET_ENEMYS_NO
+	; ;一部特殊악마は조건次第で出現させる
+	; SIF LCOUNT == [[キャラ:하루트]]
+	; 	GOTO SET_ENEMYS_NO
+	; SIF LCOUNT == [[キャラ:마루트]]
+	; 	GOTO SET_ENEMYS_NO
 
 	;解析率が50미만の악마は出現しない
 	SIF FLAG:(LCOUNT+20000) < 500
 		CONTINUE
-	;特殊合体のみ、合体조건有り、전서소환は弾く
-	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "特殊合体のみ")) || CSVCFLAG(LCOUNT, GETNUM(CFLAG, "合体조건有り")) || CSVCFLAG(LCOUNT, GETNUM(CFLAG, "전서소환불가"))
+
+	;特殊合体のみは解析率100％なら解禁
+	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "特殊合体のみ")) && FLAG:(LCOUNT+20000) < 1000
+		CONTINUE
+
+	;合体조건ありは解禁済みなら出現
+	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "合体조건有り")) && FLAG:(10000+RESULT) == 0
 		CONTINUE
 
 	;- 악마出現던전설정판정部と出現추가処理 -------------------------------------------------
@@ -973,18 +1045,18 @@ ENDIF
 LOCAL = 0
 
 
-	WHILE LOCAL < CLASS_NUM
-		IF (RAND:100 < 15) && (LOCAL:1>0)
-			LOCAL:2 = (出現する악마の종류 - (LOCAL:1)) + RAND:(LOCAL:1)
-		ELSEIF (出現する악마の종류 - (LOCAL:1)) > 0
-			LOCAL:2 = RAND:(出現する악마の종류 - (LOCAL:1))
-		ENDIF
-		SIF MATCH(ENEMY, 出現악마:(LOCAL:2))
-			CONTINUE
-		ENEMY:LOCAL = 出現악마:(LOCAL:2)
-		ENEMYLV:LOCAL = CSVBASE(出現악마:(LOCAL:2),GETNUM(BASE, "LV"))
-		LOCAL += 1
-	WEND
+WHILE LOCAL < CLASS_NUM
+	IF (RAND:100 < 15) && (LOCAL:1>0)
+		LOCAL:2 = (出現する악마の종류 - (LOCAL:1)) + RAND:(LOCAL:1)
+	ELSEIF (出現する악마の종류 - (LOCAL:1)) > 0
+		LOCAL:2 = RAND:(出現する악마の종류 - (LOCAL:1))
+	ENDIF
+	SIF MATCH(ENEMY, 出現악마:(LOCAL:2))
+		CONTINUE
+	ENEMY:LOCAL = 出現악마:(LOCAL:2)
+	ENEMYLV:LOCAL = CSVBASE(出現악마:(LOCAL:2),GETNUM(BASE, "LV"))
+	LOCAL += 1
+WEND
 
 LOCAL = 0
 ;LOCAL:7~16に7~16を入れる
@@ -1056,26 +1128,53 @@ SELECTCASE FLAG:現M
 		出現최저레벨 = 58
 ENDSELECT
 
-FOR LCOUNT, 1, 1800
+FOR LCOUNT, 1, 6900
 	;- 악마出現능력판정部 -------------------------------------------------------------------------
+
+	;メガテン系이벤트以外불허가の場合は영웅以降は판정생략
+	SIF GETBIT(FLAG:EXTRA이벤트설정, 0) == 0 && LCOUNT > 4400
+		BREAK
+
+	;クラスを弾く
+	SIF LCOUNT > 4700 && LCOUNT < 4761
+		CONTINUE
+
 	;CSVがあるか확인、なければ弾く
 	SIF EXISTCSV(LCOUNT, 0) == 0
 		CONTINUE
+
+	;エンカウントしてはいけない종족は弾く
+	SIF SEA_ARCH_VALIDATE_RACE(CSVABL(LCOUNT, GETNUM(ABL, "종족"))) == 0
+		CONTINUE
+
+	;비전투원は弾く
+	SIF CSVTALENT(LCOUNT, GETNUM(TALENT, "비전투원"))
+		CONTINUE
+
+	;소환불가は弾く
+	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "전서소환불가")) || CSVCFLAG(LCOUNT, GETNUM(CFLAG, "소환불가"))
+		CONTINUE
+
 	;레벨がフ로어に合わない場合は弾く
 	SIF CSVBASE(LCOUNT, GETNUM(BASE, "LV")) > 出現最高레벨 || CSVBASE(LCOUNT, GETNUM(BASE, "LV")) < 出現최저레벨
 		CONTINUE
 
 	;一部特殊악마は조건次第で出現させる
-	SIF LCOUNT == [[キャラ:하루트]]
-		GOTO SET_ENEMYS_NO
-	SIF LCOUNT == [[キャラ:마루트]]
-		GOTO SET_ENEMYS_NO
+	; SIF LCOUNT == [[キャラ:하루트]]
+	; 	GOTO SET_ENEMYS_NO
+	; SIF LCOUNT == [[キャラ:마루트]]
+	; 	GOTO SET_ENEMYS_NO
 
 	;解析率が50미만の악마は出現しない
 	SIF FLAG:(LCOUNT+20000) < 500
 		CONTINUE
-	;特殊合体のみ、合体조건有り、전서소환は弾く
-	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "特殊合体のみ")) || CSVCFLAG(LCOUNT, GETNUM(CFLAG, "合体조건有り")) || CSVCFLAG(LCOUNT, GETNUM(CFLAG, "전서소환불가"))
+
+	;特殊合体のみは解析率100％なら解禁
+	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "特殊合体のみ")) && FLAG:(LCOUNT+20000) < 1000
+		CONTINUE
+
+	;合体조건ありは解禁済みなら出現
+	SIF CSVCFLAG(LCOUNT, GETNUM(CFLAG, "合体조건有り")) && FLAG:(10000+RESULT) == 0
 		CONTINUE
 
 	;- 악마出現던전설정판정部と出現추가処理 -------------------------------------------------
@@ -1089,6 +1188,7 @@ FOR LCOUNT, 1, 1800
 	出現악마:LOCAL = LCOUNT
 	LOCAL ++
 NEXT
+
 
 ;레어?악마処理
 ;メガテン系이벤트以外불허가の場合は出現させない
@@ -1265,4 +1365,40 @@ SELECTCASE RAND:3
 		RETURN [[キャラ:좀비군]] , 3 + RAND:10 , CSVBASE([[キャラ:좀비군]] , GETNUM(BASE , "LV") , 0) + RAND:3
 ENDSELECT
 
-
+;=======================================================================
+;除外종족판정
+;=======================================================================
+@SEA_ARCH_VALIDATE_RACE, ARG
+#FUNCTION
+SELECTCASE ARG
+	CASE 0;인간
+		RETURNF 0
+	CASE IS < 19;通常종족
+		RETURNF 1
+	CASE 30;칠성
+		RETURNF 0
+	CASE 31;광인
+		RETURNF 1
+	CASE 32;괴이
+		RETURNF 1
+	CASE 33;ボス戦用
+		RETURNF 0
+	CASE 36;半魔
+		RETURNF 0
+	CASE 39;링크악마専用
+		RETURNF 0
+	CASE 40;페르소나専用
+		RETURNF 0
+	CASE 41;페르소나2
+		RETURNF 0
+	CASE 42;마인
+		RETURNF 1
+	CASE 43;초인
+		RETURNF 0
+	CASE 44;영웅
+		RETURNF 1
+	CASE 45;조마
+		RETURNF 0
+	CASE 73;악마인
+		RETURNF 0
+ENDSELECT

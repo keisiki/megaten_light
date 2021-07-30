@@ -48,16 +48,18 @@ NEXT
 ;CSVやERBに변경があった場合等用の기본処理
 FOR LCOUNT, 0, CHARANUM
 	IF ABL:LCOUNT:종족 == 0
-		IF NO:LCOUNT != 3501 && NO:LCOUNT != 3502 && NO:LCOUNT != 4530
+		IF !IS_RANDOMCHARA(LCOUNT) && NO:LCOUNT != 4530
 			TALENT:LCOUNT:머리 = CSVTALENT(NO:LCOUNT,GETNUM(TALENT,"머리"),0)
 			TALENT:LCOUNT:눈 = CSVTALENT(NO:LCOUNT,GETNUM(TALENT,"눈"),0)
 			TALENT:LCOUNT:입 = CSVTALENT(NO:LCOUNT,GETNUM(TALENT,"입"),0)
 			TALENT:LCOUNT:팔 = CSVTALENT(NO:LCOUNT,GETNUM(TALENT,"팔"),0)
 			TALENT:LCOUNT:발 = CSVTALENT(NO:LCOUNT,GETNUM(TALENT,"발"),0)
 		ENDIF
-		FOR LOCAL,0,22
-			TALENT:LCOUNT:GET_SUCCESSION(LOCAL) = 0
-		NEXT
+		IF !IS_RANDOMCHARA(LCOUNT)
+			FOR LOCAL,0,22
+				TALENT:LCOUNT:GET_SUCCESSION(LOCAL) = 0
+			NEXT
+		ENDIF
 	ENDIF
 	SIF (NO:LCOUNT == 3501 || NO:LCOUNT == 3502) && (ABL:LCOUNT:종족 != 0) && BASE:LCOUNT:CP == 0
 		BASE:LCOUNT:CP = 1
@@ -65,8 +67,27 @@ FOR LCOUNT, 0, CHARANUM
 		BASE:LCOUNT:LV = 1
 	SIF CFLAG:LCOUNT:임신確定後の父親の판정 >= 0 && EXISTCSV(CFLAG:LCOUNT:임신確定後の父親の판정,0) == 0
 		CFLAG:LCOUNT:임신確定後の父親の판정 = -1
+		
+	IF ABL:LCOUNT:변이 == 862
+		PRINTFORML %CALLNAME:LCOUNT%の変異先を変更しました
+		ABL:LCOUNT:변이 = 3719
+	ELSEIF ABL:LCOUNT:변이 == 863
+		PRINTFORML %CALLNAME:LCOUNT%の変異先を変更しました
+		ABL:LCOUNT:변이 = 3720
+	ELSEIF ABL:LCOUNT:변이 == 864
+		PRINTFORML %CALLNAME:LCOUNT%の変異先を変更しました
+		ABL:LCOUNT:변이 = 3721
+	ELSEIF ABL:LCOUNT:변이 == 866
+		PRINTFORML %CALLNAME:LCOUNT%の変異先を変更しました
+		ABL:LCOUNT:변이 = 3722
+	ELSEIF ABL:LCOUNT:변이 == 867
+		PRINTFORML %CALLNAME:LCOUNT%の変異先を変更しました
+		ABL:LCOUNT:변이 = 3723
+	ELSEIF ABL:LCOUNT:변이 == 868
+		PRINTFORML %CALLNAME:LCOUNT%の変異先を変更しました
+		ABL:LCOUNT:변이 = 3724
+	ENDIF
 NEXT
-
 FOR LOCAL, 100, 500
 	SIF SAVESTR:LOCAL == ""
 		CONTINUE
@@ -133,7 +154,7 @@ IF LASTLOAD_VERSION < 0201
 			TALENT:LCOUNT:도구지식 = CSVTALENT(NO:LCOUNT,GETNUM(TALENT,"도구지식"),0)
 			TALENT:LCOUNT:아이템숙련 = CSVTALENT(NO:LCOUNT,GETNUM(TALENT,"아이템숙련"),0)
 			TALENT:LCOUNT:건슬링거 = CSVTALENT(NO:LCOUNT,GETNUM(TALENT,"건슬링거"),0)
-			
+
 		ENDIF
 		IF LCOUNT != MASTER && ABL:LCOUNT:종족 != 45
 			FOR LOCAL,1,7
@@ -306,8 +327,8 @@ IF LASTLOAD_VERSION < 0267
 		SELECTCASE NO:LOCAL
 			;나가の변이を나가ラジャに
 			CASE 754
-	 			SIF ABL:LOCAL:변이 == 452
-	 				ABL:LOCAL:변이 = 755
+				SIF ABL:LOCAL:변이 == 452
+					ABL:LOCAL:변이 = 755
 			CASE 956
 				SIF NAME:LOCAL == "필방"
 					NO:LOCAL = 955
@@ -596,60 +617,60 @@ ENDIF
 IF LASTLOAD_VERSION < 0282
 	;유리코の番号변경
 	CALL CONVERT_CHARA_NO,663,424
-		FOR LOCAL, 0, CHARANUM
-			IF NO:LOCAL == [[キャラ:아마네]] || NO:LOCAL == [[キャラ:마인드아마네]]
-				ABL:LOCAL:종족 = 0
-				BASE:LOCAL:CP = 0
-				FOR LOCAL:1, 0, FLAG:相性数
-					BASE:LOCAL:GET_TYPE(LOCAL:1) = 100
-				NEXT
-				BASE:LOCAL:파마 = 0
-			;一応로키の番号변경
-			ELSEIF NO:LOCAL == 1509
-				NO:LOCAL = 261
+	FOR LOCAL, 0, CHARANUM
+		IF NO:LOCAL == [[キャラ:아마네]] || NO:LOCAL == [[キャラ:마인드아마네]]
+			ABL:LOCAL:종족 = 0
+			BASE:LOCAL:CP = 0
+			FOR LOCAL:1, 0, FLAG:相性数
+				BASE:LOCAL:GET_TYPE(LOCAL:1) = 100
+			NEXT
+			BASE:LOCAL:파마 = 0
+			;一応로키の번호변경
+		ELSEIF NO:LOCAL == 1509
+			NO:LOCAL = 261
 			;유리코のフラグを立てる
-			ELSEIF NO:LOCAL == 424
-				CFLAG:LOCAL:合体불가 = 1
-				CFLAG:LOCAL:용량未사용 = 1
-			ENDIF
+		ELSEIF NO:LOCAL == 424
+			CFLAG:LOCAL:合体불가 = 1
+			CFLAG:LOCAL:용량未사용 = 1
+		ENDIF
 			;서머너と도구지식の레벨制、아이템숙련の実装に伴う同期とり
-			IF LOCAL == MASTER
-				IF TALENT:MASTER:페르소나구사자 || TALENT:MASTER:이능자
-					TALENT:MASTER:서머너 = 0
-					TALENT:MASTER:도구지식 = 0
-				ELSEIF (TALENT:MASTER:서머너 + TALENT:MASTER:석세서 + TALENT:MASTER:건슬링거 + TALENT:MASTER:도구지식) == 0
+		IF LOCAL == MASTER
+			IF TALENT:MASTER:페르소나구사자 || TALENT:MASTER:이능자
+				TALENT:MASTER:서머너 = 0
+				TALENT:MASTER:도구지식 = 0
+			ELSEIF (TALENT:MASTER:서머너 + TALENT:MASTER:석세서 + TALENT:MASTER:건슬링거 + TALENT:MASTER:도구지식) == 0
 					;観光客はそれぞれ1Lvでもいーかなとも思ったけど、とりあえず両方0で。
-					TALENT:MASTER:서머너 = 0
-					TALENT:MASTER:도구지식 = 0
-				ELSE
-					TALENT:LOCAL:서머너 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"서머너"),0)
-					TALENT:LOCAL:도구지식 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"도구지식"),0)
-				ENDIF
-			ELSEIF NO:LOCAL == 3501 || NO:LOCAL == 3502
-				SIF TALENT:LOCAL:서머너 == 1 && (TALENT:MASTER:페르소나구사자 + TALENT:MASTER:이능자) == 0
-					TALENT:LOCAL:서머너 = 5
-				SIF TALENT:LOCAL:도구지식 == 1 && (TALENT:MASTER:페르소나구사자 + TALENT:MASTER:이능자) == 0
-					TALENT:LOCAL:도구지식 = 3
+				TALENT:MASTER:서머너 = 0
+				TALENT:MASTER:도구지식 = 0
 			ELSE
 				TALENT:LOCAL:서머너 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"서머너"),0)
 				TALENT:LOCAL:도구지식 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"도구지식"),0)
-				TALENT:LOCAL:아이템숙련 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"아이템숙련"),0)
-				TALENT:LOCAL:석세서 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"석세서"),0)
 			ENDIF
-		NEXT
-		FOR LOCAL,0,11
-			SIF DITEMTYPE:LOCAL:페르소나("NO") == 1509
-				DITEMTYPE:LOCAL:페르소나("NO") = 261
-		NEXT
-		FOR LOCAL,0, CHARANUM
+		ELSEIF NO:LOCAL == 3501 || NO:LOCAL == 3502
+			SIF TALENT:LOCAL:서머너 == 1 && (TALENT:MASTER:페르소나구사자 + TALENT:MASTER:이능자) == 0
+				TALENT:LOCAL:서머너 = 5
+			SIF TALENT:LOCAL:도구지식 == 1 && (TALENT:MASTER:페르소나구사자 + TALENT:MASTER:이능자) == 0
+				TALENT:LOCAL:도구지식 = 3
+		ELSE
+			TALENT:LOCAL:서머너 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"서머너"),0)
+			TALENT:LOCAL:도구지식 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"도구지식"),0)
+			TALENT:LOCAL:아이템숙련 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"아이템숙련"),0)
+			TALENT:LOCAL:석세서 = CSVTALENT(NO:LOCAL,GETNUM(TALENT,"석세서"),0)
+		ENDIF
+	NEXT
+	FOR LOCAL,0,11
+		SIF DITEMTYPE:LOCAL:페르소나("NO") == 1509
+			DITEMTYPE:LOCAL:페르소나("NO") = 261
+	NEXT
+	FOR LOCAL,0, CHARANUM
 			;CSVから초기페르소나を취득する
-			IF TALENT:LOCAL:페르소나구사자
-				ABL:LOCAL:초기페르소나2 = CSVABL(NO:LOCAL, GETNUM(ABL, "초기페르소나2"), 0)
-				ABL:LOCAL:초기페르소나3 = CSVABL(NO:LOCAL, GETNUM(ABL, "초기페르소나3"), 0)
-			ENDIF
-			CALL ADJUST_CHARA_ALI, LOCAL
-			CALL SYNC_STATUS, LOCAL
-		NEXT
+		IF TALENT:LOCAL:페르소나구사자
+			ABL:LOCAL:초기페르소나2 = CSVABL(NO:LOCAL, GETNUM(ABL, "초기페르소나2"), 0)
+			ABL:LOCAL:초기페르소나3 = CSVABL(NO:LOCAL, GETNUM(ABL, "초기페르소나3"), 0)
+		ENDIF
+		CALL ADJUST_CHARA_ALI, LOCAL
+		CALL SYNC_STATUS, LOCAL
+	NEXT
 	;ビエンの地図데이터を抹消
 	;FOR LOCAL:2, 19, 25
 	;	FOR LOCAL:1, 0, 20
@@ -716,7 +737,7 @@ IF LASTLOAD_VERSION < 0283
 				ENDIF
 			ENDIF
 		CATCH
-			
+
 		ENDCATCH
 	NEXT
 	FOR LOCAL, 1, 100
@@ -749,7 +770,7 @@ IF LASTLOAD_VERSION < 0283
 				ENDIF
 			ENDIF
 		CATCH
-			
+
 		ENDCATCH
 	NEXT
 ENDIF
@@ -844,7 +865,7 @@ IF LASTLOAD_VERSION < 0291
 				FOR LOCAL:3, 0, MIN(FLAG:최대Y,20)
 					FOR LOCAL:2, 0, MIN(FLAG:최대X,20)
 						CALL SET_FLOOR_ANALYZE, TA:((FLAG:現M*100+LOCAL)):(LOCAL:2):(LOCAL:3), LOCAL, LOCAL:1, LOCAL:2, LOCAL:3
-							CONTINUE
+						CONTINUE
 					NEXT
 				NEXT
 			NEXT
@@ -1054,7 +1075,7 @@ IF LASTLOAD_VERSION < 0301
 	SIF GETCHARA([[キャラ:유카리]], 0) >= 0
 		ABL:GETCHARA([[キャラ:유카리]], 0):초기페르소나3 = CSVABL([[キャラ:유카리]], GETNUM(ABL, "초기페르소나3"),0)
 	FOR LOCAL, 1, CHARANUM
-		SIF TALENT:LOCAL:연모 || TALENT:LOCAL:예속
+		SIF (TALENT:LOCAL:연모 || TALENT:LOCAL:친애) && !(TALENT:LOCAL:신뢰 || TALENT:LOCAL:동료)
 			SETBIT FLAG:(50000+NO:LOCAL), 1
 		SIF TALENT:LOCAL:친애
 			SETBIT FLAG:(50000+NO:LOCAL), 2
@@ -1066,6 +1087,10 @@ IF LASTLOAD_VERSION < 0301
 			SETBIT FLAG:(50000+NO:LOCAL), 5
 		SIF TALENT:LOCAL:예속
 			SETBIT FLAG:(50000+NO:LOCAL), 6
+					SIF TALENT:LOCAL:신뢰 || TALENT:LOCAL:동료
+			SETBIT FLAG:(50000+NO:LOCAL), 8
+		SIF TALENT:LOCAL:동료
+			SETBIT FLAG:(50000+NO:LOCAL), 9
 	NEXT
 	FOR LOCAL , 0 , CHARANUM
 		SIF CFLAG:LOCAL:구상セレクト == -1
@@ -1386,8 +1411,512 @@ IF LASTLOAD_VERSION < 00309121
 	NEXT
 ENDIF
 
+IF LASTLOAD_VERSION < 00309125
+	PRINTL キャラ上限변경の事前準備のため好感度処理が변경になりました
+	PRINTL セーブデータのCFLAGをCDFLAGに移行します。
 
+	;好感度のCFLAGをCDFLAGに
+	FOR LOCAL, 0, CHARANUM
+		FOR LOCAL:1, 2000, 2300
+			CDFLAG:LOCAL:キャラ間好感度:(LOCAL:1-2000) = CFLAG:LOCAL:(LOCAL:1)
+		NEXT
+		FOR LOCAL:1, 2301, 2600
+			CDFLAG:LOCAL:キャラ間함락素質:(LOCAL:1-2301) = CFLAG:LOCAL:(LOCAL:1)
+		NEXT
+	NEXT
+ENDIF
+IF LASTLOAD_VERSION < 00309126
+	FOR LOCAL, 0, CHARANUM
+		SIF !(ABL:LOCAL:종족 == 0 || ABL:LOCAL:종족 == 36)
+			CONTINUE
+		FOR LOCAL:1,1750,1780
+			IF CFLAG:LOCAL:(LOCAL:1) > 0 && GETCHARA(CFLAG:LOCAL:(LOCAL:1)) > -1
+				CALL 특별우정추가,LOCAL,GETCHARA(CFLAG:LOCAL:(LOCAL:1))
+			ELSE
+				LOCAL:2 = CSVCFLAG(NO:LOCAL,LOCAL:1)
+				IF LOCAL:2 > 0 && GETCHARA(LOCAL:2) > -1
+					;PRINTFORMW {LOCAL:2,4} {GETCHARA(LOCAL:2),3}
+					CALL 특별우정추가,LOCAL,GETCHARA(LOCAL:2)
+				ENDIF
+			ENDIF
+		NEXT
+	NEXT
+ENDIF
+
+;舞台少女　스킬変化でやってた専用스킬をCSTR스킬に入れ替え処理
+;ループ数はRev134におけるABL:스킬xxの数だけ、つまり20。습득스킬xxも同じ20なのでこれで動くはず。
+IF LASTLOAD_VERSION < 00309135
+	;愛城華恋
+	LOCAL = GETCHARA([[キャラ:카렌（무대소녀）]])
+	IF GETCHARA([[キャラ:카렌（무대소녀）]]) > -1
+		PRINTL ※愛城華恋の存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;イナズマ突きを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:번개찌르기]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;イナズマ突きを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:번개찌르기]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;万魔の一撃を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:만마의일격]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;万魔の一撃を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:만마의일격]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = P．of．Puberty
+		CSTR:LOCAL:전용기2 = 約束タワーブリッジ
+	ENDIF
+
+	;神楽ひかり
+	LOCAL = GETCHARA([[キャラ:히카리]])
+	IF GETCHARA([[キャラ:히카리]]) > -1
+		PRINTL ※神楽ひかりの存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;柔の波を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:부드러운파도]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;柔の波を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:부드러운파도]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;テトラプリズンを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:테트라프리즌]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;テトラプリズンを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:테트라프리즌]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = C．Bright
+		CSTR:LOCAL:전용기2 = 星罪のレヴュー
+	ENDIF
 	
+	;露崎まひる
+	LOCAL = GETCHARA([[キャラ:마히루]])
+	IF GETCHARA([[キャラ:마히루]]) > -1
+		PRINTL ※露崎まひるの存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;大暴れを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:난동부리기]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;大暴れを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:난동부리기]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;曳光倶梨伽羅蹴を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:예광구리가라축]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;曳光倶梨伽羅蹴を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:예광구리가라축]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = L．judgement
+		CSTR:LOCAL:전용기2 = 恋の魔球・ﾊｲﾗｲﾄ
+	ENDIF
+	
+	;星見純那
+	LOCAL = GETCHARA([[キャラ:쥰나]])
+	IF GETCHARA([[キャラ:쥰나]]) > -1
+		PRINTL ※星見純那の存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;切なさ乱れうちを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:안타까움난사]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;切なさ乱れうちを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:안타까움난사]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;Burn my Dreadを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:Burn my Dread]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;Burn my Dreadを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:Burn my Dread]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = 翡翠弓
+		CSTR:LOCAL:전용기2 = 自分星
+	ENDIF
+		
+	;大場なな
+	LOCAL = GETCHARA([[キャラ:나나]])
+	IF GETCHARA([[キャラ:나나]]) > -1
+		PRINTL ※大場ななの存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;浮月砕破を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:부월쇄파]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;浮月砕破を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:부월쇄파]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;アイアンクロウを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:아이언클로]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;アイアンクロウを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:아이언클로]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+			;黙示録を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:묵시록]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기3]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기3]]
+			ENDIF
+			;黙示録を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:묵시록]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기3]]
+			ENDIF
+			
+			;正義の盾を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:정의의방패]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기4]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기4]]
+			ENDIF
+			;正義の盾を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:정의의방패]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기4]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = 大太刀・輪
+		CSTR:LOCAL:전용기2 = 小太刀・舞
+		CSTR:LOCAL:전용기3 = 輪＆舞
+		CSTR:LOCAL:전용기4 = 第99回聖翔祭（再演）
+	ENDIF
+	
+	;石動双葉
+	LOCAL = GETCHARA([[キャラ:후타바（무대소녀）]])
+	IF GETCHARA([[キャラ:후타바（무대소녀）]]) > -1
+		PRINTL ※石動双葉の存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;烈風撃を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:열풍격]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;烈風撃を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:열풍격]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;風神撃を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:풍신격]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;風神撃を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:풍신격]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = Determinater
+		CSTR:LOCAL:전용기2 = 咲き誇るその瞬間
+	ENDIF
+	
+	;花柳香子
+	LOCAL = GETCHARA([[キャラ:카오루코]])
+	IF GETCHARA([[キャラ:카오루코]]) > -1
+		PRINTL ※花柳香子の存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;テンタラフーを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:텐타라후]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;テンタラフーを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:텐타라후]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;風の舞を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:바람의춤]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;風の舞を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:바람의춤]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+			;クロスフォーチュンを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:크로스포츈]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기3]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기3]]
+			ENDIF
+			;クロスフォーチュンを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:크로스포츈]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기3]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = 水仙花／優雅に
+		CSTR:LOCAL:전용기2 = 水仙花／大胆に
+		CSTR:LOCAL:전용기3 = 花咲か唄
+	ENDIF
+	
+	;天堂真矢
+	LOCAL = GETCHARA([[キャラ:마야（무대소녀）]])
+	IF GETCHARA([[キャラ:마야（무대소녀）]]) > -1
+		PRINTL ※天堂真矢の存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;夜桜の舞いを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:밤벚꽃의춤]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;夜桜の舞いを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:밤벚꽃의춤]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;ブレイブザッパーを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:브레이브재퍼]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;ブレイブザッパーを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:브레이브재퍼]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = O．t．Marvericks
+		CSTR:LOCAL:전용기2 = This_is_天堂真矢
+	ENDIF
+	
+	
+	;西條クロディーヌ
+	LOCAL = GETCHARA([[キャラ:클로딘]])
+	IF GETCHARA([[キャラ:클로딘]]) > -1
+		PRINTL ※西條クロディーヌの存在を確認　変化스킬が専用스킬へアップデートされます
+		FOR LOCAL:1, 1, 21, 1
+			;集雷撃を覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:집뢰격]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기1]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			;集雷撃を覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:집뢰격]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기1]]
+			ENDIF
+			
+			;ノヴァサイザーを覚えている場合、専用技1に差し替え
+			IF ABL:LOCAL:@"스킬{LOCAL:1}" == [[스킬:노바사이저]]
+				ABL:LOCAL:@"스킬{LOCAL:1}" = [[스킬:전용기2]]
+				;デビルシフターとなっている場合は同様に인간시스킬の項目も差し替え
+				SIF TALENT:LOCAL:데빌시프터
+					ABL:LOCAL:@"인간시스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			;ノヴァサイザーを覚える予定の場合、専用技1に差し替え
+			IF ABL:LOCAL:@"습득스킬{LOCAL:1}" == [[스킬:노바사이저]]
+				ABL:LOCAL:@"습득스킬{LOCAL:1}" = [[스킬:전용기2]]
+			ENDIF
+			
+		NEXT
+		;CSTRで専用技定義
+		CSTR:LOCAL:전용기1 = E．de．Fierte
+		CSTR:LOCAL:전용기2 = C’est_moi，la_star
+	ENDIF
+	
+	
+ENDIF
+
+;キャラ番号の移動
+;空いた枠が書き換えられないように1回だけ処理
+IF LASTLOAD_VERSION < 00309136
+	;Chara862_クール2
+	SIF FLAG:(20000+3719) == 0 && FLAG:(20000+862) != 0
+		CALL CONVERT_CHARA_NO,862,3719
+	;Chara863_クール3
+	SIF FLAG:(20000+3720) == 0 && FLAG:(20000+863) != 0
+		CALL CONVERT_CHARA_NO,863,3720
+	;Chara864_クール4
+	SIF FLAG:(20000+3721) == 0 && FLAG:(20000+864) != 0
+		CALL CONVERT_CHARA_NO,864,3721
+	;Chara866_ベール2
+	SIF FLAG:(20000+3722) == 0 && FLAG:(20000+866) != 0
+		CALL CONVERT_CHARA_NO,866,3722
+	;Chara867_ベール3
+	SIF FLAG:(20000+3723) == 0 && FLAG:(20000+867) != 0
+		CALL CONVERT_CHARA_NO,867,3723
+	;Chara868_ベール4
+	SIF FLAG:(20000+3724) == 0 && FLAG:(20000+868) != 0
+		CALL CONVERT_CHARA_NO,868,3724
+	
+	;Chara1020_オブスィーン
+	SIF FLAG:(20000+3316) == 0 && FLAG:(20000+1020) != 0
+		CALL CONVERT_CHARA_NO,1020,3316
+	;Chara1021_グリード
+	SIF FLAG:(20000+3317) == 0 && FLAG:(20000+1021) != 0
+		CALL CONVERT_CHARA_NO,1021,3317
+	;Chara1022_ジェラシー
+	SIF FLAG:(20000+3318) == 0 && FLAG:(20000+1022) != 0
+		CALL CONVERT_CHARA_NO,1022,3318
+	;Chara1023_ベリカシティ
+	SIF FLAG:(20000+3319) == 0 && FLAG:(20000+1023) != 0
+		CALL CONVERT_CHARA_NO,1023,3319
+	;Chara1024_レイジネス
+	SIF FLAG:(20000+3320) == 0 && FLAG:(20000+1024) != 0
+		CALL CONVERT_CHARA_NO,1024,3320
+	;Chara1025_アラガンス
+	SIF FLAG:(20000+3321) == 0 && FLAG:(20000+1025) != 0
+		CALL CONVERT_CHARA_NO,1025,3321
+	
+	;Chara3210_プリーステス
+	SIF FLAG:(20000+3322) == 0 && FLAG:(20000+3210) != 0
+		CALL CONVERT_CHARA_NO,3210,3322
+	;Chara3211_エンプレス
+	SIF FLAG:(20000+3323) == 0 && FLAG:(20000+3211) != 0
+		CALL CONVERT_CHARA_NO,3211,3323
+	;Chara3255_エンペラー
+	SIF FLAG:(20000+3324) == 0 && FLAG:(20000+3255) != 0
+		CALL CONVERT_CHARA_NO,3255,3324
+	;Chara3256_ハイエロファント
+	SIF FLAG:(20000+3325) == 0 && FLAG:(20000+3256) != 0
+		CALL CONVERT_CHARA_NO,3256,3325
+	;Chara3212_ラヴァーズ
+	SIF FLAG:(20000+3326) == 0 && FLAG:(20000+3212) != 0
+		CALL CONVERT_CHARA_NO,3212,3326
+	;Chara3261_チャリオッツ
+	SIF FLAG:(20000+3327) == 0 && FLAG:(20000+3261) != 0
+		CALL CONVERT_CHARA_NO,3261,3327
+	;Chara3262_ジャスティス
+	SIF FLAG:(20000+3328) == 0 && FLAG:(20000+3262) != 0
+		CALL CONVERT_CHARA_NO,3262,3328
+	;Chara3219_ハーミット
+	SIF FLAG:(20000+3329) == 0 && FLAG:(20000+3219) != 0
+		CALL CONVERT_CHARA_NO,3219,3329
+	;Chara3220_フォーチュン
+	SIF FLAG:(20000+3330) == 0 && FLAG:(20000+3220) != 0
+	CALL CONVERT_CHARA_NO,3220,3330
+	;Chara3221_ストレングス
+	SIF FLAG:(20000+3331) == 0 && FLAG:(20000+3221) != 0
+		CALL CONVERT_CHARA_NO,3221,3331
+	;Chara3277_ハングドマン
+	SIF FLAG:(20000+3332) == 0 && FLAG:(20000+3277) != 0
+		CALL CONVERT_CHARA_NO,3277,3332
+	;Chara3230_石像
+	SIF FLAG:(20000+3333) == 0 && FLAG:(20000+3230) != 0
+		CALL CONVERT_CHARA_NO,3230,3333
+		
+	;Chara3263_マインドアマネ
+	SIF FLAG:(20000+3334) == 0 && FLAG:(20000+3263) != 0
+		CALL CONVERT_CHARA_NO,3263,3334
+	;Chara4211_シャドウりせ
+	SIF FLAG:(20000+3335) == 0 && FLAG:(20000+4211) != 0
+		CALL CONVERT_CHARA_NO,4211,3335
+	;Chara3266_完二の影
+	SIF FLAG:(20000+3336) == 0 && FLAG:(20000+3266) != 0
+		CALL CONVERT_CHARA_NO,3266,3336
+	;Chara3267_ナイスガイ
+	SIF FLAG:(20000+3337) == 0 && FLAG:(20000+3267) != 0
+	CALL CONVERT_CHARA_NO,3267,3337
+	;Chara3268_タフガイ
+	SIF FLAG:(20000+3338) == 0 && FLAG:(20000+3268) != 0
+		CALL CONVERT_CHARA_NO,3268,3338
+	;Chara3270_千枝の影
+	SIF FLAG:(20000+3339) == 0 && FLAG:(20000+3270) != 0
+		CALL CONVERT_CHARA_NO,3270,3339
+	;Chara3271_雪子の影
+	SIF FLAG:(20000+3340) == 0 && FLAG:(20000+3271) != 0
+		CALL CONVERT_CHARA_NO,3271,3340
+	;Chara3272_白馬の王子様
+	SIF FLAG:(20000+3341) == 0 && FLAG:(20000+3272) != 0
+		CALL CONVERT_CHARA_NO,3272,3341
+	;Chara3274_影に呑まれた男
+	SIF FLAG:(20000+3342) == 0 && FLAG:(20000+3274) != 0
+		CALL CONVERT_CHARA_NO,3274,3342
+		
+	;Chara298_悪魔ほむら
+	SIF FLAG:(20000+3384) == 0 && FLAG:(20000+298) != 0
+		CALL CONVERT_CHARA_NO,298,3384
+
+ENDIF
+
+
 @CONVERT_CHARA_CHECK
 IF LASTLOAD_VERSION < 0282
 	;NO変換処理

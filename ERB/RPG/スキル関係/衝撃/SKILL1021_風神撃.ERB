@@ -3,13 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_1021,ARG
-;双葉はんが사용する場合사키き誇るその瞬間（実質物理림도라）
-;IF ARG > 0 && NO:ARG == [[キャラ:후타바（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:후타바（무대소녀）]]) == 1
-	RESULTS = 활짝 핀 그 순간
-ELSE
-	RESULTS = 풍신격
-ENDIF
+RESULTS = 풍신격
 
 
 ;　명중
@@ -18,12 +12,7 @@ RETURN 100
 
 ;　威힘
 @SKILL_POWER_1021, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:후타바（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:후타바（무대소녀）]]) == 1
-	RETURN 460
-ELSE
 	RETURN 400
-ENDIF
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_1021,ARG
@@ -40,12 +29,8 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_1021,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:후타바（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:후타바（무대소녀）]]) == 1
-	RETURN 20
-ELSE
 	RETURN 14
-ENDIF
+
 
 ;　相性
 @SKILL_TYPE_1021,ARG
@@ -53,12 +38,12 @@ RETURN 7
 ;충격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1021
+@SKILL_DECIDE_TYPE_1021, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1021
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1021, ARG
 RETURN 1
 
 
@@ -143,12 +128,8 @@ CALL ATTACK_SINGLE,ARG,LOCAL,1021
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1021
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:후타바（무대소녀）]]
-	PRINTL キラめきを燃焼させ、立ちふさがる障害をブッ飛ばす。
-	PRINTL 적前一体に충격物理ダメージ+転倒。사거리が短い
-ELSE
-	PRINTL [전열] 전열의 적 1체에 충격속성 특대 물리데미지. (낮은 확률로 SLIP)
-ENDIF
+PRINTL [전열] 전열의 적 1체에 충격속성 특대 물리데미지. (낮은 확률로 SLIP)
+
 
 ;継承に필요な部位
 @継承部位_1021,ARG

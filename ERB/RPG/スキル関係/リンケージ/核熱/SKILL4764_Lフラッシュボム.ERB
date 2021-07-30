@@ -12,7 +12,7 @@ RETURN 80
 @SKILL_POWER_4764, ARG
 RETURN 180
 
-@SKILL_CRITICAL_RATE_4764
+@SKILL_CRITICAL_RATE_4764, ARG
 RETURN -200
 
 ;　최저공격횟수
@@ -37,11 +37,11 @@ RETURN 14
 RETURN GET_TYPE_NUM("핵열")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_4764
+@SKILL_DECIDE_TYPE_4764, ARG
 RETURN 1
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_4764
+@SKILL_DAMAGETYPE_4764, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -73,7 +73,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4764, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4764,ARG
@@ -136,7 +136,7 @@ NEXT
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_4764
-PRINTL 전 １열에 핵열相性 물리 데미지＋명중・회피 저하。후열사용가능。
+PRINTL 전 １열에 핵열상성 물리 데미지＋명중・회피 저하。후열사용가능。
 
 ;継承に필요한部位
 @継承部位_4764,ARG

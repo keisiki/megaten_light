@@ -19,6 +19,8 @@
 ;	009		2011/03/12			P					カジノ추가
 ;	010		2014/12/16			Iz					ストーリー전개に沿った、主人公への素質等の추가
 ;	011		2019/04/22								メシアン・가이아즈系エネミーを少数추가
+;	012		2020/11/30			Jガン				ベルデルにCOOPが利かないように
+;	013		2021/06/15								魔人にボスフラグが立ってなかったので修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=======================================================================
 ;
@@ -1535,7 +1537,7 @@ SELECTCASE FLAG:現M
 				FLAG:회화불능フラグ = 0
 				FLAG:선제기습취소 = 0
 				DA:(FLAG:現X):(FLAG:現Y) = 1
-				ITEM:겨우살이 = 0
+				;ITEM:겨우살이 = 0
 				CALL LIFTING_A_BAN([[キャラ:발드르]])
 				;FLAG:10409 = 1
 				;TALENT:MASTER:도구지식 = LOCAL
@@ -2566,7 +2568,7 @@ SELECTCASE FLAG:現M
 						PRINTW 마인 마타도르가 １체 나타났다！
 						CUSTOMDRAWLINE =
 						WAIT
-						CALL SET_ENEMY,9,4101,40,0
+						CALL SET_ENEMY,9,4101,40,0,1
 						BASE:(CHARANUM-1):지혜 += 10
 						BASE:(CHARANUM-1):마력 += 10
 						BASE:(CHARANUM-1):운 += 10
@@ -2583,7 +2585,7 @@ SELECTCASE FLAG:現M
 						PRINTW 마인 헬즈엔젤이 １체 나타났다！
 						CUSTOMDRAWLINE =
 						WAIT
-						CALL SET_ENEMY,9,4102,56,0
+						CALL SET_ENEMY,9,4102,56,0,1
 						BASE:(CHARANUM-1):지혜 += 10
 						BASE:(CHARANUM-1):마력 += 10
 						BASE:(CHARANUM-1):운 += 15
@@ -2600,7 +2602,7 @@ SELECTCASE FLAG:現M
 						PRINTW 마인 대승정이 １체 나타났다！
 						CUSTOMDRAWLINE =
 						WAIT
-						CALL SET_ENEMY,9,4103,82,0
+						CALL SET_ENEMY,9,4103,82,0,1
 						BASE:(CHARANUM-1):운 += 25
 						CFLAG:(CHARANUM-1):ＨＰ보정 = 3605
 						CFLAG:(CHARANUM-1):ＭＰ보정 = 9000
@@ -2727,14 +2729,14 @@ SELECTCASE FLAG:現M
 					CUSTOMDRAWLINE =
 					;☆　１４３０　２５１６
 					;久慈川리세
-					CALL SET_ENEMY,9,4211, 20, 0, 1
+					CALL SET_ENEMY,9,[[キャラ:섀도우리세]], 20, 0, 1
 					SIF 이벤트フラグ:5:0 < 1
 						CSTR:(CHARANUM-1):종족명 = 악마빙의자
 					CFLAG:(CHARANUM-1):ＨＰ보정 += 500
 					CFLAG:(CHARANUM-1):ＭＰ보정 += 2000
 					CFLAG:(CHARANUM-1):속도보정 = 10
 					CFLAG:(CHARANUM-1):行動횟수 = 2
-					CSTR:(CHARANUM-1):사고패턴 = 4211
+					CSTR:(CHARANUM-1):사고패턴 = 3335
 					CALL SYNC_STATUS,(CHARANUM-1)
 					CALL HEALTH_CHARA,(CHARANUM-1)
 					CALL BATTLE_START
@@ -4042,7 +4044,7 @@ ENDIF
 ;타케미나카타の사고패턴
 @SET_ACTION_1407,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF RAND:3 == 0
 		;지온가
 		CALL CHECK_ACTIONABLE,ARG,902
@@ -4244,7 +4246,7 @@ ENDIF
 ;=================================
 ;사고패턴
 ;=================================
-@ENEMY_BATTLE_MESSAGE_K4211, ARG
+@ENEMY_BATTLE_MESSAGE_K3335, ARG
 IF CFLAG:ARG:입력行動 == 1214
 	PRINTFORML ┏>MESSAGE━━━━━━━━━━━━━━┓
 	PRINTFORML ┃좋아…											      ┃
@@ -4267,9 +4269,9 @@ ELSEIF CFLAG:ARG:입력行動 == 607
 ENDIF
 
 ;久慈川리세の사고패턴
-@SET_ACTION_4211,ARG
+@SET_ACTION_3335,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF RAND:3 == 0
 		;아기라오
 		CALL CHECK_ACTIONABLE,ARG,702
@@ -4538,6 +4540,8 @@ CFLAG:LOCAL:속도보정 = 10
 CSTR:LOCAL:사고패턴 = %CALLNAME:LOCAL%
 CSTR:LOCAL:増援패턴 = %CALLNAME:LOCAL%
 CFLAG:LOCAL:行動횟수 = 2
+;---- EDIT 010 ADD -------------------------
+CFLAG:LOCAL:COOP被데미지보정 = -100
 CALL SYNC_STATUS, LOCAL
 CALL HEALTH_CHARA, LOCAL
 ;벨・데르の사고패턴

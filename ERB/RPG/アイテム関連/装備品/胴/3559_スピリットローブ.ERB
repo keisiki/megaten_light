@@ -63,6 +63,10 @@ RETURN GET_EQUIPNUM("몸통")
 @필요레벨_3559
 RETURN 25
 
+@장비해설_3559
+PRINTL 착용자의 마력을 조금만 높여주는 로브
+PRINTL 무기에 의한 공격의 방어는 전혀 고려되어있지 않다
+
 @장비조건_3559,ARG
 SIF IS_LOOKSLIKE_MALE(ARG)
 	RETURN 0

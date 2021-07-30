@@ -21,7 +21,7 @@
 SIF ARG == 1
 	RETURN 0
 ;구상名
-PRINTFORML 汎用짐승・ケダモノ구상
+PRINTFORML 범용짐승・짐승구상
 ;구상설명文
 PRINTFORML    
 ;--------------------------------------------------
@@ -394,7 +394,7 @@ SELECTCASE SELECTCOM
 				;연모、친애
 				IF TALENT:3 || TALENT:6
 					SIF ASSIPLAY
-						PRINTFORMW 「그우… %CALLNAME:MASTER%이 좋으면 참는다 참는다…」 
+						PRINTFORMW 「그우… %조사처리(CALLNAME:MASTER,"가")% 좋으면 참는다 참는다…」 
 						PRINTFORMW 「%CALLNAME:PLAYER% 좋아 좀 더 만져줘」
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
@@ -606,7 +606,7 @@ SELECTCASE SELECTCOM
 				CFLAG:305 = 3
 			;それ以外
 			ELSEIF CFLAG:305 < 2 || FLAG:7 == 2
-				PRINTFORMW 「그우… %CSTR:12% 조금은 %CSTR:11%(이)가 말하는 것도 들어라…」
+				PRINTFORMW 「그우… %CSTR:12% 조금은 %조사처리(CSTR:11,"가")% 말하는 것도 들어라…」
 				CFLAG:305 = 2
 			ENDIF
 		ENDIF
@@ -630,12 +630,12 @@ SELECTCASE SELECTCOM
 						PRINTFORMW 「%CALLNAME:PLAYER%인가… 조금만 이다？」
 					ELSE
 						PRINTFORMW 「좋아 %CALLNAME:MASTER%」
-						PRINTFORMW 「%CALLNAME:MASTER%라면 좋아 마음것 꼬집어도좋아」
+						PRINTFORMW 「%조사처리(CALLNAME:MASTER,"라")%면 좋아 마음것 꼬집어도좋아」
 					ENDIF
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7
 					PRINTFORMW 「%CSTR:12% 좀 더 강하게！」
-					PRINTFORMW %CALLNAME:TARGET%가 꼴사납게 혀를 내밀면서, 쾌감을 맛보고 있다.
+					PRINTFORMW %조사처리(CALLNAME:TARGET,"가")% 꼴사납게 혀를 내밀면서, 쾌감을 맛보고 있다.
 				;복종、예속
 				ELSEIF TALENT:5 || TALENT:8
 					PRINTFORMW 「주인님 좀 더 강하게하는 게 좋아」
@@ -812,7 +812,7 @@ SELECTCASE SELECTCOM
 			;굴복각인Lv3
 			ELSEIF MARK:2 == 3 && (CFLAG:310 < 3 || FLAG:7 == 2)
 				PRINTFORMW 「그우… %CSTR:12%…」
-				PRINTFORMW 「%CSTR:11% %CSTR:12%로 되는 것이 좋아」
+				PRINTFORMW 「%CSTR:11% %조사처리(CSTR:12,"로")% 되는 것이 좋아」
 				PRINTFORMW %타겟은()% 불만을 말하면서도, 마지못해 가슴을 자극하고 있다.
 				PRINTFORMW 그러나, 약간 안타까움을 느끼고 있는 것 같다.
 				CFLAG:310 = 3
@@ -889,7 +889,7 @@ SELECTCASE SELECTCOM
 				IF TALENT:3 || TALENT:6
 					;조수조교だった場合
 					IF ASSIPLAY 
-						PRINTFORMW 「누우… %CALLNAME:PLAYER%로 하는 것인가」
+						PRINTFORMW 「누우… %조사처리(CALLNAME:PLAYER,"로")% 하는 것인가」
 						PRINTFORMW 「%CSTR:11% 갉아 먹지 않게 노력한다…」
 					ELSE 
 						PRINTFORMW 「%CALLNAME:MASTER% 맛있다!  먹을 수 없어도 맛있다!」
@@ -1029,13 +1029,13 @@ SELECTCASE SELECTCOM
 		;初めて
 		IF CFLAG:318 == 0
 			PRINTFORMW 「%CSTR:11% 정리하고 노력한다」
-			PRINTFORMW 「서투르지만  %CALLNAME:MASTER%을 위해 노력하겠어!」
+			PRINTFORMW 「서투르지만  %조사처리(CALLNAME:MASTER,"를")% 위해 노력하겠어!」
 			PRINTFORMW 그렇게 말하면서도 방이 어지러질 분인 것은 기분탓일까…
 			CFLAG:318 = 1
 		;二回눈以降
 		ELSEIF CFLAG:318 < 2 || FLAG:7 == 2
 			PRINTFORMW 「그우… %CSTR:11% 요리싫어…」
-			PRINTFORMW 「사실은 먹는 것 전문 …그렇지만 %CALLNAME:MASTER%을 위해 노력한다」
+			PRINTFORMW 「사실은 먹는 것 전문 …그렇지만 %조사처리(CALLNAME:MASTER,"를")% 위해 노력한다」
 			CFLAG:318 = 2
 		ENDIF
 
@@ -1279,7 +1279,7 @@ SELECTCASE SELECTCOM
 				IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:325 < 4 || FLAG:7 == 2)
 					;연모、친애
 					IF TALENT:3 || TALENT:6
-						PRINTFORMW 「누우!  %CALLNAME:MASTER%로 되는 것도 좋지만 이것도 좋아!」
+						PRINTFORMW 「누우!  %조사처리(CALLNAME:MASTER,"로")% 되는 것도 좋지만 이것도 좋아!」
 						PRINTFORMW %타겟은()% 숨을 거칠게 하며 쾌감에 잠겨 있다.
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
@@ -1404,7 +1404,7 @@ SELECTCASE SELECTCOM
 				;굴복각인Lv3
 				ELSEIF MARK:2 == 3 && (CFLAG:327 < 3 || FLAG:7 == 2)
 					PRINTFORMW 「%CSTR:12% 또 그거야…?」
-					PRINTFORMW 「%CSTR:12%는 이상한 기계만 가지고 있네…」
+					PRINTFORMW 「%조사처리(CSTR:12,"는")% 이상한 기계만 가지고 있네…」
 					CFLAG:327 = 3
 				;それ以外
 				ELSEIF CFLAG:327 < 2 || FLAG:7 == 2
@@ -1489,7 +1489,7 @@ SELECTCASE SELECTCOM
 					;음란、창부
 					ELSEIF TALENT:4 || TALENT:7
 						PRINTFORMW 「그렇게 붙이면 가슴도 기분좋아져서 좋은걸!」
-						PRINTFORMW 유두로부터 쾌락을 느끼면서도,%타겟은()% 한층 더 쾌락을 추구해%CALLNAME:PLAYER%를 권하고 있다.
+						PRINTFORMW 유두로부터 쾌락을 느끼면서도,%타겟은()% 한층 더 쾌락을 추구해%조사처리(CALLNAME:PLAYER,"를")% 권하고 있다.
 					;복종、예속
 					ELSEIF TALENT:5 || TALENT:8
 						PRINTFORMW 「주인님 그것 아픈건가?」
@@ -2185,7 +2185,7 @@ SELECTCASE SELECTCOM
 		;初めて
 		IF CFLAG:345 == 0
 			PRINTFORMW 「누우!  %CSTR:11% 소시지 제일 좋다!」
-			PRINTFORMW …덥석 물려고 하는%CALLNAME:TARGET%를 당신은 필사적으로 멈추었다.
+			PRINTFORMW …덥석 물려고 하는%조사처리(CALLNAME:TARGET,"를")% 당신은 필사적으로 멈추었다.
 			CFLAG:345 = 1
 		;二回눈以降
 		ELSE
@@ -3482,7 +3482,7 @@ SELECTCASE SELECTCOM
 			IF (TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8) && (CFLAG:373 < 4 || FLAG:7 == 2)
 				;연모、친애
 				IF TALENT:3 || TALENT:6
-					PRINTFORMW 「누우!  여기 %CALLNAME:MASTER%와 %CSTR:11%의 영역」
+					PRINTFORMW 「누우!  여기 %조사처리(CALLNAME:MASTER,"와")% %CSTR:11%의 영역」
 					PRINTFORMW 「%CSTR:11% 확실하게 지킨다!  그러니까 안심해라」
 				;음란、창부
 				ELSEIF TALENT:4 || TALENT:7

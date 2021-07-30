@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2305
 RETURN GET_EQUIPNUM("검")
 
+;일문자베기
+@장비추가스킬_2305,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 14
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -68,6 +78,9 @@ PRINTL 장비조건：LV10～
 
 @장비해설_2305
 PRINTL 약간 무거운、긴 양손검。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：일문자베기
+RESETCOLOR
 
 RETURN 0
 

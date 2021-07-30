@@ -49,11 +49,11 @@ SIF FLAG:공격횟수 == 1
 RETURN GET_TYPE_NUM("타격")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2980
+@SKILL_DECIDE_TYPE_2980, ARG
 RETURN 1
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2980
+@SKILL_DAMAGETYPE_2980, ARG
 RETURN 1
 
 
@@ -139,7 +139,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2980
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2980
-PRINTL 성순을 構えての 돌격으로 방패를 叩きつけ、거기로부터 파일 벙커로 관철하는 일련의 공격
+PRINTL 성순을 내지르는 돌격으로 방패를 내동댕이쳐、거기로부터 파일 벙커로 관철하는 일련의 공격
 PRINTL 리즈바이페의 필살기
 
 ;継承に필요한部位

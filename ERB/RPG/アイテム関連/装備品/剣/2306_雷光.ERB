@@ -48,7 +48,14 @@ RETURN 1
 @장비箇所_2306
 RETURN GET_EQUIPNUM("검")
 
+;번개찌르기
 @장비추가스킬_2306,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 9
+	ENDSELECT
+ENDIF
 RETURN 0
 
 ;-----------------------------
@@ -72,6 +79,9 @@ PRINTL 장비조건：LV15～
 
 @장비해설_2306
 PRINTL 무척이나 가볍고 엄청나게 날카로운 칼。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：번개찌르기
+RESETCOLOR
 
 RETURN 0
 

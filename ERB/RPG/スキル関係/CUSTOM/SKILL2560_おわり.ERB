@@ -44,12 +44,12 @@ RETURN 70
 RETURN GET_TYPE_NUM("만능")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2560
+@SKILL_DECIDE_TYPE_2560, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2560
+@SKILL_DAMAGETYPE_2560, ARG
 RETURN 2
 
 
@@ -130,7 +130,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2560
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2560
-PRINTL 적 1명에게 만능 相性의 초특대 데미지를 주고, 즉사시킨다. 명중률이 높다.
+PRINTL 적 1명에게 만능 상성의 초특대 데미지를 주고, 즉사시킨다. 명중률이 높다.
 PRINTL 진조 아키타입 어스의 라스트 아크（승계불가）Terrestrisch Schluss
 
 ;継承に필요한部位

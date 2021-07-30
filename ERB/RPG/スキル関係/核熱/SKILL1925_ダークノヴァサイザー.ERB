@@ -28,7 +28,7 @@ RETURN 3
 @SKILL_COST_1925,ARG
 RETURN 35
 
-;　相性 화염・타격・핵열・파마のうち、もっともダメージが高くなるものになる
+;　相性 화염・타격・핵열・파마のうち、もっとも데미지が高くなるものになる
 @SKILL_TYPE_1925,ARG
 #LOCALSSIZE 5
 #LOCALSIZE 4
@@ -68,12 +68,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;핵열
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1925
+@SKILL_DECIDE_TYPE_1925, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1925
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1925, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か

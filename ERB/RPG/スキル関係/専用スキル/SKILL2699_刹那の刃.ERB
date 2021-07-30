@@ -36,12 +36,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2699
+@SKILL_DECIDE_TYPE_2699, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2699
+@SKILL_DAMAGETYPE_2699, ARG
 RETURN 1
 
 
@@ -128,8 +128,8 @@ CALL ATTACK_RAND,ARG,ARG:1,2699
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2699
-PRINTL 적랜덤一体に검격공격을行う。速度が早い。即死効果
-PRINTL トキ専用
+PRINTL 적 전체중 무작위 1체에게 검격 공격을 가한다。발동 속도가 빠르다。즉사효과
+PRINTL 톡 전용
 
 
 ;継承に필요한部位

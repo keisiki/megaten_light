@@ -3,13 +3,7 @@
 
 ;스킬名
 @SKILL_NAME_263,ARG
-;まひるが사용する場合Love judgementに
-;IF ARG > 0 && NO:ARG == [[キャラ:마히루]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:마히루]]) == 1
-	RESULTS = L.judgement
-ELSE
-	RESULTS = 난동부리기
-ENDIF
+RESULTS = 난동부리기
 
 ;　명중
 @SKILL_HITRATE_263, ARG
@@ -44,12 +38,12 @@ RETURN 2
 ;타격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_263
+@SKILL_DECIDE_TYPE_263, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_263
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_263, ARG
 RETURN 1
 
 
@@ -133,14 +127,7 @@ CALL ATTACK_SPREAD,ARG,ARG:1,263
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_263
-;まひるが사용する場合Love judgementに
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:마히루]]
-	PRINTL Love judgement。소녀のキラめきによって鋳造された愛の審判。
-	PRINTL 적陣に乗り込み、メイスを振り回し손あたり次第ホームランする。
-	PRINTL 대상とその周囲に１〜３回타격相性のダメージを与える。後列사용可。
-ELSE
-	PRINTL [후열] 전열의 적 1체에 1~3회 타격속성 소 물리데미지.
-ENDIF
+PRINTL [후열] 전열의 적 1체에 1~3회 타격속성 소 물리데미지.
 
 ;継承に필요な部位
 @継承部位_263,ARG

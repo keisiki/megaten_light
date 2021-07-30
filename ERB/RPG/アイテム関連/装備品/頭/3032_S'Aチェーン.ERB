@@ -2,29 +2,51 @@
 ;======================================================
 ;장비品の데이터
 ;S'A체인
-;Lv20장비までは내성が기본　기본능력に합계+2まで
 ;======================================================
 
 @기본능력수정_3032,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3032,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 2
-	CASE "회피"
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 7
+	CASE 3
 		RETURN 3
-	CASE "마법효과"
-		RETURN 1
+	CASE 5
+		RETURN 4
 ENDSELECT
 RETURN 0
 
 @방어상성_3032,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@공격상성_3032, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3032, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3032, ARG = -1
+
+RETURN 1
+
+@사거리_3032, ARG = -1
+
+RETURN 1
+
+@공격범위_3032, ARG = -1
+
+RETURN 1
 
 @장비箇所_3032
 RETURN GET_EQUIPNUM("머리")
@@ -40,13 +62,5 @@ RETURN 1
 @장비조건설명_3032
 PRINTL 장비조건：♂
 
-@장비해설_3032
-PRINTL ブランド系デザインのシルバー악세사리チェーン。
-PRINTL 　　　　　　　　どうやって머리を守っているかは考えてはいけない。
-
-
 @구입조건_3032
-RETURN 1
-
-@引継ぎ可不可_3032
-RETURN 0
+	RETURN 1

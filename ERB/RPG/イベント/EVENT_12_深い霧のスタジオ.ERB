@@ -161,12 +161,9 @@ RETURN 0
 		ENDIF
 		PRINTFORML 「나는 하나무라 요스케, 여기를 나갈 때는 신세 좀 질게, 잘 부탁해」
 		PRINTFORML ＞하나무라 요스케가 동료가 되었다
-			CALL ADD_NEW_COMPANION, 4564, 100
-			FOR LCOUNT, 0, CHARANUM
-				;전투참가가능で加入するが、조교で전투참가불가능になる
-				SIF NO:LCOUNT == 4564
-					CFLAG:LCOUNT:전투참가불가능 = -1
-			NEXT
+		CALL ADD_NEW_COMPANION, 4564, 100
+		SIF RESULT
+			CFLAG:(RESULT:1):전투참가불가능 = -1
 		PRINTFORMW 
 		PRINTFORML 「으읏, 저 근처에서 땀냄새가…웩…」
 		PRINTFORMW 
@@ -197,41 +194,37 @@ RETURN 0
 		PRINTFORML 「노력하는 곰-!」
 		PRINTFORMW 
 		CALL ADD_NEW_COMPANION, 4573, 500
-		LOCAL = GETCHARA(4573)
-		$INPUT_LOOP_B2
-		PRINTL [1]나루카미 유우   [2]세타 소우지  [3]스스로 정한다
-
-		CALL INPUTINT,1,2,3
-		IF RESULT == 1
-			NAME:LOCAL = 나루카미 유우
-			CALLNAME:LOCAL = 유우
-		ELSEIF RESULT == 2
-			NAME:LOCAL = 세타 소우지
-			CALLNAME:LOCAL = 소우지
-		ELSEIF RESULT == 3
-			PRINTL P4주인공의 이름을 입력 해 주세요
-			INPUTS
-			NAME:LOCAL = %RESULTS%
-			PRINTL P4주인공의 애칭을 입력 해 주세요
-			INPUTS
-			CALLNAME:LOCAL = %RESULTS%
-		ELSE
-			GOTO INPUT_LOOP_B2
+		IF RESULT
+			$INPUT_LOOP_B2
+			PRINTL P4주인공의 이름을 결정해주세요
+			PRINTL [1]나루카미 유우   [2]세타 소우지  [3]스스로 정한다
+			CALL INPUTINT,1,2,3
+			IF RESULT == 1
+				NAME:(RESULT:1) = 나루카미 유우
+				CALLNAME:(RESULT:1) = 유우
+			ELSEIF RESULT == 2
+				NAME:(RESULT:1) = 세타 소우지
+				CALLNAME:(RESULT:1) = 소우지
+			ELSEIF RESULT == 3
+				PRINTL P4주인공의 이름을 입력 해 주세요
+				INPUTS
+				NAME:(RESULT:1) = %RESULTS%
+				PRINTL P4주인공의 애칭을 입력 해 주세요
+				INPUTS
+				CALLNAME:(RESULT:1) = %RESULTS%
+			ELSE
+				GOTO INPUT_LOOP_B2
+			ENDIF
+			PRINTFORML 이름　%NAME:(RESULT:1)%
+			PRINTFORML 애칭　%CALLNAME:(RESULT:1)%
+			PRINTL 이것으로 좋습니까？？
+			CALL INPUT_YN
+			SIF RESULT == 1
+				GOTO INPUT_LOOP_B2
+			CFLAG:(RESULT:1):전투참가불가능 = -1
 		ENDIF
-		PRINTFORML 이름　%NAME:LOCAL%
-		PRINTFORML 애칭　%CALLNAME:LOCAL%
-		PRINTL 이것으로 좋습니까?
-		CALL INPUT_YN
-		SIF RESULT == 1
-			GOTO INPUT_LOOP_B2
-
-		FOR LCOUNT, 0, CHARANUM
-			;전투참가가능で加入するが、조교で전투참가불가능になる
-			SIF NO:LCOUNT == 4573
-				CFLAG:LCOUNT:전투참가불가능 = -1
-		NEXT
-		PRINTFORMW ＞새로운 협력자, %조사처리(NAME:LOCAL,"과")% 함께 스튜디오를 나왔다
-		이벤트フラグ:12:0 = 3
+		PRINTFORMW ＞새로운 협력자, %조사처리(NAME:(RESULT:1),"과")% 함께 스튜디오를 나왔다
+		이벤트フラグ:12:0 = 3	
 	;곰からの의뢰
 	;大浴場クリア済み、마가츠이나바시・マガツマンダラ突入してない
 	ELSEIF 이벤트フラグ:12:0 == 3 && 던전フラグ:75:9 == 0

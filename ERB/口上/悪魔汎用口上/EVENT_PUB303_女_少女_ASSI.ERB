@@ -5,7 +5,7 @@
 ;もちろん、구상に書き込みが필요になりますが・・・
 ;
 ;
-;RETURN 1　はセリフの有無を返す関数です
+;RETURN 1　は대사の有無を返す関数です
 
 ;----------------------------------------------------------------------------------
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
@@ -28,15 +28,15 @@
 ;	+----+----+-------------------------------+
 ;	|   2| ○ | 구상の誤字・脱字の수정        |
 ;	+----+----+-------------------------------+
-;	|   3| ○ | 구상まとめへの収録            |
+;	|   3| ○ | 口上まとめへの収録             |
 ;	+----+----+-------------------------------+
-;	|   4| ○ | 구상の新規추가                |
+;	|   4| ○ | 口上の新規追加                 |
 ;	+----+----+-------------------------------+
-;	|   5| ○ | 既存구상の改変                |
+;	|   5| ○ | 既存口上の改変                |
 ;	+----+----+-------------------------------+
-;	|   6| ○ | 改変した구상の自由な再配布    |
+;	|   6| ○ | 改変した口上の自由な再配布   |
 ;	+----+----+-------------------------------+
-;	|   7| ○ | 구상内容の転載                |
+;	|   7| ○ | 口上内容の転載                |
 ;	+----+----+-------------------------------+
 ;----------------------------------------------------------------------------------
 @KOJO_MESSAGE_ASSIPAIR_COM_PUB303,ARG
@@ -50,29 +50,29 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 122
 		SELECTCASE ARG
-			;気持ちよくて感じている
+			;기분 좋아서 느끼고 있다
 			CASE 1
-				PRINTFORMW 『あん、あん…とても気持ちいいよ%UNICODE(0x2661)%』
+				PRINTFORMW 『앙、아응…너무 기분 좋아%UNICODE(0x2661)%』
 				RETURN 1
-			;こっちに来てと言うセリフ
+			;이쪽으로 오라고 하는 대사
 			CASE 2
-				PRINTFORMW 『さあ、こっちに来て！』
-				PRINTFORMW 『당신のこと、受け止めてあ・げ・る%UNICODE(0x2661)%』
+				PRINTFORMW 『자아、이 쪽으로 와！』
+				PRINTFORMW 『당신의 것、받아들여・줄・게%UNICODE(0x2661)%』
 				RETURN 1
-			;大丈남편というセリフ
+			;괜찮아라는 대사
 			CASE 3
 				IF 0 == 1
-					PRINTFORMW 『遠慮しなくていいのよ！』
+					PRINTFORMW 『사양할거 없어！』
 				ELSE	
-					PRINTFORMW 『大丈남편！』
-					PRINTFORMW 『おねーさんがリードしてあげる！』
+					PRINTFORMW 『괜찮아！』
+					PRINTFORMW 『이ー언니가 리드해줄게！』
 				ENDIF	
 				RETURN 1
-			;犯されて強がりを言うセリフ
+			;허세 부리는 대사
 			;CASE 4
 			;	PRINTFORMW 『』
 			;	RETURN 1
-			;うまくなってきたねセリフ
+			;능숙함을 칭찬하는 대사
 			;CASE 5
 			;	PRINTFORMW 『』
 			;	RETURN 1
@@ -83,69 +83,69 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 124
 			SELECTCASE ARG
-				;一緒に気持ちよくしようというセリフ
+				;같이 기분 좋게 하자는 대사
 				CASE 1
-					PRINTFORMW 『さあ、一緒に気持ちよくしよ！』
+					PRINTFORMW 『자아、같이 기분 좋게 하자！』
 					RETURN 1
-				;私のほうが気持ちよくしてるというセリフ
+				;내가 더 기분 좋게라는 대사
 				CASE 2
-					PRINTFORMW 『%CSTR:ASSI:一人称%のほうがうまいもん！』
-					PRINTFORMW 『ね、%CSTR:ASSI:二人称%%UNICODE(0x2661)%』
+					PRINTFORMW 『%CSTR:ASSI:一人称% 쪽이 더 잘하는걸！』
+					PRINTFORMW 『그렇지、%CSTR:ASSI:二人称%%UNICODE(0x2661)%』
 					RETURN 1
-				;煽りに対してのセリフ
+				;충격 받은 나머지 하는 대사
 				CASE 3
-					PRINTFORMW 『そんなことないもん！%CSTR:ASSI:一人称%だって負けないんだから！』
+					PRINTFORMW 『그렇지 않아！%CSTR:ASSI:一人称%도 지지 않는걸！』
 					RETURN 1
-				;いつもより感じてるねというセリフ
+				;평소보다 느낀다는 대사
 				CASE 4
-					PRINTFORMW 『%CSTR:ASSI:二人称%のおちんちん、いつもよりビクビクしてるね』
+					PRINTFORMW 『%CSTR:ASSI:二人称%의 자지、평소보다 움찔거리네』
 					RETURN 1
-				;레즈っぽいセリフに対するセリフ
+				;레즈 플레이 같은 대사
 				CASE 5
 					IF ABL:ASSI:레즈끼 >= 3
-						PRINTFORMW 『えへへ、%CALLNAME%と一緒にするの嬉しいかも』
+						PRINTFORMW 『에헤헤、%조사처리(CALLNAME,"와")% 같이 하는게 기쁠지도』
 						RETURN 1
 					ENDIF
-					PRINTFORMW 『%CSTR:ASSI:一人称%とするのがそんなにうれしいの？』
+					PRINTFORMW 『%CSTR:ASSI:一人称%랑 하는게 그렇게 좋아？』
 					RETURN 1
-				;二人のフェラは気持ちいいでしょ？セリフ
+				;두 명의 페라는 기분이 좋지?대사
 				CASE 6
-					PRINTFORMW 『二人分のフェラは気持ちいいでしょ？%CSTR:ASSI:二人称%』
+					PRINTFORMW 『둘이서 하는 펠라는 기분 좋지？%CSTR:ASSI:二人称%』
 					RETURN 1
 			ENDSELECT
 
 ;-------------------------------------------------
-;125,더블파이즈리
+;125,더블파이즈리%조사처리(CALLNAME,"가")% %조사처리(CSTR:一人称,"와")%
 ;-------------------------------------------------
 	CASE 125
 		SELECTCASE ARG
-			;一緒に気持ちよくしようというセリフ
+			;같이 기분 좋게 하자는 대사
 			CASE 1
-				PRINTFORMW 『さあ、二人で一緒に파이즈리しよ！』
+				PRINTFORMW 『자아、둘이서 함께 파이즈리하자！』
 				RETURN 1
-			;私のほうが気持ちよくしてるというセリフ
+			;내가 더 기분 좋게 라는 대사
 			CASE 2
-				PRINTFORMW 『%CALLNAME%より%CSTR:ASSI:一人称%のおっぱいのほうが気持ちいいよね。%CSTR:ASSI:二人称%%UNICODE(0x2661)%』
+				PRINTFORMW 『%CALLNAME%보다 %CSTR:ASSI:一人称%의 가슴이 더 기분 좋은거네。%CSTR:ASSI:二人称%%UNICODE(0x2661)%』
 				RETURN 1
-			;煽りに対してのセリフ
+			;충격 받은 나머지 하는 대사
 			CASE 3
-				PRINTFORMW 『言ったな～！絶～っ対に負けないんだから！』
+				PRINTFORMW 『말했겠다～！저～얼대로 지지 않을테니까！』
 				RETURN 1
-			;いつもより感じてるねというセリフ
+			;평소보다 느낀다는 대사
 			;CASE 4
-				PRINTFORMW 『%CSTR:ASSI:二人称%、いつもより感じているね』
+				PRINTFORMW 『%CSTR:ASSI:二人称%、평소보다 느끼고 있네』
 				RETURN 1
-			;お互いに유두がこすれて気持ちいいセリフ
+			;서로의 유두가 닿아서 기분 좋다는 대사
 			CASE 5
-				PRINTFORMW 『ん%UNICODE(0x2661)%유두擦れて気持ちいいよぉ…』
+				PRINTFORMW 『응%UNICODE(0x2661)%유두 스쳐서 기분 좋아…』
 				RETURN 1
-			;二人の파이즈리で気持ちよくなってセリフ
+			;두 사람의 파이즈리로 기분 좋아진 대사
 			CASE 6
-				PRINTFORMW 『%CSTR:ASSI:一人称%たちの파이즈리で気持ちよくなってね！』
+				PRINTFORMW 『%CSTR:ASSI:一人称%들의 파이즈리로 기분 좋아지라고！』
 				RETURN 1
-			;파이즈리で感じているの？セリフ
+			;파이즈리로 느끼고 있어？대사
 			CASE 7
-				PRINTFORMW 『파이즈리で感じてるの？』
+				PRINTFORMW 『파이즈리로 느끼고 있어？』
 				RETURN 1
 		ENDSELECT
 ;-------------------------------------------------
@@ -153,22 +153,22 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 185
 		SELECTCASE ARG
-			;犯されてとても気持ちいいセリフ
+			;범해서 기분 좋다는 대사
 			CASE 1
-				PRINTFORMW 『あん、あん、気持ちいいよぉ%UNICODE(0x2661)%』
+				PRINTFORMW 『앙、앙、기분 좋아아%UNICODE(0x2661)%』
 				RETURN 1
-			;私たち、とっても仲がいいでしょ？セリフ
+			;우리들、정말 사이가 좋죠？대사
 			CASE 2
-				PRINTFORMW 『%CSTR:ASSI:一人称%と%CSTR:ASSI:二人称%はとっても仲良しなの%UNICODE(0x2661)%』
-				PRINTFORMW 『ね、%CSTR:ASSI:二人称%%UNICODE(0x2661)%』
+				PRINTFORMW 『%CSTR:ASSI:一人称%랑 %CSTR:ASSI:二人称%랑 정말 사이가 좋아%UNICODE(0x2661)%』
+				PRINTFORMW 『그렇지、%CSTR:ASSI:二人称%%UNICODE(0x2661)%』
 				RETURN 1
-			;うらやましいでしょ？セリフ
+			;부럽죠？대사
 			CASE 3
-				PRINTFORMW 『えへへ～、とても羨ましいでしょ～』
+				PRINTFORMW 『에헤헤～、정말 부럽지～』
 				RETURN 1
-			;こっちが気になってるみたいだねセリフ
+			;이쪽이 신경 쓰이나 보네 대사
 			CASE 4
-				PRINTFORMW 『ねえねえ、%CALLNAME%こっちが気になってるみたいだね』
+				PRINTFORMW 『있잖아、%조사처리(CALLNAME,"는")% 이쪽이 신경 쓰이는 것 같네』
 				RETURN 1
 		ENDSELECT
 
@@ -177,22 +177,22 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 193
 		SELECTCASE ARG
-			;정액とてもおいしいセリフ
+			;정액이라도 맛있어 대사
 			CASE 1
-				PRINTFORMW 『んじゅ、ぢゅるる…はぁ%UNICODE(0x2661)%정액美味しい♪』
+				PRINTFORMW 『츕、츄르릅…하아%UNICODE(0x2661)% 정액맛있어♪』
 				RETURN 1
-			;これはあたしのものよ！セリフ
+			;이것은 내 것이야！대사
 			CASE 2
-				PRINTFORMW 『これは%CSTR:ASSI:一人称%の物なんだからね！』
-				PRINTFORMW 『%CALLNAME%なんかにあげないんだから！んじゅう…ちゅる』
+				PRINTFORMW 『이건 %CSTR:ASSI:一人称% 꺼니까！』
+				PRINTFORMW 『%CALLNAME%한테 주지 않을거니까！츄읍…츄릅』
 				RETURN 1
-			;うらやましいでしょ？セリフ
+			;부럽죠？대사
 			CASE 3
-				PRINTFORMW 『羨ましいでしょ？』
+				PRINTFORMW 『부럽지？』
 				RETURN 1
-			;先にいただくわセリフ（仲がいい）
+			;먼저 받을게요 대사（사이가 좋음）
 			CASE 4
-				PRINTFORMW 『%CSTR:ASSI:一人称%が先に정액貰うよ』
+				PRINTFORMW 『%CSTR:ASSI:一人称% 먼저 정액 받을게』
 				RETURN 1
 		ENDSELECT
 ;-------------------------------------------------
@@ -200,21 +200,21 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 500
 		SELECTCASE ARG
-			;ナカがとても気持ちいいセリフ
+			;안쪽이 너무 기분 좋다 대사
 			CASE 1
-				PRINTFORMW 『んあっ…！%CALLNAME%のナカ、とても気持ちいいよぉ…』
+				PRINTFORMW 『아앙…！%CALLNAME%의 안、정말 기분 좋아아…』
 				RETURN 1
-			;どんどんイキなさい！セリフ
+			;계속 하는거야！대사
 			CASE 2
-				PRINTFORMW 『それそれっ！%CSTR:ASSI:一人称%達の腰ふりでどんどんイッてね！』
+				PRINTFORMW 『그거야！%CSTR:ASSI:一人称%만의 허리 움직임으로 계속 하는거야！』
 				RETURN 1
-			;とても気持ちよさそうセリフ
+			;너무 기분 좋은것 같아 대사
 			CASE 3
-				PRINTFORMW 『%CALLNAME%とても気持ちよさそうにしてるね。』
+				PRINTFORMW 『%CALLNAME% 엄청 기분 좋은것 처럼 하고 있네。』
 				RETURN 1
-			;ここに入れてセリフ
+			;여기에 넣어 대사
 			CASE 4
-				PRINTFORMW 『さあ%CSTR:ASSI:二人称%、ここに入れてねー』
+				PRINTFORMW 『자아%CSTR:ASSI:二人称%、여기에 넣어줘ー』
 				RETURN 1
 		ENDSELECT
 ;-------------------------------------------------
@@ -222,30 +222,30 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 510
 		SELECTCASE ARG
-			;一緒に気持ちよくしようというセリフ
+			;같이 기분 좋게 하자는 대사
 			CASE 1
-				PRINTFORMW 『さあ、一緒にオチンチン気持ちよくしよ！』
+				PRINTFORMW 『자아、같이 자지 기분 좋게 하자！』
 				RETURN 1
-			;私のほうが気持ちよくしてるというセリフ
+			;내가 더 기분좋게 한다는 대사
 			CASE 2
-				PRINTFORMW 『%CSTR:ASSI:一人称%のおまんこほうが気持ちいいもん！』
-				PRINTFORMW 『そうだよね！%CSTR:ASSI:二人称%！』
+				PRINTFORMW 『%CSTR:ASSI:一人称%의 보지 쪽이 기분 좋은걸！』
+				PRINTFORMW 『그렇지！%CSTR:ASSI:二人称%！』
 				RETURN 1
-			;煽りに対してのセリフ
+			;충격 받은 나머지 하는 대사
 			CASE 3
-				PRINTFORMW 『むっー！ここまで言われたら絶対に負けられないんだから！』
+				PRINTFORMW 『믓ー！그런 말까지 들으면 절대로 질 수 없으니까！』
 				RETURN 1
-			;いつもより感じてるねというセリフ
+			;평소보다 느낀다는 대사
 			CASE 4
-				PRINTFORMW 『%CSTR:ASSI:二人称%、とっても気持ちよさそうにだね』
+				PRINTFORMW 『%CSTR:ASSI:二人称%、엄청 기분 좋은것 같네』
 				RETURN 1
-			;お互いに気持ちいいねセリフ
+			;서로 기분이 좋네 대사
 			;CASE 5
 			;	PRINTFORMW 『』
 			;	RETURN 1
-			;気持ちいいセリフ
+			;기분 좋아 대사
 			CASE 6
-				PRINTFORMW 『おまんこ擦れて気持ちいよぉ%UNICODE(0x2661)%』
+				PRINTFORMW 『보지 스쳐서 기분 좋아아%UNICODE(0x2661)%』
 				RETURN 1
 		ENDSELECT
 ;-------------------------------------------------
@@ -253,23 +253,23 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 511
 		SELECTCASE ARG
-			;とても気持ちいいセリフ
+			;とても気持ちいい대사
 			;CASE 1
 			;	PRINTFORMW 『』
 			;	RETURN 1
-			;自分もしっかり気持ちよくしてセリフ
+			;自分もしっかり気持ちよくして대사
 			;CASE 2
 			;	PRINTFORMW 『』
 			;	RETURN 1
-			;マスターの페니스が当たって気持ちいいセリフ
+			;マスターの페니스が当たって気持ちいい대사
 			;CASE 3
 			;	PRINTFORMW 『』
 			;	RETURN 1
-			;二人分の정액飲ませてあげるセリフ
+			;二人分の정액飲ませてあげる대사
 			;CASE 4
 			;	PRINTFORMW 『』
 			;	RETURN 1
-			;うまくなってきたねセリフ
+			;うまくなってきたね대사
 			;CASE 5
 			;	PRINTFORMW 『』
 			;	RETURN 1
@@ -279,21 +279,21 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 513
 		SELECTCASE ARG
-			;ナカがとても気持ちいいセリフ
+			;안이 너무 기분 좋아 대사
 			CASE 1
-				PRINTFORMW 『んあっ…！%CALLNAME%のナカ、とても気持ちいいよぉ…』
+				PRINTFORMW 『아앙…！%CALLNAME%의 안、정말 기분 좋아아…』
 				RETURN 1
-			;입がとても気持ちいいセリフ
+			;입이 너무 기분 좋아 대사
 			CASE 2
-				PRINTFORMW 『んあっ…！%CALLNAME%の입、とても気持ちいいよぉ…』
+				PRINTFORMW 『아앙…！%CALLNAME%의 입、정말 기분 좋아아…』
 				RETURN 1
-			;どんどんイキなさい！セリフ
+			;계속 하는거야！대사
 			CASE 3
-				PRINTFORMW 『それそれっ！%CSTR:ASSI:一人称%達の腰ふりでどんどんイッてね！』
+				PRINTFORMW 『그거야！%CSTR:ASSI:一人称%만의 허리 움직임으로 계속 하는거야！』
 				RETURN 1
-			;とても気持ちよさそうセリフ
+			;너무 기분 좋은것 같아 대사
 			CASE 4
-				PRINTFORMW 『%CALLNAME%とても気持ちよさそうにしてるね。』
+				PRINTFORMW 『%CALLNAME% 엄청 기분 좋은것 처럼 하고 있네。』
 				RETURN 1
 		ENDSELECT
 ;-------------------------------------------------
@@ -301,21 +301,21 @@ SELECTCASE SELECTCOM
 ;-------------------------------------------------
 	CASE 514
 		SELECTCASE ARG
-			;ナカがとても気持ちいいセリフ
+			;안이 너무 기분 좋아 대사
 			CASE 1
-				PRINTFORMW 『んあっ…！%CALLNAME%のナカ、とても気持ちいいよぉ…』
+				PRINTFORMW 『아앙…！%CALLNAME%의 안、정말 기분 좋아아…』
 				RETURN 1
-			;입がとても気持ちいいセリフ
+			;입이 너무 기분 좋아 대사
 			CASE 2
-				PRINTFORMW 『んあっ…！%CALLNAME%の입、とても気持ちいいよぉ…』
+				PRINTFORMW 『아앙…！%CALLNAME%의 입、정말 기분 좋아아…』
 				RETURN 1
-			;どんどんイキなさい！セリフ
+			;계속 하는거야！대사
 			CASE 3
-				PRINTFORMW 『それそれっ！%CSTR:ASSI:一人称%達の腰ふりでどんどんイッてね！』
+				PRINTFORMW 『그거야！%CSTR:ASSI:一人称%만의 허리 움직임으로 계속 하는거야！』
 				RETURN 1
-			;とても気持ちよさそうセリフ
+			;너무 기분 좋은것 같아 대사
 			CASE 4
-				PRINTFORMW 『%CALLNAME%とても気持ちよさそうにしてるね。』
+				PRINTFORMW 『%CALLNAME% 엄청 기분 좋은것 처럼 하고 있네。』
 				RETURN 1
 		ENDSELECT
 

@@ -29,11 +29,9 @@ RETURN 0
 @방어상성_8216,ARG,ARG:1 = -1
 SELECTCASE GET_TYPE(ARG)
 	CASE "검격","비구","타격","전술"
-		RETURN 10
+		RETURN 50
 	CASE "화염","빙결","전격","충격","지변","수격","질풍"
 		RETURN 200
-	CASE "신경","정신","파마","주살"
-		RETURN 25
 ENDSELECT
 RETURN 100
 
@@ -97,5 +95,5 @@ RETURN 0
 
 @장비해설_8216
 PRINTL 곡옥「카무로기」。인수라만 장비할 수 있다.
-PRINTL 　・물리공격을 중심으로 습득한다
+PRINTL 　・물리 공격을 중심으로 습득한다
 PRINTL 　・검격・비구・타격・전술에 강하다、대부분의 마법에 약하다

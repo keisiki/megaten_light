@@ -3,7 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_24,ARG
-RESULTS = 작열차가
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	RESULTS = Ｆ・쇼다운
+ELSE
+	RESULTS = 작열차가
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_24, ARG
@@ -38,12 +42,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_24
+@SKILL_DECIDE_TYPE_24, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_24
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_24, ARG
 RETURN 1
 
 
@@ -127,7 +131,13 @@ CALL ATTACK_SPREAD,ARG,ARG:1,24
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_24
-PRINTL [후열] 전열의 적 1체와 그 주변에 2회 검격속성 중 물리데미지.
+IF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	PRINTL 正式명칭「피닉스・ショウダウン」
+	PRINTL グラン・プラズマカッター→究極！ゲシュペンス토키ック→ニュートロン・ブラ스타と繋げる連続공격
+	PRINTL [후열] 전열의 적 1체와 그 주변에 2회 검격속성 중 물리데미지.
+ELSE
+	PRINTL [후열] 전열의 적 1체와 그 주변에 2회 검격속성 중 물리데미지.
+ENDIF
 
 ;継承に필요な部位
 @継承部位_24,ARG

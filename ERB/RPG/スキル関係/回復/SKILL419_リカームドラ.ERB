@@ -36,12 +36,12 @@ RETURN 30
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_419
+@SKILL_DECIDE_TYPE_419, ARG
 RETURN 2
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_419
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_419, ARG
 RETURN 2
 
 
@@ -115,7 +115,7 @@ RETURN 0
 ;仲間が使った場合
 IF CFLAG:(ARG):PTフラグ
 	;LOCAL:9に대상者、ARGに사용者、PTフラグ == 2はPTにいる仲間、PTフラグ == 1はPTにいない仲間、PTフラグ == 0は적
-	FOR LOCAL:9,0,CHARANUM
+	FOR LOCAL:9, 0, CHARANUM
 		;古い판정
 		;SIF CFLAG:ARG:PTフラグ == 0 && CFLAG:(LOCAL:9):PTフラグ > 0
 		;	CONTINUE
@@ -149,7 +149,7 @@ IF CFLAG:(ARG):PTフラグ
 		IF CFLAG:(LOCAL:9):ステート == GET_STATE_NUM("DYING")
 			CFLAG:(LOCAL:9):ステート = 0
 			CFLAG:(LOCAL:9):ステート経過ターン = 0
-			CALL VAR_HP,(LOCAL:9),MAXBASE:(LOCAL:9):ＨＰ
+			CALL VAR_HP, (LOCAL:9), MAXBASE:(LOCAL:9):ＨＰ
 			PRINTFORML %CALLNAME:(LOCAL:9)%は息を吹き返した
 		ELSE
 			CALL ALL_CURE_STATE, (LOCAL:9), 1

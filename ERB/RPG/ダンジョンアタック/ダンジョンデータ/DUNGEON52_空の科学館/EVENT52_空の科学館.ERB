@@ -1026,6 +1026,8 @@ ELSEIF LOCAL == 3
 							EQUIP:LOCAL:소지페르소나2 = 0
 							CALL REMOVE_POSITION, CPOS(LOCAL)
 						ENDIF
+						SIF LOCAL >= 0
+							CFLAG:LOCAL:ゲスト加入フラグ = 0
 					ENDIF
 				ELSE
 					IF STRFLAG_NUM_EV("카리스마、잡지 데뷔 소문", , , , [[이벤트:소문]]) == 2

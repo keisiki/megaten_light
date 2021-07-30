@@ -10,7 +10,7 @@ RETURN 90
 
 ;　위력
 @SKILL_POWER_2622, ARG 
-RETURN 170
+RETURN 190
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_2622,ARG
@@ -35,12 +35,12 @@ RETURN 0
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2622
+@SKILL_DECIDE_TYPE_2622, ARG
 RETURN 1
 
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2622
+@SKILL_DAMAGETYPE_2622, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬변화？用랭크
 @SKILL_RANK_2622
-RETURN 15
+RETURN 16
 
 ;テン플레이트用、추가효과シ리즈
 ;추가효과스테이터스
@@ -119,8 +119,8 @@ CALL ATTACK_FIELD,ARG,LOCAL,2622
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2622
-PRINTL 魂を刈り取る逆刃の鎌をブーメランのように投げつけ적１열に二回공격。
-PRINTL 마왕　에리の技。
+PRINTL 영혼을 거두는 역날의 낫을 부메랑처럼 던져 적 １열에 2회 공격。
+PRINTL 마왕　에리의 기술。
 
 ;継承に필요한部位
 @継承部位_2622,ARG

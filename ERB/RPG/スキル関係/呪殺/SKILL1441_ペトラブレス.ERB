@@ -39,12 +39,12 @@ RETURN 8
 RETURN GET_TYPE_NUM("주살")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1441
+@SKILL_DECIDE_TYPE_1441, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1441
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1441, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か

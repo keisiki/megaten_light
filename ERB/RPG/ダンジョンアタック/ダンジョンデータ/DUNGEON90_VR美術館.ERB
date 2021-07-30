@@ -2103,7 +2103,7 @@ ENDIF
 SIF FLAG:経過ターン数 > 0
 	CFLAG:ARG:行動횟수 = 2
 
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF CFLAG:ARG:行動した횟수 == 1
 		CALL CHECK_ACTIONABLE,ARG,[[스킬:돌핀킥]]
 		IF RESULT == 1

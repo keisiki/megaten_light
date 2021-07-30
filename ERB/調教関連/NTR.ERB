@@ -21,10 +21,10 @@ ELSE
 	好きな人ID = 好きな人
 ENDIF
 ;以前함락していたキャラが再び1位になった場合、その時点で함락し直す
-IF (CFLAG:ARG:(2400+好きな人ID) && CFLAG:ARG:함락キャラ != 好きな人ID) && CFLAG:ARG:음란度 <= ABS(FAVORITE(ARG,好きな人))
+IF (CDFLAG:ARG:キャラ間함락素質:(100+好きな人ID) && CFLAG:ARG:함락キャラ != 好きな人ID) && CFLAG:ARG:음란度 <= ABS(FAVORITE(ARG,好きな人))
 	CALL 再함락(ARG,好きな人ID)
 	RETURN 0
-ELSEIF (CFLAG:ARG:2399 == 2 && CFLAG:ARG:음란度 > ABS(FAVORITE(ARG,好きな人))) && ARG:1
+ELSEIF (CDFLAG:ARG:キャラ間함락素質:98 == 2 && CFLAG:ARG:음란度 > ABS(FAVORITE(ARG,好きな人))) && ARG:1
 	CALL 再함락(ARG,-1)
 	RETURN 0
 ENDIF
@@ -57,7 +57,7 @@ IF ARG:1 && TALENT:ARG:ＮＴＲ != 2 && (CFLAG:ARG:음란度 > ABS(FAVORITE(ARG
 		CFLAG:ARG:함락キャラ = -1
 		CFLAG:ARG:淫ＮＴＲ進行度 = 0
 		CFLAG:ARG:現ＮＴＲ進行度 = 1
-		CFLAG:ARG:(2301+CFLAG:ARG:함락キャラ) = 2
+		CDFLAG:ARG:キャラ間함락素質:(1+CFLAG:ARG:함락キャラ) = 2
 	ENDIF
 ;===============================================
 ;愛系ＮＴＲ
@@ -85,10 +85,10 @@ ELSEIF 好きな人ID != CFLAG:ARG:함락キャラ && FAVORITE(ARG,好きな人)
 		CFLAG:ARG:함락キャラ = 好きな人ID
 		CFLAG:ARG:愛ＮＴＲ進行度 = 0
 		CFLAG:ARG:現ＮＴＲ進行度 = 1
-		CFLAG:ARG:(2301+CFLAG:ARG:함락キャラ) = 1
+		CDFLAG:ARG:キャラ間함락素質:(100+CFLAG:ARG:함락キャラ) = 1
 		;仮地の文
 	ENDIF
-	
+
 ;===============================================
 ;隷系ＮＴＲ
 ;===============================================
@@ -115,10 +115,8 @@ ELSEIF 好きな人ID != CFLAG:ARG:함락キャラ && FAVORITE(ARG,好きな人)
 		CFLAG:ARG:함락キャラ = 好きな人ID
 		CFLAG:ARG:隷ＮＴＲ進行度 = 0
 		CFLAG:ARG:現ＮＴＲ進行度 = 1
-		CFLAG:ARG:(2301+CFLAG:ARG:함락キャラ) = 3
+		CDFLAG:ARG:キャラ間함락素質:(100+CFLAG:ARG:함락キャラ) = 3
 	ENDIF
-	
-
 ENDIF
 
 
@@ -137,7 +135,7 @@ IF ARG:1 == CFLAG:MASTER:キャラ固有の번호
 		TFLAG:13 = 50
 	ENDIF
 ELSE
-	TFLAG:13 = (48 + (CFLAG:ARG:(2400 + ARG:1) - 1)% 3)
+	TFLAG:13 = (48 + (CDFLAG:ARG:キャラ間함락素質:(100 + ARG:1) - 1)% 3)
 ENDIF
 CALL KOJO_MESSAGE_EVENT
 SWAP TARGET,ARG
@@ -165,7 +163,7 @@ IF ARG:1 == CFLAG:MASTER:キャラ固有の번호
 		CFLAG:ARG:上司이벤트進行度 = 0
 	ENDIF
 ELSE
-	TALENT:ARG:ＮＴＲ = CFLAG:ARG:(2400+ARG:1)
+	TALENT:ARG:ＮＴＲ = CDFLAG:ARG:キャラ間함락素質:(100+ARG:1)
 	CFLAG:ARG:함락キャラ =ARG:1
 	CFLAG:ARG:現ＮＴＲ進行度 = -1
 ENDIF
@@ -204,21 +202,24 @@ ENDSELECT
 ;대상以外への호감도を減らし、대상への호감도を上げる（中出しなど用処理）
 @NTR_SHOOT,ARG,ARG:1,ARG:2
 #LOCALSIZE 1
-FOR LOCAL, -99 , 200
-	SIF LOCAL == ARG:1
+#DIM 出した人
+#DIM 出された人
+#DIM 上昇量
+FOR LOCAL , -MAX_NTR_CHARA, MAX_PLAYER_CHARA
+	SIF LOCAL == 出した人
 		CONTINUE
-	IF CFLAG:ARG:(2100+LOCAL) > 0
-		CFLAG:ARG:(2100+LOCAL) -= ARG:2
-		SIF CFLAG:ARG:(2100+LOCAL) < 0
-			CFLAG:ARG:(2100+LOCAL) = 0
-	ELSEIF CFLAG:ARG:(2100+LOCAL) < 0
-		CFLAG:ARG:(2100+LOCAL) += ARG:2
-		SIF CFLAG:ARG:(2100+LOCAL) > 0
-			CFLAG:ARG:(2100+LOCAL) = 0
+	IF CDFLAG:出された人:キャラ間好感度:(100+LOCAL) > 0
+		CDFLAG:出された人:キャラ間好感度:(100+LOCAL) -= 上昇量
+		SIF CDFLAG:出された人:キャラ間好感度:(100+LOCAL) < 0
+			CDFLAG:出された人:キャラ間好感度:(100+LOCAL) = 0
+	ELSEIF CDFLAG:出された人:キャラ間好感度:(100+LOCAL) < 0
+		CDFLAG:出された人:キャラ間好感度:(100+LOCAL) += 上昇量
+		SIF CDFLAG:出された人:キャラ間好感度:(100+LOCAL) > 0
+			CDFLAG:出された人:キャラ間好感度:(100+LOCAL) = 0
 	ENDIF
 NEXT
-IF CFLAG:ARG:(2100+ARG:1) >= 0
-	CFLAG:ARG:(2100+ARG:1) += ARG:2
+IF CDFLAG:出された人:キャラ間好感度:(100+出した人) >= 0
+	CDFLAG:出された人:キャラ間好感度:(100+出した人) += 上昇量
 ELSE
-	CFLAG:ARG:(2100+ARG:1) -= ARG:2
+	CDFLAG:出された人:キャラ間好感度:(100+出した人) -= 上昇量
 ENDIF

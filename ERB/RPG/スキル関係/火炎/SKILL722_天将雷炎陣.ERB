@@ -43,12 +43,12 @@ SIF FLAG:공격횟수 == 1
 ;화염＋전격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_722
+@SKILL_DECIDE_TYPE_722, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_722
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_722, ARG
 RETURN 2
 
 
@@ -84,7 +84,7 @@ RETURN 1
 ;継承不可
 
 ;속도보정
-@SKILL_SPEED_722
+@SKILL_SPEED_722,ARG = -1
 RETURN 0
 
 ;　구상の표시とその타입

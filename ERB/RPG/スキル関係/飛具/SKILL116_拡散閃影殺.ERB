@@ -1,7 +1,11 @@
 ﻿
 ;스킬名
 @SKILL_NAME_116,ARG
-RESULTS = 확산섬영살
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	RESULTS = 리프 슬래셔
+ELSE
+	RESULTS = 확산섬영살
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_116, ARG
@@ -34,12 +38,12 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_116
+@SKILL_DECIDE_TYPE_116, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_116
+@SKILL_DAMAGETYPE_116, ARG
 RETURN 1
 
 
@@ -123,7 +127,11 @@ CALL ATTACK_FIELD,ARG,ARG:1,116
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_116
-PRINTL [후열] 적 전체에 비구속성 대 물리데미지. 명중률이 조금 낮다.
+IF FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
+	PRINTL 등 부분 웨펀 랙에 장착된 대형 회전날을 던져、적 전체에 비구상성의 중 데미지를 준다
+ELSE
+	PRINTL [후열] 적 전체에 비구속성 대 물리데미지. 명중률이 조금 낮다.
+ENDIF
 
 ;継承に필요한部位
 @継承部位_116,ARG

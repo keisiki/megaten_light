@@ -36,12 +36,12 @@ RETURN 20
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_618
+@SKILL_DECIDE_TYPE_618, ARG
 RETURN 1
 ;特技
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_618
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_618, ARG
 RETURN 0
 
 
@@ -136,7 +136,8 @@ ENDIF
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_618
-PRINTL [특수] 사용한 턴에 약점을 공격받는다면, 기합과 컨센트레이트 상태가 된다. 연속으로 사용하면 실패한다.
+PRINTL [특수] 사용한 턴에 약점을 공격받는다면, 기합과 컨센트레이트 상태가 된다. 
+PRINTL 연속으로 사용하면 실패한다.
 
 ;継承に필요な部位
 @継承部位_618,ARG

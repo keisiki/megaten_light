@@ -12,7 +12,7 @@
 ;	002		2011/01/11		Ｎ鳥					발りない→恵まれる系の記述がズレていたのを修正
 ;	003		2011/02/16		Ｎ鳥					악마ストレージ기능に対応
 ;	004		2011/05/07		Ｐ						회화の成否を종족가운位で見るように변경
-;	005		2011/05/09		Ｐ						회화に寄るダメージで회복していたのを修正
+;	005		2011/05/09		Ｐ						회화に寄る데미지で회복していたのを修正
 ;	006		2012/02/04		ネトリス				大業物用の素質と経験の処理
 ;	007		2012/02/09		ネトリス				性的交渉の地の文『魅了』추가
 ;	008		2012/02/09		ネトリス				発情しているときも選択肢が性的なものだけになるように변경
@@ -27,6 +27,9 @@
 ;	018		2019/08/28		空気					デビルチェンバー사용時の挙動を修正。また、DDMがONなら容量いっぱいでも仲魔になって自動的にストレージに送られるように
 ;	019		2020/02/21		なんとなくの人			インス토르ソフト：아미티프로텍터の処理を추가
 ;	020		2020/03/27		ネトリス				インス토르ソフト：커코러버の処理を추가
+;	021		2020/04/22		JK好き					犯してもらう際に地の文が途切れるパターンがあったのを修正・改行が必要な部分を改行
+;	022		2021/05/17		JK好き					女を宛がった場合の文章パターンを調整
+;	023		2021/06/24		JK好き					女を宛がった場合の主人が男の娘の場合にV描写に行かないように修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=====================================================================
 ;회화の共通処理用ファイルです。
@@ -1170,7 +1173,7 @@ RESULT = 2
 GOTO GOODBYE
 
 $GET_DAMAGE
-;ダメージを受ける
+;데미지を受ける
 ;구상呼び出し
 CALL KOJO_TALK,ARG,68
 ;---- EDIT 004 MOD START -------------------------
@@ -1620,7 +1623,7 @@ CATCH
 				ELSE
 				ENDIF
 			CASE 68
-				;68:ダメージをくれる
+				;68:데미지をくれる
 			CASE 69
 				;69-75:아이템をくれるor회복してくれる
 				;69:소마を使ってくれる
@@ -1792,6 +1795,8 @@ SELECTCASE (ARG > -1 ? ARG # TFLAG:TALK구상呼び出し用)
 									PRINTFORMW 젖은 \@ TALENT:PLAYER:소인체형 ? 균열 # 비소\@가 드러났다…
 								ELSEIF CFLAG:PLAYER:던전内発情用욕정치 >= 6000
 									PRINTFORMW 기대로 움찔움찔 떨리는 \@ TALENT:PLAYER:소인체형 ? 균열 # 비소\@가 바깥 공기에 노출되었다…
+																	ELSE
+									PRINTFORMW 예쁜 그대로의\@ TALENT:PLAYER:소인체형 ? 균열 # 비소\@가 바깥 공기에 노출되었다…
 								ENDIF
 							ELSE
 								;스커트걷어올림・下着見せ
@@ -1803,8 +1808,10 @@ SELECTCASE (ARG > -1 ? ARG # TFLAG:TALK구상呼び出し用)
 									SIF STAIN:PLAYER:16 & 1 || STAIN:PLAYER:17 & 1
 										PRINTFORM 애액과 
 									PRINTFORMW 정액 투성이로、엉망진창이 된 %CLOTHESNAMEF(PLAYER,TEQUIP:PLAYER:음순노출)%가 드러났다…
-								ELSEIF PALAM:PLAYER:윤활 >= PALAMLV:2
+								ELSEIF PALAM:PLAYER:윤활 >= PALAMLV:2 || CFLAG:PLAYER:던전内発情用욕정치 >= 6000
 									PRINTFORMW 애액으로 촉촉하고 습기차, 비순을 숨긴 부분에 얼룩이 생긴 %CLOTHESNAMEF(PLAYER,TEQUIP:PLAYER:음순노출)%가 바깥 공기에 노출되었다…
+								ELSE
+									PRINTFORMW 예쁜 그대로의%CLOTHESNAMEF(PLAYER,TEQUIP:PLAYER:음순노출)%가 바깥 공기에 노출되었다…
 								ENDIF
 							ENDIF
 						ENDIF
@@ -2048,8 +2055,76 @@ SELECTCASE (ARG > -1 ? ARG # TFLAG:TALK구상呼び出し用)
 				ENDIF
 				;本番횟수が多い
 				IF LOCAL:1 >= (LOCAL:2 || LOCAL:3)
-					
-				;애널횟수が多い
+					PRINTFORML 
+					IF RAND:2 == 0
+						PRINTFORM %CALLNAME:MASTER%は%CALLNAME:交渉대상()%
+						IF RAND:2 == 0
+							PRINTFORML に正常位で犯された
+						ELSE
+							PRINTFORM と向き合う姿勢
+							IF RAND:2 == 0
+								PRINTFORML で一つになった
+							ELSE
+								PRINTFORML で犯された
+							ENDIF
+						ENDIF
+						;獣or鳥
+						IF TALENT:交渉대상():짐승 || TALENT:交渉대상():새
+							PRINTFORM ケダモノの姿をした悪魔は%CALLNAME:MASTER%を押し倒し
+						ELSE
+							IF RAND:2 == 0
+								PRINTFORM 力強く
+							ELSE
+								PRINTFORM 乱暴に
+							ENDIF
+							PRINTFORM 悪魔は%CALLNAME:MASTER%を押し倒すと
+						ENDIF
+						IF RAND:2 == 0
+							PRINTFORM %CALLNAME:交渉대상()%はテクニックなど何もない荒々しい腰使いで
+						ELSE
+							PRINTFORM %CALLNAME:MASTER%の様子などお構い無しに
+						ENDIF
+						IF RAND:2 == 0
+							PRINTFORMW 何度も%CALLNAME:MASTER%の雌穴を突き上げて絶頂し熱い精液が子宮の中に流し込まれた
+						ELSE
+							PRINTFORMW 激しく雌穴を犯し、子宮の中に精液を吐き出していく
+						ENDIF
+					ELSE
+						PRINTFORM %CALLNAME:交渉대상()%は%CALLNAME:MASTER%
+						IF RAND:2 == 0
+							PRINTFORM を組み伏すと
+						ELSE
+							PRINTFORM を押し倒して
+						ENDIF
+						IF RAND:2 == 0
+							PRINTFORM バックから
+						ELSE
+							PRINTFORM 背後から
+						ENDIF
+						IF RAND:2 == 0
+							PRINTFORML 挿入してきた
+						ELSE
+							PRINTFORML 一気に膣を犯しはじめた
+						ENDIF
+						IF RAND:2 == 0
+							PRINTFORM 力任せに
+						ELSE
+							PRINTFORM %CALLNAME:MASTER%の様子などお構い無しに
+						ENDIF
+						IF RAND:3 == 0
+							PRINTFORM 叩きつけるように
+						ELSEIF RAND:2 == 0
+							PRINTFORM 荒々しく
+						ELSE
+							PRINTFORM 激しく
+						ENDIF
+						IF RAND:2 == 0
+							PRINTFORMW %CALLNAME:交渉대상()%は何度も何度も肉棒を膣の奥深くまで突き上げてくる
+						ELSE
+							PRINTFORMW 腰をつかい、%CALLNAME:MASTER%の雌穴の入り口は押し広げられていく
+						ENDIF
+					ENDIF
+				;アナル回数が多い
 				ELSEIF LOCAL:2 >= LOCAL:3
 					PRINTFORML 
 					IF RAND:2 == 0
@@ -2250,6 +2325,8 @@ SELECTCASE (ARG > -1 ? ARG # TFLAG:TALK구상呼び出し用)
 									PRINTFORMW 젖은 \@ TALENT:PLAYER:소인체형 ? 균열 # 비소\@가 드러났다…
 								ELSEIF CFLAG:PLAYER:던전内発情用욕정치 >= 6000
 									PRINTFORMW 기대로 움찔움찔 떨리고 있는 \@ TALENT:PLAYER:소인체형 ? 균열 # 비소\@가 바깥 공기에 노출되었다…
+								ELSE
+									PRINTFORMW 예쁜 그대로의\@ TALENT:PLAYER:소인체형 ? 군열 # 비소\@가 바깥 공기에 노출되었다…
 								ENDIF
 							ELSE
 								;스커트걷어올림・下着見せ
@@ -2263,6 +2340,8 @@ SELECTCASE (ARG > -1 ? ARG # TFLAG:TALK구상呼び出し用)
 									PRINTFORMW 정액 투성이로、엉망진창이 된 %CLOTHESNAMEF(PLAYER,TEQUIP:PLAYER:음순노출)%가 드러났다…
 								ELSEIF PALAM:PLAYER:윤활 >= PALAMLV:2
 									PRINTFORMW 애액으로 촉촉하고 습기차, 비순을 숨긴 부분에 얼룩이 생긴 %CLOTHESNAMEF(PLAYER,TEQUIP:PLAYER:음순노출)%가 바깥 공기에 노출되었다…
+								ELSE
+									PRINTFORMW 예쁜 그대로의%CLOTHESNAMEF(PLAYER,TEQUIP:PLAYER:음순노출)%가 바깥 공기에 노출되었다…
 								ENDIF
 							ENDIF
 						ENDIF

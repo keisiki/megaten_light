@@ -48,12 +48,12 @@ RETURN GET_TYPE_NUM("파마")
 ;파마
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2822
+@SKILL_DECIDE_TYPE_2822, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2822
+@SKILL_DAMAGETYPE_2822, ARG
 RETURN 2
 
 
@@ -138,7 +138,7 @@ CALL ATTACK_RAND,ARG,ARG:1,2822
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2822
-PRINTL 파마의뇌광으로 적전체에 랜덤으로 여러차례 공격한다.。
+PRINTL 파마의뇌광으로 적전체에 랜덤으로 여러차례 공격한다。
 PRINTL 환상향에 아직 전해지고 있던、오래된 마법 중 하나。
 
 ;継承に필요한部位

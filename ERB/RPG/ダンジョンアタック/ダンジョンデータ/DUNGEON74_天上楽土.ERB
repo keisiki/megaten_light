@@ -1703,9 +1703,9 @@ IF FINDCHARA_B([[キャラ:유키코]]) == 2
 ;P4주인공がパーティメンバーにいる。
 ELSEIF FINDCHARA_B([[キャラ:P4주인공]]) == 2
 	PRINTFORMW 「……서두르자！」
-		PRINTFORM 나마타메의 목소리에 초조해하는
-		CALL DUNGEON_74_PT_NAME
-		PRINTFORMW 들을 진정시키며 앞으로 나아갔다……
+	PRINTFORM 나마타메의 목소리에 초조해하는
+	CALL DUNGEON_74_PT_NAME
+	PRINTFORMW 들을 진정시키며 앞으로 나아갔다……
 ELSE
 	;나나코の知り合い何人いるかフラグ１（知り合いが一人きてる。）
 	IF 던전フラグ:74:2 == 1

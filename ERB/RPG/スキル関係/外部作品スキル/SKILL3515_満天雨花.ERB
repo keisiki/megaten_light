@@ -33,11 +33,11 @@ RETURN 45
 RETURN GET_TYPE_NUM("전술")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3515
+@SKILL_DECIDE_TYPE_3515, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3515
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3515, ARG
 RETURN 1
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -116,7 +116,7 @@ CALL ATTACK_RAND, ARG, ARG:1, 3515
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3515
-PRINTL 적複数体に전술相性で小ダメージを5～10回与える
+PRINTL 적 복수체에 전술 상성의 소 데미지를 5～10회 입힌다
 
 ;継承に필요な部位
 @継承部位_3515, ARG

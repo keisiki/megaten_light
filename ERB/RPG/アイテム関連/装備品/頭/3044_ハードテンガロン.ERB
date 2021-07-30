@@ -1,36 +1,57 @@
 ﻿
 ;======================================================
 ;장비品の데이터
-;하드텐갤런
-;Lv20장비までは내성が기본　기본능력に합계+2まで
 ;======================================================
 
 @기본능력수정_3044,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "속도"
-		RETURN 2
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3044,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 7
-	CASE "회피"
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 12
+	CASE 3
+		RETURN 6
+	CASE 5
 		RETURN 8
-	CASE "마법효과"
-		RETURN 5
 ENDSELECT
 RETURN 0
 
 @방어상성_3044,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "비구","질풍","중력"
-		RETURN 85
-	CASE "신경","정신"
-		RETURN 115
+
+SELECTCASE ARG
+	;검격・비구
+	CASE 0, 1
+		RETURN 75
+	;신경・정신
+	CASE 8, 9
+		RETURN 150
 ENDSELECT
 RETURN 100
+
+@공격상성_3044, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3044, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3044, ARG = -1
+
+RETURN 1
+
+@사거리_3044, ARG = -1
+
+RETURN 1
+
+@공격범위_3044, ARG = -1
+
+RETURN 1
 
 @장비箇所_3044
 RETURN GET_EQUIPNUM("머리")
@@ -45,18 +66,11 @@ SIF BASE:ARG:LV < 15
 	RETURN 0
 RETURN 1
 
-@장비조건설명_3044
-PRINTL 장비조건：♂ LV15～
-
-@장비해설_3044
-PRINTL 固い革で作られた大型のカウボーイハット。
-PRINTL 　　　　　　　　
-
-
 @구입조건_3044
 SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 10000
 	RETURN 0
 RETURN 1
 
-@引継ぎ可不可_3044
-RETURN 0
+@장비조건설명_3044
+PRINTL 장비조건：♂ LV１５～
+

@@ -23,9 +23,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2295,ARG,ARG:1 = -1
-RETURN 0
-
 @방어상성_2295,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -61,6 +58,15 @@ RETURN 0
 @장비箇所_2295
 RETURN GET_EQUIPNUM("검")
 
+@장비추가스킬_2295,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 405
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -82,6 +88,9 @@ PRINTL 장비조건：LV45～
 
 @장비해설_2295
 PRINTL 영조의 꼬리부분 날개깃을 사용한 지팡이
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：메・디아라마
+RESETCOLOR
 
 RETURN 0
 

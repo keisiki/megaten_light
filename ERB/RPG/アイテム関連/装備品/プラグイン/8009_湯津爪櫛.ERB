@@ -4,13 +4,18 @@
 ;======================================================
 @기본능력수정_8009,ARG,ARG:1 = -1
 SELECTCASE GET_BASESTATUS(ARG)
+	CASE "지혜"
+		LOCAL = BASE:(ARG:1):지혜/12
+		RETURN LOCAL
 	CASE "인내력"
-		RETURN 4
+		LOCAL:1 = BASE:(ARG:1):인내력/12
+		RETURN LOCAL:1
+
 ENDSELECT
 RETURN 0
 
 @증가CP_8009
-RETURN 30
+RETURN 20
 
 @전투능력수정_8009,ARG,ARG:1 = -1
 SELECTCASE ARG
@@ -49,5 +54,12 @@ RETURN 25
 @구입조건_8009
 RETURN 0
 
+@장비추가스킬_8009,ARG,ARG:1 = -1
+SELECTCASE ARG
+	CASE 0
+		RETURN [[스킬:치유촉진(소)]]
+ENDSELECT
+RETURN 0
+
 @장비해설_8009
-PRINTL 인내력이 올라간다
+PRINTL 지혜・인내력이 1/12 오른다【치유촉진(소)】

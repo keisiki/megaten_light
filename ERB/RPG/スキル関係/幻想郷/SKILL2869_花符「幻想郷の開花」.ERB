@@ -22,7 +22,7 @@ SELECTCASE FLAG:拡散フラグ
 	CASE IS < 20
 		RETURN 360
 	CASEELSE
-		RETURN 260
+		RETURN 300
 ENDSELECT
 
 ;　최저공격횟수
@@ -48,12 +48,12 @@ RETURN GET_TYPE_NUM("만능")
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2869
+@SKILL_DECIDE_TYPE_2869, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2869
+@SKILL_DAMAGETYPE_2869, ARG
 RETURN 2
 
 
@@ -140,7 +140,7 @@ FLAG:拡散フラグ = 0
 ;　 설명文の표시
 @SKILL_EXPLAIN_2869
 PRINTL 모든 존재를 불어 날려버리는 최강 마법의 단편。
-PRINTL 적전체에 만능 相性의 마법공격。위기에 빠지면 마지막 힘을 쥐어짠다。
+PRINTL 적전체에 만능 상성의 마법공격。위기에 빠지면 마지막 힘을 쥐어짠다。
 PRINTL 요마　카자미 유카의 스펠카드（승계불가）
 
 ;継承に필요한部位

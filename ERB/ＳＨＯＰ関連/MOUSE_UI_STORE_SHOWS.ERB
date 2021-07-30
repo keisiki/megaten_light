@@ -344,9 +344,9 @@ HTML_PRINT "<nobr>" + LOCALS:0 + LOCALS:1 + LOCALS:2
 #DIMS aCategoryName
 #DIMS aMode
 IF aMode == "BUY"
-	LOCALS '= TOALIGNMENT("구입", 10, "CENTER")
+	LOCALS '= TOALIGNMENT("구입", 9, "CENTER")
 ELSEIF aMode == "TRADEIN" || aMode == "SELL"
-	LOCALS '= TOALIGNMENT("매각", 10, "CENTER")
+	LOCALS '= TOALIGNMENT("매각", 9, "CENTER")
 ELSE
 	THROW %aMode%は불명な売買形式です。
 ENDIF

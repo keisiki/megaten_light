@@ -30,12 +30,8 @@ RETURN 0
 SELECTCASE GET_TYPE(ARG)
 	CASE "충격"
 		RETURN -100
-	CASE "전격","핵열"
+	CASE "전격"
 		RETURN 200
-	CASE "타격","전술","정신","주살"
-		RETURN 0
-	CASE "파마","수격","질풍"
-		RETURN 50
 ENDSELECT
 RETURN 100
 
@@ -94,4 +90,4 @@ RETURN 0
 @장비해설_8220
 PRINTL 곡옥「군다리」。인수라만 장비할 수 있다.
 PRINTL 　・충격 마법을 중심으로 습득한다
-PRINTL 　・충격흡수、전격に弱い
+PRINTL 　・충격 흡수、전격에 약하다

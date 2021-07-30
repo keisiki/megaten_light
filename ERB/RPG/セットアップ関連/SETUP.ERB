@@ -14,6 +14,8 @@
 ;	009		2017/06/23		kuni					キャラ표시でINPUT_CHARA_LISTを사용するように변경
 ;	010		2017/12/03		開発スレ【알프LV7】の448さん		치요＆유리코＆악마인の同行・待機바꾸기가능に변경
 ;	011		2017/12/21		수정野郎				악마서버전송の리스트표시の一部に固定値が使われていたのを변경
+;	012		2019/08/28		空気					데빌챔버사용時の挙動を수정
+;	013		2021/02/11		Rsp暇人 				セットアップ画面からリンケージ一覧を呼び出せるように
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 ;전투や탐색の準備を行う화면
@@ -43,15 +45,19 @@ DRAWLINE
 IF FLAG:カスタムゲーム화면
 	PRINTL 　　　　　　　　　　　　　　[1] - 소환/편입 　　　　　[2] - 포지션변경　　　　[3] - 귀환/제외
 	PRINTL 　　　　　　　　　　　　　　[4] - 장비변경  　　　　　[5] - 인스톨소프트　　[6] - 동료마해방
+;---- EDIT 013 MOD START ---------------------------
 	;---- EDIT 004 MOD START -------------------------
-	PRINTL 　　　　　　　　　　　　　　[7] - 악마서버전송　　　[8] - 플러그인소프트
+	PRINTL 　　　　　　　　　　　　　　[7] - 악마서버전송　　　[8] - 플러그인소프트　[9] - 링케이지스킬확인
 	;---- EDIT 004 MOD END   -------------------------
+;---- EDIT 013 MOD END ---------------------------
 ELSE
 	PRINTL 　　　　　　　　　　[1] - 소환/편입 　　[2] - 포지션변경 　　 [3] - 귀환/제외
 	PRINTL 　　　　　　　　　　[4] - 장비변경  　　[5] - 인스톨소프트    [6] - 동료마해방
+;---- EDIT 013 MOD START ---------------------------
 	;---- EDIT 004 MOD START -------------------------
-	PRINTL 　　　　　　　　　　[7] - 악마서버전송  [8] - 플러그인소프트
+	PRINTL 　　　　　　　　　　[7] - 악마서버전송  [8] - 플러그인소프트  [9] - 링케이지스킬확인
 	;---- EDIT 004 MOD END   -------------------------
+;---- EDIT 013 MOD END ---------------------------
 ENDIF
 PRINTL
 DRAWLINE
@@ -86,6 +92,10 @@ ELSEIF RESULT == 7
 ;---- EDIT 004 ADD START -------------------------
 ELSEIF RESULT == 8
 	CALL EQUIP_PLUGIN_SOFT
+;---- EDIT 013 MOD START ---------------------------
+ELSEIF RESULT == 9
+	CALL SHOW_LINKAGE
+;---- EDIT 013 MOD END ---------------------------
 ELSEIF RANGE(RESULT, 21, 26)
 	RESULT = POS(RESULT - 20)
 	IF RESULT >= 0
@@ -165,7 +175,6 @@ RETURN 1
 ;=================================================================
 @DEVIL_STORAGE
 #DIM LCOUNT
-#DIM CHA_NO
 
 P = 0
 ;표시させるキャラを抽出（Q:*に표시するキャラの등록번호、LOCAL:2に人数）
@@ -241,8 +250,14 @@ ELSEIF RESULT < 1 || RESULT >= CHARANUM || MATCH(Q,RESULT,0) == 0
 ELSE
 	IF CFLAG:RESULT:所属ＣＯＭＰ == -1
 		LOCAL = RESULT
-		IF FLAG:ＣＯＭＰ용량 <= NUM_NAKAMA() + ソフト용량()
-			PRINTW ＣＯＭＰ 용량이 가득 찼습니다
+		;---- EDIT 004 MOD START -------------------------
+		IF ＣＯＭＰ空き容量() < 1 && EQUIP:MASTER:데빌챔버 && NUM_NAKAMA_HEADCOUNT() == 6
+			PRINTW ＣＯＭＰ안의 악마가 ６체를 넘으면 데빌챔버의 효과가 사라져 용량이 오버됩니다！
+			CLEARLINE 2
+			GOTO INPUT_LOOP_1
+		ELSEIF ＣＯＭＰ空き容量() < 1
+		;---- EDIT 004 MOD END ---------------------------
+			PRINTW PRINTW ＣＯＭＰ 용량이 가득 찼습니다
 			CLEARLINE 2
 			GOTO INPUT_LOOP_1
 		ENDIF

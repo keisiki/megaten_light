@@ -36,12 +36,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_609
+@SKILL_DECIDE_TYPE_609, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_609
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_609, ARG
 RETURN 0
 
 
@@ -129,8 +129,7 @@ PRINTFORMW 　　TARGET:\@ ARG:1 == 19  ? PARTY # ENEMY \@ >>>>>> 마법공격�
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_609
-PRINTL [특수] 1턴동안, 아군 전체에 마법공격을 반사하는 결계를 친다.
-PRINTL 부적으로 결계를 세워 아군을 보호한다.
+PRINTL [특수] 1턴동안, 부적으로 아군 전체에 마법공격을 반사하는 결계를 친다. 발동이 빠르다.
 
 ;継承に필요な部位
 @継承部位_609,ARG

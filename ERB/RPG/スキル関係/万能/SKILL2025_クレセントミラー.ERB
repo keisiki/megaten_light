@@ -32,7 +32,7 @@ RETURN 3
 @SKILL_COST_2025,ARG
 RETURN 60
 
-;　相性 神聖・빙결・만능のうち、もっともダメージが高くなるものになる
+;　相性 神聖・빙결・만능のうち、もっとも데미지が高くなるものになる
 @SKILL_TYPE_2025, ARG
 #LOCALSSIZE 4
 #LOCALSIZE 4
@@ -61,12 +61,12 @@ NEXT
 RETURN GET_TYPE_NUM(LOCALS)
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2025
+@SKILL_DECIDE_TYPE_2025, ARG
 RETURN 1
 ;魔法
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2025
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2025, ARG
 RETURN 2
 
 

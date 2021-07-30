@@ -1,7 +1,7 @@
 ﻿
 ;스킬名
 @SKILL_NAME_1332,ARG
-RESULTS = 파마가드브레이커
+RESULTS = 파마가드브레이크
 
 ;　명중
 @SKILL_HITRATE_1332, ARG
@@ -34,12 +34,12 @@ RETURN GET_TYPE_NUM("파마")
 ;파마
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1332
+@SKILL_DECIDE_TYPE_1332, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1332
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1332, ARG
 RETURN 0
 
 

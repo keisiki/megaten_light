@@ -5,12 +5,13 @@
 ;======================================================
 
 @기본능력수정_5497,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "지혜"
+
+SELECTCASE ARG
+	CASE 2
 		RETURN 2
-	CASE "마력"
+	CASE 3
 		RETURN 2
-	CASE "인내력"
+	CASE 4
 		RETURN -3
 ENDSELECT
 RETURN 0
@@ -25,14 +26,28 @@ SELECTCASE ARG
 ENDSELECT
 RETURN 100
 
+@공격상성_5497, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_5497, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_5497, ARG = -1
+
+RETURN 1
+
+@사거리_5497, ARG = -1
+
+RETURN 1
+
+@공격범위_5497, ARG = -1
+
+RETURN 1
+
 @장비箇所_5497
 RETURN GET_EQUIPNUM("악세사리")
-
-;-----------------------------
-;- 조건・설명処理
-;-----------------------------
-@필요레벨_5497
-RETURN 1
 
 @장비조건_5497,ARG
 SIF BASE:ARG:인내력 < 9
@@ -42,16 +57,8 @@ SIF BASE:ARG:LV < 29
 RETURN 1
 
 @장비조건설명_5497
-PRINTL 장비조건：인내력10이상
-PRINTL 　　　　　LV30～
+PRINTL 장비조건：인내력10이상 LV30～
 
-@장비해설_5497
-PRINTL 지혜와 마력이 오르는 대신、인내력이 떨어지는 비디오테이프
-PRINTL 이전 안락의자 탐정이 이 비디오를 보며 추리를 했었다.
-
-;-----------------------------
-;- 구입・引き継ぎ
-;-----------------------------
 @구입조건_5497
 RETURN 0
 
@@ -59,5 +66,7 @@ RETURN 0
 @EQUIP_EXCHANGE_5497
 RETURN 0
 
-@引継ぎ可不可_5497
-RETURN 1
+@장비해설_5497
+PRINTL 지혜와 마력이 오르는 대신、인내력이 떨어지는 비디오테이프
+PRINTL 이전 안락의자 탐정이 이 비디오를 보며 추리를 했었다.
+

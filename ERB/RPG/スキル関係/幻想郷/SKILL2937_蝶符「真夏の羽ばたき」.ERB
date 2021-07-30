@@ -60,12 +60,12 @@ RETURN 7
 ;충격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2937
-RETURN 2
+@SKILL_DECIDE_TYPE_2937, ARG
+RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2937
+@SKILL_DAMAGETYPE_2937, ARG
 RETURN 2
 
 
@@ -161,7 +161,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2937
 PRINTL 적 １열에 충격 속성 낮은 위력의 마법 공격을 1회 실시한다。
 PRINTL 추가효과：레벨에 따라서 위력이 상승・전체화。　조금 높은 명중。
 PRINTL 강력한 날개짓으로、충격파를 날려서 적을 공격한다。강해지면
-PRINTL 곧 신의 영역까지 도달한다。요정　이터니티 라바의 스펠카드。（専用）
+PRINTL 곧 신의 영역까지 도달한다。요정　이터니티 라바의 스펠카드。（전용）
 
 ;継承に필요한部位
 @継承部位_2937,ARG

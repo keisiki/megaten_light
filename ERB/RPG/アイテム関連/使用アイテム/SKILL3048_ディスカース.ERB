@@ -36,10 +36,10 @@ RETURN 0
 ;　1EXTRAか2MAGICか
 @SKILL_DECIDE_TYPE_3048
 RETURN 0
-;魔法
+;마법
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3048
+;　1물리데미지で計算するか2마법데미지で計算するか
+@SKILL_DAMAGETYPE_3048, ARG
 RETURN 2
 
 
@@ -51,11 +51,11 @@ RETURN 2
 @SKILL_RANGE_3048,ARG
 RETURN 1
 
-;　範囲　11체　21열　3전체　4　적아군전체
+;　범위　1１체　2１열　3전체　4　적아군전체
 @SKILL_SPHERE_3048,ARG
 RETURN 1
 
-;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복
 @SKILL_EFECT_3048
 RETURN 2
 
@@ -110,7 +110,7 @@ ENDIF
 ;전투中以外での実行
 ;====================================================
 @ACTION_FIELD_3048,ARG,ARG:1
-PRINTFORML %ITEMNAME:1048%を使った。
+PRINTFORML %ITEMNAME:1048%을 사용했다。
 
 LOCAL = POS(ARG:1)
 CALL SKILL_CURE_STATE_3048,CFLAG:LOCAL:ステート
@@ -126,7 +126,7 @@ ENDIF
 ;実行内容ここまで
 ;====================================================
 
-;　 説明文の표시
+;　 설명文の표시
 @SKILL_EXPLAIN_3048
 PRINTL 아군一人のCURSE,BRANDを회복する。
 
@@ -155,7 +155,7 @@ RETURN RESULT
 @SKILL_T_RESERVE_3048
 RETURN 0
 
-;何のバッド스테이터스を治せるか
+;何の배드스테이터스を治せるか
 @SKILL_CURE_STATE_3048,ARG
 SELECTCASE GET_STATE(ARG)
 	CASE "CURSE","BRAND"

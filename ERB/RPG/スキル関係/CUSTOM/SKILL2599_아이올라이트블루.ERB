@@ -94,12 +94,12 @@ RETURN GET_TYPE_NUM(LOCALS)
 ;화염+빙결+파마
 
 ;　EXTRA면 1, MAGIC이면 2
-@SKILL_DECIDE_TYPE_2599
+@SKILL_DECIDE_TYPE_2599, ARG
 RETURN 1
 ;EXTRA. 화염계
 
 ;　물리 타격 판정 1 마법 타격 판정2
-@SKILL_DAMAGETYPE_2599
+@SKILL_DAMAGETYPE_2599, ARG
 RETURN 1
 
 
@@ -180,7 +180,7 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2599
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2599
-PRINTL 적 1명에 화염+빙결+파마 복합 相性 데미지를 3회 준다.
+PRINTL 적 1명에 화염+빙결+파마 복합 상성 데미지를 3회 준다.
 PRINTL 시부야 린의 오의.
 
 ;継承に필요한部位

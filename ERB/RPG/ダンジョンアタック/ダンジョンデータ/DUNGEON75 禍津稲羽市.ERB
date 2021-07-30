@@ -526,9 +526,9 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 				FLAG:선제기습취소 = 1
 				CUSTOMDRAWLINE =
 				WAIT
-				CALL SET_ENEMY, 9, 3274, 60, 0, 1
+				CALL SET_ENEMY, 9, [[キャラ:그림자에가려진남자]], 60, 0, 1
 				CFLAG:(CHARANUM-1):ＨＰ보정 = 1500
-				CSTR:(CHARANUM-1):사고패턴 = 3274
+				CSTR:(CHARANUM-1):사고패턴 = 3342
 				BASE:(CHARANUM-1):힘 += 10
 				BASE:(CHARANUM-1):지혜 += 10
 				BASE:(CHARANUM-1):마력 += 10
@@ -612,11 +612,6 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
 			PRINTW 
 			던전フラグ:75:1 = 2
 			DA:(FLAG:現X):(FLAG:現Y) = 1
-				IF FLAG:(13275) == 0
-					FLAG:(13275) = 1
-					RESULTS = 괴이 아메노사기리의 합체 제한이 해제되었습니다
-					CALL MESSAGE_B(1, RESULTS)
-				ENDIF
 			FLAG:탈출 = 1
 			RETURN 1
 
@@ -806,7 +801,7 @@ RETURN 1
 ;사고패턴
 ;=================================
 ;그림자에가려진남자、사고패턴
-@SET_ACTION_3274, ARG
+@SET_ACTION_3342, ARG
 IF FLAG:経過ターン数 == 0 && CFLAG:ARG:１moreフラグ != 2 && CFLAG:ARG:行動した횟수 == 0
 	CALL CHECK_ACTIONABLE, ARG, 525
 	SIF RESULT == 0

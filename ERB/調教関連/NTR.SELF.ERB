@@ -11,6 +11,8 @@
 ;	001		2011/04/09		Ｎ鳥					新規作成
 ;	002		2011/09/07		黒天					NTR_HOUMONNHANNBAI_SEXの처녀/재생처녀상실の処理を関数を呼ぶように修正
 ;	003		2020/04/03		ネトリス				今までの経験処理をNTRペナルティへ移動し、キャラの스테이터스に左右されない処理を通常に추가
+;	004		2020/05/19		がめら					NTR好感度処理をCDFLAGに変更
+;	004		2021/04/27		JK好き					CALL SHOW_ADD_EXPの後に獲得経験を使う計算をしていた部分をCALL SHOW_ADD_EXPの前に移動
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 
@@ -301,11 +303,11 @@ ELSE
 	TCVAR:ARG:획득질사경험 = 中出し횟수
 	TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 	TCVAR:ARG:획득바람경험 = 1
-	CALL SHOW_ADD_EXP, ARG
-	;체력の消耗
+
 	LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 	PRINTFORML 체력 - {LOCAL}
 	BASE:ARG:체력 -= LOCAL
+	CALL SHOW_ADD_EXP, ARG
 	CFLAG:ARG:現ＮＴＲ進行度 += 1
 	;바람癖がある場合は음란度倍化
 	IF TALENT:ARG:바람기
@@ -387,11 +389,11 @@ IF FLAG:ＮＴＲハードモード
 	TCVAR:ARG:획득질사경험 = CFLAG:ARG:本番횟수 * 2
 	TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 	TCVAR:ARG:획득바람경험 = 1
-	CALL SHOW_ADD_EXP, ARG
 	;체력の消耗
 	LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 	PRINTFORML 체력 - {LOCAL}
 	BASE:ARG:체력 -= LOCAL
+	CALL SHOW_ADD_EXP, ARG
 	CFLAG:ARG:現ＮＴＲ進行度 += 1
 	;바람癖がある場合は음란度倍化
 	IF TALENT:ARG:바람기
@@ -481,11 +483,11 @@ ELSE
 	TCVAR:ARG:획득질사경험 = 中出し횟수
 	TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 	TCVAR:ARG:획득바람경험 = 1
-	CALL SHOW_ADD_EXP, ARG
 	;체력の消耗
 	LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 	PRINTFORML 체력 - {LOCAL}
 	BASE:ARG:체력 -= LOCAL
+	CALL SHOW_ADD_EXP, ARG
 	CFLAG:ARG:現ＮＴＲ進行度 += 1
 	;바람癖がある場合は음란度倍化
 	IF TALENT:ARG:바람기
@@ -564,11 +566,11 @@ IF FLAG:ＮＴＲハードモード
 	TCVAR:ARG:획득질사경험 = CFLAG:ARG:本番횟수 * 2
 	TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 	TCVAR:ARG:획득바람경험 = 1
-	CALL SHOW_ADD_EXP, ARG
 	;체력の消耗
 	LOCAL = CFLAG:ARG:펠라횟수 * 10 + CFLAG:ARG:애널횟수 * 30 + CFLAG:ARG:本番횟수 * 20
 	PRINTFORML 체력 - {LOCAL}
-	BASE:ARG:체력 -= LOCAL
+	BASE:ARG:체력 -= LOCAL	
+	CALL SHOW_ADD_EXP, ARG
 	CFLAG:ARG:現ＮＴＲ進行度 += 2
 	;바람癖がある場合は음란度倍化
 	IF TALENT:ARG:바람기
@@ -662,11 +664,11 @@ ELSE
 	TCVAR:ARG:획득질사경험 = 中出し횟수
 	TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 	TCVAR:ARG:획득바람경험 = 1
-	CALL SHOW_ADD_EXP, ARG
 	;체력の消耗
 	LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 	PRINTFORML 체력 - {LOCAL}
 	BASE:ARG:체력 -= LOCAL
+	CALL SHOW_ADD_EXP, ARG
 	CFLAG:ARG:現ＮＴＲ進行度 += 2
 	;바람癖がある場合は음란度倍化
 	IF TALENT:ARG:바람기
@@ -751,11 +753,11 @@ IF FLAG:ＮＴＲハードモード
 	TCVAR:ARG:획득질사경험 = CFLAG:ARG:本番횟수 * 2
 	TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 	TCVAR:ARG:획득바람경험 = 1
-	CALL SHOW_ADD_EXP, ARG
 	;체력の消耗
 	LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 	PRINTFORML 체력 - {LOCAL}
 	BASE:ARG:체력 -= LOCAL
+	CALL SHOW_ADD_EXP, ARG
 	CFLAG:ARG:現ＮＴＲ進行度 += 1
 	;바람癖がある場合は음란度倍化
 	IF TALENT:ARG:바람기
@@ -849,11 +851,11 @@ ELSE
 	TCVAR:ARG:획득질사경험 = 中出し횟수
 	TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 	TCVAR:ARG:획득바람경험 = 1
-	CALL SHOW_ADD_EXP, ARG
 	;체력の消耗
 	LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 	PRINTFORML 체력 - {LOCAL}
 	BASE:ARG:체력 -= LOCAL
+	CALL SHOW_ADD_EXP, ARG
 	CFLAG:ARG:現ＮＴＲ進行度 += 1
 	;바람癖がある場合は음란度倍化
 	IF TALENT:ARG:바람기
@@ -867,8 +869,8 @@ ENDIF
 ;ＮＴＲ前逢引
 ;------------
 @NTR_SELF_5,ARG
-IF CFLAG:ARG:(2100 + FAVORITE_1_ID(ARG)) < 0
-	;各횟수の算出
+IF CDFLAG:ARG:キャラ間好感度:(100 + FAVORITE_1_ID(ARG)) < 0
+	;各횟수の산출
 	IF TALENT:ARG:남자 == 0 || ABL:ARG:정액중독 || ABL:ARG:ＢＬ끼
 		CFLAG:ARG:펠라횟수 = (ABL:ARG:욕망 + 6)/4 + (ABL:ARG:정액중독 + 1)/2 + ABL:ARG:봉사정신 / 3
 	ELSE
@@ -902,9 +904,9 @@ TCVAR:ARG:획득바람경험 = 1
 CALL SHOW_ADD_EXP, ARG
 ;好きな人への호감도ＵＰ
 IF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) -= 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) -= 25
 ELSE
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) += 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) += 25
 ENDIF
 
 ;------------------
@@ -959,16 +961,16 @@ TCVAR:ARG:획득절정경험 = CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 +
 TCVAR:ARG:획득질사경험 = CFLAG:ARG:本番횟수 * 2
 TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 TCVAR:ARG:획득바람경험 = 1
-CALL SHOW_ADD_EXP, ARG
 ;好きな人への호감도ＵＰ
 IF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) -= 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) -= 25
 ELSE
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) += 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) += 25
 ENDIF
 LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 PRINTFORML 체력 - {LOCAL}
 BASE:ARG:체력 -= LOCAL
+CALL SHOW_ADD_EXP, ARG
 CFLAG:ARG:現ＮＴＲ進行度 += 1
 
 ;------
@@ -983,9 +985,9 @@ CALL KOJO_MESSAGE_EVENT
 SWAP TARGET , ARG
 ;好きな人への호감도ＵＰ
 IF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) -= 50
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) -= 50
 ELSE
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) += 50
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) += 50
 ENDIF
 
 ;----
@@ -1023,16 +1025,16 @@ TCVAR:ARG:획득절정경험 = CFLAG:ARG:本番횟수 + CFLAG:ARG:挿入횟수
 TCVAR:ARG:획득질사경험 = CFLAG:ARG:本番횟수 * 2
 TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수)/3
 TCVAR:ARG:획득바람경험 = 1
-CALL SHOW_ADD_EXP, ARG
 ;好きな人への호감도ＵＰ
 IF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) -= 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) -= 25
 ELSE
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) += 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) += 25
 ENDIF
 LOCAL = CFLAG:ARG:本番횟수 * 10
 PRINTFORML 체력 - {LOCAL}
 BASE:ARG:체력 -= LOCAL
+CALL SHOW_ADD_EXP, ARG
 CFLAG:ARG:現ＮＴＲ進行度 += 1
 
 ;----------------
@@ -1056,16 +1058,16 @@ SIF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
 	TCVAR:ARG:획득조교자위경험 = CFLAG:ARG:자위과시하기횟수
 TCVAR:ARG:획득절정경험 = CFLAG:ARG:자위과시하기횟수
 TCVAR:ARG:획득바람경험 = 1
-CALL SHOW_ADD_EXP, ARG
 ;好きな人への호감도ＵＰ
 IF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) -= 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) -= 25
 ELSE
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) += 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) += 25
 ENDIF
 LOCAL = CFLAG:ARG:자위과시하기횟수 * 8
 PRINTFORML 체력 - {LOCAL}
 BASE:ARG:체력 -= LOCAL
+CALL SHOW_ADD_EXP, ARG
 CFLAG:ARG:現ＮＴＲ進行度 += 1
 
 ;--------------
@@ -1099,16 +1101,16 @@ TCVAR:ARG:획득정액경험 = CFLAG:ARG:애널횟수 * 2
 TCVAR:ARG:획득절정경험 = CFLAG:ARG:애널횟수 + CFLAG:ARG:挿入횟수
 TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:애널횟수)/3
 TCVAR:ARG:획득바람경험 = 1
-CALL SHOW_ADD_EXP, ARG
 ;好きな人への호감도ＵＰ
 IF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) -= 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) -= 25
 ELSE
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) += 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) += 25
 ENDIF
 LOCAL = CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:挿入횟수 * 5
 PRINTFORML 체력 - {LOCAL}
 BASE:ARG:체력 -= LOCAL
+CALL SHOW_ADD_EXP, ARG
 CFLAG:ARG:現ＮＴＲ進行度 += 1
 
 ;----------
@@ -1162,16 +1164,16 @@ TCVAR:ARG:획득질사경험 = CFLAG:ARG:本番횟수 * 2
 TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수)/3
 TCVAR:ARG:획득야외노출경험 = CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수 + CFLAG:ARG:挿入횟수
 TCVAR:ARG:획득바람경험 = 1
-CALL SHOW_ADD_EXP, ARG
 ;好きな人への호감도ＵＰ
 IF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) -= 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) -= 25
 ELSE
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) += 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) += 25
 ENDIF
 LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 PRINTFORML 체력 - {LOCAL}
 BASE:ARG:체력 -= LOCAL
+CALL SHOW_ADD_EXP, ARG
 CFLAG:ARG:現ＮＴＲ進行度 += 1
 
 
@@ -1231,16 +1233,16 @@ TCVAR:ARG:획득봉사쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널�
 TCVAR:ARG:획득고통쾌락경험 = (CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수)/3
 TCVAR:ARG:획득야외노출경험 = CFLAG:ARG:本番횟수 + CFLAG:ARG:애널횟수 + CFLAG:ARG:펠라횟수 + CFLAG:ARG:挿入횟수
 TCVAR:ARG:획득바람경험 = 1
-CALL SHOW_ADD_EXP, ARG
 ;好きな人への호감도ＵＰ
 IF TALENT:ARG:ＮＴＲ == 3 || TALENT:ARG:ＮＴＲ == 6
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) -= 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) -= 25
 ELSE
-	CFLAG:ARG:(2100+FAVORITE_1_ID(ARG)) += 25
+	CDFLAG:ARG:キャラ間好感度:(100+FAVORITE_1_ID(ARG)) += 25
 ENDIF
 LOCAL = CFLAG:ARG:펠라횟수 * 5 + CFLAG:ARG:애널횟수 * 15 + CFLAG:ARG:本番횟수 * 10
 PRINTFORML 체력 - {LOCAL}
 BASE:ARG:체력 -= LOCAL
+CALL SHOW_ADD_EXP, ARG
 CFLAG:ARG:現ＮＴＲ進行度 += 2
 
 ;
@@ -1253,7 +1255,7 @@ CFLAG:ARG:現ＮＴＲ進行度 += 2
 ;--------
 @NTR_HOUMONNHANNBAI
 #LOCALSIZE 5
-#DIM リスト, 200
+#DIM リスト, 500
 VARSET リスト, -1
 LOCAL:1 = 0
 FOR LOCAL,1,CHARANUM
@@ -1294,202 +1296,202 @@ ENDIF
 SIF CFLAG:LOCAL:함락キャラ == -16
 	LOCAL:1 += 20
 DRAWLINE
-PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員の応対をしている
+PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문 판매원 응대를 하고 있다
 PRINTFORML ・
 PRINTFORML ・・
 PRINTFORML ・・・
-IF RAND:10 < LOCAL:2 + LOCAL:1 || (CFLAG:LOCAL:그외 == 1117 || CFLAG:LOCAL:그외2 == 1117 || CFLAG:LOCAL:그외3 == 1117)
+IF RAND:10 < LOCAL:2 + LOCAL:1 || (CFLAG:LOCAL:그외 == 1117 || CFLAG:LOCAL:그외2 == 1117 || CFLAG:LOCAL:그외3 == 1117 || CFLAG:LOCAL:그외4 == 1117 || CFLAG:LOCAL:그외5 == 1117 || CFLAG:LOCAL:그외6 == 1117)
 	SIF CFLAG:LOCAL:함락キャラ == -16
 		GOTO HOUMONNHANNBAI_NTR
 	IF CFLAG:LOCAL:訪問販売フラグ == 0
-		IF RAND:100 < CFLAG:LOCAL:放置日数 / 2 + LOCAL:1 || (CFLAG:LOCAL:그외 == 1117 || CFLAG:LOCAL:그외2 == 1117 || CFLAG:LOCAL:그외3 == 1117) || TALENT:LOCAL:음란 || TALENT:LOCAL:창부
+		IF RAND:100 < CFLAG:LOCAL:放置日数 / 2 + LOCAL:1 || (CFLAG:LOCAL:그외 == 1117 || CFLAG:LOCAL:그외2 == 1117 || CFLAG:LOCAL:그외3 == 1117 || CFLAG:LOCAL:그외4 == 1117 || CFLAG:LOCAL:그외5 == 1117 || CFLAG:LOCAL:그외6 == 1117) || TALENT:LOCAL:음란 || TALENT:LOCAL:창부
 			IF TALENT:LOCAL:연모 || TALENT:LOCAL:친애
-				PRINTFORMW %CALLNAME:LOCAL%は寂しさを利用した巧みな話術に流され、太った訪問販売員に身体をゆだねてしまった……
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員の巨大なイチモツに貫かれながら、
-				PRINTFORMW 가슴に沸いた罪悪感に『一度だけ』『ゴムを付けてるから』と言い聞かせている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 외로움을 이용한 교묘한 언변에 넘어가 뚱뚱한 방문판매원에게 몸을 내맡기고 말았다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원의 거대한 자지에 뚫리면서、
+				PRINTFORMW 가슴에 들끓은 죄책감에 「한번만」 「고무를 달고 있으니까」라고 타이르고 있다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				CFLAG:LOCAL:訪問販売フラグ = 1
 				PRINTFORML 
-				PRINTFORMW %CALLNAME:LOCAL%は샤워を浴びながら%CALLNAME:MASTER%への言い訳を呟いている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 샤워를 몸에 뒤짚어쓰며 %CALLNAME:MASTER%에의 변명을 중얼거리고 있다……
 			ELSEIF TALENT:LOCAL:음란 || TALENT:LOCAL:창부
-				PRINTFORMW %CALLNAME:LOCAL%はお茶菓子を出そうと振り向いた瞬間、太った訪問販売員に後ろから抱きつかれた……
-				PRINTFORMW %CALLNAME:LOCAL%の尻に옷越しからでも分かるほど大きな페니스が押し付けられている……
-				PRINTFORML しばらく%CALLNAME:MASTER%に触れられていなかった%CALLNAME:LOCAL%には
-				PRINTFORMW 下着をずらして侵入してくる巨大な페니스を拒む事はできなかった……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 다과를 내려고 돌아보는 순간, 뚱뚱한 방문판매원에게 뒤에서 안겼다……
+				PRINTFORMW %CALLNAME:LOCAL%의 엉덩이에 옷 너머로라도 알 수 있을 정도로 큰 페니스가 강요되고 있다……
+				PRINTFORML 한동안 %CALLNAME:MASTER%와 접하지 않았던 %CALLNAME:LOCAL%에게는
+				PRINTFORMW 속옷을 젖히고 침입해 오는 거대한 페니스를 거부할 수는 없었다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				CFLAG:LOCAL:訪問販売フラグ = 1
 				PRINTFORML 
-				PRINTFORMW %CALLNAME:LOCAL%は放置された정액の溜まった콘돔を眺めながら、先程の逢瀬の余韻に浸っている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 방치된 정액이 든 콘돔을 바라보면서, 조금전의 만남의 여운에 잠겨있다.……
 			ELSEIF TALENT:LOCAL:복종 || TALENT:LOCAL:예속
-				PRINTFORMW %CALLNAME:LOCAL%は試供品のドリンクを飲んだ瞬間、意識を失った……
-				PRINTFORMW 体内を押し上げるような圧迫感に눈を깨달음ますと、大人の손首ほどもある페니스が%CALLNAME:LOCAL%の秘部に根元まで突き立てられていた……
-				PRINTFORMW %CALLNAME:LOCAL%は저항する事もできずに太った訪問販売員に鳴かされ続けた……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 시제품 음료를 마시는 순간 의식을 잃었다.……
+				PRINTFORMW 체내를 밀어올리는 압박감에 눈 을 뜨니、성인의 손목 정도의 페니스가 %CALLNAME:LOCAL%의 비부에 뿌리까지 꽂혀있었다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 저항하지도 못하고 뚱뚱한 방문판매원에게 계속 울렸다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				CFLAG:LOCAL:訪問販売フラグ = 1
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 샤워를 몸에 뒤짚어쓰며 %CALLNAME:MASTER%에 대한 충성의 말을 반추하고 있다……
 				PRINTFORML 
-				PRINTFORMW %CALLNAME:LOCAL%は샤워を浴びながら%CALLNAME:MASTER%への忠誠の言葉を反芻している……
 			ENDIF
 		ELSE
 			IF RAND:2 == 0
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員と世間話をしている
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원들과 잡담을 나누고 있다
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数
 			ELSE
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員を部屋に入れ、お茶を飲みながら談笑している
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원을 방에 넣어 차를 마시며 담소하다
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 2
 			ENDIF
 		ENDIF
 	ELSEIF CFLAG:LOCAL:訪問販売フラグ
-		IF RAND:100 < CFLAG:LOCAL:放置日数 + LOCAL:1 || (CFLAG:LOCAL:그외 == 1117 || CFLAG:LOCAL:그외2 == 1117 || CFLAG:LOCAL:그외3 == 1117)
+		IF RAND:100 < CFLAG:LOCAL:放置日数 + LOCAL:1 || (CFLAG:LOCAL:그외 == 1117 || CFLAG:LOCAL:그외2 == 1117 || CFLAG:LOCAL:그외3 == 1117 || CFLAG:LOCAL:그외4 == 1117 || CFLAG:LOCAL:그외5 == 1117 || CFLAG:LOCAL:그외6 == 1117)
 			IF TALENT:LOCAL:연모 || TALENT:LOCAL:친애
-				PRINTFORMW %CALLNAME:LOCAL%は言葉だけの힘無い저항を입にしながら、太った訪問販売員に押し倒された……
-				PRINTFORML 何度눈かの절정の後、%CALLNAME:LOCAL%が身体を起こそうとすると、
-				PRINTFORMW 太った訪問販売員がゴムを外して挿入しようとしている光景が눈に飛び込んできた……
-				PRINTFORMW %CALLNAME:LOCAL%は힘の入らない身体で必死に저항したが、太った訪問販売員の侵入を許してしまった……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 말뿐인 힘없는 저항을 하면서 뚱뚱한 방문판매원에게 떼밀렸다……
+				PRINTFORML 몇번째의 절정 이후、%CALLNAME:LOCAL%가 몸을 일으키려 하자、
+				PRINTFORMW 뚱뚱한 방문판매원이 고무를 벗기고 삽입하려고 하는 광경이 눈 쪽으로 흘러내렸다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 힘이 들어가지 않는 몸으로나마 필사적으로 저항했으나, 뚱뚱한 방문판매원의 침입을 허용하였다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				PRINTFORML 
-				PRINTFORMW 太った訪問販売員は페니스を膣奥へしっかりと押し付けると、そのまま大量の정액を%CALLNAME:LOCAL%の子宮へと流し込んだ……
-				PRINTFORMW %CALLNAME:LOCAL%は子宮内を満たす熱を感じながら、%CALLNAME:MASTER%の名を呟き、涙を流した……
+				PRINTFORMW 뚱뚱한 방문판매원은 페니스를 보지 깊숙한 곳에 단단히 밀어붙이고서、그대로 대량의 정액을 %CALLNAME:LOCAL%의 자궁에 쏟아내었다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 자궁내부를 채우는 열기를 느끼면서도、%CALLNAME:MASTER%의 이름을 중얼거리며 눈물을 흘렸다……
 			ELSEIF TALENT:LOCAL:음란 || TALENT:LOCAL:창부
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員が晒した巨大な페니스を눈にした瞬間、糸が切れたかのように床へ崩れ落ちた……
-				PRINTFORML うまく動く事の出来ない%CALLNAME:LOCAL%に太った訪問販売員が覆い被さり、
-				PRINTFORMW 避妊具を付けていない페니스を%CALLNAME:LOCAL%の질내へと一気に突き入れた……
-				PRINTFORMW 全身を襲う쾌락の渦に%CALLNAME:LOCAL%は自分が강간されている事も忘れ、太った訪問販売員の페니스によがり狂っている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원が이 드러낸 거대한 페니스를 눈에 담은 순간、실이 끊어진 것처럼 바닥에 주저앉았다……
+				PRINTFORML 움직이지 못하는 %CALLNAME:LOCAL%에게 뚱뚱한 방문판매원이 덮어들어、
+				PRINTFORMW 피임구를 착용하지 않은 페니스를 %CALLNAME:LOCAL%의 질내로 단숨에 찔러넣었다……
+				PRINTFORMW 전신을 덮치는 쾌락의 소용돌이에 %조사처리(CALLNAME:LOCAL,"는")% 자신이 강간 당하고 있다는 것도 잊은채、뚱뚱한 방문판매원의 페니스의 미칠듯이 기뻐하고 있다……
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				PRINTFORML 
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員の페니스が膨張し사정が近いと知ると、思わず中出しを願う言葉を発してしまった……
-				PRINTFORMW 叩きつける様な勢いの사정に%CALLNAME:LOCAL%は全身を痙攣させながら절정に達した……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원의 페니스가 팽창하여 사정이 가깝다는 것을 알고서도、저도 모르게 안에다 싸달라는 말을 해버렸다……
+				PRINTFORMW 때릴듯한 기세로 쏟아지는 사정에 %조사처리(CALLNAME:LOCAL,"는")% 온몸을 경련하며 절정에 다달았다……
 			ELSEIF TALENT:LOCAL:복종 || TALENT:LOCAL:예속
-				PRINTFORML 太った訪問販売員に옷を脱ぐように言われた%CALLNAME:LOCAL%は、
-				PRINTFORMW %CALLNAME:MASTER%の命令ではないと理解しているのに옷を肌蹴け、素肌を晒してしまった……
-				PRINTFORMW 太った訪問販売員は%CALLNAME:LOCAL%の全身をくまなく애무し、蕩けきったのを確認すると키스をしながらゆっくりと페니스を挿入した……
-				PRINTFORMW 耳元で愛を囁きながらゆっくりと抽挿を繰り返す太った訪問販売員に%CALLNAME:LOCAL%は抱き付きながら喘ぎ声を上げている……
+				PRINTFORML 뚱뚱한 방문판매원에게 옷을 벗으라고 들은 %조사처리(CALLNAME:LOCAL,"는")%、
+				PRINTFORMW %CALLNAME:MASTER%의 명령이 알고 있음에도 옷을 벗어내리고、알몸을 드러내었다……
+				PRINTFORMW 뚱뚱한 방문판매원은 %CALLNAME:LOCAL%의 전신을 구석구석 애무하고、녹아내린 것을 확인한 뒤 키스를 하며 천천히 페니스를 삽입했다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 귓가에 사랑을 속삭이며 느긋히 앞뒤로 움직이던 뚱뚱한 방문판매원을  껴안으면서 헐떡이고 있다.……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				PRINTFORML 
-				PRINTFORML %CALLNAME:LOCAL%は唐突に질내で始まった사정に非難の声を上げようとしたが、
-				PRINTFORMW 太った訪問販売員に耳元で『アイシテイル』と囁かれると身体の힘が抜けてしまった……
-				PRINTFORMW %CALLNAME:LOCAL%は子宮内に太った訪問販売員の정액が流し込まれるたびに、自分の中で何かが塗り替えられるような감각に陥った……
+				PRINTFORML %조사처리(CALLNAME:LOCAL,"는")% 당돌하게 질내에 쏟아지는 사정에 비난하려 했지만、
+				PRINTFORMW 뚱뚱한 방문판매원에게 귓가로 『사랑하고 있다』는 말을 듣고서 신체의 힘이 빠져버렸다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 자궁내에 뚱뚱한 방문판매원의 정액이 흘러들어올 때마다 자신속에서 무언가가 뒤바뀌는 듯한 감각에 빠져들었다……
 			ENDIF
 		ELSE
 			IF RAND:2 == 0
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員に손を握られると、言葉とは裏腹に身体の힘を抜けていった……
-				PRINTFORMW 困惑する%CALLNAME:LOCAL%をよそに太った訪問販売員は唇を奪いながらゆっくりと押し倒した……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원의 손을 잡고서、말과는 다르게 몸의 힘을 빼고 있다……
+				PRINTFORMW 당황하는 %CALLNAME:LOCAL%을 무시하고서 뚱뚱한 방문판매원은 입술을 뺴앗고 천천히 밀어 넘어뜨렸다……
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
 				PRINTFORML 
-				PRINTFORMW %CALLNAME:LOCAL%は曇った表情をしながら샤워ルームで身体に付いた太った訪問販売員の匂いを落としている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 흐린 표정을 지으며 샤워룸에서 몸에 남은 뚱뚱한 방문판매원의 냄새를 지우고 있다……
 			ELSE
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員の바지の下からでも分かるほど隆起した가랑이から눈を離せないでいる……
-				PRINTFORMW %CALLNAME:LOCAL%は눈の前につきつけられた巨大な페니스を引き寄せられるようにして咥えてしまった……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원의 바지 아래의 알 수 있을정도로 융기한 가랑이로부터 눈을 떼지 못하고 있다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 눈앞의 드내밀어진 거대한 페니스를 당겨 물어버렸다……
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
-				PRINTFORMW %CALLNAME:LOCAL%は입内に残る太った訪問販売員の정액の感触を洗い流すかのように何度も입をゆすいでいる……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 입 안에 남은 뚱뚱한 방문판매원의 정액의 감촉을씻어내듯 여러번 입을 행구고 있다……
 			ENDIF
 		ENDIF
 	ELSEIF CFLAG:LOCAL:함락キャラ == -16
 		$HOUMONNHANNBAI_NTR
-		IF RAND:100 < CFLAG:LOCAL:放置日数 + LOCAL:1 || (CFLAG:LOCAL:그외 == 1117 || CFLAG:LOCAL:그외2 == 1117 || CFLAG:LOCAL:그외3 == 1117)
+		IF RAND:100 < CFLAG:LOCAL:放置日数 + LOCAL:1 || (CFLAG:LOCAL:그외 == 1117 || CFLAG:LOCAL:그외2 == 1117 || CFLAG:LOCAL:그외3 == 1117 || CFLAG:LOCAL:그외4 == 1117 || CFLAG:LOCAL:그외5 == 1117 || CFLAG:LOCAL:그외6 == 1117)
 			IF TALENT:LOCAL:ＮＴＲ == 1
-				PRINTFORML ソファーに腰を下ろした太った訪問販売員の발元で、%CALLNAME:LOCAL%が눈の前にそそり立つ男根に愛しそうに舌を這わせている……
-				PRINTFORML %CALLNAME:LOCAL%は페니스から입を離すと、太った訪問販売員に抱き付きながら페니스を女陰にあてがい、ゆっくりと腰を沈めた……
-				PRINTFORMW 大人の팔程もある페니스が何の저항も無く飲み込んでいく膣입は、愛液を垂れ流しながら引く引くと痙攣している……
-				PRINTFORML 太った訪問販売員は%CALLNAME:LOCAL%を優しく抱き寄せると、気を抜いた所を見計らって激しく腰を突き上げた……
-				PRINTFORMW 不意を突かれた%CALLNAME:LOCAL%は言葉にならない声を上げながら、背中を弓なりに反らせた……
+				PRINTFORML 소파에 앉은 뚱뚱한 방문판매원의 발 앞에、%CALLNAME:LOCAL%이 눈앞에 우뚝 솟아있는 남근을 사랑스럽다는 듯이 혀로 흝고 있다……
+				PRINTFORML %조사처리(CALLNAME:LOCAL,"는")% 페니스부터 입을 떼어、뚱뚱한 방문판매원에게 안기어 페니스를 보지에 갖다대어 천천히 허리를 내렸다……
+				PRINTFORMW 성인의 손목만한 페니스가 아무런 저항도 없이 삼킨 보지는、애액을 흘리며 움찔움찔 경련했다……
+				PRINTFORML 뚱뚱한 방문판매원은 %CALLNAME:LOCAL%을 부드럽게 끌어안더니 방심한 순간에 격하게 허리를 튕겨올렸다……
+				PRINTFORMW 불시에 공격받은 %조사처리(CALLNAME:LOCAL,"는")% 말로 표현할 수 없는 괴성을 지르며、등줄기를 활 모양으로 젖혔다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 30
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				PRINTFORML 
-				PRINTFORMW 太った訪問販売員は絶え間なく続く절정の連続に朦朧としている%CALLNAME:LOCAL%の腰をぐっと引き寄せる……
-				PRINTFORML その瞬間、子宮입にあてがわれた男根から욕망の塊が大量に吐き出された……
-				PRINTFORMW %CALLNAME:LOCAL%は自分が征옷されていく감각に包まれながら、太った訪問販売員に입付けをした……
+				PRINTFORMW 뚱뚱한 방문판매원은 끊잆없이 이어지는 절정으로 몽롱해진 %CALLNAME:LOCAL%의 허리를 바짝 끌어당겼다……
+				PRINTFORML 그 순간、자궁구에 갖다댄 자지에서 욕망의 덩어리가 대량으로 뿜어져 나왔다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 자신이 정복당하는 감각에 휩쌓인채、뚱뚱한 방문판매원에게 입맞춤을 했다……
 				PRINTFORML ・
 				PRINTFORML ・・
 				PRINTFORML ・・・
-				PRINTFORML 幾度눈かの사정を終え、太った訪問販売員が페니스を引き抜くと질내に溜まっていた정액が一気に溢れ出した
-				PRINTFORML 息を荒げている%CALLNAME:LOCAL%の膣입はぽっかりと입を開けたまま、満발気にヒクヒクしている……
+				PRINTFORML 몇번의 사정을 마치고、뚱뚱한 방문판매원이 페니스를 빼내자 질내에 고여있던 정액이 일시에 쏟아져 나왔다.
+				PRINTFORML 숨을 헐떡이던 %CALLNAME:LOCAL%의 보지는 뻐끔히 입을 벌린 채 씰룩이고 있다……
 			ELSEIF TALENT:LOCAL:ＮＴＲ == 2
-				PRINTFORML ベットで寝そべる太った訪問販売員の上で%CALLNAME:LOCAL%が腰を弾ませている……
-				PRINTFORML 汗を振りまきながら動く%CALLNAME:LOCAL%の女陰には大人の팔ほどの페니스がみっちりと収まっている……
-				PRINTFORML 腰を動かすたびに溢れ出る子種の量が、%CALLNAME:LOCAL%が犯された횟수を物語っていた……
-				PRINTFORML %CALLNAME:LOCAL%の眼には光が無く、ただただ쾌락の為に腰を振り続けている……
+				PRINTFORML 침대에 누워있는 뚱뚱한 방문판매원의 위로 %CALLNAME:LOCAL%가 허리를 튕기고 있다……
+				PRINTFORML 땀을 흝뿌려가며 움직이는%CALLNAME:LOCAL%의 보지에는 성인의 손목만한 페니스가 물려져있다……
+				PRINTFORML 허리를 움직일 때마다 흘러나오는 정자의 양이、%CALLNAME:LOCAL%가 범해진 횟수를 말해주고 있었다……
+				PRINTFORML %CALLNAME:LOCAL%의 눈동자에 빛은 사라졌고、오직 그저 쾌락을 위해 계속해서 허리를 흔들고 있다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 30
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				PRINTFORML 
-				PRINTFORMW 不意に太った訪問販売員が数回、激しく突き上げると%CALLNAME:LOCAL%の腰を掴み、押さえ込んだ
-				PRINTFORMW 次の瞬間、物凄い量の사정が始まり、%CALLNAME:LOCAL%は結合部から정액を逆流させながら太った訪問販売員の上に崩れ落ちた……
+				PRINTFORML 갑자기 뚱뚱한 방문판매원이 몇차례、격하게 찔러올리더니 %CALLNAME:LOCAL%의 허리를 잡고 억눌렀다
+				PRINTFORMW 다음 순간、엄청난 양의 사정이 시작되어、%조사처리(CALLNAME:LOCAL,"는")% 결합부에서 정액을 역류 시키면서 뚱뚱한 방문판매원의 위로 무너저 내렸다……
 				PRINTFORML ・
 				PRINTFORML ・・
 				PRINTFORML ・・・
-				PRINTFORML 太った訪問販売員は意識を失った%CALLNAME:LOCAL%の女陰に子種が漏れない様にペットボトルで栓をして、部屋を後にした……
+				PRINTFORML 뚱뚱한 방문판매원은 의식을 잃은 %CALLNAME:LOCAL%의 질구에서 정액이 새지않도록 、페트병을 꽂아 막아두고 방을 나왔다……
 			ELSEIF TALENT:LOCAL:연모 || TALENT:LOCAL:친애
-				PRINTFORMW %CALLNAME:LOCAL%は頬を赤らめながら太った訪問販売員にそっと身を寄せると、熱く激しい키스を交わした……
-				PRINTFORMW 唾液の糸を伝わせながらベットへ寝そべる%CALLNAME:LOCAL%の女陰はすでに『남자』を受け入れられるほどに雫に濡れていた……
-				PRINTFORML 太った訪問販売員の極太페니스が질내をこじ開けながらゆっくりと侵入すると、
-				PRINTFORMW %CALLNAME:LOCAL%は襲い来る쾌感にシーツを掴みながら悶えている……
-				PRINTFORML まるで질내を自分の페니스の形に合うように造り変えるかの様な太った訪問販売員の腰使いに、
-				PRINTFORMW %CALLNAME:LOCAL%は悦びに満ちた嬌声で答えている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뺨을 붉히면서 뚱뚱한 방문판매원에게 슬쩍 몸을 기대어、뜨겁게 키스를 나누었다……
+				PRINTFORMW 타액의 실을 나누며 침대에 누워있는 %CALLNAME:LOCAL%의 보니에는 『남자』를 받아들이기 위해 젖어들어있다……
+				PRINTFORML 뚱뚱한 방문판매원의 극태의 페니스가 질내를 열며 천천히 침입하자、
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 덮쳐오는 쾌감에 시트를 부여잡고 몸서리 치고 있다……
+				PRINTFORML 마치 질내를 자신의 페니스의 형태에 맞춰 바꾸겠다는 듯한 뚱뚱한 방문판매원의 허리놀림에、
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 기쁨에 찬 교성으로 대답하고 있다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 30
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				PRINTFORML 
-				PRINTFORMW 巨大な페니스が질내で脈打ち子種を吐き出すたびに、部屋の中に歓喜に満ちた悲鳴が響き渡る……
+				PRINTFORMW 거대한 페니스가 질내에 맥박치는 정자를 토해낼 때마다、방 안에서는 환희에 찬 비명이 울려 퍼진다……
 				PRINTFORML ・
 				PRINTFORML ・・
 				PRINTFORML ・・・
-				PRINTFORML 太った訪問販売員は蕩けた表情で寝そべる%CALLNAME:LOCAL%の女陰から自分の子種が溢れ出す様を見ながら、
-				PRINTFORMW ニタリと입の端を吊り上げた……
+				PRINTFORML 뚱뚱한 방문판매원은 녹은 표정으로 누워있는 %CALLNAME:LOCAL%의 보지에 자신의 정액이 흘러나오는 모습을 보면서、
+				PRINTFORMW 히죽이듯 입가를 끌어올렸다……
 			ELSEIF TALENT:LOCAL:음란 || TALENT:LOCAL:창부
-				PRINTFORMW %CALLNAME:LOCAL%が上気した表情で下着を下ろすと、淫水が糸を引きながらポタポタとカーペットを汚した……
-				PRINTFORMW そして、そのまま四つん這いで太った訪問販売員に秘唇を広げて見せると、巨大なイチモツに一気に膣奥まで突き上げられた……
-				PRINTFORMW 部屋にあられもない声が響き、%CALLNAME:LOCAL%は舌を突き出しながら背中を弓なりに逸らしている……
-				PRINTFORMW 太った訪問販売員は%CALLNAME:LOCAL%の痴態を気に掛ける事無く、子宮입をこじ開けるかのようにゴツゴツと膣奥を突き上げている……
+				PRINTFORMW %CALLNAME:LOCAL%이 상기된 표정으로 속옷을 끌어내리자、애액이 실다리를 만들며 뚝뚝 떨어져 카페트 위를 더럽혔다……
+				PRINTFORMW 그리고、그대로 네발로 기어 뚱뚱한 방문판매원에게 비빌스런 곳을 펼쳐보이자、커다란 자지가 단숨에 질내로 찔러들어갔다……
+				PRINTFORMW 방안에 있을 수 없을 정도의 목소리가 울려퍼지고、%조사처리(CALLNAME:LOCAL,"는")% 혀를 내민채 등줄기를 홀처럼 젖히고 있다……
+				PRINTFORMW 뚱뚱한 방문판매원은 %CALLNAME:LOCAL%의 치태를 신경쓰지 않고、자궁구를 억지로 벌리듯 거칠게 질내를 찌르고 있다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 30
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				PRINTFORML 
-				PRINTFORMW 巨大な페니스が膨張した瞬間、太った訪問販売員の정액が질내に叩きつけるように放たれると、
-				PRINTFORMW %CALLNAME:LOCAL%は머리を振りながらケモノのような喘ぎ声を上げながら절정に達した……
+				PRINTFORMW 거대한 페니스가 팽창한 순간、뚱뚱한 방문판매원의 정액이 질내로 세차게 쏟아지자、
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 머리를 흔들어대며 짐승같은 헐떡임을 소리 높이며 절정에 달했다……
 				PRINTFORML ・
 				PRINTFORML ・・
 				PRINTFORML ・・・
-				PRINTFORMW すっかり太った訪問販売員のイチモツに馴染んだ%CALLNAME:LOCAL%の女陰は大きく입を広げ、ドロドロの子種を垂れ流している……
+				PRINTFORMW 완전히 뚱뚱한 방문판매원의 자지에 친숙해진 %CALLNAME:LOCAL%의 보지는 크게 입을 벌린채、걸쭉한 정자를 흘리고 있다……
 			ELSEIF TALENT:LOCAL:복종 || TALENT:LOCAL:예속
-				PRINTFORMW %CALLNAME:LOCAL%は微笑みながら太った訪問販売員の前で옷をはだけると壁に손をつき尻を突き出した……
-				PRINTFORMW 太った訪問販売員が巨大なイチモツを突き入れると、既に太った訪問販売員のモノに馴染んだ膣壁がキュウキュウと締め付ける……
-				PRINTFORMW 太った訪問販売員が抉るように腰を使っても、%CALLNAME:LOCAL%は愛液を飛び散らせながら悦楽の声を上げている……
-				PRINTFORMW 気を良くした太った訪問販売員は%CALLNAME:LOCAL%に『ご褒美だ』囁くと、子宮に馴染ませるように大量の정액をゆっくりと流し込んだ……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 미소를 지으며 뚱뚱한 방문판매원의 앞에서 옷을 벗고선 벽에 손을 댄체 엉덩이를 내밀었다……
+				PRINTFORMW 뚱뚱한 방문판매원의 거대한 자지가 찔러들어오자、이미 뚱뚱한 방문판매원의 물건에 익숙해진 질벽이 큐우큐우 하며 조여든다……
+				PRINTFORMW 뚱뚱한 방문판매원이 도려내듯 허리를 사용해도、%조사처리(CALLNAME:LOCAL,"는")% 애액을 흘리며 열락의 소리를 높이고 있다……
+				PRINTFORMW 기분이 좋아진 뚱뚱한 방문판매원이 %CALLNAME:LOCAL%에게 『보상이다』라고 속삭이고、자궁에 이미 친숙해져버린 대량의 정액을 천천히 흘려넣었다……
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 30
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				PRINTFORML 
-				PRINTFORMW %CALLNAME:LOCAL%は질내に子種を流し込まれるたびに、奴隷でしかない自分が『愛されている』と思い、幸せそうな笑みを浮かべている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 질내에 흘러들어올 때마다、노예에 지나지 않는 자신이 『사랑받고 있다』고 생각해、행복한 미소를 띄운다……
 				PRINTFORML ・
 				PRINTFORML ・・
 				PRINTFORML ・・・
-				PRINTFORMW %CALLNAME:LOCAL%は幾度と無く自分を『愛してくれた』太った訪問販売員の페니스を感謝の言葉を述べながら舌できれいにしている……
-				PRINTFORMW 太った訪問販売員はその様子を眺めながら満발げな笑みを浮かべている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 여러차례 자신을 『사랑해준』 뚱뚱한 방문판매원의 페니스에 감사의 말을 하면서 혀로 깨끗히 하고 있따.……
+				PRINTFORMW 뚱뚱한 방문판매원はその様子を眺めながら満발げな笑みを浮かべている……
 			ENDIF
 		ELSE
 			IF RAND:2 == 0
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員に抱き寄せられると、自ら唇を重ね舌を絡ませあった……
-				PRINTFORMW %CALLNAME:LOCAL%はそのまま押し倒されると自分から다리を広げ、太った訪問販売員の巨大なイチモツに질내を押し広げられる쾌락に浸った……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원을 끌어안고서、스스로 입술을 포개어 혀를 얽히게 했다……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 그대로 밀어넘어뜨리며 스스로 다리를 벌려、뚱뚱한 방문판매원의 거대한 페니스로 질내를 넓혀가는 쾌락에 젖었다 ……
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
 				PRINTFORML 
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員と舌を絡ませ아이ながら、幾度と無く種付けされている……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원과 혀를 얽어가며、몇 번이나 교배받고 있다……
 			ELSE
-				PRINTFORMW %CALLNAME:LOCAL%は跪くと太った訪問販売員のジッパーを입で下げ、露わになった汗臭いイチモツを躊躇なく咥えた……
-				PRINTFORMW 페니스が十分な硬さになったのを確認すると%CALLNAME:LOCAL%は下着を下ろし、太った訪問販売員に尻を向けおねだりした……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 무릎을 꿇고 뚱뚱한 방문판매원의 지퍼를 입으로 물고 끌어내려、노출되는 쩐내 나는 자지를 망설임 없이 입에 물었다……
+				PRINTFORMW 페니스가 충분한 경도로 발기한 것을 확인한 %조사처리(CALLNAME:LOCAL,"는")% 속옷을 벗어내리고서、뚱뚱한 방문판매원에게 엉덩이를 들이밀며 졸라댔다……
 				CALL NTR_HOUMONNHANNBAI_SEX,LOCAL
 				CFLAG:LOCAL:(2084) += CFLAG:LOCAL:放置日数 * 10
-				PRINTFORMW %CALLNAME:LOCAL%は太った訪問販売員の페니스にこびり付いた정액を舌を使ってキ레이になめっとっている……
-				PRINTFORMW ぽっかりと입を開けた%CALLNAME:LOCAL%の膣입からは入りきらなかった정액が溢れ出している……
+				PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 뚱뚱한 방문판매원의 페니스에 달라붙은 정액을 혀를 사용해 깨끗히 핥아내고 있다……
+				PRINTFORMW 입을 앙 벌린 %CALLNAME:LOCAL%의 보지에는 마저 담지 못한 정액들이 쏟아져나오고 있다……
 			ENDIF
 		ENDIF
 	ENDIF
 	DRAWLINE
 ELSE
-	PRINTFORMW %CALLNAME:LOCAL%はやんわりと断ったようだ
+	PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 완곡히 거절한 것 같다
 	DRAWLINE
 ENDIF
 

@@ -37,12 +37,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2097
+@SKILL_DECIDE_TYPE_2097, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2097
+@SKILL_DAMAGETYPE_2097, ARG
 RETURN 1
 
 
@@ -126,6 +126,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2097
 ;　 설명文の표시
 @SKILL_EXPLAIN_2097
 PRINTL [후열] 적 전열에 3회 만능속성 중 물리데미지. 명중률이 높다.
+PRINTL 대령 카도쿠라의 필살기.
 
 ;継承に필요한部位
 @継承部位_2097,ARG

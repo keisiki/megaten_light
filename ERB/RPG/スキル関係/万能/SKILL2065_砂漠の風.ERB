@@ -22,7 +22,7 @@ RETURN 1
 @SKILL_MAXATTACKNUMBER_2065,ARG
 RETURN 1
 
-@SKILL_CRITICAL_RATE_2065
+@SKILL_CRITICAL_RATE_2065, ARG
 RETURN 0
 
 ;　ＨＰ2を支払うかＭＰ3を支払うか
@@ -40,12 +40,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2065
+@SKILL_DECIDE_TYPE_2065, ARG
 RETURN 1
 ;EX
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2065
+@SKILL_DAMAGETYPE_2065, ARG
 RETURN 1
 
 
@@ -125,7 +125,7 @@ IF LOCAL > BASE:POS(ARG:1):ＨＰ
 		CALL REMOVE_POSITION, ARG:1
 	ELSE
 		SIF !CFLAG:POS(ARG:1):방어フラグ
-			CFLAG:ARG:１moreフラグ = 1
+			CALL ONE_MORE_POINT_ADD,ARG,1
 	ENDIF
 ENDIF
 ;====================================================
@@ -133,7 +133,8 @@ ENDIF
 ;====================================================
 ;설명文の표시
 @SKILL_EXPLAIN_2065
-PRINTL [후열] 적 1체에 만능속성 중 물리데미지. 명중률이 조금 낮다. 악마를 COMP로 돌려보내며, 돌아가지 않았을 때는 추가 행동을 얻는다.
+PRINTL [후열] 적 1체에 만능속성 중 물리데미지를 주고, 악마를 COMP로 되돌린다. 
+PRINTL 명중률이 조금 낮고, COMP로 돌아가지 않는 캐릭터를 공격할 경우 추가 행동을 얻는다.
 
 ;継承に필요한部位
 @継承部位_2065,ARG

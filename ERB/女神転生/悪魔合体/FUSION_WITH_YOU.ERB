@@ -166,9 +166,9 @@ ENDIF
 	ENDIF
 	IF TSフラグ || (TALENT:(LOCAL:1):남자 == 0 && TALENT:(LOCAL:2):남자 == 1) || (TALENT:(LOCAL:1):후타나리 == 0 &&TALENT:(LOCAL:2):후타나리 == 1)
 		PRINTFORML
-		PRINTFORML %CALLNAME:MASTER%は 후타나리가 되었다…
+		PRINTFORML %조사처리(CALLNAME:MASTER,"는")% 후타나리가 되었다…
 		IF TSフラグ
-			PRINTFORM %CALLNAME:MASTER%は 다시 태어난 몸으로 
+			PRINTFORM %조사처리(CALLNAME:MASTER,"는")% 다시 태어난 몸으로 
 			IF EXP:MASTER:Ｖ경험 > 0
 				PRINTFORM 오랜만에
 			ELSE
@@ -197,7 +197,7 @@ ENDIF
 				PRINTFORML 여자용 속옷을 준비해두는 편이 좋을지도 모르겠다.
 			ENDIF
 		ELSE
-			PRINTFORM %CALLNAME:MASTER%は %CALLNAME:(LOCAL:2)%과 하나가 도니 몸으로
+			PRINTFORM %조사처리(CALLNAME:MASTER,"는")% %CALLNAME:(LOCAL:2)%과 하나가 도니 몸으로
 			IF EXP:MASTER:사정경험 > 0
 				PRINTFORM 오랜만의
 			ELSE
@@ -222,7 +222,7 @@ ENDIF
 				PRINTFORML 단지、이런 것이 붙어있으면 더 이상 여성용 팬티는 입지 못할 것이다.
 			ENDIF
 		ENDIF
-		PRINTFORM %CALLNAME:MASTER%は 새로운 몸에서 내뿜은 
+		PRINTFORM %조사처리(CALLNAME:MASTER,"는")% 새로운 몸에서 내뿜은 
 		SIF TALENT:MASTER:모유체질
 			PRINTFORM 모유와 
 		SIF TALENT:MASTER:104
@@ -279,7 +279,7 @@ ENDIF
 			PRINTFORM %CALLNAME:(LOCAL:2)%의 것과 많이 닮은 
 		ENDIF
 		PRINTFORML 날개가 났다.
-		PRINTFORML 몇번쯤 시험해 봤지만、여하튼 %CALLNAME:MASTER%が 공중에 뜰 정도의 힘은 있는 것 같다。
+		PRINTFORML 몇번쯤 시험해 봤지만、여하튼 %조사처리(CALLNAME:MASTER,"가")% 공중에 뜰 정도의 힘은 있는 것 같다。
 		PRINTFORMW 단지 상당히 큰 날개라서 숨기기는 어려울 성싶다. 망토라도 걸칠까…?
 	ENDIF
 	IF TALENT:(LOCAL:2):꼬리 == 1 && TALENT:MASTER:꼬리 == 0 && TALENT:(LOCAL:2):물고기 == 0
@@ -333,7 +333,7 @@ ENDIF
 		PRINTFORML %CALLNAME:MASTER%의 몸은 기계화 되었다…
 		PRINTFORML 쓱 보면 그렇게 보이진 않지만、몸을 움직이면 조금씩 진동이 느껴지고、관절이 구체 파츠처럼 되었다。
 		PRINTFORML 한편 몇번이나 만지면서 살펴봤지만、어째서인지 만지는 감촉도、안쪽에서 기계가 움직이는 감촉도 느껴졌다。
-		PRINTFORML 생각해보니、%CALLNAME:(LOCAL:2)%は 자신이 조교했으니 그 정도는 느낄 수 있었을 것이다。
+		PRINTFORML 생각해보니、%조사처리(CALLNAME:(LOCAL:2),"는")% 자신이 조교했으니 그 정도는 느낄 수 있었을 것이다。
 		PRINTFORMW 그렇다곤 해도 모처럼 기계의 몸이 되었다、차라리 ＣＯＭＰ를 짜넣는 것도 재밌지 않을까…
 	ENDIF
 	IF TALENT:(LOCAL:2):부정형 == 1 && TALENT:MASTER:부정형 == 0
@@ -344,7 +344,7 @@ ENDIF
 		PRINTFORML 기본적으로는 사람의 형태를 유지하고 있지만、부위에 따라선 손가락으로 누르면 그대로 삼켜졌다…
 		PRINTFORML 어쨋든 일부가 슬라임 상태인 육체가 된 것 같다。
 		PRINTFORML 그나저나 이 몸、뭔가 잘못되면 녹아버리는게 아닐까。
-		PRINTFORMW %CALLNAME:MASTER%は 새삼스럽지만 %CALLNAME:(LOCAL:2)%의 노고에 생각이 미쳤다…
+		PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 새삼스럽지만 %CALLNAME:(LOCAL:2)%의 노고에 생각이 미쳤다…
 	ENDIF
 	
 	EXP:MASTER:85 += 1 ;당신合体の횟수を확인

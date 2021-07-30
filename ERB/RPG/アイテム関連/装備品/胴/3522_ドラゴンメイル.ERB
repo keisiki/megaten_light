@@ -57,8 +57,28 @@ RETURN 1
 
 RETURN GET_EQUIPNUM("몸통")
 
+;위협、맹반격
+@장비추가스킬_3522,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36 && EQUIP:(ARG:1):머리 == 3022 && EQUIP:(ARG:1):팔 == 4022 && EQUIP:(ARG:1):발 == 4522
+	SELECTCASE ARG
+		CASE 0
+			RETURN 560
+		CASE 1
+			RETURN 2482
+	ENDSELECT
+ENDIF
+RETURN 0
+
 @필요레벨_3522
 RETURN 50
+
+@장비해설_3522
+PRINTFORML 드래곤의 모습을 본뜬 갑옷
+PRINTFORML 어설픈 불꽃이나 천둥은 도탄된다고 한다
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：위협　맹반격（セット装備）
+PRINTL 《드래곤헬름　드래곤클로　드래곤부츠》
+RESETCOLOR
 
 @장비조건_3522,ARG
 SIF !IS_LOOKSLIKE_MALE(ARG)

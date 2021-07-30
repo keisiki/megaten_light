@@ -36,12 +36,12 @@ RETURN 7
 ;충격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1016
+@SKILL_DECIDE_TYPE_1016, ARG
 RETURN 2
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_1016
+@SKILL_DAMAGETYPE_1016, ARG
 RETURN 2
 
 
@@ -134,9 +134,9 @@ IF RESULT == 1 && CFLAG:ARG:기합フラグ > 0
 		C = CFLAG:LOCAL:무효フラグ
 		CFLAG:LOCAL:무효フラグ = 0
 	ENDIF
-	IF CFLAG:LOCAL:빙결무효화횟수 > 0
-		D = CFLAG:LOCAL:빙결무효화횟수
-		CFLAG:LOCAL:빙결무효화횟수 = 0
+	IF CFLAG:LOCAL:충격무효화횟수 > 0
+		D = CFLAG:LOCAL:충격무효화횟수
+		CFLAG:LOCAL:충격무효화횟수 = 0
 	ENDIF
 	IF A + B + C + D > 0
 		PRINTFORML 　　TARGET:[{ARG:1,2}] %CALLNAME:LOCAL,20,LEFT%　>>>>>>　내성을 관통했다!

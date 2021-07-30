@@ -10,32 +10,39 @@ Z= 0
 ;CALLTRAIN時は표시しない
 SIF TFLAG:CALLTRAIN
 	RETURN 0
-;コマンドを全て체크
+;명령어를 모두 체크
 LOCAL:1 = -1
 FOR LOCAL, 0, 1000
-	;名前の長さが0の場合、ないものとみなす
+	IF TEQUIP:주도권
+	;밀어넘어뜨려진다 시 실행가능한 커맨드 필터링
+		CALL TAKEDOWN_ABLECOM, LOCAL
+		;결과값이 0이면 실행불가
+		SIF RESULT == 0
+			CONTINUE
+	ENDIF
+	;이름의 길이가 0인 경우、없는 것으로 간주한다
 	SIF STRLENS(TRAINNAME:LOCAL) == 0
 		CONTINUE
-	;派生コマンドは蹴る
+	;파생 명령어는 버린다
 	TRYCCALLFORM COMTYPE_{LOCAL}
 		SIF RESULT == COMTYPE("派生系")
 			CONTINUE
 	CATCH
 	ENDCATCH
 	LOCAL:1++
-	;COMABLEを체크
+	;COMABLE를 체크
 	CALL COM_ABLE_COMMON_D, LOCAL
 	SIF RESULT == 0
 		CONTINUE
-	;派生コマンドになるかどうかを체크
+	;파생 명령어인지 아닌지를 체크
 	TRYCCALLFORM JUMP_COM{LOCAL}
 		LOCAL:2 = RESULT >= 0 ? RESULT # LOCAL
 	CATCH
 		LOCAL:2 = LOCAL
 	ENDCATCH
-	;MENU配列に実行可能なコマンドを登録していく
+	;MENU배열에 실행 가능한 명령어를 등록해 나가기
 	Q:(LOCAL:1) = LOCAL:2
-	;필터関係は派生前で체크するので注意
+	;필터관계는 파생 전에 체크하므로 주의할 것
 	SIF GET_COM_FILTERING(LOCAL, TARGET)
 		CONTINUE
 	TRYCCALLFORM COMTYPE_{LOCAL}
@@ -43,10 +50,43 @@ FOR LOCAL, 0, 1000
 			CONTINUE
 	CATCH
 	ENDCATCH
-	;すでに표시されているコマンドがここまで来た場合は帰る
+	;이미 표시된 명령어가 여기까지 오면 돌아간다
 	SIF MATCH(R, LOCAL:2)
 		CONTINUE
-	;コマンド표시
+	
+	;삽입 파생커맨드인지 검사
+	CALL CHECK_EX_COM_INSERTING, LOCAL
+	;만약 파생커맨드라면 커맨드가 다른 색으로 칠해진다
+	IF LOCAL == 224
+	;밀어넘어뜨려진다/발버둥친다
+		IF TEQUIP:주도권
+		;발버둥친다(빨강)
+			SETCOLOR 0xff0000
+		ELSE
+		;밀어넘어뜨린다(핑크)
+			SETCOLOR 0xfe2ef7
+		ENDIF
+	ELSEIF LOCAL == 220
+	;조교자 바지내리기/팬티벗기(청록색)
+		SETCOLOR 0x01dfa5
+	ELSEIF LOCAL == 221 || LOCAL == 226 || LOCAL == 227 || LOCAL == 228
+	;가슴팍열기, 바지내리기(속옷제치기, 속옷벗기기), 브래지어 벗기기, 신발 벗기기 - 연한 녹색
+		SETCOLOR 0x00ff40
+	ELSEIF LOCAL == 229
+	;조수도 참가한다(3P플레이/엷은 분홍색)
+		SETCOLOR 0xf781be
+	ELSEIF RESULT == 1
+	;파생커맨드 - 살몬핑크
+		SETCOLOR 0xff9999
+	ELSEIF RESULT == 2
+	;체위커맨드 - 찐한 자주색
+		SETCOLOR 0xff3399
+	;목욕탕플레이계
+	ELSEIF LOCAL == 34 || LOCAL == 84 || LOCAL == 187 || LOCAL == 188
+		SETCOLOR 0x2e64fe
+	ENDIF
+	
+	;커맨드 표시
 	TRYCCALLFORM COMNAME{LOCAL:2}
 		PRINTFORMC %RESULTS%[{LOCAL:1,3}]
 		DEBUGPRINT LOCAL:1,LOCAL:2,LOCAL:3
@@ -54,9 +94,18 @@ FOR LOCAL, 0, 1000
 		PRINTFORMC %TRAINNAME:(LOCAL:2)%[{LOCAL:1,3}]
 		DEBUGPRINT LOCAL:1,LOCAL:2,LOCAL:3
 	ENDCATCH
-	;ここまできたら표시されたものとして登録される
+	
+	;삽입 파생커맨드인지 검사
+	CALL CHECK_EX_COM_INSERTING, LOCAL
+	;만약 파생커맨드 혹은 체위커맨드라면 칠해진 다른 색이 원래대로 복구된다
+	;아니면 가슴팍열기, 밀어넘어뜨려지기, 바지내리기(조교자), 바지내리기(속옷제치기, 속옷벗기기), 브래지어 벗기기, 신발 벗기기이면 칠해진 다른 색이 원래대로 복구된다
+	IF RESULT == 1 || RESULT == 2 || LOCAL == 220 || LOCAL == 224 || (LOCAL == 221 || LOCAL == 226 || LOCAL == 227 || LOCAL == 228) || LOCAL == 229 || (LOCAL == 34 || LOCAL == 84 || LOCAL == 187 || LOCAL == 188)
+		RESETCOLOR
+	ENDIF
+	
+	;이쯤 되면 표시된 것으로 등록된다
 	R:(LOCAL:1) = LOCAL:2
-	;改行処理
+	;줄바꿈(개행) 처리
 	CALL CHECK_NEWLINE
 NEXT
 
@@ -101,7 +150,7 @@ IF !CFLAG:TARGET:옵션필터
 	Z = 0
 	PRINTC 내역표시[800]
 	CALL CHECK_NEWLINE
-	PRINTC 불결표시[801]
+	PRINTC 더러움 표시 & 관리[801]
 	CALL CHECK_NEWLINE
 	PRINTC 능력표시[802]
 	CALL CHECK_NEWLINE
@@ -126,12 +175,26 @@ IF !CFLAG:TARGET:옵션필터
 	NEXT
 		PRINTC 착의설정[803]
 		CALL CHECK_NEWLINE
-	IF HAVE_PENIS(PLAYER) || HAVE_PENIS(TARGET)
-		IF ITEM:45 > 0
-			PRINTC 콘돔설정[804]
-			CALL CHECK_NEWLINE
-		ENDIF
+	IF ( HAVE_PENIS(PLAYER) || HAVE_PENIS(TARGET) || (ASSI >= 0 && HAVE_PENIS(ASSI)) ) && ITEM:45 > 0
+	;콘돔 사용가능
+		PRINTC 콘돔설정[804]
+		CALL CHECK_NEWLINE
+	ELSE
+	;콘돔 사용불가능
+		SETCOLOR 0x1c1c1c
+		PRINTC 콘돔설정[804]
+		RESETCOLOR
+		CALL CHECK_NEWLINE
+	ENDIF
+	IF HAVE_PENIS(PLAYER) || HAVE_PENIS(TARGET) || (ASSI >= 0 && HAVE_PENIS(ASSI))
+	;3명중 1명이라도 페니스가 있다
 		PRINTC 자동사정부위변경[805]
+		CALL CHECK_NEWLINE
+	ELSE
+	;3명 전부 페니스 없다
+		SETCOLOR 0x1c1c1c
+		PRINTC 자동사정부위변경[805]
+		RESETCOLOR
 		CALL CHECK_NEWLINE
 	ENDIF
 	IF ASSIPLAY
@@ -141,22 +204,24 @@ IF !CFLAG:TARGET:옵션필터
 		PRINTC 능력표시(마스터)[806]
 		CALL CHECK_NEWLINE
 	ENDIF
-
-	IF (!(CFLAG:초기주도권 || TALENT:쾌감을부정 || TALENT:저항 || TALENT:억압) && TALENT:남자 ) || ABL:순종 > 2
-		PRINTFORMC 주도권을 \@ TEQUIP:주도권 ? 받는다 # 건네준다　 \@[808]
+	
+	;노예/조수 교대(주도권을 교대한다)는, 조교자가 아나타여야만 하고, 조수의 체력이 700 이상이어야 하며, 일부 함락소질을 가지고 있어야만 가능
+	IF (PLAYER == MASTER) && (ASSI >= 0 && (TALENT:ASSI:연모 || TALENT:ASSI:친애 || TALENT:ASSI:복종 || TALENT:ASSI:예속) && BASE:ASSI:체력 >= 700) && !TEQUIP:28
+		IF TEQUIP:주도권
+			PRINTFORMC 주도권을 교대한다[850]
+		ELSE
+			PRINTFORMC 노예/조수 교대[850]
+		ENDIF
 		CALL CHECK_NEWLINE
 	ENDIF
-
-	;섹스 지속 여부
-	PRINTFORMC 삽입 \@ CFLAG:TARGET:섹스지속 ? 단기화 # 장기화 \@[850]
-	CALL CHECK_NEWLINE
-
-	;촉수소환 및 섹스 중에는 교대불가
-	IF ASSI >= 0
+	
+	;조수가 있어야 하고, 밀어넘어뜨려지기 상태가 아니어야 한다
+	IF ASSI >= 0 && !TEQUIP:주도권
+		;촉수소환 및 섹스 중에는 교대불가
 		IF ASSIPLAY && TEQUIP:25 == 0
-			PRINTC 마스터와교대[900]
+			PRINTC 마스터가 조교한다[900]
 		ELSEIF TEQUIP:25 == 0
-			PRINTC 조수와교대[900]
+			PRINTC 조수가 조교한다[900]
 		ENDIF
 		CALL CHECK_NEWLINE
 	ENDIF
@@ -204,22 +269,33 @@ PRINTFORMC 일시적함락소질변경\@ CFLAG:일시적함락소질변경 ? ON#
 CALL CHECK_NEWLINE
 PRINTC 조교종료[999]
 PRINTL
-IF PREVCOM >= 0
+IF (TFLAG:61 > 0) && (STRLENS(TSTR:3) > 0) && PREVCOM >= 0
+;노예&조수 3P 기승위 표시
+	PRINTL 
+	PRINT ＜전회조교커맨드:
+	PRINTS TSTR:0
+	PRINT  & 
+	PRINTS TSTR:3
+	PRINTL ＞
+ELSEIF PREVCOM >= 0
 	PRINTL 
 	PRINT ＜전회조교커맨드:
 	PRINTS TSTR:0
 	SIF TFLAG:전회の조교者 == ASSI
 		PRINT (조수)
 	PRINTL ＞
-	ELSE
+ELSE
 	PRINTL 
 	PRINT ＜전회조교커맨드:없음＞
 ENDIF
 
 @USERCOM
+#DIM DYNAMIC TEMPCOM ;명령어 저장변수
+#DIM DYNAMIC TEMPCHAR ;캐릭번호 저장변수
 #LOCALSIZE 2
 IF RESULT < 0 || RESULT > 999
 	RETURN 0
+;커맨드필터들 입력계
 ELSEIF (RESULT >= 700 && RESULT <= 712) || RESULT == 715
 	INVERTBIT CFLAG:TARGET:(RESULT + 170 - 700), 0
 ELSEIF RESULT == 800
@@ -235,28 +311,59 @@ ELSEIF RESULT == 802
 ELSEIF RESULT == 803
 	CALL CLOTHES_CHANGE,TARGET
 	RETURN 1
-ELSEIF RESULT == 804 && ( HAVE_PENIS(PLAYER) || HAVE_PENIS(TARGET) ) && ITEM:45 > 0
+ELSEIF RESULT == 804 && ( HAVE_PENIS(PLAYER) || HAVE_PENIS(TARGET) || (ASSI >= 0 && HAVE_PENIS(ASSI)) ) && ITEM:45 > 0
 	CALL CONDOM_SETTING
 	RETURN 1
-ELSEIF RESULT == 805 && ( HAVE_PENIS(PLAYER) || HAVE_PENIS(TARGET) )
+ELSEIF RESULT == 805 && ( HAVE_PENIS(PLAYER) || HAVE_PENIS(TARGET) || (ASSI >= 0 && HAVE_PENIS(ASSI)) )
 	CALL SAMENPLACE_SETTING
 	RETURN 1
 ELSEIF RESULT == 806
 	CALL SHOW_CHARADATA,PLAYER
 	WAIT
 	RETURN 1
-ELSEIF RESULT == 808 && ((!(CFLAG:초기주도권 || TALENT:쾌감을부정 || TALENT:저항 || TALENT:억압) && TALENT:남자 ) || ABL:순종 > 2)
-	INVERTBIT TEQUIP:주도권 , 0
+ELSEIF RESULT == 850 && (PLAYER == MASTER) && (ASSI >= 0 && (TALENT:ASSI:연모 || TALENT:ASSI:친애 || TALENT:ASSI:복종 || TALENT:ASSI:예속) && BASE:ASSI:체력 >= 700) && !TEQUIP:28
+;노예/조수 교대
+	TEMPCHAR = TARGET ;임시변수에다 조교대상의 캐릭번호를 저장
+	TARGET = ASSI ;조수를 조교대상으로 변경
+	ASSI = TEMPCHAR ;전 조교대상을 조수로 삼음
+	IF TFLAG:60 > 0 ;조수가 조교대상이 되면, 모든 삽입 상태가 해제된다
+		TFLAG:60 = 0
+		TEQUIP:TARGET:Ｖ삽입자 = -1
+		TEQUIP:TARGET:Ａ삽입자 = -1
+		TCVAR:TARGET:페니스사용대상 = -1
+		TEQUIP:PLAYER:Ｖ삽입자 = -1
+		TEQUIP:PLAYER:Ａ삽입자 = -1
+		TCVAR:PLAYER:페니스사용대상 = -1
+	ENDIF
+	SIF TFLAG:62 > 0 ;노예/조수를 교대할 경우, 조수 삽입유지가 해제되어야 한다
+		TFLAG:62 = 0 ;조수기승위 유지변수 OFF
 	RETURN 1
-ELSEIF RESULT == 850
-	INVERTBIT CFLAG:TARGET:섹스지속 , 0
-	RETURN 1
-ELSEIF RESULT == 900 && ASSI > 0 && TEQUIP:25 == 0
+ELSEIF RESULT == 900 && !TEQUIP:주도권 && (ASSI >= 0 && TEQUIP:25 == 0)
 	IF ASSIPLAY
+	;조교역할(조수 → 주인)
 		ASSIPLAY = 0
+		IF TFLAG:60 > 0 ;조수와 관련한 모든 삽입 상태가 해제된다
+			TFLAG:60 = 0
+			TEQUIP:TARGET:Ｖ삽입자 = -1
+			TEQUIP:TARGET:Ａ삽입자 = -1
+			TCVAR:TARGET:페니스사용대상 = -1
+			TEQUIP:ASSI:Ｖ삽입자 = -1
+			TEQUIP:ASSI:Ａ삽입자 = -1
+			TCVAR:ASSI:페니스사용대상 = -1
+		ENDIF
 		PLAYER = MASTER
 	ELSE
+	;조교역할(주인 → 조수)
 		ASSIPLAY = 1
+		IF TFLAG:60 > 0 ;주인과 관련한 모든 삽입 상태가 해제된다
+			TFLAG:60 = 0
+			TEQUIP:TARGET:Ｖ삽입자 = -1
+			TEQUIP:TARGET:Ａ삽입자 = -1
+			TCVAR:TARGET:페니스사용대상 = -1
+			TEQUIP:MASTER:Ｖ삽입자 = -1
+			TEQUIP:MASTER:Ａ삽입자 = -1
+			TCVAR:MASTER:페니스사용대상 = -1
+		ENDIF
 		PLAYER = ASSI
 	ENDIF
 	RETURN 1
@@ -297,14 +404,65 @@ ELSEIF RANGE(RESULT, 981, 988)
 ELSEIF RESULT == 993
 	CALL COM_FILTER, TARGET
 	RETURN 1
+ELSEIF RESULT == 994
+	CALL 顔グラ변경,TARGET
+	RETURN 1
 ELSEIF RESULT == 998
 	INVERTBIT CFLAG:일시적함락소질변경 , 0
 	RETURN 1
 ELSEIF RESULT == 999
 	BEGIN AFTERTRAIN
 	RETURN 1
+;대부분의 조교커맨드를 실행하는 실질적인 부분
 ELSEIF Q:RESULT >= 0
-	DOTRAIN Q:RESULT
+	TEMPCOM = Q:RESULT ;실질적인 커맨드 번호 임시저장 --> RESULT에 입력되는 값이 혼동되니 이를 막기 위해 미리 저장해둔다
+	IF TEQUIP:주도권
+	;밀어넘어뜨려진다 시 실행가능한 커맨드 필터링
+		CALL TAKEDOWN_ABLECOM, TEMPCOM
+		;결과값이 0이면 실행불가
+		SIF RESULT == 0
+			RETURN 0
+	ENDIF
+	;PRINTFORML RESULT값: {RESULT} ;디버그용
+	;PRINTFORML 실행커맨드 실질적인 번호(Q:RESULT): {Q:RESULT} ;디버그용
+	;PRINTFORML 실행커맨드 임시저장 번호(TEMPCOM): {TEMPCOM} ;디버그용
+	;해당 커맨드의 계열을 읽어들여서, 만일 그 계열의 필터가 켜져 있을 경우에만 해당 커맨드를 실행한다
+	;필터 = 0 -> 물색(실행가능)
+	;필터 = 0번 이외 -> 회색(실행불가능)
+	TRYCALLFORM COMTYPE_{TEMPCOM}
+	IF RESULT == COMTYPE("애무계") && CFLAG:TARGET:애무계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("커뮤계") && CFLAG:TARGET:커뮤계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("도구계") && CFLAG:TARGET:도구계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("대조교자도구계") && CFLAG:TARGET:대조교자도구계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("Ｖ성교계") && CFLAG:TARGET:174 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("Ａ성교계") && CFLAG:TARGET:Ａ성교계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("봉사계") && CFLAG:TARGET:봉사계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("조교자봉사계") && CFLAG:TARGET:조교자봉사계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("ＳＭ계") && CFLAG:TARGET:ＳＭ계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("조수・레즈계") && CFLAG:TARGET:조수・레즈계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("하드계") && CFLAG:TARGET:하드계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("촉수계") && CFLAG:TARGET:촉수계필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("특수커맨드계") && CFLAG:TARGET:특수커맨드필터 == 0
+		DOTRAIN TEMPCOM
+	ELSEIF RESULT == COMTYPE("派生系")
+		DOTRAIN TEMPCOM
+	ELSE
+	;필터가 꺼져 있는 커맨드를 실행할 경우
+		RETURN 0
+	ENDIF
+	;DOTRAIN Q:RESULT
 ENDIF
 RETURN 0
 
@@ -519,7 +677,7 @@ A = 0
 B = 0
 C = 0
 T = 0
-PRINTW 콘돔설정을 실시하는 대상을 선택해주세요
+PRINTFORMW 콘돔설정을 실시하는 대상을 선택해주세요 (현재 콘돔 갯수: {ITEM:45})
 PRINTL  
 FOR LCOUNT, 0, 3
 	IF (HAVE_PENIS(MASTER)) && A == 0
@@ -531,7 +689,7 @@ FOR LCOUNT, 0, 3
 		ELSE
 			PRINTL (미착용)
 		ENDIF
-			A = 1
+		A = 1
 	ELSEIF ASSI >= 0
 		IF HAVE_PENIS(ASSI) && B == 0
 			PRINTFORM [{LCOUNT}] %CALLNAME:ASSI%
@@ -553,7 +711,7 @@ FOR LCOUNT, 0, 3
 		ELSE
 			PRINTL (미착용)
 		ENDIF
-			C = 1
+		C = 1
 	ENDIF
 NEXT
 PRINTL [100]돌아간다
@@ -619,24 +777,24 @@ ELSEIF RESULT == 1
 		IF TALENT:PLAYER:4 || TALENT:PLAYER:7
 			IF PLAYER != T
 				IF RAND:2 == 0
-					PRINTFORMW %CALLNAME:PLAYER%は淫らな笑みを浮かべて콘돔を取り出すと、%CALLNAME:T%の페니스に입で装着させた…
+					PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 음란한 미소를 띠면서 콘돔을 꺼내、%CALLNAME:T%의 페니스에 입으로 장착시켰다…
 				ELSE
-					PRINTFORMW %CALLNAME:PLAYER%は慣れた손つきで콘돔を咥えると、そのまま입で%CALLNAME:T%の페니스に装着させた…
+					PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 익숙한 솜씨로 콘돔을 물어、그대로 입으로 %CALLNAME:T%의 페니스에 장착시켰다…
 				ENDIF
 			ELSEIF PLAYER == MASTER && ASSI > 0
 				SELECTCASE RAND:3
 					CASE 0
-						PRINTFORMW %CALLNAME:PLAYER%は콘돔を取り出すと、%CALLNAME:ASSI%に입で%CALLNAME:T%の페니스に装着させた…
+						PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 콘돔을 꺼내、%CALLNAME:ASSI%에게 입으로 %CALLNAME:T%의 페니스에 장착시키게 했다…
 					CASE 1
-						PRINTFORMW %CALLNAME:ASSI%は慣れた손つきで콘돔を咥えると、そのまま입で%CALLNAME:T%の페니스に装着した…
+						PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 익숙한 솜씨로 콘돔을 물어、그대로 입으로 %CALLNAME:T%의 페니스에 장착시켰다…
 					CASE 2
-						PRINTFORMW %CALLNAME:PLAYER%は콘돔を取り出すと、%CALLNAME:TARGET%に입で%CALLNAME:T%の페니스に装着させた…
+						PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 콘돔을 꺼내、%CALLNAME:TARGET%에게 입으로 %CALLNAME:T%의 페니스에 장착시키게 했다…
 				ENDSELECT
 			ELSE
-				PRINTFORMW %CALLNAME:PLAYER%は콘돔を取り出すと、%CALLNAME:TARGET%に입で%CALLNAME:T%の페니스に装着させた…
+				PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 콘돔을 꺼내、%CALLNAME:TARGET%에게 입으로 %CALLNAME:T%의 페니스에 장착시키게 했다…
 			ENDIF
 		ELSE
-			PRINTFORMW %조사처리(CALLNAME:T,"는")%、콘돔을 꼈다
+			PRINTFORMW %조사처리(CALLNAME:T,"는")% 콘돔을 꼈다
 		ENDIF
 		ITEM:45 -= 1
 		TEQUIP:T:35 = 1

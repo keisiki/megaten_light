@@ -33,11 +33,11 @@ RETURN 12
 RETURN 0
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4215
+@SKILL_DECIDE_TYPE_4215, ARG
 RETURN 2
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_4215
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_4215, ARG
 RETURN 2
 
 
@@ -71,7 +71,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4215, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4215,ARG
@@ -123,14 +123,14 @@ FOR LOCAL,LOCAL:2,LOCAL:3
 		CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LOCAL:1) + "강화") = MIN(32, CFLAG:POS(LOCAL):(GET_BATTLESTATUS(LOCAL:1) + "강화") + 4)
 	NEXT
 NEXT
-PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@の全能力が上がった！
+PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@의 전 능력이 상승했다！
 ;====================================================
 ;実行内容ここまで
 ;====================================================
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_4215
-PRINTL 아군の全能力を上昇させる。
+PRINTL 아군의 전 능력을 상승시킨다。
 
 ;継承に필요な部位
 @継承部位_4215,ARG
@@ -157,9 +157,9 @@ RETURN 2
 @참가조건표시_4215,ARG
 SELECTCASE ARG
 	CASE 1
-		PRINTFORM カジャ系스킬
+		PRINTFORM 카쟈계스킬
 	CASE 2
-		PRINTFORM カジャ系스킬
+		PRINTFORM 카쟈계스킬
 	CASE 3
 		PRINTFORM 자애의기도
 ENDSELECT

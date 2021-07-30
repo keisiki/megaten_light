@@ -8,7 +8,7 @@ RESULTS = 모듬스시세트
 @SKILL_HITRATE_3075, ARG
 RETURN 100
 
-;　威힘
+;　위력
 @SKILL_POWER_3075, ARG
 RETURN 30
 
@@ -36,10 +36,10 @@ RETURN 0
 ;　1EXTRAか2MAGICか
 @SKILL_DECIDE_TYPE_3075
 RETURN 0
-;魔法
+;마법
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3075
+;　1물리데미지で計算するか2마법데미지で計算するか
+@SKILL_DAMAGETYPE_3075, ARG
 RETURN 2
 
 
@@ -51,11 +51,11 @@ RETURN 2
 @SKILL_RANGE_3075,ARG
 RETURN 1
 
-;　範囲　11체　21열　3전체　4　적아군전체
+;　범위　1１체　2１열　3전체　4　적아군전체
 @SKILL_SPHERE_3075,ARG
 RETURN 3
 
-;　 効果の타입　1공격、2회복、3상태変化、4特殊、5상태회복
+;　 効果の타입　1공격、2회복、3상태변화、4特殊、5상태회복
 @SKILL_EFECT_3075
 RETURN 2
 
@@ -127,7 +127,7 @@ NEXT
 ;====================================================
 @ACTION_FIELD_3075,ARG,ARG:1
 ITEM:1075 -= 1
-PRINTFORML %ITEMNAME:1075%を使った。
+PRINTFORML %ITEMNAME:1075%을 사용했다。
 
 ;회복量
 LOCAL = FIELD아이템関数(3,150)
@@ -149,11 +149,11 @@ NEXT
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3075
-PRINTL リーズナブルなお値段のお寿司の詰め合わせを複数個セットにしたもの
-PRINTL たとえ전투中でも손渡されたらおいしく食べる。
-PRINTL 메뉴はマグロ赤身、マグロ中トロ、イカ、甘エビ、アナゴ、ウニ
-PRINTL イクラ、エンガワ、파トロ、サーモン。
-PRINTL 아군전체のＨＰを150회복する。
+PRINTL 저렴한 가격의 초밥 모둠을 여러 개 세트로 묶은것.
+PRINTL 설령 전투중이라도 먹으면 맛있게 먹을 수 있다。
+PRINTL 메뉴는 참치 붉은살, 참치 뱃살, 오징어, 새우, 붕장어, 성게
+PRINTL 연어, 지느러미, 트로, 연어.
+PRINTL 아군전체의 ＨＰ를 150 회복시킨다。
 
 @최대소지수_3075
 RETURN 10

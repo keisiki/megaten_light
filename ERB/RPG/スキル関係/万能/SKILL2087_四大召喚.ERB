@@ -3,8 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_2087,ARG
-RESULTS = 4대정령 소환
-
+IF SKILL_CHANGE(ARG, 3118)
+	RESULTS = 사성수해방
+ELSE
+	RESULTS = 4대정령 소환
+ENDIF
 ;　명중
 @SKILL_HITRATE_2087, ARG
 RETURN 120
@@ -36,12 +39,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2087
+@SKILL_DECIDE_TYPE_2087, ARG
 RETURN 2
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2087
+@SKILL_DAMAGETYPE_2087, ARG
 RETURN 2
 
 
@@ -72,6 +75,9 @@ SIF ARG == 1
 @SKILL_SUCCESSION_TYPE_2087
 RETURN 20
 ;만능
+
+@継承不能_2087
+RETURN 1
 
 ;속도보정
 @SKILL_SPEED_2087, ARG = -1
@@ -122,8 +128,11 @@ CALL ATTACK_FIELD,ARG,ARG:1,2087
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2087
-PRINTL [후열] 적 전체에 4회 만능속성 중 마법데미지. 명중률이 높다.
-
+IF U > 0 && U < CHARANUM && NO:U == 3118
+	PRINTL 사성수를 동시 소환하여 적진에 풀어준다.사성수는 날뛰다가 율의에 COMP로 돌아온다.
+ELSE
+	PRINTL [후열] 적 전체에 4회 만능속성 중 마법데미지. 명중률이 높다.
+ENDIF
 ;継承に필요한部位
 @継承部位_2087,ARG
 RETURN 1

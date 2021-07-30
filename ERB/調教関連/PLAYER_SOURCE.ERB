@@ -10,6 +10,7 @@
 ;	Edit	Date			Author					Reason
 ;	001		20XX/XX/XX		----					新規作成
 ;	002		2011/03/03		迷走中の人				쾌ＣＶＡＢのソースを해방
+;	003		2019/03/28		TR(SAYA)				샤세트마	が3日持続する様に
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 ;@SOURCE_CHECK_PLAYER
@@ -791,8 +792,8 @@ ELSE
 ENDIF
 
 ;無限사정薬が有効なら再装填時間を0に
-SIF CFLAG:MASTER:無限사정薬フラグ == 1
+SIF CFLAG:MASTER:無限사정薬フラグ > 0
 	CFLAG:MASTER:9 = 0
-SIF CFLAG:PLAYER:無限사정薬フラグ == 1
+SIF CFLAG:PLAYER:無限사정薬フラグ > 0
 	CFLAG:PLAYER:9 = 0
 

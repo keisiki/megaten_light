@@ -59,6 +59,16 @@ RETURN 0
 @장비箇所_2289
 RETURN GET_EQUIPNUM("검")
 
+;섬머솔트
+@장비추가스킬_2289,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 206
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -80,6 +90,9 @@ PRINTL 장비조건：LV35～
 
 @장비해설_2289
 PRINTL 흑단목으로 만들어진 톤파
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：섬머솔트
+RESETCOLOR
 
 RETURN 0
 

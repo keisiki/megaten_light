@@ -9,7 +9,6 @@
 ;
 ;	Edit	Date			Author					Reason
 ;	001		2011/10/28		旅人					新規作成
-;	002		2019/09/24		(ﾟдﾟ)					약속・타워브릿지
 ;
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
@@ -19,17 +18,9 @@
 ; 나선의뱀と違って汎用스킬扱い。カード化や継承が可能。性能は下位互換
 ;-------------------------------------------------------------------------------
 
-
-
 ;스킬名
 @SKILL_NAME_2062,ARG
-;華恋が사용する場合約束タワーブリッジに
-;IF ARG > 0 && NO:ARG == [[キャラ:카렌（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카렌（무대소녀）]]) == 1
-	RESULTS = 약속・타워브릿지
-ELSE
-	RESULTS = 만마의일격
-ENDIF
+RESULTS = 만마의일격
 
 
 ;　명중
@@ -38,13 +29,7 @@ RETURN 100
 
 ;　威힘
 @SKILL_POWER_2062, ARG
-;華恋が사용する場合、威힘を盛る(主人公보정で나선의뱀より上くらいで）
-;IF ARG > 0 && NO:ARG == [[キャラ:카렌（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카렌（무대소녀）]]) == 1
-	RETURN 525
-ELSE
-	RETURN 420
-ENDIF
+RETURN 420
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_2062,ARG
@@ -61,13 +46,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_2062,ARG
-;華恋が사용する場合、コスト増加(나선의뱀相当に）
-;IF ARG > 0 && NO:ARG == [[キャラ:카렌（무대소녀）]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:카렌（무대소녀）]]) == 1
-	RETURN 42
-ELSE
-	RETURN 34
-ENDIF
+RETURN 34
 
 ;　相性
 @SKILL_TYPE_2062,ARG
@@ -75,12 +54,12 @@ RETURN GET_TYPE_NUM("만능")
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2062
+@SKILL_DECIDE_TYPE_2062, ARG
 RETURN 1
 ;EXTRA
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2062
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2062, ARG
 RETURN 1
 
 
@@ -162,13 +141,8 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2062
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2062
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:카렌（무대소녀）]]
-	PRINTL 소녀のキラめきが、始まりの東京タワーを召喚し、いかな운命とて繋ぎとめる。
-	PRINTL 本来はたった一人の友のために放たれる光り輝くキラめきの炸裂である。
-	PRINTL 적1체、만능相性の特大ダメージ。物理依存、後列사용可
-ELSE
-	PRINTL [후열] 적 1체에 만능속성 특대 물리데미지.
-ENDIF
+PRINTL [후열] 적 1체에게 모든 방호를 관통하는 신의 불꽃을 담은 일격을 쏘는
+PRINTL 적 1체에 만능속성 특대 물리데미지.
 
 ;継承に필요な部位
 @継承部位_2062,ARG

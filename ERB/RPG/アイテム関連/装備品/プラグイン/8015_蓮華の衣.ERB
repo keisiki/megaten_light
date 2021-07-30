@@ -1,12 +1,13 @@
 ﻿;======================================================
 ;장비品の데이터
-;연꽃의옷
+;연꽃의옷	
 ;락슈미
 ;======================================================
 @기본능력수정_8015,ARG,ARG:1 = -1
 SELECTCASE GET_BASESTATUS(ARG)
 	CASE "인내력"
-		RETURN 6
+		LOCAL = BASE:(ARG:1):인내력/6
+		RETURN LOCAL
 ENDSELECT
 RETURN 0
 
@@ -22,6 +23,15 @@ RETURN 0
 SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@バステ내성_8015,ARG,ARG:1 = -1
+SELECTCASE GET_STATE(ARG)
+	CASE "HAPPY"
+		RETURN -20
+	CASE "SLEEP"
+		RETURN -20
+ENDSELECT
+RETURN 0
 
 @공격상성_8015, ARG = -1
 RETURN 2
@@ -45,10 +55,15 @@ RETURN 0
 RETURN 1
 
 @필요레벨_8015
-RETURN 50
+RETURN 40
 
 @구입조건_8015
 RETURN 0
 
+@장비추가스킬_8015,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
 @장비해설_8015
-PRINTL 인내력이 많이 올라간다
+PRINTL 인내력이 1/6 오르고、HAPPY와 SLEEP 내성을 약간 얻는다

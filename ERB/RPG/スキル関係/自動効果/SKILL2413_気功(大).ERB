@@ -3,15 +3,15 @@
 
 ;스킬名
 @SKILL_NAME_2413,ARG
-;キャス여우が사용する場合영혼숨결に
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:캐스여우]]) == 1
+;캐스여우が사용する場合魂息吹に
+IF SKILL_CHANGE(ARG, [[キャラ:캐스여우]])
 	RESULTS = 영혼숨결
 ELSE
 	RESULTS = 기공(대)
 ENDIF
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2413
+@SKILL_DECIDE_TYPE_2413, ARG
 RETURN 0
 ;どちらでもない
 

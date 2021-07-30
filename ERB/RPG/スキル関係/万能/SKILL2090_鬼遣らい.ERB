@@ -1,4 +1,6 @@
-﻿;스킬名
+﻿;달인向け。コストがバカ高い代わりに高확률만능即死
+
+;스킬名
 @SKILL_NAME_2090,ARG
 RESULTS = 오니야라이
 
@@ -33,12 +35,12 @@ RETURN GET_TYPE_NUM("만능")
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2090
+@SKILL_DECIDE_TYPE_2090, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2090
+@SKILL_DAMAGETYPE_2090, ARG
 RETURN 2
 
 
@@ -69,6 +71,9 @@ SIF ARG == 1
 @SKILL_SUCCESSION_TYPE_2090
 RETURN 20
 ;만능
+
+@継承不能_2090
+RETURN 1
 
 ;속도보정
 @SKILL_SPEED_2090, ARG = -1

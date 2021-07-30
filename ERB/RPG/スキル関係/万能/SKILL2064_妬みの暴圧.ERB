@@ -73,12 +73,12 @@ RETURN 80
 RETURN GET_TYPE_NUM("만능")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2064
+@SKILL_DECIDE_TYPE_2064, ARG
 RETURN 2
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2064
+@SKILL_DAMAGETYPE_2064, ARG
 RETURN 2
 
 
@@ -163,7 +163,8 @@ FLAG:拡散フラグ = 0
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2064
-PRINTL [후열] 적 전체에 만능속성 중 마법데미지. 남은 HP가 적을수록 위력이 증가한다.
+PRINTL [후열] 적 전체에 만능속성 중 마법데미지. 
+PRINTL 남은 HP가 적을수록 위력이 증가한다.
 
 ;継承に필요한部位
 @継承部位_2064,ARG

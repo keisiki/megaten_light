@@ -3,9 +3,8 @@
 
 ;스킬名
 @SKILL_NAME_12,ARG
-;ファントムが사용する場合プラズマサイズに
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+;팬텀が사용する場合플라즈마사이즈に
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]]) || FINDCHARA_M(U, [[キャラ:팬텀]], [[キャラ:팻]])
 	RESULTS = 플라즈마사이즈
 ELSE
 	RESULTS = 이단찌르기
@@ -13,8 +12,7 @@ ENDIF
 
 ;　명중
 @SKILL_HITRATE_12, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 100
 ELSE
 	RETURN 90
@@ -22,8 +20,7 @@ ENDIF
 
 ;　威힘
 @SKILL_POWER_12, ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 180
 ELSE
 	RETURN 145
@@ -44,8 +41,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_12,ARG
-;IF ARG > 0 && NO:ARG == [[キャラ:팬텀]]
-IF SKILL_CHANGE_CHECK(ARG, [[キャラ:팬텀]]) == 1
+IF SKILL_CHANGE(ARG, [[キャラ:팬텀]]) || SKILL_CHANGE(ARG, [[キャラ:팻]])
 	RETURN 10
 ELSE
 	RETURN 8
@@ -57,12 +53,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_12
+@SKILL_DECIDE_TYPE_12, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_12
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_12, ARG
 RETURN 1
 
 
@@ -151,8 +147,9 @@ CALL ATTACK_SINGLE,ARG,LOCAL,12
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_12
-IF U > 0 && U < CHARANUM && NO:U == [[キャラ:팬텀]]
-	PRINTL [후열] 전열의 적 1체에 2회 검격속성 중 물리데미지.
+IF INRANGE(U, 0, CHARANUM-1) && GROUPMATCH(NO:U, [[キャラ:팬텀]], [[キャラ:팻]])
+	PRINTL 左팔プラズマ・ステーク3本のうち内側2本を引き抜き、小型のビーム鎌に変形させて
+	PRINTL 投げつけ적前一体に二回공격。후열사용可
 ELSE
 	PRINTL [후열] 전열의 적 1체에 2회 검격속성 소 물리데미지.
 ENDIF

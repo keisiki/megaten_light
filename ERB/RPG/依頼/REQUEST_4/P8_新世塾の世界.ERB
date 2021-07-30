@@ -50,7 +50,7 @@ CALL MESSAGE_WINDOW, "", "＞시마즈 관리관이 1명 나왔다！/＞ＳＡ�
 LOCAL:1 = FLAG:전투난이도 - 3 > 0 ? 120 + (FLAG:전투난이도 - 3) * 20 # 100
 FOR LOCAL, 7, 17
 	IF LOCAL == 14
-		CALL SET_ENEMY, LOCAL, [[キャラ:島津管理官]], 36, 0 , 1
+		CALL SET_ENEMY, LOCAL, [[キャラ:시마즈관리관]], 36, 0 , 1
 		CALL SET_BATTLE_STATUS(CHARANUM - 1, 24 * LOCAL:1, "ＨＰ")
 		CALL SET_BATTLE_STATUS(CHARANUM - 1, 20 * LOCAL:1, "ＭＰ")
 	ELSE
@@ -106,9 +106,9 @@ MONEY += 50000
 FLAG:名声 += 25
 
 ;-------------------------------
-;島津管理官
+;시마즈관리관
 ;-------------------------------
-@SET_ACTION_島津管理官, ARG
+@SET_ACTION_시마즈관리관, ARG
 #LOCALSIZE 1
 LOCAL = 0
 FOR LOCAL, 1, 7

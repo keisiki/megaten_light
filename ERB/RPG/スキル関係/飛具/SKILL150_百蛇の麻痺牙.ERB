@@ -38,12 +38,12 @@ RETURN 1
 ;비구
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_150
+@SKILL_DECIDE_TYPE_150, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_150
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_150, ARG
 RETURN 1
 
 
@@ -129,7 +129,7 @@ CALL ATTACK_RAND,ARG,ARG:1,150
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_150
-PRINTL [후열] 적 전체에 3～6회(1인 최대 3회) 비구속성 중 물리데미지. (보통 확률로 PALYZE)
+PRINTL [후열] 메두사의 필살기. 적 전체에 3～6회(1인 최대 3회) 비구속성 중 물리데미지. (보통 확률로 PALYZE)
 
 ;継承に필요な部位
 @継承部位_150,ARG

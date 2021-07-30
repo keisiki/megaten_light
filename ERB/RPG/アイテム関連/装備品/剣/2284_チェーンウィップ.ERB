@@ -59,6 +59,16 @@ RETURN 0
 @장비箇所_2284
 RETURN GET_EQUIPNUM("검")
 
+;파라라・웨이브
+@장비추가스킬_2284,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 1122
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -80,6 +90,9 @@ PRINTL 장비조건：LV35～
 
 @장비해설_2284
 PRINTL 쇠사슬로 만들어진 채찍
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：파라라・웨이브
+RESETCOLOR
 
 RETURN 0
 

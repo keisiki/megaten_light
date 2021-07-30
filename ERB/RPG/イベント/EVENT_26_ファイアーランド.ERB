@@ -191,6 +191,18 @@ IF 이벤트フラグ:26:0 == 0
 	CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
 	CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 	CFLAG:(CHARANUM-1):行動횟수 = 2
+	ABL:(CHARANUM-1):스킬1 = [[스킬:프레이라]]
+	ABL:(CHARANUM-1):스킬2 = [[스킬:파마의뇌광]]
+	ABL:(CHARANUM-1):스킬3 = [[스킬:마린카린]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:이악물기]]
+	ABL:(CHARANUM-1):스킬5 = [[스킬:치유촉진(소)]]
+	ABL:(CHARANUM-1):스킬6 = 0
+	ABL:(CHARANUM-1):스킬7 = 0
+	ABL:(CHARANUM-1):스킬8 = 0
+	ABL:(CHARANUM-1):스킬9 = 0
+	ABL:(CHARANUM-1):스킬10 = 0
+	ABL:(CHARANUM-1):스킬11 = 0
+	ABL:(CHARANUM-1):스킬12 = 0
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
 
@@ -206,6 +218,8 @@ IF 이벤트フラグ:26:0 == 0
 	CALL MESSAGE_WINDOW, "나가히사", "당신의 승리입니다……"
 	CALL MESSAGE_WINDOW, "", "＞나가히사를 손에 넣었다！"
 	CALL ADD_NEW_COMPANION,[[キャラ:나가히사]],100
+				SIF RESULT
+			CFLAG:(RESULT:1):전투참가불가능 = -1
 	CALL MESSAGE_WINDOW, "나가히사", "부디 이것을…"
 	IF 던전フラグ:61:1 == 1
 		CALL MESSAGE_WINDOW, "","＞무지개색의 메시아의 뿔을 손에 넣었다！"

@@ -11,7 +11,13 @@
 ;	001		20XX/XX/XX		----					新規作成
 ;	002		2011/03/21		黒天					처녀&재생처녀상실이벤트用の関数「@처녀상실」「@처녀상실이벤트」を新規作成
 ;	003		2012/02/04		ネトリス				主人の크고아름다움취득이벤트추가,
-;	004		2019/05/20		kuma					特殊性感素質の취득조건변경
+;	004		2019/05/20		kuma					特殊性感소질の취득조건변경
+;	005		2019/10/27		ypa						연모時にCFLAG:2400に세트する値を수정
+;	006		2020/05/19		がめら					NTR好感度処理をCDFLAGに변경
+;	007		2021/02/10		純水100%				オトコだと矛盾する表記の書き換え
+;	008		2021/03/05		JK好き					上位함락を確認したら下位함락の함락履歴を埋めるように修正　サマナーあなたの不屈の闘志獲得フラグに信頼系함락を含むように修正
+;													あなたの淫乱素質獲得の条件修正
+
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;EVENT_A.ERB、EVENT_ABILITY、能力や素質の変化이벤트
 @EVENTCHECK_ABL
@@ -40,7 +46,6 @@ SIF TARGET > -1 && (CFLAG:MASTER:그외 == 1130 || CFLAG:MASTER:그외2 == 1130 
 @EVENTCHECK_T
 #DIM LCOUNT
 IF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && 함락() < 2 && TALENT:9 == 0 && (FLAG:ＮＴＲ기능 == 0 || FAVORITE_1(TARGET) == MASTER)
-
 	;연모：순종、봉사정신3以上+굴복각인Lv3+반발각인Lv0+봉사쾌락경험200以上+의존도1000以上+이상경험2未満
 	IF ABL:0 >= 3 && ABL:7 >= 3 && MARK:2 == 3 && MARK:3 == 0 && EXP:21 >= 200 && CFLAG:2 >= 1000 && (EXP:50 - CFLAG:초기이상경험) < 2
 		PRINTFORMW %조사처리(CALLNAME:TARGET,"가")% 이쪽을 바라보는 눈이 이상하다
@@ -51,14 +56,14 @@ IF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && 함락() < 2 && TALENT:9 =
 		TALENT:ＮＴＲ = 0
 		FLAG:연모人数 += 1
 		FLAG:今周回연모人数 += 1
+;---- EDIT 005 MOD START -------------------------
 		;主人に落とされていることを保存
-		CFLAG:2400 = 2
+		CDFLAG:TARGET:キャラ間함락素質:100 = 1
+;---- EDIT 005 MOD END -------------------------
 		CFLAG:함락キャラ = CFLAG:MASTER:キャラ固有の번호
-		
+
 		SIF ABL:종족 != 0 && !TALENT:비전투원
 			CALL CHECK_LEVEL_UP , TARGET
-
-
 	;음란：욕망3以上+CVAB감각합계10以上+쾌락각인Lv3+굴복각인Lv3+반발각인Lv0+절정경험50以上+이상경험3以上or이상경험1以上+레즈경험もしくはＢＬ경험1000以上or레즈경험もしくはＢＬ경험2000以上
 	ELSEIF ABL:1 >= 3 && ABL:3+ABL:4+ABL:5+ABL:6 >= 10 && MARK:1 == 3 && MARK:2 == 3 && MARK:3 == 0 && EXP:2 >= 50
 		IF EXP:50 >= 3 || (EXP:50 >= 1 && (EXP:40 >= 1000 || EXP:41 >= 1000))
@@ -111,12 +116,11 @@ IF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && 함락() < 2 && TALENT:9 =
 			FLAG:음란人数 += 1
 			FLAG:今周回음란人数 += 1
 			;主人に落とされていることを保存
-			CFLAG:2400 = 2
+			CDFLAG:TARGET:キャラ間함락素質:100 = 2
 			CFLAG:함락キャラ = CFLAG:MASTER:キャラ固有の번호
 			SIF ABL:종족 != 0 && !TALENT:비전투원
 				CALL CHECK_LEVEL_UP , TARGET
 		ENDIF
-
 	;복종：순종、마조끼3以上+CAVB감각10未満+굴복각인Lv3+반발각인Lv0+고통쾌락경험+긴박경험200以上+의존도-1000以下+이상경험2以上
 	ELSEIF ABL:0 >= 3 && ABL:9 >= 3 && ABL:3+ABL:4+ABL:5+ABL:6 < 10 && MARK:2 == 3 && MARK:3 == 0 && EXP:30+EXP:51 >= 200 && -CFLAG:2 >= 1000 && EXP:50 >= 2
 		PRINTFORMW %조사처리(CALLNAME:TARGET,"가")% 이쪽을 바라보는 눈이 이상하다
@@ -144,16 +148,13 @@ IF TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && 함락() < 2 && TALENT:9 =
 		FLAG:복종人数 += 1
 		FLAG:今周回복종人数 += 1
 		;主人に落とされていることを保存
-		CFLAG:2400 = 3
+		CDFLAG:TARGET:キャラ間함락素質:100 = 3
 		CFLAG:함락キャラ = CFLAG:MASTER:キャラ固有の번호
 		SIF ABL:종족 != 0 && !TALENT:비전투원
 			CALL CHECK_LEVEL_UP , TARGET
 	ENDIF
-
 ENDIF
-
-
-IF 함락() < 2 && TALENT:9 == 0 && (FLAG:ＮＴＲ기능 == 0 || FAVORITE_1(TARGET) == MASTER)
+IF 함락() < 2 && TALENT:붕괴 == 0 && (FLAG:ＮＴＲ기능 == 0 || FAVORITE_1(TARGET) == MASTER)
 	;친애:연모、순종、봉사정신5以上+반발각인Lv0+애정경험200以上+봉사쾌락경험400以上+의존도3000以上+이상경험5未満
 	IF TALENT:3 && ABL:0 >= 5 && ABL:7 >= 5 && MARK:3 == 0 && EXP:23 >= 200 && EXP:21 >= 400 && CFLAG:2 >= 3000 && (EXP:50 - CFLAG:초기이상경험) < 5
 		PRINTFORMW %조사처리(CALLNAME:TARGET,"가")% 이쪽을 바라보는 눈이 이상하다
@@ -163,11 +164,9 @@ IF 함락() < 2 && TALENT:9 == 0 && (FLAG:ＮＴＲ기능 == 0 || FAVORITE_1(TAR
 		TALENT:3 = 0
 		TALENT:6 = 1
 		TALENT:ＮＴＲ = 0
-		
 		;主人に落とされていることを保存
-		CFLAG:2400 = 4
+		CDFLAG:TARGET:キャラ間함락素質:100 = 4
 		CFLAG:함락キャラ = CFLAG:MASTER:キャラ固有の번호
-
 	;창부：음란、욕망5以上+CVAB감각합계20以上+반발각인Lv0+절정경험200以上+이상경험6以上or이상경험4以上+레즈경험もしくはＢＬ경험2000以上or이상경험3以上+레즈경험もしくはＢＬ경험3000以上
 	ELSEIF TALENT:4 && ABL:1 >= 5 && ABL:3+ABL:4+ABL:5+ABL:6 >= 20 && MARK:3 == 0 && EXP:2 >= 200
 		IF EXP:50 >= 6 || (EXP:50 >= 4 && (EXP:40 >= 2000 || EXP:41 >= 2000)) || (EXP:50 >= 3 && (EXP:40 >= 3000 || EXP:41 >= 3000))
@@ -179,10 +178,9 @@ IF 함락() < 2 && TALENT:9 == 0 && (FLAG:ＮＴＲ기능 == 0 || FAVORITE_1(TAR
 			TALENT:7 = 1
 			TALENT:ＮＴＲ = 0
 			;主人に落とされていることを保存
-			CFLAG:2400 = 5
+			CDFLAG:TARGET:キャラ間함락素質:100 = 5
 			CFLAG:함락キャラ = CFLAG:MASTER:キャラ固有の번호
 		ENDIF
-
 	;예속：복종、순종、마조끼5以上+CAVB감각15未満+반발각인Lv0+고통쾌락경험+긴박경험500以上+의존도-3000以下+레즈경험もしくはＢＬ경험1500未満+이상경험5以上
 	ELSEIF TALENT:5 && ABL:0 >= 5 && ABL:9 >= 5 && ABL:3+ABL:4+ABL:5+ABL:6 < 15 && MARK:3 == 0 && EXP:30+EXP:51 >= 500 && -CFLAG:2 >= 3000 && EXP:50 >= 5
 		PRINTFORMW %조사처리(CALLNAME:TARGET,"가")% 이쪽을 바라보는 눈이 이상하다
@@ -193,22 +191,22 @@ IF 함락() < 2 && TALENT:9 == 0 && (FLAG:ＮＴＲ기능 == 0 || FAVORITE_1(TAR
 		TALENT:8 = 1
 		TALENT:ＮＴＲ = 0
 		;主人に落とされていることを保存
-		CFLAG:2400 = 6
+		CDFLAG:TARGET:キャラ間함락素質:100 = 6
 		CFLAG:함락キャラ = CFLAG:MASTER:キャラ固有の번호
 	ENDIF
 ENDIF
 
 ;조교したことがある
 SETBIT FLAG:(50000+NO:TARGET), 0
-SIF TALENT:TARGET:연모
+SIF (TALENT:TARGET:연모 || TALENT:TARGET:친애) && !(TALENT:TARGET:신뢰 || TALENT:TARGET:동료)
 	SETBIT FLAG:(50000+NO:TARGET), 1
 SIF TALENT:TARGET:친애
 	SETBIT FLAG:(50000+NO:TARGET), 2
-SIF TALENT:TARGET:음란
+SIF TALENT:TARGET:음란 || TALENT:TARGET:창부
 	SETBIT FLAG:(50000+NO:TARGET), 3
 SIF TALENT:TARGET:창부
 	SETBIT FLAG:(50000+NO:TARGET), 4
-SIF TALENT:TARGET:복종
+SIF TALENT:TARGET:복종 || TALENT:TARGET:예속
 	SETBIT FLAG:(50000+NO:TARGET), 5
 SIF TALENT:TARGET:예속
 	SETBIT FLAG:(50000+NO:TARGET), 6
@@ -219,6 +217,7 @@ SIF TALENT:TARGET:예속
 ;자위광：Ｃ감각４以上、조교자위경험２５０以上、절정경험１５０以上
 IF ABL:3 >= 4 && EXP:11 >= 250 && EXP:2 >= 150 && TALENT:74 == 0 && TALENT:75 == 0 && TALENT:76 == 0 && TALENT:77 == 0
 	PRINTFORMW %조사처리(CALLNAME:TARGET,"가")% 이쪽을 바라보는 눈이 이상하다
+		;オトコでもクリトリス固定だったので
 	PRINTFORML 조교가 끝났음에도 불구하고 %타겟은()% 클리토리스를 만지작거리며 해도 되냐는듯한 시선을 %CALLNAME:MASTER%에게 보내고 있다
 	PRINTFORMW %조사처리(NAME:TARGET,"는")% 【자위광】을 얻었다
 	PRINTL 　
@@ -618,16 +617,16 @@ ELSEIF EXP:MASTER:62 >= 10 && ABL:MASTER:13 <= 0
 ENDIF
 
 ;主人の음란：욕망3이상+CVAB감각합계10이상+절정경험50이상+매춘경험50이상or변기경험50이상
-IF ABL:MASTER:1 >= 3 && ABL:MASTER:3+ABL:MASTER:4+ABL:MASTER:5+ABL:MASTER:6 >= 10 && EXP:MASTER:2 >= 50 && TALENT:MASTER:음란 == 0 && TALENT:MASTER:창부 == 0
-	IF EXP:MASTER:72 >= 50 || EXP:MASTER:75 >= 50
+IF ABL:MASTER:욕망 >= 3 && ABL:MASTER:Ｃ감각+ABL:MASTER:Ｖ감각+ABL:MASTER:Ａ감각+ABL:MASTER:Ｂ감각 >= 10 && EXP:MASTER:절정경험 >= 50 && 함락(MASTER) == 0
+	IF EXP:MASTER:매춘경험 >= 50 || EXP:MASTER:75 >= 50
 		PRINTFORMW %조사처리(NAME:MASTER,"는")% 【음란】하게 되었다
 		TALENT:MASTER:음란 = 1
 	ENDIF
 ENDIF
 
 ;主人の창부：음란、욕망5이상+CVAB감각합계20이상+절정경험200이상+매춘경험100이상or변기경험100이상
-IF TALENT:MASTER:음란 && ABL:MASTER:1 >= 5 && ABL:MASTER:3+ABL:MASTER:4+ABL:MASTER:5+ABL:MASTER:6 >= 20 && EXP:MASTER:2 >= 200
-	IF EXP:MASTER:72 >= 100 || EXP:MASTER:75 >= 100
+IF TALENT:MASTER:음란 && ABL:MASTER:욕망 >= 5 && ABL:MASTER:Ｃ감각+ABL:MASTER:Ｖ감각+ABL:MASTER:Ａ감각+ABL:MASTER:Ｂ감각 >= 20 && EXP:MASTER:절정경험 >= 200
+	IF EXP:MASTER:매춘경험 >= 100 || EXP:MASTER:변기경험 >= 100
 		PRINTFORMW %NAME:MASTER%의 【음란】은 【창부】가 되었다
 		TALENT:MASTER:음란 = 0
 		TALENT:MASTER:창부 = 1
@@ -722,7 +721,8 @@ IF MAXBASE:MASTER:ＭＰ == 0
 	FOR L_COUNT, 0, 10000
 		SIF !EXISTCSV(L_COUNT, 0)
 			CONTINUE
-		SIF GETBIT(FLAG:(L_COUNT+50000) , 1) || GETBIT(FLAG:(L_COUNT+50000) , 2) || GETBIT(FLAG:(L_COUNT+50000) , 3) || GETBIT(FLAG:(L_COUNT+50000) , 4) || GETBIT(FLAG:(L_COUNT+50000) , 5) || GETBIT(FLAG:(L_COUNT+50000) , 6)
+		;信頼함락系を含むように修正
+		SIF GETBIT(FLAG:(L_COUNT+50000) , 1) || GETBIT(FLAG:(L_COUNT+50000) , 2) || GETBIT(FLAG:(L_COUNT+50000) , 3) || GETBIT(FLAG:(L_COUNT+50000) , 4) || GETBIT(FLAG:(L_COUNT+50000) , 5) || GETBIT(FLAG:(L_COUNT+50000) , 6) || GETBIT(FLAG:(L_COUNT+50000) , 8) || GETBIT(FLAG:(L_COUNT+50000) , 9)
 			LOCAL:CSVABL(L_COUNT, GETNUM(ABL, "종족"), 0)++
 	NEXT
 	FOR L_COUNT, 0 ,49

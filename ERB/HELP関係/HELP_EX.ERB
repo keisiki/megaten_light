@@ -3,6 +3,236 @@
 ;ネタばれＱ＆Ａについての記述があります。
 ;--------------------------------------------------
 ;=============================================================================
+;用語辞典――아이템
+;=============================================================================
+;--------------------------------------------------
+;아이템해설メイン페이지
+;--------------------------------------------------
+@DICTIONARY_ITEM_MAIN
+DRAWLINE
+PRINTFORML 「아이템」에 관한 대략의 설명입니다.
+DRAWLINE
+;各표시
+FOR LOCAL, 0, 50
+	STRLENS ITEMNAME:LOCAL
+	SIF RESULT > 0
+		PRINTFORMLC [{LOCAL, 2}] %ITEMNAME:LOCAL%
+NEXT
+PRINTL 
+DRAWLINE
+PRINTLC [100]돌아온다
+
+$INPUT_LOOP
+INPUT
+IF RESULT == 100
+	RETURN 0
+ELSEIF (RESULT >= 0 && RESULT <= 99)
+	Q = RESULT
+	STRLENS ITEMNAME:Q
+	IF RESULT > 0
+		PRINTFORML 【%ITEMNAME:Q%】
+		TRYCALLFORM DICTIONARY_ITEM_{Q}
+		RESTART
+	ELSE
+		GOTO INPUT_LOOP
+	ENDIF
+ELSE
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;--------------------------------------------------
+;아이템해설
+;--------------------------------------------------
+;로터
+@DICTIONARY_ITEM_0
+PRINTL 진동에 의해 비부에 자극을 주는 도구이다.
+PRINTL 하나 구입시 세트로 오니, 여러개를 동시에 사용할 수 있다.
+PRINTW [9]로터 및[190]유두 로터에 필수이다.
+
+;電気按摩
+@DICTIONARY_ITEM_1
+PRINTL 전기로 움직이는 어깨 결림기를 성기구로 개량한 것. 로터보다 강렬한 자극을 준다.
+PRINTW [10]전기 안마 필수이다.
+
+;클리캡
+@DICTIONARY_ITEM_2
+PRINTL 장착형의 흡입 캡이다. C계 장착 기구.
+PRINTL 남자에게는 사용할 수 없다.
+PRINTL [14]클리 캡에 필수이다.
+PRINTW 강력 아이템·커맨드 ON 필수.
+
+;오나홀
+@DICTIONARY_ITEM_3
+PRINTL 페니스에 장착할 수 있는 기구이다.C계 장착 기구.
+PRINTL 페니스가 없으면 사용할 수 없다.
+PRINTL [16]오나홀에 필수이다.
+PRINTW 실은 일상생활에도 가지고 있으면 일어나는 이벤트가 있다.
+
+;바이브
+@DICTIONARY_ITEM_4
+PRINTL 보지에 삽입할 수 있는 바이브레이터이다.V계 장착 기구.
+PRINTL 질이 없는 남자에는 사용할 수 없다.
+PRINTW [12]바이브래이터나[680]구속∇에 필수이다 (실은 일상생활에도 가지고 있으면 일어나는 이벤트가 있다.。)
+
+;애널바이브
+@DICTIONARY_ITEM_5
+PRINTL 어널에 삽입할 수 있는 바이브레이터이다.A계 장착 기구.
+PRINTW [13]어널 바이브래이터나[680]구속∇에 필수이다.
+
+;애널비즈
+@DICTIONARY_ITEM_6
+PRINTL 여러개의 구슬을 연결한 기구를 어널에 삽입하고 쾌감을 얻는다고 하는 성기구
+PRINTL 이다.A계 장착 기구.
+PRINTL [172]어널 비즈에 필수이다.
+PRINTW A계 확장 커멘드 ON필수이다.
+
+;공기펌프
+@DICTIONARY_ITEM_7
+PRINTL 항문에 공기를 보내기 위한 펌프와 마개세트이다.A계 장착 기구.
+PRINTL [175]공기 관장에 필수이다.
+PRINTW A계 확장 커멘드 ON필수이다.
+
+;확장벌룬
+@DICTIONARY_ITEM_8
+PRINTL 항문에 넣기 위한 풍선과 공기를 보내는 기구세트이다.
+PRINTL 일회용은 아니다.A계 장착 기구.
+PRINTL [173]확장 벌룬에 필수이다.
+PRINTW A계 확장 커멘드 ON필수이다.
+
+;관장기＋플러그
+@DICTIONARY_ITEM_9
+PRINTL 관장을 행하기 위한 기구 한 세트이다.일회용은 아니다.A계 장착 기구.
+PRINTL [174]관장 플레이나[176]미약관장,[177]이뇨제 관장에 필수이다.
+PRINTW A계 확장 커멘드 ON필수이다。
+
+;유두캡
+@DICTIONARY_ITEM_10
+PRINTL 유두에 자극을 주는 장착형의 기구이다.B계 장착 기구.
+PRINTW [15]니플캡에 필수이다.
+
+;착유기
+@DICTIONARY_ITEM_11
+PRINTL 착유하기 위해서 가슴에 장착하는 기구이다.B계 장착 기구.
+PRINTW [191]착유기에 필수이다.
+
+;페니스밴드
+@DICTIONARY_ITEM_12
+PRINTL 페니스가 없는 사람이 장착하는 것으로써,
+PRINTL 상대에게 삽입할 수 있게 되기 위한 기구이다.
+PRINTL 페니스가 없는 사람이 삽입을 수반하는 조교를 행할 때 필수이지만,
+PRINTW 사정을 할 수 없기 때문에 제한도 많다。
+
+;채찍
+@DICTIONARY_ITEM_13
+PRINTL 휘두르기 위한 채찍이다.
+PRINTW [221]채찍에 필수이다.
+
+;바늘
+@DICTIONARY_ITEM_14
+PRINTL 꽂기 위한 바늘이다.
+PRINTW [222]바늘에 필수이다.
+
+;아이마스크
+@DICTIONARY_ITEM_15
+PRINTL 눈 가림용이다.긴박계 장착 기구.
+PRINTW [225]아이마스크에 필수이다.
+
+;밧줄
+@DICTIONARY_ITEM_16
+PRINTL 묶기 위한 줄이다.긴박계 장착 기구.
+PRINTW [224]줄에 필수이다.
+
+;볼재갈
+@DICTIONARY_ITEM_17
+PRINTL 입에다 사용한다.호흡을 막지는 않는다..긴박계 장착 기구.
+PRINTW [226]볼 개그에 필수이다.
+
+;비디오카메라
+@DICTIONARY_ITEM_18
+PRINTL 비디오 카메라이다.전원은?
+PRINTL 더 사용을 위해서는 비디오 테잎도 필요하다.
+PRINTW [100]비디오 촬영에 필수이다.
+
+;카메라
+@DICTIONARY_ITEM_19
+PRINTL 카메라이다.디지탈 카메라는 아닐지도?
+PRINTL 더 사용을 위해서는 필름도 필요하다.
+PRINTW [102]사진 촬영에 필수이다.
+
+;플레이매트
+@DICTIONARY_ITEM_20
+PRINTL 목욕탕에 까는 매트이다.일회용은 아니다.
+PRINTW 목욕탕 플레이의 대부분에 필수이다.
+
+;큰거울
+@DICTIONARY_ITEM_21
+PRINTL 큰 거울이다.무대 이동식 기구.
+PRINTW [103]수치 플레이에 필수이다.
+
+;목걸이
+@DICTIONARY_ITEM_22
+PRINTL 목걸이와 리드세트다.무대 이동식 기구.
+PRINTW [104]야외 플레이에 필수이다
+
+;에이프런
+@DICTIONARY_ITEM_23
+PRINTL 일반적인 에이프런이다.의상계 장착 기구.
+PRINTW [90]알몸 에이프런에 필수이다.
+
+;전극플러그
+@DICTIONARY_ITEM_24
+PRINTL 항문에 삽입하기 위한 전극과 전원세트이다.A계 장착 기구.
+PRINTW [171]어널 전극에 필수이다.
+
+;촉수사역술
+@DICTIONARY_ITEM_25
+PRINTL 촉수를 부립시다
+PRINTL 
+PRINTW 
+
+;로션
+@DICTIONARY_ITEM_40
+PRINTL 몸에 바를 수 있는 윤활제이다.일회용.
+PRINTL [60]로션에 필수이다.
+PRINTW 유해한 성분도 없고, 종족을 불문하고 사용할 수 있다는 뛰어난 물건
+
+;미약
+@DICTIONARY_ITEM_41
+PRINTL 성적으로 흥분하기 쉬워지는 약이다.일회용.
+PRINTW [61]미약에 필수이다.
+
+;이뇨제
+@DICTIONARY_ITEM_42
+PRINTL 오줌을 누고싶게 만드는 약이다.일회용.
+PRINTW [62]이뇨제 등에 필수이다.
+
+;비디오테이프
+@DICTIONARY_ITEM_43
+PRINTL 비디오 카메라에 넣어 사용하는 녹화 매체이다.소모품.
+PRINTW 당연히 비디오 카메라가 없으면 사용할 수 없다.
+
+;필름
+@DICTIONARY_ITEM_44
+PRINTL 카메라의 필름이다.소모품.
+PRINTW 당연히 카메라가 없으면 사용할 수 없다.
+
+;콘돔
+@DICTIONARY_ITEM_45
+PRINTL 페니스에 씌우고 정자를 막기 위한 고무이다.일회용
+PRINTW 이지만 장착 기구이기도 하다.
+
+;저온양초
+@DICTIONARY_ITEM_46
+PRINTL SM에 사용할 수 있도록(듯이) 저온으로 납을 늘어뜨릴 수 있는 양초다.일회용.
+PRINTW [223]초에 필수이다.
+
+;강정신약
+@DICTIONARY_ITEM_47
+PRINTL 마약의 종류의 약이다.일회용.
+PRINTW [65]강정신약 및의 약에 필수이다.
+
+;=============================================================================
 ;SHOP화면コマンドにおける해설
 ;=============================================================================
 ;SHOPコマンドに해설を入れる
@@ -187,6 +417,10 @@ RESTART
 ;とりあえず作成といった程度。具体的に何を載せるかは未定
 ;当然ながら未完成
 @DICTIONARY_NETABARE_QA
+;現在の페이지を示す
+P = 0
+;최대페이지数を示す
+LOCAL = 1
 $NETABARE_QA_HELP
 DRAWLINE
 PRINTL 이하 Megaten의 시스템등에 관한 Q＆A입니다.
@@ -202,7 +436,6 @@ PRINTL  [5] Q.친애의 취득 방법
 PRINTL  [6] Q.창녀의 취득 방법
 PRINTL  [7] Q.예속의 취득 방법
 DRAWLINE
-
 PRINTLC [1000]돌아온다
 $INPUT_LOOP
 INPUT
@@ -268,4 +501,5 @@ PRINTW +이상 경험 6이상 or이상 경험 4이상+레즈비언 경험 혹은
 PRINTL 【예속의 취득 방법】
 PRINTL [복종]을 가지고 있는 상태로 순종, 마조끼 5이상+CAVB 감각 15 미만+반발 각인 Lv0+고통 쾌락 경험+긴박 경험 500이상
 PRINTW +의존도-3000 이하+레즈비언 경험 혹은 동성애자 경험 1500 미만+이상 경험 5이상
+
 

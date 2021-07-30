@@ -12,7 +12,8 @@
 ;	007		2018/06/21		JK好き					도리カドモンの소지数が分かるように추가
 ;	008		2019/05/29		名無し					ジャンクポイント関連추가(MONEY:4)
 ;	009		2019/01/13		Jガン					장비구입時に스테이터스を比較できるように
-;	010		2020/03/XX		マウス専用版아이템交換CALL処理추가
+;	010		2020/03/XX		マウス専用版アイテム交換CALL処理追加
+;	011		2021/05/20		Jガン					マッカによるCOMP容量増加をしやすくするため新しいフラグを追加
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ; 特記:
 ;  メモが필요な変数一覧
@@ -55,11 +56,17 @@ PRINTL ("아이템과 교환"화면에 적용됩니다)
 ENDIF
 
 ;---- EDIT 002 ADD END ---------------------------
+;---- EDIT 011 ADD START -------------------------
+;安くならないように
+SIF FLAG:魔貨によるＣ容量増加 < 1
+	FLAG:魔貨によるＣ容量増加 = MAX(1,FLAG:ＣＯＭＰ용량 - 7)
+;---- EDIT 011 ADD END ---------------------------
 
 PRINTL [1] ￥으로 교환
 PRINTL [2] 아이템과 교환
 PRINTL [3] 인스톨 소프트와 교환
-PRINTFORML [4] ＣＯＭＰ의 용량을 확장 (필요 마카：{POWER(FLAG:ＣＯＭＰ용량 - 7,2)*100})
+;ADD 011
+PRINTFORML [4] ＣＯＭＰ의 용량을 확장 (필요 마카：{POWER(FLAG:魔貨によるＣ容量増加,2)*100})
 PRINTL [5] 의상과 교환
 PRINTFORML [6] 도리・카드몬과 교환（필요 마카：500）({ITEM:도리・카드몬}개)
 PRINTFORML [7] 결계석과 교환（필요 마카：1000）({ITEM:결계석}/3)
@@ -109,12 +116,18 @@ ELSEIF RESULT == 3
 	CALL EXCHANGE_SOFT
 	RESTART
 ELSEIF RESULT == 4
-	IF POWER(FLAG:ＣＯＭＰ용량 - 7,2)*100 > MONEY:1
-		REUSELASTLINE 마카が발りません
+	;IF POWER(FLAG:ＣＯＭＰ용량 - 7,2)*100 > MONEY:1
+	IF POWER(FLAG:魔貨によるＣ容量増加,2)*100 > MONEY:1;011
+		REUSELASTLINE 마카가 부족합니다
 		GOTO INPUT_LOOP
 	ENDIF
-	MONEY:1 -= POWER(FLAG:ＣＯＭＰ용량 - 7,2)*100
-	MONEY:4 += POWER(FLAG:ＣＯＭＰ용량 - 7,2)*200
+	;---- EDIT 011 ADD START -------------------------
+	;MONEY:1 -= POWER(FLAG:ＣＯＭＰ용량 - 7,2)*100
+	;MONEY:4 += POWER(FLAG:ＣＯＭＰ용량 - 7,2)*200
+	MONEY:1 -= POWER(FLAG:魔貨によるＣ容量増加,2)*100
+	MONEY:4 += POWER(FLAG:魔貨によるＣ容量増加,2)*200
+	FLAG:魔貨によるＣ容量増加 += 1
+	;---- EDIT 011 ADD END ---------------------------
 	FLAG:ＣＯＭＰ용량 += 1
 	PRINTFORML 사용중인 ＣＯＭＰ의 용량이 {FLAG:ＣＯＭＰ용량}이 되었습니다。
 	RESTART
@@ -330,7 +343,7 @@ ELSEIF MATCH(아이템リスト,RESULT,0)> 0
 			GOTO PRINT_LIST
 		ENDIF
 	ELSE
-		CALLFORM 최대소지수_{LOCAL:2+2000}
+		CALLFORM 최대소지수_{COUNT_ITEMMAX(LOCAL:2)}
 		LOCAL:3 = RESULT
 		PRINTFORML %ITEMNAME:(LOCAL:2),20,LEFT%   소지数：{ITEM:(LOCAL:2)}/{LOCAL:3}
 		SIF FLAG:스킬속성표시설정 == 1

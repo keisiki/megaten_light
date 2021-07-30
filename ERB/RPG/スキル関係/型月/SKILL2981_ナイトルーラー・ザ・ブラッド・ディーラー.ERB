@@ -5,7 +5,7 @@
 @SKILL_NAME_2981,ARG
 RESULTS = 나이트룰러・더・블러드・디라
 SIF  GETBIT (FLAG:カスタムゲーム화면,1)
-	RESULTS = ナイトルー라・ザ・ブラッド디무ー라
+	RESULTS = 나이트룰러・더・블러드・디라
 
 ;　명중
 @SKILL_HITRATE_2981, ARG
@@ -47,12 +47,12 @@ SIF FLAG:공격횟수 == 1
 RETURN GET_TYPE_NUM("타격")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2981
+@SKILL_DECIDE_TYPE_2981, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2981
+@SKILL_DAMAGETYPE_2981, ARG
 RETURN 2
 
 
@@ -139,7 +139,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2981
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2981
-PRINTL 적 전체에 질풍相性과 타격 相性의 큰 데미지를 준다
+PRINTL 적 전체에 질풍 상성과 타격 상성의 큰 데미지를 준다
 PRINTL 왈라키아의 밤의 필살기
 
 ;継承に필요한部位

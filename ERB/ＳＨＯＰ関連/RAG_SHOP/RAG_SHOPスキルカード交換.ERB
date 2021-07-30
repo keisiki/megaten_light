@@ -1,4 +1,9 @@
-﻿@RAG_SKILL_CARD
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;	Edit	Date			Author					Reason
+;	001		20XX/XX/XX								新規作成
+;	002		2021/02/22		亜人いいよね			悪魔専用強化スキルの追加
+
+@RAG_SKILL_CARD
 #LOCALSIZE 14
 #LOCALSSIZE 13
 #DIM LCOUNT
@@ -23,8 +28,14 @@ PRINTL 라그：
 PRINTL 「그럼 원하는 걸 골라봐」
 PRINTL
 IF LCOUNT == 1
-    CALL RAG_SKILL_CARD_EXCHANGE_표시(1,13512, "아메지스트", 5, "토파즈", 5,"오닉스", 5)
-    CALL RAG_SKILL_CARD_EXCHANGE_표시(2,13507, "에메랄드", 7, "가넷", 7)
+    CALL RAG_SKILL_CARD_EXCHANGE_표시(1,[[아이템:스킬카드【풍파・카마이타치】]], "아메지스트", 5, "토파즈", 5,"오닉스", 5)
+    CALL RAG_SKILL_CARD_EXCHANGE_표시(2,[[아이템:스킬카드【가재가르기】]], "에메랄드", 7, "가넷", 7)
+	;EDIT 002 MOD START -----------------------------------
+    IF EXTRA強化(11)
+        CALL RAG_SKILL_CARD_EXCHANGE_표시(3,[[아이템:스킬카드【내추럴본】]], "가넷", 4, "아메지스트", 4,"아쿠아마린", 2)
+        CALL RAG_SKILL_CARD_EXCHANGE_표시(4,[[아이템:스킬카드【오토퍼지】]], "오팔", 4, "에메랄드", 4,"토파즈", 2)
+    ENDIF
+;EDIT 002 MOD END -------------------------------------
 ELSE
     CALL RAG_SKILL_CARD_EXCHANGE_표시(100,[[아이템:스킬카드【육체의악마】]], "루비", 10, "사파이어", 10,"오닉스", 10)
     CALL RAG_SKILL_CARD_EXCHANGE_표시(101,[[아이템:스킬카드【파사의광인】]], "다이아몬드", 10, "진주", 10, "아메지스트", 10)

@@ -10,15 +10,15 @@ RETURN 100
 
 ;　위력
 @SKILL_POWER_2630, ARG 
-RETURN 50
+RETURN 200
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_2630,ARG
-RETURN 5
+RETURN 1
 
 ;　최대공격횟수
 @SKILL_MAXATTACKNUMBER_2630,ARG
-RETURN 6
+RETURN 1
 
 
 ;　ＨＰ2を支払うかＭＰ3を支払うか
@@ -27,7 +27,7 @@ RETURN 3
 
 ;　コストの量
 @SKILL_COST_2630,ARG
-RETURN 30
+RETURN 40
 
 ;　相性
 @SKILL_TYPE_2630,ARG
@@ -35,12 +35,12 @@ RETURN 17
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2630
+@SKILL_DECIDE_TYPE_2630, ARG
 RETURN 2
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2630
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2630, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2630
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -113,7 +113,7 @@ RETURN 0
 
 CFLAG:ARG:마법위력강화 = MIN(32, CFLAG:ARG:마법위력강화 + 4)
 
-PRINTFORMW %CALLNAME:ARG%は마법위력が上がった！
+PRINTFORMW %CALLNAME:ARG%의 마법위력이 올라갔다！
 
 CALL ATTACK_FIELD,ARG,ARG:1,2630
 
@@ -124,8 +124,8 @@ CALL ATTACK_FIELD,ARG,ARG:1,2630
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2630
-PRINTL 全てを創造する魔界神の힘で적전체を공격する。공격前に마법위력が上昇する。
-PRINTL 마신　神綺の技。
+PRINTL 모든 것을 창조하는 마계신의 힘으로 적 전체를 공격한다。공격전에 마법위력이 상승한다。
+PRINTL 마신　신키의 기술。
 
 ;継承に필요な部位
 @継承部位_2630,ARG

@@ -94,20 +94,28 @@ SELECTCASE RESULT
 	CSTR:MASTER:해설2 = 표면적인 직업은 없이, 순수하게 데빌 서머너로서 활동하고 있다.
 	;学生風
 	CASE 1
-		PRINTFORML 당신이 소속된 학교를 골라 주십시오.
-		PRINTL [0] 지정하지 않음
-		PRINTL [1] 카루코자카 고교
-		PRINTL [2] 성 엘민 학원
-		CALL INPUTINT,0,1,2
+		PRINTFORML 당신이 소속된 학교를 선택해 주세요
+		PRINTL [0] 초등학교
+		PRINTL [1] 중학교
+		PRINTL [2] 고등학교
+		PRINTL [3] 카루코자카고교
+		PRINTL [4] 성 엘민 학원
+		CALL INPUTINT,0,1,2,3,4
 		SELECTCASE RESULT
 			CASE 0
 				CFLAG:MASTER:당신の表の職業 = 2
-				CSTR:MASTER:해설2 = 표면적인 직업은 학생.
+				CSTR:MASTER:해설2 = 표면적인 직업은 초등학교에 다니는 학생.
 			CASE 1
 				CFLAG:MASTER:당신の表の職業 = 20
-				CSTR:MASTER:해설2 = 표면적인 직업은 카루코자카 고교에 다니는 학생.
+				CSTR:MASTER:해설2 = 표면적인 직업은 중학교에 다니는 학생.
 			CASE 2
 				CFLAG:MASTER:당신の表の職業 = 21
+				CSTR:MASTER:해설2 = 표면적인 직업은 고등학교에 다니는 학생.
+			CASE 3
+				CFLAG:MASTER:당신の表の職業 = 22
+				CSTR:MASTER:해설2 = 표면적인 직업은 카루코자카 고교에 다니는 학생.
+			CASE 4
+				CFLAG:MASTER:당신の表の職業 = 23
 				CSTR:MASTER:해설2 = 표면적인 직업은 성 엘민 학원에 다니는 학생.
 		ENDSELECT
 		IF TALENT:MASTER:오토코노코
@@ -124,40 +132,95 @@ SELECTCASE RESULT
 				;겉옷　블레이저교복
 				CALL SET_초기衣装, "겉옷" , [[衣装:블레이저교복]]
 			CASE 0
-				IF RAND:2 == 0
-					;옷　セーラー
-					CALL SET_초기衣装, "옷" , [[衣装:세일러복]]
+				;小学生
+				IF CFLAG:MASTER:당신の表の職業 == 2
+					;전신복
+					IF RAND:5 == 0
+						CALL SET_초기衣装, "전신복" , [[衣装:미니원피스]]
+						CALL SET_초기衣装, "옷" , -1
+						CALL SET_초기衣装, "하의" , -1
+					ELSE
+						 ;옷
+						IF RAND:3 == 0
+							CALL SET_초기衣装, "옷" , [[衣装:T셔츠]]
+						ELSEIF RAND:2 == 0
+							CALL SET_초기衣装, "옷" , [[衣装:탱크탑]]
+						ELSE
+							CALL SET_초기衣装, "옷" , [[衣装:겉옷]]
+						ENDIF
+						;하의
+						IF RAND:4 == 0
+							CALL SET_초기衣装, "하의" , [[衣装:미니스커트]]
+						ELSEIF RAND:3 == 0
+							CALL SET_초기衣装, "하의" , [[衣装:서스펜더스커트]]
+						ELSEIF RAND:2 == 0
+							CALL SET_초기衣装, "하의" , [[衣装:스커트]]
+						ELSE
+							CALL SET_초기衣装, "하의" , [[衣装:오버올]]
+						ENDIF
+					ENDIF
+					;양말
+					IF RAND:3 == 0
+						CALL SET_초기衣装, "양말" , [[衣装:양말]]
+					ELSEIF RAND:2 == 0
+						CALL SET_초기衣装, "양말" , [[衣装:검은색타이즈]]
+					ELSE
+						CALL SET_초기衣装, "양말" , [[衣装:니삭스]]
+					ENDIF
+					;신발
+					IF RAND:3 == 0
+						CALL SET_초기衣装, "신발" , [[衣装:스니커]]
+					ELSEIF RAND:2 == 0
+						CALL SET_초기衣装, "신발" , [[衣装:슈즈]]
+					ELSE
+						CALL SET_초기衣装, "신발" , [[衣装:롤러스케이트]]
+					ENDIF
 				ELSE
-					;옷　블라우스
-					CALL SET_초기衣装, "옷" , [[衣装:블라우스]]
-					;겉옷　블레이저교복
-					CALL SET_초기衣装, "겉옷" , [[衣装:블레이저교복]]
+					IF RAND:2 == 0
+						;옷　セー라
+						CALL SET_초기衣装, "옷" , [[衣装:세일러복]]
+					ELSE
+						;옷　블라우스
+						CALL SET_초기衣装, "옷" , [[衣装:블라우스]]
+						; 겉옷　블레이저 교복
+						CALL SET_초기衣装, "겉옷" , [[衣装:블레이저교복]]
+					ENDIF
+					;하의
+					
+					IF EXP:MASTER:성교경험 >= 10
+						CALL SET_초기衣装, "하의" , [[衣装:미니스커트]]
+					ELSE
+						CALL SET_초기衣装, "하의" , [[衣装:스커트]]
+					ENDIF
+					;양말
+					IF RAND:3 == 0
+						CALL SET_초기衣装, "양말" , [[衣装:하이삭스]]
+					ELSEIF RAND:2 == 0
+						CALL SET_초기衣装, "양말" , [[衣装:니삭스]]
+					ELSE
+						CALL SET_초기衣装, "양말" , [[衣装:사이하이삭스]]
+					ENDIF
+					;신발
+						CALL SET_초기衣装, "신발" , [[衣装:가죽구두]]
 				ENDIF
-				;하의
-				
-				IF EXP:MASTER:성교경험 >= 10
-					CALL SET_초기衣装, "하의" , [[衣装:미니스커트]]
-				ELSE
-					CALL SET_초기衣装, "하의" , [[衣装:스커트]]
-				ENDIF
-				;양말
-				IF RAND:3 == 0
-					CALL SET_초기衣装, "양말" , [[衣装:하이삭스]]
-				ELSEIF RAND:2 == 0
-					CALL SET_초기衣装, "양말" , [[衣装:니삭스]]
-				ELSE
-					CALL SET_초기衣装, "양말" , [[衣装:사이하이삭스]]
-				ENDIF
-				;신발
-					CALL SET_초기衣装, "신발" , [[衣装:가죽구두]]
 				;下着
 				CALL SET_汎用下着설정
 			CASEELSE
 		ENDSELECT
 	;フリーター
 	CASE 2
-	CFLAG:MASTER:당신の表の職業 = 3
-	CSTR:MASTER:해설2 = 표면적인 직업은 프리터.
+		PRINTFORML 당신의 직업을 선택해 주세요.
+		PRINTL [0] 대학생
+		PRINTL [1] 프리터
+		CALL INPUTINT,0,1
+		SELECTCASE RESULT
+			CASE 0
+				CFLAG:MASTER:당신の表の職業 = 3
+				CSTR:MASTER:해설2 = 표면적인 직업은 대학생
+			CASE 1
+				CFLAG:MASTER:당신の表の職業 = 30
+				CSTR:MASTER:해설2 = 표면적인 직업은 프리
+		ENDSELECT
 		IF TALENT:MASTER:오토코노코
 			CALL INPUT_YN("女装","男装")
 		ELSE

@@ -2,36 +2,55 @@
 ;======================================================
 ;장비品の데이터
 ;메탈터번
-;Lv20장비までは내성が기본　기본능력に합계+2まで
 ;======================================================
 
 @기본능력수정_3003,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3003,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 4
-	CASE "회피"
-		RETURN 3
-	CASE "마법효과"
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 12
+	CASE 3
 		RETURN 1
+	CASE 5
+		RETURN 4
 ENDSELECT
 RETURN 0
 
 @방어상성_3003,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "전술"
-		RETURN 95
+
+SELECTCASE ARG
+	CASE 9
+		RETURN 0
+	CASE 8
+		RETURN 200
 ENDSELECT
 RETURN 100
 
-@バステ내성_3003,ARG,ARG:1 = -1
-SELECTCASE GET_STATE(ARG)
-ENDSELECT
-RETURN 0
+@공격상성_3003, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3003, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3003, ARG = -1
+
+RETURN 1
+
+@사거리_3003, ARG = -1
+
+RETURN 1
+
+@공격범위_3003, ARG = -1
+
+RETURN 1
 
 @장비箇所_3003
 RETURN GET_EQUIPNUM("머리")
@@ -39,19 +58,20 @@ RETURN GET_EQUIPNUM("머리")
 @필요레벨_3003
 RETURN 1
 
-@장비조건_3003,ARG
-RETURN 1
-
-@장비조건설명_3003
-PRINTL 장비조건：
-
 @장비해설_3003
-PRINTL 特殊な金属繊維の布で作られたターバン。
-PRINTL 　　　　　　　　
+PRINTL 특수 금속 섬유 천으로 만든 터번。
 
+@장비조건_3003,ARG
+SIF !IS_LOOKSLIKE_MALE(ARG)
+	RETURN 0
+
+RETURN 1
 
 @구입조건_3003
 RETURN 1
 
-@引継ぎ可不可_3003
-RETURN 0
+
+@장비조건설명_3003
+PRINTL 장비조건：♂
+
+

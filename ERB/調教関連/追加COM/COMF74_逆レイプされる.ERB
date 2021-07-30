@@ -31,7 +31,7 @@ TSTR:0 = 역강간당한다
 
 ;V경험を伴うコマンドの플래그(처녀膜재생対応)
 TFLAG:19 = 1
-SIF (TALENT:3 || TALENT:6) && ASSIPLAY == 0 && EXP:0 == 0
+SIF (TALENT:3 || TALENT:6) && ASSIPLAY == 0 && TALENT:처녀 == 1 ;EXP:0 == 0
 	TFLAG:20 = 1
 
 ;実行者が奴隷である플래그
@@ -425,9 +425,6 @@ RETURN COMTYPE("Ｖ성교계")
 ;===================================================
 @CHECK_COM_ABLE74
 ;기승위実行판정
-;주도권が相손にないとダメ
-SIF TEQUIP:주도권 == 0
-	RETURN 0
 ;바이브挿入中はダメ
 SIF TEQUIP:13
 	RETURN 0

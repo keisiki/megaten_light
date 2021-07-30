@@ -2,84 +2,76 @@
 ;======================================================
 ;장비品の데이터
 ;귀신먹는투구
-;Lv50장비までは반사まで　기본능력に합계+6まで
 ;======================================================
 
 @기본능력수정_3023,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "힘"
-		RETURN 4
-	CASE "인내력"
-		RETURN 1
+SELECTCASE ARG
+	CASE 1
+		RETURN 2
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3023,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 36
-	CASE "회피"
+
+SELECTCASE ARG
+	CASE 1
 		RETURN 8
-	CASE "마법효과"
-		RETURN 12
-	CASE "마법위력"
-		RETURN 5
+	CASE 2
+		RETURN 41
+	CASE 3
+		RETURN 4
+	CASE 5
+		RETURN 2
 ENDSELECT
 RETURN 0
 
 @방어상성_3023,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "정신"
-		RETURN 75
-	CASE "검격"
-		RETURN 50
-	CASE "타격"
+
+SELECTCASE ARG
+	CASE 2,11
 		RETURN 0
-	CASE "주살"
-		RETURN 999
-	CASE "파마"
+	CASE 10,0,8
 		RETURN 150
-	CASE "검격"
-		RETURN 125
 ENDSELECT
 RETURN 100
 
-@バステ내성_3023,ARG,ARG:1 = -1
-SELECTCASE GET_STATE(ARG)
-	CASE "CURSE","BIND"
-		RETURN -50
-	CASE "ORGY"
-		RETURN 25
-ENDSELECT
-RETURN 0
+@공격상성_3023, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3023, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3023, ARG = -1
+
+RETURN 1
+
+@사거리_3023, ARG = -1
+
+RETURN 1
+
+@공격범위_3023, ARG = -1
+RETURN 1
 
 @장비箇所_3023
 RETURN GET_EQUIPNUM("머리")
 
 @필요레벨_3023
-RETURN 48
+RETURN 60
 
 @장비조건_3023,ARG
-SIF BASE:ARG:인내력 < 12
-	RETURN 0
 SIF IS_LOOKSLIKE_MALE(ARG)
 	RETURN 0
-SIF BASE:ARG:LV < 48
+SIF BASE:ARG:LV < 60
+	RETURN 0
+RETURN 1
+
+
+@구입조건_3023
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 5000000
 	RETURN 0
 RETURN 1
 
 @장비조건설명_3023
-PRINTL 장비조건：♀ LV48～
-
-@장비해설_3023
-PRINTL 二角鬼の머리を模し、입部分から顔を出す투구。
-PRINTL 　　　　　　　　힘だけの存在と受け取られがちだが彼らは呪いの使い손でもある。
-
-
-@구입조건_3023
-SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 750000
-	RETURN 0
-RETURN 1
-
-@引継ぎ可不可_3023
-RETURN 0
+PRINTL 장비조건：♀ LV60～

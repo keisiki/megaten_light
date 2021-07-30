@@ -5,25 +5,45 @@
 ;======================================================
 
 @기본능력수정_3567,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3567,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
+SELECTCASE ARG
+	CASE 2
 		RETURN 70
-	CASE "회피"
+	CASE 3
 		RETURN -10
-	CASE "마법효과"
+	CASE 5
 		RETURN 20
 ENDSELECT
 RETURN 0
 
 @방어상성_3567,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@공격상성_3567, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3567, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3567, ARG = -1
+
+RETURN 1
+
+@사거리_3567, ARG = -1
+
+RETURN 1
+
+@공격범위_3567, ARG = -1
+
+RETURN 1
 
 @장비箇所_3567
 RETURN GET_EQUIPNUM("몸통")
@@ -45,7 +65,4 @@ PRINTL 장비조건：기계의처녀　LV40～
 
 
 @구입조건_3567
-RETURN 0
-
-@引継ぎ可不可_3567
 RETURN 0

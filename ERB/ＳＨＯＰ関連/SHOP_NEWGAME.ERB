@@ -37,6 +37,21 @@
 ;	024		2019/10/30		ypa						신뢰系함락추가
 ;	025		2019/11/03		131						娘or息子マスター引き継ぎ処理を추가
 ;	026		2020/03/14		Jガン					娘or息子マスター引き継ぎ処理の修正
+;	027		2020/06/20								FLAG:マヨナカアリーナ進行度の리셋処理を추가
+;	028		2020/06/20		Schrott					아이템や무기防具の引き継ぎ時、『引き継げる최대数』が『아이템引き継ぎ可불가フラグ수치』であったものを、『최대EP』or『10』の低い方に
+;	029		2020/08/08		kamedakeisuke(ﾟдﾟ)		劇場憑き악마系フラグの리셋処理
+;	030		2020/08/12		スパロボガスキー		페르소나구사자引き継ぎ時の초기페르소나処理の수정
+;	031		2020/09/01		スパロボガスキー		030の수정を取り消し、초기페르소나の능력値초기化のみを수정
+;	032		2020/09/22		JK好き					周回ボーナス설정時の分母と分子が逆になっていたのを수정
+;	033		2021/03/05		NEO						単発イベント用のフラグ消去加筆、そういえば以前にも加筆してここに書いてなかったわよ
+;	034		2021/03/05		JK好き					周回時にFLAG:今周回信頼人数及びFLAG:信頼人数のリセット処理を追加
+;	035		2021/03/16		JK好き					引継ぎあなたの能力ボーナス設定前にSYNC_STATUSを追加
+;	036		2021/04/10		NEO						周回ボーナス設定に「受胎アイテムをリセット」「インストールソフト引継ぎ」を追加
+;	037		2021/04/10		jガン					容量の処理追加
+;	038		2021/06/22		軽木					「インストールソフト引継ぎ」を追加……とあったが、追加されてなかったので僭越ながら追加
+;	039		2021/06/25		ロッド@カヤノソト		コロシアムイベント26_데미지コンテストのフラグ・記録リセットを追加
+;	040		2021/06/30		lemukot					「異能者半魔あなた強化段階」のフラグリセット追加、Editを更新日時に合わせた
+;	041		2021/07/17		Musue					ペルソナ強化フラグのリセット処理
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=================================================================
 ;강하게뉴게임関連
@@ -52,9 +67,8 @@
 @SHOPCOMABLE_777
 RESULT:1 = 7
 RESULTS = 뉴게임
-IF FLAG:5 == 9 || DAY > 50
+SIF FLAG:5 == 9 || DAY > 50
 	RETURN 1
-ENDIF
 RETURN 0
 
 @SHOP_COM_777
@@ -170,12 +184,16 @@ CALL REFRESH_POS
 ;		BASE:LOCAL:(RAND:6 + 31) += 1
 ;	ENDIF
 
-;引き継いだキャラの레벨を인간なら5、악마なら1にして能力をＣＳＶから読み込んでから레벨に合わせて増減、습득스킬をＣＳＶから再読み込み。引継ぎフラグに応じて素質や能力변경
+;---- MOD 031 EDIT START -------------------------
+
+;引き継いだキャラの레벨を인간なら5、악마なら1にして능력をＣＳＶから読み込んでから레벨に合わせて増減、습득스킬をＣＳＶから再読み込み。引継ぎフラグに応じて소질や능력변경
 FOR LOCAL,1,CHARANUM
 	CFLAG:LOCAL:引継ぎ횟수 += 1
+	CFLAG:LOCAL:전투참가불가능 = 0
 	CALL SHOP_NEWGAME_INITCHARA, LOCAL
 	CALL 장비강화_CSTR, "全해제：能力のみ", LOCAL
 NEXT
+;---- MOD 031 EDIT END   -------------------------
 
 
 ;-----------------------------------------------------------------
@@ -217,6 +235,7 @@ FLAG:의뢰出現1 = 0
 FLAG:의뢰出現2 = 0
 FLAG:東方의뢰進行度 = 0
 FLAG:ナナドラ의뢰進行度 = 0
+FLAG:マヨナカアリーナ進行度 = 0
 CFLAG:MASTER:101 = 0
 CFLAG:MASTER:102 = 0
 CFLAG:MASTER:103 = 0
@@ -232,10 +251,19 @@ CFLAG:MASTER:娘の産みの親の固有번호親 = 0
 TALENT:MASTER:153 = 0
 CFLAG:MASTER:発情임신 = 0
 CFLAG:MASTER:父親失踪 = 0
+;ふたごちゃんパッチ：最大受胎人数は記録的な部分があるので初期化しない
+CFLAG:MASTER:今回受胎人数 = 0
 CFLAG:MASTER:この場に居ないフラグ = 0
+
+
+
 
 TALENT:MASTER:154 = 0
 
+;뱅드림+P5 모드
+FOR LOCAL, 0, 100
+	메멘토스의뢰:LOCAL = 0
+NEXT
 FLAG:던전필터1 = 0
 FLAG:던전필터2 = 0
 FLAG:취소된ED = 0
@@ -248,6 +276,11 @@ FLAG:所属組織 = 0
 FLAG:闘技場랭크 = 0
 SAVESTR:랜덤대전팀 =
 CALL SELECT_COLOSSEUM_RANDOMBATTLE
+;---- 闘技場26_데미지コンテスト！ -------------------------
+YOUR_RANK = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ;現在の順位(レギュレーション1～10)　※レギュレーション4以降は予備です。
+COLOSSEUM_26_RANKING_EVENT_FLG = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ;ランキング1位イベント完了フラグ(レギュレーション1～10)
+COLOSSEUM_26_MAX_DAMAGE = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ;今周回の最大데미지(レギュレーションごとにハイスコアを格納する配列)　※次の周回へ進む際にリセットする。
+;---- 闘技場26_데미지コンテスト！ -------------------------
 TIME:1 = 0
 
 
@@ -288,9 +321,9 @@ FOR LOCAL,200,6000
 	SELECTCASE LOCAL
 		CASE 220 TO 250
 			ITEM:LOCAL = ABS(ITEM:LOCAL)
-		CASE 500 TO 503 , 508 TO 515 , 517 , 530 , 533 , 540 TO 542, 559
 		;一部除くインス토르ソフトを引継ぎ
 		;ラン란다ンジョンを추가
+		CASE 500 TO 503 , 508 TO 515 , 517 , 530 , 533 , 540 TO 542, 559
 		CASE 2450 TO 2499
 			SIF DC:(LOCAL-2450):90 != 1 && GET_BONUS("마정무기") == 0
 				ITEM:LOCAL = 0
@@ -299,6 +332,9 @@ FOR LOCAL,200,6000
 			TRYCCALLFORM 引継ぎ可不可_{LOCAL}
 				SIF RESULT <= 0
 					ITEM:LOCAL = 0
+				RESULT = COUNT_ENDING_POINT()
+				SIF COUNT_ENDING_POINT() >= 10
+					RESULT = 10
 				SIF ITEM:LOCAL > RESULT
 					ITEM:LOCAL = RESULT
 			CATCH
@@ -309,6 +345,11 @@ FOR LOCAL,200,6000
 				CASE 1010,1011,1012,1013,1014,1015
 				;引継不可(황금의벌꿀주,스피릿리브,겨우살이)
 				CASE 1044,1198,1199
+
+				;500-600(インストールソフト)
+				CASE 500 TO 600
+					SIF GET_BONUS("인스톨소프트")
+						CONTINUE
 
 				;270-318(宝石、페르소나강화カード、섀도우のドロップ)
 				;1400-1449(合成素材)
@@ -334,11 +375,13 @@ FOR LOCAL,200,6000
 				;4000-4448(팔)
 				;4500-4948(발)
 				;5000-5448(アクセ)
-				CASE 3000 TO 3448 , 3500 TO 3948 , 4000 TO 4448 , 4500 TO 4948 , 5000 TO 5448
+				CASE 3000 TO 3449 , 3500 TO 3949 , 4000 TO 4449 , 4500 TO 4949 , 5000 TO 5449
 					SIF GET_BONUS("방어구아이템")
 						CONTINUE
 				ENDSELECT
 				ITEM:LOCAL = 0
+				SIF 개조장비(LOCAL)
+					CALL 개조장비해제,개조장비番号(LOCAL)
 			ENDCATCH
 	ENDSELECT
 NEXT
@@ -379,6 +422,7 @@ FLAG:콜로세움참가済み = 0
 FLAG:今周回연모人数 = 0
 FLAG:今周回음란人数 = 0
 FLAG:今周回복종人数 = 0
+FLAG:今周回信頼人数 = 0
 FLAG:奴隷매각数 = 0
 
 ;今週回の帳簿リセット
@@ -413,6 +457,21 @@ VARSET 中古キャラ매각先:0:0, 0
 VARSET 中古キャラ매각日:0:0, 0
 VARSET デビオク상품リスト:0:0, 0
 VARSET デビオク予約フラグ:0:0, 0
+
+;그외	独自変数の리셋
+VARSET 보컬리스트・세이렌進行, 0
+VARSET 시나리오라이터・지크프리트進行, 0
+VARSET 『관객』디오니소스進行, 0
+VARSET ほむほむvsゴトウ進行, 0
+VARSET 料理イベント進行, 0
+VARSET Reconnect_Ragnarok進行, 0
+
+;그외 한판 개별이벤트 관련 리셋
+VARSET 세라픽게이트진행도, 0
+
+;集団ライブの変数もリセット
+VARSET グループ人気
+VARSET グループ収入
 
 ;-----------------------------------------------------------------
 ;難易度
@@ -509,6 +568,8 @@ IF FLAG:경험ED数 > 4
 		FLAG:인기취득者数 = 0
 		CFLAG:MASTER:第何子まで産んだか = 0
 		CFLAG:MASTER:仕送り時してくれる人数親 = 0  
+		;ふたごちゃんパッチ：最大人数はリセット
+		CFLAG:MASTER:最大妊娠人数 = 0
 	;	CFLAG:MASTER:キャラ固有の번호 = FLAG:今までのキャラ数
 	;	FLAG:今までのキャラ数 += 1
 		CFLAG:MASTER:요리인기 = 0
@@ -534,6 +595,8 @@ IF FLAG:경험ED数 > 4
 		ITEM:【서드・아이】 = 0
 		TALENT:MASTER:촉수사역술 = 0
 		ITEM:【촉수사역술】 = 0
+		TALENT:MASTER:잉태희망 = 0
+
 		EX:MASTER:0 = 0
 		EX:MASTER:1 = 0
 		EX:MASTER:2 = 0
@@ -564,6 +627,8 @@ ELSE
 		FLAG:인기취득者数 = 0
 		CFLAG:MASTER:第何子まで産んだか = 0
 		CFLAG:MASTER:仕送り時してくれる人数親 = 0  
+		;ふたごちゃんパッチ：最大人数はリセット
+		CFLAG:MASTER:最大妊娠人数 = 0
 	;	CFLAG:MASTER:キャラ固有の번호 = FLAG:今までのキャラ数
 	;	FLAG:今までのキャラ数 += 1
 		CFLAG:MASTER:요리인기 = 0
@@ -610,7 +675,7 @@ FOR LOCAL,0,CHARANUM
 			;	RETURN 0
 		NEXT
 
-		PRINTL 딸or아들에게 마스터를 인계하겠습니까？
+		PRINTL 딸 또는 아들에게 마스터를 인계하겠습니까？
 		CALL INPUT_YN
 		SIF RESULT == 0
 			CALL MASTER_MUSUME
@@ -648,6 +713,7 @@ IF RESULT == 1
 	FLAG:연모人数 = 0
 	FLAG:음란人数 = 0
 	FLAG:복종人数 = 0
+	FLAG:信頼人数 = 0
 	FLAG:奴隷매각総数 = 0
 ENDIF
 
@@ -689,33 +755,63 @@ FOR LOCAL,0,8
 	CFLAG:MASTER:(1170+LOCAL) = 0
 NEXT
 
-;페르소나のステ설정 旧処理
+;마장술・能力＆耐性初期化
+CALL 장비강화_CSTR, "全해제：능력のみ", MASTER
+
+;---- EDIT 031 MOD START -------------------------
+;페르소나のステ설정 
 FOR LOCAL, 0, 100
 	IF DITEMTYPE:LOCAL:페르소나("장비상태")
-		DITEMTYPE:LOCAL:페르소나("LV") = 1
-		DITEMTYPE:LOCAL:페르소나("힘") = 3
-		DITEMTYPE:LOCAL:페르소나("지혜") = 3
-		DITEMTYPE:LOCAL:페르소나("마력") = 3
-		DITEMTYPE:LOCAL:페르소나("인내력") = 3
-		DITEMTYPE:LOCAL:페르소나("속도") = 3
-		DITEMTYPE:LOCAL:페르소나("운") = 3
+		;페르소나のLvが11이상なら10まで下げる
+		SIF DITEMTYPE:LOCAL:페르소나("NO") && DITEMTYPE:LOCAL:페르소나("LV") > 10
+			DITEMTYPE:LOCAL:페르소나("LV") = 10
+		;능력値を再설정。端数は四捨五入
+		FOR LOCAL:7, 1, 7
+			LOCAL:(LOCAL:7) = (CSVBASE(DITEMTYPE:LOCAL:페르소나("NO"), GETNUM(BASE,"힘")-1+LOCAL:7, 0) * (18 + DITEMTYPE:LOCAL:페르소나("LV") * 3 / 2) * 10) / (18 + CSVBASE(DITEMTYPE:LOCAL:페르소나("NO"), GETNUM(BASE,"LV"), 0) * 3 / 2)
+			LOCAL:(LOCAL:7) = LOCAL:(LOCAL:7)%10 > 4 ? (LOCAL:(LOCAL:7)+5)/10 # LOCAL:(LOCAL:7)/10
+		NEXT
+		;それでも既定値미만なら補填
+		WHILE SUMARRAY(LOCAL, 1, 7) < (18 + DITEMTYPE:LOCAL:페르소나("LV") * 3 / 2)
+			LOCAL:((LOCAL:7)%6+1) += 1
+			LOCAL:7++
+		WEND
+		FOR LOCAL:7, 1, 7
+			DITEMTYPE:LOCAL:(페르소나("힘")-1+LOCAL:7) = LOCAL:(LOCAL:7)
+		NEXT
+;		DITEMTYPE:LOCAL:페르소나("LV") = 1
+;		DITEMTYPE:LOCAL:페르소나("힘") = 3
+;		DITEMTYPE:LOCAL:페르소나("지혜") = 3
+;		DITEMTYPE:LOCAL:페르소나("마력") = 3
+;		DITEMTYPE:LOCAL:페르소나("인내력") = 3
+;		DITEMTYPE:LOCAL:페르소나("속도") = 3
+;		DITEMTYPE:LOCAL:페르소나("운") = 3
 		DITEMTYPE:LOCAL:페르소나("EXP") = 0
 		DITEMTYPE:LOCAL:페르소나("랭크") = 0
 		DITEMTYPE:LOCAL:페르소나("강화가능횟수") = 0
 	ENDIF
 NEXT
+;---- EDIT 031 MOD END   -------------------------
 
 ;特性초기化
 CALL SET_MASTER_MAJORING
 ;---- EDIT 004 MOD START -------------------------
+;---- EDIT 041 MOD START -------------------------
 IF TALENT:MASTER:페르소나구사자 == 0 && CFLAG:MASTER:초기페르소나ナンバー
 	FOR LOCAL:1 , 0 , 50
 		DITEMTYPE:(CFLAG:MASTER:초기페르소나ナンバー):(LOCAL:1) = 0
 	NEXT
+	CFLAG:MASTER:페르소나강화フラグ = 0
 	CFLAG:MASTER:초기페르소나ナンバー = 0
 	ABL:MASTER:초기페르소나 = 0
+ELSEIF TALENT:MASTER:페르소나구사자 && ABL:MASTER:초기페르소나 != ABL:MASTER:초기페르소나3 && !ABL:MASTER:초기페르소나2
+	CFLAG:MASTER:페르소나강화フラグ = 0
+ELSEIF TALENT:MASTER:페르소나구사자 && ABL:MASTER:초기페르소나 != ABL:MASTER:초기페르소나2
+	CFLAG:MASTER:페르소나강화フラグ = 0
 ENDIF
+;---- EDIT 041 MOD END -------------------------
 ;---- EDIT 004 MOD END -------------------------
+
+;---- EDIT 031 MOD CANCEL -------------------------
 ;-----------------------------------------------------------------
 ;페르소나削除
 ;主人公の페르소나決定に使いたいので、ここでやる
@@ -726,6 +822,7 @@ FOR LOCAL, 0, 12
 		DITEMTYPE:LOCAL:(LOCAL:1) = 0
 	NEXT
 NEXT
+;---- EDIT 027 MOD END   -------------------------
 
 ;-----------------------------------------------------------------
 ;主人の特性・まとめ
@@ -747,6 +844,7 @@ LOCAL:1 = 0
 ;主人の能力ボーナスは見たEDの数-周回ボーナスコスト)*3
 ;ボーナス充当済みの이능자・달인以外は+12
 ;---- EDIT 021 MOD START -------------------------
+CALL SYNC_STATUS,0
 CALL STATUS_BONUS,MASTER,(TALENT:MASTER:이능자 || TALENT:MASTER:달인) ? (COUNT_ENDING_POINT()-REQUIRE_ENDING_POINT())*3 # 12+((COUNT_ENDING_POINT()-REQUIRE_ENDING_POINT())*3)
 ;---- EDIT 021 MOD END ---------------------------
 ;能力の同期化
@@ -757,6 +855,7 @@ CALL REFRESH_POS
 ;ＣＯＭＰ용량は8+見たEDの数-周回ボーナスコスト
 ;-----------------------------------------------------------------
 FLAG:ＣＯＭＰ용량 = 8+COUNT_ENDING_POINT()-REQUIRE_ENDING_POINT()
+FLAG:魔貨によるＣ容量増加 = FLAG:ＣＯＭＰ용량 - 7;037
 LOCAL:2 = COUNT_ENDING_POINT()-REQUIRE_ENDING_POINT()
 
 ;---- EDIT 018 ADD START -------------------------
@@ -1031,7 +1130,10 @@ RETURNF GETBIT(FLAG:周回ボーナス,LOCAL)
 ;소재아이템	2点
 ;마정무기		5点
 ;경험치			5点
-;全て取得には20EP필요
+;受胎アイテムリセット	10点　追加：受胎アイテム取得状況をリセットする。
+;						要素としてデカめなのでポイントは多めに。たっちゃんをノヴァサイザー産む機械にしないためのポイント
+;インストールソフト 4点 レベル制限がなく、引き継いですぐに使えるのでちょっと増やす。
+;全て取得には20+10+4EP必要
 @CHECK_ED_POINT(ARGS)
 #FUNCTION
 SELECTCASE ARGS
@@ -1041,8 +1143,12 @@ CASE "소재아이템"
 	RETURNF 2
 CASE "무구아이템","방어구아이템"
 	RETURNF 3
+CASE "인스톨소프트"
+	RETURNF 4
 CASE "마정무기","경험치"
 	RETURNF 5
+CASE "수태아이템리셋"
+	RETURNF 10
 ENDSELECT
 RETURNF 666
 
@@ -1063,6 +1169,10 @@ CASE 5
 	RETURNF "마정무기"
 CASE 6
 	RETURNF "경험치"
+CASE 7
+	RETURNF "수태아이템리셋"
+CASE 8
+	RETURNF "인스톨소프트"
 ENDSELECT
 RETURNF "NONE"
 
@@ -1096,12 +1206,13 @@ DRAWLINE
 FOR LOCAL,0,64
 	SIF GETBIT_BONUS_NAME(LOCAL) == "NONE"
 		CONTINUE
-	LOCALS = %GETBIT_BONUS_NAME(LOCAL),12,LEFT%\({CHECK_ED_POINT(GETBIT_BONUS_NAME(LOCAL))}EP\)
+		;한판 레이아웃 수정 12>15, 20>21
+	LOCALS = %GETBIT_BONUS_NAME(LOCAL),15,LEFT%\({CHECK_ED_POINT(GETBIT_BONUS_NAME(LOCAL))}EP\)
 	IF GETBIT(FLAG:周回ボーナス,LOCAL)
 		SETCOLOR COLOR("AQUA")
-		PRINTFORML [{LOCAL,2}] %LOCALS,20,LEFT% 계승한다
+		PRINTFORML [{LOCAL,2}] %LOCALS,21,LEFT% 계승한다
 	ELSE
-		PRINTFORML [{LOCAL,2}] %LOCALS,20,LEFT% 계승하지 않는다
+		PRINTFORML [{LOCAL,2}] %LOCALS,21,LEFT% 계승하지 않는다
 	ENDIF
 	RESETCOLOR
 NEXT

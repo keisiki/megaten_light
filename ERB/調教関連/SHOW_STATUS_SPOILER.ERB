@@ -5,7 +5,8 @@
 ;	Edit	Date			Author					Reason
 ;	001		2011/03/25		UNP						매각・함락조건표시の作成
 ;	002		2013/11/24		ひみつ					요리2+가창2の판정を수정
-;	003		2018/08/08		JK好き					MASTERの매각・조수표시を비표시＆함락조건표시수정
+;	003		2018/08/08		JK好き					MASTERの売却・助手表示を非表示＆함락条件表示修正
+;	004		2021/03/09		JK好き					恋慕と信頼の同時所持中の表示を調整
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 ;============================================================================
@@ -285,21 +286,22 @@ ELSEIF 함락() == 1
 		ENDIF
 		PRINTL
 		DRAWLINE
-	ELSEIF TALENT:신뢰
-		PRINT 동료조건： 
-		CALLF SPOILER_PRINT_FLAG("미조교 ", CFLAG:被조교횟수 <= 0, 1)
-		CALLF SPOILER_PRINT_FLAG("미조교時함락OP ", IS_HUMAN(TARGET) && FLAG:미조교시함락 > 0 || FLAG:미조교시함락 == 2)
-		CALLF SPOILER_PRINT_FLAG("주인과동성 ", IS_LESBIAN(TARGET,MASTER) || IS_GAY(TARGET,MASTER))
-		IF (TALENT:MASTER:깨달음)
-			LOCAL:0 = 10000 + (ABS(ABL:TARGET:속성LD - ABL:MASTER:속성LD) + ABS(ABL:TARGET:속성LC - ABL:MASTER:속성LC)) * 5000
-			LOCAL:0 *= 4
-			LOCALS = {LOCAL:0}
-			CALLF SPOILER_PRINT_FLAG(@"충성도%LOCALS%이상", (BASE:충성도 - MAXBASE:충성도) >= LOCAL:0)
-		ELSE
-			PRINT 충성도일정이상
-		ENDIF
-		PRINTL
-		DRAWLINE
 	ENDIF
+ENDIF
+IF TALENT:신뢰
+	PRINT 동료조건： 
+	CALLF SPOILER_PRINT_FLAG("미조교 ", CFLAG:被조교횟수 <= 0, 1)
+	CALLF SPOILER_PRINT_FLAG("미조교時함락OP ", IS_HUMAN(TARGET) && FLAG:미조교시함락 > 0 || FLAG:미조교시함락 == 2)
+	CALLF SPOILER_PRINT_FLAG("주인과동성 ", IS_LESBIAN(TARGET,MASTER) || IS_GAY(TARGET,MASTER))
+	IF (TALENT:MASTER:깨달음)
+		LOCAL:0 = 10000 + (ABS(ABL:TARGET:속성LD - ABL:MASTER:속성LD) + ABS(ABL:TARGET:속성LC - ABL:MASTER:속성LC)) * 5000
+		LOCAL:0 *= 4
+		LOCALS = {LOCAL:0}
+			CALLF SPOILER_PRINT_FLAG(@"충성도%LOCALS%이상", (BASE:충성도 - MAXBASE:충성도) >= LOCAL:0)
+	ELSE
+		PRINT 충성도일정이상
+	ENDIF
+	PRINTL
+	DRAWLINE
 ENDIF
 RETURN

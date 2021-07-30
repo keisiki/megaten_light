@@ -1648,7 +1648,7 @@ ENDIF
 ;파주주の사고패턴
 @SET_ACTION_255,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ == 2
+IF CFLAG:ARG:１moreフラグ > 0
 	IF RAND:2 == 0
 		;프레이다인
 		CALL CHECK_ACTIONABLE,ARG,1903

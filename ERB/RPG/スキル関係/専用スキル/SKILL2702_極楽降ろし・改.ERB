@@ -42,12 +42,12 @@ RETURN 12
 ;지변
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2702
+@SKILL_DECIDE_TYPE_2702, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2702
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2702, ARG
 RETURN 2
 
 
@@ -139,8 +139,8 @@ CALL ATTACK_SINGLE,ARG,LOCAL,2702
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2702
-PRINTL 적一体に지변+화염の特大ダメージ
-PRINTL 아야세専用스킬
+PRINTL 적 1체에게 지변+화염의 특대 데미지
+PRINTL 아야세 전용 스킬
 
 ;継承に필요な部位
 @継承部位_2702,ARG

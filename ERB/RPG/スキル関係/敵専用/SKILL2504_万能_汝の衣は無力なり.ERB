@@ -36,11 +36,11 @@ RETURN 30
 RETURN GET_TYPE_NUM("만능")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2504
+@SKILL_DECIDE_TYPE_2504, ARG
 RETURN 1
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2504
+@SKILL_DAMAGETYPE_2504, ARG
 RETURN 2
 
 
@@ -156,8 +156,8 @@ NEXT
 ;　 설명文の표시
 @SKILL_EXPLAIN_2504
 PRINTL ・모든 인스톨 소프트가 제외된다
-PRINTL ・악마는 相性 변화에 의해 얻은 내성、인간은 장비에 의해 얻은 내성을 무효화한다(약점은 남는다)
-PRINTL ・相性 변경에 의해 얻은 내성을 무효화한다(본래 내성은 남는다)
+PRINTL ・악마는 상성 변화에 의해 얻은 내성、인간은 장비에 의해 얻은 내성을 무효화한다(약점은 남는다)
+PRINTL ・상성 변경에 의해 얻은 내성을 무효화한다(본래 내성은 남는다)
 ;とかやりたいけどうまくいってない
 ;主に페르소나사용자・데빌시프터・식노が理解不能
 

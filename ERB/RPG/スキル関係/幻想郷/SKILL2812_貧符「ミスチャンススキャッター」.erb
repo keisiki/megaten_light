@@ -36,12 +36,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2812
-RETURN 2
+@SKILL_DECIDE_TYPE_2812, ARG
+RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2812
+@SKILL_DAMAGETYPE_2812, ARG
 RETURN 2
 ;마법위력
 
@@ -96,7 +96,7 @@ RETURN 1
 ;テン플레이트用、추가효과シ리즈
 ;추가효과스테이터스
 @SKILL_ADDTIONAL_STATE_2812,ARG
-A = RAND:3
+A = RAND:4
 IF A == 0
 	RETURN GET_STATE_NUM("CURSE")
 ELSEIF A == 1
@@ -136,10 +136,10 @@ CALL ATTACK_FIELD,ARG,ARG:1,2812
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2812
-PRINTL 적전체만능속성で大위력の마법공격을1回行う。
-PRINTL 추가효과：주살속성で랜덤に毒・魔封・呪い・即死。
-PRINTL 운気を奪う呪言を撒き散らし、不調不発呪い不幸を引き起こす。
-PRINTL 빈곤신　요리가미 시온のスペルカード（専用）
+PRINTL 적 전체 만능속성에 대 위력의 마법공격을 1회 행한다。
+PRINTL 추가효과：주살속성으로 랜덤하게 독・마법봉인・저주・죽사。
+PRINTL 운기를 빼앗는 저주의 말을 뿌리고、부조불발저주불행을 일으킨다。
+PRINTL 빈곤신　요리가미 시온의 스펠카드（전용）
 ;継承に필요한部位
 @継承部位_2812,ARG
 RETURN 1

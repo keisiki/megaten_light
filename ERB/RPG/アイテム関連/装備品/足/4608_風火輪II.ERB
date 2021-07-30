@@ -72,9 +72,11 @@ RETURN 0
 ;18,사이코
 SELECTCASE ARG
 	CASE 4
-		RETURN 80
+		RETURN -50
 	CASE 7
-		RETURN 80
+		RETURN 0
+	CASE 2,6
+		RETURN 140
 ENDSELECT
 RETURN 100
 
@@ -137,14 +139,14 @@ SIF BASE:ARG:LV < 70
 RETURN 1
 
 @장비해설_4608
-PRINTFORML 나타태자が발につけていた宝貝
-PRINTFORML 武術を極めた者はこの장비を武具として扱うことができる
+PRINTFORML 나타태자가 발에 차고 있던 보패
+PRINTFORML 무술에 능한 사람은 이 장비를 무구로 취급할 수 있다
 SETCOLOR 0x87ceeb
-PRINTL マーシャルアーツ専用《검：EMPTY》
+PRINTL 마샬아츠전용《검：EMPTY》
 RESETCOLOR
 
 @장비조건설명_4608
-PRINTL 장비조건：인간、반마인 LV70～　속도40以上
+PRINTL 장비조건：인간、반마인 LV70～　속도40이상
 
 @구입조건_4608
 RETURN 0
@@ -154,7 +156,7 @@ RETURN 1
 
 @WIKI備考欄_4608
 ;WIKIの備考欄に記載するもの|は使わないでおく、PRINTL、PRINTFORMLも使わない
-PRINT 검無장비と마샬아츠で~~
+PRINT 검 없이 장비와 마샬아츠로~~
 PRINT 공격：272　명중：205　방어：10~~
-PRINT 魔威：184　魔効：_90　회피：78~~
-PRINT 스킬が2つ付く
+PRINT 마위：184　마효：_90　회피：78~~
+PRINT 스킬이 두 개 붙는다

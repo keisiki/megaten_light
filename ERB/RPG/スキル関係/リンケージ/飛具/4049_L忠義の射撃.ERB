@@ -32,11 +32,11 @@ RETURN 1
 RETURN GET_TYPE_NUM("비구")
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4049
+@SKILL_DECIDE_TYPE_4049, ARG
 RETURN 0
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_4049
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_4049, ARG
 RETURN 1
 
 
@@ -71,7 +71,7 @@ RETURN GET_SUCCESSION_NUM("비구")
 
 ;속도보정
 @SKILL_SPEED_4049, ARG = -1
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4049,ARG
@@ -108,7 +108,7 @@ RETURN 0
 ;====================================================
 @ACTION_4049,ARG,ARG:1
 IF BASE:ARG:충성도+TCVAR:ARG:획득충성도 <= 10000
-	PRINTFORMW 충성도が발りない！
+	PRINTFORMW 충성도가 부족하다！
 ELSE
 	CALL ATTACK_FIELD, ARG, ARG:1, 4049
 	;충성도を10000残して全て소비
@@ -125,7 +125,7 @@ ENDIF
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_4049
-PRINTL 적전체に비구相性の공격。충성도が高い程위력が上昇。後列発動可能(충성도1万以上필요)
+PRINTL 적 전체에 비구상성의 공격。충성도가 높을수록 위력이 상승。후열 발동 가능(충성도1만 이상 필요)
 
 ;継承に필요な部位
 @継承部位_4049,ARG
@@ -154,12 +154,12 @@ SELECTCASE ARG
 	CASE 1
 		PRINTFORM %CALLNAME:MASTER%
 	CASE 2
-		PRINTFORM 비구系範囲物理
+		PRINTFORM 비구계 범위 물리
 ENDSELECT
 
 @発動者조건_4049 , ARG
 ;검격相性の範囲物理공격스킬を사용可能なこと
-CALL HAVE_SKILL_SEARCH(ARG, "비구", "範囲", "공격", "물리")
+CALL HAVE_SKILL_SEARCH(ARG, "비구", "범위", "공격", "물리")
 RETURN RESULT
 
 

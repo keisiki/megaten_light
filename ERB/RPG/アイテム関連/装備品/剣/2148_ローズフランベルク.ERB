@@ -23,9 +23,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2148,ARG,ARG:1 = -1
-RETURN 0
-
 @방어상성_2148,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -61,6 +58,16 @@ RETURN 40
 @장비箇所_2148
 RETURN GET_EQUIPNUM("검")
 
+;뇌쇄슬래시
+@장비추가스킬_2148,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 68
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -82,6 +89,10 @@ PRINTL 장비조건：LV45～
 
 @장비해설_2148
 PRINTL 칼날이 물결 모양인 서양검。 장미 장식으로 치장되어 있다。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：뇌쇄슬래시
+RESETCOLOR
+
 
 RETURN 0
 

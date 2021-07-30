@@ -546,7 +546,7 @@ ELSEIF ARG == 8218
 	;＋era版アダマの스킬……우뢰의세례、삼할의마맥、다크브레스
 	CFLAG:(CHARANUM-1):ＨＰ보정 = 0
 	CSTR:(CHARANUM-1):増援패턴 = アルビオンもどきの
-	CALLNAME:(CHARANUM-1) = ｱﾙﾋﾞｵﾝ
+	CALLNAME:(CHARANUM-1) = 알비온
 	MAXBASE:(CHARANUM-1):전격 = 999
 	BASE:(CHARANUM-1):전격 = 999
 	ABL:(CHARANUM-1):스킬1 = [[스킬:트윈슬래시]]
@@ -704,7 +704,7 @@ ELSEIF ARG == 8222
 ELSEIF ARG == 8223
 	;カイラース
 	;原作だと구입、TRPGだとティアマット。
-	;代わりに懐かしの아귀３体。カイラース스킬＋맛카빔搭載。
+	;代わりに懐かしの아귀３体。カイラース스킬＋마카빔搭載。
 	FOR LOCAL, 8, 11
 		CALL SET_ENEMY,LOCAL,[[キャラ:아귀]],70,0,1
 		CFLAG:(CHARANUM-1):ＨＰ보정 += 10000
@@ -714,7 +714,7 @@ ELSEIF ARG == 8223
 		BASE:(CHARANUM-1):인내력 += 10
 		BASE:(CHARANUM-1):속도 += 10
 		BASE:(CHARANUM-1):운 += 10
-		ABL:(CHARANUM-1):스킬1 = [[스킬:맛카빔]]
+		ABL:(CHARANUM-1):스킬1 = [[스킬:마카빔]]
 		ABL:(CHARANUM-1):스킬2 = [[스킬:메기도라]]
 		ABL:(CHARANUM-1):스킬3 = [[스킬:지고의마탄・인수라]]
 		ABL:(CHARANUM-1):스킬4 = [[스킬:테트라칸]]
@@ -737,7 +737,12 @@ ELSEIF ARG == 8224
 		CSTR:(CHARANUM-1):増援패턴 = ヒトシュラの
 		CFLAG:(CHARANUM-1):601 = 0
 		CFLAG:(CHARANUM-1):ＨＰ보정 += 10000
-		EQUIP:(CHARANUM-1):악세사리 = 8224
+	;	EQUIP:(CHARANUM-1):악세사리 = 8224
+		BASE:(CHARANUM-1):힘 += 4
+		BASE:(CHARANUM-1):지혜 += 4
+		BASE:(CHARANUM-1):마력 += 4
+		BASE:(CHARANUM-1):인내력 += 4
+		BASE:(CHARANUM-1):속도 += 4
 		BASE:(CHARANUM-1):검격 = 0
 		BASE:(CHARANUM-1):화염 = 0
 		BASE:(CHARANUM-1):빙결 = 0
@@ -790,7 +795,7 @@ ELSEIF ARG == 8224
 			ABL:(CHARANUM-1):스킬1 = [[스킬:아카샤아츠]]
 			ABL:(CHARANUM-1):스킬2 = [[스킬:앵화섬란]]
 			ABL:(CHARANUM-1):스킬3 = [[스킬:악셀클로]]
-			ABL:(CHARANUM-1):스킬4 = [[스킬:정수리나누기]]
+			ABL:(CHARANUM-1):스킬4 = [[스킬:머리깨기]]
 			ABL:(CHARANUM-1):스킬5 = [[스킬:묵시록]]
 			ABL:(CHARANUM-1):스킬6 = [[스킬:도발]]
 			ABL:(CHARANUM-1):스킬7 = [[스킬:어드바이스]]
@@ -834,7 +839,12 @@ ELSE
 		CSTR:(CHARANUM-1):増援패턴 = ひとしゅらの
 		CFLAG:(CHARANUM-1):601 = 0
 		CFLAG:(CHARANUM-1):ＨＰ보정 += 10000
-		EQUIP:(CHARANUM-1):악세사리 = 8224
+	;	EQUIP:(CHARANUM-1):악세사리 = 8224
+		BASE:(CHARANUM-1):힘 += 4
+		BASE:(CHARANUM-1):지혜 += 4
+		BASE:(CHARANUM-1):마력 += 4
+		BASE:(CHARANUM-1):인내력 += 4
+		BASE:(CHARANUM-1):속도 += 4
 		BASE:(CHARANUM-1):검격 = 0
 		BASE:(CHARANUM-1):화염 = 0
 		BASE:(CHARANUM-1):빙결 = 0
@@ -877,7 +887,12 @@ ELSE
 			CSTR:(CHARANUM-1):増援패턴 = ヒトシュラの
 			CFLAG:(CHARANUM-1):601 = 0
 			CFLAG:(CHARANUM-1):ＨＰ보정 += 10000
-			EQUIP:(CHARANUM-1):악세사리 = 8224
+		;	EQUIP:(CHARANUM-1):악세사리 = 8224
+			BASE:(CHARANUM-1):힘 += 4
+			BASE:(CHARANUM-1):지혜 += 4
+			BASE:(CHARANUM-1):마력 += 4
+			BASE:(CHARANUM-1):인내력 += 4
+			BASE:(CHARANUM-1):속도 += 4
 			BASE:(CHARANUM-1):검격 = 200
 			BASE:(CHARANUM-1):화염 = 200
 			BASE:(CHARANUM-1):빙결 = 200
@@ -930,7 +945,7 @@ ELSE
 			ABL:(CHARANUM-1):스킬1 = [[스킬:아카샤아츠]]
 			ABL:(CHARANUM-1):스킬2 = [[스킬:앵화섬란]]
 			ABL:(CHARANUM-1):스킬3 = [[스킬:악셀클로]]
-			ABL:(CHARANUM-1):스킬4 = [[스킬:정수리나누기]]
+			ABL:(CHARANUM-1):스킬4 = [[스킬:머리깨기]]
 			ABL:(CHARANUM-1):스킬5 = [[스킬:묵시록]]
 			ABL:(CHARANUM-1):스킬6 = [[스킬:도발]]
 			ABL:(CHARANUM-1):스킬7 = [[스킬:어드바이스]]
@@ -1399,7 +1414,7 @@ ELSEIF CFLAG:ARG:601 == 4
 	ABL:(CHARANUM-1):스킬1 = [[스킬:아카샤아츠]]
 	ABL:(CHARANUM-1):스킬2 = [[스킬:앵화섬란]]
 	ABL:(CHARANUM-1):스킬3 = [[스킬:악셀클로]]
-	ABL:(CHARANUM-1):스킬4 = [[스킬:정수리나누기]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:머리깨기]]
 	ABL:(CHARANUM-1):스킬5 = [[스킬:묵시록]]
 	ABL:(CHARANUM-1):스킬6 = [[스킬:도발]]
 	ABL:(CHARANUM-1):스킬7 = [[스킬:어드바이스]]
@@ -1731,7 +1746,7 @@ ELSEIF CFLAG:ARG:601 == 4
 	ABL:(CHARANUM-1):스킬1 = [[스킬:아카샤아츠]]
 	ABL:(CHARANUM-1):스킬2 = [[스킬:앵화섬란]]
 	ABL:(CHARANUM-1):스킬3 = [[스킬:악셀클로]]
-	ABL:(CHARANUM-1):스킬4 = [[스킬:정수리나누기]]
+	ABL:(CHARANUM-1):스킬4 = [[스킬:머리깨기]]
 	ABL:(CHARANUM-1):스킬5 = [[스킬:묵시록]]
 	ABL:(CHARANUM-1):스킬6 = [[스킬:도발]]
 	ABL:(CHARANUM-1):스킬7 = [[스킬:어드바이스]]

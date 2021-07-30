@@ -8,8 +8,10 @@
 ;	Modification Data:
 ;
 ;	Edit	Date			Author					Reason
-;	001		20XX/XX/XX		XXXX					作成
-;	002		2019/04/20		TR(SAYA)				아이템が正常に취득されなかった問題の修正
+;	001		20XX/XX/XX		XXXX					작성
+;	002		2019/04/20		TR(SAYA)				아이템が正常に취득されなかった問題の수정
+;	003		2020/05/23		名無し					아이템취득조건を黄色キャン디무準拠に
+;	004		2021/04/10		NEO						受胎アイテム取得状況を引継ぎ時リセットできるように処理を変更
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 ;====================
@@ -41,7 +43,11 @@ RETURN 1
 #FUNCTION
 SIF CFLAG:ARG:この場に居ないフラグ
 	RETURNF 0
-SIF ABL:ARG:수태아이템 <= 0
+;SIF ABL:ARG:수태아이템 <= 0
+;	RETURNF 0
+SIF ABL:ARG:수태아이템 < 0 || (ABL:ARG:수태아이템 == 0 && !CSVABL(NO:ARG, GETNUM(ABL, "수태아이템"), 0))
+	RETURNF 0
+SIF CFLAG:ARG:受胎アイテム出産済みフラグ != 0
 	RETURNF 0
 SIF 함락(ARG) < 2
 	RETURNF 0
@@ -63,9 +69,10 @@ FOR LOCAL,0,CHARANUM
 	SIF EVENT54_GIFTCHECK(LOCAL) == 0
 		CONTINUE
 	L_GIFT:0:GCOUNT = LOCAL
-	L_GIFT:1:GCOUNT = ABL:LOCAL:수태아이템
+	;L_GIFT:1:GCOUNT = ABL:LOCAL:수태아이템
+	L_GIFT:1:GCOUNT = ABL:LOCAL:수태아이템 > 0 ? ABL:LOCAL:수태아이템 # CSVABL(NO:LOCAL, GETNUM(ABL, "수태아이템"), 0)
 	CALL GET_ITEM(L_GIFT:1:GCOUNT,1)
-	ABL:LOCAL:수태아이템 = -1
+	CFLAG:LOCAL:受胎アイテム出産済みフラグ = 1
 	GCOUNT++
 NEXT
 EXP:MASTER:애정경험 += GCOUNT

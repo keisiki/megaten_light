@@ -60,12 +60,12 @@ ENDIF
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_570
+@SKILL_DECIDE_TYPE_570, ARG
 RETURN 1
 ;요리は기능
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_570
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_570, ARG
 RETURN 0
 
 
@@ -111,6 +111,11 @@ RETURN 0
 ;스킬変化？用랭크
 @SKILL_RANK_570
 RETURN 3
+
+@継承不能_570
+RETURN 1
+;불가
+
 
 ;-----------------------------
 ;- 추가효과処理

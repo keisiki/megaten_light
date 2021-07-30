@@ -12,6 +12,10 @@
 ;	002		2011/09/08		黒天					처녀(재생처녀)상실処理を関数を呼ぶように수정
 ;	003		2013/11/24		ひみつ					リスト표시数설정
 ;	004		2017/06/23		kuni					キャラ표시でINPUT_CHARA_LISTを사용するように변경
+;	005		2020/05/19		がめら					NTR好感度処理をCDFLAGに변경
+;	006		2020/06/24		名無し					尻소질が収益に影響するように
+;	007a	2020/10/19		Ratmice					引き継ぎキャラの減額率변경
+;	008		2021/04/27		JK好き					奴隷レンタルで多胎OP時でも妊娠するように修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 
 
@@ -42,24 +46,24 @@ IF ARG
 	B = ARG
 ELSE
 	PRINTL 렌탈 기간을 선택해주세요
-	SIF BASE:A:0 > 500
+	SIF BASE:A:체력 > 500
 		PRINTL [0]   -   １일
-	SIF BASE:A:0 > 800
+	SIF BASE:A:체력 > 800
 		PRINTL [1]   -   ３일
-	SIF BASE:A:0 > 1000 && (CFLAG:A:렌탈された総日数 >= 5 || TALENT:A:8)
+	SIF BASE:A:체력 > 1000 && (CFLAG:A:렌탈された総日数 >= 5 || TALENT:A:예속)
 		PRINTL [2]   -   ５일
-	SIF BASE:A:0 > 1500 && (CFLAG:A:렌탈された総日数 >= 10 || TALENT:A:8)
+	SIF BASE:A:체력 > 1500 && (CFLAG:A:렌탈された総日数 >= 10 || TALENT:A:예속)
 		PRINTL [3]   - １０일
 	PRINTL [100] -   돌아간다
 	$INPUT_LOOP_2
 	INPUT
-	IF RESULT == 0 && BASE:A:0 > 500
+	IF RESULT == 0 && BASE:A:체력 > 500
 		B = 1
-	ELSEIF RESULT == 1 && BASE:A:0 > 800
+	ELSEIF RESULT == 1 && BASE:A:체력 > 800
 		B = 3
-	ELSEIF RESULT == 2 && BASE:A:0 > 1000 && (CFLAG:A:렌탈された総日数 >= 5 || TALENT:A:8)
+	ELSEIF RESULT == 2 && BASE:A:체력 > 1000 && (CFLAG:A:렌탈された総日数 >= 5 || TALENT:A:예속)
 		B = 5
-	ELSEIF RESULT == 3 && BASE:A:0 > 1500 && (CFLAG:A:렌탈された総日数 >= 10 || TALENT:A:8)
+	ELSEIF RESULT == 3 && BASE:A:체력 > 1500 && (CFLAG:A:렌탈された総日数 >= 10 || TALENT:A:예속)
 		B = 10
 	ELSEIF RESULT == 100
 		RETURN 0
@@ -524,7 +528,7 @@ IF TALENT:A:7
 	PRINTFORML %TALENTNAME:7% ＋{C}％
 ENDIF
 ;예속
-IF TALENT:A:8
+IF TALENT:A:예속
 	C = 100
 	V += 100
 	PRINTFORML %TALENTNAME:8% ＋{C}％
@@ -911,6 +915,33 @@ IF TALENT:A:112
 	V += 10
 	PRINTFORML %TALENTNAME:112% ＋{C}％
 ENDIF
+;魔乳
+IF TALENT:A:魔乳
+	C = 10
+	V += 10
+	PRINTFORML 魔乳 ＋{C}％
+ENDIF
+;남자でないなら有効
+IF !TALENT:A:140
+	;小尻
+	IF TALENT:A:121
+		C = 10
+		V -= 10
+		PRINTFORML %TALENTNAME:121% －{C}％
+	ENDIF
+	;巨尻
+	IF TALENT:A:123
+		C = 20
+		V += 20
+		PRINTFORML %TALENTNAME:123% ＋{C}％
+	ENDIF
+	;爆尻
+	IF TALENT:A:124
+		C = 10
+		V += 10
+		PRINTFORML %TALENTNAME:124% ＋{C}％
+	ENDIF
+ENDIF
 ;회복빠름
 IF TALENT:A:130
 	C = 20
@@ -966,7 +997,7 @@ S *= V / 100
 
 ;붕괴,광기,임신は報酬をかなり低くする（순종によって、80％まで회복）
 IF TALENT:A:9 || TALENT:A:141 || TALENT:A:153
-PRINTL 
+	PRINTL 
 	IF TALENT:A:9
 		S *= ABL:A:0
 		TIMES S , 0.08
@@ -986,7 +1017,7 @@ PRINTL
 		Z *= 8
 		PRINTFORML %TALENTNAME:153% ×{Z}％
 	ENDIF
-PRINTL 
+	PRINTL 
 ENDIF
 
 
@@ -1024,8 +1055,25 @@ S *= 2
 
 ;引継ぎキャラ
 IF CFLAG:A:引継ぎ횟수 > 0 && FLAG:5 < 9 && S > 0 && DAY < 51
-	PRINTFORML 인계된 캐릭터： × 0.01
-	S /= 100
+;---- EDIT 017a MOD START -------------------------
+	IF FLAG:周回횟수 > 11
+		PRINTFORML 인계 캐릭터： × 0.50
+		S /= 2
+	ELSEIF FLAG:周回횟수 > 8
+		PRINTFORML 인계 캐릭터： × 0.35
+		S *= 7
+		S /= 20
+	ELSEIF FLAG:周回횟수 > 5
+		PRINTFORML 인계 캐릭터： × 0.20
+		S /= 5
+	ELSEIF FLAG:周回횟수 > 2
+		PRINTFORML 인계 캐릭터： × 0.10
+		S /= 10
+	ELSE
+		PRINTFORML 인계 캐릭터： × 0.05
+		S /= 20
+	ENDIF
+;---- EDIT 017a MOD END -------------------------
 	SIF S < 6
 		S = 6
 ENDIF
@@ -1097,7 +1145,7 @@ SIF CFLAG:ARG:노역フラグ > 0
 	RETURN 0
 SIF (ABL:ARG:순종 + ABL:ARG:봉사정신 + ABL:ARG:욕망 + TALENT:ARG:복종*3 + TALENT:ARG:예속*6) < 6
 	RETURN 0
-SIF BASE:ARG:0 <= 500
+SIF BASE:ARG:체력 <= 500
 	RETURN 0
 SIF CFLAG:ARG:この場に居ないフラグ == 1
 	RETURN 0
@@ -1123,16 +1171,16 @@ H = CFLAG:ARG:16
 ;체력の減少
 ;一日
 SIF  B == 1
-	BASE:ARG:0 -= 500
+	BASE:ARG:체력 -= 500
 ;三日
 SIF  B == 3
-	BASE:ARG:0 -= 800
+	BASE:ARG:체력 -= 800
 ;五日
 SIF  B == 5
-	BASE:ARG:0 -= 1000
+	BASE:ARG:체력 -= 1000
 ;十日
 SIF  B == 10
-	BASE:ARG:0 -= 1500
+	BASE:ARG:체력 -= 1500
 
 ;스트레스치の付加
 CFLAG:ARG:10 += B
@@ -1145,21 +1193,21 @@ G = 0
 ;섹스系
 ;VとAのプ레이差
 ;남자はAのみ
-IF TALENT:ARG:140
-	D = ABL:ARG:5
+IF TALENT:ARG:남자
+	D = ABL:ARG:Ａ감각
 	E = 0
 	F = B
-ELSEIF ABL:ARG:4 > ABL:ARG:5
-	D = ABL:ARG:4-ABL:ARG:5
+ELSEIF ABL:ARG:Ｖ감각 > ABL:ARG:Ａ감각
+	D = ABL:ARG:Ｖ감각-ABL:ARG:Ａ감각
 	E = (B+D/2)*3
 	F = (B-D/2)*3
 ELSE
-	D = ABL:ARG:5-ABL:ARG:4
+	D = ABL:ARG:Ａ감각-ABL:ARG:Ｖ감각
 	E = (B-D/2)*3
 	F = (B+D/2)*3
 ENDIF
 ;奴隷が처녀の場合
-IF EXP:ARG:0 == 0 && TALENT:ARG:0
+IF EXP:ARG:Ｖ경험 == 0 && TALENT:ARG:처녀
 	E += 3
 	G = 20
 ENDIF
@@ -1167,41 +1215,41 @@ SIF E < 0
 	E = 0
 SIF F < 0
 	F = 0
-EXP:ARG:0 += E
-EXP:ARG:1 += F
-EXP:ARG:2 += (E+F)/3
+EXP:ARG:Ｖ경험 += E
+EXP:ARG:Ａ경험 += F
+EXP:ARG:절정경험 += (E+F)/3
 EXP:ARG:키스경험 += MAX(E, 3*B)
 ;후타나리か남자
-SIF TALENT:ARG:139 || TALENT:ARG:140
-	EXP:ARG:3 += (E+F)/3
-EXP:ARG:4 += (E+F)
+SIF TALENT:ARG:후타나리 || TALENT:ARG:남자
+	EXP:ARG:사정경험 += (E+F)/3
+EXP:ARG:성교경험 += (E+F)
 ;질사경험
 IF H == 0
-	EXP:ARG:5 += E
-	CFLAG:ARG:105 += E/B
+	EXP:ARG:질사경험 += E
+	CFLAG:ARG:顧客の中出氏による임신판정 += E/B
 ENDIF
-JUEL:ARG:1 += E*50
-JUEL:ARG:2 += F*50
-JUEL:ARG:6 += (E+F)*30
-JUEL:ARG:8 += (E+F)*50
-JUEL:ARG:100 += (E+F+G)*100/MAX(1,ABL:ARG:0)
+JUEL:ARG:쾌Ｖ += E*50
+JUEL:ARG:쾌Ａ += F*50
+JUEL:ARG:욕정 += (E+F)*30
+JUEL:ARG:습득 += (E+F)*50
+JUEL:ARG:부정 += (E+F+G)*100/MAX(1,ABL:ARG:순종)
 
 ;봉사계
-EXP:ARG:20 += B*5
-EXP:ARG:22 += B*5
-JUEL:ARG:5 += B*10
-JUEL:ARG:8 += B*30
-JUEL:ARG:100 += B*50/MAX(1,ABL:ARG:0)
+EXP:ARG:정액경험 += B*5
+EXP:ARG:펠라경험 += B*5
+JUEL:ARG:복종 += B*10
+JUEL:ARG:습득 += B*30
+JUEL:ARG:부정 += B*50/MAX(1,ABL:ARG:순종)
 
 ;ＳＭ계
-IF ABL:ARG:9 >= ABL:ARG:10
-	EXP:ARG:30 += B
-	JUEL:ARG:10 += B*5
+IF ABL:ARG:마조끼 >= ABL:ARG:새드끼
+	EXP:ARG:고통쾌락경험 += B
+	JUEL:ARG:고통 += B*5
 ENDIF
-SIF ABL:ARG:10 > ABL:ARG:9
-	EXP:ARG:32 += B
-JUEL:ARG:8 += B*4
-JUEL:ARG:100 += B*10/MAX(1,ABL:ARG:0)
+SIF ABL:ARG:새드끼 > ABL:ARG:마조끼
+	EXP:ARG:가학쾌락경험 += B
+JUEL:ARG:습득 += B*4
+JUEL:ARG:부정 += B*10/MAX(1,ABL:ARG:순종)
 
 
 ;이벤트구상の표시
@@ -1222,16 +1270,16 @@ SIF F > 0
 	PRINTFORML %EXPNAME:1%＋{F}
 SIF E > 0 || F > 0
 	PRINTFORML %EXPNAME:2%＋{(E+F)/3}
-SIF TALENT:ARG:139 || TALENT:ARG:140
+SIF TALENT:ARG:후타나리 || TALENT:ARG:남자
 	PRINTFORML %EXPNAME:3%＋{(E+F)/3}
 PRINTFORML %EXPNAME:4%＋{(E+F)}
 SIF H == 0 && E > 0
 	PRINTFORML %EXPNAME:5%＋{E}
 PRINTFORML %EXPNAME:20%＋{B*5}
 PRINTFORML %EXPNAME:22%＋{B*5}
-SIF ABL:ARG:9 >= ABL:ARG:10
+SIF ABL:ARG:마조끼 >= ABL:ARG:새드끼
 	PRINTFORML %EXPNAME:30%＋{B}
-SIF ABL:ARG:10 > ABL:ARG:9
+SIF ABL:ARG:새드끼 > ABL:ARG:마조끼
 	PRINTFORML %EXPNAME:32%＋{B}
 ;처녀/재생처녀상실
 CALL 처녀상실, ARG
@@ -1244,9 +1292,16 @@ SIF F > 0
 PRINTFORML %PALAMNAME:5%의 구슬＋{B*5}
 PRINTFORML %PALAMNAME:6%의 구슬＋{B*30}
 PRINTFORML %PALAMNAME:8%의 구슬＋{B*50+B*30+B*4}
-SIF ABL:ARG:9 >= ABL:ARG:10
+SIF ABL:ARG:마조끼 >= ABL:ARG:새드끼
 	PRINTFORML %PALAMNAME:10%의 구슬＋{B*5}
-PRINTFORML %PALAMNAME:100%의 구슬＋{((E+F+G)*100+B*60)/MAX(1,ABL:ARG:0)}
+PRINTFORML %PALAMNAME:100%의 구슬＋{((E+F+G)*100+B*60)/MAX(1,ABL:ARG:순종)}
+
+;子宮現在容量加算
+IF TALENT:ARG:오토코노코
+	CFLAG:(ARG):子宮現在容量 += E * 5
+ELSEIF !IS_MALE(ARG)
+	CFLAG:(ARG):子宮現在容量 += E * 5
+ENDIF
 
 ;비전투원は경험치획득
 IF TALENT:ARG:비전투원
@@ -1263,41 +1318,48 @@ ENDIF
 ;페르소나구사자は装着中の페르소나の경험치획득
 IF TALENT:ARG:페르소나구사자
 	CALL INCREASE_PERSONA_EXP, ARG, V / 10, -1 ,1
-	SIF RESULT > 0
-		PRINTFORML 페르소나【\@EQUIP:ARG:장비페르소나 ? %CSVNAME(DITEMTYPE:(EQUIP:ARG:장비페르소나):페르소나("NO"), 0)% # %CSVNAME(ABL:ARG:초기페르소나, 0)%\@】　EXP：+{RESULT}
+	IF RESULT > 0
+		;新페르소나処理
+		IF BATTLE_SETTING_IS_PERSONA_NEW_FUNCTION()
+
+		;旧페르소나処理
+		ELSE
+			PRINTFORML 페르소나【\@EQUIP:ARG:장비페르소나 ? %CSVNAME(DITEMTYPE:(EQUIP:ARG:장비페르소나):페르소나("NO"), 0)% # %CSVNAME(ABL:ARG:초기페르소나, 0)%\@】　EXP：+{RESULT}
+		ENDIF
+	ENDIF
 ENDIF
 
 ;ＮＴＲ進行
 IF GETBIT(FLAG:ＮＴＲ기능 , 3)
-	;専有奴隷の개목걸이
+	;전속노예의목걸이
 	IF (CFLAG:ARG:그외 == 1116 || CFLAG:ARG:그외2 == 1116 || CFLAG:ARG:그외3 == 1116 || CFLAG:ARG:그외4 == 1116 || CFLAG:ARG:그외5 == 1116 || CFLAG:ARG:그외6 == 1116)
 		GOTO SKIP_NTR
 	ENDIF
 	SIF TALENT:ARG:ＮＴＲ == 3
 		LOCAL:20 = 30
-	SIF TALENT:ARG:15 || TALENT:ARG:16
+	SIF TALENT:ARG:프라이드높음 || TALENT:ARG:건방짐
 		LOCAL:21 += 10
-	SIF TALENT:ARG:84
+	SIF TALENT:ARG:마조
 		LOCAL:21 += 10
 	SIF CFLAG:ARG:現ＮＴＲ進行度 > 10
 		LOCAL:22 = 30
 	LOCAL:23 = CFLAG:ARG:放置日数
 	SIF LOCAL:23 > 20
 		LOCAL:23 = 20
-	SIF (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117 || CFLAG:ARG:그외4 == 1117 || CFLAG:ARG:그외5 == 1117 || CFLAG:ARG:그외6 == 1117)
+	SIF (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117)
 		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 뭐라고 할 수 없는 달콤한 향기를 풍기고 있다……
 ;10%の확률でＮＴＲ好き플래그
-	IF RAND:100 < (10 + LOCAL:23)  ||  RAND:100 < LOCAL:20 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117 || CFLAG:ARG:그외4 == 1117 || CFLAG:ARG:그외5 == 1117 || CFLAG:ARG:그외6 == 1117) || TALENT:ARG:73 == 1
+	IF RAND:100 < (10 + LOCAL:23)  ||  RAND:100 < LOCAL:20 || (CFLAG:ARG:그외 == 1117 || CFLAG:ARG:그외2 == 1117 || CFLAG:ARG:그외3 == 1117) || TALENT:ARG:73 == 1
 		PRINTFORML
 		PRINTFORML 렌탈 손님은 네토라레 취향으로 유명했던 것같다……
 		PRINTFORML ・
 		PRINTFORML ・・
 		PRINTFORMW ・・・
-		LOCAL = ((E+F+G)*100+B*60)/MAX(1,ABL:ARG:0/2) * (2-CFLAG:ARG:構ったフラグ) + CFLAG:ARG:放置日数*10
+		LOCAL = ((E+F+G)*100+B*60)/MAX(1,ABL:ARG:순종/2) * (2-CFLAG:ARG:構ったフラグ) + CFLAG:ARG:放置日数*10
 		IF RAND:2 == 0
-			CFLAG:ARG:(2092) += LOCAL
+			CDFLAG:ARG:キャラ間好感度:(92) += LOCAL
 		ELSE
-			CFLAG:ARG:(2091) -= LOCAL
+			CDFLAG:ARG:キャラ間好感度:(91) -= LOCAL
 		ENDIF
 		CFLAG:ARG:음란度 +=  LOCAL / 4
 
@@ -1309,7 +1371,7 @@ IF GETBIT(FLAG:ＮＴＲ기능 , 3)
 				ENDIF
 				IF CFLAG:ARG:108 == 1
 					IF B == 1
-					CFLAG:ARG:108 -= 1
+						CFLAG:ARG:108 -= 1
 						PRINTFORMW %CALLNAME:ARG%의 자궁내피임결계가 해제되어버린 것같다……
 					ENDIF
 				ENDIF
@@ -1323,29 +1385,29 @@ IF GETBIT(FLAG:ＮＴＲ기능 , 3)
 
 				CFLAG:ARG:음란度+= 30 + CFLAG:ARG:現ＮＴＲ進行度*10
 
-				CFLAG:ARG:105 += E/B
-   				IF TALENT:ARG:73 == 1
+				CFLAG:ARG:顧客の中出氏による임신판정 += E/B
+				IF TALENT:ARG:즉각함락 == 1
 					PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 렌탈 손님에게 굉장히 조교되어서 돌아온 모양이다……
 				ELSE
 					PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 렌탈 손님에게 굉장히 조교되어서 돌아온 모양이다……
 				ENDIF
-				
-				LOCAL = ((E+F+G)*100+B*60)/MAX(1,ABL:ARG:0/2) * (2-CFLAG:ARG:構ったフラグ) + CFLAG:ARG:放置日数*10
+
+				LOCAL = ((E+F+G)*100+B*60)/MAX(1,ABL:ARG:순종/2) * (2-CFLAG:ARG:構ったフラグ) + CFLAG:ARG:放置日数*10
 				IF RAND:2 == 0
-					CFLAG:ARG:(2092) += LOCAL
+					CDFLAG:ARG:キャラ間好感度:(92) += LOCAL
 				ELSE
-					CFLAG:ARG:(2091) -= LOCAL
+					CDFLAG:ARG:キャラ間好感度:(91) -= LOCAL
 				ENDIF
 
 			ELSEIF CFLAG:ARG:隷ＮＴＲ進行度 == 0 
 				CFLAG:ARG:隷ＮＴＲ進行度 ++
 				CFLAG:ARG:음란度+= 30 + CFLAG:ARG:現ＮＴＲ進行度*10
-				LOCAL = ((E+F+G)*100+B*60)/MAX(1,ABL:ARG:0/2) * (2-CFLAG:ARG:構ったフラグ) + CFLAG:ARG:放置日数*10
-					PRINTFORML %CALLNAME:ARG%에게서 본 적없는 행동이 늘어난 것같다……
+				LOCAL = ((E+F+G)*100+B*60)/MAX(1,ABL:ARG:순종/2) * (2-CFLAG:ARG:構ったフラグ) + CFLAG:ARG:放置日数*10
+				PRINTFORML %CALLNAME:ARG%에게서 본 적없는 행동이 늘어난 것같다……
 				IF RAND:2 == 0
-					CFLAG:ARG:(2092) += LOCAL
+					CDFLAG:ARG:キャラ間好感度:(92) += LOCAL
 				ELSE
-					CFLAG:ARG:(2091) -= LOCAL
+					CDFLAG:ARG:キャラ間好感度:(91) -= LOCAL
 				ENDIF
 
 			ELSEIF CFLAG:ARG:隷ＮＴＲ進行度 > 0 
@@ -1353,11 +1415,17 @@ IF GETBIT(FLAG:ＮＴＲ기능 , 3)
 				LOCAL = ((E+F+G)*100+B*60)/MAX(1,ABL:ARG:0/2) * (2-CFLAG:ARG:構ったフラグ) + CFLAG:ARG:放置日数*10
 					PRINTFORML %CALLNAME:ARG%에게서 본 적없는 행동이 늘어난 것같다……
 				IF RAND:2 == 0
-					CFLAG:ARG:(2092) += LOCAL
+					CDFLAG:ARG:キャラ間好感度:(92) += LOCAL
 				ELSE
-					CFLAG:ARG:(2091) -= LOCAL
+					CDFLAG:ARG:キャラ間好感度:(91) -= LOCAL
 				ENDIF
 
+			ENDIF
+			;子宮現在容量加算
+			IF TALENT:ARG:오토코노코
+				CFLAG:(ARG):子宮現在容量 += LOCAL * 15
+			ELSEIF !IS_MALE(ARG)
+				CFLAG:(ARG):子宮現在容量 += LOCAL * 15
 			ENDIF
 		ELSE
 			PRINTFORML %CALLNAME:ARG%에게서는 특별히 바뀐 모습은 없는 것같다

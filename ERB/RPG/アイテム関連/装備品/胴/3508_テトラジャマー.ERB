@@ -64,6 +64,16 @@ RETURN 1
 
 RETURN GET_EQUIPNUM("몸통")
 
+;테트라쟈
+@장비추가스킬_3508,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 601
+	ENDSELECT
+ENDIF
+RETURN 0
+
 @필요레벨_3508
 RETURN 30
 
@@ -82,5 +92,8 @@ RETURN 1
 
 
 @장비해설_3508
-PRINTL 即死공격を防ぐ防具
+PRINTL 즉사 공격을 막는 방어구
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：테트라쟈
+RESETCOLOR
 

@@ -582,13 +582,18 @@ SELECTCASE FLAG:現M
 		CALL MESSAGE_WINDOW_D, "아임", "네놈들、설마、이 몸마저 해치우다니…"
 		CALL MESSAGE_WINDOW_D, "", "＞타천사 아임은 사라졌다…"
 		CALL MESSAGE_WINDOW_D, "파누엘", "사람의 자식이여、당신 덕분에 이 쉘터는 구원 받았습니다"
-		CALL MESSAGE_WINDOW_D, "파누엘", "머잖아 이 쉘터도 다시 일어서겠지요/그럼 당신을 밖까지 모셔드리겠습니다/사람의 자식이여、힘을 빌려주셔서 고맙습니다…"
+		CALL MESSAGE_WINDOW_D, "파누엘", "머잖아 이 쉘터도 다시 일어서겠지요/그럼 당신을 밖까지 모셔드리겠습니다/사람의 자식이여、힘を貸してくれてありがとう…"
+		;파누엘合体解禁
+		FLAG:10349 = 1
 		CALL SHOW_PICTURE, "D"
 		CALL INPUT_SELECT_D("[1] 파누엘을 요구한다/[2] 보수를 받는다")
 			IF RESULT == 1
 				CALL MESSAGE_WINDOW_D, "파누엘", "…！/알겠습니다、쉘터의 주민들은 구원받은 판국이지요/이에 보답하기 위해서라면、이 몸쯤이야 바치겠습니다…"
 				CALL MESSAGE_WINDOW_D, "", "＞대천사 파누엘이 동료마로 들어왔다"
-				CALL ADD_NEW_COMPANION,309,15000
+				CALL ADD_NEW_COMPANION,349,15000
+				LOCAL = GETCHARA(349)
+				TARGET = LOCAL
+				TALENT:억압 = 0
 			ENDIF
 		이벤트フラグ:70:1 = 2
 		FLAG:탈출 = 1
@@ -648,7 +653,7 @@ IF LOCAL:1 < 0
 ELSEIF LOCAL:1 == 0
 	LOCALS:1 = BLOCK
 ELSE
-	LOCALS:1 = {LOCAL:1}대미지
+	LOCALS:1 = {LOCAL:1}데미지
 ENDIF
 LOCALS = 화염이 %조사처리(CALLNAME:LOCAL,"를")% 덮쳤다！
 CALL MESSAGE_B(1, LOCALS)

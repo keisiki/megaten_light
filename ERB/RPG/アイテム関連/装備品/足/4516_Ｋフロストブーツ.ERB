@@ -12,12 +12,13 @@ ENDSELECT
 RETURN 0
 
 @전투능력수정_4516,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
+
+SELECTCASE ARG
+	CASE 2
 		RETURN 15
-	CASE "회피"
+	CASE 3
 		RETURN 42
-	CASE "마법효과"
+	CASE 5
 		RETURN 15
 ENDSELECT
 RETURN 0
@@ -33,6 +34,26 @@ SELECTCASE GET_TYPE(ARG)
 ENDSELECT
 RETURN 100
 
+@공격상성_4516, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_4516, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_4516, ARG = -1
+
+RETURN 1
+
+@사거리_4516, ARG = -1
+
+RETURN 1
+
+@공격범위_4516, ARG = -1
+
+RETURN 1
+
 @장비箇所_4516
 RETURN GET_EQUIPNUM("발")
 
@@ -42,16 +63,8 @@ RETURN 1
 @장비조건_4516,ARG
 RETURN IS_LOOKSLIKE_MALE(ARG)
 
-@장비조건설명_4516
-PRINTL 장비조건：♂
-
-@장비해설_4516
-PRINTL 킹프로스트の履いている金色の防寒부츠
-PRINTL 　　　　　　　　見えないところにも気をつけているおしゃれさん。
-
-
 @구입조건_4516
 RETURN 0
 
-@引継ぎ可不可_4516
-RETURN 0
+@장비조건설명_4516
+PRINTL 장비조건：♂

@@ -37,12 +37,12 @@ RETURN GET_TYPE_NUM("만능")
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2988
+@SKILL_DECIDE_TYPE_2988, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2988
+@SKILL_DAMAGETYPE_2988, ARG
 RETURN 2
 
 
@@ -154,7 +154,7 @@ NEXT
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2988
-PRINTL 세계를 고쳐 쓴 힘의 일부가 날뛴다. 적 １열에게  2～4회 만능 相性의 중간 데미지를 주고 방어력・명중・회피를 저하시킨다
+PRINTL 세계를 고쳐 쓴 힘의 일부가 날뛴다. 적 １열에게  2～4회 만능 상성의 중간 데미지를 주고 방어력・명중・회피를 저하시킨다
 PRINTL 마법소녀 아케미 호무라의 필살기
 
 ;継承に필요한部位
@@ -168,6 +168,3 @@ RETURN 1
 RETURN 1
 ;とくにない
 
-
-@継承不能_2988
-RETURN 1

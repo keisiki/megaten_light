@@ -3,7 +3,11 @@
 
 ;스킬名
 @SKILL_NAME_2006,ARG
-RESULTS = 옥쇄파
+IF SKILL_CHANGE(ARG, [[キャラ:E졸다트]])
+	RESULTS = Blitz bombe
+ELSE
+	RESULTS = 옥쇄파
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_2006, ARG
@@ -32,16 +36,20 @@ RETURN 5
 
 ;　相性
 @SKILL_TYPE_2006,ARG
-RETURN 17
+IF SKILL_CHANGE(ARG, [[キャラ:E졸다트]])
+	RETURN 6
+ELSE
+	RETURN 17
+ENDIF
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2006
+@SKILL_DECIDE_TYPE_2006, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2006
+@SKILL_DAMAGETYPE_2006, ARG
 RETURN 1
 
 
@@ -72,7 +80,7 @@ SIF ARG == 1
 @SKILL_SUCCESSION_TYPE_2006
 RETURN 20
 
-@継承조건無視_2006
+@継承条件無視_2006
 RETURN 1
 ;全て
 
@@ -125,7 +133,12 @@ SIF CFLAG:ARG:ステート < GET_STATE_NUM("DYING")
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2006
-PRINTL [후열] 목숨과 맞바꿔, 적 전체에 만능속성 초특대 물리데미지. 명중률이 아주 높고, 발동이 느리다.
+IF U > 0 && U < CHARANUM && NO:U == [[キャラ:E졸다트]]
+	PRINTL 電光機関により生命力を変換し命と引き換えに敵全体に전격데미지
+	PRINTL 옥쇄파のEゾルダート専用化スキル
+ELSE
+	PRINTL [후열] 목숨과 맞바꿔, 적 전체에 만능속성 초특대 물리데미지. 명중률이 아주 높고, 발동이 느리다.
+ENDIF
 
 ;継承に필요한部位
 @継承部位_2006,ARG

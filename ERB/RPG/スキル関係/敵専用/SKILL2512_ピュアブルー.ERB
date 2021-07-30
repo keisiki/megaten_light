@@ -34,11 +34,11 @@ RETURN 10
 RETURN GET_TYPE_NUM("만능")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2512
+@SKILL_DECIDE_TYPE_2512, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2512
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2512, ARG
 RETURN 0
 
 
@@ -125,14 +125,14 @@ PRINTFORML 　　TARGET:[{CPOS(ARG)}] %CALLNAME:ARG,20,LEFT%　>>>>>>　{CFLAG:A
 CALL VAR_HP, (ARG:0), CFLAG:ARG:810, 3
 
 
-PRINTFORMW %CALLNAME:ARG%の低下した能力が戻り、체력を회복した
+PRINTFORMW %CALLNAME:ARG%의 저하되었던 능력이 돌아왔고、체력을 회복했다
 ;====================================================
 ;実行内容ここまで
 ;====================================================
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2512
-PRINTL 自身の下がった能力を元に戻し、HPを회복する
+PRINTL 자신의 떨어진 능력을 원상태로 복원하고、HP를 회복한다
 ;CFLAG:ARG:810で회복量が決まる
 ;継承に필요な部位
 @継承部位_2512,ARG

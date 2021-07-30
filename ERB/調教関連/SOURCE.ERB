@@ -3,6 +3,18 @@
 #DIM PCOUNT, 2
 #DIM 절정수 , 1
 #DIM LCOUNT
+#DIM DYNAMIC C_ABLE1 ;조수 - 안면기승위 가능여부 판단변수
+#DIM DYNAMIC C_ABLE20 ;조수 - 키스한다 가능여부 판단변수
+#DIM DYNAMIC C_ABLE30 ;조수 - 파후파후 가능여부 판단변수
+#DIM DYNAMIC C_ABLE31 ;조수 - 손가락츄파 가능여부 판단변수
+#DIM DYNAMIC C_ABLE66 ;조수 - 기승위 가능여부 판단변수
+#DIM DYNAMIC C_ABLE80 ;조수 - 수음 가능여부 판단변수
+#DIM DYNAMIC C_ABLE81 ;조수 - 펠라치오 가능여부 판단변수
+#DIM DYNAMIC C_ABLE82 ;조수 - 파이즈리 가능여부 판단변수
+#DIM DYNAMIC C_ABLE83 ;조수 - 스마타 가능여부 판단변수
+#DIM DYNAMIC C_ABLE85 ;조수 - 풋잡 가능여부 판단변수
+#DIM DYNAMIC C_ABLE87 ;조수 - 세로파이즈리 가능여부 판단변수
+#DIM DYNAMIC C_ABLE88 ;조수 - 파이즈리펠라 가능여부 판단변수
 CHARA = TARGET
 CHARA:1 = PLAYER
 
@@ -882,6 +894,8 @@ FOR PCOUNT, 0, 2
 	CUP:CHARA:공포 += LOCAL:2
 
 NEXT
+SIF ASSI >= 0 && (TFLAG:61 > 0)
+	CALL ORGASM_ADD, ASSI
 CHARA = TARGET
 CHARA:1 = PLAYER
 
@@ -2282,89 +2296,338 @@ ENDIF
 ;-------------------------------------------------
 ;섹스時の挿入継続フラグ
 ;-------------------------------------------------
-TFLAG:60 = 0
-SIF (SELECTCOM == 60 || SELECTCOM == 61 || SELECTCOM == 62 || SELECTCOM == 63 || SELECTCOM == 64 || SELECTCOM == 65 || SELECTCOM == 66 || SELECTCOM == 67 || SELECTCOM == 68 || SELECTCOM == 69 || SELECTCOM == 70 || SELECTCOM == 71 || SELECTCOM == 154 || SELECTCOM == 74) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-	TFLAG:60 = 1
-;후배위, 대면위에만 애널애무 추가, 
-;후배위, 후배위애널, 배면위, 배면위 애널에만 방뇨추가
-;후배위에만 애널바이브 추가
-;후배위, 후배위애널에만 스팽킹 추가
-;후배위
-IF TFLAG:60 == 1 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 5 || SELECTCOM == 144 || SELECTCOM == 45 || SELECTCOM == 46 || SELECTCOM == 100) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-	TFLAG:60 = 1
-;대면위
-ELSEIF TFLAG:60 == 2 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 5) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-	TFLAG:60 = 2
-;배면위
-ELSEIF TFLAG:60 == 3 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 144) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-	TFLAG:60 = 3
-;기승위, 역강간당한다
-ELSEIF TFLAG:60 == 4 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-TFLAG:60 = 4
-;정상위, 속옷빗겨, 요정오나홀
-ELSEIF TFLAG:60 == 5 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 14 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-TFLAG:60 = 5
-;역강간
-ELSEIF TFLAG:60 == 6 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-TFLAG:60 = 6
-;후배위애널
-ELSEIF TFLAG:60 == 7 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 144 || SELECTCOM == 100) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-TFLAG:60 = 7
-;대면위애널
-ELSEIF TFLAG:60 == 8 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-TFLAG:60 = 8
-;배면위애널
-ELSEIF TFLAG:60 == 9 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 144) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-TFLAG:60 = 9
-;기승위애널
-ELSEIF TFLAG:60 == 10 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-TFLAG:60 = 10
-;정상위, 속옷빗겨 애널
-ELSEIF TFLAG:60 == 11 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 14 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
-TFLAG:60 = 11
-ELSE
-	TFLAG:60 = 0
-ENDIF
-;재차 삽입시 
-IF (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
+;TFLAG:60 = 0
+;SIF (SELECTCOM == 60 || SELECTCOM == 61 || SELECTCOM == 62 || SELECTCOM == 63 || SELECTCOM == 64 || SELECTCOM == 65 || SELECTCOM == 66 || SELECTCOM == 67 || SELECTCOM == 68 || SELECTCOM == 69 || SELECTCOM == 70 || SELECTCOM == 71 || SELECTCOM == 72  || SELECTCOM == 73 || SELECTCOM == 154 || SELECTCOM == 74) && (TFLAG:2 == 0 || PALAM:CHARA:욕정 >= PALAMLV:4) && CFLAG:TARGET:106 == 0 && CHARA == TARGET
+;	TFLAG:60 = 1
+
+;삽입유지 코드들 - 선커맨드 후처리
+IF TFLAG:60 == 0
+	TFLAG:59 = 0 ;이전 체위를 '아무것도 아님'으로 설정
 	;후배위
-	IF SELECTCOM == 61 
+	IF (SELECTCOM == 61)
 		TFLAG:60 = 1
 	;대면위
-	ELSEIF SELECTCOM == 68 || SELECTCOM == 76
+	ELSEIF (SELECTCOM == 68 || SELECTCOM == 76)
 		TFLAG:60 = 2
 	;배면위
-	ELSEIF SELECTCOM == 69 || SELECTCOM == 77
+	ELSEIF (SELECTCOM == 69 || SELECTCOM == 77)
 		TFLAG:60 = 3
 	;기승위, 역강간당한다
-	ELSEIF SELECTCOM == 66 || SELECTCOM == 74
+	ELSEIF (SELECTCOM == 66 || SELECTCOM == 74)
 		TFLAG:60 = 4
 	;정상위, 속옷빗겨, 요정오나홀
-	ELSEIF SELECTCOM == 60 || SELECTCOM == 72 || SELECTCOM == 154
+	ELSEIF (SELECTCOM == 60 || SELECTCOM == 72 || SELECTCOM == 154)
 		TFLAG:60 = 5
-	;역강간
-	ELSEIF SELECTCOM == 64
+	;역강간, 기승위한다
+	ELSEIF (SELECTCOM == 64 || SELECTCOM == 94)
 		TFLAG:60 = 6
 	;후배위애널
-	ELSEIF SELECTCOM == 63
+	ELSEIF (SELECTCOM == 63)
 		TFLAG:60 = 7
 	;대면위애널
-	ELSEIF SELECTCOM == 70 || SELECTCOM == 78
+	ELSEIF (SELECTCOM == 70 || SELECTCOM == 78)
 		TFLAG:60 = 8
 	;배면위애널
-	ELSEIF SELECTCOM == 71 || SELECTCOM == 79
+	ELSEIF (SELECTCOM == 71 || SELECTCOM == 79)
 		TFLAG:60 = 9
 	;기승위애널
-	ELSEIF SELECTCOM == 67
+	ELSEIF (SELECTCOM == 67)
 		TFLAG:60 = 10
 	;정상위, 속옷빗겨 애널
-	ELSEIF SELECTCOM == 62 || SELECTCOM == 73
+	ELSEIF (SELECTCOM == 62 || SELECTCOM == 73)
 		TFLAG:60 = 11
+	;삽입체위가 아닌 경우
 	ELSE
 		TFLAG:60 = 0
 	ENDIF
+ENDIF
+
+;-------------------------------------------------
+;(SELECTCOM == 66 || SELECTCOM == 67 || TFLAG:60 == 4 || TFLAG:60 == 10) && (PLAYER == MASTER) && (ASSI >= 0 && (TALENT:ASSI:연모 || TALENT:ASSI:친애 || TALENT:ASSI:복종 || TALENT:ASSI:예속))
+;-------------------------------------------------
+;<조수 가능목록>
+;안면기승위(1), 키스한다(20), 파후파후(30), 손가락츄파(31)
+;--> 노예가 기승위(애널)중일 때 높은 확률로 자동실행
+;--> 노예가 기승위(애널)중이면서 파생커맨드로 '키스하기(20)'를 실행할 경우, 파후파후(30)와 손가락츄파(31)밖에 선택지가 없다
+;--> 그 외에도 실행가능성 있음
+;기승위(66)
+;--> 노예가 기승위(애널) 이외의 커맨드를 실행하고 있을 때 높은 확률로 자동실행
+;=================================================
+;조수 3P 커맨드 행동결정
+;=================================================
+IF ASSI >= 0 && (BASE:ASSI:체력 >= 700)
+;조수의 체력이 700 이상이면 계속할 수 있다
+	IF TFLAG:61 > 0 && SELECTCOM != 229
+	;조수3P참가여부가 ON되어 있어야 한다
+	;조수도 참가한다/빠진다 커맨드가 선택되지 않은 경우여야 한다
+
+		;조수 체위실행여부 검사
+		CALL ASSI_CHECK_COM_ABLE1 ;안면기승위 검사
+		C_ABLE1 = RESULT
+		CALL ASSI_CHECK_COM_ABLE20 ;키스한다 검사
+		C_ABLE20 = RESULT
+		CALL ASSI_CHECK_COM_ABLE30 ;파후파후 검사
+		C_ABLE30 = RESULT
+		CALL ASSI_CHECK_COM_ABLE31 ;손가락츄파 검사
+		C_ABLE31 = RESULT
+		CALL ASSI_CHECK_COM_ABLE66 ;기승위 검사
+		C_ABLE66 = RESULT
+		CALL ASSI_CHECK_COM_ABLE80 ;수음 검사
+		C_ABLE80 = RESULT
+		CALL ASSI_CHECK_COM_ABLE81 ;펠라치오 검사
+		C_ABLE81 = RESULT
+		CALL ASSI_CHECK_COM_ABLE82 ;파이즈리 검사
+		C_ABLE82 = RESULT
+		CALL ASSI_CHECK_COM_ABLE83 ;스마타 검사
+		C_ABLE83 = RESULT
+		CALL ASSI_CHECK_COM_ABLE85 ;풋잡 검사
+		C_ABLE85 = RESULT
+		CALL ASSI_CHECK_COM_ABLE87 ;세로파이즈리 검사
+		C_ABLE87 = RESULT
+		CALL ASSI_CHECK_COM_ABLE88 ;파이즈리펠라 검사
+		C_ABLE88 = RESULT
+		
+		IF (SELECTCOM == 66 || SELECTCOM == 67 || SELECTCOM == 506 || SELECTCOM == 507) || (TFLAG:60 == 4 || TFLAG:60 == 10)
+		;노예가 기승위(애널) 시작 혹은 그 삽입유지중일 경우
+			SIF TFLAG:62 > 0 ;노예가 기승위(애널)을 하려고 하면 조수는 비켜줘야 한다
+				TFLAG:62 = 0 ;조수기승위 유지변수 OFF
+			IF (TFLAG:60 == 4 || TFLAG:60 == 10) && SELECTCOM == 20
+			;노예가 삽입유지중이면서 키스한다(파생커맨드)를 실행했을 경우
+				IF C_ABLE31 == 1 && (RAND:5 == 0)
+					CALL ASSI_3P_DOING, 31 ;손가락츄파
+				ELSEIF C_ABLE30 == 1
+					CALL ASSI_3P_DOING, 30 ;파후파후
+				ELSE
+					CALL ASSI_3P_DOING     ;대기행동
+				ENDIF
+			ELSE
+			;그 외(주인의 얼굴이 자유로운 상태)
+				IF C_ABLE31 == 1 && (RAND:9 == 0)
+					CALL ASSI_3P_DOING, 31 ;손가락츄파
+				ELSEIF C_ABLE30 == 1 && (RAND:7 == 0)
+					CALL ASSI_3P_DOING, 30 ;파후파후
+				ELSEIF C_ABLE20 == 1 && (RAND:5 == 0)
+					CALL ASSI_3P_DOING, 20 ;키스한다
+				ELSEIF C_ABLE1 == 1
+					CALL ASSI_3P_DOING, 1 ;안면기승위
+				ELSE
+					CALL ASSI_3P_DOING     ;대기행동
+				ENDIF
+			ENDIF
+		ELSEIF SELECTCOM == 80 || SELECTCOM == 81 || SELECTCOM == 82 || SELECTCOM == 83 || SELECTCOM == 85 || SELECTCOM == 87 || SELECTCOM == 88
+		;노예가 봉사계 커맨드를 실행할 경우
+			SIF TFLAG:62 > 0 ;노예가 봉사커맨드를 하려고 하면 조수는 비켜줘야 한다
+				TFLAG:62 = 0 ;조수기승위 유지변수 OFF
+			IF C_ABLE31 == 1 && (RAND:9 == 0)
+				CALL ASSI_3P_DOING, 31 ;손가락츄파
+			ELSEIF C_ABLE30 == 1 && (RAND:7 == 0)
+				CALL ASSI_3P_DOING, 30 ;파후파후
+			ELSEIF C_ABLE20 == 1 && (RAND:5 == 0)
+				CALL ASSI_3P_DOING, 20 ;키스한다
+			ELSEIF C_ABLE1 == 1
+				CALL ASSI_3P_DOING, 1 ;안면기승위
+			ELSE
+				CALL ASSI_3P_DOING     ;대기행동
+			ENDIF
+		ELSE
+		;그 외(노예가 삽입행위를 하지 않는 경우)
+			IF TFLAG:62 > 0
+			;조수가 기승위 삽입유지 상태일 경우
+				IF C_ABLE31 == 1 && (SELECTCOM != 31) && (RAND:35 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 31 ;손가락츄파
+				ELSEIF C_ABLE30 == 1 && (SELECTCOM != 30) && (RAND:30 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 30 ;파후파후
+				ELSEIF C_ABLE20 == 1 && (SELECTCOM != 20) && (RAND:25 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 20 ;키스한다
+				ELSEIF C_ABLE80 == 1 && (SELECTCOM != 80) && (RAND:25 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 80 ;수음
+				ELSEIF C_ABLE81 == 1 && (SELECTCOM != 81) && (RAND:25 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 81 ;펠라치오
+				ELSEIF C_ABLE82 == 1 && (SELECTCOM != 82) && (RAND:25 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 82 ;파이즈리
+				ELSEIF C_ABLE83 == 1 && (SELECTCOM != 83) && (RAND:25 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 83 ;스마타
+				ELSEIF C_ABLE85 == 1 && (SELECTCOM != 85) && (RAND:25 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 85 ;풋잡
+				ELSEIF C_ABLE87 == 1 && (SELECTCOM != 87) && (RAND:25 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 87 ;세로파이즈리
+				ELSEIF C_ABLE88 == 1 && (SELECTCOM != 88) && (RAND:25 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 88 ;파이즈리펠라
+				ELSEIF C_ABLE1 == 1 && (SELECTCOM != 1) && (RAND:20 == 0)
+					TFLAG:62 = 0 ;조수 삽입유지 해제
+					CALL ASSI_3P_DOING, 1 ;안면기승위
+				ELSEIF C_ABLE66 == 1
+					CALL ASSI_3P_DOING, 66 ;기승위
+				ELSE
+					CALL ASSI_3P_DOING     ;대기행동
+				ENDIF
+			ELSE
+				IF SELECTCOM == 1
+				;노예가 안면기승위를 채택할 경우
+					IF C_ABLE31 == 1 && (RAND:25 == 0)
+						CALL ASSI_3P_DOING, 31 ;손가락츄파
+					ELSEIF C_ABLE80 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 80 ;수음
+					ELSEIF C_ABLE81 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 81 ;펠라치오
+					ELSEIF C_ABLE82 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 82 ;파이즈리
+					ELSEIF C_ABLE83 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 83 ;스마타
+					ELSEIF C_ABLE85 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 85 ;풋잡
+					ELSEIF C_ABLE87 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 87 ;세로파이즈리
+					ELSEIF C_ABLE88 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 88 ;파이즈리펠라
+					ELSEIF C_ABLE66 == 1
+						CALL ASSI_3P_DOING, 66 ;기승위
+					ELSE
+						CALL ASSI_3P_DOING     ;대기행동
+					ENDIF
+				ELSEIF SELECTCOM == 20
+				;노예가 키스한다를 채택할 경우
+					IF C_ABLE31 == 1 && (RAND:25 == 0)
+						CALL ASSI_3P_DOING, 31 ;손가락츄파
+					ELSEIF C_ABLE30 == 1 && (RAND:25 == 0)
+						CALL ASSI_3P_DOING, 30 ;파후파후
+					ELSEIF C_ABLE80 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 80 ;수음
+					ELSEIF C_ABLE81 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 81 ;펠라치오
+					ELSEIF C_ABLE82 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 82 ;파이즈리
+					ELSEIF C_ABLE83 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 83 ;스마타
+					ELSEIF C_ABLE85 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 85 ;풋잡
+					ELSEIF C_ABLE87 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 87 ;세로파이즈리
+					ELSEIF C_ABLE88 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 88 ;파이즈리펠라
+					ELSEIF C_ABLE66 == 1
+						CALL ASSI_3P_DOING, 66 ;기승위
+					ELSE
+						CALL ASSI_3P_DOING     ;대기행동
+					ENDIF
+				ELSEIF SELECTCOM == 30
+				;노예가 파후파후를 채택할 경우
+					IF C_ABLE31 == 1 && (RAND:25 == 0)
+						CALL ASSI_3P_DOING, 31 ;손가락츄파
+					ELSEIF C_ABLE20 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 20 ;키스한다
+					ELSEIF C_ABLE80 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 80 ;수음
+					ELSEIF C_ABLE81 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 81 ;펠라치오
+					ELSEIF C_ABLE82 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 82 ;파이즈리
+					ELSEIF C_ABLE83 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 83 ;스마타
+					ELSEIF C_ABLE85 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 85 ;풋잡
+					ELSEIF C_ABLE87 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 87 ;세로파이즈리
+					ELSEIF C_ABLE88 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 88 ;파이즈리펠라
+					ELSEIF C_ABLE66 == 1
+						CALL ASSI_3P_DOING, 66 ;기승위
+					ELSE
+						CALL ASSI_3P_DOING     ;대기행동
+					ENDIF
+				ELSEIF SELECTCOM == 31
+				;노예가 손가락츄파를 채택할 경우
+					IF C_ABLE30 == 1 && (RAND:25 == 0)
+						CALL ASSI_3P_DOING, 30 ;파후파후
+					ELSEIF C_ABLE20 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 20 ;키스한다
+					ELSEIF C_ABLE80 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 80 ;수음
+					ELSEIF C_ABLE81 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 81 ;펠라치오
+					ELSEIF C_ABLE82 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 82 ;파이즈리
+					ELSEIF C_ABLE83 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 83 ;스마타
+					ELSEIF C_ABLE85 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 85 ;풋잡
+					ELSEIF C_ABLE87 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 87 ;세로파이즈리
+					ELSEIF C_ABLE88 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 88 ;파이즈리펠라
+					ELSEIF C_ABLE1 == 1 && (RAND:15 == 0)
+						CALL ASSI_3P_DOING, 1 ;안면기승위
+					ELSEIF C_ABLE66 == 1
+						CALL ASSI_3P_DOING, 66 ;기승위
+					ELSE
+						CALL ASSI_3P_DOING     ;대기행동
+					ENDIF
+				ELSEIF SELECTCOM == 80 || SELECTCOM == 81 || SELECTCOM == 82 || SELECTCOM == 83 || SELECTCOM == 85 || SELECTCOM == 87 || SELECTCOM == 88
+				;노예가 봉사계 커맨드를 실행할 경우
+					IF C_ABLE31 == 1 && (RAND:9 == 0)
+						CALL ASSI_3P_DOING, 31 ;손가락츄파
+					ELSEIF C_ABLE30 == 1 && (RAND:7 == 0)
+						CALL ASSI_3P_DOING, 30 ;파후파후
+					ELSEIF C_ABLE20 == 1 && (RAND:5 == 0)
+						CALL ASSI_3P_DOING, 20 ;키스한다
+					ELSEIF C_ABLE1 == 1
+						CALL ASSI_3P_DOING, 1 ;안면기승위
+					ELSE
+						CALL ASSI_3P_DOING     ;대기행동
+					ENDIF
+				ELSE
+				;그 외
+					IF C_ABLE31 == 1 && (RAND:25 == 0)
+						CALL ASSI_3P_DOING, 31 ;손가락츄파
+					ELSEIF C_ABLE30 == 1 && (RAND:25 == 0)
+						CALL ASSI_3P_DOING, 30 ;파후파후
+					ELSEIF C_ABLE20 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 20 ;키스한다
+					ELSEIF C_ABLE80 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 80 ;수음
+					ELSEIF C_ABLE81 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 81 ;펠라치오
+					ELSEIF C_ABLE82 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 82 ;파이즈리
+					ELSEIF C_ABLE83 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 83 ;스마타
+					ELSEIF C_ABLE85 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 85 ;풋잡
+					ELSEIF C_ABLE87 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 87 ;세로파이즈리
+					ELSEIF C_ABLE88 == 1 && (RAND:20 == 0)
+						CALL ASSI_3P_DOING, 88 ;파이즈리펠라
+					ELSEIF C_ABLE1 == 1 && (RAND:10 == 0)
+						CALL ASSI_3P_DOING, 1 ;안면기승위
+					ELSEIF C_ABLE66 == 1
+						CALL ASSI_3P_DOING, 66 ;기승위
+					ELSE
+						CALL ASSI_3P_DOING     ;대기행동
+					ENDIF
+				ENDIF
+			ENDIF
+		ENDIF
+	ENDIF
 ELSE
-	TFLAG:60 = 0
+;조수의 체력이 700보다 낮아질 경우, 강제로 빠지게 한다
+	IF TFLAG:61 > 0
+		TFLAG:61 = 0
+		TFLAG:62 = 0
+		TSTR:3 = 
+		SETCOLOR 0xff0000
+		PRINTFORMW %조사처리(CALLNAME:ASSI,"는")% 체력이 바닥났기에 정사에서 빠졌다
+		RESETCOLOR
+	ENDIF
 ENDIF
 
 ;-------------------------------------------------
@@ -2663,6 +2926,8 @@ ENDIF
 ;UPCHECK
 CALL UPCHECK_A, CHARA
 CALL UPCHECK_A, CHARA:1
+SIF ASSI >= 0
+	CALL UPCHECK_A, ASSI
 ;-------------------------------------------------
 ;EXP・MAG等の표시
 ;-------------------------------------------------
@@ -2759,6 +3024,10 @@ ENDIF
 #DIM 결과PALAM, 1
 #DIM 증가PALAM, 1
 #DIM 減少PALAM, 1
+#DIM COMPARE1 ;비교 변수1
+#DIM COMPARE2 ;비교 변수2
+#DIM COMPARE3 ;비교 변수3
+#DIM COMPARE4 ;비교 변수4
 #LOCALSSIZE 1
 SIF ARG < 0
 	RETURN 0
@@ -2911,6 +3180,355 @@ IF LOCAL:1
 			CUP:ARG:LOCAL = 0
 			CDOWN:ARG:LOCAL = 0
 		NEXT
+	ENDIF
+ENDIF
+
+;-------------------------------------------------
+;착의 불결처리
+;-------------------------------------------------
+;주인
+;착용하고 있는 옷들의 가랑이 유형 조사 (하의 - 바지)
+;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:MASTER:하의}
+COMPARE1 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (전신복)
+;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:MASTER:전신복}
+COMPARE2 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (속옷（하）)
+;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:MASTER:속옷（하）}
+COMPARE3 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (양말)
+;참고 - 해당 의복이 없거나 탈의됐거나 가랑이를 덮지 않는 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:MASTER:양말}
+COMPARE4 = RESULT
+
+;(COMPARE4 == 1 || COMPARE4 == 4)
+
+IF PALAM:TARGET:윤활 >= PALAMLV:4 && HAVE_VAGINA(MASTER)
+	IF (TEQUIP:MASTER:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && (TEQUIP:MASTER:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+	;하의(바지)와 전신복(바지)을 모두 입었을 경우
+		IF TEQUIP:MASTER:속옷（하） || TEQUIP:MASTER:전신속옷
+		;하의 속옷류 착용
+			IF TEQUIP:MASTER:속옷（하）
+			;속옷(하)를 입었을 경우
+				CALL SET_STAIN("속옷（하）", "애액", MASTER) ;팬티가 애액에 젖는다
+				CALL MOVE_STAIN("속옷（하）", MASTER, "바기나", MASTER)
+			ELSEIF TEQUIP:MASTER:전신속옷
+			;전신속옷을 입었을 경우
+				CALL SET_STAIN("전신속옷", "애액", MASTER) ;전신속옷이 애액에 젖는다
+				CALL MOVE_STAIN("전신속옷", MASTER, "바기나", MASTER)
+			ENDIF
+		ELSEIF TEQUIP:MASTER:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+		;스타킹 착용
+			CALL SET_STAIN("양말", "애액", MASTER) ;스타킹이 애액에 젖는다
+			CALL MOVE_STAIN("양말", MASTER, "바기나", MASTER)
+		ELSE
+		;하의 속옷류 미착용 → 하의(바지)와 전신복(바지)에 모두 얼룩이 뭍는다
+			CALL SET_STAIN("하의", "애액", MASTER) ;하의(바지)가 애액에 젖는다
+			CALL SET_STAIN("전신복", "애액", MASTER) ;전신복(바지)이 애액에 젖는다
+			CALL MOVE_STAIN("하의", MASTER, "바기나", MASTER)
+			CALL MOVE_STAIN("전신복", MASTER, "바기나", MASTER)
+		ENDIF
+	ELSEIF !(TEQUIP:MASTER:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && (TEQUIP:MASTER:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+	;하의(스커트/밑개방형/미착용)와 전신복(바지)을 모두 입었을 경우
+		IF TEQUIP:MASTER:속옷（하） || TEQUIP:MASTER:전신속옷
+		;하의 속옷류 착용
+			IF TEQUIP:MASTER:속옷（하）
+			;속옷(하)를 입었을 경우
+				CALL SET_STAIN("속옷（하）", "애액", MASTER) ;팬티가 애액에 젖는다
+				CALL MOVE_STAIN("속옷（하）", MASTER, "바기나", MASTER)
+			ELSEIF TEQUIP:MASTER:전신속옷
+			;전신속옷을 입었을 경우
+				CALL SET_STAIN("전신속옷", "애액", MASTER) ;전신속옷이 애액에 젖는다
+				CALL MOVE_STAIN("전신속옷", MASTER, "바기나", MASTER)
+			ENDIF
+		ELSEIF TEQUIP:MASTER:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+		;스타킹 착용
+			CALL SET_STAIN("양말", "애액", MASTER) ;스타킹이 애액에 젖는다
+			CALL MOVE_STAIN("양말", MASTER, "바기나", MASTER)
+		ELSE
+		;하의 속옷류 미착용 → 전신복(바지)에만 얼룩이 뭍는다
+			CALL SET_STAIN("전신복", "애액", MASTER) ;전신복(바지)이 애액에 젖는다
+			CALL MOVE_STAIN("전신복", MASTER, "바기나", MASTER)
+		ENDIF
+	ELSEIF (TEQUIP:MASTER:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && !(TEQUIP:MASTER:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+	;하의(바지)와 전신복(스커트/밑개방형/미착용)을 모두 입었을 경우
+		IF TEQUIP:MASTER:속옷（하） || TEQUIP:MASTER:전신속옷
+		;하의 속옷류 착용
+			IF TEQUIP:MASTER:속옷（하）
+			;속옷(하)를 입었을 경우
+				CALL SET_STAIN("속옷（하）", "애액", MASTER) ;팬티가 애액에 젖는다
+				CALL MOVE_STAIN("속옷（하）", MASTER, "바기나", MASTER)
+			ELSEIF TEQUIP:MASTER:전신속옷
+			;전신속옷을 입었을 경우
+				CALL SET_STAIN("전신속옷", "애액", MASTER) ;전신속옷이 애액에 젖는다
+				CALL MOVE_STAIN("전신속옷", MASTER, "바기나", MASTER)
+			ENDIF
+		ELSEIF TEQUIP:MASTER:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+		;스타킹 착용
+			CALL SET_STAIN("양말", "애액", MASTER) ;스타킹이 애액에 젖는다
+			CALL MOVE_STAIN("양말", MASTER, "바기나", MASTER)
+		ELSE
+		;하의 속옷류 미착용 → 하의(바지)에만 얼룩이 뭍는다
+			CALL SET_STAIN("하의", "애액", MASTER) ;하의(바지)가 애액에 젖는다
+			CALL MOVE_STAIN("하의", MASTER, "바기나", MASTER)
+		ENDIF
+	ELSEIF !(TEQUIP:MASTER:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && !(TEQUIP:MASTER:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+	;하의(스커트/밑개방형/미착용)와 전신복(스커트/밑개방형/미착용)을 모두 입었을 경우
+		IF TEQUIP:MASTER:속옷（하） || TEQUIP:MASTER:전신속옷
+		;하의 속옷류 착용
+			IF TEQUIP:MASTER:속옷（하）
+			;속옷(하)를 입었을 경우
+				CALL SET_STAIN("속옷（하）", "애액", MASTER) ;팬티가 애액에 젖는다
+				CALL MOVE_STAIN("속옷（하）", MASTER, "바기나", MASTER)
+			ELSEIF TEQUIP:MASTER:전신속옷
+			;전신속옷을 입었을 경우
+				CALL SET_STAIN("전신속옷", "애액", MASTER) ;전신속옷이 애액에 젖는다
+				CALL MOVE_STAIN("전신속옷", MASTER, "바기나", MASTER)
+			ENDIF
+		ELSEIF TEQUIP:MASTER:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+		;스타킹 착용
+			CALL SET_STAIN("양말", "애액", MASTER) ;스타킹이 애액에 젖는다
+			CALL MOVE_STAIN("양말", MASTER, "바기나", MASTER)
+		ELSE
+		;하의 속옷류 미착용 → 얼룩은 음순에만 있는 상태
+			;구현 안해도 됨
+		ENDIF
+	ENDIF
+ENDIF
+
+;노예
+;착용하고 있는 옷들의 가랑이 유형 조사 (하의 - 바지)
+;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:TARGET:하의}
+COMPARE1 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (전신복)
+;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:TARGET:전신복}
+COMPARE2 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (속옷（하）)
+;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:TARGET:속옷（하）}
+COMPARE3 = RESULT
+
+;착용하고 있는 옷들의 가랑이 유형 조사 (양말)
+;참고 - 해당 의복이 없거나 탈의됐거나 가랑이를 덮지 않는 경우 리턴값(0)
+TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:TARGET:양말}
+COMPARE4 = RESULT
+
+IF PALAM:TARGET:윤활 >= PALAMLV:4 && HAVE_VAGINA(TARGET)
+	IF (TEQUIP:TARGET:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && (TEQUIP:TARGET:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+	;하의(바지)와 전신복(바지)을 모두 입었을 경우
+		IF TEQUIP:TARGET:속옷（하） || TEQUIP:TARGET:전신속옷
+		;하의 속옷류 착용
+			IF TEQUIP:TARGET:속옷（하）
+			;속옷(하)를 입었을 경우
+				CALL SET_STAIN("속옷（하）", "애액", TARGET) ;팬티가 애액에 젖는다
+				CALL MOVE_STAIN("속옷（하）", TARGET, "바기나", TARGET)
+			ELSEIF TEQUIP:TARGET:전신속옷
+			;전신속옷을 입었을 경우
+				CALL SET_STAIN("전신속옷", "애액", TARGET) ;전신속옷이 애액에 젖는다
+				CALL MOVE_STAIN("전신속옷", TARGET, "바기나", TARGET)
+			ENDIF
+		ELSEIF TEQUIP:TARGET:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+		;스타킹 착용
+			CALL SET_STAIN("양말", "애액", TARGET) ;스타킹이 애액에 젖는다
+			CALL MOVE_STAIN("양말", TARGET, "바기나", TARGET)
+		ELSE
+		;하의 속옷류 미착용 → 하의(바지)와 전신복(바지)에 모두 얼룩이 뭍는다
+			CALL SET_STAIN("하의", "애액", TARGET) ;하의(바지)가 애액에 젖는다
+			CALL SET_STAIN("전신복", "애액", TARGET) ;전신복(바지)이 애액에 젖는다
+			CALL MOVE_STAIN("하의", TARGET, "바기나", TARGET)
+			CALL MOVE_STAIN("전신복", TARGET, "바기나", TARGET)
+		ENDIF
+	ELSEIF !(TEQUIP:TARGET:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && (TEQUIP:TARGET:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+	;하의(스커트/밑개방형/미착용)와 전신복(바지)을 모두 입었을 경우
+		IF TEQUIP:TARGET:속옷（하） || TEQUIP:TARGET:전신속옷
+		;하의 속옷류 착용
+			IF TEQUIP:TARGET:속옷（하）
+			;속옷(하)를 입었을 경우
+				CALL SET_STAIN("속옷（하）", "애액", TARGET) ;팬티가 애액에 젖는다
+				CALL MOVE_STAIN("속옷（하）", TARGET, "바기나", TARGET)
+			ELSEIF TEQUIP:TARGET:전신속옷
+			;전신속옷을 입었을 경우
+				CALL SET_STAIN("전신속옷", "애액", TARGET) ;전신속옷이 애액에 젖는다
+				CALL MOVE_STAIN("전신속옷", TARGET, "바기나", TARGET)
+			ENDIF
+		ELSEIF TEQUIP:TARGET:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+		;스타킹 착용
+			CALL SET_STAIN("양말", "애액", TARGET) ;스타킹이 애액에 젖는다
+			CALL MOVE_STAIN("양말", TARGET, "바기나", TARGET)
+		ELSE
+		;하의 속옷류 미착용 → 전신복(바지)에만 얼룩이 뭍는다
+			CALL SET_STAIN("전신복", "애액", TARGET) ;전신복(바지)이 애액에 젖는다
+			CALL MOVE_STAIN("전신복", TARGET, "바기나", TARGET)
+		ENDIF
+	ELSEIF (TEQUIP:TARGET:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && !(TEQUIP:TARGET:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+	;하의(바지)와 전신복(스커트/밑개방형/미착용)을 모두 입었을 경우
+		IF TEQUIP:TARGET:속옷（하） || TEQUIP:TARGET:전신속옷
+		;하의 속옷류 착용
+			IF TEQUIP:TARGET:속옷（하）
+			;속옷(하)를 입었을 경우
+				CALL SET_STAIN("속옷（하）", "애액", TARGET) ;팬티가 애액에 젖는다
+				CALL MOVE_STAIN("속옷（하）", TARGET, "바기나", TARGET)
+			ELSEIF TEQUIP:TARGET:전신속옷
+			;전신속옷을 입었을 경우
+				CALL SET_STAIN("전신속옷", "애액", TARGET) ;전신속옷이 애액에 젖는다
+				CALL MOVE_STAIN("전신속옷", TARGET, "바기나", TARGET)
+			ENDIF
+		ELSEIF TEQUIP:TARGET:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+		;스타킹 착용
+			CALL SET_STAIN("양말", "애액", TARGET) ;스타킹이 애액에 젖는다
+			CALL MOVE_STAIN("양말", TARGET, "바기나", TARGET)
+		ELSE
+		;하의 속옷류 미착용 → 하의(바지)에만 얼룩이 뭍는다
+			CALL SET_STAIN("하의", "애액", TARGET) ;하의(바지)가 애액에 젖는다
+			CALL MOVE_STAIN("하의", TARGET, "바기나", TARGET)
+		ENDIF
+	ELSEIF !(TEQUIP:TARGET:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && !(TEQUIP:TARGET:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+	;하의(스커트/밑개방형/미착용)와 전신복(스커트/밑개방형/미착용)을 모두 입었을 경우
+		IF TEQUIP:TARGET:속옷（하） || TEQUIP:TARGET:전신속옷
+		;하의 속옷류 착용
+			IF TEQUIP:TARGET:속옷（하）
+			;속옷(하)를 입었을 경우
+				CALL SET_STAIN("속옷（하）", "애액", TARGET) ;팬티가 애액에 젖는다
+				CALL MOVE_STAIN("속옷（하）", TARGET, "바기나", TARGET)
+			ELSEIF TEQUIP:TARGET:전신속옷
+			;전신속옷을 입었을 경우
+				CALL SET_STAIN("전신속옷", "애액", TARGET) ;전신속옷이 애액에 젖는다
+				CALL MOVE_STAIN("전신속옷", TARGET, "바기나", TARGET)
+			ENDIF
+		ELSEIF TEQUIP:TARGET:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+		;스타킹 착용
+			CALL SET_STAIN("양말", "애액", TARGET) ;스타킹이 애액에 젖는다
+			CALL MOVE_STAIN("양말", TARGET, "바기나", TARGET)
+		ELSE
+		;하의 속옷류 미착용 → 얼룩은 음순에만 있는 상태
+			;구현 안해도 됨
+		ENDIF
+	ENDIF
+ENDIF
+
+;조수
+IF ASSI >= 0
+	;착용하고 있는 옷들의 가랑이 유형 조사 (하의 - 바지)
+	;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+	TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:ASSI:하의}
+	COMPARE1 = RESULT
+
+	;착용하고 있는 옷들의 가랑이 유형 조사 (전신복)
+	;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+	TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:ASSI:전신복}
+	COMPARE2 = RESULT
+
+	;착용하고 있는 옷들의 가랑이 유형 조사 (속옷（하）)
+	;참고 - 바지 유형, ビキニ 유형 리턴값(1,2), 해당 의복이 없거나 탈의됐을 경우 리턴값(0)
+	TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:ASSI:속옷（하）}
+	COMPARE3 = RESULT
+	
+	;착용하고 있는 옷들의 가랑이 유형 조사 (양말)
+	;참고 - 해당 의복이 없거나 탈의됐거나 가랑이를 덮지 않는 경우 리턴값(0)
+	TRYCALLFORM CLOTHES_CROTCH_{TEQUIP:ASSI:양말}
+	COMPARE4 = RESULT
+	
+	IF PALAM:ASSI:윤활 >= PALAMLV:4 && HAVE_VAGINA(ASSI)
+		IF (TEQUIP:ASSI:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && (TEQUIP:ASSI:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+		;하의(바지)와 전신복(바지)을 모두 입었을 경우
+			IF TEQUIP:ASSI:속옷（하） || TEQUIP:ASSI:전신속옷
+			;하의 속옷류 착용
+				IF TEQUIP:ASSI:속옷（하）
+				;속옷(하)를 입었을 경우
+					CALL SET_STAIN("속옷（하）", "애액", ASSI) ;팬티가 애액에 젖는다
+					CALL MOVE_STAIN("속옷（하）", ASSI, "바기나", ASSI)
+				ELSEIF TEQUIP:ASSI:전신속옷
+				;전신속옷을 입었을 경우
+					CALL SET_STAIN("전신속옷", "애액", ASSI) ;전신속옷이 애액에 젖는다
+					CALL MOVE_STAIN("전신속옷", ASSI, "바기나", ASSI)
+				ENDIF
+			ELSEIF TEQUIP:ASSI:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+			;스타킹 착용
+				CALL SET_STAIN("양말", "애액", ASSI) ;스타킹이 애액에 젖는다
+				CALL MOVE_STAIN("양말", ASSI, "바기나", ASSI)
+			ELSE
+			;하의 속옷류 미착용 → 하의(바지)와 전신복(바지)에 모두 얼룩이 뭍는다
+				CALL SET_STAIN("하의", "애액", ASSI) ;하의(바지)가 애액에 젖는다
+				CALL SET_STAIN("전신복", "애액", ASSI) ;전신복(바지)이 애액에 젖는다
+				CALL MOVE_STAIN("하의", ASSI, "바기나", ASSI)
+				CALL MOVE_STAIN("전신복", ASSI, "바기나", ASSI)
+			ENDIF
+		ELSEIF !(TEQUIP:ASSI:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && (TEQUIP:ASSI:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+		;하의(스커트/밑개방형/미착용)와 전신복(바지)을 모두 입었을 경우
+			IF TEQUIP:ASSI:속옷（하） || TEQUIP:ASSI:전신속옷
+			;하의 속옷류 착용
+				IF TEQUIP:ASSI:속옷（하）
+				;속옷(하)를 입었을 경우
+					CALL SET_STAIN("속옷（하）", "애액", ASSI) ;팬티가 애액에 젖는다
+					CALL MOVE_STAIN("속옷（하）", ASSI, "바기나", ASSI)
+				ELSEIF TEQUIP:ASSI:전신속옷
+				;전신속옷을 입었을 경우
+					CALL SET_STAIN("전신속옷", "애액", ASSI) ;전신속옷이 애액에 젖는다
+					CALL MOVE_STAIN("전신속옷", ASSI, "바기나", ASSI)
+				ENDIF
+			ELSEIF TEQUIP:ASSI:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+			;스타킹 착용
+				CALL SET_STAIN("양말", "애액", ASSI) ;스타킹이 애액에 젖는다
+				CALL MOVE_STAIN("양말", ASSI, "바기나", ASSI)
+			ELSE
+			;하의 속옷류 미착용 → 전신복(바지)에만 얼룩이 뭍는다
+				CALL SET_STAIN("전신복", "애액", ASSI) ;전신복(바지)이 애액에 젖는다
+				CALL MOVE_STAIN("전신복", ASSI, "바기나", ASSI)
+			ENDIF
+		ELSEIF (TEQUIP:ASSI:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && !(TEQUIP:ASSI:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+		;하의(바지)와 전신복(스커트/밑개방형/미착용)을 모두 입었을 경우
+			IF TEQUIP:ASSI:속옷（하） || TEQUIP:ASSI:전신속옷
+			;하의 속옷류 착용
+				IF TEQUIP:ASSI:속옷（하）
+				;속옷(하)를 입었을 경우
+					CALL SET_STAIN("속옷（하）", "애액", ASSI) ;팬티가 애액에 젖는다
+					CALL MOVE_STAIN("속옷（하）", ASSI, "바기나", ASSI)
+				ELSEIF TEQUIP:ASSI:전신속옷
+				;전신속옷을 입었을 경우
+					CALL SET_STAIN("전신속옷", "애액", ASSI) ;전신속옷이 애액에 젖는다
+					CALL MOVE_STAIN("전신속옷", ASSI, "바기나", ASSI)
+				ENDIF
+			ELSEIF TEQUIP:ASSI:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+			;스타킹 착용
+				CALL SET_STAIN("양말", "애액", ASSI) ;스타킹이 애액에 젖는다
+				CALL MOVE_STAIN("양말", ASSI, "바기나", ASSI)
+			ELSE
+			;하의 속옷류 미착용 → 하의(바지)에만 얼룩이 뭍는다
+				CALL SET_STAIN("하의", "애액", ASSI) ;하의(바지)가 애액에 젖는다
+				CALL MOVE_STAIN("하의", ASSI, "바기나", ASSI)
+			ENDIF
+		ELSEIF !(TEQUIP:ASSI:하의 && (COMPARE1 == 1 || COMPARE1 == 2)) && !(TEQUIP:ASSI:전신복 && (COMPARE2 == 1 || COMPARE2 == 2))
+		;하의(스커트/밑개방형/미착용)와 전신복(스커트/밑개방형/미착용)을 모두 입었을 경우
+			IF TEQUIP:ASSI:속옷（하） || TEQUIP:ASSI:전신속옷
+			;하의 속옷류 착용
+				IF TEQUIP:ASSI:속옷（하）
+				;속옷(하)를 입었을 경우
+					CALL SET_STAIN("속옷（하）", "애액", ASSI) ;팬티가 애액에 젖는다
+					CALL MOVE_STAIN("속옷（하）", ASSI, "바기나", ASSI)
+				ELSEIF TEQUIP:ASSI:전신속옷
+				;전신속옷을 입었을 경우
+					CALL SET_STAIN("전신속옷", "애액", ASSI) ;전신속옷이 애액에 젖는다
+					CALL MOVE_STAIN("전신속옷", ASSI, "바기나", ASSI)
+				ENDIF
+			ELSEIF TEQUIP:ASSI:양말 && (COMPARE4 == 1 || COMPARE4 == 4)
+			;스타킹 착용
+				CALL SET_STAIN("양말", "애액", ASSI) ;스타킹이 애액에 젖는다
+				CALL MOVE_STAIN("양말", ASSI, "바기나", ASSI)
+			ELSE
+			;하의 속옷류 미착용 → 얼룩은 음순에만 있는 상태
+				;구현 안해도 됨
+			ENDIF
+		ENDIF
 	ENDIF
 ENDIF
 
@@ -3130,7 +3748,7 @@ IF ARGS == ""
 ELSE
 	RETURNF TOSTR(FINDELEMENT(이상경험名 , ARGS , , , 1))
 ENDIF
-
+;父_母_兄弟_姉妹_娘_息子
 @NUM_ABNORMAL_EXP(ARGS)
 #FUNCTION
 RETURNF TOINT(NAME_ABNORMAL_EXP(, ARGS))

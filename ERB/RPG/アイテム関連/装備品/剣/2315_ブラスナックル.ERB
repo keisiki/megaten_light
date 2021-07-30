@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2315
 RETURN GET_EQUIPNUM("검")
 
+;숏잽
+@장비추가스킬_2315,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 202
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -68,6 +78,9 @@ PRINTL 장비조건：LV10～
 
 @장비해설_2315
 PRINTL 단순한 주먹무기。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：숏잽
+RESETCOLOR
 
 RETURN 0
 

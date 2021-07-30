@@ -100,10 +100,12 @@ RETURN 0
 
 ;마카交換可能か
 @EQUIP_EXCHANGE_3541
-RETURN 0
+SIF FLAG:組織貢献度 + FLAG:名声 * 100 < 3500000
+	RETURN 0
+RETURN 1
 
 @장비해설_3541
-PRINTL 악마の皮膚で作られたという옷、ぬめる様な感触が気持ち悪い
+PRINTL 악마의 가죽으로 만들어졌다는 소문이 있는 옷, 질척거리는 감촉이 기분나쁘다
 
 @장비조건설명_3541
 PRINTL 장비조건：♀ LV40～

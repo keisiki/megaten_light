@@ -15,8 +15,9 @@ ENDSELECT
 RETURN 0
 
 @방어상성_5048,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "정신"
+
+SELECTCASE ARG
+	CASE 9
 		RETURN 0
 ENDSELECT
 RETURN 100
@@ -34,14 +35,28 @@ SELECTCASE GET_STATE(ARG)
 ENDSELECT
 RETURN 0
 
+@공격상성_5048, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_5048, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_5048, ARG = -1
+
+RETURN 1
+
+@사거리_5048, ARG = -1
+
+RETURN 1
+
+@공격범위_5048, ARG = -1
+
+RETURN 1
+
 @장비箇所_5048
 RETURN GET_EQUIPNUM("악세사리")
-
-;-----------------------------
-;- 조건・설명処理
-;-----------------------------
-@필요레벨_5048
-RETURN 1
 
 @장비조건_5048,ARG
 SIF !IS_LOOKSLIKE_MALE(ARG)
@@ -52,15 +67,6 @@ SIF ABL:ARG:기교 < 10
 	RETURN 0
 RETURN 1
 
-@장비조건설명_5048
-PRINTL 장비조건：♂　　성교경험1000～　　기교ＬＶ10
-
-@장비해설_5048
-PRINTL 온갖 여성들을 복종시키는 악마의 힘이 담겨있다고 하는 네츠케 (정신계 상태이상 무효)
-
-;-----------------------------
-;- 구입・引き継ぎ
-;-----------------------------
 @구입조건_5048
 SIF (FLAG:30+FLAG:31+FLAG:32) < 100
 	RETURN 0
@@ -69,6 +75,12 @@ RETURN 1
 ;마카교환가능か
 @EQUIP_EXCHANGE_5048
 RETURN 1
+
+@장비해설_5048
+PRINTL 온갖 여성들을 복종시키는 악마의 힘이 담겨있다고 하는 네츠케
+
+@장비조건설명_5048
+PRINTL 장비조건：♂　　성교경험1000～　　기교ＬＶ10
 
 @引継ぎ可不可_5048
 RETURN 1

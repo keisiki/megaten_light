@@ -9,6 +9,8 @@
 ;
 ;	Edit	Date			Author					Reason
 ;	001		2014/09/17		ネトリス					
+;	002		2021/01/14		しぐれみそ				リスト更新及び中古品購入の際の処理が、所持している中古品と同じタイプのランダムキャラに行われてしまう不具合の修正。MAXBASEとアライメントを保存する処理を追加。VAR.ERHにMAXBASEとアライメント用の変数を追加
+;													
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;デビオク
 ;매각した固有キャラ（主に인간）の買戻しと、他作品キャラの落札が出来る(NOは5100台:メガテンキャラ、5200台:그외キャラ)
@@ -22,6 +24,8 @@
 ;랭크が上がると상품の枠が増える
 ;予約する事で１週間過ぎてもその枠だけ상품が入れ替えられなくなる
 ;ただし、一日に付き구입額の１％（최저額５００마카）を支払わなければいけない
+;
+;保存用の変数を追加する場合は@デビオク_リストの中古品の処理、@CHARASELL_AFTER_デビオク、@デビオク_中古経験処理にもそれ用の処理を追加する
 ;
 ;==========================================================
 ;==========================================================
@@ -43,8 +47,6 @@ ELSE
 	RESULTS = ？？？？？
 	RETURN 0
 ENDIF
-
-
 
 ;==========================================================
 ;SHOP_COM_124
@@ -71,7 +73,6 @@ SELECTCASE RESULT
 	CASE 1
 		CALL デビオク_リスト
 		GOTO LOOP_START
-		
 	;会員情報변경
 	CASE 2
 		LOCALS = -일반-
@@ -108,23 +109,17 @@ SELECTCASE RESULT
 						
 						MONEY:1 -= LOCAL:(FLAG:デビオク랭크)
 						FLAG:デビオク랭크 += 1
-						
 					;もどる
 					CASE 100
 						GOTO LOOP_START
-						
-				
 				ENDSELECT
-
 			CASE 3
 				PRINTFORML [100] 돌아간다
 				;ただ押すだけ
 				CALL INPUTINT(100)
 				GOTO LOOP_START
-
 		ENDSELECT
 		GOTO LOOP_START
-		
 	;헬プ
 	CASE 3
 		$LOOP_헬프
@@ -145,8 +140,6 @@ SELECTCASE RESULT
 				PRINTFORML 
 				PRINTFORMW 이로써 낙찰은 완료됩니다
 				PRINTFORML 
-				
-				
 			CASE 2
 				
 				PRINTFORML -중고와 신품-
@@ -177,7 +170,6 @@ SELECTCASE RESULT
 				PRINTFORML 데빌 옥션 내의 정보는 다음 주차로 넘어가지 않습니다
 				PRINTFORMW 낙찰하지 않은 캐릭터는 초기화되니 이점에 주의해 주세요
 				PRINTFORML 
-				
 			CASE 3
 				
 				PRINTFORML -예약-
@@ -187,8 +179,6 @@ SELECTCASE RESULT
 				PRINTFORMW 주）최저 금액은 ５００마카
 				PRINTFORML 
 				PRINTFORML 
-				
-				
 			CASE 4
 				
 				PRINTFORML -회원 정보 변경-
@@ -196,19 +186,15 @@ SELECTCASE RESULT
 				PRINTFORML 이쪽은 일정 액수를 지불해 상품의 범위를 늘릴 수 있습니다
 				PRINTFORMW 최종적으로는 ４칸까지 확장 가능합니다
 				PRINTFORML 
-				
 			CASE 100
 				GOTO LOOP_START
-
 		ENDSELECT
 		GOTO LOOP_헬프
 		
 	;もどる
 	CASE 100
 		RETURN
-
 ENDSELECT
-
 
 ;==========================================================
 ;デビオク_リスト
@@ -235,7 +221,6 @@ SELECTCASE RESULT
 		;見やすいように入れ替え
 		FOR LOCAL, 0, 4
 			상품:LOCAL = デビオク상품リスト:0:LOCAL
-			
 		NEXT
 		CLEARLINE LINECOUNT
 		PRINTFORML -중고품 리스트-
@@ -247,11 +232,9 @@ SELECTCASE RESULT
 					SETCOLOR COLOR("PINK")
 					PRINTFORML 　　예약완료
 					RESETCOLOR
-				
 				ELSE
 					PRINTFORML 
 				ENDIF
-				
 			ELSE
 				PRINTFORML ＜재고 품절＞
 			ENDIF
@@ -265,24 +248,19 @@ SELECTCASE RESULT
 				CALL INPUTINT(1, 100)
 			CASE 1
 				CALL INPUTINT(1, 2, 100)
-		
 			CASE 2
 				CALL INPUTINT(1, 2, 3, 100)
-		
 			CASE 3
 				CALL INPUTINT(1, 2, 3, 4, 100)
-		
 		ENDSELECT
 		
 		;もどる
 		SIF RESULT == 100
 			RESTART
 		
-		
 		;在庫がない場合はループ
 		SIF 상품:(RESULT-1) < 1
 			GOTO LOOP_1
-		
 		
 		;選択したキャラ번호
 		ARG = 상품:(RESULT-1)
@@ -301,11 +279,9 @@ SELECTCASE RESULT
 		PRINTFORML [100] 돌아간다
 		CALL INPUTINT( 1, 2, 100)
 		
-		
 		SELECTCASE RESULT
 			;落札
 			CASE 1
-				
 				PRINTFORML %조사처리(CSVNAME(ARG,0),"를")% 낙찰하겠습니까?　　　낙찰 가격：{ARG:1}마카
 				PRINTFORML 
 				CALL INPUT_YN, "낙찰한다", "아니오"
@@ -313,7 +289,6 @@ SELECTCASE RESULT
 				;やめる
 				SIF RESULT == 1
 					RESTART
-				
 				
 				;발りない場合はもどる
 				IF MONEY:1 < ARG:1
@@ -326,7 +301,13 @@ SELECTCASE RESULT
 				MONEY:1 -= ARG:1
 				
 				CALL ADD_NEW_COMPANION, ARG
-				ARG = GETCHARA(ARG)
+				IF INRANGE(ARG, 4901, 4912)
+					;ランダムキャラは固有番号が同じな場合があるので処理を分ける
+					;どっちもCHARANUM - 1で良い気もするけど念の為
+					ARG = CHARANUM - 1
+				ELSE
+					ARG = GETCHARA(ARG)
+				ENDIF
 				
 				固有번호退避 = CFLAG:ARG:キャラ固有の번호
 				
@@ -338,6 +319,7 @@ SELECTCASE RESULT
 				;BASE入れ替え
 				FOR LOCAL, 0, 100
 					BASE:ARG:LOCAL = 中古キャラBASE:(NO:ARG-4500):LOCAL
+					MAXBASE:ARG:LOCAL = 中古キャラMAXBASE:(NO:ARG-4500):LOCAL
 				NEXT
 				
 				;CFLAG保存入れ替え
@@ -357,6 +339,10 @@ SELECTCASE RESULT
 
 				;CFLAG이상경험記録保存
 				CFLAG:ARG:이상경험記録 = 中古キャラCFLAG이상경험記録:(NO:ARG-4500):0
+				
+								;アライメント入れ替え
+				CFLAG:ARG:善悪치 = 中古キャラアライメント:(NO:ARG-4500):0
+				CFLAG:ARG:秩混치 = 中古キャラアライメント:(NO:ARG-4500):1
 				
 				CFLAG:ARG:キャラ固有の번호 = 固有번호退避
 	
@@ -401,46 +387,36 @@ SELECTCASE RESULT
 				SIF LOCAL < 500
 					LOCAL = 500
 				FLAG:デビオク予約料金 -= LOCAL
-
 			;予約
 			CASE 2
-			
 				;予約料計算（落札가격の１％を毎日支払う、최저額は500）
 				LOCAL = ARG:1/100
 				SIF LOCAL < 500
 					LOCAL = 500
 				
 				SELECTCASE デビオク予約フラグ:0:(ARG:2)
-					;予約
 					CASE 0
-							
+						;予約
 						PRINTFORML %조사처리(CSVNAME(ARG,0),"를")% 예약했습니다
 						PRINTFORMW 1일 {LOCAL}마카를 지불합니다
 						デビオク予約フラグ:0:(ARG:2) = ARG
 						FLAG:デビオク予約料金 += LOCAL
-					
-					
-					;予約해제（取り消しは無料）
 					CASEELSE
+					;予約해제（取り消しは無料）
 						PRINTFORMW 예약을 취소했습니다
 						デビオク予約フラグ:0:(ARG:2) = 0
 						FLAG:デビオク予約料金 -= LOCAL
-						
 				ENDSELECT
 				GOTO L00P_予約_1
 			CASE 100
 				RESTART
 		ENDSELECT
-		
-		
-		
 	;新品
 	CASE 2
 		$L00P_予約_新品
 		;見やすいように入れ替え
 		FOR LOCAL, 0, 4
 			상품:LOCAL = デビオク상품リスト:1:LOCAL
-			
 		NEXT
 		CLEARLINE LINECOUNT
 		PRINTFORML -신품 리스트-
@@ -452,11 +428,9 @@ SELECTCASE RESULT
 					SETCOLOR COLOR("PINK")
 					PRINTFORML 　　예약 완료
 					RESETCOLOR
-				
 				ELSE
 					PRINTFORML 
 				ENDIF
-				
 			ELSE
 				PRINTFORML ＜재고 품절＞
 			ENDIF
@@ -470,24 +444,19 @@ SELECTCASE RESULT
 				CALL INPUTINT(1, 100)
 			CASE 1
 				CALL INPUTINT(1, 2, 100)
-		
 			CASE 2
 				CALL INPUTINT(1, 2, 3, 100)
-		
 			CASE 3
 				CALL INPUTINT(1, 2, 3, 4, 100)
-		
 		ENDSELECT
 		
 		;もどる
 		SIF RESULT == 100
 			RESTART
 		
-		
 		;在庫がない場合はループ
 		SIF 상품:(RESULT-1) < 1
 			GOTO LOOP_2
-		
 		
 		;選択したキャラ번호
 		ARG = 상품:(RESULT-1)
@@ -506,11 +475,9 @@ SELECTCASE RESULT
 		PRINTFORML [100] 돌아간다
 		CALL INPUTINT( 1, 2, 100)
 		
-		
 		SELECTCASE RESULT
 			;落札
 			CASE 1
-				
 				PRINTFORML %조사처리(CSVNAME(ARG,0),"를")% 낙찰하겠습니까?　　　낙찰 가격：{ARG:1}마카
 				PRINTFORML 
 				CALL INPUT_YN, "낙찰한다", "그만둔다"
@@ -518,7 +485,6 @@ SELECTCASE RESULT
 				;やめる
 				SIF RESULT == 1
 					RESTART
-				
 				
 				;발りない場合はもどる
 				IF MONEY:1 < ARG:1
@@ -544,10 +510,8 @@ SELECTCASE RESULT
 				SIF LOCAL < 500
 					LOCAL = 500
 				FLAG:デビオク予約料金 -= LOCAL
-				
 			;予約
 			CASE 2
-				
 				;予約料計算（落札가격の１％を毎日支払う、최저額は500）
 				LOCAL = ARG:1/100
 				SIF LOCAL < 500
@@ -556,19 +520,16 @@ SELECTCASE RESULT
 				SELECTCASE デビオク予約フラグ:1:(ARG:2)
 					;予約
 					CASE 0
-							
 						PRINTFORML %조사처리(CSVNAME(ARG,0),"를")% 예약했습니다
 						PRINTFORMW 1일 {LOCAL}마카의 지불이 발생합니다
 						デビオク予約フラグ:1:(ARG:2) = ARG
 						FLAG:デビオク予約料金 += LOCAL
-					
 					
 					;予約해제（取り消しは無料）
 					CASEELSE
 						PRINTFORMW 예약을 취소했습니다
 						デビオク予約フラグ:1:(ARG:2) = 0
 						FLAG:デビオク予約料金 -= LOCAL
-				
 				ENDSELECT
 				GOTO L00P_予約_新品
 			CASE 100
@@ -577,10 +538,7 @@ SELECTCASE RESULT
 	;もどる
 	CASE 100
 		RETURN
-
 ENDSELECT
-
-
 
 ;==========================================================
 ;デビオク_リスト更新_新品
@@ -670,7 +628,6 @@ FOR LOCAL:2 , 0, 4
 	;予約されているキャラを保管
 	ELSE
 		予約済み상품:(LOCAL:2) = デビオク予約フラグ:1:(LOCAL:2)
-		
 	ENDIF
 	;リスト:Xの中にある予約キャラの번호を-1にする
 	FOR LOCAL , 0, LOCAL:1+1
@@ -729,32 +686,25 @@ NEXT
 
 		;LOCAL:2に-1が入っている場合（他の　상품:Ｘ　に使われていた場合）は有効な数字になるまで一つずつずらす
 		IF リスト:(LOCAL:2) == -1
-		
 			;LOCAL:2　と　LOCAL:1　が同じ場合は0に
 			IF LOCAL:2 == LOCAL:1
 				LOCAL:2 = 0
-			
 			;LOCAL:2　が　LOCAL:1　より小さい場合は1발す
 			ELSEIF LOCAL:2 < LOCAL:1
 				LOCAL:2++
-			
 			ENDIF
 			
 			;無限ループ防止処理用カウント
 			LOCAL:3++
 			
 			GOTO LOOP_2
-			
 		ENDIF
 
 		상품:LOCAL = リスト:(LOCAL:2)
 		
 		;사용した번호を-1にする
 		リスト:(LOCAL:2) = -1
-	
 	NEXT
-	
-
 ;ENDIF
 FOR LOCAL, 0, 4
 
@@ -788,9 +738,6 @@ FOR LOCAL, 0, 4
 	ENDIF
 NEXT
 
-
-
-
 ;==========================================================
 ;デビオク_リスト更新_中古
 ; デビオクの상품リスト更新の処理
@@ -811,7 +758,6 @@ VARSET 상품 , -1
 ;中古リスト更新
 LOCAL:1 = -1
 FOR LOCAL, 1, 2000
-	
 	;中古キャラ매각済みフラグがない場合は弾く
 	SIF 中古キャラ매각済み:LOCAL:0 == 0
 		CONTINUE
@@ -821,7 +767,6 @@ FOR LOCAL, 1, 2000
 	
 	;フラグの立っているキャラ번호を保存、4500を引いて保存しているため발しなおす
 	リスト:(LOCAL:1) = LOCAL+4500
-	
 NEXT
 
 ;一人もいない場合は戻る
@@ -842,7 +787,6 @@ FOR LOCAL:2 , 0, 4
 	NEXT
 NEXT
 
-
 ;棚に上がっているキャラを弾く、二週連続載せないための処理
 FOR LOCAL:2 , 0, 4
 	SIF デビオク상품リスト:0:(LOCAL:2) == -1
@@ -855,7 +799,6 @@ FOR LOCAL:2 , 0, 4
 	ENDIF
 	NEXT
 NEXT
-
 
 ;번호を상품0～3に入れる
 FOR LOCAL, 0, 4
@@ -890,32 +833,24 @@ FOR LOCAL, 0, 4
 
 	;LOCAL:2に-1が入っている場合（他の　상품:Ｘ　に使われていた場合）は有効な数字になるまで一つずつずらす
 	IF リスト:(LOCAL:2) == -1
-	
-		;LOCAL:2　と　LOCAL:1　が同じ場合は0に
 		IF LOCAL:2 == LOCAL:1
 			LOCAL:2 = 0
-		
-		;LOCAL:2　が　LOCAL:1　より小さい場合は1발す
 		ELSEIF LOCAL:2 < LOCAL:1
 			LOCAL:2++
-		
 		ENDIF
 		
 		;無限ループ防止処理用カウント
 		LOCAL:3++
 		
 		GOTO LOOP_1
-		
 	ENDIF
 
 	상품:LOCAL = リスト:(LOCAL:2)
 	
 	;사용した번호を-1にする
 	リスト:(LOCAL:2) = -1
-
 NEXT
 
-;デビオク상품リスト:0:Xに-1を入れる
 FOR LOCAL, 0, 4
 	デビオク상품リスト:0:LOCAL = -1
 NEXT
@@ -962,7 +897,6 @@ NEXT
 SIF NO:ARG < 4500 || NO:ARG > 4999 && NO:ARG < 5100 || NO:ARG > 5299
 	RETURN
 
-
 ;中古済み판정
 中古キャラ매각済み:(NO:ARG-4500):0 = 1
 
@@ -987,51 +921,42 @@ FOR LOCAL, 0, 291
 	中古キャラABL:(NO:ARG-4500):LOCAL = ABL:ARG:LOCAL
 NEXT
 
-;BASE保存
 FOR LOCAL, 0, 100
 	中古キャラBASE:(NO:ARG-4500):LOCAL = BASE:ARG:LOCAL
+	中古キャラMAXBASE:(NO:ARG-4500):LOCAL = MAXBASE:ARG:LOCAL
 NEXT
 
-;CFLAG保存
 FOR LOCAL, 200, 600
 	中古キャラCFLAG:(NO:ARG-4500):(LOCAL-200) = CFLAG:ARG:LOCAL
 NEXT
-;CFLAG保存2
+
 FOR LOCAL, 600, 1000
 	中古キャラCFLAG2:(NO:ARG-4500):(LOCAL-600) = CFLAG:ARG:LOCAL
 NEXT
 
-;CFLAG保存3
 FOR LOCAL, 1551, 1572
 	中古キャラCFLAG3:(NO:ARG-4500):(LOCAL-1551) = CFLAG:ARG:LOCAL
 NEXT
 
-;CFLAG이상경험記録保存
 中古キャラCFLAG이상경험記録:(NO:ARG-4500):0 = CFLAG:ARG:이상경험記録
 
-;EXP保存
+中古キャラアライメント:(NO:ARG-4500):0 = CFLAG:ARG:善悪치
+中古キャラアライメント:(NO:ARG-4500):1 = CFLAG:ARG:秩混치
+
 FOR LOCAL, 0, 84
 	中古キャラEXP:(NO:ARG-4500):LOCAL = EXP:ARG:LOCAL
 NEXT
 
-;TALENT保存
 FOR LOCAL, 0, 160
 	中古キャラTALENT:(NO:ARG-4500):LOCAL = TALENT:ARG:LOCAL
 NEXT
 
-;MARK保存
 FOR LOCAL, 0, 4
 	中古キャラMARK:(NO:ARG-4500):LOCAL = MARK:ARG:LOCAL
 NEXT
 
-
 ;임신相손保存
 ;中古キャラ임신相손:(NO:ARG-4500):LOCAL = ABL:ARG:LOCAL
-
-
-
-
-
 
 ;==========================================================
 ;デビオク_中古경험処理
@@ -1045,65 +970,67 @@ NEXT
 ;	なし
 ;========================================================
 @デビオク_中古경험処理, ARG
-#DIM 매각日
-#DIM 固有번호退避
+#DIM DYNAMIC 매각日
+#DIM DYNAMIC 固有번호退避
+
 ;대상キャラを一時的に加入
 CALL ADD_NEW_COMPANION, ARG
-ARG = GETCHARA(ARG)
+IF INRANGE(ARG, 4901, 4912)
+	ARG = CHARANUM - 1
+ELSE
+	ARG = GETCHARA(ARG)
+ENDIF
 
-;ABL入れ替え
 FOR LOCAL, 0, 291
 	ABL:ARG:LOCAL = 中古キャラABL:(NO:ARG-4500):LOCAL
 NEXT
 
-;BASE入れ替え
 FOR LOCAL, 0, 100
 	BASE:ARG:LOCAL = 中古キャラBASE:(NO:ARG-4500):LOCAL
+	MAXBASE:ARG:LOCAL = 中古キャラMAXBASE:(NO:ARG-4500):LOCAL
 NEXT
 
 固有번호退避 = CFLAG:ARG:キャラ固有の번호
 
-;CFLAG保存入れ替え
 FOR LOCAL, 200, 600
 	CFLAG:ARG:LOCAL = 中古キャラCFLAG:(NO:ARG-4500):(LOCAL-200)
 NEXT
-;CFLAG保存2入れ替え
+
 FOR LOCAL, 600, 1000
 	CFLAG:ARG:LOCAL = 中古キャラCFLAG2:(NO:ARG-4500):(LOCAL-600)
 NEXT
 
-;CFLAG保存3入れ替え
 FOR LOCAL, 1551, 1572
 	CFLAG:ARG:LOCAL = 中古キャラCFLAG3:(NO:ARG-4500):(LOCAL-1551)
 NEXT
 
+CFLAG:ARG:善悪치 = 中古キャラアライメント:(NO:ARG-4500):0
+CFLAG:ARG:秩混치 = 中古キャラアライメント:(NO:ARG-4500):1
+
 CFLAG:ARG:キャラ固有の번호 = 固有번호退避
 
-;CFLAG이상경험記録保存
 CFLAG:ARG:이상경험記録 = 中古キャラCFLAG이상경험記録:(NO:ARG-4500):0
 
-;EXP入れ替え
 FOR LOCAL, 0, 84
 	EXP:ARG:LOCAL = 中古キャラEXP:(NO:ARG-4500):LOCAL
 NEXT
 
-;TALENT入れ替え
 FOR LOCAL, 0, 160
 	TALENT:ARG:LOCAL = 中古キャラTALENT:(NO:ARG-4500):LOCAL
 NEXT
 
-;MARK保存
 FOR LOCAL, 0, 4
 	MARK:ARG:LOCAL = 中古キャラMARK:(NO:ARG-4500):LOCAL
 NEXT
-
 
 ;『中古キャラ매각先:ARG:0』で경험の종류を、『中古キャラ매각期間:ARG:0』で횟수を決める
 ;もしなんらかの不具合で『中古キャラ매각期間:ARG:0』が『0』になってしまっている場合、또는『DAY』이상의 場合は『DAY-7』を入れる
 SIF 中古キャラ매각日:(NO:ARG-4500):0 == 0 || 中古キャラ매각日:(NO:ARG-4500):0 >= DAY
 	中古キャラ매각日:(NO:ARG-4500):0 = DAY-7
+
 ;変数が長いので入れ替え
 매각日 = 中古キャラ매각日:(NO:ARG-4500):0
+
 $LOOP_1
 LOCAL:1 = 0
 SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
@@ -1124,7 +1051,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						TCVAR:ARG:획득펠라경험 += 1
 						TCVAR:ARG:획득정액경험 += 1
 						TCVAR:ARG:획득봉사쾌락경험 += 1
-
 					;本番
 					CASE 30 TO 79
 						;처녀상실
@@ -1143,7 +1069,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-
 					;애널
 					CASE 80 TO 99
 						TCVAR:ARG:획득Ａ경험 += 1
@@ -1153,9 +1078,7 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-				
 				ENDSELECT
-				
 			;남자の場合
 			ELSE
 				TCVAR:ARG:획득성교경험 += 1
@@ -1164,10 +1087,8 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 					TCVAR:ARG:획득사정경험 += 1
 					TCVAR:ARG:획득절정경험 += 1
 				ENDIF
-				
 			ENDIF
 		NEXT
-	
 	;동성（一日０～３回の計算）
 	CASE 1
 		;総プ레이횟수計算
@@ -1191,7 +1112,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約５０％の確立で봉사쾌락경험
 						SIF RAND:100 < 50
 							TCVAR:ARG:획득봉사쾌락경험 += 1
-
 					;바이브
 					CASE 40 TO 59
 						SELECTCASE RAND:100
@@ -1219,7 +1139,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 								SIF RAND:100 < 30
 									TCVAR:ARG:획득절정경험 += 1
 						ENDSELECT
-
 					;ペニバン
 					CASE 60 TO 99
 						SELECTCASE RAND:100
@@ -1250,7 +1169,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 									TCVAR:ARG:획득절정경험 += 1
 						ENDSELECT
 				ENDSELECT
-				
 			;남자の場合
 			ELSE
 				SELECTCASE RAND:100
@@ -1260,7 +1178,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						TCVAR:ARG:획득정액경험 += 1
 						TCVAR:ARG:획득봉사쾌락경험 += 1
 						TCVAR:ARG:획득ＢＬ경험 += 1
-
 					;本番
 					CASE 30 TO 79
 						TCVAR:ARG:획득Ａ경험 += 1
@@ -1271,9 +1188,7 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-
 				ENDSELECT
-				
 			ENDIF
 		NEXT
 	;수간（一日１～５回の計算）
@@ -1294,7 +1209,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						TCVAR:ARG:획득정액경험 += 1
 						TCVAR:ARG:획득봉사쾌락경험 += 1
 						TCVAR:ARG:획득수간경험 += 1
-
 					;本番
 					CASE 20 TO 79
 						;처녀상실
@@ -1314,7 +1228,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-
 					;애널
 					CASE 80 TO 99
 						TCVAR:ARG:획득Ａ경험 += 1
@@ -1325,9 +1238,7 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-				
 				ENDSELECT
-				
 			;남자の場合
 			ELSE
 				TCVAR:ARG:획득성교경험 += 1
@@ -1337,7 +1248,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 					TCVAR:ARG:획득사정경험 += 1
 					TCVAR:ARG:획득절정경험 += 1
 				ENDIF
-				
 			ENDIF
 		NEXT
 	;ノーマル윤간（一日３～１０回の計算）
@@ -1358,7 +1268,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						TCVAR:ARG:획득정액경험 += 1
 						TCVAR:ARG:획득봉사쾌락경험 += 1
 						TCVAR:ARG:획득윤간경험 += 1
-
 					;本番
 					CASE 30 TO 79
 						;처녀상실
@@ -1378,7 +1287,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-
 					;애널
 					CASE 80 TO 99
 						TCVAR:ARG:획득Ａ경험 += 1
@@ -1389,9 +1297,7 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-				
 				ENDSELECT
-				
 			;남자の場合
 			ELSE
 				TCVAR:ARG:획득성교경험 += 1
@@ -1428,7 +1334,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約５０％の確立で봉사쾌락경험
 						SIF RAND:100 < 50
 							TCVAR:ARG:획득봉사쾌락경험 += 1
-
 					;바이브
 					CASE 40 TO 59
 						SELECTCASE RAND:100
@@ -1458,7 +1363,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 								SIF RAND:100 < 30
 									TCVAR:ARG:획득절정경험 += 1
 						ENDSELECT
-
 					;ペニバン
 					CASE 60 TO 99
 						SELECTCASE RAND:100
@@ -1492,7 +1396,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 									TCVAR:ARG:획득절정경험 += 1
 						ENDSELECT
 				ENDSELECT
-				
 			;남자の場合
 			ELSE
 				SELECTCASE RAND:100
@@ -1503,7 +1406,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						TCVAR:ARG:획득봉사쾌락경험 += 1
 						TCVAR:ARG:획득ＢＬ경험 += 1
 						TCVAR:ARG:획득윤간경험 += 1
-
 					;本番
 					CASE 30 TO 79
 						TCVAR:ARG:획득Ａ경험 += 1
@@ -1515,12 +1417,9 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-
 				ENDSELECT
-				
 			ENDIF
 		NEXT
-	
 	;수간윤간（一日５～２０回の計算）
 	CASE 5
 		;総プ레이횟수計算
@@ -1540,7 +1439,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						TCVAR:ARG:획득봉사쾌락경험 += 1
 						TCVAR:ARG:획득수간경험 += 1
 						TCVAR:ARG:획득윤간경험 += 1
-
 					;本番
 					CASE 20 TO 79
 						;처녀상실
@@ -1561,7 +1459,6 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-
 					;애널
 					CASE 80 TO 99
 						TCVAR:ARG:획득Ａ경험 += 1
@@ -1573,9 +1470,7 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 						;約３０％の確立で절정
 						SIF RAND:100 < 30
 							TCVAR:ARG:획득절정경험 += 1
-				
 				ENDSELECT
-				
 			;남자の場合
 			ELSE
 				TCVAR:ARG:획득성교경험 += 1
@@ -1586,16 +1481,14 @@ SELECTCASE 中古キャラ매각先:(NO:ARG-4500):0
 					TCVAR:ARG:획득사정경험 += 1
 					TCVAR:ARG:획득절정경험 += 1
 				ENDIF
-				
 			ENDIF
 		NEXT
-
 	;どれにも当てはまらない場合は中古キャラ매각先:ARG:0に0を入れてループ
 	CASEELSE
 		中古キャラ매각先:ARG:0 = 0
 		GOTO LOOP_1
-
 ENDSELECT
+
 ;매각경험부여
 TCVAR:ARG:획득매각경험 = 1
 ;경험반영
@@ -1634,5 +1527,4 @@ RESETCOLOR
 MONEY:1 -= FLAG:デビオク予約料金
 
 DRAWLINE
-
 

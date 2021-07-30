@@ -3,8 +3,8 @@
 
 ;스킬名
 @SKILL_NAME_305,ARG
-;ばななが사용する場合小太刀・舞《まい》に
-IF ARG > 0 && NO:ARG == [[キャラ:나나]]
+;ば나나が사용する場合소태도・무《まい》に
+IF SKILL_CHANGE(ARG, [[キャラ:나나]])
 	RESULTS = 소태도・무
 ELSE
 	RESULTS = 아이언클로
@@ -41,12 +41,12 @@ RETURN 3
 ;전술
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_305
+@SKILL_DECIDE_TYPE_305, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_305
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_305, ARG
 RETURN 1
 
 
@@ -131,8 +131,8 @@ CALL ATTACK_SINGLE,ARG,LOCAL,305
 ;　 説明文の표시
 @SKILL_EXPLAIN_305
 IF U > 0 && U < CHARANUM && NO:U == [[キャラ:나나]]
-	PRINTL 소녀のキラめきにより鋳造された日本刀。
-	PRINTL 小太刀を主体としたすばやい二連撃により적一体に特大ダメージ。
+	PRINTL 소녀의 반짝임으로 주조된 일본도.
+	PRINTL 소태도를 주로 한 빠른 이연격으로 적 한 체에 특대 데미지.
 ELSE
 	PRINTL [전열] 적 1체에 2회 전술속성 중 물리데미지. 
 ENDIF

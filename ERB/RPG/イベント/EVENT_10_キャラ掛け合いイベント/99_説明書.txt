@@ -1,92 +1,92 @@
-‡@ƒ^ƒCƒgƒ‹ì¬
-u1_ƒ^ƒCƒgƒ‹ˆê——vƒtƒHƒ‹ƒ_‚Ì
-SELECTCASE“à‚É‘}“ü‚·‚é
+¨ç«¿«¤«È«ëÀÛ¼º
+¡¸1_«¿«¤«È«ëìé?¡¹«Õ«©«ë«ÀªÎ
+SELECTCASE?ªË?ìýª¹ªë
 
 @EVENT_10_TITLELIST_0(ARG)
 SELECTCASE ARG
--------‘}“ü—“----------------
-CASE ›
-	RESULTS = iƒ^ƒCƒgƒ‹j
+-------?ìýÕ±----------------
+CASE ¡Û
+	RESULTS = £¨«¿«¤«È«ë£©
 -----------------------------
 CASEELSE
 	RETURN 0
 ENDSELECT
 RETURN 1
-¦iƒ^ƒCƒgƒ‹j‚ð‘‚«‚©‚¦‚ê‚ÎOK
-¦›‚Ì•”•ª‚Í”Žš‚ð“ü‚ê‚éB”Žš‚Í0`63‚Ü‚Å‚Å‚«‚é
-@63‚Ü‚Ås‚Á‚Ä‚µ‚Ü‚Á‚½ê‡A@EVENT_10_TITLELIST_1(ARG)‚ªƒRƒƒ“ƒgƒAƒEƒg‚µ‚Ä‚ ‚é‚Ì‚Å
-@‚»‚ê‚ðŽg‚¤
+¡Ø£¨«¿«¤«È«ë£©ªòßöª­ª«ª¨ªìªÐOK
+¡Ø¡ÛªÎÝ»ÝÂªÏ?í®ªòìýªìªë¡£?í®ªÏ0¢¦63ªÞªÇªÇª­ªë
+¡¡63ªÞªÇú¼ªÃªÆª·ªÞªÃª¿íÞùê¡¢@EVENT_10_TITLELIST_1(ARG)ª¬«³«á«ó«È«¢«¦«Èª·ªÆª¢ªëªÎªÇ
+¡¡ª½ªìªòÞÅª¦
 
-*‘}“ü—á
+*?ìýÖÇ
 CASE 4
-	RESULTS = Å‰‚Ì—1
+	RESULTS = ÃÖÃÊªÎÒ³1
 
 
 
 
-‡AoŒ»ƒ`ƒFƒbƒN
-u2_oŒ»ƒ`ƒFƒbƒNvƒtƒHƒ‹ƒ_‚Ì
-SELECTCASE“à‚É‘}“ü‚·‚éiCASE‚Ì”Žš‚Í‡@‚Æˆêj
+¨èõóúÞÃ¼Å©
+¡¸2_õóúÞÃ¼Å©¡¹«Õ«©«ë«ÀªÎ
+SELECTCASE?ªË?ìýª¹ªë£¨CASEªÎ?í®ªÏ¨çªÈìé?£©
 
 @EVENT_10_PLAYABLE_0(ARG)
 SELECTCASE ARG
--------‘}“ü—“----------------
-CASE › ; iƒ^ƒCƒgƒ‹j
+-------?ìýÕ±----------------
+CASE ¡Û ; £¨«¿«¤«È«ë£©
 	
-	;(ƒLƒƒƒ‰1)‚Æ(ƒLƒƒƒ‰2)‚ª‚¢‚éŽ–
-	SIF EVENT_10_2lŠ|‚¯‡‚¢ƒ`ƒFƒbƒN([[ƒLƒƒƒ‰:(ƒLƒƒƒ‰1)]],[[ƒLƒƒƒ‰:(ƒLƒƒƒ‰2)]])
+	;(«­«ã«é1)ªÈ(«­«ã«é2)ª¬ª¤ªëÞÀ
+	SIF EVENT_10_2ìÑÎÐª±ùêª¤Ã¼Å©([[«­«ã«é:(«­«ã«é1)]],[[«­«ã«é:(«­«ã«é2)]])
 		RETURN 1
 	
 -----------------------------
--------‘}“ü—“2---------------
-CASE  ; iƒ^ƒCƒgƒ‹2j
+-------?ìýÕ±2---------------
+CASE ¡Ý ; £¨«¿«¤«È«ë2£©
 	
-	;iƒ^ƒCƒgƒ‹j‚ðŒ©‚Ä‚¢‚é
-	SIF !GETBIT(ƒCƒxƒ“ƒgƒtƒ‰ƒO:10:0,›)
+	;£¨«¿«¤«È«ë£©ªòÌ¸ªÆª¤ªë
+	SIF !GETBIT(ÀÌº¥Æ®«Õ«é«°:10:0,¡Û)
 		RETURN 0
-	;(ƒLƒƒƒ‰1)‚Æ(ƒLƒƒƒ‰2)‚ª‚¢‚Ä“ñl‚ÌãJ(ŒÝ‚¢‚Ö‚ÌDŠ´“x+’‰½)‚ªˆê’è’lˆÈã
-	SIF !EVENT_10_2lŠ|‚¯‡‚¢ƒ`ƒFƒbƒN([[ƒLƒƒƒ‰:(ƒLƒƒƒ‰1)]],[[ƒLƒƒƒ‰:(ƒLƒƒƒ‰2)]],2500)
+	;(«­«ã«é1)ªÈ(«­«ã«é2)ª¬ª¤ªÆì£ìÑªÎÚô(û»ª¤ªØªÎû¿ÊïÓø+õ÷á¤)ª¬ìéïÒö·ÀÌ»ó
+	SIF !EVENT_10_2ìÑÎÐª±ùêª¤Ã¼Å©([[«­«ã«é:(«­«ã«é1)]],[[«­«ã«é:(«­«ã«é2)]],2500)
 		RETURN 0
-	;—¼ŽÒ‚Ì’‰½’l‚ª700ˆÈã
-	SIF BASE:GETCHARA([[ƒLƒƒƒ‰:(ƒLƒƒƒ‰1)]]):’‰½“x < 700
+	;?íºªÎõ÷á¤ö·ª¬700ÀÌ»ó
+	SIF BASE:GETCHARA([[«­«ã«é:(«­«ã«é1)]]):Ãæ¼ºµµ < 700
 		RETURN 0
-	SIF BASE:GETCHARA([[ƒLƒƒƒ‰:(ƒLƒƒƒ‰2)]]):’‰½“x < 700
+	SIF BASE:GETCHARA([[«­«ã«é:(«­«ã«é2)]]):Ãæ¼ºµµ < 700
 		RETURN 0
 	RETURN 1
 -----------------------------
 ENDSELECT
 RETURN 0
 
-¦(ƒLƒƒƒ‰1)‚Æ(ƒLƒƒƒ‰2)‚Í‚»‚ÌƒLƒƒƒ‰ƒNƒ^[‚ÌCSV‚ÌŒÄ‚Ñ–¼‚É’uŠ·‚·‚ê‚ÎOK
-¦‘}“ü—“2‚Í‘±‚«‚ðì‚é‚Æ‚«‚Ì‘}“ü—“A‚Í‘O‚Æˆá‚¤”Žš
-@GETBIT“à‚Ì›‚Í‘O‚ÌCASE‚Ì”Ô†‚ð“ü‚ê‚é
+¡Ø(«­«ã«é1)ªÈ(«­«ã«é2)ªÏª½ªÎÄ³¸¯ÅÍªÎCSVªÎû¼ªÓÙ£ªËöÇüµª¹ªìªÐOK
+¡Ø?ìýÕ±2ªÏ?ª­ªòíÂªëªÈª­ªÎ?ìýÕ±¡¢¡ÝªÏîñªÈêÞª¦?í®
+¡¡GETBIT?ªÎ¡ÛªÏîñªÎCASEªÎ¹øÈ£ªòìýªìªë
 
 
 
 
-‡BƒCƒxƒ“ƒg
-u3_ƒCƒxƒ“ƒgvƒtƒHƒ‹ƒ_‚Ì
-SELECTCASE“à‚É‘}“ü‚·‚éiCASE‚Ì”Žš‚Í‡@‚Æˆêj
+¨éÀÌº¥Æ®
+¡¸3_ÀÌº¥Æ®¡¹«Õ«©«ë«ÀªÎ
+SELECTCASE?ªË?ìýª¹ªë£¨CASEªÎ?í®ªÏ¨çªÈìé?£©
 
 @EVENT_10_MAINEVENT_0(ARG)
 SELECTCASE ARG
--------‘}“ü—“----------------
-CASE ›
+-------?ìýÕ±----------------
+CASE ¡Û
 	PRINTL
 	PRINTL
-	PRINTFORMW iƒCƒxƒ“ƒgj
-	PRINTFORMW iƒCƒxƒ“ƒgj
-	PRINTFORMW iƒCƒxƒ“ƒgj
-	PRINTFORMW iƒCƒxƒ“ƒgj
-	PRINTFORMW iƒCƒxƒ“ƒgj
-	PRINTFORMW iƒCƒxƒ“ƒgj
-	PRINTFORMW iƒCƒxƒ“ƒgj
+	PRINTFORMW £¨ÀÌº¥Æ®£©
+	PRINTFORMW £¨ÀÌº¥Æ®£©
+	PRINTFORMW £¨ÀÌº¥Æ®£©
+	PRINTFORMW £¨ÀÌº¥Æ®£©
+	PRINTFORMW £¨ÀÌº¥Æ®£©
+	PRINTFORMW £¨ÀÌº¥Æ®£©
+	PRINTFORMW £¨ÀÌº¥Æ®£©
 -----------------------------
--------‘}“ü—“2----------------
-	CALL “ÁŽê—Fî’Ç‰Á,GETCHARA([[ƒLƒƒƒ‰:(ƒLƒƒƒ‰1)]]),GETCHARA([[ƒLƒƒƒ‰:(ƒLƒƒƒ‰2)]])
-	IF !GETBIT(ƒCƒxƒ“ƒgƒtƒ‰ƒO:10:0,›)
-		CALL LEARN_SKILL(GETCHARA([[ƒLƒƒƒ‰:(ƒLƒƒƒ‰1)]]),SSSS,0)
-		CALL LEARN_SKILL(GETCHARA([[ƒLƒƒƒ‰:(ƒLƒƒƒ‰2)]]),SSSS,0)
+-------?ìýÕ±2----------------
+	CALL Æ¯º°¿ìÁ¤Ãß°¡,GETCHARA([[«­«ã«é:(«­«ã«é1)]]),GETCHARA([[«­«ã«é:(«­«ã«é2)]])
+	IF !GETBIT(ÀÌº¥Æ®«Õ«é«°:10:0,¡Û)
+		CALL LEARN_SKILL(GETCHARA([[«­«ã«é:(«­«ã«é1)]]),SSSS,0)
+		CALL LEARN_SKILL(GETCHARA([[«­«ã«é:(«­«ã«é2)]]),SSSS,0)
 		CALL GET_ITEMS(ITEMNAME:XXX,1)
 	ENDIF
 -----------------------------
@@ -95,11 +95,11 @@ CASEELSE
 ENDSELECT
 RETURN 1
 
-¦iƒCƒxƒ“ƒgj‚Í‚»‚ÌƒLƒƒƒ‰“¯Žm‚Ì‰ï˜b‚È‚Ç‚ð“ü‚ê‚Ä‚¢‚­
-@›‚ÍCASE‚Ì”Žš
+¡Ø£¨ÀÌº¥Æ®£©ªÏª½ªÎ«­«ã«éÔÒÞÍªÎÈ¸È­ªÊªÉªòìýªìªÆª¤ª¯
+¡¡¡ÛªÏCASEªÎ?í®
 
-¦‘}“ü—“2‚Í‚»‚ÌƒCƒxƒ“ƒg‚Ì‚¨‚Ü‚¯
-@CALL “ÁŽê—Fî’Ç‰Á‚Í‚»‚ÌƒLƒƒƒ‰ƒNƒ^[“¯Žm‚É“ÁŽê—Fî‚ª•t‚­@í“¬Žž‚ÌCOOP”­“®ŽžAÅ‘å’l‚Å
-@ˆÈ‰º‚ÍIF !GETBIT(ƒCƒxƒ“ƒgƒtƒ‰ƒO:10:0,›)“à‚Åì‚éi‚»‚¤‚µ‚È‚¢‚Æ‰½“x‚à‹N‚«‚éj
-@@CALL LEARN_SKILL@ƒLƒƒƒ‰ƒNƒ^[‚ÉSSSS‚ÌƒXƒLƒ‹‚ðŠo‚¦‚³‚¹‚é
-@@CALL GET_ITEMS@@XXX‚ÌƒAƒCƒeƒ€‚ð“üŽè‚·‚é
+¡Ø?ìýÕ±2ªÏª½ªÎÀÌº¥Æ®ªÎªªªÞª±
+¡¡CALL Æ¯º°¿ìÁ¤Ãß°¡ªÏª½ªÎÄ³¸¯ÅÍÔÒÞÍªËÆ¯º°¿ìÁ¤ª¬Üõª¯¡¡ÀüÅõãÁªÎCOOP?ÔÑãÁ¡¢ÃÖ´ëö·ªÇ
+¡¡ì¤ù»ªÏIF !GETBIT(ÀÌº¥Æ®«Õ«é«°:10:0,¡Û)?ªÇíÂªë£¨ª½ª¦ª·ªÊª¤ªÈù¼ÓøªâÑÃª­ªë£©
+¡¡¡¡CALL LEARN_SKILL¡¡Ä³¸¯ÅÍªËSSSSªÎ½ºÅ³ªò±ú´ÞÀ½ª¨ªµª»ªë
+¡¡¡¡CALL GET_ITEMS¡¡¡¡XXXªÎ¾ÆÀÌÅÛªòÀÔ¼öª¹ªë

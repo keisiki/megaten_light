@@ -36,12 +36,12 @@ RETURN 0
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2698
+@SKILL_DECIDE_TYPE_2698, ARG
 RETURN 1
 ;どちらでもない
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2698
+@SKILL_DAMAGETYPE_2698, ARG
 RETURN 1
 
 
@@ -128,8 +128,8 @@ CALL ATTACK_SINGLE, ARG, POS(ARG:1),2698
 
 ;　 설명문の표시
 @SKILL_EXPLAIN_2698
-PRINTL 적 1명에게 검격공격을行う。即死効果
-PRINTL トキ専用
+PRINTL 적 1명에게 검격 공격을 가한다。즉사효과
+PRINTL 톡 전용
 
 
 ;継承に필요한部位

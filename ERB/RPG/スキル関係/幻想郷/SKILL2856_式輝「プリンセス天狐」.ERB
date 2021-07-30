@@ -38,12 +38,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2856
+@SKILL_DECIDE_TYPE_2856, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2856
+@SKILL_DAMAGETYPE_2856, ARG
 RETURN 2
 
 
@@ -137,7 +137,7 @@ PRINTFORMW  　　TARGET:[{ARG,2}] %CALLNAME:ARG,20,LEFT%　>>>>>>　모든 공�
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2856
-PRINTL 강력무비결계를 자신에게 펼쳐、모든 공격을 1회 막는다（만능은 제외）
+PRINTL 강력한 무효화 결계를 자신에게 펼쳐、모든 공격을 1회 막는다（만능은 제외）
 PRINTL 자신의 파티 안에 요괴 야쿠모 유카리가 존재할 경우、 모든 공격을 2번 막는다 (만능은 제외）
 PRINTL 신수　야쿠모 란의 스펠카드（승계불가）
 

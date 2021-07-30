@@ -366,12 +366,14 @@ ENDIF
 IF CFLAG:PLAYER:처녀상실フラグ
 	PRINTL 처녀상실
 	CFLAG:PLAYER:처녀상실フラグ = 0
-PRINTL 이상경험　처녀상실(윤간) + 2  
-	EXP:PLAYER:이상경험 += 2
+	;PRINTL 이상경험　처녀상실(윤간) + 2  
+	;EXP:PLAYER:이상경험 += 2
+	CALL ADDS_ABNORMAL_EXP, "처녀상실（윤간）", PLAYER
 ELSEIF CFLAG:PLAYER:재생처녀상실フラグ
 	CFLAG:PLAYER:재생처녀상실フラグ = 0
 	PRINTFORML 재생처녀상실
 ENDIF
+CALL SHOW_ABNORMAL_EXP, PLAYER, 1
 PRINTFORML Ｖ경험 ＋{LOCAL:2}
 EXP:PLAYER:Ｖ경험 += LOCAL:2
 PRINTFORML Ａ경험 ＋{LOCAL:2/ 3}

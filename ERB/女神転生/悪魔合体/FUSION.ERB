@@ -33,6 +33,8 @@
 ;	021		2019/10/04		なんとなくの人			스킬카드確認コマンドを추가
 ;	022		2019/11/21		JK好き					@CASTING_CHANGE_LINKをIF文に使えるように#FUNCTION対応
 ;	023		2019/12/02		JK好き					@CASTING_CHANGE_LINK_Fを新たに추가して@CASTING_CHANGE_LINKは差し戻しました
+;	024		2020/08/31		JK好き					달인악마は素材の스킬を継承できないように변경
+;	025		2020/12/20		JK好き					ABL인계체크に素材:3を추가
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 @SHOPCOMABLE_120
 RESULT:1 = 4
@@ -42,28 +44,57 @@ RETURN 1
 
 
 @SHOP_COM_120
+#DIM JAKYOU_COMMAND_NUMBER ;사용가능 커맨드 개수
 #LOCALSIZE 10
 ;---- EDIT 008 ADD START -------------------------
 VARSET LOCAL
 ;---- EDIT 008 ADD END   -------------------------
 ;---- EDIT 010 MOD START -------------------------
+JAKYOU_COMMAND_NUMBER = 0
 CUSTOMDRAWLINE =
+PRINTL 관의 주인：
+PRINTFORML 「악마가 모이는
+PRINTFORML   사교의 관에 어서 오게」
+DRAWLINE
+PRINTL
+PRINTL
+PRINTL
+DRAWLINE
+PRINTL [CLICK]
+TWAIT 2000,0
+CLEARLINE 9
+$JAKYOU_START
+JAKYOU_COMMAND_NUMBER = 0
+PRINTL 관의 주인：
+PRINTFORML \@ RESULT ? 「무엇을 원하는가?」#「다른 원하는 게 있는가?」\@
+DRAWLINE
 PRINTL [ 1] ２신 합체
+JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
 PRINTL [ 2] ３신 합체
-SIF ITEM:도리・카드몬 > 0
+JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+IF ITEM:도리・카드몬 > 0
 	PRINTL [ 3] 조마 작성
-SIF NUM_ZOUMA() > 0 && NUM_FUSIONABLE() > 0
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
+IF NUM_ZOUMA() > 0 && NUM_FUSIONABLE() > 0
 	PRINTL [ 4] 조마 강화 합체
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
 ;메어리が居る場合は필요한조마の数に+1
-SIF NUM_ZOUMA() > (GETCHARA(4509) > -1) ? 1 # 0
+IF NUM_ZOUMA() > (GETCHARA(4509) > -1) ? 1 # 0
 	PRINTL [ 5] 조마 초기화
-SIF ITEM:무명의도 || EQUIP:MASTER:마장의공방
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
+IF ITEM:무명의도 || EQUIP:MASTER:마장의공방
 	PRINTL [ 6] 마정무구 작성
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
 FOR LOCAL,2000,VARSIZE("ITEM")
 	IF 마정장비(LOCAL)
 		IF ITEM:LOCAL > 0
 			PRINTL [7] 마정무구 소재화
 			LOCAL:3 = 1
+			JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
 			BREAK
 		ENDIF
 	ELSE
@@ -71,6 +102,7 @@ FOR LOCAL,2000,VARSIZE("ITEM")
 NEXT
 
 PRINTL [ 8] 스킬 카드 작성
+JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
 ;---- EDIT 008 MOD START -------------------------
 FOR LOCAL,0,CHARANUM
 	SIF 계약(LOCAL) > 0 && ABL:LOCAL:종족 > 0 && ABL:LOCAL:종족 < 45
@@ -106,24 +138,36 @@ FOR LOCAL,0,CHARANUM
 		ENDIF
 	ENDIF
 NEXT
-SIF LOCAL:4 == 1
+IF LOCAL:4 == 1
 	PRINTL [ 9] 제물 합체
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
 ;---- EDIT 010 MOD END   -------------------------
 PRINTL [10] 악마전서
-SIF LOCAL:5 == 1
+JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+IF LOCAL:5 == 1
 	PRINTL [11] 변신악마 변경
-SIF LOCAL:6 == 1
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
+IF LOCAL:6 == 1
 	PRINTL [12] 코딩
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
 ;---- EDIT 008 MOD END   -------------------------
 ;---- EDIT 010 ADD START -------------------------
 PRINTL [13] 악마서버전송
+JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
 ;---- EDIT 010 ADD END ---------------------------
 ;---- EDIT WITH YOU ADD START -------------------------
-SIF TALENT:MASTER:144
+IF TALENT:MASTER:144
 	PRINTL [14] 당신 합체
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
 ;---- EDIT WITH YOU ADD END ---------------------------
-SIF GETBIT(FLAG:発見ED, 30)
+IF GETBIT(FLAG:発見ED, 30)
 	PRINTL [15]시간성
+	JAKYOU_COMMAND_NUMBER += 1 ;커맨드 개수 가산
+ENDIF
 	
 CUSTOMDRAWLINE =
 PRINTL [ 0]돌아간다
@@ -132,14 +176,24 @@ $INPUT_LOOP
 INPUT
 IF RESULT == 1
 	CALL FUSION_DOUBLE
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 2
 	CALL FUSION_DOUBLE,3
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 3 && ITEM:도리・카드몬 > 0
 	CALL MAKE_ZOUMA
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 4 && NUM_ZOUMA() > 0 && NUM_FUSIONABLE() > 0
 	CALL FUSION_ZOUMA
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 5 && NUM_ZOUMA() > (GETCHARA(4509) > -1) ? 1 # 0
 	CALL DEL_ZOUMA
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 6 && ((ITEM:무명의도) || (EQUIP:MASTER:마장의공방))
 	PRINTL [ 1]마정검작성
 	PRINTL [ 2]마정지팡이작성
@@ -156,36 +210,68 @@ ELSEIF RESULT == 6 && ((ITEM:무명의도) || (EQUIP:MASTER:마장의공방))
 	ELSEIF RESULT == 2
 		CALL MAKE_MASHO_STAFF
 	ELSEIF RESULT == 0
-		RETURN 0
+		CLEARLINE 5
+		CUSTOMDRAWLINE =
+		GOTO JAKYOU_START ;이전으로 돌아가기
 	ENDIF
 ELSEIF RESULT == 7 && LOCAL:3
 	CALL DEL_MASHO
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 8
 	CALL MAKE_SKILLCARD
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 9 && LOCAL:4
 	CALL FUSION_SACRIFICE
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 10
 	CALL DEVIL_COMPENDIUM
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 0
+	CLEARLINE JAKYOU_COMMAND_NUMBER + 6
+	PRINTL 관의 주인：
+	PRINTL 「동료마가 늘면 다시 오도록 하게」
+	DRAWLINE
+	PRINTL
+	PRINTL
+	PRINTL
+	DRAWLINE
+	PRINTL
+	TWAIT 2000,0
 	RETURN 0
 ELSEIF RESULT == 11 && LOCAL:5
 	CALL CHANGE_LINK
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ;---- EDIT 008 ADD START -------------------------
 ELSEIF RESULT == 12 && LOCAL:6
 ;---- EDIT 008 ADD END   -------------------------
 	CALL CODING
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ;---- EDIT 010 ADD START -------------------------
 ELSEIF RESULT == 13
 	CALL DEVIL_STORAGE
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ;---- EDIT 010 ADD END ---------------------------
 ;---- EDIT WITH YOU ADD START -------------------------
 ELSEIF RESULT == 14
 	CALL FUSION_WITH_YOU
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ;---- EDIT WITH YOU ADD END ---------------------------
 ELSEIF RESULT == 15
 	CALL CASTLE_OF_WATCH
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSEIF RESULT == 16
 	CALL SKILLCARD_CHECK
+	CUSTOMDRAWLINE =
+	GOTO JAKYOU_START ;이전으로 돌아가기
 ELSE
 	GOTO INPUT_LOOP
 ENDIF
@@ -206,7 +292,7 @@ ENDIF
 ;	;一応포지션復帰
 ;	CALL REFRESH_POS
 ;ENDIF
-RESTART
+;RESTART
 ;================================================================
 ;２身合体
 ;================================================================
@@ -383,11 +469,14 @@ IF 소재:(FLAG:合体人数) > 0
 	TRYCALLFORM FUSION_SPECIAL_PROCESS_{LOCAL:4}, 完成品, 소재:1, 소재:2 , 소재:3
 	;---- EDIT 006 ADD END -------------------------
 	;스킬継承
-	CALL SUCCESS_SKILL,完成品,소재:1,소재:2,소재:3,0
-	;사교의관なら更に素質のない스킬も継承
-	SIF FLAG:SHOPコマンド == [[SHOP:사교의관]]
-		CALL SUCCESS_SKILL,完成品,소재:1,소재:2,소재:3,1
-	;사교의관なら更に素質も継承
+	;달인악마は스킬を継承できないように수정
+	IF !TALENT:完成品:달인
+		CALL SUCCESS_SKILL,完成品,소재:1,소재:2,소재:3,0
+		;사교의관なら更に소질のない스킬も継承
+		SIF FLAG:SHOPコマンド == [[SHOP:사교의관]]
+			CALL SUCCESS_SKILL,完成品,소재:1,소재:2,소재:3,1
+	ENDIF
+	;사교의관なら更に소질も継承
 	SIF FLAG:SHOPコマンド == [[SHOP:사교의관]]
 		CALL SUCCESS_TALENT,完成品,소재:1,소재:2,소재:3
 	;----------------------------------------
@@ -820,12 +909,12 @@ IF 소재:(FLAG:合体人数) > 0
 		BASE:(完成品):충성도 = 1000
 	
 	;LOCAL:7 ABL인계레벨
-	LOCAL:7 = ABL인계체크(소재:1,소재:2)
+	LOCAL:7 = ABL인계체크(소재:1,소재:2,소재:3)
 	IF BASE:(完成品):충성도 >= 200 && LOCAL:7 >= 1
 		PRINTL 충성도를 소비해 조교에 관련된 능력을 계승할 수 있습니다
 		
 		PRINTL [0] 계승하지 않는다
-		LOCAL:7 = ABL인계체크(소재:1,소재:2)
+		LOCAL:7 = ABL인계체크(소재:1,소재:2,소재:3)
 		SIF BASE:(完成品):충성도 >= 200 && LOCAL:7 >= 1
 			PRINTL [1] LV1까지 계승  -  소비충성도 200
 		SIF BASE:(完成品):충성도 >= 500 && LOCAL:7 >= 2
@@ -1116,7 +1205,7 @@ FOR 카운트 , 1 , (ARG:3 > -1 ? 4 # 3)
 		CATCH
 		ENDCATCH
 		;조건無視스킬は판정しない
-		TRYCCALLFORM 継承조건無視_{SKILL}
+		TRYCCALLFORM 継承条件無視_{SKILL}
 		CATCH
 			;계승타입読み込み、ARGが継承できる타입でなければ次へ
 			CALLFORM SKILL_SUCCESSION_TYPE_{SKILL}
@@ -1131,7 +1220,7 @@ FOR 카운트 , 1 , (ARG:3 > -1 ? 4 # 3)
 			CONTINUE
 		;既に습득している스킬かつ、重複습득数（通常１）以上になるならば次へ
 		IF CHECK_SKILL(ARG,SKILL)
-			TRYCCALLFORM 重複습득数_{SKILL}
+			TRYCCALLFORM 重複習得数_{SKILL}
 				SIF HAVE_SKILL_OVERLAP(ARG,SKILL) + 1 > RESULT
 					CONTINUE
 			CATCH

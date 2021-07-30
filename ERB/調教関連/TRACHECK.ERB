@@ -1,5 +1,16 @@
-﻿;-------------------------------------------------
-;바이브など付けっぱなし아이템の체크
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		2021/01/28		eMさ者					挿入継続処理のTARGETのVの処理を一部変更
+;	002		2021/01/28		eMさ者					挿入継続処理へ飛ぶ条件で、下着ずらし挿入に対応。また、V挿入中→ズボンをはかせたときに挿入解除処理へ行くように
+;	003		2021/02/14		J>s!UL@1				手淫の挿入継続処理を変更。挿入継続処理へ516,517,520,902,903を追加
+;	004		2021/04/25		JK好き					@TARGET_EJAC_CHECKにターゲットのTCVAR:射精処理追加
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+;-------------------------------------------------
+;バイブなど付けっぱなしアイテムのチェック
 ;-------------------------------------------------
 @EQUIP_CHECK
 ;질내に바기나불결を付加
@@ -104,6 +115,14 @@ SIF TEQUIP:41
 ;리본装着中
 SIF TEQUIP:42
 	CALL EQUIP_COM109
+
+;カテーテル装着中
+SIF TEQUIP:43
+	CALL EQUIP_COM158
+
+;尿道プラグ装着中
+SIF TEQUIP:44
+	CALL EQUIP_COM159
 
 ;클리캡装着中(조교者)
 SIF TEQUIP:PLAYER:11
@@ -241,72 +260,138 @@ SIF TEQUIP:로터
 ;애널로터삽입
 SIF TEQUIP:애널로터
 	CALL EQUIP_COM259
-;1~9 주인->노예 성기삽입계	
-;정상위, 속옷빗겨	
-SIF TFLAG:60 == 1
+	
+;비디오 시청중
+SIF TFLAG:64
+	CALL EQUIP_COM36
+
+;挿入継続処理追加
+;----------------------------------------------------------------------------------------------------------------------
+;頭文字から一物はP、指はFの方で
+
+;삽입유지 코드들 - 후커맨드 선처리
+IF TFLAG:60 > 0
+	TFLAG:59 = TFLAG:60 ;이전 체위 변수에 '현재 체위'를 기록
+	;후배위
+	IF (SELECTCOM == 61) || (TFLAG:60 == 1 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 5 || SELECTCOM == 144 || SELECTCOM == 45 || SELECTCOM == 46 || SELECTCOM == 100 || SELECTCOM == 32 || SELECTCOM == 221 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 날개애무(12), 꼬리애무(13), 클리애무(14), 엉덩이애무(15), 키스한다(20), 아무것도안한다(21), 회화(22), 애널애무(5), 방뇨(144), 애널바이브/애널촉수(45), 애널비즈(46), 스팽킹(100), 후배위 목덜미자극(32), 가슴팍열기(221), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 1
+	;대면위
+	ELSEIF (SELECTCOM == 68 || SELECTCOM == 76) || (TFLAG:60 == 2 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 5 || SELECTCOM == 32 || SELECTCOM == 221 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 날개애무(12), 꼬리애무(13), 엉덩이애무(15), 키스한다(20), 아무것도안한다(21), 회화(22), 애널애무(5), 대면위 목덜미자극(32), 가슴팍열기(221), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 2
+	;배면위
+	ELSEIF (SELECTCOM == 69 || SELECTCOM == 77) || (TFLAG:60 == 3 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 144 || SELECTCOM == 32 || SELECTCOM == 221 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 날개애무(12), 꼬리애무(13), 클리애무(14), 엉덩이애무(15), 키스한다(20), 아무것도안한다(21), 회화(22), 방뇨(144), 배면위 목덜미자극(32), 가슴팍열기(221), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 3
+	;기승위, 역강간당한다
+	ELSEIF (SELECTCOM == 66 || SELECTCOM == 74) || (TFLAG:60 == 4 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 505 || SELECTCOM == 221 || SELECTCOM == 224 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 클리애무(14), 엉덩이애무(15), 키스한다(20), 아무것도안한다(21), 회화(22), 기승유방자위(505), 가슴팍열기(221), 주도권을 넘겨준다(224), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 4
+	;정상위, 속옷빗겨, 요정오나홀
+	ELSEIF (SELECTCOM == 60 || SELECTCOM == 72 || SELECTCOM == 154) || (TFLAG:60 == 5 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 14 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 32 || SELECTCOM == 221 || SELECTCOM == 224 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 클리애무(14), 키스한다(20), 아무것도안한다(21), 회화(22), 정상위 목덜미자극(32), 가슴팍열기(221), 주도권을 넘겨준다(224), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 5
+	;역강간, 기승위한다
+	ELSEIF (SELECTCOM == 64 || SELECTCOM == 94) || (TFLAG:60 == 6 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 221 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 키스한다(20), 아무것도안한다(21), 회화(22), 가슴팍열기(221), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 6
+	;후배위애널
+	ELSEIF (SELECTCOM == 63) || (TFLAG:60 == 7 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 144 || SELECTCOM == 100 || SELECTCOM == 221 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 날개애무(12), 꼬리애무(13), 클리애무(14), 엉덩이애무(15), 키스한다(20), 아무것도안한다(21), 회화(22), 방뇨(144), 스팽킹(100), 가슴팍열기(221), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 7
+	;대면위애널
+	ELSEIF (SELECTCOM == 70 || SELECTCOM == 78) || (TFLAG:60 == 8 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 221 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 날개애무(12), 꼬리애무(13), 엉덩이애무(15), 키스한다(20), 아무것도안한다(21), 회화(22), 가슴팍열기(221), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 8
+	;배면위애널
+	ELSEIF (SELECTCOM == 71 || SELECTCOM == 79) || (TFLAG:60 == 9 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 12 || SELECTCOM == 13 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 144 || SELECTCOM == 221 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 날개애무(12), 꼬리애무(13), 클리애무(14), 엉덩이애무(15), 키스한다(20), 아무것도안한다(21), 회화(22), 방뇨(144), 가슴팍열기(221), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 9
+	;기승위애널
+	ELSEIF (SELECTCOM == 67) || (TFLAG:60 == 10 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 14 || SELECTCOM == 15 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 512 || SELECTCOM == 221 || SELECTCOM == 224 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 클리애무(14), 엉덩이애무(15), 키스한다(20), 아무것도안한다(21), 회화(22), 애널기승유방자위(505), 가슴팍열기(221), 주도권을 넘겨준다(224), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 10
+	;정상위, 속옷빗겨 애널
+	ELSEIF (SELECTCOM == 62 || SELECTCOM == 73) || (TFLAG:60 == 11 && (SELECTCOM == 6 || SELECTCOM == 7 || SELECTCOM == 8 || SELECTCOM == 10 || SELECTCOM == 14 || SELECTCOM == 20 || SELECTCOM == 21 || SELECTCOM == 22 || SELECTCOM == 221 || SELECTCOM == 224 || SELECTCOM == 271 || SELECTCOM == 273))
+	;파생커맨드 - 가슴주무르기(6), 유두자극(7), 가슴애무(8), 가슴자위(10), 클리애무(14), 키스한다(20), 아무것도안한다(21), 회화(22), 가슴팍열기(221), 주도권을 넘겨준다(224), 긴급피임약(271), 배란유도제(273)
+		TFLAG:60 = 11
+	ELSE
+		TFLAG:60 = 0
+	ENDIF
+ENDIF
+
+;1~9 주인 → 노예 성기삽입계	
+;정상위, 속옷빗겨
+SIF TFLAG:60 == 5
 	CALL EQUIP_COM60
-;후배위	
-SIF TFLAG:60 == 2
+;후배위
+SIF TFLAG:60 == 1
 	CALL EQUIP_COM61
-;대면좌위	;대면입위	
-SIF TFLAG:60 == 3 || TFLAG:60 == 5
+;대면좌위 ;대면입위
+SIF TFLAG:60 == 2
 	CALL EQUIP_COM68
-;배면좌위	;배면입위	
-SIF TFLAG:60 == 4 || TFLAG:60 == 6
+;배면좌위 ;배면입위
+SIF TFLAG:60 == 3
 	CALL EQUIP_COM69
 ;기승위 ;역강간당한다도 기승위와 같은 판정 씀
-SIF TFLAG:60 == 7 || TFLAG:60 == 9
+SIF TFLAG:60 == 4
 	CALL EQUIP_COM66
-;요정오나홀	
-SIF TFLAG:60 == 8
+;요정오나홀
+SIF TFLAG:60 == 5
 	CALL EQUIP_COM154
-;10~16 주인->노예 애널삽입계	
-;정상위, 속옷빗겨 애널	
-SIF TFLAG:60 == 10
-	CALL EQUIP_COM62
-;후배위애널	
+;10~16 주인->노예 애널삽입계
+;정상위, 속옷빗겨 애널
 SIF TFLAG:60 == 11
+	CALL EQUIP_COM62
+;후배위애널
+SIF TFLAG:60 == 7
 	CALL EQUIP_COM63
-;대면좌위애널	;대면입위애널	
-SIF TFLAG:60 == 12 || TFLAG:60 == 14
+;대면좌위애널 ;대면입위애널
+SIF TFLAG:60 == 8
 	CALL EQUIP_COM70
-;배면좌위애널	;배면입위애널	
-SIF TFLAG:60 == 13 || TFLAG:60 == 15
+;배면좌위애널 ;배면입위애널
+SIF TFLAG:60 == 9
 	CALL EQUIP_COM71
-;기승위애널	
-SIF TFLAG:60 == 16
+;기승위애널
+SIF TFLAG:60 == 10
 	CALL EQUIP_COM67
-;17~20 노예->주인 성기삽입계	
-;정상위시킨다	
+	
+;17~20 노예->주인 성기삽입계
+;정상위시킨다
 SIF TFLAG:60 == 17
 	CALL EQUIP_COM92
-;후배위시킨다	
+;후배위시킨다
 SIF TFLAG:60 == 18
 	CALL EQUIP_COM93
 ;기승위한다 ;역강간
-SIF TFLAG:60 == 19 || TFLAG:60 == 20
+SIF TFLAG:60 == 6
 	CALL EQUIP_COM94
-;21~23 노예->주인 애널삽입계	
-;대면입위애널	
+	
+;21~23 노예->주인 애널삽입계
+;대면입위애널한다
 SIF TFLAG:60 == 21
 	CALL EQUIP_COM95
-;배면입위애널	
+;배면입위애널한다
 SIF TFLAG:60 == 22
 	CALL EQUIP_COM96
-;기승위애널	
+;기승위애널한다
 SIF TFLAG:60 == 23
 	CALL EQUIP_COM97
-;24 조수를범한다	
+;24 조수를범한다
 SIF TFLAG:60 == 24
 	CALL EQUIP_COM185
-;25 조수를범하게한다	
+;25 조수를범하게한다
 SIF TFLAG:60 == 25
 	CALL EQUIP_COM122
 ;3p
 SIF TEQUIP:60 == 26
 	CALL EQUIP_COM500
-
+	
 RETURN 1
+
+
+
 
 
 ;-------------------------------------------------
@@ -317,28 +402,28 @@ RETURN 1
 IF ASSIPLAY == 0
 	;正ベクトル
 	IF CFLAG:2 >= 5000
-		TIMES SOURCE:ARG:쾌Ｃ , 1.40
-		TIMES SOURCE:ARG:쾌Ｖ, 1.40
-		TIMES SOURCE:ARG:쾌Ａ , 1.40
-		TIMES SOURCE:ARG:쾌Ｂ , 1.40
+		TIMES SOURCE:ARG:쾌Ｃ , 1.50
+		TIMES SOURCE:ARG:쾌Ｖ, 1.50
+		TIMES SOURCE:ARG:쾌Ａ , 1.50
+		TIMES SOURCE:ARG:쾌Ｂ , 1.50
 		TIMES SOURCE:ARG:정애 , 1.50
 		
 		TIMES SOURCE:ARG:불결 , 0.50
 		TIMES SOURCE:ARG:일탈 , 0.50
 	ELSEIF CFLAG:2 >= 2000
-		TIMES SOURCE:ARG:쾌Ｃ , 1.20
-		TIMES SOURCE:ARG:쾌Ｖ, 1.20
-		TIMES SOURCE:ARG:쾌Ａ , 1.20
-		TIMES SOURCE:ARG:쾌Ｂ , 1.20
+		TIMES SOURCE:ARG:쾌Ｃ , 1.30
+		TIMES SOURCE:ARG:쾌Ｖ, 1.30
+		TIMES SOURCE:ARG:쾌Ａ , 1.30
+		TIMES SOURCE:ARG:쾌Ｂ , 1.30
 		TIMES SOURCE:ARG:정애 , 1.30
 		
 		TIMES SOURCE:ARG:불결 , 0.70
 		TIMES SOURCE:ARG:일탈 , 0.70
 	ELSEIF CFLAG:2 >= 1000
-		TIMES SOURCE:ARG:쾌Ｃ , 1.10
-		TIMES SOURCE:ARG:쾌Ｖ, 1.10
-		TIMES SOURCE:ARG:쾌Ａ , 1.10
-		TIMES SOURCE:ARG:쾌Ｂ , 1.10
+		TIMES SOURCE:ARG:쾌Ｃ , 1.20
+		TIMES SOURCE:ARG:쾌Ｖ, 1.20
+		TIMES SOURCE:ARG:쾌Ａ , 1.20
+		TIMES SOURCE:ARG:쾌Ｂ , 1.20
 		TIMES SOURCE:ARG:정애 , 1.20
 		
 		TIMES SOURCE:ARG:불결 , 0.80
@@ -350,26 +435,26 @@ IF ASSIPLAY == 0
 		TIMES SOURCE:ARG:일탈 , 0.90
 	;負ベクトル
 	ELSEIF CFLAG:2 <= -5000
-		TIMES SOURCE:ARG:무서움 , 1.40
-		TIMES SOURCE:ARG:중독충족 , 1.40
+		TIMES SOURCE:ARG:무서움 , 1.50
+		TIMES SOURCE:ARG:중독충족 , 1.50
 		TIMES SOURCE:ARG:굴종 , 1.50
+		
+		TIMES SOURCE:ARG:울굴 , 0.30
+		TIMES SOURCE:ARG:반감 , 0.30
+	ELSEIF CFLAG:2 <= -2000
+		TIMES SOURCE:ARG:무서움 , 1.30
+		TIMES SOURCE:ARG:중독충족 , 1.30
+		TIMES SOURCE:ARG:굴종 , 1.30
 		
 		TIMES SOURCE:ARG:울굴 , 0.50
 		TIMES SOURCE:ARG:반감 , 0.50
-	ELSEIF CFLAG:2 <= -2000
+	ELSEIF CFLAG:2 <= -1000
 		TIMES SOURCE:ARG:무서움 , 1.20
 		TIMES SOURCE:ARG:중독충족 , 1.20
-		TIMES SOURCE:ARG:굴종 , 1.30
+		TIMES SOURCE:ARG:굴종 , 1.20
 		
 		TIMES SOURCE:ARG:울굴 , 0.70
 		TIMES SOURCE:ARG:반감 , 0.70
-	ELSEIF CFLAG:2 <= -1000
-		TIMES SOURCE:ARG:무서움 , 1.10
-		TIMES SOURCE:ARG:중독충족 , 1.10
-		TIMES SOURCE:ARG:굴종 , 1.20
-		
-		TIMES SOURCE:ARG:울굴 , 0.80
-		TIMES SOURCE:ARG:반감 , 0.80
 	ELSEIF CFLAG:2 <= -500
 		TIMES SOURCE:ARG:굴종 , 1.10
 		
@@ -382,7 +467,7 @@ ENDIF
 ;처녀상실時の処理
 ;-------------------------------------------------
 @LOST_VIRGIN
-IF TALENT:0 && TFLAG:19
+IF TALENT:TARGET:0 && TFLAG:19
 	PRINTW 처녀상실
 	;TALENT:TARGET:0 = 0
 	;처녀상실フラグ(今回のコマンド)
@@ -400,8 +485,8 @@ IF TALENT:0 && TFLAG:19
 		TIMES SOURCE:TARGET:반감 , 10.00
 	;정조관념+연모or친애（主人による처녀상실のみ）
 	ELSEIF TALENT:TARGET:30 && TFLAG:19 && !IS_LOVER(TARGET)
-		TIMES SOURCE:TARGET:정애 , 1.20
-		TIMES SOURCE:TARGET:반감 , 0.50
+		TIMES SOURCE:TARGET:정애 , 1.50
+		TIMES SOURCE:TARGET:반감 , 0.25
 	;정조관결여
 	ELSEIF TALENT:TARGET:31
 		TIMES SOURCE:TARGET:정애 , 0.60
@@ -410,24 +495,24 @@ IF TALENT:0 && TFLAG:19
 	;손가락삽입の慣らしギミック処理
 	IF PALAM:TARGET:1 >= 80
 		TIMES SOURCE:TARGET:쾌Ｖ, 1.50
-		TIMES SOURCE:TARGET:정애 , 1.20
-		TIMES SOURCE:TARGET:아픔 , 0.80
-		TIMES SOURCE:TARGET:반감 , 0.80
+		TIMES SOURCE:TARGET:정애 , 1.25
+		TIMES SOURCE:TARGET:아픔 , 0.60
+		TIMES SOURCE:TARGET:반감 , 0.60
 	ELSEIF PALAM:TARGET:1 >= 60
 		TIMES SOURCE:TARGET:쾌Ｖ, 1.40
 		TIMES SOURCE:TARGET:정애 , 1.15
-		TIMES SOURCE:TARGET:아픔 , 0.85
-		TIMES SOURCE:TARGET:반감 , 0.85
+		TIMES SOURCE:TARGET:아픔 , 0.70
+		TIMES SOURCE:TARGET:반감 , 0.70
 	ELSEIF PALAM:TARGET:1 >= 40
 		TIMES SOURCE:TARGET:쾌Ｖ, 1.30
 		TIMES SOURCE:TARGET:정애 , 1.10
-		TIMES SOURCE:TARGET:아픔 , 0.90
-		TIMES SOURCE:TARGET:반감 , 0.90
+		TIMES SOURCE:TARGET:아픔 , 0.80
+		TIMES SOURCE:TARGET:반감 , 0.80
 	ELSEIF PALAM:TARGET:1 >= 20
 		TIMES SOURCE:TARGET:쾌Ｖ, 1.20
 		TIMES SOURCE:TARGET:정애 , 1.05
-		TIMES SOURCE:TARGET:아픔 , 0.95
-		TIMES SOURCE:TARGET:반감 , 0.95
+		TIMES SOURCE:TARGET:아픔 , 0.90
+		TIMES SOURCE:TARGET:반감 , 0.90
 	ENDIF
 	;함락소질による処理
 	IF TFLAG:20
@@ -929,22 +1014,26 @@ ENDIF
 ;절정Ｃ
 IF CUP:ARG:0 + PALAM:ARG:0 >= PALAMLV:4 * 5
 	C = 5
-	CDOWN:ARG:0 = (PALAMLV:4 * 5 - 1000)
+;	CDOWN:ARG:0 = (PALAMLV:4 * 5 - 1000)
+	CDOWN:ARG:0 = (PALAMLV:4 - 1000) * 5
 	NOWEX:ARG:0 = 5
 	;PRINTFORML 究極절정Ｃ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:0 + PALAM:ARG:0 >= PALAMLV:4 * 4
 	C = 4
-	CDOWN:ARG:0 = (PALAMLV:4 * 4 - 1000)
+;	CDOWN:ARG:0 = (PALAMLV:4 * 4 - 1000)
+	CDOWN:ARG:0 = (PALAMLV:4 - 1000) * 4
 	NOWEX:ARG:0 = 4
 	;PRINTFORML 最強절정Ｃ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:0 + PALAM:ARG:0 >= PALAMLV:4 * 3
 	C = 3
-	CDOWN:ARG:0 = (PALAMLV:4 * 3 - 1000)
+;	CDOWN:ARG:0 = (PALAMLV:4 * 3 - 1000)
+	CDOWN:ARG:0 = (PALAMLV:4 - 1000) * 3
 	NOWEX:ARG:0 = 3
 	;PRINTFORML 超強절정Ｃ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:0 + PALAM:ARG:0 >= PALAMLV:4 * 2
 	C = 2
-	CDOWN:ARG:0 = (PALAMLV:4 * 2 - 1000)
+;	CDOWN:ARG:0 = (PALAMLV:4 * 2 - 1000)
+	CDOWN:ARG:0 = (PALAMLV:4 - 1000) * 2
 	NOWEX:ARG:0 = 2
 	;PRINTFORML 強절정Ｃ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:0 + PALAM:ARG:0 >= PALAMLV:4
@@ -961,22 +1050,26 @@ SIF CUP:ARG:0 + PALAM:ARG:0 - CDOWN:ARG:0 >= PALAMLV:4
 ;절정Ｖ
 IF CUP:ARG:1 + PALAM:ARG:1 >= PALAMLV:4 * 5
 	V = 5
-	CDOWN:ARG:1 = (PALAMLV:4 * 5 - 1000)
+;	CDOWN:ARG:1 = (PALAMLV:4 * 5 - 1000)
+	CDOWN:ARG:1 = (PALAMLV:4 - 1000) * 5
 	NOWEX:ARG:1 = 5
 	;PRINTFORML 究極절정Ｖ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:1 + PALAM:ARG:1 >= PALAMLV:4 * 4
 	V = 4
-	CDOWN:ARG:1 = (PALAMLV:4 * 4 - 1000)
+;	CDOWN:ARG:1 = (PALAMLV:4 * 4 - 1000)
+	CDOWN:ARG:1 = (PALAMLV:4 - 1000) * 4
 	NOWEX:ARG:1 = 4
 	;PRINTFORML 最強절정Ｖ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:1 + PALAM:ARG:1 >= PALAMLV:4 * 3
 	V = 3
-	CDOWN:ARG:1 = (PALAMLV:4 * 3 - 1000)
+;	CDOWN:ARG:1 = (PALAMLV:4 * 3 - 1000)
+	CDOWN:ARG:1 = (PALAMLV:4 - 1000) * 3
 	NOWEX:ARG:1 = 3
 	;PRINTFORML 超強절정Ｖ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:1 + PALAM:ARG:1 >= PALAMLV:4 * 2
 	V = 2
-	CDOWN:ARG:1 = (PALAMLV:4 * 2 - 1000)
+;	CDOWN:ARG:1 = (PALAMLV:4 * 2 - 1000)
+	CDOWN:ARG:1 = (PALAMLV:4 - 1000) * 2
 	NOWEX:ARG:1 = 2
 	;PRINTFORML 強절정Ｖ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:1 + PALAM:ARG:1 >= PALAMLV:4
@@ -993,22 +1086,26 @@ SIF CUP:ARG:1 + PALAM:ARG:1 - CDOWN:ARG:1 >= PALAMLV:4
 ;절정Ａ
 IF CUP:ARG:2 + PALAM:ARG:2 >= PALAMLV:4 * 5
 	A = 5
-	CDOWN:ARG:2 = (PALAMLV:4 * 5 - 1000)
+;	CDOWN:ARG:2 = (PALAMLV:4 * 5 - 1000)
+	CDOWN:ARG:2 = (PALAMLV:4 - 1000) * 5
 	NOWEX:ARG:2 = 5
 	;PRINTFORML 究極절정Ａ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:2 + PALAM:ARG:2 >= PALAMLV:4 * 4
 	A = 4
-	CDOWN:ARG:2 = (PALAMLV:4 * 4 - 1000)
+;	CDOWN:ARG:2 = (PALAMLV:4 * 4 - 1000)
+	CDOWN:ARG:2 = (PALAMLV:4 - 1000) * 4
 	NOWEX:ARG:2 = 4
 	;PRINTFORML 最強절정Ａ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:2 + PALAM:ARG:2 >= PALAMLV:4 * 3
 	A = 3
-	CDOWN:ARG:2 = (PALAMLV:4 * 3 - 1000)
+;	CDOWN:ARG:2 = (PALAMLV:4 * 3 - 1000)
+	CDOWN:ARG:2 = (PALAMLV:4 - 1000) * 3
 	NOWEX:ARG:2 = 3
 	;PRINTFORML 超強절정Ａ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:2 + PALAM:ARG:2 >= PALAMLV:4 * 2
 	A = 2
-	CDOWN:ARG:2 = (PALAMLV:4 * 2 - 1000)
+;	CDOWN:ARG:2 = (PALAMLV:4 * 2 - 1000)
+	CDOWN:ARG:2 = (PALAMLV:4 - 1000) * 2
 	NOWEX:ARG:2 = 2
 	;PRINTFORML 強절정Ａ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:2 + PALAM:ARG:2 >= PALAMLV:4
@@ -1025,22 +1122,26 @@ SIF CUP:ARG:2 + PALAM:ARG:2 - CDOWN:ARG:2 >= PALAMLV:4
 ;절정Ｂ
 IF CUP:ARG:3 + PALAM:ARG:3 >= PALAMLV:4 * 5
 	B = 5
-	CDOWN:ARG:3 = (PALAMLV:4 * 5 - 1000)
+;	CDOWN:ARG:3 = (PALAMLV:4 * 5 - 1000)
+	CDOWN:ARG:3 = (PALAMLV:4- 1000) * 5 
 	NOWEX:ARG:3 = 5
 	;PRINTFORML 究極절정Ｂ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:3 + PALAM:ARG:3 >= PALAMLV:4 * 4
 	B = 4
-	CDOWN:ARG:3 = (PALAMLV:4 * 4 - 1000)
+;	CDOWN:ARG:3 = (PALAMLV:4 * 4 - 1000)
+	CDOWN:ARG:3 = (PALAMLV:4 - 1000) * 4
 	NOWEX:ARG:3 = 4
 	;PRINTFORML 最強절정Ｂ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:3 + PALAM:ARG:3 >= PALAMLV:4 * 3
 	B = 3
-	CDOWN:ARG:3 = (PALAMLV:4 * 3 - 1000)
+;	CDOWN:ARG:3 = (PALAMLV:4 * 3 - 1000)
+	CDOWN:ARG:3 = (PALAMLV:4 - 1000) * 3
 	NOWEX:ARG:3 = 3
 	;PRINTFORML 超強절정Ｂ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:3 + PALAM:ARG:3 >= PALAMLV:4 * 2
 	B = 2
-	CDOWN:ARG:3 = (PALAMLV:4 * 2 - 1000)
+;	CDOWN:ARG:3 = (PALAMLV:4 * 2 - 1000)
+	CDOWN:ARG:3 = (PALAMLV:4 - 1000) * 2
 	NOWEX:ARG:3 = 2
 	;PRINTFORML 強절정Ｂ\@ARG == PLAYER?(조교者)#\@
 ELSEIF CUP:ARG:3 + PALAM:ARG:3 >= PALAMLV:4
@@ -1223,7 +1324,7 @@ IF ARG == TARGET
 
 	IF ABL:ARG:1 < L
 		ABL:ARG:1 = L
-		PRINT 그리고
+		PRINT 그리고 
 		PRINTS ABLNAME:1
 		PRINT 이 LV
 		PRINTV L
@@ -1289,45 +1390,60 @@ RETURN 1
 ;조교대상の사정체크
 ;-------------------------------------------------
 @TARGET_EJAC_CHECK
-SIF TALENT:139 == 0 && !IS_MALE(TARGET)
+SIF TALENT:후타나리 == 0 && !IS_MALE(TARGET)
 	RETURN 0
 
 A = CUP:TARGET:0 + CUP:TARGET:1 + CUP:TARGET:2 + CUP:TARGET:3
 
 ;자제심
-SIF TALENT:20
+SIF TALENT:자제심
 	A /= 2
 
 ;쾌감에솔직
-SIF TALENT:70
+SIF TALENT:쾌감에솔직
 	TIMES A , 1.20
 
-;쾌감을부정（음란、창부で무효）
-SIF TALENT:71 && (TALENT:4 == 0 && TALENT:7 == 0)
+;쾌감을부정（음란、娼婦で無効）
+SIF TALENT:쾌감을부정 && (TALENT:음란 == 0 && TALENT:창부 == 0)
 	TIMES A , 0.80
 
 ;미약
-SIF TEQUIP:26
+SIF TEQUIP:미약
 	A *= 2
 
 ;이뇨제
-SIF TEQUIP:27
+SIF TEQUIP:이뇨제
 	A /= 2
 
-;사정の再装填期間中は사정ゲージの증가は20分の1に
-SIF CFLAG:TARGET:9 > 0
+;射精の再装填期間中は射精ゲージの増加は20分の1に
+SIF CFLAG:TARGET:사정ゲージ再装填 > 0
 	A /= 20
 
-;사정の限界が来ている場合は、사정ゲージの증가はしない
-IF CFLAG:TARGET:11 == 0
+;射精の限界が来ている場合は、射精ゲージの増加はしない
+IF CFLAG:TARGET:사정残数の保存 == 0
 	A = 0
-	BASE:2 = 0
+	BASE:사정 = 0
 ENDIF
 
-BASE:2 += A
+BASE:사정 += A
 
-S = BASE:2
-EJAC = MAXBASE:2
+;ターゲットTCVAR:射精処理追加
+IF BASE:TARGET:사정 > MAXBASE:TARGET:사정 * 5
+	TCVAR:TARGET:사정 = 5
+ELSEIF BASE:TARGET:사정 > MAXBASE:TARGET:사정 * 4
+	TCVAR:TARGET:사정 = 4
+ELSEIF BASE:TARGET:사정 > MAXBASE:TARGET:사정 * 3
+	TCVAR:TARGET:사정 = 3
+ELSEIF BASE:TARGET:사정 > MAXBASE:TARGET:사정 * 2
+	TCVAR:TARGET:사정 = 2
+ELSEIF BASE:TARGET:사정 > MAXBASE:TARGET:사정
+	TCVAR:TARGET:사정 = 1
+ELSE
+	TCVAR:TARGET:사정 = 0
+ENDIF
+
+S = BASE:사정
+EJAC = MAXBASE:사정
 IF TEQUIP:42 == 0
 	IF  S > EJAC * 5
 		E = 5
@@ -1343,12 +1459,12 @@ IF TEQUIP:42 == 0
 		E = 0
 	ENDIF
 	
-	;究極사정
+	;究極射精
 	IF E == 5
-		DOWNBASE:TARGET:0 += 20
-		DOWNBASE:TARGET:1 += 100
+		DOWNBASE:TARGET:체력 += 20
+		DOWNBASE:TARGET:기력 += 100
 	
-		IF EXP:TARGET:3 < EXPLV:1
+		IF EXP:TARGET:사정경험 < EXPLV:1
 			SOURCE:TARGET:노출 += 10000
 			SOURCE:TARGET:굴종 += 5000
 			IF TALENT:남자
@@ -1356,7 +1472,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 2000
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:2
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:2
 			SOURCE:TARGET:노출 += 5000
 			SOURCE:TARGET:굴종 += 3000
 			IF TALENT:남자
@@ -1364,7 +1480,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 1500
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:3
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:3
 			SOURCE:TARGET:노출 += 3000
 			SOURCE:TARGET:굴종 += 1500
 			IF TALENT:남자
@@ -1372,7 +1488,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 1000
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:4
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:4
 			SOURCE:TARGET:노출 += 1500
 			SOURCE:TARGET:굴종 += 800
 			IF TALENT:남자
@@ -1380,7 +1496,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 700
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:5
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:5
 			SOURCE:TARGET:노출 += 1000
 			SOURCE:TARGET:굴종 += 500
 			IF TALENT:남자
@@ -1412,20 +1528,20 @@ IF TEQUIP:42 == 0
 		;Ｐに정액불결
 		CALL SET_STAIN("페니스", "정액", TARGET)
 	
-		BASE:2 -= EJAC*5
-		SIF BASE:2 >= EJAC
-			BASE:2 = EJAC-1
+		BASE:사정 -= EJAC*5
+		SIF BASE:사정 >= EJAC
+			BASE:사정 = EJAC-1
 
-		;조교대상が사정フラグ
+		;調教対象が射精フラグ
 		TFLAG:10 = 5
 		NOWEX:5 += 1
 		EX:5 += 1
-	;最強사정
+	;最強射精
 	ELSEIF E == 4
-		DOWNBASE:TARGET:0 += 20
-		DOWNBASE:TARGET:1 += 100
+		DOWNBASE:TARGET:체력 += 20
+		DOWNBASE:TARGET:기력 += 100
 	
-		IF EXP:TARGET:3 < EXPLV:1
+		IF EXP:TARGET:사정경험 < EXPLV:1
 			SOURCE:TARGET:노출 += 10000
 			SOURCE:TARGET:굴종 += 5000
 			IF TALENT:남자
@@ -1433,7 +1549,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 2000
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:2
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:2
 			SOURCE:TARGET:노출 += 5000
 			SOURCE:TARGET:굴종 += 3000
 			IF TALENT:남자
@@ -1441,7 +1557,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 1500
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:3
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:3
 			SOURCE:TARGET:노출 += 3000
 			SOURCE:TARGET:굴종 += 1500
 			IF TALENT:남자
@@ -1449,7 +1565,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 1000
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:4
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:4
 			SOURCE:TARGET:노출 += 1500
 			SOURCE:TARGET:굴종 += 800
 			IF TALENT:남자
@@ -1457,7 +1573,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 700
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:5
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:5
 			SOURCE:TARGET:노출 += 1000
 			SOURCE:TARGET:굴종 += 500
 			IF TALENT:남자
@@ -1489,9 +1605,9 @@ IF TEQUIP:42 == 0
 		;Ｐに정액불결
 		CALL SET_STAIN("페니스", "정액", TARGET)
 	
-		BASE:2 -= EJAC*4
-		SIF BASE:2 >= EJAC
-			BASE:2 = EJAC-1
+		BASE:사정 -= EJAC*4
+		SIF BASE:사정 >= EJAC
+			BASE:사정 = EJAC-1
 
 		;조교대상が사정フラグ
 		TFLAG:10 = 4
@@ -1499,10 +1615,10 @@ IF TEQUIP:42 == 0
 		EX:5 += 1
 	;超大量사정
 	ELSEIF E == 3
-		DOWNBASE:TARGET:0 += 20
-		DOWNBASE:TARGET:1 += 100
+		DOWNBASE:TARGET:체력 += 20
+		DOWNBASE:TARGET:기력 += 100
 	
-		IF EXP:TARGET:3 < EXPLV:1
+		IF EXP:TARGET:사정경험 < EXPLV:1
 			SOURCE:TARGET:노출 += 10000
 			SOURCE:TARGET:굴종 += 5000
 			IF TALENT:남자
@@ -1510,7 +1626,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 2000
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:2
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:2
 			SOURCE:TARGET:노출 += 5000
 			SOURCE:TARGET:굴종 += 3000
 			IF TALENT:남자
@@ -1518,7 +1634,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 1500
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:3
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:3
 			SOURCE:TARGET:노출 += 3000
 			SOURCE:TARGET:굴종 += 1500
 			IF TALENT:남자
@@ -1526,7 +1642,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 1000
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:4
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:4
 			SOURCE:TARGET:노출 += 1500
 			SOURCE:TARGET:굴종 += 800
 			IF TALENT:남자
@@ -1534,7 +1650,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 700
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:5
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:5
 			SOURCE:TARGET:노출 += 1000
 			SOURCE:TARGET:굴종 += 500
 			IF TALENT:남자
@@ -1566,9 +1682,9 @@ IF TEQUIP:42 == 0
 		;Ｐに정액불결
 		CALL SET_STAIN("페니스", "정액", TARGET)
 	
-		BASE:2 -= EJAC*3
-		SIF BASE:2 >= EJAC
-			BASE:2 = EJAC-1
+		BASE:사정 -= EJAC*3
+		SIF BASE:사정 >= EJAC
+			BASE:사정 = EJAC-1
 
 		;조교대상が사정フラグ
 		TFLAG:10 = 3
@@ -1576,10 +1692,10 @@ IF TEQUIP:42 == 0
 		EX:5 += 1
 	;大量사정
 	ELSEIF E == 2
-		DOWNBASE:TARGET:0 += 20
-		DOWNBASE:TARGET:1 += 100
+		DOWNBASE:TARGET:체력 += 20
+		DOWNBASE:TARGET:기력 += 100
 	
-		IF EXP:TARGET:3 < EXPLV:1
+		IF EXP:TARGET:사정경험 < EXPLV:1
 			SOURCE:TARGET:노출 += 10000
 			SOURCE:TARGET:굴종 += 5000
 			IF TALENT:남자
@@ -1587,7 +1703,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 2000
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:2
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:2
 			SOURCE:TARGET:노출 += 5000
 			SOURCE:TARGET:굴종 += 3000
 			IF TALENT:남자
@@ -1595,7 +1711,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 1500
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:3
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:3
 			SOURCE:TARGET:노출 += 3000
 			SOURCE:TARGET:굴종 += 1500
 			IF TALENT:남자
@@ -1603,7 +1719,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 1000
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:4
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:4
 			SOURCE:TARGET:노출 += 1500
 			SOURCE:TARGET:굴종 += 800
 			IF TALENT:남자
@@ -1611,7 +1727,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 700
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:5
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:5
 			SOURCE:TARGET:노출 += 1000
 			SOURCE:TARGET:굴종 += 500
 			IF TALENT:남자
@@ -1643,9 +1759,9 @@ IF TEQUIP:42 == 0
 		;Ｐに정액불결
 		CALL SET_STAIN("페니스", "정액", TARGET)
 	
-		BASE:2 -= EJAC*2
-		SIF BASE:2 >= EJAC
-			BASE:2 = EJAC-1
+		BASE:사정 -= EJAC*2
+		SIF BASE:사정 >= EJAC
+			BASE:사정 = EJAC-1
 
 		;조교대상が사정フラグ
 		TFLAG:10 = 2
@@ -1653,9 +1769,9 @@ IF TEQUIP:42 == 0
 		EX:5 += 1
 	;통상の사정
 	ELSEIF E == 1
-		DOWNBASE:TARGET:1 += 40
+		DOWNBASE:TARGET:기력 += 40
 	
-		IF EXP:TARGET:3 < EXPLV:1
+		IF EXP:TARGET:사정경험 < EXPLV:1
 			SOURCE:TARGET:노출 += 5000
 			SOURCE:TARGET:굴종 += 2500
 			IF TALENT:남자
@@ -1663,7 +1779,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 900
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:2
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:2
 			SOURCE:TARGET:노출 += 2500
 			SOURCE:TARGET:굴종 += 2000
 			IF TALENT:남자
@@ -1671,7 +1787,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 700
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:3
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:3
 			SOURCE:TARGET:노출 += 1000
 			SOURCE:TARGET:굴종 += 800
 			IF TALENT:남자
@@ -1679,7 +1795,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 500
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:4
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:4
 			SOURCE:TARGET:노출 += 800
 			SOURCE:TARGET:굴종 += 600
 			IF TALENT:남자
@@ -1687,7 +1803,7 @@ IF TEQUIP:42 == 0
 			ELSE
 				SOURCE:TARGET:불결 += 350
 			ENDIF
-		ELSEIF EXP:TARGET:3 < EXPLV:5
+		ELSEIF EXP:TARGET:사정경험 < EXPLV:5
 			SOURCE:TARGET:노출 += 400
 			SOURCE:TARGET:굴종 += 400
 			IF TALENT:남자
@@ -3165,9 +3281,9 @@ ENDIF
 ;반발각인
 ;------------------------------------------------- 
 A = CUP:TARGET:12+CUP:TARGET:13
-IF A >= 500 && A < 1200 && MARK:4 <= 0 && TFLAG:150 == 0
+IF A > 500 && A < 1200 && MARK:4 <= 0 && TFLAG:150 == 0
 	TFLAG:21 = 1
-ELSEIF A >= 1200 && A < 3000 && MARK:4 <= 1 && TFLAG:150 == 0
+ELSEIF A >= 1200 && A < 3000 && MARK:4 < 1 && TFLAG:150 == 0
 	TFLAG:21 = 2
 	;감정결핍の場合は반발각인による순종ダウンはなし
 	IF ABL:0 == 1 && TALENT:22 == 0

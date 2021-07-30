@@ -63,6 +63,17 @@
 ;	044		2018/11/08			JK好き				에스트마時にパーティ人数を参照して平均Lvを計算するように변경ついでに에스트마とキャプスロックの판정が同居するように변경
 ;	045		2019/11/21			JK好き				이능자데빌시프터が변신악마변경できない様に修正　CASTING_CHANGE_LINK_F()を사용
 ;	046		2020/02/20			JK好き				自動레벨アップ사용時はＣＯＭＰから成長比率설정が出来るように추가
+;	047		2020/05/13			JK好き				@COMMAND_MAGIC_FIELDに特技と마법を바꾸기られるボタンを추가
+;	048		2020/06/28			JK好き				질내が정액で汚れている場合は10％の확률で바기나に汚れが付くを1％に변경
+;	049		2020/08/19			JK好き				던전권장레벨の표시のズレを수정
+;	050		2020/08/22			春眠				ターミナルから喰人の스킬세트・스테이터스세트が行えるようについでに삼히타	のUIをちょっと변경
+;	051		2020/08/22			Jガン				扉、→等色固定のマスの色を変えやすいように
+;	052		2020/09/23			Jガン				던전での買い物のエ라の수정
+;	053		2020/10/14			Jガン				エネミーエンカウントの無限ループ対策
+;	LNKUI	2021/02/11			Rsp暇人 			ダンジョン探索中、COMP（またはMENU)画面からリンケージ一覧を呼び出せるように
+;	054		2021/04/11			Jガン				3D時のダンジョンの処理を追加
+;													ウパニシャッド処理追加
+;	055		2021/04/22			JK好き				結界石によるダンジョン内調教であなたを選択できる問題を修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=====================================================================
 ;던전ＲＰＧモジュール
@@ -399,6 +410,12 @@ CALLFORM MAKE_FLOOR_{ARG}
 ;CALL SET_FLOOR_ANALYZE_DEFAULT, ARG, FLAG:現M
 ;現在の던전の現在のフ로어のアナライズ情報を取得する
 ;CALL SET_FLOOR_ANALYZE_T, ARG, FLAG:現M
+;---- D3D 054 START (ADD) ------------------------------
+;SIF EQUIP:MASTER:モノスコープ
+SIF D3D_WORP == 0
+	CALL D3D_AUTOFLIP
+D3D_WORP = 0
+;---- D3D 054 END   (ADD) ------------------------------
 ;=====================================================================
 ;FLOOR_ANALYZE
 ;フ로어전체や部屋をまとめてアナライズする
@@ -429,9 +446,13 @@ CALLFORM FLOORNAME_{FLAG:現던전}
 ;ALIGNMENT RIGHT
 IF FLAG:カスタムゲーム화면
 	PRINTFORML   ￥{MONEY,9}    ＣＯＭＰ용량： {NUM_NAKAMA() + ソフト용량()}/{FLAG:ＣＯＭＰ용량}사용중
+	SIF DELE_MAG_INCHARGE > 0
+		PRINTFORML MAG위임: {BASE:DELE_MAG_INCHARGE:ＭＡＧ,9}
 	PRINTFORM MAG:{BASE:MASTER:ＭＡＧ,9}    
 ELSE
 	PRINTFORML   ￥{MONEY,8}    ＣＯＭＰ용량： {NUM_NAKAMA() + ソフト용량()}/{FLAG:ＣＯＭＰ용량}사용중
+	SIF DELE_MAG_INCHARGE > 0
+		PRINTFORML MAG위임: {BASE:DELE_MAG_INCHARGE:ＭＡＧ,8}
 	PRINTFORM MAG:{BASE:MASTER:ＭＡＧ,8}    
 ENDIF
 IF FLAG:月齢 != 0 && FLAG:月齢 != 8
@@ -439,6 +460,14 @@ IF FLAG:月齢 != 0 && FLAG:月齢 != 8
 ELSE
 	PRINTFORML \@ FLAG:月齢 == 8 ? ＦＵＬＬ ＭＯＯＮ # ＮＥＷ ＭＯＯＮ\@
 ENDIF
+;---- D3D 054 START (ADD) ------------------------------
+IF D3D_ACTIVE
+; && EQUIP:MASTER:モノスコープ
+	ALIGNMENT LEFT
+	CALL D3D_SHOW_GRAPHIC
+	TRYGOTO D3D_SHOW_FLOOR_FINISH
+ENDIF
+;---- D3D 054 END   (ADD) ------------------------------
 ALIGNMENT CENTER
 IF FLAG:최대Y < 18
 	FOR LOCAL , 0 , (18 - FLAG:최대Y)/2
@@ -482,7 +511,9 @@ IF FLAG:최대Y < 18
 		PRINTL
 	NEXT
 ENDIF
-
+;---- D3D 054 START (ADD) ------------------------------
+$D3D_SHOW_FLOOR_FINISH
+;---- D3D 054 END   (ADD) ------------------------------
 ;---- EDIT 004 DEL START -------------------------
 ;IF EQUIP:MASTER:에너미소나  && NUM_SUMMONER()
 ;;	IF FLAG:エンカウント変動 == 1
@@ -542,21 +573,47 @@ SELECTCASE FLAG:던전내조작설정
 		ENDIF
 		PRINTBUTTON "[L]ＬＯＧ" , "L"
 		PRINTL
-		PRINT         
-		PRINTBUTTON "[8]↑","8"
-		PRINT                  
+		;---- D3D 054 START (MOD) ------------------------------
+		IF D3D_ACTIVE
+		; && EQUIP:MASTER:モノスコープ
+			PRINTBUTTON "[7]←","7"
+			PRINT    
+			PRINTBUTTON "[8]↑","8"
+			PRINT    
+			PRINTBUTTON "[9]→","9"
+			PRINT          
+		ELSE
+			PRINT         
+			PRINTBUTTON "[8]↑","8"
+			PRINT                  
+		ENDIF
+		;---- D3D 054 END   (MOD) ------------------------------
 		PRINTBUTTON "[m]ＭＡＧＩＣ","m"
 		PRINT     
 		PRINTBUTTON "[f]ＦＯＲＭ　　　","f"
 		SIF FLAG:ムフフ전개
 			PRINTBUTTON "[*]" + ハート() , "*"
 		PRINTL
-		PRINTBUTTON "[4]←","4"
+		;---- D3D 054 START (MOD) ------------------------------
+		IF D3D_ACTIVE
+		; && EQUIP:MASTER:モノスコープ
+			PRINTBUTTON "[4]＜","4"
+		ELSE
+			PRINTBUTTON "[4]←","4"
+		ENDIF
 		PRINT  
+		;---- D3D 054 END   (MOD) ------------------------------
 		PRINTBUTTON "[5]조  사","5"
 		PRINT  
-		PRINTBUTTON "[6]→","6"
+		;---- D3D 054 START (MOD) ------------------------------
+		IF D3D_ACTIVE
+		; && EQUIP:MASTER:モノスコープ
+			PRINTBUTTON "[6]＞","6"
+		ELSE
+			PRINTBUTTON "[6]→","6"
+		ENDIF
 		PRINT          
+		;---- D3D 054 END   (MOD) ------------------------------
 		PRINTBUTTON "[e]ＥＸＴＲＡ","e"
 		PRINT     
 		PRINTBUTTON "[s]ＳＴＡＴＵＳ　","s"
@@ -568,12 +625,29 @@ SELECTCASE FLAG:던전내조작설정
 			ENDIF
 		ENDIF
 		PRINTL
-		PRINT         
-		PRINTBUTTON "[2]↓","2"
-		PRINT                  
+		;---- D3D 054 START (MOD) ------------------------------
+		IF D3D_ACTIVE
+		; && EQUIP:MASTER:モノスコープ
+			PRINT       
+			PRINTBUTTON "[2]Ｖ","2"
+			PRINTBUTTON "[0]↓","0"
+			PRINT               
+			;PRINT                  
+		ELSE
+			PRINT         
+			PRINTBUTTON "[2]↓","2"
+			PRINT                  
+		ENDIF
+		;---- D3D 054 END   (MOD) ------------------------------
 		PRINTBUTTON "[E]ＥＱＵＩＰ","E"
 		PRINT     
 		PRINTBUTTON "[M]ＭＡＧ","M"
+		;---- D3D 054 START (ADD) ------------------------------
+		;IF EQUIP:MASTER:モノスコープ
+			PRINT         
+			PRINTBUTTON "[D]３Ｄ？","D"
+		;ENDIF
+		;---- D3D 054 END   (MOD) ------------------------------
 		PRINTL
 		CUSTOMDRAWLINE =
 		PRINTL
@@ -588,21 +662,47 @@ SELECTCASE FLAG:던전내조작설정
 		ENDIF
 		PRINTBUTTON "[+]ＬＯＧ" , "+"
 		PRINTL
-		PRINT         
-		PRINTBUTTON "[w]↑","w"
-		PRINT                  
+		;---- D3D 054 START (MOD) ------------------------------
+		IF D3D_ACTIVE
+		; && EQUIP:MASTER:モノスコープ
+			PRINTBUTTON "[q]←","q"
+			PRINT    
+			PRINTBUTTON "[w]↑","w"
+			PRINT    
+			PRINTBUTTON "[e]→","e"
+			PRINT          
+		ELSE
+			PRINT         
+			PRINTBUTTON "[w]↑","w"
+			PRINT                  
+		ENDIF
+		;---- D3D 054 END   (MOD) ------------------------------
 		PRINTBUTTON "[2]ＭＡＧＩＣ","2"
 		PRINT     
 		PRINTBUTTON "[6]ＦＯＲＭ　　　","6"
 		SIF FLAG:ムフフ전개
 			PRINTBUTTON "[9]" + ハート() , "9"
 		PRINTL
-		PRINTBUTTON "[a]←","a"
+		;---- D3D 054 START (MOD) ------------------------------
+		IF D3D_ACTIVE
+		; && EQUIP:MASTER:モノスコープ
+			PRINTBUTTON "[a]＜","a"
+		ELSE
+			PRINTBUTTON "[a]←","a"
+		ENDIF
 		PRINT  
+		;---- D3D 054 END   (MOD) ------------------------------
 		PRINTBUTTON "[f]조  사","f"
 		PRINT  
-		PRINTBUTTON "[d]→","d"
+		;---- D3D 054 START (MOD) ------------------------------
+		IF D3D_ACTIVE
+		; && EQUIP:MASTER:モノスコープ
+			PRINTBUTTON "[d]＞","d"
+		ELSE
+			PRINTBUTTON "[d]→","d"
+		ENDIF
 		PRINT          
+		;---- D3D 054 END   (MOD) ------------------------------
 		PRINTBUTTON "[3]ＥＸＴＲＡ","3"
 		PRINT     
 		PRINTBUTTON "[7]ＳＴＡＴＵＳ　","7"
@@ -614,12 +714,29 @@ SELECTCASE FLAG:던전내조작설정
 			ENDIF
 		ENDIF
 		PRINTL
-		PRINT         
-		PRINTBUTTON "[s]↓","s"
-		PRINT                  
+		;---- D3D 054 START (MOD) ------------------------------
+		IF D3D_ACTIVE
+		; && EQUIP:MASTER:モノスコープ
+			PRINT       
+			PRINTBUTTON "[s]Ｖ","s"
+			PRINTBUTTON "[x]↓","x"
+			PRINT               
+			;PRINT                  
+		ELSE
+			PRINT         
+			PRINTBUTTON "[s]↓","s"
+			PRINT                  
+		ENDIF
+		;---- D3D 054 END   (MOD) --------------------------------
 		PRINTBUTTON "[4]ＥＱＵＩＰ","4"
 		PRINT     
 		PRINTBUTTON "[8]ＭＡＧ","8"
+		;---- D3D 054 START (ADD) ------------------------------
+		;IF EQUIP:MASTER:モノスコープ
+			PRINT         
+			PRINTBUTTON "[D]３Ｄ？","D"
+		;ENDIF
+		;---- D3D 054 END   (MOD) --------------------------------
 		PRINTL
 		CUSTOMDRAWLINE =
 		PRINTL
@@ -631,6 +748,10 @@ ENDSELECT
 ;던전攻略のメイン処理
 ;=====================================================================
 @DUNGEON_ATTACK
+;---- D3D 054 START (ADD) ------------------------------
+#DIM DYNAMIC D3D_TOWALK;WALK_DUNGEON 関数などへ渡すべき数値を保存するDYNAMIC変数
+#DIM DYNAMIC D3D_LOCALCOORD,2;一時的に座標値を保存するDYNAMIC変数
+;---- D3D 054 END   (ADD) --------------------------------
 #LOCALSIZE 1
 
 ;終了조건が満たされるまで処理を繰り返す
@@ -643,6 +764,8 @@ WHILE 1 == 1
 		BREAK
 	;탈출フラグ立ってたら終わり
 	IF FLAG:탈출
+		;마그네타이트 소모 담당 초기화
+		DELE_MAG_INCHARGE = 0
 		TRYCALLFORM EVENT_DUNGEON_END_{FLAG:現던전}
 		FLAG:탈출스킬禁止 = 0
 		BREAK
@@ -663,6 +786,148 @@ WHILE 1 == 1
 	$INPUT_LOOP
 	ONEINPUTS
 	REDRAW 1
+	;---- D3D 054 START (ADD) ------------------------------
+	IF D3D_ACTIVE
+	; && EQUIP:MASTER:モノスコープ
+		SELECTCASE RESULTS
+			CASE "8","w","7","q","9","e","0","x"
+			{
+				SIF ((RESULTS == "8" || RESULTS == "7" || RESULTS == "9" || RESULTS == "0") && FLAG:던전내조작설정 != 0)
+				 || ((RESULTS == "w" || RESULTS == "q" || RESULTS == "e" || RESULTS == "x") && FLAG:던전내조작설정 != 1)
+			}
+					GOTO D3D_SKIPNEWINPUT
+				IF RESULTS == "8" || RESULTS == "w"
+					SELECTCASE D3D_PLAYER_DIRECTION
+						CASE 0
+							D3D_TOWALK = 8
+						CASE 1
+							D3D_TOWALK = 6
+						CASE 2
+							D3D_TOWALK = 2
+						CASE 3
+							D3D_TOWALK = 4
+					ENDSELECT
+					CALL D3D_GET_FRONT_COORD(FLAG:現X,FLAG:現Y)
+				ELSEIF RESULTS == "7" || RESULTS == "q"
+					SELECTCASE D3D_PLAYER_DIRECTION
+						CASE 0
+							D3D_TOWALK = 4
+						CASE 1
+							D3D_TOWALK = 8
+						CASE 2
+							D3D_TOWALK = 6
+						CASE 3
+							D3D_TOWALK = 2
+					ENDSELECT
+					CALL D3D_GET_LEFT_COORD(FLAG:現X,FLAG:現Y)
+				ELSEIF RESULTS == "9" || RESULTS == "e"
+					SELECTCASE D3D_PLAYER_DIRECTION
+						CASE 0
+							D3D_TOWALK = 6
+						CASE 1
+							D3D_TOWALK = 2
+						CASE 2
+							D3D_TOWALK = 4
+						CASE 3
+							D3D_TOWALK = 8
+					ENDSELECT
+					CALL D3D_GET_RIGHT_COORD(FLAG:現X,FLAG:現Y)
+				ELSEIF RESULTS == "0" || RESULTS == "x"
+					SELECTCASE D3D_PLAYER_DIRECTION
+						CASE 0
+							D3D_TOWALK = 2
+						CASE 1
+							D3D_TOWALK = 4
+						CASE 2
+							D3D_TOWALK = 8
+						CASE 3
+							D3D_TOWALK = 6
+					ENDSELECT
+					CALL D3D_GET_BEHIND_COORD(FLAG:現X,FLAG:現Y)
+				ENDIF
+				D3D_LOCALCOORD:0 = RESULT:0,RESULT:1
+				;ここから一般化コードにしてもいいかな
+				IF GETBIT(FLAG:232,0) == 0
+					;歩いて探索
+					IF D3D_IS_MAPRANGE(D3D_TOWALK) != 1
+						CLEARLINE 1
+						GOTO PRINT
+					ENDIF
+					CALL SET_FLOOR_ANALYZE(2, FLAG:現던전, FLAG:現M, D3D_LOCALCOORD:0, D3D_LOCALCOORD:1)
+					CALLFORM CAN_ENTER_{FLAG:現던전},D3D_LOCALCOORD:0,D3D_LOCALCOORD:1
+					IF RESULT == 0
+						CLEARLINE 1
+						GOTO PRINT
+					ENDIF
+					CALL WALK_DUNGEON,D3D_TOWALK
+				ELSE
+					;런런던전
+					;非D3D(既存)移動の方をそのまま移植
+					;マップ端っこなら進めない
+					IF D3D_IS_MAPRANGE(D3D_TOWALK) != 1
+						CLEARLINE 1
+						GOTO PRINT
+					ENDIF
+					;壁とかだったら進めない
+					CALL SET_FLOOR_ANALYZE(2, FLAG:現던전, FLAG:現M, D3D_LOCALCOORD:0, D3D_LOCALCOORD:1)
+					CALLFORM CAN_ENTER_{FLAG:現던전},D3D_LOCALCOORD:0,D3D_LOCALCOORD:1
+					IF RESULT == 0
+						CLEARLINE 1
+						GOTO PRINT
+					ENDIF
+					;ここから２マス目の判定開始
+					IF D3D_IS_MAPRANGE(D3D_TOWALK,1) != 1
+						;2マス目がマップ端っこなら進めない
+						CALL WALK_DUNGEON,D3D_TOWALK
+						RESTART
+					ENDIF
+					CALL D3D_GET_FRONT_COORD(FLAG:現X,FLAG:現Y)
+					CALL D3D_GET_FRONT_COORD(RESULT:0,RESULT:1)
+					D3D_LOCALCOORD:0 = RESULT:0,RESULT:1
+					CALLFORM CAN_ENTER_{FLAG:現던전},D3D_LOCALCOORD:0,D3D_LOCALCOORD:1
+					IF RESULT == 0
+						;2マス目が壁とかだったら歩く
+						CALL WALK_DUNGEON,D3D_TOWALK
+					ELSE
+						CALL DUNGEON_RUNRUN_CHECK,D3D_TOWALK
+						IF RESULT == 0
+							CALL WALK_DUNGEON,D3D_TOWALK
+						ELSE
+							CALL SET_FLOOR_ANALYZE(2,FLAG:現던전, FLAG:現M, D3D_LOCALCOORD:0, D3D_LOCALCOORD:1)
+							;それ以外の時に初めて走る
+							CALL RUN_DUNGEON,D3D_TOWALK
+						ENDIF
+					ENDIF
+				ENDIF
+			CASE "4","a"
+				SIF (RESULTS == "4" && FLAG:던전내조작설정 != 0) || (RESULTS == "a" && FLAG:던전내조작설정 != 1)
+					GOTO D3D_SKIPNEWINPUT
+				CALL D3D_CHANGE_DIRECTION(-1)
+				CLEARLINE 1
+				GOTO PRINT
+			CASE "6","d"
+				SIF (RESULTS == "6" && FLAG:던전내조작설정 != 0) || (RESULTS == "d" && FLAG:던전내조작설정 != 1)
+					GOTO D3D_SKIPNEWINPUT
+				CALL D3D_CHANGE_DIRECTION(1)
+				CLEARLINE 1
+				GOTO PRINT
+			CASE "2","s"
+				SIF (RESULTS == "2" && FLAG:던전내조작설정 != 0) || (RESULTS == "s" && FLAG:던전내조작설정 != 1)
+					GOTO D3D_SKIPNEWINPUT
+				CALL D3D_CHANGE_DIRECTION(2)
+				CLEARLINE 1
+				GOTO PRINT
+			CASE "D"
+				D3D_ACTIVE = 0
+				CLEARLINE 1
+				GOTO PRINT
+			CASEELSE
+				GOTO D3D_SKIPNEWINPUT
+		ENDSELECT
+		RESTART
+	ENDIF
+	$D3D_SKIPNEWINPUT
+	;---- D3D 054 END   (ADD) --------------------------------
 	SELECTCASE FLAG:던전내조작설정
 		CASE 0
 			SELECTCASE RESULTS
@@ -937,6 +1202,14 @@ WHILE 1 == 1
 					CALL DUNGEON_RUNRUN
 				CASE "L"
 					CALL MESSAGE_WINDOW_LOG(, , , , , 1)
+				;---- D3D 054 START (ADD) ------------------------------
+				CASE "D"
+					;IF EQUIP:MASTER:モノスコープ
+						D3D_ACTIVE = 1
+						CLEARLINE 1
+						GOTO PRINT
+					;ENDIF
+				;---- D3D 054 END   (ADD) --------------------------------
 				CASEELSE
 					GOTO INPUT_LOOP
 			ENDSELECT
@@ -1213,6 +1486,14 @@ WHILE 1 == 1
 					CALL DUNGEON_RUNRUN
 				CASE "+"
 					CALL MESSAGE_WINDOW_LOG(, , , , , 1)
+				;---- D3D 054 START (ADD) ------------------------------
+				CASE "D"
+					;IF EQUIP:MASTER:モノスコープ
+						D3D_ACTIVE = 1
+						CLEARLINE 1
+						GOTO PRINT
+					;ENDIF
+				;---- D3D 054 END   (ADD) --------------------------------
 				CASEELSE
 					GOTO INPUT_LOOP
 			ENDSELECT
@@ -1430,7 +1711,7 @@ FOR LOCAL,1,7
 				CFLAG:(LOCAL:1):ステート経過ターン += FLAG:未遭遇歩数/2
 			;バッド스테이터스・セービング
 			CALL BADSTATUS_SAVING,LOCAL:1
-			;毒ならダメージ
+			;毒なら데미지
 			SIF CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("POISON") && FLAG:未遭遇歩数 % 4 == 0
 				CALL VAR_HP,LOCAL:1,-MAX(MAXBASE:(LOCAL:1):ＭＰ/16,1),3
 			;麻痺ならMP減少
@@ -1790,7 +2071,7 @@ FOR LOCAL,1,7
 				CFLAG:(LOCAL:1):ステート経過ターン += FLAG:未遭遇歩数/2
 			;バッド스테이터스・セービング
 			CALL BADSTATUS_SAVING,LOCAL:1
-			;毒ならダメージ
+			;毒なら데미지
 			SIF CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("POISON") && FLAG:未遭遇歩数 % 4 == 0
 				CALL VAR_HP,LOCAL:1,-MAX(MAXBASE:(LOCAL:1):ＭＰ/16,1),3
 			;麻痺ならMP減少
@@ -2082,7 +2363,7 @@ FOR LOCAL,1,7
 				CFLAG:(LOCAL:1):ステート経過ターン += FLAG:未遭遇歩数/2
 			;バッド스테이터스・セービング
 			CALL BADSTATUS_SAVING,LOCAL:1
-			;毒ならダメージ
+			;毒なら데미지
 			SIF CFLAG:(LOCAL:1):ステート == GET_STATE_NUM("POISON") && FLAG:未遭遇歩数 % 4 == 0
 				CALL VAR_HP,LOCAL:1,-MAX(MAXBASE:(LOCAL:1):ＭＰ/16,1),3
 			;麻痺ならMP減少
@@ -2373,8 +2654,13 @@ FOR LOCAL, 1, 7
 NEXT
 SIF LOCAL:1
 	PRINTL [13] 곡옥(플러그인)변경
+SIF SOFT_ON("우파니샤드",3);054
+	PRINTL [14] 식노 스킬 변경
 SIF FLAG:레벨アップ時インターフェース설정 == 3
 	PRINTL [20] 성장비율설정
+;---- EDIT LINKUI ADD START ---------------------------
+PRINTL [30] 링케이지 목록
+;---- EDIT LINKUI ADD END ---------------------------
 PRINTL [99] 옵션
 PRINTL [100] 돌아간다
 
@@ -2475,6 +2761,8 @@ ELSEIF RESULT == 8
 		CASE 4,5,6
 			LOCAL:10 = 100
 	ENDSELECT
+	SIF POS(RESULT) == 0
+		LOCAL:10 *= 100
 	IF BASE:POS(RESULT):ＭＡＧ < LOCAL:10*LOCAL:1*(LOCAL:1+1)
 		PRINTW ＭＡＧ가 부족합니다
 		CLEARLINE 2
@@ -2558,11 +2846,17 @@ ELSEIF RESULT == 13
 		CALL CHANGE_PLUGIN_SOFT, LOCAL
 		GOTO MAGATAMA_LOOP
 	ENDIF
+ELSEIF RESULT == 14 && SOFT_ON("우파니샤드",3);054
+	CALL SET_KARMANS_SKILL
 ELSEIF RESULT == 20 && FLAG:레벨アップ時インターフェース설정 == 3
 		SWAP LOCAL,FLAG:SHOPコマンド
 		FLAG:SHOPコマンド = 40032
 		CALL LVUP_AUTOIF2_SETUP
 		SWAP LOCAL,FLAG:SHOPコマンド
+;---- EDIT LINKUI ADD START ---------------------------
+ELSEIF RESULT == 30
+	CALL SHOW_LINKAGE
+;---- EDIT LINKUI ADD END ---------------------------
 ELSEIF RESULT == 99
 	CALL SHOP_COM_400
 ELSE
@@ -2750,7 +3044,7 @@ ENDIF
 
 @CASTING_COMMAND_MAGIC_FIELD_LIST(ARG:0)
 ;PTに居ない인간は無理
-SIF CFLAG:(ARG:0):PTフラグ == 1 && (ABL:(ARG:0):종족 == 0 || ABL:(ARG:0):종족 > 45)
+SIF CFLAG:(ARG:0):PTフラグ == 1 && (ABL:(ARG:0):종족 == 0 || ABL:(ARG:0):종족 > 45) && ABL:(ARG:0):종족 != 73
 	RETURN 0
 ;PTに居ない악마もCOMP使える인간が居ないと無理
 SIF (CFLAG:(ARG:0):PTフラグ == 1 && NUM_SUMMONER(1) == 0) || CFLAG:(ARG:0):전투참가불가능 > 0
@@ -2771,6 +3065,7 @@ RETURN 1
 #DIM LINE, 2
 #DIM SKILL, 42
 #DIM USE_CONTINUE
+$SKILLSTART
 VARSET SKILL
 CALL INPUTABLE_CHARA, CHARA
 IF !RESULT
@@ -2883,7 +3178,8 @@ IF TALENT:CHARA:페르소나구사자 && EQUIP:CHARA:소지페르소나1
 	PRINTL 
 ENDIF
 DRAWLINE
-PRINTFORML [0] 돌아간다\@ ARG:2 == 1? # %" " * 18%[2000] 메뉴에서 나간다 \@
+PRINTFORM [0] 돌아간다\@ ARG:2 == 1? # %" " * 18%[2000] 메뉴에서 \@
+PRINTFORML \@ ARG == 1 ? %" " * 12%[9999] 마법을본다 # %" " * 12%[9999] 특기를본다\@
 
 LINE:1 = LINECOUNT
 $INPUT_LOOP
@@ -2891,6 +3187,13 @@ CLEARLINE LINECOUNT - LINE:1
 INPUT
 IF !RESULT
 	RETURN ARG:2 != 0
+ELSEIF RESULT == 9999
+	IF ARG == 1
+		ARG = 2
+	ELSE
+		ARG = 1
+	ENDIF
+	GOTO SKILLSTART
 ELSEIF RESULT == 2000 && !ARG:2
 	RETURN 1
 ELSEIF RESULT == FLAG:스킬数 + 1 && (TALENT:CHARA:데빌시프터 ||  TALENT:CHARA:식노 || TALENT:CHARA:악마빙의자 > 1)
@@ -2966,11 +3269,11 @@ PRINTL [2] 성욕처리
 PRINTL [3] 휴식（결계석 필요）
 ;---- EDIT 041 ADD START   -------------------------
 IF FLAG:조교난이도 < 3
-	PRINT [4]조교（결계석 필요）
+	PRINT [4] 조교（결계석 필요
 	SIF FLAG:MAG소비율 > 0
 		SETCOLOR 404040
 	SIF FLAG:조교난이도 == 1
-		PRINT 、または안전한 장소
+		PRINT 、또는 안전한 장소
 	RESETCOLOR
 	PRINTL ）
 ELSE
@@ -3193,12 +3496,16 @@ ELSEIF RESULT == 4
 			GOTO LOOP_SELECTAA
 		ENDIF
 		;行動不能だったりマスターならそもそも選択できない
-		IF CFLAG:LOCAL:전투참가불가능 == -1 && LOCAL != MASTER
+		IF LOCAL == MASTER
+			PRINTL 
+			CLEARLINE 2
+			GOTO LOOP_SELECTAA
+		ELSEIF CFLAG:LOCAL:전투참가불가능 == -1 && LOCAL != MASTER
 			PRINTL 
 			CLEARLINE 2
 			GOTO LOOP_SELECTAA
 		;조교によって신뢰を失う相손やゲスト참가、あと반발각인3持つのも選べない
-		ELSEIF !(CFLAG:LOCAL:전투참가불가능 == 0) || CFLAG:LOCAL:ゲスト加入フラグ == 1 || MARK:LOCAL:반발각인 >= 3
+		ELSEIF !(CFLAG:LOCAL:전투참가불가능 == 0) || CFLAG:LOCAL:ゲスト加入フラグ == 1 || MARK:LOCAL:반발각인 >= 3 || TALENT:LOCAL:맹우
 			PRINTW 거부당했다
 			CLEARLINE 2
 			GOTO LOOP_SELECTAA
@@ -3270,7 +3577,9 @@ TRYCCALLFORM CALLFORM ENEMYSET_{FLAG:現던전}, CLASS_NUM
 	NEXT
 CATCH
 	;組み合わせが랜덤ならこっち
-	WHILE LOCAL < CLASS_NUM
+;---- EDIT 053 MOD --- LOCAL:1を使って無限ループ対策、1000回繰り返すと出るように
+	LOCAL:1 = 0
+	WHILE LOCAL < CLASS_NUM && LOCAL:1 < 1000
 		CALLFORM ENEMY_{FLAG:現던전}, CLASS_NUM
 		;同一の적が来ないようにする
 		SIF MATCH(ENEMY, RESULT)
@@ -3278,6 +3587,7 @@ CATCH
 		ENEMY:LOCAL = RESULT
 		ENEMYLV:LOCAL = RESULT:1
 		LOCAL += 1
+		LOCAL:1 ++
 	WEND
 ENDCATCH
 LOCAL = 0
@@ -3301,7 +3611,7 @@ FOR LOCAL, 0, ENEMY_NUM
 	TRYCALLFORM SET_ENEMY_STATUS_{FLAG:現던전}, CHARANUM - 1
 NEXT
 ;미타마코이코이
-IF EQUIP:MASTER:미타마코이코이 && 10 > LOCAL && GET_SUMMONER_LV2() > 2 && RAND:100 < GET_SUMMONER_LV2() - 2
+IF EQUIP:MASTER:미타마코이코이 && 10 > LOCAL && GET_SUMMONER_MLV() > 2 && RAND:100 < GET_SUMMONER_MLV() - 2
 	CALLFORM ENEMY_{FLAG:現던전}, CLASS_NUM
 	FOR LOCAL:1,7,17
 		SIF POS(LOCAL:1) >= 0
@@ -3486,7 +3796,7 @@ ENDIF
 ;=====================================================================
 @GET_TREASURE_TRAP,ARGS,ARG,ARG:1 = 0,ARG:2,ARG:3,ARG:4 = -1
 ;ARGS = 罠の종류
-;ARG ダメージ量or확률
+;ARG 데미지量or확률
 ;ARG:1 バッド스테이터스の相性
 
 PRINTL 상자가 놓여있다。 
@@ -3500,32 +3810,48 @@ IF RESULT == 0
 	ELSE
 		던전フラグ:(ARG:2):(ARG:3) = 1
 	ENDIF
+	LOCAL:1 = 0
 	SELECTCASE ARGS
 		CASE "ＨＰ"
 			FOR LOCAL,1,7
 				IF POS(LOCAL) > -1 && GET_STATE(CFLAG:(POS(LOCAL)):ステート) != "DYING"
+					IF RAND:2 && RAND:200 < MAXBASE:(POS(LOCAL)):지혜
+						CONTINUE
+					ELSEIF RAND:200 < MAXBASE:(POS(LOCAL)):운
+						CONTINUE
+					ENDIF
 					PRINTFORML [{LOCAL}] %CALLNAME:POS(LOCAL)%　>>>>>>　{MAXBASE:(POS(LOCAL)):ＨＰ*ARG/100}데미지
 					CALL VAR_HP,POS(LOCAL),-MAXBASE:(POS(LOCAL)):ＨＰ*ARG/100
+					LOCAL:1 += 1
 				ENDIF
 			NEXT
-			PRINTFORMW %CALLNAME:MASTER% 일행은 데미지를 받았다
+			PRINTFORMW \@LOCAL:1 > 0 ? %CALLNAME:MASTER% 일행은 데미지를 받았다 # %CALLNAME:MASTER% 일행은 데미지를 회피했다\@
 		CASE "ＭＰ"
 			FOR LOCAL,1,7
 				IF POS(LOCAL) > -1 && GET_STATE(CFLAG:(POS(LOCAL)):ステート) != "DYING"
+					IF RAND:2 && RAND:200 < MAXBASE:(POS(LOCAL)):지혜
+						CONTINUE
+					ELSEIF RAND:200 < MAXBASE:(POS(LOCAL)):운
+						CONTINUE
+					ENDIF
 					PRINTFORML [{LOCAL}] %CALLNAME:POS(LOCAL)%　>>>>>>　{MAXBASE:(POS(LOCAL)):ＭＰ*ARG/100}ＭＰ데미지
 					CALL VAR_MP,POS(LOCAL),-MAXBASE:(POS(LOCAL)):ＭＰ*ARG/100
+					LOCAL:1 += 1
 				ENDIF
 			NEXT
 			PRINTFORMW %CALLNAME:MASTER% 일행은 데미지를 받았다
 		CASEELSE
 			SIF GETNUM(BASE,ARGS) == -1 || GET_STATE_NUM(ARGS) < 0 || GET_STATE_NUM(ARGS) > FLAG:ステート数
 				RETURN 1
+			LOCAL:1 = RAND:2
 			FOR LOCAL,1,7
 				IF POS(LOCAL) > -1 && CFLAG:(POS(LOCAL)):ステート < GET_STATE_NUM(ARGS)
 					PRINTFORM [{LOCAL}] %CALLNAME:POS(LOCAL)%　>>>>>>　
 					IF MAXBASE:POS(LOCAL):GET_TYPE(ARG:1) <= 0 || MAXBASE:POS(LOCAL):GET_TYPE(ARG:1) == 999 || MAXBASE:(POS(LOCAL)):ARGS == -100
 						PRINTFORML BLOCK
-					ELSEIF RAND:100 < ARG * MAXBASE:(POS(LOCAL)):GET_TYPE(ARG:1) * (100 + MAXBASE:(POS(LOCAL)):ARGS) / 100
+					ELSEIF LOCAL:1 && RAND:200 < MAXBASE:(POS(LOCAL)):지혜 || LOCAL:1 == 0 & RAND:200 < MAXBASE:(POS(LOCAL)):운
+						PRINTFORML MISS!
+					ELSEIF RAND:100 < ARG * MAXBASE:(POS(LOCAL)):GET_TYPE(ARG:1) * (100 + MAXBASE:(POS(LOCAL)):ARGS) / 10000
 						CFLAG:(POS(LOCAL)):ステート = GET_STATE_NUM(ARGS)
 						PRINTFORML %ARGS%
 					ELSE
@@ -3644,6 +3970,10 @@ ENDIF
 ;特定のマップの特定の座標へ移動
 ;=====================================================================
 @DUNGEON_WORP,ARG,ARG:1,ARG:2
+;---- D3D 054 START (ADD) ------------------------------
+SIF FLAG:現M == ARG
+	D3D_WORP = 1
+;---- D3D 054 END   (ADD) ------------------------------
 FLAG:現M = ARG
 FLAG:現X = ARG:1
 FLAG:現Y = ARG:2
@@ -3660,6 +3990,10 @@ CALLFORM EVENT_ENTER_DUNGEON_{FLAG:現던전},0
 ;特定のマップの特定の座標へ移動_ID
 ;=====================================================================
 @DUNGEON_WORP_ID,ARG,ARG:1,ARG:2 = 0
+;---- D3D 054 START (ADD) ------------------------------
+SIF FLAG:現M == ARG
+	D3D_WORP = 1
+;---- D3D 054 END   (ADD) ------------------------------
 FLAG:現M = ARG
 ;ラン란다ンジョン用のRUN中断フラグ立て
 SIF GETBIT(FLAG:232,0) == 1
@@ -3711,8 +4045,10 @@ SIF ARG:2 == 0
 	NEXT
 	SIF LOCAL:3 == 1
 		PRINTL [5] 푸른 나비
+;---- EDIT 050 MOD START   -----------------------
 	SIF LOCAL:4 == 1
 		PRINTL [6] 만트라 취득
+;---- EDIT 050 MOD END   -------------------------		
 
 	DRAWLINE
 	PRINTL [0] 아무것도 하지 않는다
@@ -3735,8 +4071,10 @@ SIF ARG:2 == 0
 			CALL RECONSTRUCTION
 		CASE 5
 			CALL VELVET_ROOM
+;---- EDIT 050 MOD START   -----------------------
 		CASE 6
-			CALL KARMAN
+			CALL KARMA_TERMINAL
+;---- EDIT 050 MOD END   -------------------------
 	ENDSELECT
 	RESTART
 
@@ -3858,7 +4196,7 @@ ENDIF
 IF FLAG:트리슈조교 == -2
 	PRINTL 「뭘 하겠습니까~」
 ELSE
-	PRINTL 「그래서, 용무는 뭐야~?」」
+	PRINTL 「그래서, 용무는 뭐야~?」
 ENDIF
 $START
 PRINTL [0] 회복한다
@@ -4330,7 +4668,7 @@ GOTO START
 #DIM PRICE, 20
 #DIMS BUYITEM, 1
 #DIMS BUYITEMNAME, 1
-#LOCALSIZE 1
+#LOCALSIZE 2
 #LOCALSSIZE 5
 IF ARG == 3
 	LOCALS = 코인
@@ -4342,7 +4680,9 @@ ENDIF
 DRAWLINE
 PRINTFORML 무엇을 구입합니까？		소지%LOCALS% {MONEY:ARG}
 DRAWLINE
+;---- EDIT 052 ADD START 存在しない아이템名はリストに出ないように-------------------------
 LOCAL = 0
+LOCAL:1 = 0
 WHILE 1
 	PRICE:(LOCAL+1) = ARG:(LOCAL+1) ? ARG:(LOCAL+1) # ITEMPRICE:(GETNUM(ITEM, ARGS:(LOCAL+1)))
 	LOCALS:1 = {PRICE:(LOCAL+1),5}%LOCALS%
@@ -4352,15 +4692,21 @@ WHILE 1
 	ELSE
 		BUYITEMNAME = %ARGS:(LOCAL+1)%
 	ENDIF
-	PRINTFORM [{LOCAL,2}] %BUYITEMNAME, 24, LEFT% %@"{PRICE:(LOCAL+1),5}%LOCALS%", 9%　　
+	IF GETNUM(ITEM, ARGS:(LOCAL+1)) >= 0
+		PRINTFORM [{LOCAL,2}] %BUYITEMNAME, 24, LEFT% %@"{PRICE:(LOCAL+1),5}%LOCALS%", 9%　　
+		LOCAL:1++
+	ELSE
+		PRICE:(LOCAL+1) = 0
+	ENDIF
 	LOCAL += 1
-	SIF !(LOCAL & 1)
+	SIF !(LOCAL:1 & 1)
 		PRINTL 
 	SIF STRLENS(ARGS:(LOCAL+1)) == 0
 		BREAK
 WEND
-SIF LOCAL & 1
+SIF LOCAL:1 & 1
 	PRINTL 
+;---- EDIT 052 ADD END   -------------------------
 $INPUT_LOOP
 DRAWLINE
 PRINTFORML [100] 돌아간다
@@ -4420,7 +4766,7 @@ RETURN 0
 #DIMS BUYITEMNAME, 1
 #DIMS ITEMLIST , 20
 #DIMS PRELIST , 40
-#LOCALSIZE 1
+#LOCALSIZE 2
 #LOCALSSIZE 5
 VARSET PRICE , 0
 VARSET ITEMLIST , ""
@@ -4441,24 +4787,32 @@ ENDIF
 DRAWLINE
 PRINTFORML 무엇을 구입합니까？		소지%LOCALS% {MONEY:ARG}
 DRAWLINE
+;---- EDIT 052 ADD START 存在しない아이템名はリストに出ないように-------------------------
 LOCAL = 0
+LOCAL:1 = 0
 WHILE 1
 	LOCALS:1 = {PRICE:LOCAL,5}%LOCALS%
-	IF GETNUM(ITEM, ARGS:(LOCAL+1)) >= 10000 && GETNUM(ITEM, ITEMLIST:LOCAL) <= 15000
+	IF GETNUM(ITEM, ITEMLIST:LOCAL) >= 10000 && GETNUM(ITEM, ITEMLIST:LOCAL) <= 15000
 		CALLFORM SKILL_NAME_{GETNUM(ITEM,  ITEMLIST:LOCAL) - 10000}
 		BUYITEMNAME = 【%RESULTS%】
 	ELSE
 		BUYITEMNAME = %ITEMLIST:LOCAL%
 	ENDIF
-	PRINTFORM [{LOCAL,2}] %BUYITEMNAME, 24, LEFT% %@"{PRICE:LOCAL,5}%LOCALS%", 9%　　
+	IF GETNUM(ITEM, ITEMLIST:LOCAL) >= 0
+		PRINTFORM [{LOCAL,2}] %BUYITEMNAME, 24, LEFT% %@"{PRICE:LOCAL,5}%LOCALS%", 9%　　
+		LOCAL:1++
+	ELSE
+		PRICE:LOCAL = 0
+	ENDIF
 	LOCAL += 1
-	SIF LOCAL % 2 == 0
+	SIF LOCAL:1 % 2 == 0
 		PRINTL 
 	SIF ITEMLIST:LOCAL == ""
 		BREAK
 WEND
-SIF LOCAL & 1
+SIF LOCAL:1 & 1
 	PRINTL 
+;---- EDIT 052 ADD END   -------------------------
 $INPUT_LOOP
 DRAWLINE
 PRINTFORML [100] 돌아간다
@@ -4483,27 +4837,43 @@ IF ARG > 0
 ENDIF
 
 ;=====================================================================
-;トラップ：ＨＰダメージ
+;トラップ：ＨＰ데미지
 ;=====================================================================
 @DUNGEON_TRAP_HP,ARG
 SIF FLAG:리프트마
 	RETURN 1
+LOCAL:1 = 0
 FOR LOCAL,1,7
-	SIF POS(LOCAL) > -1 && GET_STATE(CFLAG:(POS(LOCAL)):ステート) != "DYING"
+	IF POS(LOCAL) > -1 && GET_STATE(CFLAG:(POS(LOCAL)):ステート) != "DYING"
+		IF RAND:2 && RAND:100 < MAXBASE:(POS(LOCAL)):지혜
+			CONTINUE
+		ELSEIF RAND:100 < MAXBASE:(POS(LOCAL)):운
+			CONTINUE
+		ENDIF
 		CALL VAR_HP,POS(LOCAL),-MAXBASE:(POS(LOCAL)):ＨＰ*ARG/100
+		LOCAL:1 += 1
+	ENDIF
 NEXT
 PRINTFORMW %CALLNAME:MASTER% 일행은 데미지를 받았다
 RETURN 1
 
 ;=====================================================================
-;トラップ：ＭＰダメージ
+;トラップ：ＭＰ데미지
 ;=====================================================================
 @DUNGEON_TRAP_MP,ARG
 SIF FLAG:리프트마
 	RETURN 1
+LOCAL:1 = 0
 FOR LOCAL,1,7
-	SIF POS(LOCAL) > -1 && GET_STATE(CFLAG:(POS(LOCAL)):ステート) != "DYING"
+	IF POS(LOCAL) > -1 && GET_STATE(CFLAG:(POS(LOCAL)):ステート) != "DYING"
+		IF RAND:2 && RAND:100 < MAXBASE:(POS(LOCAL)):지혜
+			CONTINUE
+		ELSEIF RAND:100 < MAXBASE:(POS(LOCAL)):운
+			CONTINUE
+		ENDIF
 		CALL VAR_MP,POS(LOCAL),-MAXBASE:(POS(LOCAL)):ＭＰ*ARG/100
+		LOCAL:1 += 1
+	ENDIF
 NEXT
 PRINTFORMW %CALLNAME:MASTER% 일행은 마력을 빼앗겼다
 RETURN 1
@@ -4514,13 +4884,20 @@ RETURN 1
 @DUNGEON_TRAP_POISON,ARG,ARG:1 = 8
 SIF FLAG:리프트마
 	RETURN 1
+LOCAL:1 = 0
 FOR LOCAL,1,7
-	
 	IF POS(LOCAL) > -1 && CFLAG:(POS(LOCAL)):ステート < GET_STATE_NUM("POISON")
-		SIF MAXBASE:POS(LOCAL):GET_TYPE(ARG:1) == 999
+		SIF MAXBASE:POS(LOCAL):GET_TYPE(ARG:1) == 999 || MAXBASE:POS(LOCAL):GET_TYPE(ARG:1) < 1 || (100+MAXBASE:POS(LOCAL):POISON) < 1
 			CONTINUE
-		SIF RAND:100 < ARG * MAXBASE:(POS(LOCAL)):GET_TYPE(ARG:1)
+		IF RAND:2 && RAND:100 < MAXBASE:(POS(LOCAL)):지혜
+			CONTINUE
+		ELSEIF RAND:100 < MAXBASE:(POS(LOCAL)):운
+			CONTINUE
+		ENDIF
+		IF RAND:100 < ARG * MAXBASE:(POS(LOCAL)):GET_TYPE(ARG:1) * (100+MAXBASE:POS(LOCAL):POISON) / 10000
 			CFLAG:(POS(LOCAL)):ステート = GET_STATE_NUM("POISON")
+			LOCAL:1 += 1
+		ENDIF
 	ENDIF
 NEXT
 PRINTFORMW %CALLNAME:MASTER% 일행은 독에 걸렸다
@@ -4560,13 +4937,20 @@ IF ARG:2 == -1
 ENDIF
 SIF FLAG:리프트마 || ARG:2 == -1
 	RETURN 1
+LOCAL:1 = 0
 FOR LOCAL,1,7
-	
 	IF POS(LOCAL) > -1
 		SIF MAXBASE:POS(LOCAL):GET_TYPE(ARG:2) == 999 || MAXBASE:POS(LOCAL):GET_TYPE(ARG:2) < 1 || (100+MAXBASE:POS(LOCAL):GET_STATE(ARG)) < 1
 			CONTINUE
-		SIF RAND:100 < ARG:1 * MAXBASE:(POS(LOCAL)):GET_TYPE(ARG:2) * (100+MAXBASE:POS(LOCAL):GET_STATE(ARG)) / 100
+		IF RAND:2 && RAND:100 < MAXBASE:(POS(LOCAL)):지혜
+			CONTINUE
+		ELSEIF RAND:100 < MAXBASE:(POS(LOCAL)):운
+			CONTINUE
+		ENDIF
+		IF RAND:100 < ARG:1 * MAXBASE:(POS(LOCAL)):GET_TYPE(ARG:2) * (100+MAXBASE:POS(LOCAL):GET_STATE(ARG)) / 10000
 			CFLAG:(POS(LOCAL)):ステート = ARG
+			LOCAL:1 += 1
+		ENDIF
 	ENDIF
 NEXT
 PRINTFORMW %CALLNAME:MASTER% 일행은 %GET_STATE(ARG)%에 걸렸다
@@ -4605,34 +4989,77 @@ FOR LOCAL:1,1,7
 			CONTINUE
 ;---- EDIT 042 ADD END -------------------------
 		IF CFLAG:LOCAL:ＭＡＧ自己소비 == 1
-			;自己소비がＯＮなら自分のＭＡＧを見る
+		;자기소비가 ＯＮ이라면 자신의 ＭＡＧ를 본다
 			IF BASE:LOCAL:ＭＡＧ == 0
-				;ＭＡＧが空の場合主人を見る
-				IF BASE:MASTER:ＭＡＧ == 0
-					;主人のも空ならダメージ処理
-					CALL VAR_HP,LOCAL,-(MAXBASE:LOCAL:ＨＰ/10),0
-					CALL VAR_MP,LOCAL,-(MAXBASE:LOCAL:ＭＰ/10),0
+			;악마 자신의 MAG가 고갈될 경우
+				IF BASE:DELE_MAG_INCHARGE:ＭＡＧ == 0
+				;마그네타이트 공급요원의 MAG가 0이 될 경우
+					IF DELE_MAG_INCHARGE == MASTER
+					;마그네타이트 공급요원이 아나타일 경우, 악마는 체력 기력에 데미지를 받는다
+						CALL VAR_HP,LOCAL,-(MAXBASE:LOCAL:ＨＰ/10),0
+						CALL VAR_MP,LOCAL,-(MAXBASE:LOCAL:ＭＰ/10),0
+					ELSE
+					;마그네타이트 공급요원이 동료 서머너일 경우, 공급요원 역할이 아나타로 전환된다
+						DELE_MAG_INCHARGE = MASTER
+						IF BASE:DELE_MAG_INCHARGE:ＭＡＧ == 0
+						;근데 아나타마저 MAG가 없다면, 악마는 체력 기력에 데미지를 받는다
+							CALL VAR_HP,LOCAL,-(MAXBASE:LOCAL:ＨＰ/10),0
+							CALL VAR_MP,LOCAL,-(MAXBASE:LOCAL:ＭＰ/10),0
+						ELSE
+						;여기서 아나타가 MAG를 갖고 있다면, 전환되는 그 즉시 아나타가 MAG를 지불한다
+							CALL CONTROL_MAG, DELE_MAG_INCHARGE, -MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
+						ENDIF
+					ENDIF
 				ELSE
-					CALL CONTROL_MAG, MASTER, -MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
+				;마그네타이트 공급요원의 MAG가 대신 지불된다
+					CALL CONTROL_MAG, DELE_MAG_INCHARGE, -MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
 				ENDIF
 			ELSE
-				;空でなければ自分で소비
+			;악마 자신이 MAG를 소비
 				CALL CONTROL_MAG,LOCAL, -MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
 			ENDIF
 		ELSE
-			;自己소비がＯＦＦなら主人のＭＡＧを見る
-			IF BASE:MASTER:ＭＡＧ == 0
-				;主人のＭＡＧが空の場合自分のＭＡＧを見る
+		;자기소비가 ＯＦＦ라면 주인의 ＭＡＧ를 본다
+			IF BASE:DELE_MAG_INCHARGE:ＭＡＧ == 0
+			;마그네타이트 공급요원의 MAG가 0이 될 경우
 				IF BASE:LOCAL:ＭＡＧ == 0
-					;主人のも空ならダメージ処理
-					CALL VAR_HP,LOCAL,-(MAXBASE:LOCAL:ＨＰ/10),0
-					CALL VAR_MP,LOCAL,-(MAXBASE:LOCAL:ＭＰ/10),0
+				;악마 자신의 MAG가 고갈될 경우
+					IF DELE_MAG_INCHARGE == MASTER
+					;공급요원이 아나타일 경우(아나타마저 MAG가 없다는 얘기니까), 악마는 체력 기력에 데미지를 받는다
+						CALL VAR_HP,LOCAL,-(MAXBASE:LOCAL:ＨＰ/10),0
+						CALL VAR_MP,LOCAL,-(MAXBASE:LOCAL:ＭＰ/10),0
+					ELSE
+					;마그네타이트 공급요원이 동료 서머너일 경우, 공급요원 역할이 아나타로 전환된다
+						DELE_MAG_INCHARGE = MASTER
+						IF BASE:DELE_MAG_INCHARGE:ＭＡＧ == 0
+						;근데 아나타마저 MAG가 없다면, 악마는 체력 기력에 데미지를 받는다
+							CALL VAR_HP,LOCAL,-(MAXBASE:LOCAL:ＨＰ/10),0
+							CALL VAR_MP,LOCAL,-(MAXBASE:LOCAL:ＭＰ/10),0
+						ELSE
+						;여기서 아나타가 MAG를 갖고 있다면, 전환되는 그 즉시 아나타가 MAG를 지불한다
+							CALL CONTROL_MAG, DELE_MAG_INCHARGE, -MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
+						ENDIF
+					ENDIF
 				ELSE
-					CALL CONTROL_MAG, LOCAL,-MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
+				;악마가 지불하기 전에, 상황을 따져본다
+					IF DELE_MAG_INCHARGE != MASTER
+					;공급요원이 아나타가 아닐 경우, 일단 아나타한테 공급요원의 역할이 넘어간다
+						DELE_MAG_INCHARGE = MASTER
+						IF BASE:DELE_MAG_INCHARGE:ＭＡＧ == 0
+						;근데 아나타마저 MAG가 없다면, 악마가 MAG를 지불한다
+							CALL CONTROL_MAG, LOCAL,-MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
+						ELSE
+						;여기서 아나타가 MAG를 갖고 있다면, 전환되는 그 즉시 아나타가 MAG를 지불한다
+							CALL CONTROL_MAG, DELE_MAG_INCHARGE, -MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
+						ENDIF
+					ELSE
+					;공급요원이 아나타일 경우(아나타마저 MAG가 없다는 얘기니까), 악마가 MAG를 지불한다
+						CALL CONTROL_MAG, LOCAL,-MAXBASE:LOCAL:CP * FLAG:MAG소비율 / 100
+					ENDIF
 				ENDIF
 			ELSE
-				;空でなければ主人で소비
-				CALL CONTROL_MAG,MASTER,-MAXBASE:LOCAL:CP  * FLAG:MAG소비율 / 100
+			;마그네타이트 공급요원이 MAG를 지불한다
+				CALL CONTROL_MAG,DELE_MAG_INCHARGE,-MAXBASE:LOCAL:CP  * FLAG:MAG소비율 / 100
 			ENDIF
 		ENDIF
 	ENDIF
@@ -4642,12 +5069,41 @@ NEXT
 ;ＭＡＧ소비切り替え
 ;===================================================================
 @SWITCH_MAG
+#LOCALSIZE 6
+#DIM DYNAMIC LCOUNT
+REDRAW 0
+LCOUNT = LINECOUNT
 
 $PRINT_LIST
+;중마 유지용 마그네타이트 소모 담당을 정하는 부문
 DRAWLINE
+PRINTFORML 【ＭＡＧ충당요원 = 주인】
+FOR LOCAL,1,7
+	LOCALS = 포지션{LOCAL}
+	SIF FLAG:LOCALS < 0
+		CONTINUE
+	;종족이 악마인 경우이면서 아나타가 아닌 경우는 넘어간다(아나타는 인간이 아니어도 MAG충당요원에 해당)
+	SIF ABL:(FLAG:LOCALS):종족 > 0 && ((FLAG:LOCALS) != MASTER)
+		CONTINUE
+	;아나타(인간이 아닐수도 있음)를 제외한 인간 동료가 서머너가 아닐 경우, 넘어간다
+	SIF TALENT:(FLAG:LOCALS):서머너 == 0 && ((FLAG:LOCALS) != MASTER)
+		CONTINUE
+	PRINTFORM [{LOCAL}]　
+	CALL ARRANGE_CHARALIST_2,FLAG:LOCALS
+	PRINTFORML 　MAG:[{BASE:(FLAG:LOCALS):ＭＡＧ,8}/{MAXBASE:(FLAG:LOCALS):ＭＡＧ,8}] \@ DELE_MAG_INCHARGE == (FLAG:LOCALS) ? MAG공급담당 # 비담당 \@
+NEXT
+;중마의 MAG소모 방식을 정하는 부문
+DRAWLINE
+PRINTFORML ＭＡＧ비용을 바꾸고 싶은 동료마를 선택해주세요
 FOR LOCAL,1,7
 	LOCALS = 포지션{LOCAL}
 	SIF FLAG:LOCALS < 1
+		CONTINUE
+	;CP가 0인 경우는 넘어간다
+	SIF BASE:(FLAG:LOCALS):CP == 0
+		CONTINUE
+	;종족이 인간인 경우는 넘어간다
+	SIF ABL:(FLAG:LOCALS):종족 == 0
 		CONTINUE
 	PRINTFORM [{LOCAL}]　
 	CALL ARRANGE_CHARALIST_2,FLAG:LOCALS
@@ -4655,9 +5111,6 @@ FOR LOCAL,1,7
 	PRINTFORM 　MAG:[{BASE:(FLAG:LOCALS):ＭＡＧ,8}/{MAXBASE:(FLAG:LOCALS):ＭＡＧ,8}] \@ CFLAG:(FLAG:LOCALS):ＭＡＧ自己소비 ? 자기소비 # 주인소비 \@
 NEXT
 PRINTL
-
-DRAWLINE
-PRINTFORML ＭＡＧ비용을 바꾸고 싶은 캐릭터를 선택해주세요
 DRAWLINE
 
 PRINTLC [1000]돌아간다
@@ -4666,17 +5119,34 @@ $INPUT_LOOP_1
 INPUT
 LOCALS = 포지션{RESULT}
 IF RESULT == 1000
+	REDRAW 1 ;emuera 재(再)그리기 on
 	RETURN 0
-ELSEIF RESULT < 1 || RESULT > 6 || FLAG:LOCALS < 1
+ELSEIF (RESULT < 1 || RESULT > 6) || POS(RESULT) < 0
+	CLEARLINE 1
+	REUSELASTLINE
 	GOTO INPUT_LOOP_1
 ELSE
-	IF CFLAG:(FLAG:LOCALS):ＭＡＧ自己소비 == 0
-		CFLAG:(FLAG:LOCALS):ＭＡＧ自己소비 = 1
+	IF ((TALENT:(FLAG:LOCALS):서머너 > 0 && (ABL:(FLAG:LOCALS):종족 == 0 || BASE:(FLAG:LOCALS):CP == 0)) || (FLAG:LOCALS == MASTER)) && FLAG:LOCALS > -1
+	;마그네타이트 공급담당 지정
+		DELE_MAG_INCHARGE = (FLAG:LOCALS)
+		CLEARLINE LINECOUNT - LCOUNT
+		RESTART
+	ELSEIF ABL:(FLAG:LOCALS):종족 > 0 && BASE:(FLAG:LOCALS):CP > 0 && (FLAG:LOCALS != MASTER && FLAG:LOCALS > 0)
+	;중마 마그네타이트 소비방식 변경
+		IF CFLAG:(FLAG:LOCALS):ＭＡＧ自己소비 == 0
+			CFLAG:(FLAG:LOCALS):ＭＡＧ自己소비 = 1
+		ELSE
+			CFLAG:(FLAG:LOCALS):ＭＡＧ自己소비 = 0
+		ENDIF
+		CLEARLINE LINECOUNT - LCOUNT
+		RESTART
 	ELSE
-		CFLAG:(FLAG:LOCALS):ＭＡＧ自己소비 = 0
+		CLEARLINE 1
+		REUSELASTLINE
+		GOTO INPUT_LOOP_1
 	ENDIF
 ENDIF
-RESTART
+
 
 
 ;===================================================================
@@ -4850,33 +5320,34 @@ CATCH
 		LOCALS = %RESULTS%
 	ENDCATCH
 ENDCATCH
-
-SELECTCASE LOCALS
-	CASE "■"
-	
-	CASE "□"
-		IF DA:LX:LY < 0
-			SETCOLOR 0x333344
-		ELSE
-			SETCOLOR 0x777766
-		ENDIF
-	CASE "문"
-		SETCOLOR 0x8888aa
-	CASE "보"
-		SETCOLOR 0xffdd99
-	CASE "덫"
-		SETCOLOR 0xbb0033
-	CASE "승", "강"
-		SETCOLOR 0x44aa00
-	CASE "Ｔ", "ｔ", "！"
-		SETCOLOR 0xaa44ff
-	CASE "Ｒ", "Ｃ"
-		SETCOLOR 0x77bbff
-	CASE "↑", "→", "↓", "←", "Ｅ", "출"
-		SETCOLOR 0xff7700
-CASEELSE
-
-ENDSELECT
+;---- EDIT 051 MOD  -------------------------
+IF GETCOLOR() == GETDEFCOLOR()
+	SELECTCASE LOCALS
+		CASE "■"
+			SETCOLOR GETDEFCOLOR()
+		CASE "□"
+			IF DA:LX:LY < 0
+				SETCOLOR 0x333344
+			ELSE
+				SETCOLOR 0x777766
+			ENDIF
+		CASE "문"
+			SETCOLOR 0x8888aa
+		CASE "보"
+			SETCOLOR 0xffdd99
+		CASE "덫"
+			SETCOLOR 0xbb0033
+		CASE "승", "강"
+			SETCOLOR 0x44aa00
+		CASE "Ｔ", "ｔ", "！"
+			SETCOLOR 0xaa44ff
+		CASE "Ｒ", "Ｃ"
+			SETCOLOR 0x77bbff
+		CASE "↑", "→", "↓", "←", "Ｅ", "출"
+			SETCOLOR 0xff7700
+		CASEELSE
+	ENDSELECT
+ENDIF
 
 RESULTS = %LOCALS%
 
@@ -4954,7 +5425,37 @@ ENDSELECT
 RESULTS = %LOCALS%
 
 ;---- EDIT 021 ADD END   -------------------------
+;---- EDIT 050 ADD START -------------------------
+@KARMA_TERMINAL
+	CUSTOMDRAWLINE =
+	
+	PRINTL 식노를 셋팅을 진행합니다
+	PRINTL 실행 내용을 선택해 주세요.
+	
+	DRAWLINE
+	
+	PRINTL [1]스킬세트
+	PRINTL [2]스테이터스세트
+	PRINTL [3]만트라취득
+	
+	DRAWLINE
+	PRINTL [0]아무것도안한다
 
+	CALL INPUTINT,0,1,2,3
+
+	SELECTCASE RESULT
+		CASE 0
+			RETURN 1
+		CASE 1
+			CALL SET_KARMANS_SKILL
+		CASE 2
+			CALL SET_KARMANS_STATUS
+		CASE 3
+			CALL KARMAN
+	ENDSELECT
+	RESTART
+		
+;---- EDIT 050 ADD END -------------------------	
 ;---- EDIT 029 ADD START -------------------------
 @KARMAN
 	LOCAL:1 = 0
@@ -4978,13 +5479,18 @@ RESULTS = %LOCALS%
 	$MANTRA_LOOP
 	CLEARLINE LINECOUNT - LOCAL:2
 	CALL SHOW_NOW_FORMATION_P,0,2
-	PRINTL [0] ＣＡＮＣＥＬ [2000]ＡＬＬ ＣＡＮＣＥＬ
+;---- EDIT 050 MOD START -------------------------
+;RESTAT選べる意味がなさそうなのでコメントアウト
+;	PRINTL [0] ＣＡＮＣＥＬ [2000]ＡＬＬ ＣＡＮＣＥＬ
+	PRINTL [0] 돌아간다
 	PRINTL 누구에게 만트라를 습득시키겠습니까?
-	CALL INPUTINT(0,1,2,3,4,5,6,2000)
+;	CALL INPUTINT(0,1,2,3,4,5,6,2000)
+	CALL INPUTINT(0,1,2,3,4,5,6)
 	IF RESULT == 0
-		RESTART
-	ELSEIF RESULT == 2000
+;		RESTART
+;	ELSEIF RESULT == 2000
 		RETURN 0
+;---- EDIT 050 MOD END -------------------------
 	ELSE
 		LOCAL = POS(RESULT)
 		SIF LOCAL < 0
@@ -5002,3 +5508,62 @@ RESULTS = %LOCALS%
 		GOTO MANTRA_LOOP
 	ENDIF
 ;---- EDIT 029 ADD END   -------------------------
+
+;---- EDIT 050 ADD START -------------------------
+@SET_KARMANS_SKILL
+
+	LOCAL:1 = LINECOUNT
+	$MANTRA_LOOP
+	CLEARLINE LINECOUNT - LOCAL:1
+	CALL SHOW_NOW_FORMATION_P,0,2
+	PRINTL [0] 돌아간다
+	PRINTL 누구의 소지스킬을 변경할까？
+	CALL INPUTINT(0,1,2,3,4,5,6)
+	IF RESULT == 0
+		RETURN 0
+	ELSE
+		LOCAL = POS(RESULT)
+		SIF LOCAL < 0
+			GOTO MANTRA_LOOP
+		IF !TALENT:LOCAL:식노
+			PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 식노가 아닙니다
+			GOTO MANTRA_LOOP
+		ENDIF
+		CALL INPUTABLE_CHARA, LOCAL
+		IF !RESULT
+			PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 스킬을 셋팅할 수 있는 상태가 아닙니다
+			GOTO MANTRA_LOOP
+		ENDIF
+		CALL SET_MANTRA_SKILL,LOCAL
+		GOTO MANTRA_LOOP
+	ENDIF
+	
+@SET_KARMANS_STATUS
+
+	LOCAL:1 = LINECOUNT
+	$MANTRA_LOOP
+	CLEARLINE LINECOUNT - LOCAL:1
+	CALL SHOW_NOW_FORMATION_P,0,2
+	PRINTL [0] 돌아간다
+	PRINTL 누구의 스테이터스배분을 변경할까？
+	CALL INPUTINT(0,1,2,3,4,5,6)
+	IF RESULT == 0
+		RETURN 0	
+	ELSE
+		LOCAL = POS(RESULT)
+		SIF LOCAL < 0
+			GOTO MANTRA_LOOP
+		IF !TALENT:LOCAL:식노
+			PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 식노가 아닙니다
+			GOTO MANTRA_LOOP
+		ENDIF
+		CALL INPUTABLE_CHARA, LOCAL
+		IF !RESULT
+			PRINTFORMW %조사처리(CALLNAME:LOCAL,"는")% 스킬을 셋팅할 수 있는 상태가 아닙니다
+			GOTO MANTRA_LOOP
+		ENDIF
+		CALL MANTRA_BASESTATUS,LOCAL
+		GOTO MANTRA_LOOP
+	ENDIF
+
+;---- EDIT 050 ADD END -------------------------

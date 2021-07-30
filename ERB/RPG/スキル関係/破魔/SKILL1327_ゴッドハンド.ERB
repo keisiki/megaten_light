@@ -3,7 +3,13 @@
 
 ;스킬名
 @SKILL_NAME_1327,ARG
-RESULTS = 갓핸드
+IF SKILL_CHANGE(ARG, [[キャラ:T씨]])
+	RESULTS = 파아(破ぁ---)!
+ELSEIF SKILL_CHANGE(ARG, 4316)
+	RESULTS = 롱고미니아드
+ELSE	
+	RESULTS = 갓핸드
+ENDIF
 
 ;　명중
 @SKILL_HITRATE_1327, ARG
@@ -11,7 +17,14 @@ RETURN 100
 
 ;　위력
 @SKILL_POWER_1327, ARG
-RETURN 245
+IF SKILL_CHANGE(ARG, [[キャラ:T씨]])
+	RETURN 350
+ELSEIF SKILL_CHANGE(ARG,4316)
+	RETURN 325
+ELSE
+	RETURN 295
+ENDIF
+
 
 ;　최저공격횟수
 @SKILL_MINATTACKNUMBER_1327,ARG
@@ -36,12 +49,12 @@ RETURN GET_TYPE_NUM("파마")
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_1327
+@SKILL_DECIDE_TYPE_1327, ARG
 RETURN 1
 ;どちらでもない
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_1327
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_1327, ARG
 RETURN 1
 
 
@@ -123,7 +136,12 @@ CALL ATTACK_FIELD,ARG,ARG:1,1327
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_1327
-PRINTL [후열] 적 전체에 파마속성 중 물리데미지.
+IF U > 0 && U < CHARANUM && NO:U == 4316
+	PRINTL 얀 창에서 내뿜는 빛이 적을 꿰뚫는다。아서왕의 최후의 무기。
+	PRINTL 적 전체에 파마 상성의 물리공격으로 대 데미지。후열사용가능。
+ELSE
+	PRINTL [후열] 적 전체에 파마속성 중 물리데미지.
+ENDIF
 
 ;継承に필요な部位
 @継承部位_1327,ARG

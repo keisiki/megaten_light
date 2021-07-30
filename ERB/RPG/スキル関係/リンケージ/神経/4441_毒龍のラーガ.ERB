@@ -34,11 +34,11 @@ RETURN 30
 RETURN 8
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4441
+@SKILL_DECIDE_TYPE_4441, ARG
 RETURN 2
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_4441
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_4441, ARG
 RETURN 2
 
 
@@ -71,10 +71,10 @@ RETURN 23
 ;화염
 
 ;속도보정
-@SKILL_SPEED_4441, ARG
+@SKILL_SPEED_4441, ARG = -1
 SIF CFLAG:(ARG):PTフラグ == 0
 	RETURN 70
-RETURN 0
+RETURN 20
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4441,ARG
@@ -134,7 +134,7 @@ FOR LOCAL,LOCAL:1,LOCAL:2
 		CFLAG:POS(LOCAL):마법위력강화 = MAX(-16, CFLAG:POS(LOCAL):마법위력강화 - 4)
 	ENDIF
 NEXT
-PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@の공격력と마법위력を下げた！
+PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@의 공격력과 마법위력을 저하시켰다！
 
 
 
@@ -147,8 +147,8 @@ PRINTFORMW \@ CFLAG:ARG:PTフラグ == 2 ? 적 # 아군 \@の공격력と마법�
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_4441
-PRINTL 毒、金縛、麻痺を与え、공격、마법위력を下げる。発動者の가창기능で効果アップ
-PRINTL 무효화、반사、흡수されても低下する
+PRINTL 독、긴박、마비를 주고、공격、마법위력을 저하시킨다。발동자의 가창기능에 따라 효과 상승
+PRINTL 무효화、반사、흡수되어도 저하된다
 
 ;継承に필요な部位
 @継承部位_4441,ARG
@@ -175,16 +175,16 @@ RETURN 1
 @참가조건표시_4441,ARG
 SELECTCASE ARG
 	CASE 1
-		PRINTFORM 공격or마법위력弱化지원스킬
+		PRINTFORM 공격or마법위력약화지원스킬
 	CASE 2
-		PRINTFORM 範囲신경系스킬
+		PRINTFORM 범위 신경계스킬
 ENDSELECT
 
 @発動者조건_4441 , ARG
-CALL HAVE_SKILL_SEARCH(ARG, "신경", "範囲", "공격", )
+CALL HAVE_SKILL_SEARCH(ARG, "신경", "범위", "공격", )
 SIF RESULT
 	RETURN 1
-CALL HAVE_SKILL_SEARCH(ARG, "신경", "範囲", "상태変化", )
+CALL HAVE_SKILL_SEARCH(ARG, "신경", "범위", "상태변화", )
 SIF RESULT
 	RETURN 1
 RETURN 0

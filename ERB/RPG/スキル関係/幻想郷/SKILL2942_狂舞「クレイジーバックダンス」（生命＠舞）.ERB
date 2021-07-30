@@ -1,8 +1,8 @@
 ﻿;스킬名
 @SKILL_NAME_2942,ARG
-RESULTS = 광무「크레이지백댄스＠정신」
+RESULTS = 광무「크레이지백댄스＠생명」
 SIF  GETBIT (FLAG:カスタムゲーム화면,1)
-	RESULTS = 광무「ク레이ジーバッ쿠단ス」
+	RESULTS = 광무「크레이지백댄스＠생명」
 
 
 ;　명중
@@ -35,12 +35,12 @@ RETURN 50
 RETURN 0
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2942
+@SKILL_DECIDE_TYPE_2942, ARG
 RETURN 1
 
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2942
+@SKILL_DAMAGETYPE_2942, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -162,7 +162,7 @@ PRINTFORMW \@ CFLAG:ARG:PTフラグ == 0 ? 적 # 아군 \@의 마법 위력이  
 @SKILL_EXPLAIN_2942
 PRINTL 아군 전원의 물리 공격、명중을３단계 올리고、마법 위력을 ２단계 내린다。
 PRINTL 마이의 춤은 생명력을 활성화 시킨다。아군 전원의 물리적 잠재 능력을 강화한다。
-PRINTL 광인　테이레이타 마이의 스펠카드（専用）
+PRINTL 광인　테이레이타 마이의 스펠카드（전용）
 
 ;継承に필요한部位
 @継承部位_2942,ARG

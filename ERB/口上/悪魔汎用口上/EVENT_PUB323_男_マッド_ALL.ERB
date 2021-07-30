@@ -34,7 +34,7 @@
 SIF ARG == 1
 	RETURN 0
 ;구상名
-PRINTFORML 汎用男・マッド구상
+PRINTFORML 범용남・매드구상
 ;구상설명文
 PRINTFORML 
 
@@ -98,8 +98,8 @@ IF CFLAG:201 == 0 && TALENT:연모 == 0
 		IF TALENT:MASTER:남자 == 1
 			PRINTFORML 「우우우우우우우우～ 웃、웃기지마아아아아앗！」
 			PRINTFORML 「%CSTR:一人称%、야한 일 할거라면、아름다운 누님이라던가아아아아아아아아아아앗！！」
-			PRINTFORMW 「이제 싫어어어어엇　%CSTR:一人称%(은)는、이제 돌아가겠어어어엇！돌아가돌아가돌아가돌아가돌아가돌아가아아아아아앗！！」
-			PRINTFORMW 그 후、%조사처리(CALLNAME:MASTER,"는")% 필사적으로 %CALLNAME%(을)를 설득해、어떻게든 조교하게 되었다…
+			PRINTFORMW 「이제 싫어어어어엇　%조사처리(CSTR:一人称,"는")%、이제 돌아가겠어어어엇！돌아가돌아가돌아가돌아가돌아가돌아가아아아아아앗！！」
+			PRINTFORMW 그 후、%조사처리(CALLNAME:MASTER,"는")% 필사적으로 %조사처리(CALLNAME,"를")% 설득해、어떻게든 조교하게 되었다…
 			PRINTFORMW …왠지 이미 완전히 지쳐버렸다…이래서야 앞으로가 걱정이다…
 		ELSE
 			PRINTFORML 「우오오오오오오！ %CSTR:一人称%、%CSTR:二人称% 같은 아름다운 누나에게 조교받는 게
@@ -113,11 +113,11 @@ IF CFLAG:201 == 0 && TALENT:연모 == 0
 ELSEIF CFLAG:201 < 2 && MARK:2 == 1
 		IF TALENT:MASTER:남자 == 1 && TALENT:MASTER:오토코노코 == 1
 			PRINTFORMW 「안돼안돼안돼안돼애애애애～～～」
-			PRINTFORML 「%CSTR:二人称%(이)가 아무리 귀엽다고해도오오오오오오～～～、%CSTR:一人称%(은)는 남자 상대 따위
+			PRINTFORML 「%조사처리(CSTR:二人称,"가")% 아무리 귀엽다고해도오오오오오오～～～、%조사처리(CSTR:一人称,"는")% 남자 상대 따위
 			PRINTFORMW 　싫어싫어싫어싫다아아아아～～～」
 		ELSEIF TALENT:MASTER:남자 == 1 && TALENT:MASTER:오토코노코 == 0
 			PRINTFORML 「쿄、쿄에에～엣、%CSTR:二人称% 아아아 왔나아아아～～！！」
-			PRINTFORMW 「%CSTR:一人称%(은)는、남자에게 당한다니 싫어싫어싫다아아아아아～～」
+			PRINTFORMW 「%조사처리(CSTR:一人称,"는")%、남자에게 당한다니 싫어싫어싫다아아아아아～～」
 			PRINTFORMW 변함없이 %조사처리(CALLNAME:MASTER,"는")% %CALLNAME%에게 격렬하게 거부당하고있다…
 		ELSE
 			PRINTFORMW 「와、와、왔다아아～～！！%CALLNAME:MASTER%님 왔다아～～앗！！」
@@ -136,7 +136,7 @@ ELSEIF CFLAG:201 < 3 && MARK:2 == 2
 		IF TALENT:MASTER:남자 == 1
 			PRINTFORMW 「우오오오오오오오오잇！！%CSTR:二人称%、%CSTR:一人称%의 몸에 도대체 무슨 짓을 했어어어어어？！」
 			PRINTFORMW 「어、어쩐지잇、%CSTR:一人称%、%CSTR:二人称%에게 조교당하는 게 싫지 않게 됐다아아아아아～～！」
-			PRINTFORMW 「히、히에에～ %CSTR:一人称%(은)는 세뇌되어버린건가아아～～！？ 이제 대체 어떻게 해줄거야아아～～～！！？」
+			PRINTFORMW 「히、히에에～ %조사처리(CSTR:一人称,"는")% 세뇌되어버린건가아아～～！？ 이제 대체 어떻게 해줄거야아아～～～！！？」
 		ELSE
 			PRINTFORMW 「아、%CSTR:二人称% 왔나아아아아아」
 			PRINTFORMW 「어、어쩐지、%CSTR:一人称% 요새 이상해애애애」
@@ -219,7 +219,7 @@ ENDIF
 @EVENTTRAIN_SECOND_PUB323
 ;반발각인Lv3
 IF MARK:3 == 3 && (CFLAG:202 < 4 || FLAG:7 == 2)
-	PRINTFORMW 「키에에에에에～～엣！！%CSTR:二人称%(은)느은、사형이다아아앗！！ 사형사형사형사형사형사혀어어어어어엉！！！」
+	PRINTFORMW 「키에에에에에～～엣！！%조사처리(CSTR:二人称,"는")%、사형이다아아앗！！ 사형사형사형사형사형사혀어어어어어엉！！！」
 	CFLAG:202 = 4
 ;굴복각인Lv0
 ELSEIF MARK:2 == 0 && (CFLAG:202 < 1 || FLAG:7 == 2)
@@ -243,10 +243,10 @@ ELSEIF MARK:2 == 1 && (CFLAG:202 < 2 || FLAG:7 == 2)
 					PRINTFORM 부인
 				ENDIF
 			PRINTFORMW 이 있다구우우우…」
-			PRINTFORMW 「%CSTR:一人称%(이)가 죽어버리면、대체 누가 그 녀석을 지켜준단말야아아아아아～～～～…」
+			PRINTFORMW 「%조사처리(CSTR:一人称,"가")% 죽어버리면、대체 누가 그 녀석을 지켜준단말야아아아아아～～～～…」
 			PRINTFORMW …바보 같아서 무시한채로 조교를 시작하기로한다.
 		ELSE
-			PRINTFORMW 「쿠히히히히히…%CSTR:一人称%(은)는 언제라도 준비 만만이야아아아아～～…」
+			PRINTFORMW 「쿠히히히히히…%조사처리(CSTR:一人称,"는")% 언제라도 준비 만만이야아아아아～～…」
 			PRINTFORMW 그렇게 말하며 %조사처리(CALLNAME,"는")% 우뚝 솟은 양물을 %CALLNAME:MASTER%에게 보였다…
 		ENDIF
 	CFLAG:202 = 2

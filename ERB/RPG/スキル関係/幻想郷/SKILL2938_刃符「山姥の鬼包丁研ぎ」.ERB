@@ -36,12 +36,12 @@ RETURN GET_TYPE_NUM("검격")
 ;검격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2938
+@SKILL_DECIDE_TYPE_2938, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2938
+@SKILL_DAMAGETYPE_2938, ARG
 RETURN 1
 
 
@@ -132,7 +132,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2938
 @SKILL_EXPLAIN_2938
 PRINTL 적 １열에 검격 속성 낮은 위력의 물리 공격을 2회 실시한다。
 PRINTL 추가효과：공격시 가끔 물리 공격력을 2단계 강화。
-PRINTL 人を取って食うか小豆取んで食うか。귀녀　사카타 네무노의 스펠카드（専用）
+PRINTL 사람을 잡아먹는건가 팥을 해서 먹는건가。귀녀　사카타 네무노의 스펠카드（전용）
 
 ;継承に필요한部位
 @継承部位_2938,ARG

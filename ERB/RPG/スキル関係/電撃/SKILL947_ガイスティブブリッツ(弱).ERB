@@ -35,12 +35,12 @@ RETURN 6
 ;전격
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_947
+@SKILL_DECIDE_TYPE_947, ARG
 RETURN 1
 ;마법
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_947
+@SKILL_DAMAGETYPE_947, ARG
 RETURN 2
 
 
@@ -127,6 +127,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,947
 ;　 설명文の표시
 @SKILL_EXPLAIN_947
 PRINTL [후열] 적 전체에 전격속성 특대 마법데미지. (보통 확률로 SHOCK)
+PRINTL 성창기사단을 상징하는 스킬
 
 ;継承に필요한部位
 @継承部位_947,ARG

@@ -28,7 +28,7 @@ CUSTOMDRAWLINE =
 PRINTW 링에 글어가자 프로텍터와 COMP를 몸에 장착한 빗자루머리의 남자가 기세등등한 웃음을 지었다.
 PRINTL 남자：
 PRINTL 「용케 도망치지 않고 여기까지 왔군」
-PRINTW 「내 이름은 구세주 달레스. 너절한 다크 서머너 나부랭이가 구세주인 내게 이길 거라 생각하지 말라고」
+PRINTW 「내 이름은 구세주 다레스. 너절한 다크 서머너 나부랭이가 구세주인 내게 이길 거라 생각하지 말라고」
 PRINTL
 PRINTL 다레스：
 PRINTW 「난 구세주다! 각오해라, 메시아의 이름을 걸고 네놈을 쓰러뜨리겠다!」
@@ -89,31 +89,56 @@ CALL HEALTH_CHARA,(CHARANUM-1)
 
 CALL BATTLE_START
 CUSTOMDRAWLINE =
-PRINTW 구세주 달레스와 그 동료마를 쓰러트렸다.
+PRINTW 구세주 다레스와 그 동료마를 쓰러트렸다.
 
-PRINTL
-PRINTFORMW 「제, 젠장… 말도 안 돼. 이 몸이… 졌다고!?」
-PRINTFORMW 「으, 그극… 이 원한, 결고 잊지 않겠…!?」
-PRINTFORMW ＞패배자의 대사를 내뱉는 달레스 등 뒤의 입장문이 열렸다
-PRINTFORMW 「뭐, 뭐야…?」
-PRINTFORMW ＞열린 입구에서 근육질에 호색해보이는 오니들이 줄줄이 나타나 패배한 달레스 일행을 에워싸기 시작했다…
-PRINTFORMW 「뭐냐, 네놈들!? 어쩔 속셈이야!?」
-PRINTFORMW 「……어, 어이, 그 발딱 선 물건은 대체…… 농담이지?」
-PRINTFORMW 「기다려! 기다리라고! 나는! 우리는 남자란 말이다!」
-PRINTFORMW 「관둬! 하지 마! 다가오지 마! 그 물건을 이리 겨누지 말라고!」
-PRINTFORMW 「……앗―――――――――――!!」
 PRINTL
 PRINTW ・・・
 PRINTW ・・
 PRINTW ・
 PRINTL
 
+PRINTL
+PRINTFORMW 「제, 젠장… 말도 안 돼. 이 몸이… 졌다고!?」
+PRINTFORMW ＞아무래도 이쪽의 승리인 것 같다.。
+PRINTFORMW ＞생살여탈 권리는 이쪽에 있는 것 같은데…
+PRINTL 다레스를 받습니까？
+
+CALL INPUT_YN
+
+IF RESULT == 0
+PRINTFORMW ＞일단 전력으로 취급할 수 있을 것 같다…
+PRINTFORMW ＞しかしよく吠えるこの男、どうしてやろうか…
+PRINTFORMW ＞「くっ…情けのつもりか…！！」
+PRINTFORMW ＞…まぁいい。情けかどうかはいずれ分かるだろう…
+PRINTFORMW ＞…最も、どんな「情け」かは今は知ることは無いが。
+PRINTW ＞다레스와 ￥45000을 상금으로 받고서 콜로세움을 뒤로했다.
+PRINTW 다레스가 노예가 되었다.
+CALL ADD_NEW_COMPANION,4997,500
+CFLAG:(RESULT:1):전투참가불가능 = -1
+PRINTW 명성 125을 얻었다
+MONEY += 45000
+
+ELSEIF RESULT == 1
+PRINTFORMW 「으, 그극… 이 원한, 결고 잊지 않겠…!?」
+PRINTFORMW ＞패배자의 대사를 내뱉는 다레스 등 뒤의 입장문이 열렸다
+PRINTFORMW 「뭐, 뭐야…?」
+PRINTFORMW ＞열린 입구에서 근육질에 호색해보이는 오니들이 줄줄이 나타나 패배한 다레스 일행을 에워싸기 시작했다…
+PRINTFORMW 「뭐냐, 네놈들!? 어쩔 속셈이야!?」
+PRINTFORMW 「……어, 어이, 그 발딱 선 물건은 대체…… 농담이지?」
+PRINTFORMW 「기다려! 기다리라고! 나는! 우리는 남자란 말이다!」
+PRINTFORMW 「관둬! 하지 마! 다가오지 마! 그 물건을 이리 겨누지 말라고!」
+PRINTFORMW 「……앗―――――――――――!!」
+PRINTW ＞다레스의 비명을 등지고 ￥50000을 상금으로 받고서 콜로세움을 뒤로했다.
+PRINTW 명성 125을 얻었다
+MONEY += 50000
+ENDIF
+
+
+투기장フラグ:5:0 = 1
 FLAG:도주불가フラグ = 0
 FLAG:회화불능フラグ = 0
 FLAG:선제기습취소 = 0
-PRINTW ＞달레스의 비명을 등지고 ￥50000을 상금으로 받고서 콜로세움을 뒤로했다.
-PRINTW 명성 125을 얻었다
-MONEY += 50000
+
 FLAG:名声 += 125
 투기장フラグ:5:0 = 1
 

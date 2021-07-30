@@ -35,12 +35,12 @@ RETURN 9
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2613
+@SKILL_DECIDE_TYPE_2613, ARG
 RETURN 2
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2613
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2613, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2613
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -140,8 +140,8 @@ NEXT
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2613
-PRINTL 相손の夢を破壊する공격。相손が幸福だった場合そのショックで死んでしまう。
-PRINTL 외도　카나・アナベラルの技。
+PRINTL 상대의 꿈을 파괴하는 공격。상대가 행복에 빠질 경우 그 충격으로 죽고 만다。
+PRINTL 외도　카나・아나벨라의 기술。
 
 ;継承に필요な部位
 @継承部位_2613,ARG

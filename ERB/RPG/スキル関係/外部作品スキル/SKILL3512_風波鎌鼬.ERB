@@ -37,11 +37,11 @@ SIF FLAG:공격횟수 == 1
 RETURN GET_TYPE_NUM("검격")
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_3512
+@SKILL_DECIDE_TYPE_3512, ARG
 RETURN 1
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_3512
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_3512, ARG
 RETURN 1
 
 
@@ -124,7 +124,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,3512
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_3512
-PRINTL 적一列に검격+질풍の２回공격
+PRINTL 적 일렬에 검격+질풍의 2회 공격
 
 ;継承に필요な部位
 @継承部位_3512,ARG

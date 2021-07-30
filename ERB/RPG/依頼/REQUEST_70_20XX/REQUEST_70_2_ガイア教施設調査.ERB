@@ -29,7 +29,7 @@ CUSTOMDRAWLINE =
 CALLF FINDCHARA_B([[キャラ:아인]])
 LOCAL = RESULT:1
 	
-	PRINTFORMW 「「ふぅん……　자네가 최근 소문에 들리는 %CALLNAME:MASTER%인가」
+	PRINTFORMW 「흐음……　자네가 최근 소문에 들리는 %CALLNAME:MASTER%인가」
 	PRINTFORML 
 	PRINTFORMW ＞%CALLNAME:MASTER%의 앞에 나타난 기묘한 헤어스타일의 템플나이트는 %CALLNAME:MASTER%를 평가하듯 보면서 그렇게 말했다。
 	PRINTFORML 
@@ -185,6 +185,7 @@ LOCAL = RESULT:1
 		CALL ADD_GUEST_COMPANION([[キャラ:아인]], 0, 1)
 		SIF RESULT:1 >= 0
 			PRINTFORMW %CALLNAME:(RESULT:1)%(을)를COMP에 되돌렸으므로 주의해 주세요
+		CFLAG:LOCAL:ゲスト加入フラグ = 0
 	ELSE
 		PRINTFORMW ＞%CALLNAME:MASTER%가 자신의 사무소로 돌아가、재차 회수한 자료의 정리를 실시하고 있었다。
 		PRINTFORMW ＞그때、정리의 심부름을 하고 있던 %CALLNAME:LOCAL%의 신체에 돌연 빛의 선이 떠올랐다！

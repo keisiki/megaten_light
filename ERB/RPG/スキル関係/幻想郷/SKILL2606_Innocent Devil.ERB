@@ -31,16 +31,16 @@ RETURN 30
 
 ;　相性
 @SKILL_TYPE_2606,ARG
-RETURN 13
+RETURN 17
 
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2606
+@SKILL_DECIDE_TYPE_2606, ARG
 RETURN 2
 
 
-;　1物理ダメージで計算するか2魔法ダメージで計算するか
-@SKILL_DAMAGETYPE_2606
+;　1物理데미지で計算するか2魔法데미지で計算するか
+@SKILL_DAMAGETYPE_2606, ARG
 RETURN 2
 
 ;　대상が1적か2아군か3場전체か4特殊か
@@ -87,7 +87,7 @@ RETURN 0
 
 ;스킬変化？用랭크
 @SKILL_RANK_2606
-RETURN 15
+RETURN 16
 
 ;テンプレート用、추가효과シリーズ
 ;추가효과스테이터스
@@ -111,9 +111,9 @@ RETURN 0
 ;====================================================
 @ACTION_2606,ARG,ARG:1
 
-
+CFLAG:ARG:명중강화 = MIN(32, CFLAG:ARG:명중강화 + 4)
 CFLAG:ARG:회피강화 = MIN(32, CFLAG:ARG:회피강화 + 8)
-PRINTFORML %CALLNAME:ARG%の회피힘が上がった！
+PRINTFORML %CALLNAME:ARG%의 회피력이 올라갔다！
 
 ;====================================================
 ;実行内容ここまで
@@ -121,8 +121,8 @@ PRINTFORML %CALLNAME:ARG%の회피힘が上がった！
 
 ;　 説明文の표시
 @SKILL_EXPLAIN_2606
-PRINTL 蝙蝠のような姿に변신し飛び回ることで회피힘を강화する。
-PRINTL 여신　Elisの技。
+PRINTL 박쥐의 모습으로 변신하는 것으로 회피력을 강화한다。
+PRINTL 여신　Elis의 기술。
 
 
 ;継承に필요な部位

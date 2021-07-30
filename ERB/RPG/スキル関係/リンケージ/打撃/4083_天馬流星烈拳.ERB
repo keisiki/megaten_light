@@ -32,11 +32,11 @@ RETURN 1
 RETURN GET_TYPE_NUM("타격")
 ;　1EXTRAか2MAGICか
 
-@SKILL_DECIDE_TYPE_4083
+@SKILL_DECIDE_TYPE_4083, ARG
 RETURN 0
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_4083
+@SKILL_DAMAGETYPE_4083, ARG
 RETURN 1
 
 
@@ -71,7 +71,7 @@ RETURN 23
 
 ;속도보정
 @SKILL_SPEED_4083, ARG = -1
-RETURN 20
+RETURN 40
 
 ;　구상の표시とその타입
 @SKILL_MESSAGE_4083,ARG
@@ -120,7 +120,7 @@ CALL ATTACK_SINGLE,ARG,POS(ARG:1),4083
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_4083
-PRINTL 적 １명에게 타격 相性의 큰 데미지。아주 빨리 발동한다。
+PRINTL 적 １명에게 타격 상성의 큰 데미지。아주 빨리 발동한다。
 
 ;継承に필요한部位
 @継承部位_4083, ARG

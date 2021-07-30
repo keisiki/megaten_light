@@ -45,12 +45,12 @@ RETURN GET_TYPE_NUM("만능")
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2559
+@SKILL_DECIDE_TYPE_2559, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2559
+@SKILL_DAMAGETYPE_2559, ARG
 RETURN 2
 
 
@@ -170,7 +170,7 @@ WAIT
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2559
-PRINTL 적 １열에 만능 相性의 큰 데미지. 명중률이 높다
+PRINTL 적 １열에 만능 상성의 큰 데미지. 명중률이 높다
 PRINTL 적의 만능 내성 및 방어를 깨고、확실히 데미지를 준다
 PRINTL 진조 아키타입 어스의 필살기（승계불가）Gedachtnis
 

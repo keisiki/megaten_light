@@ -3,38 +3,38 @@
 #PRI
 #DIM LCOUNT
 ;主人公の사정を0に
-BASE:MASTER:2 = 0
-BASE:MASTER:3 = 0
-BASE:MASTER:99 = 0
+BASE:MASTER:사정 = 0
+BASE:MASTER:모유 = 0
+BASE:MASTER:절정 = 0
 ;いちおう조교대상と조수も
-BASE:TARGET:2 = 0
-BASE:TARGET:99 = 0
+BASE:TARGET:사정 = 0
+BASE:TARGET:절정 = 0
 IF ASSI >= 0
 	ISASSI:ASSI = 1
-	BASE:ASSI:2 = 0
-	BASE:ASSI:3 = 0
-	BASE:ASSI:99 = 0
+	BASE:ASSI:사정 = 0
+	BASE:ASSI:모유 = 0
+	BASE:ASSI:절정 = 0
 ENDIF
-BASE:TARGET:3 = 0
-BASE:MASTER:4 = 0
+BASE:TARGET:모유 = 0
+BASE:MASTER:뇨의 = 0
 
 ;사정限界数の確保
 FOR LCOUNT, 0, CHARANUM
-	CFLAG:LCOUNT:11 = 100 + (EXP:LCOUNT:절정경험/200 + EXP:LCOUNT:사정경험/200)
+	CFLAG:LCOUNT:사정残数の保存 = 10 + (EXP:LCOUNT:절정경험/200 + EXP:LCOUNT:사정경험/200)
 	SIF TALENT:LCOUNT:절륜 == 1
-		TIMES CFLAG:LCOUNT:11,1.50
+		TIMES CFLAG:LCOUNT:사정残数の保存,1.50
 	LOCAL = 10000
-	SIF TALENT:152
+	SIF TALENT:절륜
 		LOCAL /= 2
-	MAXBASE:LCOUNT:2 = LOCAL
-	MAXBASE:LCOUNT:99 = LOCAL
+	MAXBASE:LCOUNT:사정 = LOCAL
+	MAXBASE:LCOUNT:절정 = LOCAL
 NEXT
 
 ;사정後の充填時間を리셋
-CFLAG:MASTER:9 = 0
-CFLAG:TARGET:9 = 0
+CFLAG:MASTER:사정ゲージ再装填 = 0
+CFLAG:TARGET:사정ゲージ再装填 = 0
 SIF ASSI >= 0
-	CFLAG:ASSI:9 = 0
+	CFLAG:ASSI:사정ゲージ再装填 = 0
 
 ;사정フラグ、처녀상실フラグなどを리셋
 VARSET TFLAG, 0, 0, 200
@@ -56,10 +56,10 @@ VARSET PREVCOM, -1
 ;ENDIF
 
 ;콘돔자동장착설정の리셋
-FLAG:98 = 0
+FLAG:콘돔자동장착処理 = 0
 
 ;콘돔사정フラグを리셋
-CFLAG:107 = 0
+CFLAG:사용済み콘돔판정 = 0
 
 ;조교者は誰か
 IF ASSIPLAY == 0
@@ -98,9 +98,9 @@ SIF TARGET < 0
 
 SIF ABL:순종+ABL:욕망 < 6
 	RETURN 0
-SIF ABL:순종 < 4 && ((TALENT:11 && TALENT:5 == 0 && TALENT:8 == 0) || TALENT:12)
+SIF ABL:순종 < 4 && ((TALENT:반항적 && TALENT:복종 == 0 && TALENT:예속 == 0) || TALENT:꿋꿋함)
 	RETURN 0
-SIF ABL:욕망 < 4 && (TALENT:20 || TALENT:32 || TALENT:34)
+SIF ABL:욕망 < 4 && (TALENT:자제심 || TALENT:억압 || TALENT:저항)
 	RETURN 0
 LOCAL = 0
 SIF ABL:기교 >= 2 && ABL:봉사정신 >= 2
@@ -111,9 +111,9 @@ SIF ABL:노출증 >= 3 && ABL:자위중독
 	LOCAL += 1
 SIF ABL:마조끼 >= 3
 	LOCAL += 1
-SIF ABL:3+ABL:4+ABL:5+ABL:6 >= 8
+SIF ABL:Ｃ감각+ABL:Ｖ감각+ABL:Ａ감각+ABL:Ｂ감각 >= 8
 	LOCAL += 1
-SIF ABL:3+ABL:4+ABL:5+ABL:6 >= 13
+SIF ABL:Ｃ감각+ABL:Ｖ감각+ABL:Ａ감각+ABL:Ｂ감각 >= 13
 	LOCAL += 1
 SIF ABL:순종 >= 4
 	LOCAL += 1
@@ -140,27 +140,27 @@ SIF MARK:굴복각인 >= 3 && MARK:고통각인 >= 3
 
 ;IF GROUPMATCH(1,(ABL:기교 >= 3 && ABL:봉사정신 >= 3) , (ABL:노출증 >= 3 && ABL:자위중독) , ABL:마조끼 >= 3 , ABL:3+ABL:4+ABL:5+ABL:6 >= 13 , ABL:0 >= 5 , ABL:1 >= 5) >= 2
 IF LOCAL > MIN(6,CSVBASE(NO:TARGET,GETNUM(BASE,"LV"),0)/10 + (ABL:종족 == 0))
-	IF CFLAG:1 <= 0
+	IF CFLAG:매각가능 <= 0
 		PRINTFORMW %타겟이(1)% 매각할 수 있게 되었다
-		CFLAG:1 = 1
+		CFLAG:매각가능 = 1
 	ENDIF
 ELSE
 	RETURN 0
 ENDIF
 
-IF ABL:0+ABL:1+ABL:2+(TALENT:남자 ? ABL:ＢＬ끼 # ABL:레즈끼) >= 12
-	IF CFLAG:1 <= 1
+IF ABL:순종+ABL:욕망+ABL:기교+(TALENT:남자 ? ABL:ＢＬ끼 # ABL:레즈끼) >= 12
+	IF CFLAG:매각가능 <= 1
 		PRINTFORMW %타겟이(1)% 조수가 가능하게 되었다
-		CFLAG:1 = 2
+		CFLAG:매각가능 = 2
 	ENDIF
 ENDIF
 
 @EVENTTURNEND
 #DIM LCOUNT
 IF ASSI > 0
-	IF TALENT:ASSI:요호 && ITEM:41 == 0
+	IF TALENT:ASSI:요호 && ITEM:미약 == 0
 		PRINTW [요호]의 효과로 미약을 손에 넣었습니다
-		ITEM:41 = 1
+		ITEM:미약 = 1
 	ENDIF
 ENDIF
 
@@ -273,38 +273,39 @@ ELSE
 ENDIF
 
 PRINTFORMW %CALLNAME:TARGET%의 상태가 이상하다
-PRINTFORMW PRINTFORMW 격렬한 조교의 영향으로 %타겟은()% 정신에 이상이 생긴 것 같다
+PRINTFORMW 격렬한 조교의 영향으로 %타겟은()% 정신에 이상이 생긴 것 같다
 PRINTFORMW %조사처리(NAME:TARGET,"는")% 【붕괴】되었다
-TALENT:9 = 1
+TALENT:붕괴 = 1
 TFLAG:13 = 247
 	CALL KOJO_MESSAGE_EVENT
-IF TALENT:3 || TALENT:4 || TALENT:5 || TALENT:6 || TALENT:7 || TALENT:8
+IF TALENT:연모 || TALENT:음란 || TALENT:복종 || TALENT:친애 || TALENT:창부 || TALENT:예속
 	PRINTFORM %타겟은()% [
-	SIF TALENT:3
-		PRINTS TALENTNAME:3
-	SIF TALENT:4
-		PRINTS TALENTNAME:4
-	SIF TALENT:5
-		PRINTS TALENTNAME:5
-	SIF TALENT:6
-		PRINTS TALENTNAME:6
-	SIF TALENT:7
-		PRINTS TALENTNAME:7
-	SIF TALENT:8
-		PRINTS TALENTNAME:8
-	PRINTW ]을(를) 잃었다
-	SIF TALENT:3
-		TALENT:3 = 0
-	SIF TALENT:4
-		TALENT:4 = 0
-	SIF TALENT:5
-		TALENT:5 = 0
-	SIF TALENT:6
-		TALENT:6 = 0
-	SIF TALENT:7
-		TALENT:7 = 0
-	SIF TALENT:8
-		TALENT:8 = 0
+	SIF TALENT:연모
+		PRINT 연모]를
+	SIF TALENT:음란
+		PRINT 음란]을
+	SIF TALENT:복종
+		PRINT 복종]을
+	SIF TALENT:친애
+		PRINT 친애]를
+	SIF TALENT:창부
+		PRINT 창부]를
+	SIF TALENT:예속
+		PRINT 예속]를
+	PRINTW  잃었다
+;	PRINTW ]을(를) 잃었다
+	SIF TALENT:연모
+		TALENT:연모 = 0
+	SIF TALENT:음란
+		TALENT:음란 = 0
+	SIF TALENT:복종
+		TALENT:복종 = 0
+	SIF TALENT:친애
+		TALENT:친애 = 0
+	SIF TALENT:창부
+		TALENT:창부 = 0
+	SIF TALENT:예속
+		TALENT:예속 = 0
 ENDIF
 
 @EVENTEND
@@ -315,6 +316,34 @@ SIF TARGET > 0 && TALENT:TARGET:페르소나구사자
 @EVENTEND
 #LATER
 PRINTL 조교를 종료했습니다
+;九条나나미は처녀である限り신뢰を維持する。
+IF TARGET == GETCHARA([[キャラ:나나미]]) && CFLAG:801 == 4
+	PRINTFORMW 이번에도 처녀가 지켜진 나나미의 신뢰는 유지되고 있다
+;九条나나미でなければ조교で신뢰を상실する。
+ELSE
+	IF TALENT:TARGET:신뢰 || TALENT:TARGET:동료
+		SETCOLOR 0xff0033
+		IF TALENT:TARGET:연모
+			PRINTFORMW 조교를 받은 것 때문에、%조사처리(NAME:TARGET,"는")%%NAME:MASTER%에게의 애욕이 우정을 앞서 버렸다
+		ELSEIF CFLAG:TARGET:전투참가불가능 == -1
+			PRINTFORMW 조교를 받은 것 때문에、%조사처리(NAME:TARGET,"는")%%NAME:MASTER%에게의 우정이 깨지고 전투에 참여하지 않게 되었다
+			CFLAG:전투참가불가능 = 1
+			SIF CFLAG:포지션 > 0
+				CALL REMOVE_POSITION,CFLAG:포지션
+		ELSE
+			PRINTFORMW 조교를 받은 것 때문에、%조사처리(NAME:TARGET,"는")%%NAME:MASTER%의 노예임을 재인식한 듯하다.
+		ENDIF
+		SIF TALENT:TARGET:신뢰
+			PRINTFORMW %조사만처리(NAME:TARGET,"는")% 【신뢰】를 잃었다
+		SIF TALENT:TARGET:동료
+			PRINTFORMW %조사만처리(NAME:TARGET,"는")% 【동료】를 잃었다
+		TALENT:TARGET:신뢰 = 0
+		TALENT:TARGET:동료 = 0
+		FLAG:信頼人数 -= 1
+		FLAG:今周回信頼人数 -= 1
+		RESETCOLOR
+	ENDIF
+ENDIF
 IF CFLAG:TARGET:전투참가불가능 == -1
 	SETCOLOR 0xff0033
 	PRINTFORMW 조교를 받은 것 때문에 %조사처리(NAME:TARGET,"는")% %NAME:MASTER%에 대한 신뢰를 잃어 전투에 참가하지 않게 되었습니다
@@ -323,14 +352,27 @@ IF CFLAG:TARGET:전투참가불가능 == -1
 		CALL REMOVE_POSITION,CFLAG:포지션
 	RESETCOLOR
 ENDIF
-;비전투원が식당で働いていて、노역の조건を満たさなくなったら노역해제
+;修練中に戦闘参加不可能になった場合の修練中断処理
+IF CFLAG:TARGET:전투참가불가능 == 1 && CFLAG:TARGET:노역フラグ == 6
+	SETCOLOR 0xff0033
+	PRINTFORMW 調教を始めたことにより、%NAME:TARGET%の修練を中断させました
+	CFLAG:TARGET:노역フラグ = 0
+	RESETCOLOR
+ENDIF
+;非戦闘員が食堂で働いていて、労役の条件を満たさなくなったら労役解除
 IF (ABL:TARGET:순종 + ABL:TARGET:봉사정신 + ABL:TARGET:요리기능 + TALENT:TARGET:연모*3 + TALENT:TARGET:친애*6) < 6 && TALENT:TARGET:비전투원 && CFLAG:TARGET:被조교횟수 && CFLAG:TARGET:노역フラグ == 1
 	SETCOLOR 0xff0033
 	PRINTFORMW 조교를 받은 것 때문에、%조사처리(NAME:TARGET,"는")% %NAME:MASTER%에 대한 신뢰를 잃어、노역이 중지됐습니다
 	CFLAG:TARGET:노역フラグ = 0
 	RESETCOLOR
 ENDIF
-
+;비전투원が전투員素質を持っていて、훈련경험を持っていれば비전투원が無くなる
+IF TALENT:TARGET:비전투원 == 1 && EXP:TARGET:훈련경험 > 99 && (TALENT:TARGET:석세서 || TALENT:TARGET:데빌시프터 || TALENT:TARGET:이능자 || TALENT:TARGET:페르소나구사자 || TALENT:TARGET:도구지식 || TALENT:TARGET:아이템숙련 || TALENT:TARGET:건슬링거 || TALENT:TARGET:쿠즈노하 || TALENT:TARGET:식노 || TALENT:TARGET:달인)
+	SETCOLOR 0x0099cc
+	PRINTFORMW 충분한 전투경험을 쌓은 %조사처리(NAME:TARGET,"는")% 전투에 참가 할 수 있게 되었다
+	TALENT:TARGET:230 = 0
+	RESETCOLOR
+ENDIF
 
 ;조교後行為の체크
 CALL SELF_CHECK
@@ -365,7 +407,7 @@ SIF CFLAG:TARGET:스트레스치 >= 100 && TALENT:TARGET:붕괴 == 0
 @JUEL_CHECK
 #DIM LCOUNT
 
-LOCAL = (EX:0 + EX:1 + EX:2 +EX:3+EX:4+EX:5)*2
+LOCAL = (EX:Ｃ절정 + EX:Ｖ절정 + EX:Ａ절정 +EX:Ｂ절정+EX:4+EX:5)*2
 FOR LCOUNT, 0, 15
 	IF PALAM:LCOUNT < PALAMLV:1
 		G = 0
@@ -410,18 +452,18 @@ FOR LCOUNT, 0, 15
 	ENDIF
 
 	IF LCOUNT == 0
-		GOTJUEL:LCOUNT = G + EX:0 * 1000
+		GOTJUEL:LCOUNT = G + EX:Ｃ절정 * 1000
 	ELSEIF LCOUNT == 1
-		GOTJUEL:LCOUNT = G + EX:1 * 1000
+		GOTJUEL:LCOUNT = G + EX:Ｖ절정 * 1000
 	ELSEIF LCOUNT == 2
-		GOTJUEL:LCOUNT = G + EX:2 * 1000
+		GOTJUEL:LCOUNT = G + EX:Ａ절정 * 1000
 	ELSEIF LCOUNT == 3
-		GOTJUEL:LCOUNT = G + EX:3 * 1000
+		GOTJUEL:LCOUNT = G + EX:Ｂ절정 * 1000
 	ELSEIF LCOUNT < 12
 		GOTJUEL:LCOUNT = G
 		LOCAL += PALAMLV_F(TARGET,PALAMNAME:LCOUNT)*3
 	ELSE
-		GOTJUEL:100 += G
+		GOTJUEL:부정 += G
 	ENDIF
 NEXT
 
@@ -467,7 +509,7 @@ FOR LCOUNT, 0, 15
 	
 	IF D == 12
 		PRINTFORML %PALAMNAME:100%의 구슬×({JUEL:100}+{GOTJUEL:100})
-		JUEL:100 += GOTJUEL:100
+		JUEL:부정 += GOTJUEL:부정
 	ELSEIF D != 4 && D != 13 && D != 14
 		PRINTFORML %PALAMNAME:D%의 구슬×({JUEL:D}+{GOTJUEL:D})
 		JUEL:D += GOTJUEL:D
@@ -479,7 +521,7 @@ PRINTW 이상의 구슬을 얻었습니다
 
 @DENIAL_CHECK
 #DIM LCOUNT
-SIF JUEL:100 == 0
+SIF JUEL:부정 == 0
 	RETURN 0
 
 SIF SUMARRAY(JUEL,5,8) < 1
@@ -487,31 +529,31 @@ SIF SUMARRAY(JUEL,5,8) < 1
 
 $LABEL_1
 A = RAND:3 + 5
-B = JUEL:100 / 2
-SIF B == 0 && JUEL:100 > 0
+B = JUEL:부정 / 2
+SIF B == 0 && JUEL:부정 > 0
 	B = 1
 SIF JUEL:A < B
 	B = JUEL:A
 JUEL:A -= B
-JUEL:100 -= B
+JUEL:부정 -= B
 
 SIF B > 0
 	PRINTFORML %PALAMNAME:A%의 구슬×{B}감소
-SIF JUEL:100 > 0 && (JUEL:5 + JUEL:6 + JUEL:7) > 0
+SIF JUEL:부정 > 0 && (JUEL:5 + JUEL:6 + JUEL:7) > 0
 	GOTO LABEL_1
 
 $LABEL_2
 A = RAND:3 + 9
-B = JUEL:100 / 2
-SIF B == 0 && JUEL:100 > 0
+B = JUEL:부정 / 2
+SIF B == 0 && JUEL:부정 > 0
 	B = 1
 SIF JUEL:A < B
 	B = JUEL:A
 JUEL:A -= B
-JUEL:100 -= B
+JUEL:부정 -= B
 SIF B > 0
 	PRINTFORML %PALAMNAME:A%의 구슬×{B}개 감소
-SIF JUEL:100 > 0 && (JUEL:9 + JUEL:10 + JUEL:11) > 0
+SIF JUEL:부정 > 0 && (JUEL:치정 + JUEL:고통 + JUEL:공포) > 0
 	GOTO LABEL_2
 
 DRAWLINE

@@ -134,6 +134,13 @@ WHILE LOCAL < 100 || LOCAL:1 < 200
 					ENDIF
 					PRINTFORM │%LOCALS,18,LEFT%│*{ABL:ARG:순종*8,4}\%│
 				ENDIF
+				;ふたごちゃんパッチ追記：ふたごちゃんフラグがオンかつ6以上の多胎児の場合、かつ崩壊でも狂気でもない場合、ちょっと上昇する
+				;※きちんと育つのは記録上五つ子くらいまでらしいのと、6以上はさすがにけっこう物珍しいため。
+				IF FLAG:ふたごちゃんフラグ > 0 && CFLAG:ARG:今回受胎人数 > 5 && TALENT:ARG:붕괴 == 0 && TALENT:ARG:광기 == 0
+					LOCALS = 多胎妊娠
+					PRICE_EX = 110
+					PRINTFORM │%LOCALS,18,LEFT%│*{PRICE_EX,4}\%│
+				ENDIF
 			CASE 1
 				;옵션、FLAG:악마가챠모드==2、핸디캡 플레이ONの時に매각가격25%へ
 				IF FLAG:악마가챠모드 > 1
@@ -460,6 +467,10 @@ SELECTCASE TALENTNAME:ARG
 		RETURNF 20
 	CASE "젖기어려움"
 		RETURNF -10
+	CASE "임신하기쉬움"
+		RETURNF 10
+	CASE "임신하기어려움"
+		RETURNF -10
 	CASE "습득빠름"
 		RETURNF 10
 	CASE "습득느림"
@@ -492,6 +503,8 @@ SELECTCASE TALENTNAME:ARG
 		RETURNF 20
 	CASE "음유"
 		RETURNF 30
+	CASE "잉태희망"
+		RETURNF 20
 	CASE "도착적"
 		RETURNF 10
 	CASE "남성혐오"
@@ -534,8 +547,14 @@ SELECTCASE TALENTNAME:ARG
 		RETURNF 10
 	CASE "거유"
 		RETURNF 20
-	CASE "폭유"
+	CASE "폭유", "魔乳"
 		RETURNF 10
+	CASE "小尻"
+		RETURNF TALENT:(ARG:1):남자 ? 0 # -10
+	CASE "巨尻"
+		RETURNF TALENT:(ARG:1):남자 ? 0 # 20
+	CASE "爆尻"
+		RETURNF TALENT:(ARG:1):남자 ? 0 # 10
 	CASE "회복빠름"
 		RETURNF 20
 	CASE "회복느림"

@@ -23,9 +23,6 @@ RETURN 0
 
 RETURN 0
 
-@장비추가스킬_2285,ARG,ARG:1 = -1
-RETURN 0
-
 @방어상성_2285,ARG,ARG:1 = -1
 SELECTCASE ARG
 ENDSELECT
@@ -61,6 +58,16 @@ RETURN 0
 @장비箇所_2285
 RETURN GET_EQUIPNUM("검")
 
+;아라크노와이어
+@장비추가스킬_2285,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 1124
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -82,6 +89,9 @@ PRINTL 장비조건：LV45～
 
 @장비해설_2285
 PRINTL 가시나무처럼 가시가 달려있는 채찍
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：아라크노와이어
+RESETCOLOR
 
 RETURN 0
 

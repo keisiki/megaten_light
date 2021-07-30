@@ -41,7 +41,7 @@ ENDIF
 TFLAG:挿入続行 = 1
 
 ;처녀상실時のテ키스ト用処理
-SIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 61 || PREVCOM == 66 || PREVCOM == 68 || PREVCOM == 69 || PREVCOM == 76 || PREVCOM == 77 || PREVCOM == 72) && (TFLAG:전회の조교者 == PLAYER) && TFLAG:31
+SIF TFLAG:60 && (PREVCOM == 60 || PREVCOM == 61 || PREVCOM == 66 || PREVCOM == 68 || PREVCOM == 69) && (TFLAG:전회の조교者 == PLAYER) && TFLAG:31
 	TFLAG:31 = 2
 ;-------------------------------------------------
 ;사정ゲージ체크

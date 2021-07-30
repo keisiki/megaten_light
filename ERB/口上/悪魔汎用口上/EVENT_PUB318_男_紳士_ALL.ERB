@@ -12,15 +12,15 @@
 ;	+----+----+-------------------------------+
 ;	|   2| ○ | 구상の誤字・脱字の수정        |
 ;	+----+----+-------------------------------+
-;	|   3| ○ | 구상まとめへの収録            |
+;	|   3| ○ | 口上まとめへの収録             |
 ;	+----+----+-------------------------------+
-;	|   4| ○ | 구상の新規추가                |
+;	|   4| ○ | 口上の新規追加                 |
 ;	+----+----+-------------------------------+
-;	|   5| ○ | 既存구상の改変                |
+;	|   5| ○ | 既存口上の改変                |
 ;	+----+----+-------------------------------+
-;	|   6| ○ | 改変した구상の自由な再配布    |
+;	|   6| ○ | 改変した口上の自由な再配布   |
 ;	+----+----+-------------------------------+
-;	|   7| ○ | 구상内容の転載                |
+;	|   7| ○ | 口上内容の転載                |
 ;	+----+----+-------------------------------+
 ;-------------------------------------------------
 ;-------------------------------------------------
@@ -46,7 +46,7 @@
 SIF ARG == 1
 	RETURN 0
 ;구상名
-PRINTFORML 범용 남자・紳士구상
+PRINTFORML 범용 남자・신사구상
 ;구상설명文
 PRINTFORML    
 ;--------------------------------------------------
@@ -108,11 +108,11 @@ IF CFLAG:201 == 0 && TALENT:연모 == 0
 	LOCAL = ABL:80
 	PRINTFORMW 「%STR:LOCAL%%NAME:TARGET%、맹약에 따라 찾아뵈었습니다. 뭐든 명령을………
 	PRINTFORMW 　……허？ 조교？」
-	PRINTFORMW 아지트의 어두운 방에 불려진 %CALLNAME%는、한쪽 눈썹을 올린채 %CALLNAME:MASTER%의 말을 반복했다.
+	PRINTFORMW 아지트의 어두운 방에 불려진 %조사처리(CALLNAME,"는")%、한쪽 눈썹을 올린채 %CALLNAME:MASTER%의 말을 반복했다.
 	;천사
 	IF ABL:80 == 4
 		PRINTFORMW 「신의 도구를 육욕으로 유혹하겠다니……수치를 아십시오」
-		PRINTFORMW 이대로 설교가 시작될 것 같은 기세의 %CALLNAME%(을)를 달래、듣기 좋은 말로 구슬린다.
+		PRINTFORMW 이대로 설교가 시작될 것 같은 기세의 %조사처리(CALLNAME,"를")% 달래、듣기 좋은 말로 구슬린다.
 		PRINTFORMW 어쨌든 시작하기만하면 이 쪽의 차례다……
 	ELSE
 		PRINTFORMW 「……인간이 악마를 펫으로 기르기라도 할 생각입니까？크크크……이런 실례」
@@ -136,7 +136,7 @@ IF CFLAG:201 == 0 && TALENT:연모 == 0
 ELSEIF CFLAG:201 < 2 && MARK:2 == 1
 	;천사
 	IF ABL:80 == 4
-		PRINTFORMW 「%CSTR:一人称%(은)는 이런 짓을 하기 위해서 현세에 내려온 것이 아닙니다……」
+		PRINTFORMW 「%조사처리(CSTR:一人称,"는")% 이런 짓을 하기 위해서 현세에 내려온 것이 아닙니다……」
 		PRINTFORMW 「오오 주여、이런 일을 해버리는 사람의 아이를 용서해주세요！」
 	ELSE
 		PRINTFORML 「%CSTR:二人称%도 질리지 않는군요……. 인간들 사이에서 조교가 유행하고 있다는 이야기는 들었습니다만、
@@ -149,7 +149,7 @@ ELSEIF CFLAG:201 < 3 && MARK:2 == 2
 	;천사
 	IF ABL:80 == 4
 		PRINTFORMW 「이걸로 %CSTR:二人称%의 마음이 채워진다면、아무쪼록 좋을대로 해주세요」
-		PRINTFORMW 「……하지만、%CSTR:一人称%(은)는 절대 굽히지 않습니다」
+		PRINTFORMW 「……하지만、%조사처리(CSTR:一人称,"는")% 절대 굽히지 않습니다」
 	ELSE
 		PRINTFORMW 「확실히 우리들은 인간과 정을 주고받는 일도 있습니다만……이렇게 강제당한다면 사정이 달라요」
 		PRINTFORMW %조사처리(CALLNAME,"는")% 한숨을 내쉬고 머리를 흔들었다.
@@ -162,13 +162,13 @@ ELSEIF CFLAG:201 < 4 && MARK:2 == 3 && (TALENT:3 == 0 && TALENT:4 == 0 && TALENT
 	IF ABL:80 == 4
 		PRINTFORMW 「……%CSTR:二人称%도 주의 사랑스러운 아이인 이상、필시 좋은 영혼을 갖고 있을 것입니다」
 		PRINTFORMW 「그러니까……이제 이런 일은……」
-		PRINTFORMW 말뿐인 허약한 저항을 보이는 %CALLNAME%(을)를 밀어넘어뜨리고、%조사처리(CALLNAME:MASTER,"는")% 옷 안에 손을 미끄러트려 넣었다……
+		PRINTFORMW 말뿐인 허약한 저항을 보이는 %조사처리(CALLNAME,"를")% 밀어넘어뜨리고、%조사처리(CALLNAME:MASTER,"는")% 옷 안에 손을 미끄러트려 넣었다……
 	ELSE
-		PRINTFORMW 「……%CSTR:一人称%(은)는 아직 진 것이 아닙니다」
+		PRINTFORMW 「……%조사처리(CSTR:一人称,"는")% 아직 진 것이 아닙니다」
 		IF TALENT:MASTER:남자
-			PRINTFORMW 「%CSTR:一人称%(은)는 …%CSTR:一人称%(은)는 건전한 남성입니다！ 조금 몸을 허락했다고해서、도 동성과 그런 그런 일은 없습니다……！」
+			PRINTFORMW 「%조사처리(CSTR:一人称,"는")% …%조사처리(CSTR:一人称,"는")% 건전한 남성입니다！ 조금 몸을 허락했다고해서、도 동성과 그런 그런 일은 없습니다……！」
 		ELSE
-			PRINTFORMW 「으음、그렇고말구요、이 %CSTR:一人称%(이)가 이런 계집에에게……던가 같은 건……」
+			PRINTFORMW 「으음、그렇고말구요、이 %조사처리(CSTR:一人称,"가")% 이런 계집에에게……던가 같은 건……」
 		ENDIF
 		PRINTFORMW %조사처리(CALLNAME,"는")% 반대편을 향한채로 중얼중얼 뭔가 혼잣말을 하고있다……
 	ENDIF
@@ -180,45 +180,45 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 	IF TALENT:3
 		IF CFLAG:未조교함락 == 1
 			;조교せずに연모をつけた場合
-			PRINTFORMW 「조교、입니까. 말의 느낌은 어찌되었건、%CSTR:二人称%(이)가 상대라면 %CSTR:一人称%(은)는 언제라도 대환영이에요」
+			PRINTFORMW 「조교、입니까. 말의 느낌은 어찌되었건、%조사처리(CSTR:二人称,"가")% 상대라면 %조사처리(CSTR:一人称,"는")% 언제라도 대환영이에요」
 			PRINTFORMW 「……후후、이 쪽의 얘기입니다」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 장난스럽게 웃으며、손 끝에 감은 %CALLNAME:MASTER%의 머리카락에 가볍게 키스했다.
 		ELSE
 			;천사
 			;ストックホルム症候群にしようと思ったのにこれじゃただの勘違い野郎だ
 			IF ABL:80 == 4
-				PRINTFORMW 「……%CSTR:二人称%(이)가 왜 이런 일을 강요하는지, 줄곧 생각해봤습니다」
+				PRINTFORMW 「……%조사처리(CSTR:二人称,"가")% 왜 이런 일을 강요하는지, 줄곧 생각해봤습니다」
 				PRINTFORMW 「%CALLNAME:MASTER%……당신은 외로운거군요」
 				IF TALENT:MASTER:오토코노코
 					PRINTFORML 「남자라고도 여자라고도 말할 수 없는 애매한 성에 고뇌하고、그래서
-					PRINTFORMW 　같은 중성적인 존재인 %CSTR:一人称%와 몸을 겹치는 것으로 고독을 감출 수 있었겠지요」
+					PRINTFORMW 　같은 중성적인 존재인 %조사처리(CSTR:一人称,"과")% 몸을 겹치는 것으로 고독을 감출 수 있었겠지요」
 				ELSEIF TALENT:MASTER:남자
 					PRINTFORMW 「사람의 온기에 굶주려、그러면서도 거부되는 것을 두려워해、고로 이런식으로 억지로 인연을 묶을 수 밖에 없었던 거지요」
 				ELSE
-					PRINTFORML 「분명、몸을 주지 않으면 아무도 %CSTR:二人称%와 함께 있어주지 않는다고 생각했던 것이겠지요.
+					PRINTFORML 「분명、몸을 주지 않으면 아무도 %조사처리(CSTR:二人称,"와")% 함께 있어주지 않는다고 생각했던 것이겠지요.
 					PRINTFORMW 　자신의 가치를 육체관계에서밖에 발견하지 못하고……」
 				ENDIF
-				PRINTFORMW 「허나…이제 그런 일은 하지 않아도 괜찮습니다. %CSTR:二人称%의 마음이 채워질때까지、%CSTR:一人称%(이)가 계속 곁에 있겠습니다」
+				PRINTFORMW 「허나…이제 그런 일은 하지 않아도 괜찮습니다. %CSTR:二人称%의 마음이 채워질때까지、%조사처리(CSTR:一人称,"가")% 계속 곁에 있겠습니다」
 				PRINTFORMW %조사처리(CALLNAME,"는")% 꽉 %플레이어를()% 껴안았다.
 				PRINTFORMW 「진심으로 사랑받는 기쁨을 알게되면、%CSTR:二人称%도 분명 진짜 인간으로 돌아올 수 있을겁니다」
-				PRINTFORMW 「지금 당장 변하는 것은 어려울지도 모릅니다. 하지만、%CSTR:一人称%(은)는 절대로 %CSTR:二人称%(을)를 버리거나 하지 않으니……」
+				PRINTFORMW 「지금 당장 변하는 것은 어려울지도 모릅니다. 하지만、%조사처리(CSTR:一人称,"는")% 절대로 %조사처리(CSTR:二人称,"를")% 버리거나 하지 않으니……」
 			ELSE
 			;Q.惚れさせるまでは守るって、惚れてからはどうすんの？
 			;A.危ないことをさせたくないので二人で隠遁生活しましょう
 				PRINTFORMW 「……언제부터였을까요. %CSTR:二人称%에게 요구될때마다 가슴이 뛰게 된 것은」
 				PRINTFORMW 「처음에는 단순한 놀이를 할 생각이었는데、이래서야 입장 역전이네요」
 				PRINTFORMW %조사처리(CALLNAME,"는")% 쓴웃음을 지은채 %CALLNAME:MASTER%의 손을 잡고、살그머니 자신의 가슴에 눌렀다.
-				PRINTFORMW 「아십니까？ %CSTR:一人称%(은)는 괴롭습니다. %CSTR:二人称%(이)가 %CSTR:一人称%(을)를 어떻게 생각하는지 몰라서……」
-				PRINTFORMW 「한번이라도 좋습니다、사랑하고 있다고 해주세요. 그러면 %CSTR:一人称%(은)는 구원받습니다」
-				PRINTFORMW 「……거짓말이라도 상관없어요. 언젠가 정말로 %CSTR:二人称%(을)를 %CSTR:一人称%의 포로로 해보일테니」
-				PRINTFORMW 「그 때까지는、이 %타겟이(1)% %CSTR:二人称%의 방패가 되어 %CSTR:二人称%(을)를 지켜보이겠습니다」
+				PRINTFORMW 「아십니까？ %조사처리(CSTR:一人称,"는")% 괴롭습니다. %조사처리(CSTR:二人称,"가")% %조사처리(CSTR:一人称,"를")% 어떻게 생각하는지 몰라서……」
+				PRINTFORMW 「한번이라도 좋습니다、사랑하고 있다고 해주세요. 그러면 %조사처리(CSTR:一人称,"는")% 구원받습니다」
+				PRINTFORMW 「……거짓말이라도 상관없어요. 언젠가 정말로 %조사처리(CSTR:二人称,"를")% %CSTR:一人称%의 포로로 해보일테니」
+				PRINTFORMW 「그 때까지는、이 %타겟이(1)% %CSTR:二人称%의 방패가 되어 %조사처리(CSTR:二人称,"를")% 지켜보이겠습니다」
 			ENDIF
 		ENDIF
 	;음란
 	ELSEIF TALENT:4
 		;천사
 		IF ABL:80 == 4
-			PRINTFORMW 「평안하십니까、주인님……。%CSTR:二人称%의 탓으로、%CSTR:一人称%(은)는 이런 모습이 되어버렸습니다」
+			PRINTFORMW 「평안하십니까、주인님……。%CSTR:二人称%의 탓으로、%조사처리(CSTR:一人称,"는")% 이런 모습이 되어버렸습니다」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 비틀비틀 %CALLNAME:MASTER%에게 달라붙어、겹치듯이 양 날개를 펼쳐보였다.
 			PRINTFORMW 그 날개는 매끄럽고 아름답고、단 한가지 칠흑으로 물들어있다는 것만이 이전의 모습과 달라져 있었다.
 			PRINTFORMW 「색욕에 사로잡혀、신의 말을 계속 외면해온 바보의 말로가 이것입니다」
@@ -227,17 +227,17 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 			PRINTFORMW %조사처리(CALLNAME,"는")% 힘 없이 웃고있다.
 			PRINTFORMW 이미 하늘로 돌아가는 것조차 할 수 없는 그로서는、의지할 수 있는 것은 %CALLNAME:MASTER%뿐인 것이다……
 		ELSEIF TALENT:자제심
-			PRINTFORML 「%CSTR:一人称%(은)는 어떻게 되어버린건지. 온종일 %CSTR:二人称%와의 정사밖에는 생각할 수 없어……
+			PRINTFORML 「%조사처리(CSTR:一人称,"는")% 어떻게 되어버린건지. 온종일 %조사처리(CSTR:二人称,"와")%의 정사밖에는 생각할 수 없어……
 			PRINTFORMW 　마치 머리의 나사가 빠져버린 것 같아」
 			PRINTFORMW 「……이대로、%CSTR:二人称%의 냄새를 맡는 것만으로도 하반신이 반응해버리고 맙니다」
 			PRINTFORMW 그렇게 자조하는 %CALLNAME%의 목소리가 떨리고、자세히 보자 뭔가를 참고 있는듯이 주먹을 꽉 움켜쥐고 있다.
-			PRINTFORMW 사실은 당장이라도 %CALLNAME:MASTER%를 덮치고 싶은 것을 이성으로 참고 있다는 것일 것이다.
+			PRINTFORMW 사실은 당장이라도 %조사처리(CALLNAME:MASTER,"를")% 덮치고 싶은 것을 이성으로 참고 있다는 것일 것이다.
 			PRINTFORML 「……하지만、그것도 무리도 아닐지도 모릅니다. 그런 정도를 어긋난 경험을 반복해버린 탓인지、
 			PRINTFORMW 　이제 보통의 쾌락으로는 만족하지 못하게 되어버렸으니……」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 천천히 일어서、%플레이어를()% 벽으로 몰아넣듯이 압박하기 시작했다.
-			PRINTFORMW 「자、오늘은 어떻게 하겠습니까？ ……%CSTR:一人称%(을)를 이렇게 만든 책임을 져줘야겠어요」
+			PRINTFORMW 「자、오늘은 어떻게 하겠습니까？ ……%조사처리(CSTR:一人称,"를")% 이렇게 만든 책임을 져줘야겠어요」
 		ELSE
-			PRINTFORMW 「크、크크크……아무래도 %CSTR:二人称%(은)는、상당히 %CSTR:一人称%(을)를 진심으로 만들고 싶은 것 같군」
+			PRINTFORMW 「크、크크크……아무래도 %조사처리(CSTR:二人称,"는")%、상당히 %조사처리(CSTR:一人称,"를")% 진심으로 만들고 싶은 것 같군」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 대단히 유쾌한듯한 웃음소리를 흘렸다.
 			PRINTFORMW 「이런 농간、악마의 세계에서조차 좀처럼 볼 수 없기 때문에.
 			PRINTFORMW 　……오랫만에 야성이라는 것을 떠올렸습니다」
@@ -250,15 +250,15 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 		;천사
 		IF ABL:80 == 4
 			;二人称が서머너とかニンゲンだと微妙にニュアンスがおかしくなるので당신固定で
-			PRINTFORMW 「%CSTR:一人称%(은)는 ……신의 좋은 종이었습니다」
+			PRINTFORMW 「%조사처리(CSTR:一人称,"는")% ……신의 좋은 종이었습니다」
 			PRINTFORMW 바닥에 무릎을 꿇은 %조사처리(CALLNAME,"가")% 툭하고 입을 열었다.
 			PRINTFORMW 「신의 영광을 믿고、자신의 정의를 믿고、올바른 행동은 반드시 보답받는다고……그렇게 믿고 있었습니다. 그런데도」
 			PRINTFORMW %조사처리(CALLNAME,"가")% 두려움으로 가득찬 눈으로 %플레이어를()% 올려다본다.
 			PRINTFORMW 「당신이……당신에게 괴롭힘 당하고 있을때、신은 %CSTR:一人称%의 외침을 무시했어！」
 			PRINTFORMW 「당신을 뉘우치게하려고 한 %CSTR:一人称%의 말은 아무런 효력도 없었어！」
-			PRINTFORMW 「%CSTR:一人称%(이)가 믿고 있던 것은、%CSTR:一人称%의 버팀목이었던 것은、……도대체 뭐였던겁니까！」
+			PRINTFORMW 「%조사처리(CSTR:一人称,"가")% 믿고 있던 것은、%CSTR:一人称%의 버팀목이었던 것은、……도대체 뭐였던겁니까！」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 비통한 절규를 내지르며, 어깨를 축 늘어트린다.
-			PRINTFORMW 「……%CSTR:一人称%는 이제 아무것도 믿을 수 없습니다. 이런 일이 있은 후에 지금까지처럼 신을 받을다니……할 수 없어………」
+			PRINTFORMW 「……%조사처리(CSTR:一人称,"는")% 이제 아무것도 믿을 수 없습니다. 이런 일이 있은 후에 지금까지처럼 신을 받을다니……할 수 없어………」
 			PRINTFORMW 오열하는 %CALLNAME%의 몸에서 유일신의 가호가 사라져가는 것이 느껴진다……
 			PRINTFORMW 정신적 지주를 잃고、이렇게 되어버리면 이제 악마로서는 갓난아이나 마찬가지다.
 			PRINTFORMW 차분히 %CALLNAME:MASTER% 취향으로 물들여가도록하자……
@@ -266,8 +266,8 @@ ELSEIF CFLAG:201 < 5 && (TALENT:3 || TALENT:4 || TALENT:5)
 			PRINTFORMW 「…………」
 			PRINTFORML 이상하게 얌전한 %CALLNAME%에게、저항하지 않느냐고 무심코 묻자、
 			PRINTFORMW %조사처리(CALLNAME,"는")% 단념한듯이 미소지으며 고개를 저었다.
-			PRINTFORMW 「……%CSTR:一人称%(은)는 이제、%CSTR:二人称%에게 거역하거나 하지 않습니다」
-			PRINTFORMW 그 말을 들은 %조사처리(CALLNAME:MASTER,"는")% 아무말도 하지 않고 %CALLNAME%(을)를 바닥에 냅다 밀치고、
+			PRINTFORMW 「……%조사처리(CSTR:一人称,"는")% 이제、%CSTR:二人称%에게 거역하거나 하지 않습니다」
+			PRINTFORMW 그 말을 들은 %조사처리(CALLNAME:MASTER,"는")% 아무말도 하지 않고 %조사처리(CALLNAME,"를")% 바닥에 냅다 밀치고、
 			PRINTFORMW 당황하면서도 저항하지 않는 그의 사타구니를 맘껏 유린했다.
 			PRINTFORMW 「히잇…！뭐、뭘！？」
 			PRINTFORMW 그 질문에는 답하지않고、발을 걸어 힘을 늘려나간다.
@@ -348,7 +348,7 @@ ELSEIF MARK:2 == 1 && (CFLAG:202 < 2 || FLAG:7 == 2)
 	IF TALENT:자제심
 		PRINTFORMW 「일단 상대는 합니다만、이 행위를 환영하는 것은 아니에요」
 	ELSE
-		PRINTFORMW 「이런식으로 어울려드리고 있으니、적어도 %CSTR:一人称%(을)를 만족시켜보세요」
+		PRINTFORMW 「이런식으로 어울려드리고 있으니、적어도 %조사처리(CSTR:一人称,"를")% 만족시켜보세요」
 	ENDIF
 	CFLAG:202 = 2
 ;굴복각인Lv2
@@ -356,7 +356,7 @@ ELSEIF MARK:2 == 2 && (CFLAG:202 < 3 || FLAG:7 == 2)
 	PRINTFORMW 「……%CSTR:二人称%도 꽤나 숙련되어있는 것 같군요」
 	;천사
 	IF ABL:80 == 4
-		PRINTFORMW 「이것은 주께서 %CSTR:一人称%의 정신력을 시험하고 계신것이 틀림 없습니다……%CSTR:一人称%(은)는 욕정에 지거나하지 않습니다！」
+		PRINTFORMW 「이것은 주께서 %CSTR:一人称%의 정신력을 시험하고 계신것이 틀림 없습니다……%조사처리(CSTR:一人称,"는")% 욕정에 지거나하지 않습니다！」
 	ELSE
 		PRINTFORMW 「기쁩니다、이 정도는 되어야 경쟁할 생각이 들기 때문에」
 	ENDIF
@@ -364,7 +364,7 @@ ELSEIF MARK:2 == 2 && (CFLAG:202 < 3 || FLAG:7 == 2)
 ;굴복각인Lv3＋함락소질無し
 ELSEIF MARK:2 == 3 && (TALENT:3 == 0 && TALENT:4 == 0 && TALENT:5 == 0 && TALENT:6 == 0 && TALENT:7 == 0 && TALENT:8 == 0) && (CFLAG:202 < 4 || FLAG:7 == 2)
 	IF TALENT:자제심
-		PRINTFORMW 「후、후……또 %CSTR:一人称%(을)를 희롱할 생각입니까. 좋습니다、이제 좋을대로 해주세요……」
+		PRINTFORMW 「후、후……또 %조사처리(CSTR:一人称,"를")% 희롱할 생각입니까. 좋습니다、이제 좋을대로 해주세요……」
 	ELSE
 		PRINTFORMW 「%CSTR:二人称%도 호색가군요……뭐、거기에 어울려주고있는 %CSTR:一人称%도 만만치 않습니다만」
 	ENDIF
@@ -376,10 +376,10 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 		;랜덤で구상が변화する（使わない場合はすべて同じにすればよい）
 		K:1 = RAND:3
 		IF K:1 == 0
-			PRINTFORMW 「%CSTR:一人称%(은)는 행운아입니다. 잠깐이라고는해도、%CSTR:二人称%(을)를 독점할 수 있으니」
+			PRINTFORMW 「%조사처리(CSTR:一人称,"는")% 행운아입니다. 잠깐이라고는해도、%조사처리(CSTR:二人称,"를")% 독점할 수 있으니」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 능글능글한 대사를 하며 %CALLNAME:MASTER%의 허리에 손을 둘렀다.
 		ELSEIF K:1 == 1
-			PRINTFORMW 「오늘은 %CALLNAME:MASTER%와 함께라고 들어 아침부터 기대했습니다」
+			PRINTFORMW 「오늘은 %조사처리(CALLNAME:MASTER,"와")% 함께라고 들어 아침부터 기대했습니다」
 			PRINTFORM %조사처리(CALLNAME,"는")% 기쁜듯이 
 			IF TALENT:날개
 				PRINTW 날개를 파닥거리고있다.
@@ -390,8 +390,8 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 			ENDIF
 		ELSE
 			PRINTFORMW %조사처리(CALLNAME,"는")% 조금 기분이 나쁜 것 같다……
-			PRINTFORMW 「……전에、%CSTR:二人称%(이)가 모르는 남성과 함께 있는 것을 봤습니다」
-			PRINTFORMW 「%CSTR:一人称%(을)를 안절부절하게 만들어서 즐기고 있습니까？ 죄 많은 사람입니다……」
+			PRINTFORMW 「……전에、%조사처리(CSTR:二人称,"가")% 모르는 남성과 함께 있는 것을 봤습니다」
+			PRINTFORMW 「%조사처리(CSTR:一人称,"를")% 안절부절하게 만들어서 즐기고 있습니까？ 죄 많은 사람입니다……」
 		ENDIF
 	;음란、창부
 	ELSEIF TALENT:4 || TALENT:7
@@ -401,7 +401,7 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 			PRINTFORMW 「기다리고 있었습니다……。후후、오싹오싹합니다」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 눈을 가늘게 뜨고 입술을 핥았다.
 		ELSEIF K:1 == 1
-			PRINTFORMW 문을 닫고、%조사처리(CALLNAME,"는")% %CALLNAME:MASTER%를 끌어당겨 억지로 입술을 빼앗았다.
+			PRINTFORMW 문을 닫고、%조사처리(CALLNAME,"는")% %조사처리(CALLNAME:MASTER,"를")% 끌어당겨 억지로 입술을 빼앗았다.
 			PRINTFORMW 「최근에는 이 것만이 기다려져……누구씨 때문에 말이죠」
 		ELSE
 			PRINTFORMW 「이 정도로 내버려둬서、주체하질 못하고 있습니다」
@@ -415,7 +415,7 @@ ELSEIF CFLAG:202 < 5 || FLAG:7 == 2
 			PRINTFORMW 「오、오늘은 뭘 하시겠습니까……？」
 			PRINTFORMW %조사처리(CALLNAME,"는")% 점차 %CALLNAME:MASTER%에게 봉사하는 것에서 기쁨을 찾아내는 것 같다……
 		ELSEIF K:1 == 1
-			PRINTFORMW 「%CALLNAME:MASTER%님께서 즐기실 수 있다면、%CSTR:一人称%(은)는 뭐든지 하겠습니다」
+			PRINTFORMW 「%CALLNAME:MASTER%님께서 즐기실 수 있다면、%조사처리(CSTR:一人称,"는")% 뭐든지 하겠습니다」
 			PRINTFORMW 「그……차이는 것도 점점 싫지 않게 됐고……」
 		ELSE
 			PRINTFORMW 「이미 도구는 준비되어 있습니다. 오늘도 잔뜩 즐겨주세요……」
@@ -449,7 +449,7 @@ RETURN 0
 DRAWLINE
 ;フルムーン
 IF FLAG:300 == 8 && CFLAG:204 == 1
-	PRINTFORMW 「……핫！%CSTR:一人称%(은)는 뭘」
+	PRINTFORMW 「……핫！%조사처리(CSTR:一人称,"는")% 뭘」
 	CFLAG:204 = 0
 ;반발각인Lv3
 ELSEIF MARK:3 == 3 && (CFLAG:217 < 1 || FLAG:7 == 2)
@@ -459,11 +459,11 @@ ELSEIF MARK:3 == 3 && (CFLAG:217 < 1 || FLAG:7 == 2)
 	CFLAG:217 = 1
 ;굴복각인Lv1以
 ELSEIF MARK:2 <= 1 && (CFLAG:219 < 1 || FLAG:7 == 2)
-	PRINTFORMW 「%CSTR:一人称%(이)가 말할만한 것은 아닙니다만、짧은 생을 이런 일에 소비해도 괜찮겠습니까？」
+	PRINTFORMW 「%조사처리(CSTR:一人称,"가")% 말할만한 것은 아닙니다만、짧은 생을 이런 일에 소비해도 괜찮겠습니까？」
 	CFLAG:219 = 1
 ;굴복각인Lv2
 ELSEIF MARK:2 == 2
-	PRINTFORMW 「……이 정도로 %CSTR:一人称%(을)를 장악했다고 생각합니까？」
+	PRINTFORMW 「……이 정도로 %조사처리(CSTR:一人称,"를")% 장악했다고 생각합니까？」
 	PRINTFORMW 말과는 정반대로、%CALLNAME%의 여유는 점점 사라져가는 것 같다……
 	CFLAG:219 = 2
 ;굴복각인Lv3＋함락소질無し
@@ -494,7 +494,7 @@ ELSEIF CFLAG:219 < 4 || FLAG:7 == 2
 	IF TALENT:3 || TALENT:6
 		;천사
 		IF ABL:80 == 4
-			PRINTFORMW 「또 언제라도 불러주세요. %CSTR:一人称%(은)는 결코 %CSTR:二人称%(을)를 거절하지 않습니다」
+			PRINTFORMW 「또 언제라도 불러주세요. %조사처리(CSTR:一人称,"는")% 결코 %조사처리(CSTR:二人称,"를")% 거절하지 않습니다」
 		ELSE
 			PRINTFORMW 「음、벌써 작별입니까……좀 더 오래 함께있고 싶습니다만」
 		ENDIF

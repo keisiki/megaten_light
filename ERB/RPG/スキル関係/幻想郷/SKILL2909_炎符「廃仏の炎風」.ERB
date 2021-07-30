@@ -36,12 +36,12 @@ RETURN GET_TYPE_NUM("화염")
 ;화염
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2909
+@SKILL_DECIDE_TYPE_2909, ARG
 RETURN 1
 ;EXTRA
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2909
+@SKILL_DAMAGETYPE_2909, ARG
 RETURN 2
 
 
@@ -122,7 +122,7 @@ CALL ATTACK_FIELD,ARG,ARG:1,2909
 
 ;　 설명文の표시
 @SKILL_EXPLAIN_2909
-PRINTL 적 １열에 화염 相性의 데미지를 주고、신도의 파마의 힘으로 승천시킨다。
+PRINTL 적 １열에 화염 상성의 데미지를 주고、신도의 파마의 힘으로 승천시킨다。
 PRINTL 외도　모노노베노 후토의 스펠카드
 
 ;継承に필요한部位

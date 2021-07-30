@@ -2,37 +2,51 @@
 ;======================================================
 ;장비品の데이터
 ;수트
-;Lv20장비までは내성が기본　기본능력に합계+2まで
 ;======================================================
 
 @기본능력수정_3534,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
-	CASE "지혜"
-		RETURN 1
-	CASE "속도"
-		RETURN -1
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
 @전투능력수정_3534,ARG,ARG:1 = -1
-SELECTCASE GET_BATTLESTATUS(ARG)
-	CASE "방어"
-		RETURN 3
-	CASE "회피"
+
+SELECTCASE ARG
+	CASE 2
+		RETURN 9
+	CASE 3
 		RETURN 4
-	CASE "마법효과"
-		RETURN 4
+	CASE 5
+		RETURN 1
 ENDSELECT
 RETURN 0
 
 @방어상성_3534,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
-	CASE "검격"
-		RETURN 95
-	CASE "화염"
-		RETURN 125
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@공격상성_3534, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_3534, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_3534, ARG = -1
+
+RETURN 1
+
+@사거리_3534, ARG = -1
+
+RETURN 1
+
+@공격범위_3534, ARG = -1
+
+RETURN 1
 
 @장비箇所_3534
 RETURN GET_EQUIPNUM("몸통")
@@ -43,13 +57,6 @@ RETURN 1
 @장비조건_3534,ARG
 RETURN 1
 
-@장비해설_3534
-PRINTL ただの安物수트
-PRINTL 　　　　　　　　
-
-
 @구입조건_3534
 RETURN 0
 
-@引継ぎ可不可_3534
-RETURN 0

@@ -40,12 +40,12 @@ RETURN 17
 ;만능
 
 ;　1EXTRAか2MAGICか
-@SKILL_DECIDE_TYPE_2939
+@SKILL_DECIDE_TYPE_2939, ARG
 RETURN 1
 
 
 ;　1물리데미지で計算するか2마법데미지で計算するか
-@SKILL_DAMAGETYPE_2939
+@SKILL_DAMAGETYPE_2939, ARG
 RETURN 2
 
 
@@ -157,7 +157,7 @@ CFLAG:ARG:ターゲット = CFLAG:ARG:포지션 < 7 ? 22 # 19
 PRINTL 적 전체에 만능 속성으로 낮은 위력의 마법 공격을 2회 실시한다。
 PRINTL 추가 효과：체력 흡수
 PRINTL 분신으로 탄막을 발사・호흡을 고르면서 체력 회복을 동시에 실시한다。
-PRINTL 성수　코마노 아운의 스펠카드（専用）
+PRINTL 성수　코마노 아운의 스펠카드（전용）
 
 ;継承に필요한部位
 @継承部位_2939,ARG

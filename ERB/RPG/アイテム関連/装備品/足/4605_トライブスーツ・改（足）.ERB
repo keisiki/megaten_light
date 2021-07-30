@@ -5,7 +5,8 @@
 ;======================================================
 
 @기본능력수정_4605,ARG,ARG:1 = -1
-SELECTCASE GET_BASESTATUS(ARG)
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 0
 
@@ -31,9 +32,30 @@ ENDSELECT
 RETURN 0
 
 @방어상성_4605,ARG,ARG:1 = -1
-SELECTCASE GET_TYPE(ARG)
+
+SELECTCASE ARG
 ENDSELECT
 RETURN 100
+
+@공격상성_4605, ARG = -1
+
+RETURN 2
+
+@최저공격횟수_4605, ARG = -1
+
+RETURN 1
+
+@최대공격횟수_4605, ARG = -1
+
+RETURN 1
+
+@사거리_4605, ARG = -1
+
+RETURN 1
+
+@공격범위_4605, ARG = -1
+
+RETURN 1
 
 @장비箇所_4605
 RETURN GET_EQUIPNUM("발")
@@ -41,12 +63,13 @@ RETURN GET_EQUIPNUM("발")
 @필요레벨_4605
 RETURN 1
 
+@장비해설_4605
+PRINTL 가혹한 '연옥'을 살아낸 자가 착용하고 있던 옷
+PRINTL 레벨・스테이터스에 따라 수치가 바뀐다
+
 @장비조건_4605,ARG
 RETURN 1
 
-@장비해설_4605
-PRINTL 過酷な『煉獄』を生き抜いた者が着けていた옷
-PRINTL 　　　　　　　　레벨・스테이터스에 따라 수치가 바뀐다
 
 
 @구입조건_4605

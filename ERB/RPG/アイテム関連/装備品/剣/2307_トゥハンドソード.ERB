@@ -47,6 +47,16 @@ RETURN 1
 @장비箇所_2307
 RETURN GET_EQUIPNUM("검")
 
+;양팔찍기
+@장비추가스킬_2307,ARG,ARG:1 = -1
+IF ARG:1 != -1 && ABL:(ARG:1):종족 == 36
+	SELECTCASE ARG
+		CASE 0
+		RETURN 4
+	ENDSELECT
+ENDIF
+RETURN 0
+
 ;-----------------------------
 ;- SHOP
 ;-----------------------------
@@ -68,6 +78,9 @@ PRINTL 장비조건：LV25～
 
 @장비해설_2307
 PRINTL 양손으로 다루는、자루가 긴 검。
+SETCOLOR 0xdc143c
+PRINTL 반마인 추가스킬：양팔찍기
+RESETCOLOR
 
 RETURN 0
 

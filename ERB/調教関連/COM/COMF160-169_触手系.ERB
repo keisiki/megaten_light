@@ -1,9 +1,36 @@
-﻿;-------------------------------------------------
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:COMF160-169_触手系.ERB
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		XXXX/XX/XX		------					新規作成
+;	002		2020/09/06		MkjX					触手系コマンドを修正
+;	003		2020/10/19		JK好き					掲示板に書いてあった通りに修正
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;-------------------------------------------------
 ;촉수소환および派生コマンド
 ;촉수계コマンド
 ;-------------------------------------------------
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME160
+IF TEQUIP:25 == 1
+	RESULTS = 촉수송환
+ELSE
+	RESULTS = 촉수소환
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 @ACT_COM160
-PRINTL 촉수소환
+;---- EDIT 002 촉수系コマンドを수정 MOD START ----
+IF TEQUIP:25 == 1
+	PRINTL 촉수송환
+ELSE
+	PRINTL 촉수소환
+ENDIF
+;PRINTL 촉수소환
+;---- EDIT 002 촉수系コマンドを수정 MOD END   ----
 TSTR:0 = 촉수소환
 ;CALL KOJO_MESSAGE_COM
 
@@ -17,30 +44,39 @@ IF TEQUIP:25 == 0
 	TEQUIP:14 = 0
 	TEQUIP:16 = 0
 	TEQUIP:17 = 0
-;	TEQUIP:19 = 0
+	TEQUIP:19 = 0
 	TEQUIP:21 = 0
-	TEQUIP:22 = 0
-;	TEQUIP:37 = 0
+	TEQUIP:37 = 0
 	TEQUIP:PLAYER:11 = 0
 	TEQUIP:PLAYER:12 = 0
 	TEQUIP:PLAYER:13 = 0
 	TEQUIP:PLAYER:14 = 0
 	TEQUIP:PLAYER:16 = 0
 	TEQUIP:PLAYER:17 = 0
-	SIF FLAG:47
-		TEQUIP:촉수위험도 = LIMIT((FLAG:촉수레벨 - BASE:PLAYER:LV) * 10, 10, 80)
-;촉수해제時はソース、経験の加算は行わず終了する
+;---- EDIT 002 촉수系コマンドを수정 MOD START ----
+	TEQUIP:촉수위험도 = 0
+;	SIF FLAG:47
+;		TEQUIP:촉수위험도 = LIMIT((FLAG:촉수레벨 - BASE:PLAYER:LV) * 10, 10, 80)
+;---- EDIT 002 촉수系コマンドを수정 MOD END   ----
+;촉수해제時は소스、경험の加算は行わず종료する
 ELSE
-	TEQUIP:25 = 0
-	;촉수계コマンドの장비も해제する
+;---- EDIT 002 촉수系コマンドを수정 MOD START ----
+	;TEQUIP:25 = 0
+	;촉수系コマンドの장비も해제する
 	TEQUIP:11 = 0
 	TEQUIP:12 = 0
 	TEQUIP:13 = 0
 	TEQUIP:14 = 0
 	TEQUIP:16 = 0
 	TEQUIP:17 = 0
-;	TEQUIP:19 = 0
-	TEQUIP:21 = 0
+	TEQUIP:19 = 0
+	;촉수관장中ならまき散らす
+	IF TEQUIP:21 == 1
+		;촉수관장
+		CALL COM146
+	ENDIF
+;	TEQUIP:21 = 0
+	TEQUIP:22 = 0
 	TEQUIP:36 = 0
 	TEQUIP:PLAYER:11 = 0
 	TEQUIP:PLAYER:12 = 0
@@ -48,6 +84,11 @@ ELSE
 	TEQUIP:PLAYER:14 = 0
 	TEQUIP:PLAYER:16 = 0
 	TEQUIP:PLAYER:17 = 0
+	;最後に촉수해제
+	TEQUIP:25 = 0
+	TSTR:0 = 촉수送還
+;---- EDIT 002 촉수系コマンドを수정 MOD END   ----
+
 	RETURN 1
 ENDIF
 
@@ -217,6 +258,11 @@ IF MAXBASE:MASTER:4 != 0
 	;촉수구욕
 	SIF TEQUIP:36
 		TIMES B , 1.50
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+	;애널극태촉수
+	SIF TEQUIP:22
+		TIMES B , 1.50
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 	BASE:MASTER:4 += B
 ENDIF
@@ -466,6 +512,11 @@ IF E > 0
 	;촉수구욕
 	SIF TEQUIP:36
 		CALL SET_STAIN("입", "정액", TARGET)
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+	;애널극태촉수
+	SIF TEQUIP:22
+		CALL SET_STAIN("애널", "정액", TARGET)
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 ENDIF
 
 
@@ -491,103 +542,291 @@ IF TALENT:5 && ASSIPLAY == 0
 ELSEIF TALENT:8 && ASSIPLAY == 0
 	TFLAG:30 = 4
 ENDIF
+
+;---- EDIT 002 촉수系コマンドを수정 MOD START ----
+;コマンド名退避
+;ARGS:0 = %TSTR:0%
+LOCALS:0 = %TSTR:0%
+
+;촉수소환이외なら暴走판정
+IF SELECTCOM != 160
+	IF FLAG:촉수레벨 <= TEQUIP:촉수위험도 || TFLAG:48
 ;IF RAND:100 + 1 < TEQUIP:촉수위험도 && FLAG:47 && SELECTCOM != 160 && FLAG:촉수레벨 > 0
-;PRINTL 　
-;PRINTW 	･
-;PRINTW 	･
-;PRINTW 	･
-;PRINTW 	!
-;PRINT 촉수는 주어진 명령에 따르지 않고、
-;PRINT 마치 자신의 사고가 있는 것처럼
-;PRINTL 멋대로 움직이기 시작했다…
-;PRINTL 
-;PRINTW 	･
-;PRINTW 	･
-;PRINTW 	･
-;
-;	IF !USE_CLI(TARGET)
-;		TEQUIP:12 = 1
-;	ELSE
-;		TEQUIP:11 = 1
-;	ENDIF
-;	IF TALENT:남자 == 0
-;		TFLAG:19 = 1
-;		TEQUIP:13 = 1
-;	ENDIF
-;	TEQUIP:14 = 1
-;	IF TALENT:모유체질
-;		TEQUIP:17 = 1
-;	ELSE
-;		TEQUIP:16 = 1
-;	ENDIF
-;	TEQUIP:19 = 1
-;	TEQUIP:36 = 1
-;	
-;	IF RAND:100 >= 5 + LIMIT((FLAG:촉수레벨 - BASE:LV) * 10, 0, 80)
-;		PRINTFORM 촉수는、%타겟을()% 덮치는 것만으로 만족하지 못하고 
-;		PRINTFORM %CALLNAME:PLAYER%에게 덤벼들었다
-;		IF !USE_CLI(PLAYER)
-;			TEQUIP:PLAYER:12 = 1
-;		ELSE
-;			TEQUIP:PLAYER:11 = 1
-;		ENDIF
-;		IF TALENT:PLAYER:남자 == 0
-;			TEQUIP:PLAYER:13 = 1
-;		ENDIF
-;		TEQUIP:PLAYER:14 = 1
-;		IF TALENT:PLAYER:모유체질
-;			TEQUIP:PLAYER:17 = 1
-;		ELSE
-;			TEQUIP:PLAYER:16 = 1
-;		ENDIF
-;	ENDIF
-;	
-;	TEQUIP:촉수위험도 = LIMIT((FLAG:촉수레벨 - BASE:LV) * 10, 10, 80)
-;ENDIF
+
+
+	PRINTL 　
+	PRINTW 	･
+	PRINTW 	･
+	PRINTW 	･
+	PRINTW 	!
+	PRINT 촉수는 주어진 명령에 따르지 않고、
+	PRINT 마치 자신의 사고가 있는 것처럼
+	PRINTL 멋대로 움직이기 시작했다…
+	PRINTL 
+	PRINTW 	･
+	PRINTW 	･
+	PRINTW 	･
+
+		;남자か후타나리
+		IF HAVE_PENIS(TARGET)
+		;IF !USE_CLI(TARGET)
+			;未実行확인
+			IF TEQUIP:12 == 0
+				;촉수페니스자극
+				CALL COM169
+				;TEQUIP:12 = 1
+			ENDIF
+		ELSE
+			;未実行확인
+			IF TEQUIP:11 == 0
+				;촉수클리자극
+				CALL COM42
+				;TEQUIP:11 = 1
+			ENDIF
+		ENDIF
+		
+		IF TALENT:남자 == 0
+			;未実行확인
+			IF TEQUIP:13 == 0
+				;촉수삽입
+				CALL COM44
+				;TFLAG:19 = 1
+				;TEQUIP:13 = 1
+			ENDIF
+		ENDIF
+		
+		;同じ個所が複数つくと해제できなくなる
+		;尻が空いてるか
+		IF !(TEQUIP:14 || TEQUIP:21 || TEQUIP:22)
+			;애널촉수
+			CALL COM45
+			;TEQUIP:14 = 1
+		ENDIF
+		
+		;가슴が空いてるか
+		IF !(TEQUIP:16 || TEQUIP:17)
+			IF TALENT:모유체질
+				;촉수착유
+				CALL COM49
+				;TEQUIP:17 = 1
+			ELSE
+				;촉수유두자극
+				CALL COM47
+				;TEQUIP:16 = 1
+			ENDIF
+		ENDIF
+		
+		;未実行확인
+		IF TEQUIP:19 == 0
+			;촉수긴박
+			CALL COM106
+			;TEQUIP:19 = 1
+		ENDIF
+		
+		;未実行확인
+		IF TEQUIP:36 == 0
+			;촉수구욕
+			CALL COM168
+			;TEQUIP:36 = 1
+		ENDIF
+		
+		;촉수폭주フラグ초기化
+		TFLAG:48 = 0
+	ENDIF
+
+	IF (FLAG:촉수레벨 + RAND:100) <= TEQUIP:촉수위험도 || TFLAG:49
+	
+		PRINTL 　
+		PRINTW 	･
+		PRINTW 	･
+		PRINTW 	･
+		PRINTW 	!
+		PRINTFORM 촉수는 %조사처리(CALLNAME:TARGET,"를")% 덮치는 것만으로는 성에 차지 않아
+		PRINTL 
+		PRINTFORM %조사처리(CALLNAME:PLAYER,"를")% 덮쳤다
+		PRINTL 
+		PRINTW 	･
+		PRINTW 	･
+		PRINTW 	･
+		
+		IF HAVE_PENIS(PLAYER)
+		;IF !USE_CLI(PLAYER)
+			;未実行확인
+			IF TEQUIP:PLAYER:12 == 0
+				;촉수페니스자극시킨다
+				CALL COM51
+				;TEQUIP:PLAYER:12 = 1
+			ENDIF
+		ELSE
+			;未実行확인
+			IF TEQUIP:PLAYER:11 == 0
+				;촉수클리자극시킨다
+				CALL COM50
+				;TEQUIP:PLAYER:11 = 1
+			ENDIF
+		ENDIF
+		
+		IF TALENT:PLAYER:남자 == 0
+			;未実行확인
+			IF TEQUIP:PLAYER:13 == 0
+				;촉수삽입시킨다
+				CALL COM52
+				;TEQUIP:PLAYER:13 = 1
+			ENDIF
+		ENDIF
+		
+		;同じ個所が複数つくと해제できなくなる
+		;尻が空いてるか
+		IF !(TEQUIP:PLAYER:14 || TEQUIP:PLAYER:21 || TEQUIP:PLAYER:22)
+			;애널촉수시킨다
+			CALL COM53
+			;TEQUIP:PLAYER:14 = 1
+		ENDIF
+		
+		;가슴が空いてるか
+		IF !(TEQUIP:PLAYER:16 || TEQUIP:PLAYER:17)
+			IF TALENT:PLAYER:모유체질
+				;촉수착유시킨다
+				CALL COM56
+				;TEQUIP:PLAYER:17 = 1
+			ELSE
+				;촉수유두자극시킨다
+				CALL COM55
+				;TEQUIP:PLAYER:16 = 1
+			ENDIF
+		ENDIF
+		
+		
+		;촉수폭주시킨다フラグ초기化
+		TFLAG:49 = 0
+		;TEQUIP:촉수위험도 = LIMIT((FLAG:촉수레벨 - BASE:LV) * 10, 10, 80)
+	ENDIF
+	
+	;他コマンドを呼び出したため退避した전회조교コマンドを付け直す
+	;TSTR:0 = %ARGS:0%
+	TSTR:0 = %LOCALS:0%
+
+ENDIF
+
+
+TEQUIP:촉수위험도 += 1
 ;SIF FLAG:47
 ;	TEQUIP:촉수위험도 += RAND:3
-;RETURN 1
+;---- EDIT 002 촉수系コマンドを수정 MOD END   ----
 
+RETURN 1
 
 
 ;-------------------------------------------------
 ;派生コマンドの処理
 ;-------------------------------------------------
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME161
+IF TEQUIP:13 == 1
+	RESULTS = 촉수삽입해제
+ELSE
+	RESULTS = 촉수삽입
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
+
 @ACT_COM161
 ;촉수삽입
 JUMP COM44
 RETURN 1
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME162
+IF TEQUIP:14 == 1
+	RESULTS = 애널촉수해제
+ELSE
+	RESULTS = 애널촉수
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 @ACT_COM162
 ;애널촉수
 JUMP COM45
 RETURN 1
 
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME163
+IF TEQUIP:11 == 1
+	RESULTS = 촉수클리자극해제
+ELSE
+	RESULTS = 촉수클리자극
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
+
 @ACT_COM163
 ;촉수클리자극
 JUMP COM42
 RETURN 1
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME164
+IF TEQUIP:16 == 1
+	RESULTS = 촉수유두자극해제
+ELSE
+	RESULTS = 촉수유두자극
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 @ACT_COM164
 ;촉수유두자극
 JUMP COM47
 RETURN 1
 
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME165
+IF TEQUIP:17 == 1
+	RESULTS = 촉수착유해제
+ELSE
+	RESULTS = 촉수착유
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
+
 @ACT_COM165
 ;촉수착유
 JUMP COM49
 RETURN 1
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME166
+IF TEQUIP:19 == 1
+	RESULTS = 촉수긴박해제
+ELSE
+	RESULTS = 촉수긴박
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 @ACT_COM166
 ;촉수긴박
 JUMP COM106
 RETURN 1
 
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME167
+IF TEQUIP:21 == 1
+	RESULTS = 촉수관장해제
+ELSE
+	RESULTS = 촉수관장
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
+
 @ACT_COM167
 ;촉수관장
 JUMP COM146
 RETURN 1
 
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME168
+IF TEQUIP:36 == 1
+	RESULTS = 촉수구욕해제
+ELSE
+	RESULTS = 촉수구욕
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 @ACT_COM168
 ;촉수구욕
@@ -666,40 +905,143 @@ CALL ADDS_EXP("촉수경험", 1, TARGET)
 RETURN 1
 
 
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME169
+IF TEQUIP:12 == 1
+	RESULTS = 촉수페니스자극해제
+ELSE
+	RESULTS = 촉수페니스자극
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
+
 @ACT_COM169
 ;촉수페니스자극
 JUMP COM43
 RETURN 1
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME170
+IF TEQUIP:PLAYER:13 == 1
+	RESULTS = 촉수삽입시킨다해제
+ELSE
+	RESULTS = 촉수삽입시킨다
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 @ACT_COM170
 ;촉수삽입시킨다
 JUMP COM52
 RETURN 1
 
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME171
+IF TEQUIP:PLAYER:14 == 1
+	RESULTS = 애널촉수시킨다해제
+ELSE
+	RESULTS = 애널촉수시킨다
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
+
 @ACT_COM171
 ;애널촉수시킨다
 JUMP COM53
 RETURN 1
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME172
+IF TEQUIP:PLAYER:11 == 1
+	RESULTS = 촉수클리자극시킨다해제
+ELSE
+	RESULTS = 촉수클리자극시킨다
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 @ACT_COM172
 ;촉수클리자극시킨다
 JUMP COM50
 RETURN 1
 
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME173
+IF TEQUIP:PLAYER:16 == 1
+	RESULTS = 촉수유두자극시킨다해제
+ELSE
+	RESULTS = 촉수유두자극시킨다
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
+
 @ACT_COM173
 ;촉수유두자극시킨다
 JUMP COM55
 RETURN 1
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME174
+IF TEQUIP:PLAYER:17 == 1
+	RESULTS = 촉수착유시킨다해제
+ELSE
+	RESULTS = 촉수착유시킨다
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 @ACT_COM174
 ;촉수착유시킨다
 JUMP COM56
 RETURN 1
 
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME175
+IF TEQUIP:PLAYER:12 == 1
+	RESULTS = 촉수페니스자극시킨다해제
+ELSE
+	RESULTS = 촉수페니스자극시킨다
+ENDIF
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
+
 @ACT_COM175
 ;촉수페니스자극시킨다
 JUMP COM51
 RETURN 1
+
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMNAME176
+IF TEQUIP:22 == 1
+	RESULTS = 애널극태촉수해제
+ELSE
+	RESULTS = 애널극태촉수
+ENDIF
+
+@ACT_COM176
+;애널극태촉수
+JUMP COM148
+RETURN 1
+
+@COMNAME177
+RESULTS = 촉수폭주
+
+@ACT_COM177
+;촉수폭주
+PRINTL 촉수폭주
+TSTR:0 = 촉수폭주
+SELECTCOM = 177
+
+TFLAG:48 = 1
+RETURN 1
+
+@COMNAME178
+RESULTS = 촉수폭주시킨다
+
+@ACT_COM178
+;촉수폭주시킨다
+PRINTL 촉수폭주시킨다
+TSTR:0 = 촉수폭주시킨다
+SELECTCOM = 178
+
+TFLAG:49 = 1
+
+RETURN 1
+
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 ;===================================================
 ;조교타입
@@ -736,6 +1078,14 @@ RETURN COMTYPE("촉수계")
 RETURN COMTYPE("촉수계")
 @COMTYPE_175
 RETURN COMTYPE("촉수계")
+;---- EDIT 002 촉수系コマンドを수정 ADD START ----
+@COMTYPE_176
+RETURN COMTYPE("촉수계")
+@COMTYPE_177
+RETURN COMTYPE("촉수계")
+@COMTYPE_178
+RETURN COMTYPE("촉수계")
+;---- EDIT 002 촉수系コマンドを수정 ADD END   ----
 
 
 
