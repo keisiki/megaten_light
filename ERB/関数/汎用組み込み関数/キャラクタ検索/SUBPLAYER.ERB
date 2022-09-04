@@ -1,0 +1,12 @@
+﻿;========================================
+;@SUBPLAYER MASTER와 ASSI 중 PLAYER가 아닌 쪽을 반환
+;단、성질상、ASSI == -1(ASSI부재)와 일치를 해 버리면 여러가지 귀찮게 되므로
+;ASSI가 존재할 수 없는 상황이라면 -2를 반환시킨다
+;========================================
+@SUBPLAYER
+#FUNCTION
+SIF ASSI < 0
+	RETURNF -2
+SIF ASSIPLAY
+	RETURNF MASTER
+RETURNF ASSI

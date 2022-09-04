@@ -1,6 +1,10 @@
-﻿
-@SHOPCOMABLE_108
-RESULT:1 = 1
+﻿;	Edit	Date			Author					Reason
+;	000		20xx/xx/xx		----					新規作成
+;	001		2022/06/07		Collared				UI整理プロジェクトにより配置変更
+
+
+@SHOPCOMABLE_202
+RESULT:1 = 2
 RESULTS = 파트너변경
 LOCAL:1 = 0
 FOR LOCAL,1,CHARANUM
@@ -8,11 +12,11 @@ FOR LOCAL,1,CHARANUM
 		CONTINUE
 	SIF TALENT:LOCAL:맹우
 		CONTINUE
-	SIF CFLAG:LOCAL:この場に居ないフラグ >= 1
+	SIF CFLAG:LOCAL:이자리에없는플래그 >= 1
 		CONTINUE
-	SIF CFLAG:LOCAL:노역フラグ == 3
+	SIF CFLAG:LOCAL:노역플래그 == 3
 			CONTINUE
-	SIF ((TALENT:LOCAL:임신 && CFLAG:LOCAL:출산予定日 - 2 <= DAY) || TALENT:LOCAL:육아중) && FLAG:출산기능ONOFF == 1
+	SIF ((TALENT:LOCAL:임신 && CFLAG:LOCAL:출산예정일 - 2 <= DAY) || TALENT:LOCAL:육아중) && FLAG:출산기능ONOFF == 1
 		CONTINUE
 	LOCAL:1 += 1
 NEXT
@@ -21,19 +25,19 @@ IF LOCAL:1 >= 1
 ENDIF
 RETURN 0
 
-@SHOPCOMABLE_109
-RESULT:1 = 1
+@SHOPCOMABLE_203
+RESULT:1 = 2
 RESULTS = 조수변경
 ;조수가능キャラがいるなら
 SIF CHARANUM < 2
 	RETURN 0
 LOCAL:1 = 0
 FOR LOCAL,1,CHARANUM
-	SIF CFLAG:LOCAL:この場に居ないフラグ >= 1
+	SIF CFLAG:LOCAL:이자리에없는플래그 >= 1
 		CONTINUE
-	SIF CFLAG:LOCAL:노역フラグ == 3
+	SIF CFLAG:LOCAL:노역플래그 == 3
 		CONTINUE
-	SIF ((TALENT:LOCAL:임신 && CFLAG:LOCAL:출산予定日 - 2 <= DAY) || TALENT:LOCAL:육아중) && FLAG:출산기능ONOFF == 1
+	SIF ((TALENT:LOCAL:임신 && CFLAG:LOCAL:출산예정일 - 2 <= DAY) || TALENT:LOCAL:육아중) && FLAG:출산기능ONOFF == 1
 		CONTINUE
 	SIF CFLAG:LOCAL:매각가능 < 2
 		CONTINUE
@@ -50,34 +54,34 @@ RETURN 0
 SIF ARG == MASTER
 	RETURNF 0
 ;노역中キャラは除外
-SIF CFLAG:ARG:노역フラグ == 3
+SIF CFLAG:ARG:노역플래그 == 3
 	RETURNF 0
-SIF ((TALENT:ARG:임신 && CFLAG:ARG:출산予定日 - 2 <= DAY) || TALENT:ARG:육아중) && FLAG:출산기능ONOFF == 1
+SIF ((TALENT:ARG:임신 && CFLAG:ARG:출산예정일 - 2 <= DAY) || TALENT:ARG:육아중) && FLAG:출산기능ONOFF == 1
 	RETURNF 0
 ;失踪中などこの場にいないなら除外
-SIF CFLAG:ARG:この場に居ないフラグ
+SIF CFLAG:ARG:이자리에없는플래그
 	RETURNF 0
 RETURNF 1
 
 
-@SHOP_COM_108
+@SHOP_COM_202
 PRINTL
 CUSTOMDRAWLINE =
 ;キャラリストを표시
-CALL INPUT_CHARA_LIST("누구를 파트너로 합니까？", "CASTING_SHOPCOM_108")
+CALL INPUT_CHARA_LIST("누구를 파트너로 합니까？", "CASTING_SHOPCOM_202")
 SIF RESULT == 1000
 	RETURN 0
 TARGET = RESULT
 SIF TARGET == ASSI
 	ASSI = -1
 
-@CASTING_SHOPCOM_108(ARG)
+@CASTING_SHOPCOM_202(ARG)
 ;主人は除外
 SIF !PARTNER_ABLE(ARG)
 	RETURN 0
 SIF TALENT:ARG:맹우
 	RETURN 0
-SIF CFLAG:ARG:필터링フラグ
+SIF CFLAG:ARG:필터링플래그
 	RETURN 0
 RETURN 1
 
@@ -89,19 +93,19 @@ SIF MARK:ARG:반발각인 > 0
 SIF ARG == MASTER
 	RETURNF 0
 ;노역中キャラは除外
-SIF CFLAG:ARG:노역フラグ == 3
+SIF CFLAG:ARG:노역플래그 == 3
 	RETURNF 0
-SIF ((TALENT:ARG:임신 && CFLAG:ARG:출산予定日 - 2 <= DAY) || TALENT:ARG:육아중) && FLAG:출산기능ONOFF == 1
+SIF ((TALENT:ARG:임신 && CFLAG:ARG:출산예정일 - 2 <= DAY) || TALENT:ARG:육아중) && FLAG:출산기능ONOFF == 1
 	RETURNF 0
 ;失踪中などこの場にいないなら除外
-SIF CFLAG:ARG:この場に居ないフラグ
+SIF CFLAG:ARG:이자리에없는플래그
 	RETURNF 0
 ;조수가능でないものは除外
 SIF CFLAG:ARG:매각가능 < 2
 	RETURNF 0
 RETURNF 1
 
-@SHOP_COM_109
+@SHOP_COM_203
 #DIM LCOUNT
 P = 0
 ;표시させるキャラを抽出（Q:*に표시するキャラの등록번호、LOCAL:2に人数）
@@ -110,7 +114,7 @@ A = 0
 FOR LCOUNT, 0, CHARANUM
 	SIF !ASSI_ABLE(LCOUNT)
 		CONTINUE
-	SIF CFLAG:LCOUNT:필터링フラグ
+	SIF CFLAG:LCOUNT:필터링플래그
 		CONTINUE
 	Q:A = LCOUNT
 	LOCAL:2 = A
@@ -121,9 +125,9 @@ NEXT
 $PRINT_LIST
 CALL ASSI_LIST
 DRAWLINE
-PRINTFORMLC \@(P <= 0) ? %" " * 16% # [1001]이전 페이지\@
+PRINTFORMLC \@(P <= 0) ? %" " * 16% # [1001]이전페이지\@
 PRINTLC [1000]돌아간다
-PRINTFORMLC \@(P >= (LOCAL:2 - 1) / リスト표시数()) ? %" " * 16% # [1009]다음 페이지\@
+PRINTFORMLC \@(P >= (LOCAL:2 - 1) / 리스트표시수()) ? %" " * 16% # [1009]다음페이지\@
 
 $INPUT_LOOP
 INPUT
@@ -137,7 +141,7 @@ ELSEIF RESULT == 1001
 		GOTO INPUT_LOOP
 	ENDIF
 ELSEIF RESULT == 1009
-	LOCAL = (LOCAL:2 - 1) / リスト표시数()
+	LOCAL = (LOCAL:2 - 1) / 리스트표시수()
 	IF P < LOCAL
 		P += 1
 		GOTO PRINT_LIST
@@ -175,8 +179,8 @@ PRINTFORML 누구를 조수로 하겠습니까? (현재의 조수는 ☆, 현재
 DRAWLINE
 PRINTL   [ 0]조수 없음
 DRAWLINE
-FOR LCOUNT, 0, リスト표시数()
-	LOCAL = Q:(LCOUNT + P * リスト표시数())
+FOR LCOUNT, 0, 리스트표시수()
+	LOCAL = Q:(LCOUNT + P * 리스트표시수())
 	SIF LOCAL == 0
 		CONTINUE
 

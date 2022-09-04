@@ -1,0 +1,297 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:WRITE_IMG.ERB
+;	Facility	:画像描画処理など
+;
+;	Licence		:ライセンスフリー
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		2019/08/03		ypa 					新規作成
+;	002		2019/09/26		空気 					ショップ画面・調教画面の顔グラを個別に選択できるように
+;	003		2020/02/02		木綿豆腐 				デビルシフター/喰奴/悪魔憑きは悪魔変身時の画面の顔グラを設定できるように
+;	004		2020/06/19		なんとなくの人			画像エディットの画像を表示できるように
+;	005		2020/06/20		なんとなくの人			画像エディットにて、助手画像が調教対象のものと同じになるバグを修正
+;	006		2020/08/20		Jガン					特殊変身顔グラ追加
+;	007		2022/05/22		Collared				外見固定処理追加
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+; WRITE_IMG 
+; 　画像出力
+;   WRITE_IMG_1,WRITE_IMG_2を統合
+; ARG   캐릭터번호
+; ARG:1 画像種別
+;       0:小(4行) 1:大:(6行) 
+;       主に伽耶CHANG(S)用拡張
+;       10:機械小　11;機械大 20:凶鳥小 21:凶鳥大 30:地霊小 31:地霊大 40:夜魔小 41:夜魔大
+; ARG:2 何行目を出力するか
+@WRITE_IMG, ARG, ARG:1, ARG:2
+
+;リソース存在체크
+SPRITECREATED @"A%TOSTR(ARG)%_%TOSTR(ARG:1)%_%TOSTR(ARG:2)%"
+IF RESULT
+	PRINT_IMG @"A%TOSTR(ARG)%_%TOSTR(ARG:1)%_%TOSTR(ARG:2)%"
+ELSE
+	; KR판 추가수정, KR판 범용화상 로드함수
+	CALL RACE_ICON_CUSTOM,ARG, ARG:2, ARG:1
+
+	; 이하는 RACE_ICON_CUSTOM에 내장
+	; ;中途半端にリソースがない場合の処理
+	; ;今の所 偶数が小 奇数が大と判定する
+	; 	IF ARG:1 % 2 == 0
+	; 		PRINT_RECT 400
+	; 	ELSE
+	; 		PRINT_RECT 600
+	; 	ENDIF
+	; ENDIF
+ENDIF
+
+; GET_IMG_TYPE
+;　画像種別取得
+;  ARG   포지션
+;  ARG:1 画像サイズ
+;       0:小(4行) 1:大:(6行) 
+;  ARG:2 表示箇所
+;       -100:セットアップ・能力確認画面 0:ショップ画面 1:調教画面
+;       2:초기링크악마変身時 <- EDIT 003 ADD
+;       3:汎用悪魔変身時       <- EDIT 003 ADD
+;  RETURNF
+;       0:小(4行) 1:大:(6行)  
+;       主に伽耶CHANG(S)用拡張
+;       10:機械小　11;機械大 20:凶鳥小 21:凶鳥大 30:地霊小 31:地霊大 40:夜魔小 41:夜魔大
+;       X00:X番目画像小 X01:X番目画像大
+@GET_IMG_TYPE(ARG,ARG:1,ARG:2=-100)
+#FUNCTION
+;---- EDIT 006 ADD START -------------------------
+IF 특수변신얼굴이미지변경(ARG) == 1 && CFLAG:ARG:특수변신얼굴이미지 != CFLAG:ARG:얼굴이미지 && ARG:1 < 2
+	ARG:1 += CFLAG:ARG:특수변신얼굴이미지 * 100
+;---- EDIT 006 ADD END -------------------------
+ELSEIF ARG:2 == 0 && CFLAG:ARG:SHOP얼굴이미지 != CFLAG:ARG:얼굴이미지 && ARG:1 < 2
+	ARG:1 += CFLAG:ARG:SHOP얼굴이미지 * 100
+ELSEIF ARG:2 == 1 && CFLAG:ARG:조교얼굴이미지 != CFLAG:ARG:얼굴이미지 && ARG:1 < 2
+	ARG:1 += CFLAG:ARG:조교얼굴이미지 * 100
+;---- EDIT 003 ADD START -------------------------
+ELSEIF ARG:2 == 2 && CFLAG:ARG:악마변신얼굴이미지 != CFLAG:ARG:얼굴이미지 && ARG:1 < 2
+	ARG:1 += CFLAG:ARG:악마변신얼굴이미지 * 100
+ELSEIF ARG:2 == 3 && CFLAG:ARG:범용악마변신얼굴이미지 != CFLAG:ARG:얼굴이미지 && ARG:1 < 2
+	ARG:1 += CFLAG:ARG:범용악마변신얼굴이미지 * 100
+;---- EDIT 003 ADD END -------------------------
+ELSEIF CFLAG:ARG:얼굴이미지 > 0 && ARG:1 < 2
+	ARG:1 += CFLAG:ARG:얼굴이미지 * 100
+ENDIF
+;대상が石嶺카야で、かつ카야が인간をやめている
+IF NO:ARG == 4629 && ABL:ARG:종족 != 0 && CFLAG:ARG:얼굴이미지 < 1
+	IF CSTR:ARG:종족명 == "기계의처녀"
+		RETURNF ARG:1 + 10
+	ELSEIF CSTR:ARG:종족명 == "흉조"
+		RETURNF ARG:1 + 20
+	ELSEIF CSTR:ARG:종족명 == "지령"
+		RETURNF ARG:1 + 30
+	ELSEIF CSTR:ARG:종족명 == "야마"
+		RETURNF ARG:1 + 40
+	ENDIF
+ENDIF
+RETURNF ARG:1
+
+; SHOW_IMG 
+; 　調教キャラクターの画像出力
+;   SHOW_IMG_L,SHOW_IMG_Sを統合
+; ARG   何行目を出力するか
+; ARG:1 出力先
+;       0:ショップ画面(画像サイズ小:4行) 1:調教画面(画像サイズ大:6行) 
+; ARG:2 画像がないときの代替アイコンフラグ
+@SHOW_IMG, ARG, ARG:1, ARG:2
+#DIMS TARGET_PADD
+#DIMS ASSI_PADD
+#DIM IMG_SIZE
+#DIM IMG_TYPE
+#DIMS モブ画像_設定画面名
+
+;今のところは出力先=画像サイズ
+IMG_SIZE = ARG:1
+
+;표시位置調整用
+IF ARG:1 == 0
+	SELECTCASE ARG
+		CASE 1, 3
+			IF TARGET >= 0 && ASSI > 0
+				TARGET_PADD  = %"　　"%
+				ASSI_PADD    = %" "%
+			ELSEIF TARGET >= 0 && 0 > ASSI
+				TARGET_PADD  = %"　　"%
+			ELSEIF 0 >= TARGET && ASSI > 0
+				ASSI_PADD    = %" 　　　　　　"%
+			ENDIF
+		CASE 2, 4
+			IF TARGET >= 0 && ASSI > 0
+				TARGET_PADD  = %" "%
+				ASSI_PADD    = %" "%
+			ELSEIF TARGET >= 0 && 0 > ASSI
+				TARGET_PADD  = %" "%
+			ELSEIF 0 >= TARGET && ASSI > 0
+				ASSI_PADD    = %"　　　　　"%
+			ENDIF
+	ENDSELECT
+ENDIF
+
+IF ARG:1 == 0
+	モブ画像_設定画面名 '= "ショップ"
+ELSE
+	モブ画像_設定画面名 '= "調教"
+ENDIF
+
+IF ARG:2 == 1
+	IF TARGET >= 0 && ASSI > 0
+		IMG_TYPE = GET_IMG_TYPE(TARGET, IMG_SIZE,ARG:1)
+		IF モブ画像_設定確認(TARGET, モブ画像_設定画面名)
+			PRINTFORM %TARGET_PADD%
+			CALL モブ画像_表示(TARGET, モブ画像_設定画面名, ARG, ARG:1)
+		;---- EDIT 007 ADD START -------------------------
+		ELSEIF EXIST_PICTURE((CFLAG:TARGET:외견번호),IMG_TYPE) && CFLAG:TARGET:외견번호 > 0
+			PRINTFORM %TARGET_PADD%
+			CALL WRITE_IMG,(CFLAG:TARGET:외견번호),IMG_TYPE,ARG
+		;---- EDIT 007 ADD END -------------------------
+		ELSEIF EXIST_PICTURE(NO:TARGET,IMG_TYPE)
+			PRINTFORM %TARGET_PADD%
+			CALL WRITE_IMG,NO:TARGET,IMG_TYPE,ARG
+		ELSE
+			PRINTFORM %TARGET_PADD%
+			CALL RACE_ICON,NO:TARGET,ARG,TARGET,IMG_SIZE
+		ENDIF
+		IMG_TYPE = GET_IMG_TYPE(ASSI, IMG_SIZE,ARG:1)
+		IF モブ画像_設定確認(ASSI, モブ画像_設定画面名)
+			PRINTFORM %ASSI_PADD%
+			CALL モブ画像_表示(ASSI, モブ画像_設定画面名, ARG, ARG:1)
+		;---- EDIT 007 ADD START -------------------------
+		ELSEIF EXIST_PICTURE((CFLAG:ASSI:외견번호),IMG_TYPE) && CFLAG:ASSI:외견번호 > 0
+			PRINTFORM %ASSI_PADD%
+			CALL WRITE_IMG,(CFLAG:ASSI:외견번호),IMG_TYPE,ARG
+		;---- EDIT 007 ADD END -------------------------
+		ELSEIF EXIST_PICTURE(NO:ASSI,IMG_TYPE)
+			PRINTFORM %ASSI_PADD%
+			CALL WRITE_IMG,NO:ASSI,IMG_TYPE,ARG
+		ELSE
+			PRINTFORM %ASSI_PADD%
+			CALL RACE_ICON,NO:ASSI,ARG,ASSI,IMG_SIZE
+		ENDIF
+	ELSEIF TARGET >= 0 && 0 > ASSI
+		IMG_TYPE = GET_IMG_TYPE(TARGET, IMG_SIZE,ARG:1)
+		IF モブ画像_設定確認(TARGET, モブ画像_設定画面名)
+			PRINTFORM %TARGET_PADD%
+			CALL モブ画像_表示(TARGET, モブ画像_設定画面名, ARG, ARG:1)
+		;---- EDIT 007 ADD START -------------------------
+		ELSEIF EXIST_PICTURE((CFLAG:TARGET:외견번호),IMG_TYPE) && (CFLAG:TARGET:외견번호)
+			PRINTFORM %TARGET_PADD%
+			CALL WRITE_IMG,(CFLAG:TARGET:외견번호),IMG_TYPE,ARG
+		;---- EDIT 007 ADD END -------------------------
+		ELSEIF EXIST_PICTURE(NO:TARGET,IMG_TYPE)
+			PRINTFORM %TARGET_PADD%
+			CALL WRITE_IMG,NO:TARGET,IMG_TYPE,ARG
+		ELSE
+			PRINTFORM %TARGET_PADD%
+			CALL RACE_ICON,NO:TARGET,ARG,TARGET,IMG_SIZE
+		ENDIF
+	ELSEIF 0 >= TARGET && ASSI > 0
+		IMG_TYPE = GET_IMG_TYPE(ASSI, IMG_SIZE,ARG:1)
+		IF モブ画像_設定確認(ASSI, モブ画像_設定画面名)
+			PRINTFORM %ASSI_PADD%
+			CALL モブ画像_表示(ASSI, モブ画像_設定画面名, ARG, ARG:1)
+		;---- EDIT 007 ADD START -------------------------
+		ELSEIF EXIST_PICTURE((CFLAG:ASSI:외견번호),IMG_TYPE) && CFLAG:ASSI:외견번호 > 0
+			PRINTFORM %ASSI_PADD%
+			CALL WRITE_IMG,(CFLAG:ASSI:외견번호),IMG_TYPE,ARG
+		;---- EDIT 007 ADD END -------------------------
+		ELSEIF EXIST_PICTURE(NO:ASSI,IMG_TYPE)
+			PRINTFORM %ASSI_PADD%
+			CALL WRITE_IMG,NO:ASSI,IMG_TYPE,ARG
+		ELSE
+			PRINTFORM %ASSI_PADD%
+			CALL RACE_ICON,NO:ASSI,ARG,ASSI,IMG_SIZE
+		ENDIF
+	ENDIF
+ELSEIF ARG:2 == 2
+	IF TARGET >= 0 && ASSI > 0
+		IMG_TYPE = GET_IMG_TYPE(TARGET, IMG_SIZE,ARG:1)
+		IF モブ画像_設定確認(TARGET, モブ画像_設定画面名)
+			PRINTFORM %TARGET_PADD%
+			CALL モブ画像_表示(TARGET, モブ画像_設定画面名, ARG, ARG:1)
+		;---- EDIT 007 ADD START -------------------------
+		ELSEIF EXIST_PICTURE((CFLAG:TARGET:외견번호),IMG_TYPE) && CFLAG:TARGET:외견번호 > 0
+			PRINTFORM %TARGET_PADD%
+			CALL WRITE_IMG,(CFLAG:TARGET:외견번호),IMG_TYPE,ARG
+		;---- EDIT 007 ADD END -------------------------
+		ELSEIF EXIST_PICTURE(NO:TARGET,IMG_TYPE)
+			PRINTFORM %TARGET_PADD%
+			CALL WRITE_IMG,NO:TARGET,IMG_TYPE,ARG
+		ELSE
+			PRINTFORM %TARGET_PADD%
+			CALL ONI_MARK,TARGET,ARG,IMG_SIZE
+		ENDIF
+		IMG_TYPE = GET_IMG_TYPE(ASSI, IMG_SIZE,ARG:1)
+		IF モブ画像_設定確認(ASSI, モブ画像_設定画面名)
+			PRINTFORM %ASSI_PADD%
+			CALL モブ画像_表示(ASSI, モブ画像_設定画面名, ARG, ARG:1)
+		;---- EDIT 007 ADD START -------------------------
+		ELSEIF EXIST_PICTURE((CFLAG:ASSI:외견번호),IMG_TYPE) && CFLAG:ASSI:외견번호 > 0
+			PRINTFORM %ASSI_PADD%
+			CALL WRITE_IMG,(CFLAG:ASSI:외견번호),IMG_TYPE,ARG
+		;---- EDIT 007 ADD END -------------------------
+		ELSEIF EXIST_PICTURE(NO:ASSI,IMG_TYPE)
+			PRINTFORM %ASSI_PADD%
+			CALL WRITE_IMG,NO:ASSI,IMG_TYPE,ARG
+		ELSE
+			PRINTFORM %ASSI_PADD%
+			CALL ONI_MARK,ASSI,ARG,IMG_SIZE
+		ENDIF
+	ELSEIF TARGET >= 0 && 0 > ASSI
+		IMG_TYPE = GET_IMG_TYPE(TARGET, IMG_SIZE,ARG:1)
+		IF モブ画像_設定確認(TARGET, モブ画像_設定画面名)
+			PRINTFORM %TARGET_PADD%
+			CALL モブ画像_表示(TARGET, モブ画像_設定画面名, ARG, ARG:1)
+		;---- EDIT 007 ADD START -------------------------
+		ELSEIF EXIST_PICTURE((CFLAG:TARGET:외견번호),IMG_TYPE) && CFLAG:TARGET:외견번호 > 0
+			PRINTFORM %TARGET_PADD%
+			CALL WRITE_IMG,(CFLAG:TARGET:외견번호),IMG_TYPE,ARG
+		;---- EDIT 007 ADD END -------------------------
+		ELSEIF EXIST_PICTURE(NO:TARGET,IMG_TYPE)
+			PRINTFORM %TARGET_PADD%
+			CALL WRITE_IMG,NO:TARGET,IMG_TYPE,ARG
+		ELSE
+			PRINTFORM %TARGET_PADD%
+			CALL ONI_MARK,TARGET,ARG,IMG_SIZE
+		ENDIF
+	ELSEIF 0 >= TARGET && ASSI > 0
+		IMG_TYPE = GET_IMG_TYPE(ASSI, IMG_SIZE,ARG:1)
+		IF モブ画像_設定確認(ASSI, モブ画像_設定画面名)
+			PRINTFORM %ASSI_PADD%
+			CALL モブ画像_表示(ASSI, モブ画像_設定画面名, ARG, ARG:1)
+		;---- EDIT 007 ADD START -------------------------
+		ELSEIF EXIST_PICTURE((CFLAG:ASSI:외견번호),IMG_TYPE) && CFLAG:ASSI:외견번호
+			PRINTFORM %ASSI_PADD%
+			CALL WRITE_IMG,(CFLAG:ASSI:외견번호),IMG_TYPE,ARG
+		;---- EDIT 007 ADD END -------------------------
+		ELSEIF EXIST_PICTURE(NO:ASSI,IMG_TYPE)
+			PRINTFORM %ASSI_PADD%
+			CALL WRITE_IMG,NO:ASSI,IMG_TYPE,ARG
+		ELSE
+			PRINTFORM %ASSI_PADD%
+			CALL ONI_MARK,ASSI,ARG,IMG_SIZE
+		ENDIF
+	ENDIF
+ELSEIF ARG:2 == 3
+	IF TARGET >= 0 && ASSI > 0
+		PRINTFORM %TARGET_PADD%
+		CALL ONI_MARK,TARGET,ARG,IMG_SIZE
+		PRINTFORM %ASSI_PADD%
+		CALL ONI_MARK,ASSI,ARG,IMG_SIZE
+	ELSEIF TARGET >= 0 && 0 > ASSI
+		PRINTFORM %TARGET_PADD%
+		CALL ONI_MARK,TARGET,ARG,IMG_SIZE
+	ELSEIF 0 >= TARGET && ASSI > 0
+		PRINTFORM %ASSI_PADD%
+		CALL ONI_MARK,ASSI,ARG,IMG_SIZE
+	ENDIF
+ENDIF
+SIF ARG:1 == 0
+	PRINTL

@@ -1,5 +1,5 @@
 ﻿;ライセンスフリー
-;リプ레이本のコンバートだから기본회화ばっかりです。
+;リプレイ本のコンバートだから기본회화ばっかりです。
 ;2020/03/07　作成者：92473/나나미の人
 ;====================
 ;内容
@@ -120,15 +120,15 @@ CALL INPUTINT,0,1
 		PRINTFORML 
 			CUSTOMDRAWLINE =
 			WAIT
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
+			FLAG:도주불가플래그 = 1
+			FLAG:회화불능플래그 = 1
 			FLAG:선제기습취소 = 1
 			CALL SET_ENEMY, 8, 1093, 10, 0, 0
 			CALL SET_ENEMY, 9, 1093, 10, 0, 0
 			CALL SET_ENEMY, 10, 1093, 10, 0, 0
 			CALL BATTLE_START
-			FLAG:도주불가フラグ = 0
-			FLAG:회화불능フラグ = 0
+			FLAG:도주불가플래그 = 0
+			FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 0
 			WAIT
 		PRINTFORML 
@@ -142,8 +142,8 @@ CALL INPUTINT,0,1
 		PRINTFORML 
 		PRINTFORML ＞아귀 떼가 나타났다
 		PRINTFORML 
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
+			FLAG:도주불가플래그 = 1
+			FLAG:회화불능플래그 = 1
 			FLAG:선제기습취소 = 1
 			CUSTOMDRAWLINE =
 			WAIT
@@ -151,8 +151,8 @@ CALL INPUTINT,0,1
 			CALL SET_ENEMY, 9, 1093, 10, 0, 0
 			CALL SET_ENEMY, 10, 1093, 10, 0, 0
 			CALL BATTLE_START
-			FLAG:도주불가フラグ = 0
-			FLAG:회화불능フラグ = 0
+			FLAG:도주불가플래그 = 0
+			FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 0
 			WAIT
 		PRINTFORML 
@@ -167,8 +167,8 @@ CALL INPUTINT,0,1
 		PRINTFORML 
 		PRINTFORML ＞아귀의 군세가 나타났다
 		PRINTFORML 
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
+			FLAG:도주불가플래그 = 1
+			FLAG:회화불능플래그 = 1
 			FLAG:선제기습취소 = 1
 			CUSTOMDRAWLINE =
 			WAIT
@@ -176,8 +176,8 @@ CALL INPUTINT,0,1
 			CALL SET_ENEMY, 9, 1093, 10, 0, 0
 			CALL SET_ENEMY, 10, 1093, 10, 0, 0
 			CALL BATTLE_START
-			FLAG:도주불가フラグ = 0
-			FLAG:회화불능フラグ = 0
+			FLAG:도주불가플래그 = 0
+			FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 0
 			WAIT
 		PRINTFORML 
@@ -210,7 +210,7 @@ PRINTFORMW ―――――――――――――――――――――――
 PRINTFORMW 
 RESETCOLOR
 ;真Ⅲオープニング이벤트で報道される通信塔の暴動事件の舞台。
-;氷川の名前が出てくる最初の話　報道→なお建設責任者であるサイバーズ・コミュ니케ション社の氷川氏は依然行方불명のままです。
+;氷川の名前が出てくる最初の話　報道→なお建設責任者であるサイバーズ・コミュニケーション社の氷川氏は依然行方불명のままです。
 ;この事件の際、氷川は신주쿠위생병원に雲隠れし地下で儀式を進める。
 PRINTFORML 
 PRINTFORMW 　　＞＞요요기 공원 통신탑＜＜
@@ -320,12 +320,13 @@ PRINTFORMW 「물리 공격에 강한 내성이 있는 데다가、대부분의 
 PRINTFORML 
 PRINTFORML ＞슬라임이 나타났다
 PRINTFORML 
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
 	CUSTOMDRAWLINE =
 	WAIT
 	CALL SET_ENEMY, 9, 1028, 20, 0, 1
+	LOCAL = CHARANUM -1 
 	CFLAG:LOCAL:ＨＰ보정 = 1000
 	CFLAG:LOCAL:ＭＰ보정 = 1000
 	BASE:LOCAL:파마 = 0
@@ -335,10 +336,10 @@ PRINTFORML
 	ABL:LOCAL:스킬4 = 2005;자폭
 	CALL SYNC_STATUS,LOCAL
 	CALL HEALTH_CHARA,LOCAL
-	CFLAG:LOCAL:行動횟수 = 2
+	CFLAG:LOCAL:행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
 	WAIT
 PRINTFORML 
@@ -403,7 +404,7 @@ PRINTFORML ＴＲＰＧ리플레이 재회 제１화 시작의 끝 ～ Beginning
 PRINTFORMW 
 RESETCOLOR
 ;Bパート終了
-;エン디무ング
+;エンディング
 PRINTFORMW ＞이웃의 세계에서 인간은 멸망했고、그곳은 사람을 닮은 인형：마네카타가 착취당하는 세계였다。
 PRINTFORMW ＞픽시는「이쪽의 세계」에 누를 끼치지 않는 為%CALLNAME:MASTER%에게 바란다。
 PRINTFORMW ＞세계을 넘어 싸우는 것을…。
@@ -414,10 +415,10 @@ PRINTFORML 츠루기：
 PRINTFORMW 「사야、내가、반드시 너를 찾아내고 말겠어。세계가 다시 태어난다고 해도!」
 PRINTFORML 
 ;PRINTFORMW 製作中ですよー
-이벤트フラグ:35:0 = 2
+이벤트플래그:35:0 = 2
 CUSTOMDRAWLINE =
 ;- 1ターン経過
-FLAG:휴식フラグ = 1
+FLAG:휴식플래그 = 1
 BEGIN TURNEND
 RETURN
 

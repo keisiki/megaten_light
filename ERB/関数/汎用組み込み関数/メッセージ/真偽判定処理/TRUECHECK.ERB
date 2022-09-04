@@ -1,0 +1,15 @@
+﻿;-------------------------------------------------
+;참값 집계함수 @TRUECHECK
+;	인수0～19：집계대상
+;인수 중 참값이 몇개 있는지를 센다
+;PANCTION로부터의 이식
+;-------------------------------------------------
+@TRUECHECK(ARG, ARG:1, ARG:2, ARG:3, ARG:4, ARG:5, ARG:6, ARG:7, ARG:8, ARG:9, ARG:10, ARG:11, ARG:12, ARG:13, ARG:14, ARG:15, ARG:16, ARG:17, ARG:18, ARG:19)
+#FUNCTION
+#LOCALSIZE 2
+LOCAL = 0
+FOR LOCAL:1, 0, 20
+	SIF ARG:(LOCAL:1) > 0
+		LOCAL ++
+NEXT
+RETURNF LOCAL

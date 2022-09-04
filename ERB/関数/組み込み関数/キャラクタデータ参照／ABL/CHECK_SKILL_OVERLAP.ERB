@@ -1,0 +1,19 @@
+﻿;===============================
+;특정 스킬을、몇 개 습득하고 있는지
+;習得するかどうかの判定に装備スキルまで見るのはどうかと思ったので…
+;とりあえず保留
+;==============================
+@CHECK_SKILL_OVERLAP(ARG,ARG:1)
+#FUNCTION
+#LOCALSIZE 2
+LOCAL = 0
+
+LOCAL:1 = GETNUM(ABL , "스킬1")
+LOCAL += MATCH(ABL:ARG:0, ARG:1, LOCAL:1, LOCAL:1 + CHARA_SKILLCOUNT(ARG) + 1)
+
+;IF TALENT:ARG:異能者 || TALENT:ARG:達人 || TALENT:ARG:人修羅
+;	LOCAL += MATCH(ABL:ARG:0, ARG:1, LOCAL:1, LOCAL:1 + FLAG:異能者スキル数+1)
+;ELSE
+;	LOCAL += MATCH(ABL:ARG:0, ARG:1, LOCAL:1, LOCAL:1 + FLAG:スキル数+1)
+;ENDIF
+RETURNF LOCAL

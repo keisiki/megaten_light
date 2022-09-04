@@ -1,0 +1,24 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:RAND_SPLIT.ERB
+;	Facility	:인수로 전달된 ARGS에서、특정 문자열 ARGS:1로 구분
+;				 그 중 하나를 랜덤으로 반환한다（확률은 항상 동확률）
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;	Edit	Date			Author					Reason
+;	001		2011/10/17		P						新規作成
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;@AUTO_SPLIT
+;ARGS   操作する文字列
+;ARGS:1 ARGSを区切る文字列
+;================================================
+@RAND_SPLIT(ARGS, ARGS:1)
+#FUNCTIONS
+#LOCALSSIZE 200
+VARSET LOCALS
+SPLIT ARGS , ARGS:1 , LOCALS
+RETURNF LOCALS:(RAND:RESULT)
+

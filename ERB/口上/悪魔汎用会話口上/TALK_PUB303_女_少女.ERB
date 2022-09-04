@@ -9,8 +9,8 @@
 ;
 ;	Edit	Date			Author					Reason
 ;	001		20XX/XX/XX		----					新規作成
-;	002		2011/01/10		Ｎ鳥					기본処理をTALK_COMMONに一元化し、메시지を구상呼び出し用関数に移植
-;	003		2011/06/11		元248 ◆9KQKGfbV0.		ムフフ전개の実装、文章の整理・増補
+;	002		2011/01/10		Ｎ鳥					기본処理をTALK_COMMONに一元化し、메시지を구상호출用関数に移植
+;	003		2011/06/11		元248 ◆9KQKGfbV0.		무후후전개の実装、文章の整理・増補
 ;	004		2011/07/20		元248 ◆9KQKGfbV0.		회화時問答CASE3の踊ってみる실패時の台詞の増補、文章の整理
 ;	005		2019/08/28		空気					デビルチェンバー사용中の挙動を修正。また、DDM사용時は容量いっぱいでも仲魔になって自宅ストレージに送るように
 ;	006		2020/01/26		JK好き					スケベ防具장비中の조건をIS_EROEQUIP_Fにまとめ
@@ -25,7 +25,7 @@ SELECTCASE ARG:1
 	CASE 1
 		;1:레이디・킬러즈
 		PRINTFORMW 「……!?」
-		PRINTFORMW 「뭐, 뭐지. %CSTR:ARG:一人称%, 굉장히 두근두근거려……」
+		PRINTFORMW 「뭐, 뭐지. %CSTR:ARG:일인칭%, 굉장히 두근두근거려……」
 		PRINTFORMW 「혹시, 이것이 사랑……？ 꺄악, 꺅%UNICODE(0x2661)%」
 		PRINTFORMW 「……조, 좋아, 언니가 따라가 줄게!」
 	CASE 2
@@ -33,7 +33,7 @@ SELECTCASE ARG:1
 		PRINTFORML 「에~, 어떻게 할까나♪」
 	CASE 3
 		; 3:交渉の목적を尋ねる
-		SELECTCASE CFLAG:ARG:友好度
+		SELECTCASE CFLAG:ARG:우호도
 			CASE IS < 25
 				PRINTFORMW 「무슨 일이야, 인간?」
 				PRINTFORML 「%CSTR:ARG:11%한테 용무 있어?」
@@ -46,7 +46,7 @@ SELECTCASE ARG:1
 		;84:要求前の1文
 		PRINT 「그럼……」
 	CASE 4
-		; 4-6:交渉목적：やらせてくれと言った時の反応
+		; 4-6:교섭목적：やらせてくれと言った時の反応
 		; 4:取り付く島もなし
 			PRINTFORMW 호되게 거절당했다
 	CASE 5
@@ -56,7 +56,7 @@ SELECTCASE ARG:1
 		; 6:一発おｋ
 		PRINTFORMW 상쾌하게 승낙했다
 	CASE 7
-		; 7-9:交渉목적：やらせてくれと言った時の反応
+		; 7-9:교섭목적：やらせてくれと言った時の反応
 		; 7:取り付く島もなし
 			PRINTFORMW 호되게 거절당했다
 	CASE 8
@@ -67,7 +67,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 상쾌하게 승낙했다
 	CASE 10
 		;10:要求額を提示：￥
-		PRINTFORML 「￥{TFLAG:TALK用要求値} 줘」
+		PRINTFORML 「￥{TFLAG:TALK용요구치} 줘」
 	CASE 11
 		;11-13:￥を払おうとしてお金が발りない
 		;11:別のものを要求する
@@ -79,7 +79,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 「뭔가 재미없어졌다」
 		PRINTFORMW 「%CSTR:ARG:11% 그만 가도 돼?」
 	CASE 13
-		;13:交渉실패。적対する
+		;13:交渉실패。敵対する
 		PRINTFORMW 「돈이 없어?」
 		PRINTFORMW 「겨우 그것도 가지지 않았는데 말 걸지 말라고!」
 	CASE 14
@@ -98,7 +98,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 「열받아～！ %CSTR:ARG:11%한테는 그런 가치도 없다는 거야?」
 		PRINTFORMW 「그만 됐어, 죽어. 지금 당장!」
 	CASE 18
-		;18:交渉실패。적対する
+		;18:交渉실패。敵対する
 		PRINTFORMW 「에~!」
 		PRINTFORMW 「구두쇠!」
 		PRINTFORMW 「이제 몰라!」
@@ -107,7 +107,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 「그럼 다른 걸로 할까」
 	CASE 20
 		;20:要求額を提示：ＭＡＧ
-		PRINTFORML 「{TFLAG:TALK用要求値}MAG 줘!」
+		PRINTFORML 「{TFLAG:TALK용요구치}MAG 줘!」
 		PRINTFORML
 	CASE 21
 		;21-23:ＭＡＧを支払おうとしたが발りない
@@ -120,7 +120,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 「뭔가 재미없어졌다」
 		PRINTFORMW 「%CSTR:ARG:11% 그만 가도 돼?」
 	CASE 23
-		;23:交渉실패。적対する
+		;23:交渉실패。敵対する
 		PRINTFORMW 「ＭＡＧ가 부족해?」
 		PRINTFORMW 「겨우 그것도 가지지 않았는데 말 걸지 말라고!」
 	CASE 24
@@ -139,7 +139,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 「열받아～！ %CSTR:ARG:11%한테는 그런 가치도 없다는 거야?」
 		PRINTFORMW 「그만 됐어, 죽어. 지금 당장!」
 	CASE 28
-		;28:交渉실패。적対する
+		;28:交渉실패。敵対する
 		PRINTFORMW 「에~!」
 		PRINTFORMW 「구두쇠!」
 		PRINTFORMW 「이제 몰라!」
@@ -161,7 +161,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 「마석이 없다면 용무는 없어」
 		PRINTFORMW 「%CSTR:ARG:11%, 그만 갈게」
 	CASE 33
-		;33:交渉실패。적対する
+		;33:交渉실패。敵対する
 		PRINTFORMW 「마석도 없어?」
 		PRINTFORMW 「악마와 대화하는데 마석도 없다니, 예의도 몰라!」
 	CASE 34
@@ -180,7 +180,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 「열받아～！ %CSTR:ARG:11%한테는 그런 가치도 없다는 거야?」
 		PRINTFORMW 「그만 됐어, 죽어. 지금 당장!」
 	CASE 38
-		;38:交渉실패。적対する
+		;38:交渉실패。敵対する
 		PRINTFORMW 「에~!」
 		PRINTFORMW 「구두쇠!」
 		PRINTFORMW 「이제 몰라!」
@@ -211,7 +211,7 @@ SELECTCASE ARG:1
 		;47-49:성교渉を断った
 		;47:交渉실패。奇襲する
 	CASE 48
-		;48:交渉실패。적対する
+		;48:交渉실패。敵対する
 	CASE 49
 		;49:他のものを要求する
 	CASE 50
@@ -250,7 +250,7 @@ SELECTCASE ARG:1
 		;現状、死に処理
 	CASE 62
 		;62:仲魔になる
-			IF FLAG:交渉목적 > 3
+			IF FLAG:교섭목적 > 3
 				PRINTFORMW %CALLNAME:PLAYER%의 몸에 무척 만족해, %조사처리(CALLNAME:ARG,"가")% 동료마가 되어주었다.
 			ELSE
 				PRINTFORML 「%CSTR:ARG:11%, %STR:(ABL:ARG:종족)% %CALLNAME:ARG%」
@@ -270,16 +270,16 @@ SELECTCASE ARG:1
 		;65:搾りとられた
 	CASE 66 TO 75
 		;66:お金をくれる
-		IF FLAG:交渉목적 > 3 && ARG:1 == 66
+		IF FLAG:교섭목적 > 3 && ARG:1 == 66
 			PRINTFORMW %CALLNAME:PLAYER%의 몸에 무척 만족해서 돈을 건네주었습니다
-		ELSEIF FLAG:交渉목적 > 3 && ARG:1 == 67
+		ELSEIF FLAG:교섭목적 > 3 && ARG:1 == 67
 				PRINTFORMW %CALLNAME:PLAYER%의 몸에 무척 만족해서  ＭＡＧ를 건네주었습니다
 		ELSE
 			PRINTFORMW 「이거 줄게!」
 		ENDIF
 ;	CASE 67
 ;		;67:ＭＡＧをくれる
-;		IF FLAG:交渉목적 > 3
+;		IF FLAG:교섭목적 > 3
 ;			PRINTFORMW %CALLNAME:PLAYER%の体に大変満발し、ＭＡＧを恵んでもらいました
 ;		ELSE
 ;			PRINTFORMW 「コレあげるですぅ!」
@@ -315,7 +315,7 @@ SELECTCASE ARG:1
 		PRINTFORMW 「싫어！　싫어！　싫다고!」
 		PRINTFORMW 「그만 죽어!」
 	CASE 77
-		;77:회화실패。적対する
+		;77:회화실패。敵対する
 		PRINTFORMW 「부우！ 열받아~!」
 		PRINTFORMW 「이제 몰라！ 메롱~이다!」
 	CASE 78
@@ -330,13 +330,13 @@ SELECTCASE ARG:1
 		;険悪な雰囲気
 		PRINTFORML 「같이 있어줄 수 없겠네~」
 	CASE 81
-		;友好度が低い
+		;우호도が低い
 		PRINTFORML 「그럼」
 	CASE 82
-		;友好度が普通
+		;우호도が普通
 		PRINTFORML 「 봐~」
 	CASE 83
-		;友好度が高い
+		;우호도が高い
 		PRINTFORML 「또 보자♪」
 		PRINTFORMW %조사처리(CALLNAME:ARG,"는")% 윙크했다.
 	CASE 88
@@ -385,7 +385,7 @@ ENDSELECT
 ;회화時挨拶
 ;===========================================================================
 @GREET_PUB303,ARG
-SELECTCASE CFLAG:ARG:友好度
+SELECTCASE CFLAG:ARG:우호도
 	CASE IS > 25
 		PRINTFORML 「에…… %조사처리(CSTR:ARG:11,"랑")% 얘기를 하고 싶은 거야?」
 		PRINTFORMW 「꺄아 어떡하지!? 너무 기뻐♪」
@@ -398,14 +398,14 @@ SELECTCASE CFLAG:ARG:友好度
 			PRINTFORMW 「응, 좋아♪」
 		ENDIF
 	CASEELSE
-		PRINTFORML 「%조사처리(CSTR:ARG:一人称,"랑")% 얘기를 하고 싶은 거야?」
+		PRINTFORML 「%조사처리(CSTR:ARG:일인칭,"랑")% 얘기를 하고 싶은 거야?」
 		PRINTFORMW 「……이상한 짓 안 한다면 좋아」
 ENDSELECT
 PRINTFORML
 
 ;質問を増やした場合、RAND:XのXを増やす
 ;RETURNの値により回答後の雰囲気が変わる。
-;0.회화継続 1.直接仲魔になる 2.何かくれる 3.奇襲される 4.적対する 5.逃げる 6.気まずくなる
+;0.회화継続 1.直接仲魔になる 2.何かくれる 3.奇襲される 4.敵対する 5.逃げる 6.気まずくなる
 
 SELECTCASE RAND:2
 	CASE 0
@@ -421,13 +421,13 @@ SELECTCASE RAND:2
 			;損してる
 			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 			IF LOCAL < 30
-				CFLAG:ARG:友好度 -= RAND:50
+				CFLAG:ARG:우호도 -= RAND:50
 				;실패
 					PRINTFORMW 「거짓말쟁이!」
 					PRINTFORMW 「마음에도 없는 말을 하고 있어!」
 					RETURN 6
 			ELSE
-				CFLAG:ARG:友好度 += RAND:30
+				CFLAG:ARG:우호도 += RAND:30
 				;성공
 					PRINTFORMW 「역시, 그렇지!」
 					PRINTFORMW 「와아, 처음으로 같은 의견인 아이 만났다~.」
@@ -437,13 +437,13 @@ SELECTCASE RAND:2
 			;そんな事はない
 			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 			IF LOCAL < 30
-				CFLAG:ARG:友好度 -= RAND:50
+				CFLAG:ARG:우호도 -= RAND:50
 				;실패
 					PRINTFORMW 「거짓말!」
 					PRINTFORMW 「마음에도 없는 말을 하고 있어!」
 					RETURN 4
 			ELSE
-				CFLAG:ARG:友好度 += RAND:30
+				CFLAG:ARG:우호도 += RAND:30
 				;성공
 					PRINTFORMW 「그렇구나」
 					PRINTFORMW 「내가 지나치게 생각한 걸까?」
@@ -453,13 +453,13 @@ SELECTCASE RAND:2
 			;아이っぽいほうが好みだ
 			LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 			IF LOCAL < 30
-				CFLAG:ARG:友好度 -= RAND:50
+				CFLAG:ARG:우호도 -= RAND:50
 				;실패
 					PRINTFORML 「그런 걸, 인간쪽 언어로 로리콘이라고 말하지?」
 					PRINTFORMW 「……마마가 그런 사람하고는 가까워지지 말라고 말했어」
 					RETURN 5
 			ELSE
-				CFLAG:ARG:友好度 += RAND:30
+				CFLAG:ARG:우호도 += RAND:30
 				;성공
 					PRINTFORMW 「그런 걸, 인간쪽 언어로 로리콘이라고 말하지?」
 					PRINTFORMW 「실물로 본 건 처음이야♪」
@@ -471,13 +471,13 @@ SELECTCASE RAND:2
 
 			
 			IF LOCAL < 30
-				CFLAG:ARG:友好度 -= RAND:50
+				CFLAG:ARG:우호도 -= RAND:50
 				;실패
 					PRINTFORML 「정말～！　아이라고 생각해 적당히 말하는거지!」
 					PRINTFORMW 「바보ー!」
 					RETURN 3
 			ELSE
-				CFLAG:ARG:友好度 += RAND:30
+				CFLAG:ARG:우호도 += RAND:30
 				;성공
 					PRINTFORMW 「이득을 보는 것도 있어?」
 					PRINTFORMW 「헤～ 그건 몰랐어」
@@ -510,7 +510,7 @@ SELECTCASE RAND:2
 				SIF TALENT:ARG:호기심
 					LOCAL += RAND:15
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 					IF TALENT:ARG:호기심
 						PRINTFORML 「인간이란 이상하네」
@@ -522,10 +522,10 @@ SELECTCASE RAND:2
 						RETURN 6
 					ENDIF
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 					IF TALENT:ARG:호기심
-						CFLAG:ARG:友好度 += RAND:10
+						CFLAG:ARG:우호도 += RAND:10
 						PRINTFORML 「저기저기」
 						PRINTFORMW 「왜 그런 옷차림을 한 거야?」
 						RETURN 0
@@ -541,13 +541,13 @@ SELECTCASE RAND:2
 				SIF TALENT:ARG:호기심
 					LOCAL += RAND:15
 				IF LOCAL < 50
-					CFLAG:ARG:友好度 -= RAND:10
+					CFLAG:ARG:우호도 -= RAND:10
 					;실패
 					PRINTFORML 「에ー……」
 					PRINTFORMW 「절대로 부끄럽다고ー」
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:50
+					CFLAG:ARG:우호도 += RAND:50
 					;성공
 					IF RAND:4 == 0
 						PRINTFORML 「남자아이를 유혹해버리는거지?」
@@ -574,7 +574,7 @@ SELECTCASE RAND:2
 				SIF TALENT:ARG:호기심
 					LOCAL += RAND:15
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:40
+					CFLAG:ARG:우호도 -= RAND:40
 					;실패
 					IF RAND:2 == 0
 						PRINTFORML 「에……」
@@ -584,7 +584,7 @@ SELECTCASE RAND:2
 					ENDIF
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:40
+					CFLAG:ARG:우호도 += RAND:40
 					;성공
 					IF RAND:3 == 0
 						PRINTFORML 「%조사처리(CSTR:ARG:11,"라")%도 어울릴까?」
@@ -612,13 +612,13 @@ SELECTCASE RAND:2
 				;冒険
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 					PRINTFORML 「……어쩐지 꼬마 같네」
 					PRINTFORMW 「나이가 든 어른이 일도 안하고 그런 거나 하고, 부끄럽지도 않아?」
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 					PRINTFORML 「헤에……재밌어보이네!」
 					PRINTFORMW 「조금 꼬마 같을지도 모르지만, 그런 것도 좋을지도 모른다고 생각해」
@@ -630,7 +630,7 @@ SELECTCASE RAND:2
 				SIF TALENT:ARG:호기심
 					LOCAL += RAND:15
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:30
+					CFLAG:ARG:우호도 -= RAND:30
 					;실패
 					IF RAND:3 == 0
 						PRINTFORMW 「그대로 길이나 잃어버려라~」
@@ -646,7 +646,7 @@ SELECTCASE RAND:2
 					ENDIF
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 					IF RAND:2 == 0
 						PRINTFORML 「어쩔 수 없는 인간이네, 마치 아이같아」
@@ -669,13 +669,13 @@ SELECTCASE RAND:2
 				SIF TALENT:ARG:호기심
 					LOCAL += RAND:15
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:30
+					CFLAG:ARG:우호도 -= RAND:30
 					;실패
 					PRINTFORML 「이런 곳에서 인간이 일한다고？」
 					PRINTFORMW 「거짓말이어도 진짜여도, 어느쪽이던 수상해……」
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 					PRINTFORML 「일인가、대단하네……」
 					PRINTFORMW 「무슨 일인지 모르겠지만 힘내！」
@@ -687,7 +687,7 @@ SELECTCASE RAND:2
 				SIF TALENT:ARG:호기심
 					LOCAL += RAND:15
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:30
+					CFLAG:ARG:우호도 -= RAND:30
 					;실패
 					IF RAND:2 == 0
 						PRINTFORML 「빈틈！！」
@@ -709,7 +709,7 @@ SELECTCASE RAND:2
 						RETURN 6
 					ENDIF
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 					IF RAND:2 == 0
 						PRINTFORML 「우후후후」
@@ -756,13 +756,13 @@ DO
 				;まあ普通
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:30
+					CFLAG:ARG:우호도 -= RAND:30
 					;실패
 						PRINTFORML 「보통인가……」
 						PRINTFORMW 「재미없는 답이네……」
 						RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 						PRINTFORML 「보통인가……」
 						PRINTFORMW 「계속 그곳에 살고 있으니까 눈치채지 못하는거 아닐까?」
@@ -774,13 +774,13 @@ DO
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 						PRINTFORMW 「에～?」
 						PRINTFORMW 「인간의 주의력 부족인거 아니야～?」
 						RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 						PRINTFORML 「에～그런거야?」
 						PRINTFORMW 「그럼 인간도 이쪽에서 살아」
@@ -791,14 +791,14 @@ DO
 				;食い物
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 0
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 						PRINTFORMW 「에～그럴까?」
 						PRINTFORMW 「전에 잠깐 집어먹었는데」
 						PRINTFORMW 「내 입맛에는 맞지 않았어……」
 						RETURN 3
 				ELSE
-					CFLAG:ARG:友好度 += RAND:20
+					CFLAG:ARG:우호도 += RAND:20
 					;성공
 						PRINTFORMW 「그러고 보니 전에 마마한테서 들은 적 있어」
 						PRINTFORMW 「인간은 먹을 것에 관해서는 악마보다 깐깐하다고」
@@ -809,14 +809,14 @@ DO
 				;악마の세계のほうが
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 0
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 						PRINTFORMW 「그래?」
 						PRINTFORMW 「그럼 가지 않아도 괜찮을까」
 						PRINTFORMW 「그럼 난 돌아갈게」
 						RETURN 5
 				ELSE
-					CFLAG:ARG:友好度 += RAND:20
+					CFLAG:ARG:우호도 += RAND:20
 					;성공
 						PRINTFORMW 「그래?」
 						PRINTFORMW 「자신이 살고 있는 곳을 칭찬받는 건 뭔가 기쁘네♪」
@@ -845,14 +845,14 @@ DO
 				;いる
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:30
+					CFLAG:ARG:우호도 -= RAND:30
 					;실패
 					PRINTFORML 「그게 뭐야!?」
 					PRINTFORML 「%조사처리(CSTR:ARG:11,"가")% 꼬마라고 자랑하는 거?」
 					PRINTFORMW 「흥흥」
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:40
+					CFLAG:ARG:우호도 += RAND:40
 					;성공
 					PRINTFORML 「그렇구나」
 					PRINTFORMW 「%CSTR:ARG:11%도 어른이 되면 좋아하는 사람이 생길까?」
@@ -862,7 +862,7 @@ DO
 				;いない
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 					PRINTFORMW 「연인도 없는 인생이라니……」
 					IF TALENT:PLAYER:140 == 0 || TALENT:PLAYER:157 == 1
@@ -873,7 +873,7 @@ DO
 					PRINTFORMW 는 뭘 위해 사는거야?」
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 					PRINTFORML 「흐～응?」
 					PRINTFORMW 「그럼, %조사처리(CSTR:ARG:11,"가")% 사귀어줄까?」
@@ -883,13 +883,13 @@ DO
 				;無視
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 0
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 					PRINTFORMW 「흥흥! %조사처리(CSTR:ARG:11,"가")% 질문했는데도 무시를 하다니!」
 					PRINTFORMW 「온화한 %조사처리(CSTR:ARG:11,"라")%도 화내버린다고!」
 					RETURN 3
 				ELSE
-					CFLAG:ARG:友好度 += RAND:60
+					CFLAG:ARG:우호도 += RAND:60
 					;성공
 					PRINTFORMW 「왜 무시하는 거야……」
 					PRINTFORMW 「%조사처리(CSTR:ARG:11,"를")% 바보라고 생각하는 거야?」
@@ -913,8 +913,8 @@ DO
 				;YES
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:LV+MAXBASE:PLAYER:운/2)
 				;---- EDIT 005 MOD START -------------------------
-				IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && LOCAL > 40
-					CFLAG:ARG:友好度 += RAND:50
+				IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && LOCAL > 40
+					CFLAG:ARG:우호도 += RAND:50
 					;성공
 						PRINTFORMW 「그럼 계약 성립이야. 곤란한땐 언제라도 불러줘!」
 						CALL ADD_NEW_COMPANION,NO:ARG,0
@@ -924,7 +924,7 @@ DO
 						RETURN 9
 				;---- EDIT 005 MOD END ---------------------------
 				ELSE
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 						PRINTFORMW 「꺄하♪ 걸렸다, 걸렸다!」
 						PRINTFORMW 「악마가 그렇게 간단하게 동료마가 되줄리 없잖아. 인간은 정말 단순하네―」
@@ -935,7 +935,7 @@ DO
 				;NO
 				LOCAL = RAND:100 + RAND:(1+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 40
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 					IF RAND:4 == 0
 						PRINTFORMW 「……왠지, 악마로서의 자존심이 상처받은 느낌이야ー」
@@ -955,7 +955,7 @@ DO
 						RETURN 5
 					ENDIF
 				ELSE
-					CFLAG:ARG:友好度 += RAND:10
+					CFLAG:ARG:우호도 += RAND:10
 					;성공
 					IF RAND:2 == 0
 						PRINTFORMW 「……음, 됐어. 별로 동료마가 되고 싶지도 않고」
@@ -985,7 +985,7 @@ DO
 				;歌って踊る
 				LOCAL = RAND:75 + RAND:(MAXBASE:PLAYER:마력+MAXBASE:PLAYER:운/2)
 				IF RESULT < 40
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 					PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 춤추었다!
 					PRINTFORMW 하지만 %CALLNAME:ARG%에겐 효과 없었다……
@@ -993,12 +993,12 @@ DO
 					PRINTFORMW 「」
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:30
+					CFLAG:ARG:우호도 += RAND:30
 					;성공
 					PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 춤추었다!
 					PRINTFORMW 웬일인지 %CALLNAME:ARG%에게 통했다!!
 					PRINTFORML 「꺄하핫! 정말 재밌어보여!」
-					PRINTFORMW 「%CSTR:ARG:一人称%도 끼워줘ー♪」
+					PRINTFORMW 「%CSTR:ARG:일인칭%도 끼워줘ー♪」
 					PRINTFORMW %조사처리(CALLNAME:ARG,"는")% %조사처리(CALLNAME:PLAYER,"와")% 같이 춤추었다!
 					PRINTFORMW 「정말 재밌었어!」
 					RETURN 0
@@ -1007,7 +1007,7 @@ DO
 				;笑わせてみせる
 				LOCAL = RAND:80 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
 					PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 농담으로 웃기려 했다
 					PRINTFORMW 하지만 %CALLNAME:ARG%에겐 효과가 없다……
@@ -1015,7 +1015,7 @@ DO
 					PRINTFORMW 「정말 재밌다고 생각하는 거야?」
 					RETURN 6
 				ELSE
-					CFLAG:ARG:友好度 += RAND:40
+					CFLAG:ARG:우호도 += RAND:40
 					;성공
 					PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 농담으로 웃기려 했다
 					PRINTFORMW 웬일인지 %CALLNAME:ARG%에게 통했다!!
@@ -1026,21 +1026,21 @@ DO
 				;ない
 				LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:20
+					CFLAG:ARG:우호도 -= RAND:20
 					;실패
 					IF RAND:2 == 0
 						PRINTFORML 「뭐ー야. 기대했더니만ー」
-						PRINTFORMW 「이제 볼일 없으니까, %CSTR:ARG:一人称% 돌아갈래」
+						PRINTFORMW 「이제 볼일 없으니까, %CSTR:ARG:일인칭% 돌아갈래」
 						RETURN 5
 					ELSE
-						PRINTFORML 「%CSTR:ARG:一人称%의 부탁, 안 들어주는 거야?」
+						PRINTFORML 「%CSTR:ARG:일인칭%의 부탁, 안 들어주는 거야?」
 						PRINTFORMW 「흥이다！　그럼 죽어버려ー!」
 						RETURN 3
 					ENDIF
 				ELSE
-					CFLAG:ARG:友好度 += RAND:15
+					CFLAG:ARG:우호도 += RAND:15
 					;성공
-						PRINTFORML 「%CSTR:ARG:一人称%의 부탁, 안 들어주는 거야?」
+						PRINTFORML 「%CSTR:ARG:일인칭%의 부탁, 안 들어주는 거야?」
 						PRINTFORMW 「\@TALENT:PLAYER:남자?오빠#언니\@는 살아있어서 재밌다고 생각해?」
 						RETURN 5
 				ENDIF
@@ -1049,13 +1049,13 @@ DO
 				;この辺は, 당신のLVと純粋たる운で成否판정する
 				LOCAL = RAND:90 + RAND:(MAXBASE:PLAYER:LV+MAXBASE:PLAYER:운/2)
 				IF LOCAL < 30
-					CFLAG:ARG:友好度 -= RAND:50
+					CFLAG:ARG:우호도 -= RAND:50
 					;실패
-					PRINTFORML 「%CSTR:ARG:一人称% 알고 있어. 여자아이를 습격해서 혼자 기분 좋아질려고 하는 거지!」
+					PRINTFORML 「%CSTR:ARG:일인칭% 알고 있어. 여자아이를 습격해서 혼자 기분 좋아질려고 하는 거지!」
 					PRINTFORMW 「누가ー구해줘요！　범해져요ー!」
 					RETURN 5
 				ELSE
-					CFLAG:ARG:友好度 -= RAND:80
+					CFLAG:ARG:우호도 -= RAND:80
 					;성공
 					;偽典での思いつきで作ってみた
 					;당신が男or후타나리の場合は以下の選択、それ以外は一番下の処理に移行
@@ -1076,15 +1076,15 @@ DO
 							;成否판정の지혜から힘に변경する
 							LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:힘+MAXBASE:PLAYER:운/2)
 							SIF TALENT:ARG:마조
-							CFLAG:ARG:友好度 += RAND:30
+							CFLAG:ARG:우호도 += RAND:30
 							IF LOCAL < 30
-								CFLAG:ARG:友好度 -= RAND:50
+								CFLAG:ARG:우호도 -= RAND:50
 								;실패
-								PRINTFORMW 「이, 이거 놔! %조사처리(CSTR:ARG:一人称,"를")% 만지지 마!」
+								PRINTFORMW 「이, 이거 놔! %조사처리(CSTR:ARG:일인칭,"를")% 만지지 마!」
 								PRINTFORMW 「정말. 이야기해보려고 왔는데, 최악이야!」
 								RETURN 6
 							ELSE
-								CFLAG:ARG:友好度 -= RAND:25
+								CFLAG:ARG:우호도 -= RAND:25
 								;성공
 								PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %조사처리(CALLNAME:ARG,"를")% 애무했다！
 								IF RAND:4 == 0
@@ -1103,15 +1103,15 @@ DO
 							;2.
 							LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:힘+MAXBASE:PLAYER:운/2)
 							SIF TALENT:ARG:마조
-							CFLAG:ARG:友好度 += RAND:30
+							CFLAG:ARG:우호도 += RAND:30
 							IF LOCAL < 35
-								CFLAG:ARG:友好度 -= RAND:50
+								CFLAG:ARG:우호도 -= RAND:50
 								;실패
-								PRINTFORMW 「이, 이거 놔! %조사처리(CSTR:ARG:一人称,"를")% 만지지 마!」
+								PRINTFORMW 「이, 이거 놔! %조사처리(CSTR:ARG:일인칭,"를")% 만지지 마!」
 								PRINTFORMW 「정말. 이야기해보려고 왔는데, 최악이야!」
 								RETURN 6
 							ELSE
-								CFLAG:ARG:友好度 -= RAND:25
+								CFLAG:ARG:우호도 -= RAND:25
 								PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:ARG%의 
 								IF TALENT:ARG:거유 == 1 || TALENT:ARG:폭유 == 1
 									PRINT 풍만한 가슴
@@ -1141,13 +1141,13 @@ DO
 							;3.
 							LOCAL = RAND:100 + RAND:(MAXBASE:PLAYER:지혜+MAXBASE:PLAYER:운/2)
 							IF LOCAL < 30
-								CFLAG:ARG:友好度 -= RAND:50
+								CFLAG:ARG:우호도 -= RAND:50
 								;실패
 								PRINTFORMW 「싫어― 그런 거 보이지 마―」
 								PRINTFORMW 「이렇게 되면…… 여기서 죽여주겠어―!」
 								RETURN 3
 							ELSE
-								CFLAG:ARG:友好度 -= RAND:70
+								CFLAG:ARG:우호도 -= RAND:70
 								;성공
 								IF RAND:3 == 0
 									PRINTFORM %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:ARG%의 
@@ -1184,10 +1184,10 @@ DO
 						ELSEIF RESULT == 4
 							;4.
 							;これもやることがヤることなので、
-							;당신と相손の힘の値によって成否판정をする
-							LOCAL = RAND:100 + RAND:(MAX(1,MAXBASE:PLAYER:힘-MAXBASE:ARG:힘/2)) + RAND:(MAX(1,CFLAG:ARG:友好度))
+							;당신と相手の힘の値によって成否판정をする
+							LOCAL = RAND:100 + RAND:(MAX(1,MAXBASE:PLAYER:힘-MAXBASE:ARG:힘/2)) + RAND:(MAX(1,CFLAG:ARG:우호도))
 							IF LOCAL < 30
-								CFLAG:ARG:友好度 -= RAND:90
+								CFLAG:ARG:우호도 -= RAND:90
 								IF TALENT:ARG:처녀 == 1
 									PRINTFORML 「싫어…… 싫어! 이 짐승!」
 									PRINTFORMW 「두 번 다시 %CSTR:ARG:11% 앞에 나타나지 마!」
@@ -1195,7 +1195,7 @@ DO
 								ELSE
 								ENDIF
 							ELSE
-								CFLAG:ARG:友好度 -= RAND:80
+								CFLAG:ARG:우호도 -= RAND:80
 								;처녀
 								IF TALENT:ARG:처녀 == 1
 									PRINTFORML 「싫어…… 싫어! 이 짐승!」
@@ -1216,8 +1216,8 @@ DO
 									;처녀관통내역用
 									IF PLAYER == MASTER
 										SETBIT FLAG:(50000+NO:ARG), 7
-										;처녀탈취人数カウント
-										FLAG:처녀탈취人数 += 1
+										;처녀탈취인수カウント
+										FLAG:처녀탈취인수 += 1
 									ENDIF
 
 									RETURN 1
@@ -1242,9 +1242,9 @@ DO
 						GOTO INPUT_RAPE01
 						ENDIF
 					ELSE
-						PRINTFORML 「흐―웅. \@TALENT:PLAYER:남자?오빠#언니\@가 %CSTR:ARG:一人称%에게 기분 좋은 일 해줄 수 있어?」
-						;女악마とのムフフ전개を추가
-						;IF FLAG:ムフフ전개 == 0
+						PRINTFORML 「흐―웅. \@TALENT:PLAYER:남자?오빠#언니\@가 %CSTR:ARG:일인칭%에게 기분 좋은 일 해줄 수 있어?」
+						;女악마との무후후전개を추가
+						;IF FLAG:무후후전개 == 0
 							PRINTFORML [1]있어
 							PRINTFORML [2]없어
 							$INPUT_SEX
@@ -1253,7 +1253,7 @@ DO
 							IF RESULT == 1
 								;처녀
 								IF TALENT:ARG:처녀 == 1
-									PRINTFORML 「미ー안. %CSTR:ARG:一人称%, 아픈 건 싫으니까 못 해ー」
+									PRINTFORML 「미ー안. %CSTR:ARG:일인칭%, 아픈 건 싫으니까 못 해ー」
 									PRINTFORMW 「그ー런ー건 다른 애한테 해줄래？　그럼ー♪」
 
 									;1/2でPLAYERにナニが生えてるなら無理矢理犯るか分岐
@@ -1290,7 +1290,7 @@ DO
 											ENDIF
 										;ホッとしつつも大人ぶる
 										ELSEIF RESULT == 2
-											CFLAG:ARG:友好度 += RAND:20
+											CFLAG:ARG:우호도 += RAND:20
 											PRINTFORMW 「어머어머 %UNICODE(0x2661)%、미안합니다♪」
 										ELSE
 											GOTO INPUT_SEX_4
@@ -1300,7 +1300,7 @@ DO
 										RETURN 5
 									ENDIF
 									RETURN 5
-								;ムフフ전개突入
+								;무후후전개突入
 								ELSE
 									PRINTFORMW 「좋아ー♪　언니가 기분 좋은 일 많이 해줄게%UNICODE(0x2661)%」
 									CALL SEX_NEGOTIATE_PUB303,ARG
@@ -1327,13 +1327,13 @@ DO
 LOOP 1
 
 ;====================================================================
-;ムフフ전개
+;무후후전개
 ;====================================================================
 ;@SEX_NEGOTIATE,ARG
 @SEX_NEGOTIATE_PUB303,ARG
-;LOCAL:5 ムフフ전개の판정결과。
+;LOCAL:5 무후후전개の판정결과。
 
-;ムフフ전개突入
+;무후후전개突入
 PRINTFORMW 
 PRINTFORMW ………
 PRINTFORMW ……
@@ -1341,7 +1341,7 @@ PRINTFORMW …
 PRINTFORMW 조금 기다려 주세요%UNICODE(0x2661)%
 ;ムフフ결과の合否판정
 
-;自分と相손との기교の差でほぼ決まる
+;自分と相手との기교の差でほぼ決まる
 IF ABL:PLAYER:기교 < ABL:ARG:기교
 	LOCAL = RAND:5
 ELSE
@@ -1362,8 +1362,8 @@ ELSE
 ENDIF
 
 IF LOCAL < 5
-	;실패　ＭＡＧを搾られるので友好度自体はあがる
-	CFLAG:ARG:友好度 += RAND:20
+	;실패　ＭＡＧを搾られるので우호도自体はあがる
+	CFLAG:ARG:우호도 += RAND:20
 	PRINTFORML 「어라？　벌써 가는 거야？ 칠칠맞긴♪」
 
 	IF TALENT:PLAYER:남자 == 1 && TALENT:PLAYER:오토코노코 == 0
@@ -1385,9 +1385,9 @@ IF LOCAL < 5
 		PRINTFORMW 육봉이 %CALLNAME:ARG%의 안에서 몇 번이고 조이고, 짜여져, 정기를 발하고 있다.
 		PRINTFORMW 인간과 악마 사이의 분명한 성욕・육욕의 차이가, %조사처리(CALLNAME:PLAYER,"를")% 무겁게 짓눌렀다.
 		PRINTFORMW %CALLNAME:PLAYER%의 유두를 농락하며, %조사처리(CALLNAME:ARG,"는")% 즐겁게 웃었다.
-		PRINTFORMW 「응ー어때？　여기도 %CSTR:ARG:一人称%의 안에서 또 커졌는데, 보지는 어떨까?」
+		PRINTFORMW 「응ー어때？　여기도 %CSTR:ARG:일인칭%의 안에서 또 커졌는데, 보지는 어떨까?」
 		PRINTFORMW 「흥분하고 있어？　보지에서 꿀이 넘쳐나고 있어. 정말 음란하네」
-		PRINTFORMW 「%CSTR:ARG:一人称%도 그래♪　좀 더 가득, 기분 좋아지자%UNICODE(0x2661)%」
+		PRINTFORMW 「%CSTR:ARG:일인칭%도 그래♪　좀 더 가득, 기분 좋아지자%UNICODE(0x2661)%」
 	ELSEIF TALENT:PLAYER:오토코노코 == 1
 		PRINTFORMW %CALLNAME:PLAYER%의 배 위에서 %조사처리(CALLNAME:ARG,"가")% 격렬하게 허리를 움직이고 있다.
 		PRINTFORMW 육봉이 %CALLNAME:ARG%의 안에서 몇 번이고 조이고, 짜여져, 정기를 발하고 있다.
@@ -1405,7 +1405,7 @@ IF LOCAL < 5
 		PRINTFORMW 「응, 쥬……츕, 응……언니의 꿀은 정말 맛있네♪」
 		PRINTFORMW 이 안타깝고도 달달한 쾌감에 %CALLNAME:PLAYER%의 헐떡거림은 멈추지 않고, %CALLNAME:ARG%의 혀에 희롱당한다.
 		PRINTFORMW 영혼이, 악마의 혀에 능욕당한다.
-		PRINTFORMW 「이대로 언니를 %CSTR:ARG:一人称% 걸로 만들고 싶은데ー」
+		PRINTFORMW 「이대로 언니를 %CSTR:ARG:일인칭% 걸로 만들고 싶은데ー」
 		PRINTFORMW 「나도 사정이 있어서, 이번엔 이 정도로 해둘게♪」
 	ENDIF
 
@@ -1421,8 +1421,8 @@ IF LOCAL < 5
 	RETURN 0
 
 ELSE
-;성공　満발したので友好度もあがる
-	CFLAG:ARG:友好度 += RAND:50
+;성공　満발したので우호도もあがる
+	CFLAG:ARG:우호도 += RAND:50
 	IF TALENT:PLAYER:남자 == 1 || TALENT:PLAYER:후타나리 == 1
 	PRINTFORMW 「야……아아, 안 돼, 너무 커……아아아!」
 	PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 전라인 %CALLNAME:ARG%의 엉덩이를 잡아, 뒤에서 격렬하게 찔렀다.
@@ -1457,9 +1457,9 @@ ELSE
 	RETURN 1
 ENDIF
 
-;相손が처녀の場合の판정
+;相手が처녀の場合の판정
 @SEX_NEGOTIATE_PUB303_처녀,ARG
-CFLAG:ARG:友好度 += RAND:50
+CFLAG:ARG:우호도 += RAND:50
 PRINTFORML 「에엣？아…그래도………여、역시 그만두는게…―――므으윽!?」
 PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% %CALLNAME:ARG%의 입을 키스로 막고서
 PRINTFORML [1]상낭하게 안는다
@@ -1518,13 +1518,13 @@ ELSE
 ENDIF
 
 @SEX_NEGOTIATE_PUB303_강간,ARG
-CFLAG:ARG:友好度 -= RAND:80
+CFLAG:ARG:우호도 -= RAND:80
 ;처녀
 IF TALENT:ARG:처녀 == 1
 	;새드ッ気LV10で소질새드を持っている場合は레이프
 	;IF TALENT:PLAYER:새드 && ABL:PLAYER:새드끼
-	;당신と相손の힘の値によって成否판정をする
-	LOCAL = RAND:100 + RAND:(MAX(1,MAXBASE:PLAYER:힘-MAXBASE:ARG:힘/2)) + RAND:(MAX(1,CFLAG:ARG:友好度))
+	;당신と相手の힘の値によって成否판정をする
+	LOCAL = RAND:100 + RAND:(MAX(1,MAXBASE:PLAYER:힘-MAXBASE:ARG:힘/2)) + RAND:(MAX(1,CFLAG:ARG:우호도))
 	IF LOCAL > 30
 		PRINTFORMW 「――아앗, 그만 그만둬―― 싫어어어어엇!!」
 		PRINTFORMW %조사처리(CALLNAME:PLAYER,"는")% 도망치려는 %조사처리(CALLNAME:ARG,"를")% 억지로 쓰러뜨리고, 몇 번이나 범했다……
@@ -1538,8 +1538,8 @@ IF TALENT:ARG:처녀 == 1
 		;처녀관통내역用
 		IF PLAYER == MASTER
 			SETBIT FLAG:(50000+NO:ARG), 7
-			;처녀탈취人数カウント
-			FLAG:처녀탈취人数 += 1
+			;처녀탈취인수カウント
+			FLAG:처녀탈취인수 += 1
 		ENDIF
 		
 		;仲間加入판정＝기교LV*7

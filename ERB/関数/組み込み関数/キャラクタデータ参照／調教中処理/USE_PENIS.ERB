@@ -1,0 +1,21 @@
+﻿;-------------------------------------------------
+;페니스사용판정기본
+;-------------------------------------------------
+@USE_PENIS,ARG,ARG:1 = 0
+#FUNCTION
+;オトコかふたなりじゃないとダメ
+SIF !HAVE_PENIS(ARG)
+	RETURNF 0
+
+;V비켜놓기중이면 OK
+SIF TEQUIP:ARG:V비켜놓기중 == -1
+	RETURNF 1
+
+;下半身下着をつけている、スカート以外の下半身上着を履いている、下の空いてない全身上着を着ているとダメ
+SIF TEQUIP:ARG:음순노출 != -1 && ((ARG:1 & 1 && (TEQUIP:ARG:Ｃ촉각 & 2)) || (ARG:1 & 2 && (TEQUIP:ARG:Ｃ촉각 & 4)) ) == 0
+	RETURNF 0
+
+;オナホール使用中はダメ
+SIF ITEM_PENIS(ARG) > 0
+	RETURNF 0
+RETURNF 1

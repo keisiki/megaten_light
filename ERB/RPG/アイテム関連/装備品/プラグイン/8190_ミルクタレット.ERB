@@ -1,0 +1,64 @@
+﻿;======================================================
+;장비품의 데이터
+;8190 , 아이템:플러그인／밀크터렛
+;======================================================
+@기본능력수정_8190,ARG,ARG:1 = -1
+SELECTCASE GET_BASESTATUS(ARG)
+ENDSELECT
+RETURN 0
+
+@증가CP_8190
+RETURN 20
+
+@전투능력수정_8190,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 0
+
+@방어상성_8190,ARG,ARG:1 = -1
+SELECTCASE ARG
+ENDSELECT
+RETURN 100
+
+@공격상성_8190, ARG = -1
+RETURN 2
+
+@최저공격횟수_8190, ARG = -1
+RETURN 1
+
+@최대공격횟수_8190, ARG = -1
+RETURN 1
+
+@사거리_8190, ARG = -1
+RETURN 1
+
+@공격범위_8190, ARG = -1
+RETURN 1
+
+@장비부위_8190
+RETURN 0
+
+@필요레벨_8190
+RETURN 1
+
+@장비조건_8190,ARG
+RETURN 1
+
+@구입조건_8190
+RETURN 0
+
+@장비추가스킬_8190,ARG,ARG:1 = -1
+SIF ARG == -1
+	RETURN 0
+IF TALENT:ARG:모유체질 == 0 && TALENT:ARG:절벽 == 0
+	RETURN 0
+ELSE
+	SELECTCASE ARG
+		CASE 0
+			RETURN 3974
+	ENDSELECT
+ENDIF
+
+@장비해설_8190
+PRINTL 絶壁か母乳体質の場合、通常攻撃が長사거리の水撃相性に変化するが、搾乳により消耗を強いられるようになる。
+PRINTL 搾乳機と接続した自動砲台マシンを用いる方式なので銃の扱えない悪魔でも安心。 ミルクガン性癖いいぞ～これ。

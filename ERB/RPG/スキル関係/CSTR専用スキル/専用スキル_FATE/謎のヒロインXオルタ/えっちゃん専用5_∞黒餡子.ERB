@@ -1,0 +1,348 @@
+﻿;スキル名
+@SKILL_NAME_∞黒餡子,ARG
+IF CSTR:ARG:102 != ""
+	RESULTS = ∞밤팥소
+ELSE
+	RESULTS = ∞흑팥소
+ENDIF
+
+;　명중
+@SKILL_HITRATE_∞黒餡子, ARG
+RETURN 100
+
+;　위력
+@SKILL_POWER_∞黒餡子, ARG
+RETURN 200
+
+;;クリティカル率
+;@SKILL_CRITICAL_RATE_∞黒餡子, ARG
+;RETURN 5
+
+;;　吸収率
+;@SKILL_HP_ABSORBER_∞黒餡子, ARG
+;RETURN 0
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_∞黒餡子,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_∞黒餡子,ARG
+RETURN 1
+
+;;一体辺りの最大ＨＩＴ数
+;;※ランダム攻撃系に使う
+;@SKILL_MAXATK_PER_∞黒餡子,ARG
+;RETURN 1
+
+;;一体辺りの最低ＨＩＴ数
+;;※ランダム攻撃系に使う
+;@SKILL_MINATK_PER_∞黒餡子,ARG
+;RETURN 1
+
+;　2 ＨＰ지불　3 ＭＰ지불
+@SKILL_COSTTYPE_∞黒餡子, ARG
+RETURN 3
+;消費なし＝1
+
+;　코스트량
+@SKILL_COST_∞黒餡子,ARG
+RETURN 4
+
+;　상성
+@SKILL_TYPE_∞黒餡子,ARG
+RETURN 0
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_∞黒餡子,ARG
+RETURN 1
+
+;　1 물리데미지로 계산　2 마법데미지로 계산
+@SKILL_DAMAGETYPE_∞黒餡子,ARG
+RETURN 2
+
+
+;　対象が1敵か2味方か3場全体か4特殊か
+@SKILL_TARGET_∞黒餡子,ARG
+RETURN 4
+
+;　사거리
+@SKILL_RANGE_∞黒餡子,ARG
+RETURN 3
+
+;　범위　1 1체　2 1열　3 전체　4 적아군전체
+@SKILL_SPHERE_∞黒餡子,ARG
+RETURN 1
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_∞黒餡子,ARG
+RETURN 2
+
+;　 특수처리 여부 및 처리내용
+;@SKILL_SPECIALEFECT_∞黒餡子,ARG
+;ARG = 1인 경우는 처리 여부를 반환합니다
+;SIF ARG == 1
+;	RETURN 0
+;아래쪽에 특수처리를 기술합니다
+
+;계승타입
+;@SKILL_SUCCESSION_TYPE_∞黒餡子,ARG
+;RETURN 23
+;검격
+
+;속도보정
+@SKILL_SPEED_∞黒餡子, ARG = -1
+RETURN 0
+
+;;　口上の表示とそのタイプ
+;@SKILL_MESSAGE_∞黒餡子,ARG
+
+
+;전투시 이외에 사용 가능한가
+@SKILL_ACTIONABLE_FIELD_∞黒餡子, ARG = -1
+RETURN 1
+
+;没
+;@SKILL_RANK_∞黒餡子
+;@SKILL_RANKUP_∞黒餡子
+;@계승불능_∞黒餡子
+
+;템플릿용、추가효과 시리즈
+;추가효과ステータス
+@SKILL_ADDTIONAL_STATE_∞黒餡子,ARG
+RETURN 0
+
+;추가효과 상성
+@SKILL_ADDTIONAL_TYPE_∞黒餡子,ARG
+RETURN 0
+
+;추가효과基本付与確率
+@SKILL_ADDTIONAL_BASE_RATE_∞黒餡子,ARG
+RETURN 0
+
+;추가효과付与確率上限
+@SKILL_ADDTIONAL_MAX_RATE_∞黒餡子,ARG
+RETURN 0
+
+;;拡散攻撃用追加処理
+;;ブレスなどの拡散攻撃に使う
+;@SKILL_SPREAD_∞黒餡子,ARG
+;RETURN 0
+
+;====================================================
+;トリガー発動条件
+;====================================================
+;@SKILL_TRIGGER_ACTIONABLE_∞黒餡子,ARG,ARG:1
+;RETURN 0
+
+;====================================================
+;カウンター発動条件
+;====================================================
+;@SKILL_COUNTER_ACTIONABLE_∞黒餡子,ARG,ARG:1
+;RETURN RESULT
+
+;====================================================
+;ヒット時ダメージ前処理
+;====================================================
+;@SKILL_HIT_EFFECT_∞黒餡子,ARG,ARG:1
+
+;====================================================
+;ダメージ発動時
+;====================================================
+;@SKILL_DAMAGE_EFFECT_∞黒餡子,ARG,ARG:1
+
+;====================================================
+;行動によるスキルゲージ操作
+;====================================================
+@SKILLGAGE_CHARGE_∞黒餡子,ARG,ARG:1
+#DIM SKILL_NUM
+SKILL_NUM = PU_SKILLNUM_GET(ARG,"∞黒餡子")
+
+SIF ARG != ARG:1
+	RETURN 0
+;검격
+IF SKILLGAGE_H_GETBIT(ARG,SKILL_NUM,4) 
+	CALL SKILLGAGE_H_CLEARBIT(ARG,SKILL_NUM,1)
+	CALL SKILLGAGE_H_CLEARBIT(ARG,SKILL_NUM,4)
+ENDIF
+;전격
+IF SKILLGAGE_H_GETBIT(ARG,SKILL_NUM,5)
+	CALL SKILLGAGE_H_CLEARBIT(ARG,SKILL_NUM,2)
+	CALL SKILLGAGE_H_CLEARBIT(ARG,SKILL_NUM,5)
+ENDIF
+;중력
+IF SKILLGAGE_H_GETBIT(ARG,SKILL_NUM,6)
+	CALL SKILLGAGE_H_CLEARBIT(ARG,SKILL_NUM,3)
+	CALL SKILLGAGE_H_CLEARBIT(ARG,SKILL_NUM,6)
+ENDIF
+SIF SKILLGAGE_D_GET(ARG,SKILL_NUM) < 1 && SKILLGAGE_H_GET(ARG,SKILL_NUM) < 1
+	CALL SKILLGAGE_H_SET,ARG,SKILL_NUM,0
+RETURN 0
+;====================================================
+;스킬 및 행동의 실행
+;====================================================
+@ACTION_∞黒餡子,ARG,ARG:1,SKILL_NUM
+#DIM SKILL_NUM
+#DIM BIT_C
+
+CALL HEAL_SINGLE,ARG,ARG,SKILL_NUM	;単体回復
+IF CSTR:ARG:102 != ""
+	CALL SKILLGAGE_D_SET,ARG,SKILL_NUM,4
+	FOR BIT_C,0,4
+		CALL SKILLGAGE_H_SETBIT,ARG,SKILL_NUM,BIT_C
+	NEXT
+	PRINTFORMW 3턴간、특정 상성의 공격이 크리티컬한 경우 그때만 데미지가 상승하는 상태가 되었다！
+ENDIF
+;CALL ATTACK_SINGLE,ARG,POS(ARG:1),SKILL_NUM;	単体攻撃
+;CALL ATTACK_FIELD,ARG,ARG:1,SKILL_NUM;			範囲攻撃(列、全体)
+;CALL ATTACK_SPREAD,ARG,ARG:1,SKILL_NUM;		拡散攻撃
+;CALL ATTACK_RAND,ARG,ARG:1,SKILL_NUM;			ランダム攻撃
+
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;전투중 이외에서의 실행
+;====================================================
+@ACTION_FIELD_∞黒餡子,ARG,ARG:1,SKILL_NUM
+#DIM SKILL_NUM
+
+CALL HEAL_SINGLE,ARG,ARG,SKILL_NUM	;単体回復
+;CALL HEAL_FIELD,ARG,ARG:1,SKILL_NUM		;範囲回復(列、全体)
+;CALL ALL_HEAL, POS(ARG:1), 0				;単体前回復
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;追加コマンド(EXTRAの下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_EXTRA_∞黒餡子,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(MAGICの下、魔封だと消える)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_MAGIC_∞黒餡子,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(一番下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_∞黒餡子,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;コマンド実行
+;====================================================
+;@INPUT_COM_∞黒餡子,ARG
+;RETURN -1
+;-1 再びコマンド選択へ
+; 1 キャラ選択へ
+
+;====================================================
+;戦闘中スキルゲージの可視化
+;====================================================
+@SKILLGAGE_DISPLAY_∞黒餡子,ARG
+#DIM SKILL_NUM
+SKILL_NUM = PU_SKILLNUM_GET(ARG,"∞黒餡子")
+IF SKILLGAGE_D_GET(ARG,SKILL_NUM) > 0 && SKILLGAGE_H_GET(ARG,SKILL_NUM) > 0
+	SETCOLOR COLOR("GRAY")
+	SIF SKILLGAGE_H_GETBIT(ARG,SKILL_NUM,1)
+		SETCOLOR COLOR("P-GREEN")
+	PRINT 【검】
+	SETCOLOR COLOR("GRAY")
+	SIF SKILLGAGE_H_GETBIT(ARG,SKILL_NUM,2)
+		SETCOLOR COLOR("P-BLUE")
+	PRINT 【전】
+	SETCOLOR COLOR("GRAY")
+	SIF SKILLGAGE_H_GETBIT(ARG,SKILL_NUM,3)
+		SETCOLOR COLOR("RED")
+	PRINT 【중】
+	RESETCOLOR
+	PRINTFORML 『∞밤팥소』특수효과 종료까지 나머지　{SKILLGAGE_D_GET(ARG,SKILL_NUM)}턴
+ENDIF
+
+;　説明文の表示
+@SKILL_EXPLAIN_∞黒餡子,ARG
+PRINTL 여섯 가지 원시력「욕구(소울)、당분(파워)、판매처(스페이스)、
+PRINTL 원가(리얼리티)、제작(타임)、수요(마인드)」이 내장된 수수께끼의 아이템。
+PRINTL 가진 자에게 무한한 힘을 주어、손가락 하나로 우주의 절반이 과자공장이 된다거나 한다지만、자세한 것은 불명。
+;KR판 추가수정, 조사처리에 따른 출력문 개정
+SIF CSTR:ARG:102 != ""
+	PRINTL 특훈의 덕분에 밤팥소로 진화했다。 왜 진화했는지는 잘 모른다。
+PRINTL
+PRINTL 자신의 ＨＰ를 크게 회복。
+PRINT 습득 중에는 자신의 피회복량이 증가
+IF CSTR:ARG:102 != ""
+	PRINTL 하고、턴 종료시에 ＭＡＧ를 소비하는 대신 ＨＰ가 5％ 재생한다。
+	PRINTL 추가로 스킬 사용 시、자신을 3턴간『검격』『전격』『중력』의 공격으로 크리티컬한 경우
+	PRINTL 각 속성당 한 번만、그때만 데미지가 상승하는 상태가 된다。
+ELSE
+	PRINTL 한다。
+ENDIF
+
+;没
+;@계승부위_∞黒餡子,ARG
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_∞黒餡子,ARG
+RETURN 1
+
+;ターゲット条件
+;↓のSKILL_T_RESERVEがRETURN 1 の時に使用する
+;@SKILL_SPECIAL_TARGET_∞黒餡子,USE_CHARA,ARG
+;#DIM USE_CHARA
+;RETURN 0
+
+;控えに使えるか
+;@SKILL_T_RESERVE_∞黒餡子,ARG
+;RETURN 0
+
+;어떤 배드스테이터스를 고칠수 있는가
+;@SKILL_CURE_STATE_∞黒餡子,USE_CHARA,ARG
+;#DIM USE_CHARA
+;SELECTCASE GET_STATE(ARG)
+;	CASE "HAPPY","CLOSE"
+;		RETURN 1
+;ENDSELECT
+;RETURN 0
+
+;この技を複数持てるか
+;@중복습득수_∞黒餡子,ARG
+;RETURN 1
+
+;スキル重複で役に立つ関数
+;HAVE_SKILL_OVERLAP(ARG,PU_SKILLNUM_GET(ARG,"∞黒餡子"))
+
+;スキルゲージで役に立つ関数
+;SKILLGAGE_H_GET(ARG,PU_SKILLNUM_GET(ARG,"∞黒餡子"))
+;CALL SKILLGAGE_H_SET,ARG,PU_SKILLNUM_GET(ARG,"∞黒餡子"),0
+
+;ＨＰ自動回復処理における優先度 高いほど優先され、低いと無効化される
+@SKILL_HP_REGEN_RANK_∞黒餡子,ARG
+SIF ARG < 0 || CSTR:ARG:102 == ""
+	RETURN 0
+RETURN 5
+
+;ターン終了時に行う処理
+@SKILL_TURNEND_∞黒餡子,ARG
+SIF ARG < 0 || CSTR:ARG:102 == ""
+	RETURN 0
+SIF CPOS(ARG) > 0 && CFLAG:ARG:회복불능플래그 < 1 && CFLAG:ARG:상태이상 != GET_STATE_NUM("DYING") && CFLAG:ARG:상태이상 != GET_STATE_NUM("BRAND") && BASE:ARG:ＨＰ < MAXBASE:ARG:ＨＰ
+	CALL VAR_REGEN,ARG,PU_SKILLNUM_GET(ARG,"∞黒餡子"),"ＨＰ",MAX(MAXBASE:ARG:ＨＰ/20,1),(MAXBASE:ARG:ＨＰ/20) * BASE:ARG:LV

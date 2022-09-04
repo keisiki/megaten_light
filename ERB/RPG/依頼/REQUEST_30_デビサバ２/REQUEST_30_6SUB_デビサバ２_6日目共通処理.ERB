@@ -3,7 +3,7 @@
 ;
 ;	Module		:REQUEST_xxx_yyy.ERB
 ;	Facility	:의뢰:030(데빌서바이버２) ６日눈ENEMY。
-;				 REQUEST_30のサ부후ァイル。
+;				 REQUEST_30のサ부흐ァイル。
 ;				 ６日눈の전투に関する処理を管理する。
 ;
 ;	Licence		:ライセンスフリー。
@@ -55,11 +55,11 @@ L_ENEMY_LV = ARG
 
 
 ;- 전투前処理
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 FLAG:선제기습취소 = 1
 
-SELECTCASE FLAG:デビサバ２進行度
+SELECTCASE FLAG:데빌서바２진행도
 	;対東京戦
 	CASE 1005 , 2005 , 4005
 		SETCOLOR 0xDD0000
@@ -74,7 +74,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		
 		;SETしヴぁ
 		CALL SET_ENEMY,9,[[キャラ:시바]],95,1,1
-		CFLAG:(CHARANUM-1):行動횟수 = 3
+		CFLAG:(CHARANUM-1):행동횟수 = 3
 		;물리반사
 		FOR LOCAL,GETNUM(MAXBASE,"검격"),GETNUM(MAXBASE,"전술") + 1
 			BASE:(CHARANUM-1):LOCAL = 999
@@ -103,15 +103,15 @@ SELECTCASE FLAG:デビサバ２進行度
 		PRINTL 인간　히어로가 1명 나왔다！
 		PRINTL 인간　시지마 다이치가 1명 나왔다！
 		PRINTL 인간　쿠죠 히나코가 1명 나왔다！
-		PRINTL 인간　토리이 쥰고가 1명 나왔다！
+		PRINTL 인간　토리이 준고가 1명 나왔다！
 		CUSTOMDRAWLINE =
 		WAIT
 		
 		;SETジュンゴ
-		CALL SET_ENEMY,8,[[キャラ:쥰고]],L_ENEMY_LV,1,1
+		CALL SET_ENEMY,8,[[キャラ:준고]],L_ENEMY_LV,1,1
 		ABL:(CHARANUM-1):종족 = 43
 		CFLAG:(CHARANUM-1):속도보정 = 15
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		;물리무효
 		FOR LOCAL,GETNUM(MAXBASE,"검격"),GETNUM(MAXBASE,"전술") + 1
 			BASE:(CHARANUM-1):LOCAL = 0
@@ -131,7 +131,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;- SET:다이치
 		CALL SET_ENEMY,9,[[キャラ:다이치]],L_ENEMY_LV,1,1
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;全門내성
 		FOR LOCAL,GETNUM(MAXBASE,"화염"),GETNUM(MAXBASE,"만능")
@@ -152,7 +152,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		NAME:(CHARANUM-1) = 히어로
 		CALLNAME:(CHARANUM-1) = 히어로
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		ABL:(CHARANUM-1):스킬1 = [[스킬:마카・카쟈]]
 		ABL:(CHARANUM-1):스킬2 = [[스킬:메기도]]
@@ -166,7 +166,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;- SET:히나코
 		CALL SET_ENEMY,11,[[キャラ:히나코]],L_ENEMY_LV,1,1
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;全門내성
 		FOR LOCAL,GETNUM(MAXBASE,"화염"),GETNUM(MAXBASE,"만능")
@@ -191,7 +191,7 @@ SELECTCASE FLAG:デビサバ２進行度
 			CALL HEALTH_CHARA,POS(LOCAL)
 		NEXT
 
-		;SET雑물고기
+		;SET雑魚
 		CALL SET_ENEMY,7,[[キャラ:누에]],L_ENEMY_LV
 		CALL SET_ENEMY,12,[[キャラ:하트호르]],L_ENEMY_LV
 		CALL SET_ENEMY,13,[[キャラ:파이몬]],L_ENEMY_LV
@@ -202,7 +202,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;- 전투開始
 		CALL BATTLE_START
 
-		PRINTL 쥰고：
+		PRINTL 준고：
 		PRINTL 「그엇…싫어…。이런거…！」
 		PRINTL 히나코：
 		PRINTL 「큿…안되나。나는 멈출수가 없어…！」
@@ -224,7 +224,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		ABL:(CHARANUM-1):종족 = 43
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;빙결충격무효
 		BASE:(CHARANUM-1):빙결 = 0
@@ -247,7 +247,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		ABL:(CHARANUM-1):종족 = 43
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;물리반사
 		FOR LOCAL,GETNUM(MAXBASE,"검격"),GETNUM(MAXBASE,"전술") + 1
@@ -271,7 +271,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		ABL:(CHARANUM-1):종족 = 43
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;화염핵열무효
 		BASE:(CHARANUM-1):화염 = 0
@@ -289,7 +289,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
-		;- SET:雑물고기
+		;- SET:雑魚
 		CALL SET_ENEMY,13,[[キャラ:아르테미스]],L_ENEMY_LV
 		CALL SET_ENEMY,14,[[キャラ:아타파구]],L_ENEMY_LV
 		CALL SET_ENEMY,15,[[キャラ:빠챠카마쿠]],L_ENEMY_LV
@@ -321,7 +321,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;빙결충격무효
 		BASE:(CHARANUM-1):빙결 = 0
@@ -344,7 +344,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		ABL:(CHARANUM-1):종족 = 43
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 2000
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;물리반사
 		FOR LOCAL,GETNUM(MAXBASE,"검격"),GETNUM(MAXBASE,"전술") + 1
@@ -363,7 +363,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
-		;- SET:雑물고기
+		;- SET:雑魚
 		CALL SET_ENEMY,7,[[キャラ:베르세르크]],L_ENEMY_LV
 		CALL SET_ENEMY,8,[[キャラ:아타파구]],L_ENEMY_LV
 		CALL SET_ENEMY,10,[[キャラ:바스테트]],L_ENEMY_LV
@@ -395,7 +395,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 2000
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;男なら拳一つで勝負せんかい내성
 		BASE:(CHARANUM-1):검격 = 0
@@ -415,7 +415,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
-		;- SET:雑물고기
+		;- SET:雑魚
 		CALL SET_ENEMY,8,[[キャラ:후츠누시]],L_ENEMY_LV
 		CALL SET_ENEMY,10,[[キャラ:페리]],L_ENEMY_LV
 		
@@ -435,7 +435,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		ABL:(CHARANUM-1):종족 = 43
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;물리반사화염무효
 		FOR LOCAL,GETNUM(MAXBASE,"검격"),GETNUM(MAXBASE,"전술")+1
@@ -456,7 +456,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		ABL:(CHARANUM-1):종족 = 43
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;충격반사
 		BASE:(CHARANUM-1):충격 = 999
@@ -474,7 +474,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
-		;SET雑물고기
+		;SET雑魚
 		CALL SET_ENEMY,7,[[キャラ:아메노후토타마]],L_ENEMY_LV
 		CALL SET_ENEMY,8,[[キャラ:트리글라프]],L_ENEMY_LV
 		CALL SET_ENEMY,10,[[キャラ:아타파구]],L_ENEMY_LV
@@ -511,7 +511,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 2000
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 3
+		CFLAG:(CHARANUM-1):행동횟수 = 3
 		CSTR:(CHARANUM-1):사고패턴 = HIGHヤマト
 		;常世、메기도、중재의뇌화、MP회복(本当はお供の스킬)
 		ABL:(CHARANUM-1):스킬1 = [[스킬:메・디아라한]]
@@ -525,7 +525,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
-		;SET雑물고기
+		;SET雑魚
 		CALL SET_ENEMY,7,[[キャラ:듀라한]],L_ENEMY_LV
 		CALL SET_ENEMY,8,[[キャラ:쿠치사케]],L_ENEMY_LV
 		CALL SET_ENEMY,10,[[キャラ:아마존]],L_ENEMY_LV
@@ -534,7 +534,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CALL SET_ENEMY,13,[[キャラ:얌]],L_ENEMY_LV
 		CALL SET_ENEMY,15,[[キャラ:루흐]],L_ENEMY_LV
 		CALL SET_ENEMY,16,[[キャラ:빠챠카마쿠]],L_ENEMY_LV
-
+		
 		;- 전투開始
 		CALL BATTLE_START
 		
@@ -548,14 +548,14 @@ SELECTCASE FLAG:デビサバ２進行度
 				CONTINUE
 			SIF ABL:LCOUNT:종족 == 0 || ABL:LCOUNT:종족 > 45
 				CONTINUE
-			SIF TALENT:LCOUNT:인수라 && CFLAG:LCOUNT:所属ＣＯＭＰ == -1
+			SIF TALENT:LCOUNT:인수라 && CFLAG:LCOUNT:소속ＣＯＭＰ == -1
 				CONTINUE
-			SIF CFLAG:LCOUNT:この場に居ないフラグ == 1 
+			SIF CFLAG:LCOUNT:이자리에없는플래그 == 1 
 				CONTINUE
-			SIF CFLAG:LCOUNT:所属ＣＯＭＰ < 0 || CFLAG:LCOUNT:용량未사용
+			SIF CFLAG:LCOUNT:소속ＣＯＭＰ < 0 || CFLAG:LCOUNT:용량미사용
 				CONTINUE
 			
-			CFLAG:LCOUNT:所属ＣＯＭＰ = -1
+			CFLAG:LCOUNT:소속ＣＯＭＰ = -1
 			LOCAL:L_CNT = LCOUNT
 			
 			L_CNT ++
@@ -571,7 +571,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		
 		CALL SET_ENEMY,9,[[キャラ:베네트나쉬]],60,1,1
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 
 		ABL:(CHARANUM-1):스킬1 = [[스킬:연성의불꽃]]
 		ABL:(CHARANUM-1):스킬2 = [[스킬:주극의거포]]
@@ -599,7 +599,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;SET本体
 		CALL SET_ENEMY,8,[[キャラ:베네트나쉬]],60,1,1
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;화염내성추가
 		BASE:(CHARANUM-1):화염 = 50
@@ -620,7 +620,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		NAME:(CHARANUM-1) = 破軍の娘
 		CALLNAME:(CHARANUM-1) = 破軍の娘
 		CFLAG:(CHARANUM-1):속도보정 = 15
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;두베메그레즈＋α내성
 		FOR L_TMP , GETNUM(MAXBASE,"검격") , GETNUM(MAXBASE,"만능")
@@ -647,7 +647,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		NAME:(CHARANUM-1) = 破軍の娘
 		CALLNAME:(CHARANUM-1) = 破軍の娘
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;물리약점 他무효
 		FOR L_TMP , GETNUM(MAXBASE,"검격") , GETNUM(MAXBASE,"만능")
@@ -673,7 +673,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		NAME:(CHARANUM-1) = 破軍の娘
 		CALLNAME:(CHARANUM-1) = 破軍の娘
 		CFLAG:(CHARANUM-1):속도보정 = 20
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 
 		;미자르알리오츠＋α내성
 		BASE:(CHARANUM-1):검격 = 50
@@ -706,7 +706,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;所属COMPを戻す処理
 		FOR LCOUNT, 0, L_CNT + 1
 			SIF LOCAL:LCOUNT > 0
-				CFLAG:(LOCAL:LCOUNT):所属ＣＯＭＰ = 0
+				CFLAG:(LOCAL:LCOUNT):소속ＣＯＭＰ = 0
 		NEXT
 	;알코르
 	CASE 1045 , 2045 , 3125
@@ -731,7 +731,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 		CFLAG:(CHARANUM-1):속도보정 = 5
-		CFLAG:(CHARANUM-1):行動횟수 = 3
+		CFLAG:(CHARANUM-1):행동횟수 = 3
 		
 		;伴星の凶兆(혼탁의장기で代用)、중재의뇌화、勝利の美酒
 		ABL:(CHARANUM-1):스킬1 = [[스킬:혼탁의장기]]
@@ -747,11 +747,11 @@ SELECTCASE FLAG:デビサバ２進行度
 		
 		;SET보티스
 		CALL SET_ENEMY,8,[[キャラ:보티스]],60,1,1
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 		;SETビフロンス
 		CALL SET_ENEMY,10,[[キャラ:비프론스]],60,1,1
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 
 		;- 전투開始
 		CALL BATTLE_START
@@ -773,7 +773,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 3
+		CFLAG:(CHARANUM-1):행동횟수 = 3
 		CSTR:(CHARANUM-1):사고패턴 = 前座ヤマト
 		
 		;デビサバ２진・전문내성＋마력무효
@@ -868,8 +868,8 @@ SELECTCASE FLAG:デビサバ２進行度
 		ABL:(CHARANUM - 1):스킬7 = 0
 		ABL:(CHARANUM - 1):스킬8 = 0
 		
-		;- SET:쥰고
-		CALL SET_ENEMY,10,[[キャラ:쥰고]],L_ENEMY_LV,1,1
+		;- SET:준고
+		CALL SET_ENEMY,10,[[キャラ:준고]],L_ENEMY_LV,1,1
 		CFLAG:(CHARANUM-1):속도보정 = 5
 		
 		;충격반사전격정신신경파마주살약점
@@ -969,7 +969,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		BASE:(CHARANUM-1):주살 = 0
 		
 		;스킬構成は原作전투時を参考
-		ABL:(CHARANUM - 1):스킬1 = [[스킬:마하・부후다인]]
+		ABL:(CHARANUM - 1):스킬1 = [[스킬:마하・부흐다인]]
 		ABL:(CHARANUM - 1):스킬2 = [[스킬:마계의조사]]
 		ABL:(CHARANUM - 1):스킬3 = 0
 		ABL:(CHARANUM - 1):스킬4 = 0
@@ -1021,7 +1021,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;- SET:이오
 		CALL SET_ENEMY,8,[[キャラ:이오]],L_ENEMY_LV,1,1
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		ABL:(CHARANUM-1):종족 = 10
 		
 		BASE:(CHARANUM-1):전격 = 999
@@ -1044,7 +1044,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;- SET:야마토
 		CALL SET_ENEMY,9,[[キャラ:야마토]],L_ENEMY_LV,1,1
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		ABL:(CHARANUM-1):종족 = 10
 		
 		FOR LOCAL,GETNUM(MAXBASE,"검격"),GETNUM(MAXBASE,"전술") + 1
@@ -1069,7 +1069,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;- SET:케이타
 		CALL SET_ENEMY,10,[[キャラ:케이타]],L_ENEMY_LV,1,1
 		CFLAG:(CHARANUM-1):속도보정 = 15
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		ABL:(CHARANUM-1):종족 = 10
 		
 		BASE:(CHARANUM-1):화염 = 999
@@ -1102,7 +1102,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
 		CFLAG:(CHARANUM-1):ＭＰ보정 = 2000
 		CFLAG:(CHARANUM-1):속도보정 = 10
-		CFLAG:(CHARANUM-1):行動횟수 = 4
+		CFLAG:(CHARANUM-1):행동횟수 = 4
 		ABL:(CHARANUM-1):공격범위 = 1
 		
 		;ケフェイド、슈퍼노바、메기도라온、封技추가。現在はスーパーノヴァ未実装
@@ -1118,7 +1118,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		;SETオトモ
 		
 		;摂理
-		IF FLAG:デビサバ２進行度 == 3127 || FLAG:デビサバ２進行度 ==  3137 || FLAG:デビサバ２進行度 ==  4057
+		IF FLAG:데빌서바２진행도 == 3127 || FLAG:데빌서바２진행도 ==  3137 || FLAG:데빌서바２진행도 ==  4057
 			PRINTL 섭리의 창　폴라리스B가 1명 나왔다！
 			PRINTL 섭리의 방패　폴라리스Ab가 1명 나왔다！
 			
@@ -1128,7 +1128,7 @@ SELECTCASE FLAG:デビサバ２進行度
 			CSTR:(CHARANUM-1):종족명 =  섭리의 창
 			CFLAG:(CHARANUM-1):ＨＰ보정 = 500
 			CFLAG:(CHARANUM-1):속도보정 = 10
-			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):행동횟수 = 2
 			
 			;공격전체化、데스바운드(デビサバ版)、천열찌르기、クリティカル＋、반격
 			ABL:(CHARANUM-1):스킬1 = [[스킬:메테오피스트]]
@@ -1156,7 +1156,7 @@ SELECTCASE FLAG:デビサバ２進行度
 			CSTR:(CHARANUM-1):종족명 =  섭리의 방패
 			CFLAG:(CHARANUM-1):ＨＰ보정 = 500
 			CFLAG:(CHARANUM-1):속도보정 = 10
-			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):행동횟수 = 2
 			ABL:(CHARANUM-1):공격범위 = 1
 			
 			;화염무효전격내성충격흡수
@@ -1182,7 +1182,7 @@ SELECTCASE FLAG:デビサバ２進行度
 			NAME:(CHARANUM-1) = 폴라리스B
 			CALLNAME:(CHARANUM-1) = 폴라리스B
 			CSTR:(CHARANUM-1):종족명 =  하늘의 창
-			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):행동횟수 = 2
 		
 			;공격전체化、데스바운드(デビサバ版)、천열찌르기、クリティカル＋、반격
 			ABL:(CHARANUM-1):스킬1 = [[스킬:메테오피스트]]
@@ -1208,7 +1208,7 @@ SELECTCASE FLAG:デビサバ２進行度
 			NAME:(CHARANUM-1) = 폴라리스Ab
 			CALLNAME:(CHARANUM-1) = 폴라리스Ab
 			CSTR:(CHARANUM-1):종족명 =  하늘의 방패
-			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):행동횟수 = 2
 			ABL:(CHARANUM-1):공격범위 = 1
 			
 			;화염무효전격내성충격흡수
@@ -1245,19 +1245,19 @@ SELECTCASE FLAG:デビサバ２進行度
 ENDSELECT
 	
 ;- 전투종료
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 
 ;=================================================
 ;   sub EVENT_BATTLE_TURN_END_REQUEST30_6
 ;=================================================
-;   의뢰:전투中処理(ターン종료시)
+;   의뢰:전투중処理(ターン종료시)
 ;-------------------------------------------------
-;   6日눈、7日눈用の전투中処理(ターン종료시)
+;   6日눈、7日눈用の전투중処理(ターン종료시)
 ;-------------------------------------------------
-;   FLAG:勝利フラグに1をセットすると、전투を強制종료出来る
-;   FLAG:敗北フラグに1をセットすると、ゲームオーバーに出来る
+;   FLAG:승리플래그に1をセットすると、전투を強制종료出来る
+;   FLAG:패배플래그に1をセットすると、ゲームオーバーに出来る
 ;-------------------------------------------------
 @EVENT_BATTLE_TURNEND_REQUEST30_6
 #DIM L_POSITION
@@ -1268,10 +1268,10 @@ L_CNT = 0
 ;-----------------------------
 ;- 処理開始
 ;-----------------------------
-SELECTCASE FLAG:デビサバ２進行度
+SELECTCASE FLAG:데빌서바２진행도
 		
 	;-----------------------------
-	;- 2025:전투中(対HIGHヤマト)
+	;- 2025:전투중(対HIGHヤマト)
 	;-----------------------------
 	CASE 2025 , 3025
 		
@@ -1285,16 +1285,16 @@ SELECTCASE FLAG:デビサバ２進行度
 			ELSEIF NO:L_POSITION == [[キャラ:야마토]]
 				L_NO = L_POSITION
 			;該当する位置のキャラが死んでない
-			ELSEIF CFLAG:L_POSITION:ステート != GET_STATE_NUM("DYING")
+			ELSEIF CFLAG:L_POSITION:상태이상 != GET_STATE_NUM("DYING")
 				L_CNT ++
 			ENDIF
 		NEXT
 		;ヤマトが死んでたら
-		SIF CFLAG:L_NO:ステート == GET_STATE_NUM("DYING")
+		SIF CFLAG:L_NO:상태이상 == GET_STATE_NUM("DYING")
 			RETURN
 		
-		;ヤマトの行動횟수調整
-		IF (L_CNT == 0 || 現HP割合(L_NO) < 30) && CFLAG:L_NO:行動횟수 <= 4
+		;ヤマトの행동횟수調整
+		IF (L_CNT == 0 || 현HP비율(L_NO) < 30) && CFLAG:L_NO:행동횟수 <= 4
 			CUSTOMDRAWLINE =
 			SETCOLOR 0xDD0000
 			CALL MESSAGE_BL(1,"야마토: 후하하핫…！흐럅, 계속 간다！네놈들은 따라잡을수 없다！")
@@ -1302,10 +1302,10 @@ SELECTCASE FLAG:デビサバ２進行度
 			CUSTOMDRAWLINE =
 			CALL MESSAGE_B(3,,"야마토의 움직임이 빨라졌다！",)
 			
-			CFLAG:L_NO:行動횟수 = 5
+			CFLAG:L_NO:행동횟수 = 5
 			CFLAG:L_NO:속도보정 = 25
 			CALL SYNC_STATUS,L_NO
-		ELSEIF (L_CNT <= 4 || 現HP割合(L_NO) < 60) && CFLAG:L_NO:行動횟수 == 3
+		ELSEIF (L_CNT <= 4 || 현HP비율(L_NO) < 60) && CFLAG:L_NO:행동횟수 == 3
 			CUSTOMDRAWLINE =
 			SETCOLOR 0xDD0000
 			CALL MESSAGE_BL(1,"야마토：아직이다…아직 더있다！자 따라잡아 봐라…！")
@@ -1313,12 +1313,12 @@ SELECTCASE FLAG:デビサバ２進行度
 			CUSTOMDRAWLINE =
 			CALL MESSAGE_B(3,,"야마토의 움직임이 빨라졌다！",)
 			
-			CFLAG:L_NO:行動횟수 = 4
+			CFLAG:L_NO:행동횟수 = 4
 			CFLAG:L_NO:속도보정 = 15
 			CALL SYNC_STATUS,L_NO
 		ENDIF
 	;-----------------------------
-	;- 1045 , 2045:전투中(알코르)
+	;- 1045 , 2045:전투중(알코르)
 	;-----------------------------
 	CASE 1045 , 2045 , 3115 , 3125
 		LOCAL = FINDCHARA_ENEMY(3008)
@@ -1326,7 +1326,7 @@ SELECTCASE FLAG:デビサバ２進行度
 		SIF L_NO < 0 || CPOS(L_NO) <= 0 || LOCAL == 0 || LOCAL == 3
 			RETURN
 		
-		IF FLAG:経過ターン数 % 6 == 0
+		IF FLAG:경과턴수 % 6 == 0
 			
 			;물리무효それ以外내성
 			BASE:L_NO:검격 = 0
@@ -1349,7 +1349,7 @@ SELECTCASE FLAG:デビサバ２進行度
 			ABL:L_NO:스킬4 = [[스킬:치유촉진(대)]]
 			
 			CALL MESSAGE_B(3,"알코르의 모습이 큐브가 되었다！","알코르의 내성이 변했다！","알코르의 스킬이 변했다！")
-		ELSEIF FLAG:経過ターン数 % 3 == 0
+		ELSEIF FLAG:경과턴수 % 3 == 0
 			LOCAL = FINDCHARA_ENEMY(3008)
 			L_NO = RESULT:1
 			SIF L_NO < 0 || CPOS(L_NO) <= 0 || LOCAL == 0 || LOCAL == 3
@@ -1379,7 +1379,7 @@ SELECTCASE FLAG:デビサバ２進行度
 			CALL MESSAGE_B(3,"알코르의 모습이 가시모양이 되었다！","알코르의 내성이 변했다！","알코르의 스킬이 변했다！")
 		ENDIF
 	;-----------------------------
-	;- 4057:전투中(真ポラリス戦　摂理)
+	;- 4057:전투중(真ポラリス戦　摂理)
 	;-----------------------------
 	CASE 4057 , 3137 , 3147
 		L_CNT = 1
@@ -1391,18 +1391,18 @@ SELECTCASE FLAG:デビサバ２進行度
 			SIF L_POSITION < 0 || NO:L_POSITION != 3311
 				CONTINUE
 			
-			;ボスフラグついた本体だったら
-			SIF CFLAG:L_POSITION:ボスフラグ == 1
+			;보스플래그ついた本体だったら
+			SIF CFLAG:L_POSITION:보스플래그 == 1
 				L_NO = L_POSITION
 				
 			;該当するキャラが死んでない
-			IF CFLAG:L_POSITION:ステート != GET_STATE_NUM("DYING")
+			IF CFLAG:L_POSITION:상태이상 != GET_STATE_NUM("DYING")
 				L_CNT ++
 			;取り巻きが死んで３ターン立った
-			ELSEIF !CFLAG:L_POSITION:ボスフラグ && CFLAG:L_POSITION:ステート経過ターン > 2
+			ELSEIF !CFLAG:L_POSITION:보스플래그 && CFLAG:L_POSITION:상태이상경과턴수 > 2
 				CALL MESSAGE_BL(3,,CALLNAME:L_POSITION+"가 재생했다",)
-				CFLAG:L_POSITION:ステート = 0
-				CFLAG:L_POSITION:ステート経過ターン = 0
+				CFLAG:L_POSITION:상태이상 = 0
+				CFLAG:L_POSITION:상태이상경과턴수 = 0
 				CALL HEALTH_CHARA,(L_POSITION)
 				
 				L_CNT ++
@@ -1411,18 +1411,18 @@ SELECTCASE FLAG:デビサバ２進行度
 		
 		
 		;本体が死んでたら
-		IF CFLAG:L_NO:ステート == GET_STATE_NUM("DYING")
-			FLAG:勝利フラグ = 1
+		IF CFLAG:L_NO:상태이상 == GET_STATE_NUM("DYING")
+			FLAG:승리플래그 = 1
 		;당신が死んでたら
-		ELSEIF CFLAG:MASTER:ステート == GET_STATE_NUM("DYING")
-			FLAG:敗北フラグ = 1
-		;ポラリスの行動횟수調整
-		ELSEIF L_CNT < CFLAG:L_NO:行動횟수
-			CFLAG:L_NO:行動횟수 = L_CNT
-			CALL MESSAGE_B(3,,"폴라리스의 行動횟수가 감소했다！",)
-		ELSEIF L_CNT > CFLAG:L_NO:行動횟수
-			CFLAG:L_NO:行動횟수 = L_CNT
-			CALL MESSAGE_B(3,,"폴라리스의 行動횟수가 늘어났다！",)
+		ELSEIF CFLAG:MASTER:상태이상 == GET_STATE_NUM("DYING")
+			FLAG:패배플래그 = 1
+		;ポラリスの행동횟수調整
+		ELSEIF L_CNT < CFLAG:L_NO:행동횟수
+			CFLAG:L_NO:행동횟수 = L_CNT
+			CALL MESSAGE_B(3,,"폴라리스의 행동횟수가 감소했다！",)
+		ELSEIF L_CNT > CFLAG:L_NO:행동횟수
+			CFLAG:L_NO:행동횟수 = L_CNT
+			CALL MESSAGE_B(3,,"폴라리스의 행동횟수가 늘어났다！",)
 		ENDIF
 ENDSELECT
 
@@ -1430,20 +1430,20 @@ ENDSELECT
 ;HIGHヤマトの사고패턴
 @SET_ACTION_HIGHヤマト,ARG
 ;ＨＰ15％以下
-IF 現HP割合(ARG) < 15 && RAND:2 == 0
+IF 현HP비율(ARG) < 15 && RAND:2 == 0
 	CALL CHECK_ACTIONABLE,ARG,[[스킬:메・디아라한]]
 	SIF RESULT == 0
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = [[스킬:메・디아라한]]
+	CFLAG:ARG:입력행동 = [[스킬:메・디아라한]]
 	CALL RANDOM_TARGET,ARG,[[스킬:메・디아라한]]
 	RETURN 1
 ;ＨＰ15％이상
-ELSEIF 現HP割合(ARG) >= 15
+ELSEIF 현HP비율(ARG) >= 15
 	IF CFLAG:ARG:명중강화 < 0 || CFLAG:ARG:마법위력강화 < 0
 		CALL CHECK_ACTIONABLE,ARG,[[스킬:데・쿤다]]
 		SIF RESULT == 0
 			GOTO DECIDE_ACTION
-		CFLAG:ARG:입력行動 = [[스킬:데・쿤다]]
+		CFLAG:ARG:입력행동 = [[스킬:데・쿤다]]
 		CALL RANDOM_TARGET,ARG,[[스킬:데・쿤다]]
 		RETURN 1
 	ELSE
@@ -1453,7 +1453,7 @@ ELSEIF 現HP割合(ARG) >= 15
 				CALL CHECK_ACTIONABLE,ARG,[[스킬:메기도라]]
 				SIF RESULT == 0
 					GOTO DECIDE_ACTION
-				CFLAG:ARG:입력行動 = [[스킬:메기도라]]
+				CFLAG:ARG:입력행동 = [[스킬:메기도라]]
 				CALL RANDOM_TARGET,ARG,[[스킬:메기도라]]
 				RETURN 1
 			;20％
@@ -1461,7 +1461,7 @@ ELSEIF 現HP割合(ARG) >= 15
 				CALL CHECK_ACTIONABLE,ARG,[[스킬:중재의뇌화]]
 				SIF RESULT == 0
 					GOTO DECIDE_ACTION
-				CFLAG:ARG:입력行動 = [[스킬:중재의뇌화]]
+				CFLAG:ARG:입력행동 = [[스킬:중재의뇌화]]
 				CALL RANDOM_TARGET,ARG,[[스킬:중재의뇌화]]
 				RETURN 1
 		ENDSELECT
@@ -1470,8 +1470,8 @@ ELSE
 	$DECIDE_ACTION
 	CALL SEARCH_ACT,ARG
 	IF RESULT == 0
-		CFLAG:ARG:입력行動 = -1
-		CFLAG:ARG:방어フラグ = 1
+		CFLAG:ARG:입력행동 = -1
+		CFLAG:ARG:방어플래그 = 1
 		RETURN 0
 	ENDIF
 	LOCAL = RAND:RESULT
@@ -1482,63 +1482,63 @@ ELSE
 	CALL RANDOM_TARGET,ARG,LOCAL:1
 	CALLFORM SKILL_TARGET_{LOCAL:1}
 	;ここで스킬번호を行動内容に代入
-	SIF CFLAG:ARG:ターゲット == -1
+	SIF CFLAG:ARG:타겟 == -1
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = LOCAL:1
+	CFLAG:ARG:입력행동 = LOCAL:1
 
 ENDIF
 
 ;前座ヤマトの사고패턴
 @SET_ACTION_前座ヤマト,ARG
 ;1more
-IF CFLAG:ARG:１moreフラグ > 0
+IF CFLAG:ARG:１more플래그 > 0
 	;메기도라온
 	CALL CHECK_ACTIONABLE,ARG,[[스킬:메기도라온]]
 	SIF RESULT == 0
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = [[스킬:메기도라온]]
+	CFLAG:ARG:입력행동 = [[스킬:메기도라온]]
 	CALL RANDOM_TARGET,ARG,[[스킬:메기도라온]]
 ;ＨＰ10％以下
-ELSEIF 現HP割合(ARG) < 10
-	IF CFLAG:ARG:集中フラグ == 1
+ELSEIF 현HP비율(ARG) < 10
+	IF CFLAG:ARG:집중플래그 == 1
 		CALL CHECK_ACTIONABLE,ARG,[[스킬:메기도라온]]
 		SIF RESULT == 0
 			GOTO DECIDE_ACTION
-		CFLAG:ARG:입력行動 = [[스킬:메기도라온]]
+		CFLAG:ARG:입력행동 = [[스킬:메기도라온]]
 		CALL RANDOM_TARGET,ARG,[[스킬:메기도라온]]
 		RETURN 1
 	ELSE
 		CALL CHECK_ACTIONABLE,ARG,[[스킬:디아라한]]
 		SIF RESULT == 0
 			GOTO DECIDE_ACTION
-		CFLAG:ARG:입력行動 = [[스킬:디아라한]]
+		CFLAG:ARG:입력행동 = [[스킬:디아라한]]
 		CALL RANDOM_TARGET,ARG,[[스킬:디아라한]]
 		RETURN 1
 	ENDIF
 ;ＨＰ10％이상
-ELSEIF 現HP割合(ARG) >= 10
-	IF CFLAG:ARG:集中フラグ == 1
+ELSEIF 현HP비율(ARG) >= 10
+	IF CFLAG:ARG:집중플래그 == 1
 		CALL CHECK_ACTIONABLE,ARG,[[스킬:메기도라온]]
 		SIF RESULT == 0
 			GOTO DECIDE_ACTION
-		CFLAG:ARG:입력行動 = [[스킬:메기도라온]]
+		CFLAG:ARG:입력행동 = [[스킬:메기도라온]]
 		CALL RANDOM_TARGET,ARG,[[스킬:메기도라온]]
 		RETURN 1
 	ELSEIF CFLAG:ARG:명중강화 < -2 || CFLAG:ARG:마법위력강화 < -2
 		CALL CHECK_ACTIONABLE,ARG,[[스킬:데・쿤다]]
 		SIF RESULT == 0
 			GOTO DECIDE_ACTION
-		CFLAG:ARG:입력行動 = [[스킬:데・쿤다]]
+		CFLAG:ARG:입력행동 = [[스킬:데・쿤다]]
 		CALL RANDOM_TARGET,ARG,[[스킬:데・쿤다]]
 		RETURN 1
-	ELSEIF CFLAG:ARG:行動した횟수 == 0
+	ELSEIF CFLAG:ARG:행동한횟수 == 0
 		SELECTCASE RAND:100
 			;40％
 			CASE IS < 40
 				CALL CHECK_ACTIONABLE,ARG,[[스킬:컨센트레이트]]
 				SIF RESULT == 0
 					GOTO DECIDE_ACTION
-				CFLAG:ARG:입력行動 = [[스킬:컨센트레이트]]
+				CFLAG:ARG:입력행동 = [[스킬:컨센트레이트]]
 				CALL RANDOM_TARGET,ARG,[[스킬:컨센트레이트]]
 				RETURN 1
 			;40％
@@ -1546,7 +1546,7 @@ ELSEIF 現HP割合(ARG) >= 10
 				CALL CHECK_ACTIONABLE,ARG,[[스킬:마카・카쟈]]
 				SIF RESULT == 0
 					GOTO DECIDE_ACTION
-				CFLAG:ARG:입력行動 = [[스킬:마카・카쟈]]
+				CFLAG:ARG:입력행동 = [[스킬:마카・카쟈]]
 				CALL RANDOM_TARGET,ARG,[[스킬:마카・카쟈]]
 				RETURN 1
 			;20％
@@ -1554,7 +1554,7 @@ ELSEIF 現HP割合(ARG) >= 10
 				CALL CHECK_ACTIONABLE,ARG,[[스킬:메기도라온]]
 				SIF RESULT == 0
 					GOTO DECIDE_ACTION
-				CFLAG:ARG:입력行動 = [[스킬:메기도라온]]
+				CFLAG:ARG:입력행동 = [[스킬:메기도라온]]
 				CALL RANDOM_TARGET,ARG,[[스킬:메기도라온]]
 				RETURN 1
 		ENDSELECT
@@ -1565,7 +1565,7 @@ ELSEIF 現HP割合(ARG) >= 10
 				CALL CHECK_ACTIONABLE,ARG,[[스킬:메기도라온]]
 				SIF RESULT == 0
 					GOTO DECIDE_ACTION
-				CFLAG:ARG:입력行動 = [[스킬:메기도라온]]
+				CFLAG:ARG:입력행동 = [[스킬:메기도라온]]
 				CALL RANDOM_TARGET,ARG,[[스킬:메기도라온]]
 				RETURN 1
 			;30％
@@ -1573,7 +1573,7 @@ ELSEIF 現HP割合(ARG) >= 10
 				CALL CHECK_ACTIONABLE,ARG,[[스킬:마카・카쟈]]
 				SIF RESULT == 0
 					GOTO DECIDE_ACTION
-				CFLAG:ARG:입력行動 = [[스킬:마카・카쟈]]
+				CFLAG:ARG:입력행동 = [[스킬:마카・카쟈]]
 				CALL RANDOM_TARGET,ARG,[[스킬:마카・카쟈]]
 				RETURN 1
 			;10％
@@ -1581,7 +1581,7 @@ ELSEIF 現HP割合(ARG) >= 10
 				CALL CHECK_ACTIONABLE,ARG,[[스킬:컨센트레이트]]
 				SIF RESULT == 0
 					GOTO DECIDE_ACTION
-				CFLAG:ARG:입력行動 = [[스킬:컨센트레이트]]
+				CFLAG:ARG:입력행동 = [[스킬:컨센트레이트]]
 				CALL RANDOM_TARGET,ARG,[[스킬:컨센트레이트]]
 				RETURN 1
 		ENDSELECT
@@ -1590,8 +1590,8 @@ ELSE
 	$DECIDE_ACTION
 	CALL SEARCH_ACT,ARG
 	IF RESULT == 0
-		CFLAG:ARG:입력行動 = -1
-		CFLAG:ARG:방어フラグ = 1
+		CFLAG:ARG:입력행동 = -1
+		CFLAG:ARG:방어플래그 = 1
 		RETURN 0
 	ENDIF
 	LOCAL = RAND:RESULT
@@ -1602,8 +1602,8 @@ ELSE
 	CALL RANDOM_TARGET,ARG,LOCAL:1
 	CALLFORM SKILL_TARGET_{LOCAL:1}
 	;ここで스킬번호を行動内容に代入
-	SIF CFLAG:ARG:ターゲット == -1
+	SIF CFLAG:ARG:타겟 == -1
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = LOCAL:1
+	CFLAG:ARG:입력행동 = LOCAL:1
 
 ENDIF

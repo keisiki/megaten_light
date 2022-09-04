@@ -4,8 +4,8 @@
 ;조건
 ;====================
 @PLAYABLE_COLOSSEUM_14
-;IF FLAG:DEBUG || (투기장フラグ:14:0 == 0 && 투기장フラグ:6:0 == 1)
-IF FLAG:闘技場랭크 >= 4 && FLAG:闘技場名声 >= 1200 && 투기장フラグ:14:0 == 0
+;IF FLAG:DEBUG || (투기장플래그:14:0 == 0 && 투기장플래그:6:0 == 1)
+IF FLAG:투기장랭크 >= 4 && FLAG:투기장명성 >= 1200 && 투기장플래그:14:0 == 0
 	RESULTS = 시합 랭크 Ａ　ＶＳ 음양사의 후예
 	RETURN 1
 ENDIF
@@ -16,8 +16,8 @@ RETURN 0
 ;内容
 ;====================
 @COLOSSEUM_14
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 FLAG:선제기습취소 = 1
 CUSTOMDRAWLINE =
 PRINTL 
@@ -60,7 +60,7 @@ CALL HEALTH_CHARA,(CHARANUM-1)
 ;용신　청룡
 CALL SET_ENEMY,10,757,45,1,1
 CFLAG:(CHARANUM-1):ＭＰ보정 += 1000
-CFLAG:(CHARANUM-1):行動횟수 = 2
+CFLAG:(CHARANUM-1):행동횟수 = 2
 ABL:(CHARANUM-1):스킬5 = 0
 ABL:(CHARANUM-1):스킬6 = 0
 ABL:(CHARANUM-1):입수확률1 = 100
@@ -117,14 +117,14 @@ CALL LIFTING_A_BAN([[キャラ:주작]])
 
 CUSTOMDRAWLINE =
 WAIT
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 PRINTW ￥10000을 상금으로 받았다
 MONEY += 10000
-투기장フラグ:14:0 = 1
-IF FLAG:闘技場랭크 < 5
-	FLAG:闘技場랭크 = 5
+투기장플래그:14:0 = 1
+IF FLAG:투기장랭크 < 5
+	FLAG:투기장랭크 = 5
 ENDIF
 
 FOR LOCAL,0,CHARANUM
@@ -135,30 +135,30 @@ NEXT
 @SET_ACTION_757,ARG
 ;後衛に居るなら前衛に出る
 IF CPOS(ARG) > 11
-	CFLAG:ARG:입력行動 = 2301
-	CFLAG:ARG:입력行動 = CPOS(ARG)-5
+	CFLAG:ARG:입력행동 = 2301
+	CFLAG:ARG:입력행동 = CPOS(ARG)-5
 ENDIF
 
 @SET_ACTION_872,ARG
 ;後衛に居るなら前衛に出る
 IF CPOS(ARG) > 11
-	CFLAG:ARG:입력行動 = 2301
-	CFLAG:ARG:입력行動 = CPOS(ARG)-5
+	CFLAG:ARG:입력행동 = 2301
+	CFLAG:ARG:입력행동 = CPOS(ARG)-5
 ENDIF
 
 @SET_ACTION_873,ARG
 ;後衛に居るなら前衛に出る
 IF CPOS(ARG) > 11
-	CFLAG:ARG:입력行動 = 2301
-	CFLAG:ARG:입력行動 = CPOS(ARG)-5
+	CFLAG:ARG:입력행동 = 2301
+	CFLAG:ARG:입력행동 = CPOS(ARG)-5
 ENDIF
 
 
 @SET_ACTION_4543,ARG
 ;前衛に居るならスウェイバック
-IF CPOS(ARG) == 9 && CFLAG:POS(14):ステート < GET_STATE_NUM("DYING") 
-	CFLAG:ARG:입력行動 = 2301
-	CFLAG:ARG:ターゲット = 14
+IF CPOS(ARG) == 9 && CFLAG:POS(14):상태이상 < GET_STATE_NUM("DYING") 
+	CFLAG:ARG:입력행동 = 2301
+	CFLAG:ARG:타겟 = 14
 	RETURN 1
 ENDIF
 
@@ -167,38 +167,38 @@ ENDIF
 @SET_ACTION_957,ARG
 ;포지션8.9.10.が死んでたら리캄
 ;それ以外に死んでるキャラが居たら리캄
-IF CFLAG:POS(8):ステート == GET_STATE_NUM("DYING")
+IF CFLAG:POS(8):상태이상 == GET_STATE_NUM("DYING")
 	CALL CHECK_ACTIONABLE,ARG,418
 	SIF RESULT == 0
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = 418
-	CFLAG:ARG:ターゲット = POS(8)
+	CFLAG:ARG:입력행동 = 418
+	CFLAG:ARG:타겟 = POS(8)
 	RETURN 1
-ELSEIF CFLAG:POS(9):ステート == GET_STATE_NUM("DYING")
+ELSEIF CFLAG:POS(9):상태이상 == GET_STATE_NUM("DYING")
 	CALL CHECK_ACTIONABLE,ARG,418
 	SIF RESULT == 0
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = 418
-	CFLAG:ARG:ターゲット = POS(9)
+	CFLAG:ARG:입력행동 = 418
+	CFLAG:ARG:타겟 = POS(9)
 	RETURN 1
-ELSEIF CFLAG:POS(10):ステート == GET_STATE_NUM("DYING")
+ELSEIF CFLAG:POS(10):상태이상 == GET_STATE_NUM("DYING")
 	CALL CHECK_ACTIONABLE,ARG,418
 	SIF RESULT == 0
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = 418
-	CFLAG:ARG:ターゲット = POS(10)
+	CFLAG:ARG:입력행동 = 418
+	CFLAG:ARG:타겟 = POS(10)
 	RETURN 1
 ;前衛に居るならスウェイバック
 ELSEIF CPOS(ARG) == 8
-	CFLAG:ARG:입력行動 = 2301
-	CFLAG:ARG:ターゲット = 14
+	CFLAG:ARG:입력행동 = 2301
+	CFLAG:ARG:타겟 = 14
 	RETURN 1
 ELSE
 	$DECIDE_ACTION
 	CALL SEARCH_ACT,ARG
 	IF RESULT == 0
-		CFLAG:ARG:입력行動 = -1
-		CFLAG:ARG:방어フラグ = 1
+		CFLAG:ARG:입력행동 = -1
+		CFLAG:ARG:방어플래그 = 1
 		RETURN 0
 	ENDIF
 	PRINTFORML [{CFLAG:ARG:5}]의 스킬수 {RESULT}
@@ -211,9 +211,9 @@ ELSE
 	CALL RANDOM_TARGET,ARG,LOCAL:1
 	CALLFORM SKILL_TARGET_{LOCAL:1}
 	;ここで스킬번호を行動内容に代入
-	SIF CFLAG:ARG:ターゲット == -1
+	SIF CFLAG:ARG:타겟 == -1
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = LOCAL:1
+	CFLAG:ARG:입력행동 = LOCAL:1
 ENDIF
 
 

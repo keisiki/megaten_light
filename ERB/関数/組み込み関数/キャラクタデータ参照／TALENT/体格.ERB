@@ -1,0 +1,16 @@
+﻿;体格のポイントは체격차.ERBを元に設定
+;小人:-10 小柄:-1 大柄:+1 巨体:+10 素質なし:0
+@체격(ARG=-1)
+#FUNCTION	
+
+ARG = ( ARG==-1 ) ? TARGET # ARG
+
+SIF TALENT:ARG:소인체형
+	RETURNF -10
+SIF TALENT:ARG:유아체형
+	RETURNF -1
+SIF TALENT:ARG:큰체형
+	RETURNF 1
+SIF TALENT:ARG:거체
+	RETURNF 10
+RETURNF 0

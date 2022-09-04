@@ -2,7 +2,7 @@
 ;
 ;	Module		:REQUEST_xxx_yyy.ERB
 ;	Facility	:의뢰:060(真IV) 3
-;				 REQUEST_60のサ부후ァイル。
+;				 REQUEST_60のサ부흐ァイル。
 ;
 ;	Licence		:ライセンスフリー。
 ;
@@ -18,16 +18,16 @@
 ; フラグは下記のみ사용。
 ;
 ;
-; FLAG:真IV進行度
+; FLAG:진IV진행도
 ; 開始時　200
 ;100の位 6
-;10の位　아수라会側で働いていれば 1 적対していれば 9、中立なら0
-;1の位 아수라会側についていれば0-1,적対してれば0か2
+;10の位　아수라会側で働いていれば 1 敵対していれば 9、中立なら0
+;1の位 아수라会側についていれば0-1,敵対してれば0か2
 ;終了時
 ;100の位　700
-;10の位　아수라会側で働いていれば 1 적対していれば 9、中立なら0
+;10の位　아수라会側で働いていれば 1 敵対していれば 9、中立なら0
 ;1の位 	아수라会側についている	カガをタヤマに渡せば1 渡さなければ(殺した場合も)0
-;		적対している
+;		敵対している
 ;		サムライルート 390
 ;		無関係		350
 ;-------------------------------------------------------------------------------
@@ -49,7 +49,7 @@
 ;-----------------------------
 ;- 処理開始
 ;-----------------------------
-L_FLAG_REQ = FLAG:真IV進行度 % 100
+L_FLAG_REQ = FLAG:진IV진행도 % 100
 L_FLAG_REQ = L_FLAG_REQ / 10
 
 IF L_FLAG_REQ == 1
@@ -63,7 +63,7 @@ IF L_FLAG_REQ == 1
 	PRINTFORML  （ 주의：이 의뢰를 받으면、시간이 경과합니다 ）
 	CALL INPUT_YN("의뢰를 수락한다", "거절한다")
 	IF RESULT == 0
-		FLAG:真IV進行度 += 100
+		FLAG:진IV진행도 += 100
 		PRINTFORMW ＞타야마『‥‥미안하다、정말로 살았다。　장소는 이치가야 주둔지의‥‥』
 
 	ELSE
@@ -132,7 +132,7 @@ IF L_FLAG_REQ == 1
 		BASE:(CHARANUM-1):속도 = 13
 		BASE:(CHARANUM-1):운 = 7
 		ABL:(CHARANUM-1):스킬1 = 1006;마하・잔다인
-		ABL:(CHARANUM-1):스킬2 = 806;부후다인
+		ABL:(CHARANUM-1):스킬2 = 806;부흐다인
 		ABL:(CHARANUM-1):스킬3 = 2002;메기도라
 		EQUIP:(CHARANUM-1):검 = [[아이템:사무라이의도]]
 		EQUIP:(CHARANUM-1):총 = [[아이템:곤즈피스톨]]
@@ -140,23 +140,23 @@ IF L_FLAG_REQ == 1
 		EQUIP:(CHARANUM-1):몸통 = [[아이템:법의옷]]
 		EQUIP:(CHARANUM-1):팔 = [[아이템:가드엔젤]]
 		EQUIP:(CHARANUM-1):발 = [[아이템:퍼레이드부츠]]
-		EQUIP:(CHARANUM-1):악세사리 = [[아이템:메가인텔리안경]]
+		EQUIP:(CHARANUM-1):악세서리 = [[아이템:메가인텔리안경]]
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY, 8, 908, 50, 0, 1
 		CALL SET_ENEMY, 9, 306, 50, 0, 1
 		CALL SET_ENEMY, 10, 363, 50, 0, 1
 ;- 전투前処理
-		FLAG:도주불가フラグ = 1
-		FLAG:회화불능フラグ = 1
+		FLAG:도주불가플래그 = 1
+		FLAG:회화불능플래그 = 1
 		FLAG:선제기습취소 = 1
 
 ;- 전투開始
 		CALL BATTLE_START
 
 ;- 전투終了
-		FLAG:도주불가フラグ = 0
-		FLAG:회화불능フラグ = 0
+		FLAG:도주불가플래그 = 0
+		FLAG:회화불능플래그 = 0
 		FLAG:선제기습취소 = 0
 	PRINTFORMW 요나탄「큭、유감‥‥」
 	PRINTFORMW ＞요난단이 쓰러졌다。
@@ -207,15 +207,15 @@ IF L_FLAG_REQ == 1
 			EQUIP:(CHARANUM-1):몸통 = [[아이템:법의옷]]
 			EQUIP:(CHARANUM-1):팔 = [[아이템:가드엔젤]]
 			EQUIP:(CHARANUM-1):발 = [[아이템:퍼레이드부츠]]
-			EQUIP:(CHARANUM-1):악세사리 = [[아이템:메가인텔리안경]]
+			EQUIP:(CHARANUM-1):악세서리 = [[아이템:메가인텔리안경]]
 			ABL:(CHARANUM-1):스킬1 = 703;아기다인
-			ABL:(CHARANUM-1):스킬2 = 801;부후
+			ABL:(CHARANUM-1):스킬2 = 801;부흐
 			ABL:(CHARANUM-1):스킬3 = 1005;마하・잔마
-			ABL:(CHARANUM-1):스킬4 = 704;マハ라기
-			ABL:(CHARANUM-1):스킬5 = 804;マハ부후
+			ABL:(CHARANUM-1):스킬4 = 704;마하라기
+			ABL:(CHARANUM-1):스킬5 = 804;마하부흐
 			ABL:(CHARANUM-1):스킬6 = 1002;잔마
 			ABL:(CHARANUM-1):스킬7 = 702;아기라오
-			ABL:(CHARANUM-1):스킬8 = 805;マハ부후라
+			ABL:(CHARANUM-1):스킬8 = 805;마하부흐라
 			ABL:(CHARANUM-1):습득스킬1 = 0
 			ABL:(CHARANUM-1):습득LV1 = 0
 			ABL:(CHARANUM-1):습득스킬2 = 0
@@ -235,9 +235,9 @@ IF L_FLAG_REQ == 1
 	PRINTFORMW 타야마『아아、그 사무라이가 있다면 갖고 가도 상관 없어。　남겨둬 봤자 처치할 수 밖에 없으니 말이야』
 	ENDIF
 ELSEIF L_FLAG_REQ == 9
-	L_FLAG = 이벤트フラグ:60:1 % 10
+	L_FLAG = 이벤트플래그:60:1 % 10
 
-;- フラグをセット(이벤트フラグ:2桁눈)
+;- フラグをセット(이벤트플래그:2桁눈)
 	IF L_FLAG == 1
 ;ヨナタンルート
 		PRINTFORMW ＞%CALLNAME:MASTER%가 자신의 방에서 휴식을 하고 있는데、누군가가 방문을 노크했다。　
@@ -262,7 +262,7 @@ ELSEIF L_FLAG_REQ == 9
 	PRINTFORML  （ 주의：이 의뢰를 받으면、시간이 경과합니다 ）
 	CALL INPUT_YN("의뢰를 받아들인다", "거절한다")
 	IF RESULT == 0
-		FLAG:真IV進行度 += 100
+		FLAG:진IV진행도 += 100
 	ELSE
 		PRINTFORMW ＞마음이 내키지 않는다。지금은 그만두자。
 		IF L_FLAG == 1
@@ -396,18 +396,18 @@ ELSEIF L_FLAG_REQ == 9
 	CALL SET_ENEMY, 8, 4310, 60, 0, 1
 	CFLAG:(CHARANUM-1):ＨＰ보정 = 2000
 	CFLAG:(CHARANUM-1):ＭＰ보정 = 2000
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CSTR:(CHARANUM-1):사고패턴 = 4310
 	ABL:(CHARANUM-1):스킬4 = [[스킬:데・카쟈]]
 	ABL:(CHARANUM-1):스킬5 = [[스킬:데・쿤다]]
 	ABL:(CHARANUM-1):스킬6 = [[스킬:만마의일격]]
 
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
 	;合体解禁
 	CALL LIFTING_A_BAN([[キャラ:야마토타케루]])
@@ -481,29 +481,29 @@ CALL REQUEST_60_TURN_END
 		BREAK
 	NEXT
 
-IF CFLAG:ARG:行動した횟수 == 0
+IF CFLAG:ARG:행동한횟수 == 0
 	IF CFLAG:ARG:공격강화 < -8 || CFLAG:ARG:명중강화 < -8 || CFLAG:ARG:회피강화 < -8 || CFLAG:ARG:마법위력강화 < -8
-		CFLAG:ARG:입력行動 = [[스킬:데・쿤다]]
-		CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+		CFLAG:ARG:입력행동 = [[스킬:데・쿤다]]
+		CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 	ELSEIF CFLAG:(LOCAL:1):공격강화 > 8 || CFLAG:(LOCAL:1):명중강화 > 8 || CFLAG:(LOCAL:1):회피강화 > 8 || CFLAG:(LOCAL:1):마법위력강화 > 8
-		CFLAG:ARG:입력行動 = [[스킬:데・카쟈]]
-		CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+		CFLAG:ARG:입력행동 = [[스킬:데・카쟈]]
+		CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 	ELSE
-		CFLAG:ARG:입력行動 = [[스킬:이검난무]]
-		CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+		CFLAG:ARG:입력행동 = [[스킬:이검난무]]
+		CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 	ENDIF
 ELSE
-	CFLAG:ARG:입력行動 = [[스킬:만마의일격]]
-	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+	CFLAG:ARG:입력행동 = [[스킬:만마의일격]]
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 ENDIF
 
 ;アクション実行不能なら自動的に通常공격にする
-CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력행동
 IF RESULT == 0
-	CFLAG:ARG:입력行動 = 0
-	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+	CFLAG:ARG:입력행동 = 0
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 ENDIF
-;ここまでターゲットが決まってなかったら、랜덤ターゲットをよんで決定
-SIF CFLAG:ARG:ターゲット == -1
-	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+;ここまで타겟が決まってなかったら、랜덤타겟をよんで決定
+SIF CFLAG:ARG:타겟 == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 RETURN 1

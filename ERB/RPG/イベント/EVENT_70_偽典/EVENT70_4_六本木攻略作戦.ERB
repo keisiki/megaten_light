@@ -3,7 +3,7 @@
 CUSTOMDRAWLINE =
 
 PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 카츠라기와 함께 어머니 금성에 연락했다…
-PRINTFORMW 「카츠라기 님과 %CALLNAME:MASTER% 님이시군요. 연락을 주셨단 말씀은…」
+PRINTFORMW 「카츠라기 님과 %CALLNAME:MASTER%님이시군요. 연락을 주셨단 말씀은…」
 PRINTW 그렇다. 이포스를 묻어버릴 준비가 갖추어졌다는 뜻이다.
 PRINTW 「그럼 바로 성왕님께 연락 드려 저희가 양동을 벌이겠습니다」
 PRINTW 「부디 여러분께 이슈타르 님의 가호가 내리시기를」
@@ -33,11 +33,11 @@ PRINTW 「인간이란 잘 이해 못할 생물이로고…」
 PRINTW 「모처럼 살아남았거늘, 복수 같은 걸 위해 허비하다니…」
 PRINTW 「좋도다. 네놈들 따위에게 쓰러질 내가 아니다! 저승에서 후회하도록…」
 PRINTW 「아니… 영혼마저도 집어삼켜주리라!!」
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 FLAG:선제기습취소 = 1
 CALL SET_ENEMY,9,1762,60,0,5;이포스
-CFLAG:(CHARANUM-1):行動횟수 = 3
+CFLAG:(CHARANUM-1):행동횟수 = 3
 BASE:(CHARANUM-1):힘 += 6
 BASE:(CHARANUM-1):지혜 += 6
 BASE:(CHARANUM-1):마력 += 6
@@ -45,8 +45,8 @@ BASE:(CHARANUM-1):인내력 += 5
 BASE:(CHARANUM-1):속도 += 5
 BASE:(CHARANUM-1):운 += 5
 CALL BATTLE_START
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 
 PRINTW 「…크헉……!? 마, 말도 안 돼…!!」
@@ -58,4 +58,4 @@ PRINTW 카츠라기는 소중하게 그 오른쪽 다리를 주워들었다…
 PRINTL
 PRINTW 자, 이포스를 묻어버린 이상 이곳에 더 있을 필요는 없다.
 PRINTW 조직의 연구자에게 오른쪽 다리를 보호해달라고 하기 위해서라도 어서 벗어나도록 하자…
-이벤트フラグ:70:0 = 6
+이벤트플래그:70:0 = 6

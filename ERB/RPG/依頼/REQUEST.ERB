@@ -1,16 +1,18 @@
 ﻿;コロシアム
-;とりあえず今の所전투のテスト用
-;クリアフラグに던전フラグ:0:Xを사용
+;とりあえず今の所戦闘のテスト用
+;クリアフラグにダンジョンフラグ:0:Xを使用
 
+;	Edit	Date			Author					Reason
+;	001		2022/06/07			Collared			UI整理プロジェクトにより配置変更
 
 @SHOPCOMABLE_104
 #DIM LCOUNT
-;パーティに一人이상いるなら
-RESULT:1 = 2
+;파티에 한 명 이상 있다면
+RESULT:1 = 1
 RESULTS = 의뢰청부
 LOCAL = 0
 FOR LCOUNT, 0, CHARANUM
-	SIF CFLAG:LCOUNT:PTフラグ == 2
+	SIF CFLAG:LCOUNT:PT플래그 == 2
 		LOCAL += 1
 NEXT
 IF LOCAL > 0
@@ -63,9 +65,9 @@ ELSEIF TFLAG:RESULT || FLAG:DEBUG
 			CALL INPUT_YN,"Yes","No"
 
 			IF RESULT == 0
-				FLAG:進行中의뢰 = LOCAL
+				FLAG:진행중의뢰 = LOCAL
 				TRYCALLFORM REQUEST_{LOCAL}
-				FLAG:進行中의뢰 = 0
+				FLAG:진행중의뢰 = 0
 				FOR LOCAL,0,CHARANUM
 					SIF CFLAG:LOCAL:악마변신 == 1
 						CALL ACTION_2310 , LOCAL , 0

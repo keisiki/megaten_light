@@ -1,0 +1,43 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:ADD_SPLIT.ERB
+;	Facility	:인수로 전달된 ARGS에、ARGS:1로 구분했을 경우의 가장 이른(若い) 빈 문자열에 ARGS:2를 더한 문자열을 반환하는 함수 @ADD_SPLIT
+;
+;	Licence		:ライセンスフリー。
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	001		2011/09/25		Ｎ鳥					新規作成
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;@ADD_SPLIT
+;ARGS   조작하는 문자열
+;ARGS:1 ARGS를 구분하는 문자열
+;ARGS:2 추가할 문자열
+;※ARGS에 빈 문자열이 없는 경우, 추가를 하지 않는다
+;================================================
+@ADD_SPLIT(ARGS , ARGS:1 , ARGS:2 = "")
+#FUNCTIONS
+#LOCALSSIZE 200
+#LOCALSIZE 3
+VARSET LOCALS , ""
+SPLIT ARGS , ARGS:1 , LOCALS
+FOR LOCAL , 0 , 200
+	IF LOCALS:LOCAL == ""
+		LOCALS:LOCAL = %ARGS:2%
+		FOR LOCAL:1 , 0 , 200
+			SIF LOCALS:(LOCAL:1) != ""
+				LOCAL:2 = LOCAL:1
+		NEXT
+		SIF LOCAL:2 == 0
+			RETURNF LOCALS
+		FOR LOCAL:1 , 1 , 200
+			LOCALS += ARGS:1 + LOCALS:(LOCAL:1)
+			SIF LOCAL:1 == LOCAL:2
+				BREAK
+		NEXT
+		RETURNF LOCALS
+	ENDIF
+NEXT
+RETURNF ARGS

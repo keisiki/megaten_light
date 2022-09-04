@@ -1,0 +1,25 @@
+﻿;-------------------------------------------------
+;검은 하트마크 함수 @HEARTB
+;	인수0：하트 수（생략하면 1개）
+;	인수1：사용할 폰트명（생락하면 Symbol）
+;꽉 찬 하트마크(♥)를 표시합니다
+;-------------------------------------------------
+@HEARTB(ARG = 1, ARGS)
+LOCAL = RESULT
+IF CHKFONT("Times New Roman")
+	ARGS = \@ ARGS == "" ? Times New Roman # %ARGS% \@
+ELSEIF CHKFONT("Verdana")
+	ARGS = \@ ARGS == "" ? Verdana # %ARGS% \@
+ENDIF
+LOCALS = %GETFONT()%
+
+SETFONT CHKFONT(ARGS) ? ARGS # LOCALS
+
+IF GETFONT() == "Symbol"
+	PRINTFORM %UNICODE(0xA9)*ARG%
+ELSE
+	PRINTFORM %UNICODE(0x2665)*ARG%
+ENDIF
+
+SETFONT LOCALS
+RETURN LOCAL

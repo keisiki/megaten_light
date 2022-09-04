@@ -3,7 +3,7 @@
 ;
 ;	Module		:REQUEST_xxx_yyy.ERB
 ;	Facility	:의뢰:030(데빌서바이버２) 火曜日。
-;				 REQUEST_30のサ부후ァイル。
+;				 REQUEST_30のサ부흐ァイル。
 ;				 火曜日の데이터を管理する。
 ;
 ;	Licence		:ライセンスフリー。
@@ -19,12 +19,12 @@
 ; 【フラグついて】
 ; フラグは下記のみ사용。
 ;
-; ・デビサバ２進行度
+; ・데빌서바２진행도
 ;
 ; [10-19] 獅子の怒り
-; FLAG:デビサバ２進行度 = 5010;初回
-; FLAG:デビサバ２進行度 = 5015;デネボラ戦
-; FLAG:デビサバ２進行度 = 5100;クリア
+; FLAG:데빌서바２진행도 = 5010;初回
+; FLAG:데빌서바２진행도 = 5015;デネボラ戦
+; FLAG:데빌서바２진행도 = 5100;クリア
 ;
 ;------------------------------------------------------------------------------
 ; 【メモ】
@@ -50,11 +50,11 @@
 #DIM L_FLAG_EVENT_FIRST_DIGIT
 #DIM L_BTL_FLG
 
-;- フラグをセット(이벤트フラグ:２桁)
-L_FLAG_EVENT_DIGIT = (FLAG:デビサバ２進行度) % 100
+;- フラグをセット(이벤트플래그:２桁)
+L_FLAG_EVENT_DIGIT = (FLAG:데빌서바２진행도) % 100
 
-;- フラグをセット(이벤트フラグ:１桁눈)
-L_FLAG_EVENT_FIRST_DIGIT = (FLAG:デビサバ２進行度) % 10
+;- フラグをセット(이벤트플래그:１桁눈)
+L_FLAG_EVENT_FIRST_DIGIT = (FLAG:데빌서바２진행도) % 10
 
 ;- 전투フラグ(디버그용。OFFで전투無しで実行出来る)
 L_BTL_FLG = 1
@@ -70,7 +70,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 		;- 初回
 		IF L_FLAG_EVENT_FIRST_DIGIT == 0
 			;- フラグセット
-			FLAG:デビサバ２進行度 = 5001
+			FLAG:데빌서바２진행도 = 5001
 
 			PRINTW ＞도쿄 ― 국회 의사당。
 			PRINTW ＞대합실에서 기다리게 되고 있는 동안에、휴대전화의 메일을 체크하다가、기묘한 메일을 찾아냈다…。
@@ -136,7 +136,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 			PRINTW …그녀가 장을 맡는 지금의 지프스는 전의 세계와는 달라、악마 소란의 피해자들의 구조 등도 열심히 하고 있다。
 			PRINTW 그때문에 팬텀의 손을 빌릴 정도로 일손부족에 빠져 버리고 있는 것 같지만…。
 
-		;- ２回눈以降
+		;- ２回目以降
 		ELSE
 			PRINTW ＞도쿄 ― 국회 의사당。
 			PRINTW ＞엘리베이터를 내려、미야코와 면회했다。
@@ -164,7 +164,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 		PRINTW ………
 		PRINTW ……
 		PRINTW …
-		;- 의뢰:一日のタイトル
+		;- 의뢰:一日の타이틀
 		CALL REQUEST_30_DAY_TITLE("TUES DAY", "재앙。저울을 가지고 내려와、사람의 아이들을 매단다")
 		
 		PRINTL
@@ -243,14 +243,14 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 		PRINTW 포대의 건도 있고、빨리 결착을 내야 하겠다…。
 		
 		;- 전투前処理
-		FLAG:도주불가フラグ = 1
-		FLAG:회화불능フラグ = 1
+		FLAG:도주불가플래그 = 1
+		FLAG:회화불능플래그 = 1
 		FLAG:선제기습취소 = 1
 		;-----------------------------
 		;- 전투開始
 		;-----------------------------
 		;- フラグをセット
-		FLAG:デビサバ２進行度 = 5005
+		FLAG:데빌서바２진행도 = 5005
 
 		PRINTW
 		PRINTW 트리앙글룸 五帝一데네볼라가 나타났다！
@@ -265,7 +265,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 
 			;- SET:데네볼라
 			CALL SET_ENEMY,9,[[キャラ:데네볼라]],REQUEST_30_BASE_LV(3),1,1
-			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):행동횟수 = 2
 			CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 			CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 			
@@ -276,7 +276,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 			CALL SET_ENEMY,8,[[キャラ:데네볼라]],REQUEST_30_BASE_LV(3),1,1
 			NAME:(CHARANUM-1) = ショルトの守護
 			CALLNAME:(CHARANUM-1) = ショルトの守護
-			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):행동횟수 = 2
 			CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 			CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 			
@@ -302,7 +302,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 			CALL SET_ENEMY,10,[[キャラ:데네볼라]],REQUEST_30_BASE_LV(3),1,1
 			NAME:(CHARANUM-1) = ゾスマの守護
 			CALLNAME:(CHARANUM-1) = ゾスマの守護
-			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):행동횟수 = 2
 			CFLAG:(CHARANUM-1):ＨＰ보정 = 1000
 			CFLAG:(CHARANUM-1):ＭＰ보정 = 1000
 			
@@ -318,7 +318,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 				ENDSELECT
 			NEXT
 			
-			;マハ라기、魔性の乱舞、명중UP
+			;마하라기、魔性の乱舞、명중UP
 			ABL:(CHARANUM-1):스킬1 = [[스킬:마하・라기온]]
 			ABL:(CHARANUM-1):스킬2 = [[스킬:중재의뇌화]]
 			ABL:(CHARANUM-1):스킬3 = [[스킬:스쿠・카쟈]]
@@ -333,10 +333,10 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 		;-----------------------------
 		;- 勝利後
 		;-----------------------------
-				
+		
 		;- 전투종료
-		FLAG:도주불가フラグ = 0
-		FLAG:회화불능フラグ = 0
+		FLAG:도주불가플래그 = 0
+		FLAG:회화불능플래그 = 0
 		FLAG:선제기습취소 = 0
 		
 		PRINTW 데네볼라가 움직임을 그치고、옥상을 구른다…。
@@ -515,7 +515,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 		MONEY += 60000
 
 		;- フラグをセット
-		FLAG:デビサバ２進行度 = 5100
+		FLAG:데빌서바２진행도 = 5100
 
 		;- 의뢰:フラグ리셋
 		CALL REQUEST_30_FLAG_RESET
@@ -529,33 +529,33 @@ ENDSELECT
 ;=================================================
 ;   sub EVENT_BATTLE_TURNEND_REQUESTxxx_yyy
 ;=================================================
-;   의뢰:전투中処理(ターン종료시)
+;   의뢰:전투중処理(ターン종료시)
 ;-------------------------------------------------
-;   FLAG:勝利フラグに1をセットすると、전투を強制종료出来る
-;   FLAG:敗北フラグに1をセットすると、ゲームオーバーに出来る
+;   FLAG:승리플래그に1をセットすると、전투を強制종료出来る
+;   FLAG:패배플래그に1をセットすると、ゲームオーバーに出来る
 ;-------------------------------------------------
 @EVENT_BATTLE_TURNEND_REQUEST30_50
 #DIM L_FLAG_EVENT_DIGIT
 
-;- フラグをセット(이벤트フラグ:２桁)
-L_FLAG_EVENT_DIGIT = FLAG:デビサバ２進行度 % 100
+;- フラグをセット(이벤트플래그:２桁)
+L_FLAG_EVENT_DIGIT = FLAG:데빌서바２진행도 % 100
 
 ;-----------------------------
 ;- 処理開始
 ;-----------------------------
 
 ;당신が死ぬと問答無用でゲームオーバー
-SIF CFLAG:MASTER:ステート == GET_STATE_NUM("DYING")
-	FLAG:敗北フラグ = 1
+SIF CFLAG:MASTER:상태이상 == GET_STATE_NUM("DYING")
+	FLAG:패배플래그 = 1
 
 SELECTCASE L_FLAG_EVENT_DIGIT
 	;-----------------------------
-	;- 5:전투中(데네볼라)
+	;- 5:전투중(데네볼라)
 	;-----------------------------
 	CASE 5
 		
 		;- 5ターン毎に단계が進行する
-		SELECTCASE FLAG:経過ターン数
+		SELECTCASE FLAG:경과턴수
 			CASE 5
 				CUSTOMDRAWLINE =
 				PRINTL
@@ -594,7 +594,7 @@ SELECTCASE L_FLAG_EVENT_DIGIT
 				CALL MESSAGE_B(3,"%CALLNAME:MASTER%가 하늘로 날려져","멀리 아래 지상으로 떨어진다…",)
 				PRINTL
 				CALL MESSAGE_B(3,,"데네볼라의 포격을 막지 못했다…",)
-				FLAG:敗北フラグ = 1
+				FLAG:패배플래그 = 1
 		ENDSELECT
 
 ENDSELECT

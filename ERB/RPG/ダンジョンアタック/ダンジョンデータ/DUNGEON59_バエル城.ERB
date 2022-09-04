@@ -1,9 +1,11 @@
 ﻿;=======================================================================
-;바알 성
-;돌입에는 아야토 군 필수, 이것 이후의 위전 던전도 같은 조건으로 함
-;사용フラグ
-;59:0 무르무르撃破フラグ
+;バール城
+;突入には史人君必須、これ以降の偽典던전も同条件とする
+;使用フラグ
+;59:0 ムールムール撃破フラグ
 ;59:1 突入フラグ
+
+;2021/8/XX	名無	88行目の던전플래그:70を던전플래그:59に修正
 ;=======================================================================
 
 ;=======================================================================
@@ -11,7 +13,7 @@
 ;=======================================================================
 
 @PREREQUISITE_DUNGEON_59
-SIF (이벤트フラグ:70:0 == 10 && FINDCHARA_B(4761,0) == 2 && (FINDCHARA_B(4763,0) == 2 || FINDCHARA_B(4764,0) == 2)) || (이벤트フラグ:70:0 == 11 && FINDCHARA_B(4761,0) == 2)  
+SIF (이벤트플래그:70:0 == 10 && FINDCHARA_B(4761,0) == 2 && (FINDCHARA_B(4763,0) == 2 || FINDCHARA_B(4764,0) == 2)) || (이벤트플래그:70:0 == 11 && FINDCHARA_B(4761,0) == 2)  
 	RETURN 1
 RETURN 0
 
@@ -22,11 +24,11 @@ RETURN 0
 RESULTS = 바알 성
 
 ;=======================================================================
-;フ로어名표시
+;플로어名표시
 ;=======================================================================
 @FLOORNAME_59
 PRINT 바알 성
-SELECTCASE FLAG:現M
+SELECTCASE FLAG:현M
 	CASE 0
 		PRINTL   １Ｆ
 	CASE 1
@@ -65,25 +67,25 @@ ENDSELECT
 ;スタート地点입력
 ;=======================================================================
 @START_DUNGEON_59,ARG
-FLAG:現M = 0
-FLAG:現X = 7
-FLAG:現Y = 1
+FLAG:현M = 0
+FLAG:현X = 7
+FLAG:현Y = 1
 ;CALL AUTOMAP
 
 ;=======================================================================
 ;攻略開始時の이벤트
 ;=======================================================================
 @EVENT_DUNGEON_START_59
-IF 던전フラグ:59:0 == 0
+IF 던전플래그:59:0 == 0
 	CALL MESSAGE_WINDOW_D, "", "＞" + CALLNAME:MASTER + "는 카츠라기와 함께/＞바알 성에 찾아왔다"
 	CALL MESSAGE_WINDOW_D, "", "＞생각해보면 카츠라기와 함께 여기까지 길고 괴로운 여행이었다"
-	IF 이벤트フラグ:70:0 == 10
+	IF 이벤트플래그:70:0 == 10
 		CALL MESSAGE_WINDOW_D, "", "＞그러나 이슈타르는 마침내 부활했고、/＞나머지는 분령으로서 카츠라기를 노려대는 바알만 쓰러뜨리면 모든 게 끝난다"
 	ELSE
 		CALL MESSAGE_WINDOW_D, "", "＞그러나 부활한 이슈타르는 카츠라기와 " + CALLNAME:MASTER + "에게 패하고/＞나머지는 분령으로서 카츠라기를 노려대는 바알만 쓰러뜨리면 모든 게 끝난다"
 	ENDIF
 	CALL MESSAGE_WINDOW_D, "", "＞카츠라기의 운명에 종지부를 찍기 위해、지금 " + CALLNAME:MASTER + " 일행은 바알 성에 도전한다…"
-	던전フラグ:70:0 = 1
+	던전플래그:59:0 = 1
 ENDIF
 
 ;=======================================================================
@@ -100,10 +102,10 @@ CALL CAN_ENTER,ARG,ARG:1
 RETURN RESULT
 
 ;=======================================================================
-;フ로어데이터
+;플로어데이터
 ;=======================================================================
 @MAKE_FLOOR_59
-SELECTCASE FLAG:現M
+SELECTCASE FLAG:현M
 	CASE 0
 	;１階
 		FLAG:최대X = 14
@@ -281,9 +283,9 @@ ENDSELECT
 @EVENT_CHECK_DUNGEON_59
 
 ;==========
-;出입の処理
+;出口の処理
 ;==========
-IF DA:(FLAG:現X):(FLAG:現Y) == 8
+IF DA:(FLAG:현X):(FLAG:현Y) == 8
 	CALL DUNGEON_EXIT
 	RETURN 1
 ;========
@@ -291,14 +293,14 @@ IF DA:(FLAG:現X):(FLAG:現Y) == 8
 ;========
 ;% 10は10で割ったあまり、つまり下一桁がでてきます
 ;そして、下一桁はタイルの종류を表す
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 3
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) % 10 == 3
 ;	CALL TREASURE_59
 ;	RETURN RESULT
 ;=======
 ;階段
 ;=======
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 6
-SELECTCASE FLAG:現M
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 6
+SELECTCASE FLAG:현M
 	CASE 0
 		CALL DUNGEON_UPSTAIRS,1,7,11
 	CASE 1
@@ -320,8 +322,8 @@ ENDSELECT
 
 RETURN 1
 
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 7
-SELECTCASE FLAG:現M
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 7
+SELECTCASE FLAG:현M
 	CASE 0
 
 	CASE 1
@@ -345,7 +347,7 @@ RETURN 1
 ;========
 ;이벤트
 ;========
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) % 10 == 4
 
 ELSE
 	CALL MESSAGE_WINDOW_D, "", "＞아무것도 없는 것 같다"
@@ -358,16 +360,16 @@ ENDIF
 @EVENT_ENTER_DUNGEON_59,ARG
 ;ARG = 進入時の向き　0の場合ワープなど
 ;==========
-;出입の処理
+;出口の処理
 ;==========
-IF DA:(FLAG:現X):(FLAG:現Y) % 10 == 8
+IF DA:(FLAG:현X):(FLAG:현Y) % 10 == 8
 	CALL DUNGEON_EXIT
 	RETURN 1
 ;========
 ;宝の処理
 ;========
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 3
-	SELECTCASE FLAG:現M
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) % 10 == 3
+	SELECTCASE FLAG:현M
 	CASE 0
 	CASE 1
 	CASE 2
@@ -385,8 +387,8 @@ ENDSELECT
 ;=======
 ;階段
 ;=======
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 6
-SELECTCASE FLAG:現M
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 6
+SELECTCASE FLAG:현M
 	CASE 0
 		CALL DUNGEON_UPSTAIRS,1,7,11
 	CASE 1
@@ -407,8 +409,8 @@ SELECTCASE FLAG:現M
 ENDSELECT
 
 RETURN 1
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 7
-SELECTCASE FLAG:現M
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 7
+SELECTCASE FLAG:현M
 	CASE 0
 
 	CASE 1
@@ -432,29 +434,29 @@ RETURN 1
 ;==========
 ;扉の処理
 ;==========
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 2
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 2
 	CALL DUNGEON_DOOR,ARG
 	RETURN 1
 ;========================
 ;이벤트
 ;========================
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 4
-SELECTCASE FLAG:現M
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) % 10 == 4
+SELECTCASE FLAG:현M
 	CASE 6
-		IF 던전フラグ:59:0 == 0
+		IF 던전플래그:59:0 == 0
 		CALL MESSAGE_WINDOW_D, "", "＞바알 성을 위로 위로 계속 올라가는 " + CALLNAME:MASTER + " 일행 앞에 한 악마가 모습을 드러냈다"
 		CALL MESSAGE_WINDOW_D, "악마", "카츠라기 아야토… 오랜만이구나… 기다리고 있었다…"	
 		CALL MESSAGE_WINDOW_D, "", "＞문득 쳐다보니 카츠라기는 덜덜 떨면서도 분노로 눈을 불태우는 걸 알 수 있다…/＞아마도 놈이 하츠다이를 멸망시킨 무르무르이리라…"
 		CALL MESSAGE_WINDOW_D, "무르무르", "보잘 것 없던 무력한 소년이、꽤나 다부지게 변했구나。/인간은 모를 노릇이로고…"
 		CALL MESSAGE_WINDOW_D, "무르무르", "허나 네놈의 명운도 여기까지… 그 분의 손을 번거롭게 할 것도 없다/어차피 버러지임을 깨닫게 해주마！！"
 		CALL MESSAGE_WINDOW_D, "", "＞타천사　무르무르　가　1명　나타났다！"
-		FLAG:도주불가フラグ = 1
-		FLAG:회화불능フラグ = 1
+		FLAG:도주불가플래그 = 1
+		FLAG:회화불능플래그 = 1
 		FLAG:선제기습취소 = 1
 		CALL SET_ENEMY,9,1707,70,0,5;무르무르
 		MAXBASE:(CHARANUM-1):파마 = 0
 		MAXBASE:(CHARANUM-1):주살 = 0
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		BASE:(CHARANUM-1):힘 += 6
 		BASE:(CHARANUM-1):지혜 += 6
 		BASE:(CHARANUM-1):마력 += 6
@@ -462,18 +464,18 @@ SELECTCASE FLAG:現M
 		BASE:(CHARANUM-1):속도 += 5
 		BASE:(CHARANUM-1):운 += 5
 		CALL BATTLE_START
-		FLAG:도주불가フラグ = 0
-		FLAG:회화불능フラグ = 0
+		FLAG:도주불가플래그 = 0
+		FLAG:회화불능플래그 = 0
 		FLAG:선제기습취소 = 0
 		CALL MESSAGE_WINDOW_D, "무르무르", "말도 안 돼… 네 녀석 따위에게… 이 몸이…！"
 		CALL MESSAGE_WINDOW_D, "", "＞무르무르는 사라졌다…"
-		던전フラグ:59:0 =1
+		던전플래그:59:0 =1
 		ELSE
 			CALL MESSAGE_WINDOW_D, "", "＞아무도 없다"
 		ENDIF
 	CASE 7
 		CALL MESSAGE_WINDOW_D, "", "＞대청 안에 한 악마가 자리 잡고 있다…"
-		IF 이벤트フラグ:70:0 == 10
+		IF 이벤트플래그:70:0 == 10
 			CALL MESSAGE_WINDOW_D, "바알", "잘 왔도다… 내 아내 이슈타르여…/그리고 내 아들、카츠라기 아야토여…"
 			CALL MESSAGE_WINDOW_D, "바알", "자아、어머니 신 이슈타르여、깨어나서 아들의 피로 그대의 죄를 갚을지어다！"
 			IF FINDCHARA_B(4763,0) == 2
@@ -485,13 +487,13 @@ SELECTCASE FLAG:現M
 				CALL MESSAGE_WINDOW_D, "루이", "싫어、난 아야토를 따라갈 거야。"
 				CALL MESSAGE_WINDOW_D, "바알", "무어라！ 네 이년、아무리 내 아내라고 해도 용서 못한다！"
 			ENDIF
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
+			FLAG:도주불가플래그 = 1
+			FLAG:회화불능플래그 = 1
 			FLAG:선제기습취소 = 1
 			CALL SET_ENEMY,9,270,70,0,5;바엘
 			MAXBASE:(CHARANUM-1):파마 = 0
 			MAXBASE:(CHARANUM-1):주살 = 0
-			CFLAG:(CHARANUM-1):行動횟수 = 2
+			CFLAG:(CHARANUM-1):행동횟수 = 2
 			BASE:(CHARANUM-1):힘 += 6
 			BASE:(CHARANUM-1):지혜 += 6
 			BASE:(CHARANUM-1):마력 += 6
@@ -499,8 +501,8 @@ SELECTCASE FLAG:現M
 			BASE:(CHARANUM-1):속도 += 5
 			BASE:(CHARANUM-1):운 += 5
 			CALL BATTLE_START
-			FLAG:도주불가フラグ = 0
-			FLAG:회화불능フラグ = 0
+			FLAG:도주불가플래그 = 0
+			FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 0
 			CALL MESSAGE_WINDOW_D, "바알", "내 패배다、옛 왕의 살해자가 그러했듯이 내 혈육을 받고 마왕이 되어 이 제도에 군림하여라。"
 			CALL SHOW_PICTURE, "D"
@@ -512,7 +514,7 @@ SELECTCASE FLAG:現M
 					CALL SET_ENEMY,9,270,90,0,5;バエル
 					MAXBASE:(CHARANUM-1):파마 = 0
 					MAXBASE:(CHARANUM-1):주살 = 0
-					CFLAG:(CHARANUM-1):行動횟수 = 3
+					CFLAG:(CHARANUM-1):행동횟수 = 3
 					BASE:(CHARANUM-1):힘 += 6
 					BASE:(CHARANUM-1):지혜 += 6
 					BASE:(CHARANUM-1):마력 += 6
@@ -520,8 +522,8 @@ SELECTCASE FLAG:現M
 					BASE:(CHARANUM-1):속도 += 5
 					BASE:(CHARANUM-1):운 += 5
 					CALL BATTLE_START
-					FLAG:도주불가フラグ = 0
-					FLAG:회화불능フラグ = 0
+					FLAG:도주불가플래그 = 0
+					FLAG:회화불능플래그 = 0
 					FLAG:선제기습취소 = 0
 					CALL MESSAGE_WINDOW_D, "바알", "말도 안 돼… 성왕의… 힘이… 패하리라…고는…"
 				ELSE
@@ -530,18 +532,18 @@ SELECTCASE FLAG:現M
 					CALL MESSAGE_WINDOW_D, "", "＞이제 카츠라기와 이슈타르를 방해할 자는 없다…/＞두 사람은 행복하게 살겠지"
 					CALL MESSAGE_WINDOW_D, "", "＞카츠라기에게서 보수로 500000엔을 받았다"
 					MONEY += 500000
-					이벤트フラグ:70:0 = 12
+					이벤트플래그:70:0 = 12
 					FLAG:탈출 = 1
-		ELSEIF 이벤트フラグ:70:0 == 11
+		ELSEIF 이벤트플래그:70:0 == 11
 			CALL MESSAGE_WINDOW_D, "바알", "어리석은 아들이여… 설마 내 아내、이슈타르를 멸하려들 줄이야…"
 			CALL MESSAGE_WINDOW_D, "바알", "네놈들… 용서 못한다！/두 사람 다 저승의 어둠에 떨어뜨려주리라！！"
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
+			FLAG:도주불가플래그 = 1
+			FLAG:회화불능플래그 = 1
 			FLAG:선제기습취소 = 1
 			CALL SET_ENEMY,9,270,90,0,5;바엘
 			MAXBASE:(CHARANUM-1):파마 = 0
 			MAXBASE:(CHARANUM-1):주살 = 0
-			CFLAG:(CHARANUM-1):行動횟수 = 3
+			CFLAG:(CHARANUM-1):행동횟수 = 3
 			BASE:(CHARANUM-1):힘 += 6
 			BASE:(CHARANUM-1):지혜 += 6
 			BASE:(CHARANUM-1):마력 += 6
@@ -549,8 +551,8 @@ SELECTCASE FLAG:現M
 			BASE:(CHARANUM-1):속도 += 5
 			BASE:(CHARANUM-1):운 += 5
 			CALL BATTLE_START
-			FLAG:도주불가フラグ = 0
-			FLAG:회화불능フラグ = 0
+			FLAG:도주불가플래그 = 0
+			FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 0
 			CALL MESSAGE_WINDOW_D, "바알", "내 패배다、옛 왕의 살해자가 그러했듯이 내 혈육을 받고 마왕이 되어 이 제도에 군림하여라。"
 			CALL SHOW_PICTURE, "D"
@@ -562,7 +564,7 @@ SELECTCASE FLAG:現M
 					CALL SET_ENEMY,9,270,105,0,5;바엘、이슈타르倒せてればこの位勝てるでしょうきっと
 					MAXBASE:(CHARANUM-1):파마 = 0
 					MAXBASE:(CHARANUM-1):주살 = 0
-					CFLAG:(CHARANUM-1):行動횟수 = 4
+					CFLAG:(CHARANUM-1):행동횟수 = 4
 					BASE:(CHARANUM-1):힘 += 10
 					BASE:(CHARANUM-1):지혜 += 10
 					BASE:(CHARANUM-1):마력 += 10
@@ -570,8 +572,8 @@ SELECTCASE FLAG:現M
 					BASE:(CHARANUM-1):속도 += 10
 					BASE:(CHARANUM-1):운 += 10
 					CALL BATTLE_START
-					FLAG:도주불가フラグ = 0
-					FLAG:회화불능フラグ = 0
+					FLAG:도주불가플래그 = 0
+					FLAG:회화불능플래그 = 0
 					FLAG:선제기습취소 = 0
 					CALL MESSAGE_WINDOW_D, "바알", "말도 안 돼… 성왕의… 힘이… 패하리라…고는…"
 					;撃破ボーナス：バエル解禁
@@ -602,9 +604,10 @@ SELECTCASE FLAG:現M
 			PRINTFORML 
 			PRINTFORMW 　　　　　　　　―― Ending No.016 (위전・여신전생　"신・성왕전설")
 			PRINTFORML 
+			이벤트플래그:70:0 = 13
 			FLAG:5 = 9
 			SETBIT FLAG:취소된ED,16
-			SETBIT FLAG:発見ED,16
+			SETBIT FLAG:발견ED,16
 			FLAG:탈출 = 1
 			PRINTFORML [0]끝낸다 [1]계속한다 [2]일부 데이터를 인계해 새로 시작한다
 			CALL INPUTINT,0, 1, 2
@@ -620,8 +623,8 @@ SELECTCASE FLAG:現M
 	CASEELSE
 ENDSELECT
 
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) % 10 == 9
-SELECTCASE FLAG:現M
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) % 10 == 9
+SELECTCASE FLAG:현M
 	CASE 0
 	CASE 1
 		
@@ -642,20 +645,20 @@ ENDIF
 
 
 ;=======================================================================
-;エンカウント率
+;인카운트율
 ;=======================================================================
 @ENCOUNT_RATE_59
-FLAG:エンカウント率 = FLAG:未遭遇歩数*5
+FLAG:인카운트율 = FLAG:미조우걸음수*5
 
 ;=======================================================================
 ;エンカウント処理
 ;=======================================================================
 @CHECK_ENCOUNT_59
-IF RAND:100 < FLAG:エンカウント率
+IF RAND:100 < FLAG:인카운트율
 	CALL ENEMY_TABLE
 	RETURN 1
 ELSE
-	FLAG:未遭遇歩数 += 1
+	FLAG:미조우걸음수 += 1
 	RETURN 0
 ENDIF
 
@@ -678,7 +681,7 @@ RETURN ENEMY_NUM_COMMON("上級", ARG)
 	IF RAND:4 == 0
 		RETURN 1621, 55;다곤
 	ELSEIF RAND:3 == 0
-		RETURN 675, 57;헤카톤케이르
+		RETURN 675, 57;헤카톤케일
 	ELSEIF RAND:2 == 0
 		RETURN 708, 60;티아마트
 	ELSE

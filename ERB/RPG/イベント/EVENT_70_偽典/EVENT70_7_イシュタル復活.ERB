@@ -39,11 +39,11 @@ IF ((TALENT:LOCAL:연모 || TALENT:LOCAL:친애))
 	PRINTW 그리고 그 모습이 여신 이슈타르의 그것으로 변모한다!
 	PRINTL
 	PRINTW 「죽도록 해, 후파시야스! 아니, 카츠라기 아야토!」
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
 	CALL SET_ENEMY,9,4,90,0,5;이슈타르
-	CFLAG:(CHARANUM-1):行動횟수 = 3
+	CFLAG:(CHARANUM-1):행동횟수 = 3
 	BASE:(CHARANUM-1):힘 += 10
 	BASE:(CHARANUM-1):지혜 += 10
 	BASE:(CHARANUM-1):마력 += 15
@@ -51,8 +51,8 @@ IF ((TALENT:LOCAL:연모 || TALENT:LOCAL:친애))
 	BASE:(CHARANUM-1):속도 += 15
 	BASE:(CHARANUM-1):운 += 10
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
 	PRINTL
 	PRINTW 「이럴 수가… 내가… 쓰러지…다니…」
@@ -68,7 +68,7 @@ IF ((TALENT:LOCAL:연모 || TALENT:LOCAL:친애))
 	PRINTW ・
 	PRINTL
 	PRINTFORMW 얼마나 그러고 있었을까. %조사처리(CALLNAME:MASTER,"와")% 카츠라기는 서로의 사랑을 확인하고, 또 카츠라기를 노리는 바엘을 처단할 결의를 새로이 했다…
-	이벤트フラグ:70:0 = 11
+	이벤트플래그:70:0 = 11
 ELSE
 	CALL INPUT_YN, "유우카", "루이"
 	PRINTL  
@@ -116,5 +116,5 @@ ELSE
 		SIF RESULT
 			CFLAG:(RESULT:1):전투참가불가능 = -1
 	ENDIF
-이벤트フラグ:70:0 = 10
+이벤트플래그:70:0 = 10
 ENDIF

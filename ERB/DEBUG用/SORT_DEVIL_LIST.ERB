@@ -1,7 +1,7 @@
 ﻿;====================================
 ;등록済みの악마をリスト化するための関数です
 ;레벨順リストは기본的に特殊종족と인간を표시しません。
-;雑물고기악마等を選択したりする用です。
+;雑魚악마等を選択したりする用です。
 ;====================================
 
 
@@ -29,9 +29,9 @@ PRINTFORML ;%RESULTS%
 PRINTFORML ;-------------------------------
 PRINTFORML ;-------------------------------
 PRINTFORML ;この資料は資料フォルダ内にある
-PRINTFORML ;SORT_DEVIL_LIST.ERBを이용して作成されています
-PRINTFORML ;何か추가する際はコピペするのではなく、
-PRINTFORML ;SORT_DEVIL_LIST.ERBを이용して출력してください
+PRINTFORML ;SORT_DEVIL_LIST.ERBを利用して作成されています
+PRINTFORML ;何か追加する際はコピペするのではなく、
+PRINTFORML ;SORT_DEVIL_LIST.ERBを利用して出力してください
 PRINTFORML ;-------------------------------
 IF LOCAL == 3
 	FOR LOCAL:2 , 0 , 18
@@ -56,9 +56,9 @@ IF LOCAL == 3
 							PRINTFORM 수태아이템：%ITEMNAME:CSVABL(LOCAL,GETNUM(ABL,"수태아이템"),0)%　
 						SIF CSVCSTR(LOCAL,GETNUM(CSTR,"해설1"),0) != ""
 							PRINTFORM 해설　
-						SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"特殊合体のみ"),0)
+						SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"특수합체만"),0)
 							PRINTFORM 특수합체만　
-						SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"合体조건有り"),0)
+						SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"합체조건있음"),0)
 							PRINTFORM 합체조건있음　
 						SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"전서소환불가"),0)
 							PRINTFORM 전서소환불가　
@@ -93,9 +93,9 @@ ELSEIF LOCAL == 2
 				PRINTFORM 수태아이템：%ITEMNAME:CSVABL(LOCAL,GETNUM(ABL,"수태아이템"),0)%　
 			SIF CSVCSTR(LOCAL,GETNUM(CSTR,"해설1"),0) != ""
 				PRINTFORM 해설　
-			SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"特殊合体のみ"),0)
+			SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"특수합체만"),0)
 				PRINTFORM 특수합체만　
-			SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"合体조건有り"),0)
+			SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"합체조건있음"),0)
 				PRINTFORM 합체조건 있음　
 			SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"전서소환불가"),0)
 				PRINTFORM 전서소환불가　
@@ -128,9 +128,9 @@ ELSE
 					PRINTFORM 수태아이템：%ITEMNAME:CSVABL(LOCAL,GETNUM(ABL,"수태아이템"),0)%　
 				SIF CSVCSTR(LOCAL,GETNUM(CSTR,"해설1"),0) != ""
 					PRINTFORM 해설　
-				SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"特殊合体のみ"),0)
+				SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"특수합체만"),0)
 					PRINTFORM 특수합체만　
-				SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"合体조건有り"),0)
+				SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"합체조건있음"),0)
 					PRINTFORM 합체조건있음　
 				SIF CSVCFLAG(LOCAL,GETNUM(CFLAG,"전서소환불가"),0)
 					PRINTFORM 전서소환불가　

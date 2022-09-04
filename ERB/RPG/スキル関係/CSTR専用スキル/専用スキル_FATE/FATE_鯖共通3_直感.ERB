@@ -1,0 +1,276 @@
+﻿;スキル名
+@SKILL_NAME_直感,ARG
+RESULTS = 직감
+
+;　명중
+@SKILL_HITRATE_直感, ARG
+RETURN 100
+
+;　위력
+@SKILL_POWER_直感, ARG
+RETURN 100
+
+;;クリティカル率
+;@SKILL_CRITICAL_RATE_直感, ARG
+;RETURN 5
+
+;;　吸収率
+;@SKILL_HP_ABSORBER_直感, ARG
+;RETURN 0
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_直感,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_直感,ARG
+RETURN 1
+
+;;一体辺りの最大ＨＩＴ数
+;;※ランダム攻撃系に使う
+;@SKILL_MAXATK_PER_直感,ARG
+;RETURN 1
+
+;;一体辺りの最低ＨＩＴ数
+;;※ランダム攻撃系に使う
+;@SKILL_MINATK_PER_直感,ARG
+;RETURN 1
+
+;　2 ＨＰ지불　3 ＭＰ지불
+@SKILL_COSTTYPE_直感, ARG
+RETURN 3
+;消費なし＝1
+
+;　코스트량
+@SKILL_COST_直感,ARG
+RETURN 0
+
+;　상성
+@SKILL_TYPE_直感,ARG
+RETURN 0
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_直感,ARG
+RETURN 0
+
+;　1 물리데미지로 계산　2 마법데미지로 계산
+@SKILL_DAMAGETYPE_直感,ARG
+RETURN 2
+
+
+;　対象が1敵か2味方か3場全体か4特殊か
+@SKILL_TARGET_直感,ARG
+RETURN 4
+
+;　사거리
+@SKILL_RANGE_直感,ARG
+RETURN 3
+
+;　범위　1 1체　2 1열　3 전체　4 적아군전체
+@SKILL_SPHERE_直感,ARG
+RETURN 1
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_直感,ARG
+RETURN 4
+
+;　 특수처리 여부 및 처리내용
+;@SKILL_SPECIALEFECT_直感,ARG
+;ARG = 1인 경우는 처리 여부를 반환합니다
+;SIF ARG == 1
+;	RETURN 0
+;아래쪽에 특수처리를 기술합니다
+
+;계승타입
+;@SKILL_SUCCESSION_TYPE_直感,ARG
+;RETURN 23
+;검격
+
+;속도보정
+@SKILL_SPEED_直感, ARG = -1
+RETURN 0
+
+;;　口上の表示とそのタイプ
+;@SKILL_MESSAGE_直感,ARG
+
+
+;전투시 이외에 사용 가능한가
+@SKILL_ACTIONABLE_FIELD_直感, ARG = -1
+RETURN 0
+
+;没
+;@SKILL_RANK_直感
+;@SKILL_RANKUP_直感
+;@계승불능_直感
+
+;템플릿용、추가효과 시리즈
+;추가효과ステータス
+@SKILL_ADDTIONAL_STATE_直感,ARG
+RETURN 0
+
+;추가효과 상성
+@SKILL_ADDTIONAL_TYPE_直感,ARG
+RETURN 0
+
+;추가효과基本付与確率
+@SKILL_ADDTIONAL_BASE_RATE_直感,ARG
+RETURN 0
+
+;추가효과付与確率上限
+@SKILL_ADDTIONAL_MAX_RATE_直感,ARG
+RETURN 0
+
+;;拡散攻撃用追加処理
+;;ブレスなどの拡散攻撃に使う
+;@SKILL_SPREAD_直感,ARG
+;RETURN 0
+
+;====================================================
+;トリガー発動条件
+;====================================================
+;@SKILL_TRIGGER_ACTIONABLE_直感,ARG,ARG:1
+;RETURN 0
+
+;====================================================
+;カウンター発動条件
+;====================================================
+;@SKILL_COUNTER_ACTIONABLE_直感,ARG,ARG:1
+;RETURN RESULT
+
+;====================================================
+;ヒット時ダメージ前処理
+;====================================================
+;@SKILL_HIT_EFFECT_直感,ARG,ARG:1
+
+;====================================================
+;ダメージ発動時
+;====================================================
+;@SKILL_DAMAGE_EFFECT_直感,ARG,ARG:1
+
+;====================================================
+;行動によるスキルゲージ操作
+;====================================================
+;@SKILLGAGE_CHARGE_直感,ARG,ARG:1
+
+
+
+;====================================================
+;스킬 및 행동의 실행
+;====================================================
+@ACTION_直感,ARG,ARG:1,SKILL_NUM
+#DIM SKILL_NUM
+
+;CALL ATTACK_SINGLE,ARG,POS(ARG:1),SKILL_NUM;	単体攻撃
+;CALL ATTACK_FIELD,ARG,ARG:1,SKILL_NUM;			範囲攻撃(列、全体)
+;CALL ATTACK_SPREAD,ARG,ARG:1,SKILL_NUM;		拡散攻撃
+;CALL ATTACK_RAND,ARG,ARG:1,SKILL_NUM;			ランダム攻撃
+
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;전투중 이외에서의 실행
+;====================================================
+;@ACTION_FIELD_直感,ARG,ARG:1,SKILL_NUM
+;#DIM SKILL_NUM
+
+;CALL HEAL_SINGLE,ARG,POS(ARG:1),SKILL_NUM	;単体回復
+;CALL HEAL_FIELD,ARG,ARG:1,SKILL_NUM		;範囲回復(列、全体)
+;CALL ALL_HEAL, POS(ARG:1), 0				;単体前回復
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;追加コマンド(EXTRAの下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_EXTRA_直感,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(MAGICの下、魔封だと消える)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_MAGIC_直感,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(一番下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_直感,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;コマンド実行
+;====================================================
+;@INPUT_COM_直感,ARG
+;RETURN -1
+;-1 再びコマンド選択へ
+; 1 キャラ選択へ
+
+;====================================================
+;戦闘中スキルゲージの可視化
+;====================================================
+;@SKILLGAGE_DISPLAY_直感,ARG
+;SKILL_NUM = PU_SKILLNUM_GET(ARG,"直感")
+;SKILLGAGE_D_GET(ARG,SKILL_NUM)
+
+
+;　説明文の表示
+@SKILL_EXPLAIN_直感,ARG
+PRINTL 전투 시、항상 자신에게 있어 최적의 전개를 감지하는 능력。
+PRINTL 적의 공격을 초견이라도 어느 정도 예견할 수 있게 된다。
+PRINTL
+PRINTL  자신의 여크리티컬율이 상승하고、피크리티컬률이 감소한다。
+
+;没
+;@계승부위_直感,ARG
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_直感,ARG
+RETURN 0
+
+;타겟조건
+;↓のSKILL_T_RESERVEがRETURN 1 の時に使用する
+;@SKILL_SPECIAL_TARGET_直感,USE_CHARA,ARG
+;#DIM USE_CHARA
+;RETURN 0
+
+;控えに使えるか
+;@SKILL_T_RESERVE_直感,ARG
+;RETURN 0
+
+;어떤 배드스테이터스를 고칠수 있는가
+;@SKILL_CURE_STATE_直感,USE_CHARA,ARG
+;#DIM USE_CHARA
+;SELECTCASE GET_STATE(ARG)
+;	CASE "HAPPY","CLOSE"
+;		RETURN 1
+;ENDSELECT
+;RETURN 0
+
+;この技を複数持てるか
+;@중복습득수_直感,ARG
+;RETURN 1
+
+;スキル重複で役に立つ関数
+;HAVE_SKILL_OVERLAP(ARG,PU_SKILLNUM_GET(ARG,"直感"))
+
+;スキルゲージで役に立つ関数
+;SKILLGAGE_H_GET(ARG,PU_SKILLNUM_GET(ARG,"直感"))
+;CALL SKILLGAGE_H_SET,ARG,PU_SKILLNUM_GET(ARG,"直感"),0
+

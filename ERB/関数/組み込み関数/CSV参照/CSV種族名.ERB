@@ -1,0 +1,9 @@
+﻿;-------------------------------------------------
+;@CSV종족명(ARG,ARG:1)
+;정의되지 않은 캐릭터(NO:ARG)의 종족명을 반환한다
+;-------------------------------------------------
+@CSV종족명(ARG,ARG:1)
+#FUNCTIONS
+SIF CSVCSTR(ARG,GETNUM(CSTR,"종족명"),ARG:1) != ""
+	RETURNF CSVCSTR(ARG,GETNUM(CSTR,"종족명"),ARG:1)
+RETURNF STR:(CSVABL(ARG,GETNUM(ABL,"종족"),ARG:1))

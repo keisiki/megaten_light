@@ -1,0 +1,18 @@
+﻿;===============================
+;合体可能な仲魔（悪魔）の人数
+;==============================
+@NUM_FUSIONABLE()
+#FUNCTION
+LOCAL:1 = 0
+FOR LOCAL,0,CHARANUM
+	SIF ABL:LOCAL:종족 < 1 || ABL:LOCAL:종족 > 44
+		CONTINUE
+	SIF CFLAG:LOCAL:합체불가
+		CONTINUE
+	SIF CFLAG:LOCAL:이자리에없는플래그
+		CONTINUE
+	SIF CFLAG:LOCAL:PT플래그 == 0
+		CONTINUE
+	LOCAL:1 += 1
+NEXT
+RETURNF LOCAL:1

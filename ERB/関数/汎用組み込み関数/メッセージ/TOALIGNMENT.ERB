@@ -1,0 +1,14 @@
+﻿;------------------------------
+;ARGS를 ARG의 문자폭에 맞춘다
+;ARGS:1 LEFT 왼쪽 정렬、CENTER 가운데 정렬, RIGHT 오른쪽 정렬이 되도록 반각 공간을 더해서 반환한다
+;------------------------------
+@TOALIGNMENT, ARGS, ARG, ARGS:1
+#FUNCTIONS
+SELECTCASE ARGS:1
+	CASE "LEFT"
+		RETURNF @"%ARGS,ARG,LEFT%"
+	CASE "CENTER"
+		RETURNF " " * MAX((ARG - STRLENS(ARGS))/2,0) + ARGS + " " * MAX((ARG - STRLENS(ARGS)+1)/2,0)
+	CASE "RIGHT"
+		RETURNF @"%ARGS,ARG,RIGHT%"
+ENDSELECT

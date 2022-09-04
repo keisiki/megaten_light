@@ -11,8 +11,8 @@ RETURN 0
 ;内容
 ;====================
 @COLOSSEUM_8
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 FLAG:선제기습취소 = 1
 CUSTOMDRAWLINE =
 PRINTW 오늘도 일당을 벌기 위해 위험한 전투에 나선다….
@@ -33,7 +33,7 @@ WAIT
 CALL SET_ENEMY,9,[[キャラ:미샤구지님]],32,0,1
 CFLAG:(CHARANUM-1):ＨＰ보정 += 1000
 CFLAG:(CHARANUM-1):ＭＰ보정 += 9000
-CFLAG:(CHARANUM-1):行動횟수 = 2
+CFLAG:(CHARANUM-1):행동횟수 = 2
 MAXBASE:(CHARANUM-1):검격 = 50
 MAXBASE:(CHARANUM-1):비구 = 50
 MAXBASE:(CHARANUM-1):타격 = 0
@@ -80,21 +80,21 @@ PRINTW 영혼이 변질하면 여태까지 보지 못하던 것이 보이는 게
 PRINTW …관심이 있으면 가보는 건 어떨지요…?」
 PRINTL 
 PRINTW 수수께끼의 거탑, 다이달로스를 탐색할 수 있게 되었다.
-던전フラグ:5:0 = 0
-던전フラグ:5:1 = 0
+던전플래그:5:0 = 0
+던전플래그:5:1 = 0
 FLAG:11511 = 1
 
 CUSTOMDRAWLINE =
 WAIT
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 PRINTW ￥75000을 상금으로 받았다
 PRINTFORMW %조사처리(CALLNAME:MASTER,"는")% 180의 명성을 얻었다
 MONEY += 75000
-FLAG:名声 += 180
-FLAG:闘技場名声 += 180
-투기장フラグ:8:0 = 1
+FLAG:명성 += 180
+FLAG:투기장명성 += 180
+투기장플래그:8:0 = 1
 
 
 FOR LOCAL,0,CHARANUM

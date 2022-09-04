@@ -2,7 +2,7 @@
 ;
 ;	Module		:REQUEST_xxx_yyy.ERB
 ;	Facility	:의뢰:060(真IV) １
-;				 REQUEST_60のサ부후ァイル。
+;				 REQUEST_60のサ부흐ァイル。
 ;
 ;	Licence		:ライセンスフリー。
 ;
@@ -18,7 +18,7 @@
 ; フラグは下記のみ사용。
 ;
 ;
-; FLAG:真IV進行度 = 000;初回
+; FLAG:진IV진행도 = 000;初回
 ; 종료後　100 or 101
 ;
 ;-------------------------------------------------------------------------------
@@ -46,7 +46,7 @@
 
 		CALL INPUT_YN("탑에 침입한다", "아직 준비가")
 		IF RESULT == 0
-			FLAG:真IV進行度 = 100
+			FLAG:진IV진행도 = 100
 			PRINTFORMW ＞%조사처리(CALLNAME:MASTER,"은")% 탑에 들어갔다‥‥
 		ELSE
 			PRINTFORMW ＞준비가 끝나면、다시 여기로 오자。
@@ -97,20 +97,20 @@
 		ABL:LOCAL:추가효과명중률 = 30
 		ABL:LOCAL:추가효과최대명중률 = 60
 		ABL:LOCAL:최대공격횟수 = 5
-		CFLAG:LOCAL:行動횟수 = 2
+		CFLAG:LOCAL:행동횟수 = 2
 		CALL SYNC_STATUS, LOCAL
 		CALL HEALTH_CHARA, LOCAL
 ;- 전투前処理
-		FLAG:도주불가フラグ = 1
-		FLAG:회화불능フラグ = 1
+		FLAG:도주불가플래그 = 1
+		FLAG:회화불능플래그 = 1
 		FLAG:선제기습취소 = 1
 
 ;- 전투開始
 		CALL BATTLE_START
 
 ;- 전투종료
-		FLAG:도주불가フラグ = 0
-		FLAG:회화불능フラグ = 0
+		FLAG:도주불가플래그 = 0
+		FLAG:회화불능플래그 = 0
 		FLAG:선제기습취소 = 0
 		
 		CUSTOMDRAWLINE =
@@ -136,7 +136,7 @@
 		PRINTFORMW ＞그렇다면 어떻게 해야 할 것인가‥‥？
 		CALL INPUT_YN("말을 건다", "상태를 본다")
 		IF RESULT == 0
-			FLAG:真IV進行度 += 1
+			FLAG:진IV진행도 += 1
 			PRINTFORMW ＞%조사처리(CALLNAME:MASTER,"는")% 숨은 곳으로 부터 나와、그들에게 말을 걸었다。
 			PRINTFORMW 『‥‥케가레비토(ケガレビト)？　우리들에게 무슨 볼일이지？』
 			PRINTFORMW ＞3인조의 리더역인것 같은、고지식해 보이는 아프로헤어의 소년이 그렇게 말했다。
@@ -201,51 +201,51 @@
 		
 		
 @SET_ACTION_MEDOUSA_IV, ARG
-;입력行動を-1とターゲットを-1にしておく
-CFLAG:ARG:입력行動 = -1
-CFLAG:ARG:ターゲット = -1
-SIF CFLAG:ARG:行動した횟수 == 0 && CFLAG:ARG:１moreフラグ == 0
-	CFLAG:ARG:行動횟수 = 2 + RAND:3
+;입력행동を-1と타겟を-1にしておく
+CFLAG:ARG:입력행동 = -1
+CFLAG:ARG:타겟 = -1
+SIF CFLAG:ARG:행동한횟수 == 0 && CFLAG:ARG:１more플래그 == 0
+	CFLAG:ARG:행동횟수 = 2 + RAND:3
 ;1more時
-IF CFLAG:ARG:１moreフラグ > 0
+IF CFLAG:ARG:１more플래그 > 0
 	SELECTCASE RAND:100
 		CASE IS < 40
-			CFLAG:ARG:입력行動 = [[스킬:마하에이하]]
+			CFLAG:ARG:입력행동 = [[스킬:마하에이하]]
 		CASE IS < 80
-			CFLAG:ARG:입력行動 = [[스킬:마하・라기온]]
+			CFLAG:ARG:입력행동 = [[스킬:마하・라기온]]
 		CASEELSE
-			CFLAG:ARG:입력行動 = [[스킬:페트라아이]]
+			CFLAG:ARG:입력행동 = [[스킬:페트라아이]]
 	ENDSELECT
-ELSEIF CFLAG:ARG:行動した횟수 < 2
+ELSEIF CFLAG:ARG:행동한횟수 < 2
 	SELECTCASE RAND:100
 		CASE IS < 30
-			CFLAG:ARG:입력行動 = [[스킬:마구날뛰기]]
+			CFLAG:ARG:입력행동 = [[스킬:마구날뛰기]]
 		CASE IS < 45
-			CFLAG:ARG:입력行動 = [[스킬:마하에이하]]
+			CFLAG:ARG:입력행동 = [[스킬:마하에이하]]
 		CASE IS < 60
-			CFLAG:ARG:입력行動 = [[스킬:마하・라기온]]
+			CFLAG:ARG:입력행동 = [[스킬:마하・라기온]]
 		CASEELSE
-			CFLAG:ARG:입력行動 = [[스킬:페트라아이]]
+			CFLAG:ARG:입력행동 = [[스킬:페트라아이]]
 	ENDSELECT
 ELSE
 	SELECTCASE RAND:100
 		CASE IS < 50
-			CFLAG:ARG:입력行動 = 0
+			CFLAG:ARG:입력행동 = 0
 		CASE IS < 75
-			CFLAG:ARG:입력行動 = [[스킬:자장가]]
+			CFLAG:ARG:입력행동 = [[스킬:자장가]]
 		CASEELSE
-			CFLAG:ARG:입력行動 = [[스킬:휘감기]]
+			CFLAG:ARG:입력행동 = [[스킬:휘감기]]
 	ENDSELECT
 ENDIF
 ;アクション実行不能なら自動的に통상공격にする
-CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력행동
 IF RESULT == 0
-	CFLAG:ARG:입력行動 = 0
-	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+	CFLAG:ARG:입력행동 = 0
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 ENDIF
-;ここまでターゲットが決まってなかったら、랜덤ターゲットをよんで決定
-SIF CFLAG:ARG:ターゲット == -1
-	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+;ここまで타겟が決まってなかったら、랜덤타겟をよんで決定
+SIF CFLAG:ARG:타겟 == -1
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 RETURN 1
 
 

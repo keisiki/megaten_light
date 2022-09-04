@@ -1,0 +1,49 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:FATE_鯖共通10_ルーラー.ERB
+;	Facility	:
+;
+;	Licence		:ライセンスフリー
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	000		20XX/XX/XX		----					テンプレ
+;	001		2021/08/12		SUIHOU					作成
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;スキル名
+@SKILL_NAME_ルーラー,ARG
+RESULTS = 룰러
+
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_ルーラー,ARG
+RETURN 0
+;どちらでもない
+
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_ルーラー,ARG
+RETURN 6
+
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_ルーラー,ARG
+RETURN 23
+;검격
+
+
+;　説明文の表示
+@SKILL_EXPLAIN_ルーラー,ARG
+PRINTL 서번트로 소환된 자의 증거
+PRINTL 클래스에 맞춘 보정을 받고 있다
+PRINTL 
+PRINTL 자신의 HP를 20% 증가시킨다
+PRINTL 자신의 피데미지 감소
+
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_ルーラー,ARG
+RETURN 0
+
+;PU_SKILLNUM_GET(ARG,"ルーラー")

@@ -1,0 +1,315 @@
+﻿;スキル名
+@SKILL_NAME_支援砲撃,ARG
+IF TOINT(CSTR:ARG:102) > 2
+	RESULTS = 지원포격XEX
+ELSE
+	RESULTS = 지원포격
+ENDIF
+
+;　명중
+@SKILL_HITRATE_支援砲撃, ARG
+RETURN 100
+
+;　위력
+@SKILL_POWER_支援砲撃, ARG
+RETURN 200
+
+;;クリティカル率
+;@SKILL_CRITICAL_RATE_支援砲撃, ARG
+;RETURN 5
+
+;;　吸収率
+;@SKILL_HP_ABSORBER_支援砲撃, ARG
+;RETURN 0
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_支援砲撃,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_支援砲撃,ARG
+RETURN 1
+
+;;一体辺りの最大ＨＩＴ数
+;;※ランダム攻撃系に使う
+;@SKILL_MAXATK_PER_支援砲撃,ARG
+;RETURN 1
+
+;;一体辺りの最低ＨＩＴ数
+;;※ランダム攻撃系に使う
+;@SKILL_MINATK_PER_支援砲撃,ARG
+;RETURN 1
+
+;　2 ＨＰ지불　3 ＭＰ지불
+@SKILL_COSTTYPE_支援砲撃, ARG
+RETURN 3
+;消費なし＝1
+
+;　코스트량
+@SKILL_COST_支援砲撃,ARG
+RETURN 20
+
+;　상성
+@SKILL_TYPE_支援砲撃,ARG
+RETURN GET_TYPE_NUM("비구")
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_支援砲撃,ARG
+RETURN 1
+
+;　1 물리데미지로 계산　2 마법데미지로 계산
+@SKILL_DAMAGETYPE_支援砲撃,ARG
+RETURN 1
+
+
+;　対象が1敵か2味方か3場全体か4特殊か
+@SKILL_TARGET_支援砲撃,ARG
+RETURN 1
+
+;　사거리
+@SKILL_RANGE_支援砲撃,ARG
+RETURN 3
+
+;　범위　1 1체　2 1열　3 전체　4 적아군전체
+@SKILL_SPHERE_支援砲撃,ARG
+RETURN 3
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_支援砲撃,ARG
+RETURN 3
+
+;　 특수처리 여부 및 처리내용
+;@SKILL_SPECIALEFECT_支援砲撃,ARG
+;ARG = 1인 경우는 처리 여부를 반환합니다
+;SIF ARG == 1
+;	RETURN 0
+;아래쪽에 특수처리를 기술합니다
+
+;계승타입
+;@SKILL_SUCCESSION_TYPE_支援砲撃,ARG
+;RETURN 23
+;검격
+
+;속도보정
+@SKILL_SPEED_支援砲撃, ARG = -1
+RETURN 0
+
+;;　口上の表示とそのタイプ
+;@SKILL_MESSAGE_支援砲撃,ARG
+
+
+;전투시 이외에 사용 가능한가
+@SKILL_ACTIONABLE_FIELD_支援砲撃, ARG = -1
+RETURN 0
+
+;没
+;@SKILL_RANK_支援砲撃
+;@SKILL_RANKUP_支援砲撃
+;@계승불능_支援砲撃
+
+;템플릿용、추가효과 시리즈
+;추가효과ステータス
+@SKILL_ADDTIONAL_STATE_支援砲撃,ARG
+RETURN GET_STATE_NUM("BIND")
+
+;추가효과 상성
+@SKILL_ADDTIONAL_TYPE_支援砲撃,ARG
+RETURN GET_TYPE_NUM("비구")
+
+;추가효과基本付与確率
+@SKILL_ADDTIONAL_BASE_RATE_支援砲撃,ARG
+RETURN 60
+
+;추가효과付与確率上限
+@SKILL_ADDTIONAL_MAX_RATE_支援砲撃,ARG
+RETURN 95
+
+;;拡散攻撃用追加処理
+;;ブレスなどの拡散攻撃に使う
+;@SKILL_SPREAD_支援砲撃,ARG
+;RETURN 0
+
+;====================================================
+;トリガー発動条件
+;====================================================
+;@SKILL_TRIGGER_ACTIONABLE_支援砲撃,ARG,ARG:1
+;#DIM SKILL_NUM
+;
+;SKILL_NUM = PU_SKILLNUM_GET(ARG,"支援砲撃")
+;
+;SIF FLAG:행동순1 != -1 || SKILLGAGE_D_GET(ARG,SKILL_NUM) < 1
+;	RETURN 0
+;RETURN 1
+
+;====================================================
+;カウンター発動条件
+;====================================================
+;@SKILL_COUNTER_ACTIONABLE_支援砲撃,ARG,ARG:1
+;RETURN RESULT
+
+;====================================================
+;ヒット時ダメージ前処理
+;====================================================
+;@SKILL_HIT_EFFECT_支援砲撃,ARG,ARG:1
+
+;====================================================
+;ダメージ発動時
+;====================================================
+;@SKILL_DAMAGE_EFFECT_支援砲撃,ARG,ARG:1
+
+;====================================================
+;行動によるスキルゲージ操作
+;====================================================
+;@SKILLGAGE_CHARGE_支援砲撃,ARG,ARG:1
+
+;====================================================
+;스킬 및 행동의 실행
+;====================================================
+@ACTION_支援砲撃,ARG,ARG:1,SKILL_NUM
+#DIM SKILL_NUM
+SKILL_NUM = PU_SKILLNUM_GET(ARG,"支援砲撃")
+
+;IF SKILLGAGE_D_GET(ARG,SKILL_NUM) == 0
+CALL SKILLGAGE_D_SET,ARG,SKILL_NUM,2
+PRINTFORML %ARG는% 던・스탈리온Ⅱ에게 지원포격을 요청했다！
+PRINTFORML 턴 종료시에 \@ CFLAG:ARG:PT플래그 == 2 ? 적 # 아군 \@ 전체를 BIND로 만든다！
+IF TOINT(CSTR:ARG:102) > 2
+	IF CFLAG:(ARG):PT플래그 == 0
+		LOCAL:1 = 1
+		LOCAL:2 = 7
+	ELSE
+		LOCAL:1 = 7
+		LOCAL:2 = 17
+	ENDIF
+	FOR LOCAL,LOCAL:1,LOCAL:2
+		SIF POS(LOCAL) < 0
+			CONTINUE
+		CFLAG:POS(LOCAL):방어강화 = MAX(-16, CFLAG:POS(LOCAL):방어강화 - 4)
+	NEXT
+	PRINTFORMW 추가로、\@ CFLAG:ARG:PT플래그 == 2 ? 적 # 아군 \@의 방어력을 낮췄다！
+ENDIF
+;ELSE
+;	PRINTFORML ドゥ・スタリオンⅡの支援砲撃！
+;	CALL FIELD_BADSTATE,ARG,ARG:1,SKILL_NUM
+;	CALL SKILLGAGE_D_SET,ARG,SKILL_NUM,0
+;ENDIF
+;CALL ATTACK_SINGLE,ARG,POS(ARG:1),SKILL_NUM;	単体攻撃
+;CALL ATTACK_FIELD,ARG,ARG:1,SKILL_NUM;			範囲攻撃(列、全体)
+;CALL ATTACK_SPREAD,ARG,ARG:1,SKILL_NUM;		拡散攻撃
+;CALL ATTACK_RAND,ARG,ARG:1,SKILL_NUM;			ランダム攻撃
+
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;전투중 이외에서의 실행
+;====================================================
+;@ACTION_FIELD_支援砲撃,ARG,ARG:1,SKILL_NUM
+;#DIM SKILL_NUM
+
+;CALL HEAL_SINGLE,ARG,ARG,SKILL_NUM	;単体回復
+;CALL HEAL_FIELD,ARG,ARG:1,SKILL_NUM		;範囲回復(列、全体)
+;CALL ALL_HEAL, POS(ARG:1), 0				;単体前回復
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;追加コマンド(EXTRAの下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_EXTRA_支援砲撃,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(MAGICの下、魔封だと消える)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_MAGIC_支援砲撃,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(一番下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_支援砲撃,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;コマンド実行
+;====================================================
+;@INPUT_COM_支援砲撃,ARG
+;RETURN -1
+;-1 再びコマンド選択へ
+; 1 キャラ選択へ
+
+;====================================================
+;戦闘中スキルゲージの可視化
+;====================================================
+;@SKILLGAGE_DISPLAY_支援砲撃,ARG
+;#DIM SKILL_NUM
+;SKILL_NUM = PU_SKILLNUM_GET(ARG,"支援砲撃")
+
+;　説明文の表示
+@SKILL_EXPLAIN_支援砲撃,ARG
+PRINTL 독자적인 통신장치를 이용해、우주선 던・스탈리온Ⅱ에 의한 원호공격을 행한다
+PRINTL 검사들끼리의 1:1(タイマン) 규칙을 어기는 어새신다운 스킬
+PRINTL 
+IF TOINT(CSTR:ARG:102) > 2
+	PRINTL 발동시에 적 전체의 방어력을 저하시키고、
+ENDIF
+PRINTL 발동 후、턴 종료시에 적 전체를 BIND로 만든다
+;没
+;@계승부위_支援砲撃,ARG
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_支援砲撃,ARG
+#DIM SKILL_NUM
+SKILL_NUM = PU_SKILLNUM_GET(ARG,"支援砲撃")
+
+SIF SKILLGAGE_D_GET(ARG,SKILL_NUM) == 0
+	RETURN 1
+RETURN 0
+
+;ターゲット条件
+;↓のSKILL_T_RESERVEがRETURN 1 の時に使用する
+;@SKILL_SPECIAL_TARGET_支援砲撃,USE_CHARA,ARG
+;#DIM USE_CHARA
+;RETURN 0
+
+;控えに使えるか
+;@SKILL_T_RESERVE_支援砲撃,ARG
+;RETURN 0
+
+;어떤 배드스테이터스를 고칠수 있는가
+;@SKILL_CURE_STATE_支援砲撃,USE_CHARA,ARG
+;#DIM USE_CHARA
+;SELECTCASE GET_STATE(ARG)
+;	CASE "HAPPY","CLOSE"
+;		RETURN 1
+;ENDSELECT
+;RETURN 0
+
+;この技を複数持てるか
+;@중복습득수_支援砲撃,ARG
+;RETURN 1
+
+;スキル重複で役に立つ関数
+;HAVE_SKILL_OVERLAP(ARG,PU_SKILLNUM_GET(ARG,"支援砲撃"))
+
+;スキルゲージで役に立つ関数
+;SKILLGAGE_H_GET(ARG,PU_SKILLNUM_GET(ARG,"支援砲撃"))
+;CALL SKILLGAGE_H_SET,ARG,PU_SKILLNUM_GET(ARG,"支援砲撃"),0
+

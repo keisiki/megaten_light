@@ -1,0 +1,7 @@
+﻿;총의 분류명을 취득
+@GET_GUNTYPE,ARG
+#FUNCTIONS
+#LOCALSSIZE 6
+SIF LOCALS == ""
+	SPLIT "_핸드건_샷건_머신건_라이플_그외의총","_",LOCALS
+RETURNF LOCALS:ARG

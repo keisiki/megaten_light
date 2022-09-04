@@ -4,9 +4,9 @@
 ;조건
 ;====================
 @PLAYABLE_COLOSSEUM_5
-;IF (투기장フラグ:4:0 == 1 || 투기장フラグ:3:0 == 1) && 투기장フラグ:5:0 == 0
+;IF (투기장플래그:4:0 == 1 || 투기장플래그:3:0 == 1) && 투기장플래그:5:0 == 0
 ;	IF GETCHARA(4507) > -1 || FLAG:34507 > 0
-IF FLAG:闘技場랭크 >= 1 && FLAG:闘技場名声 >= 150 && 투기장フラグ:5:0 == 0
+IF FLAG:투기장랭크 >= 1 && FLAG:투기장명성 >= 150 && 투기장플래그:5:0 == 0
 			RESULTS = 시합랭크Ｄ　ＶＳ 구세주
 			RETURN 1
 ;	ELSE
@@ -21,8 +21,8 @@ RETURN 0
 ;内容
 ;====================
 @COLOSSEUM_5
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 FLAG:선제기습취소 = 1
 CUSTOMDRAWLINE =
 PRINTW 링에 글어가자 프로텍터와 COMP를 몸에 장착한 빗자루머리의 남자가 기세등등한 웃음을 지었다.
@@ -39,7 +39,7 @@ CUSTOMDRAWLINE =
 WAIT
 ;다레스
 CALL SET_ENEMY,14,4213,25,0,1
-CFLAG:(CHARANUM-1):行動횟수 = 2
+CFLAG:(CHARANUM-1):행동횟수 = 2
 CFLAG:(CHARANUM-1):ＨＰ보정 += 500
 CFLAG:(CHARANUM-1):ＭＰ보정 += 500
 CALL SYNC_STATUS,(CHARANUM-1)
@@ -112,7 +112,7 @@ PRINTFORMW ＞「くっ…情けのつもりか…！！」
 PRINTFORMW ＞…まぁいい。情けかどうかはいずれ分かるだろう…
 PRINTFORMW ＞…最も、どんな「情け」かは今は知ることは無いが。
 PRINTW ＞다레스와 ￥45000을 상금으로 받고서 콜로세움을 뒤로했다.
-PRINTW 다레스가 노예가 되었다.
+PRINTW 다레스가 노예가 되었다
 CALL ADD_NEW_COMPANION,4997,500
 CFLAG:(RESULT:1):전투참가불가능 = -1
 PRINTW 명성 125을 얻었다
@@ -134,17 +134,17 @@ MONEY += 50000
 ENDIF
 
 
-투기장フラグ:5:0 = 1
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+투기장플래그:5:0 = 1
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 
-FLAG:名声 += 125
-투기장フラグ:5:0 = 1
+FLAG:명성 += 125
+투기장플래그:5:0 = 1
 
-FLAG:闘技場名声 += 125
-IF FLAG:闘技場랭크 < 2
-	FLAG:闘技場랭크 = 2
+FLAG:투기장명성 += 125
+IF FLAG:투기장랭크 < 2
+	FLAG:투기장랭크 = 2
 ENDIF
 SAVESTR:랜덤대전팀 =
 CALL SELECT_COLOSSEUM_RANDOMBATTLE
@@ -158,16 +158,16 @@ NEXT
 RETURN 1
 
 @SET_ACTION_XXXX,ARG
-IF CFLAG:ARG:行動した횟수 == 0
+IF CFLAG:ARG:행동한횟수 == 0
 	IF RESULT == 1
 		;회전베기
 		IF RAND:2 == 0
-			CFLAG:ARG:입력行動 = 3
+			CFLAG:ARG:입력행동 = 3
 			CALL RANDOM_TARGET,ARG,3
 		;아카샤아츠
 		ELSE
 			
-			CFLAG:ARG:입력行動 = 215
+			CFLAG:ARG:입력행동 = 215
 			CALL RANDOM_TARGET,ARG,215
 		ENDIF
 	ELSE
@@ -177,8 +177,8 @@ ELSE
 	$DECIDE_ACTION
 	CALL SEARCH_ACT,ARG
 	IF RESULT == 0
-		CFLAG:ARG:입력行動 = -1
-		CFLAG:ARG:방어フラグ = 1
+		CFLAG:ARG:입력행동 = -1
+		CFLAG:ARG:방어플래그 = 1
 		RETURN 0
 	ENDIF
 	LOCAL = RAND:RESULT
@@ -189,17 +189,17 @@ ELSE
 	CALL RANDOM_TARGET,ARG,LOCAL:1
 	CALLFORM SKILL_TARGET_{LOCAL:1}
 	;ここで스킬番号を行動内容に代入
-	SIF CFLAG:ARG:ターゲット == -1
+	SIF CFLAG:ARG:타겟 == -1
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = LOCAL:1
+	CFLAG:ARG:입력행동 = LOCAL:1
 ENDIF
 
 @SET_ACTION_4507,ARG
-IF CFLAG:ARG:行動した횟수 == 0
+IF CFLAG:ARG:행동한횟수 == 0
 	CALL CHECK_ACTIONABLE,ARG,1623
 	IF RESULT == 1
 		CFLAG:(CHARANUM-1):속도보정 = 12
-		CFLAG:ARG:입력行動 = 1623
+		CFLAG:ARG:입력행동 = 1623
 		CALL RANDOM_TARGET,ARG,1623
 	ELSE
 		GOTO DECIDE_ACTION
@@ -210,8 +210,8 @@ ELSE
 	$DECIDE_ACTION
 	CALL SEARCH_ACT,ARG
 	IF RESULT == 0
-		CFLAG:ARG:입력行動 = -1
-		CFLAG:ARG:방어フラグ = 1
+		CFLAG:ARG:입력행동 = -1
+		CFLAG:ARG:방어플래그 = 1
 		RETURN 0
 	ENDIF
 	LOCAL = RAND:RESULT
@@ -222,9 +222,9 @@ ELSE
 	CALL RANDOM_TARGET,ARG,LOCAL:1
 	CALLFORM SKILL_TARGET_{LOCAL:1}
 	;ここで스킬番号を行動内容に代入
-	SIF CFLAG:ARG:ターゲット == -1
+	SIF CFLAG:ARG:타겟 == -1
 		GOTO DECIDE_ACTION
-	CFLAG:ARG:입력行動 = LOCAL:1
+	CFLAG:ARG:입력행동 = LOCAL:1
 ENDIF
 
 

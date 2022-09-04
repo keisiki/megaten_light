@@ -1,0 +1,49 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:FATE_鯖共通_アサシン.ERB
+;	Facility	:
+;
+;	Licence		:ライセンスフリー
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	000		20XX/XX/XX		----					テンプレ
+;	001		2021/04/20		しゃけ					作成
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;スキル名
+@SKILL_NAME_アサシン,ARG
+RESULTS = 어새신
+
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_アサシン,ARG
+RETURN 0
+;どちらでもない
+
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_アサシン,ARG
+RETURN 6
+
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_アサシン,ARG
+RETURN 23
+;검격
+
+
+;　説明文の表示
+@SKILL_EXPLAIN_アサシン,ARG
+PRINTL 서번트로 소환된 자의 증거
+PRINTL 클래스에 맞춘 보정을 받고 있다
+PRINTL 
+PRINTL 자신의 최대 MP 증가、상태이상 부여율과 회피율、크리티컬률이 상승
+PRINTL 대가로 공격력이 저하、피데미지가 증가한다
+
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_アサシン,ARG
+RETURN 0
+
+;PU_SKILLNUM_GET(ARG,"アサシン")

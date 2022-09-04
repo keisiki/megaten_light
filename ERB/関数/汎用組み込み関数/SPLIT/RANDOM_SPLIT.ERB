@@ -1,0 +1,34 @@
+﻿;==========================================================
+;@RANDOM_SPLIT
+;문자열 ARGS를 ARGS:1로 구분하도록 SPLIT명령에 걸고、
+;랜덤으로 추출한 항목만 선택하여 ARGS:1로 다시 연결
+;==========================================================
+;ARGS   = 抽出元の文章
+;ARGS:1 = 文の区切り
+;ARG    = 抽出する項目の数
+@RANDOM_SPLIT,ARGS,ARGS:1,ARG
+#FUNCTIONS
+#DIMS 결과, 1
+#DIM 항목수,1
+#LOCALSIZE 2
+#LOCALSSIZE 10000
+VARSET LOCAL
+VARSET 항목수
+DO
+	LOCAL   = STRFIND(ARGS, ARGS:1, LOCAL) + 1
+	항목수 += 1
+LOOP LOCAL != 0
+SIF ARG > 항목수
+	ARG = 항목수
+SPLIT ARGS, ARGS:1 ,LOCALS
+VARSET 결과
+FOR LOCAL,0,ARG
+	LOCAL:1 = RAND(0,항목수)
+	결과 = %결과%%LOCALS:(LOCAL:1)%
+	SIF ARG-LOCAL > 1
+		결과  = %결과%%ARGS:1%
+	항목수 --
+	ARRAYREMOVE LOCALS, LOCAL:1,1
+NEXT
+VARSET LOCALS
+RETURNF 결과

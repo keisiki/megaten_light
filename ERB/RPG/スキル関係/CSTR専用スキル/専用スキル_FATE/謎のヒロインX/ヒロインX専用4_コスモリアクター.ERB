@@ -1,0 +1,165 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:コスモリアクター.ERB
+;	Facility	:
+;
+;	Licence		:ライセンスフリー
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	000		20XX/XX/XX		----					テンプレ
+;	001		2021/04/21		しゃけ					作成
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+
+;スキル名
+@SKILL_NAME_コスモリアクター,ARG
+RESULTS = 코스모 리액터
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_コスモリアクター,ARG
+RETURN 0
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_コスモリアクター,ARG
+RETURN 6
+
+;계승타입
+;@SKILL_SUCCESSION_TYPE_コスモリアクター,ARG
+RETURN 22
+; 継承不可
+
+;전투시 이외에 사용 가능한가
+@SKILL_ACTIONABLE_FIELD_コスモリアクター, ARG = -1
+RETURN 0
+
+;====================================================
+;トリガー発動条件
+;====================================================
+@SKILL_TRIGGER_ACTIONABLE_コスモリアクター,ARG,ARG:1
+#DIM SKILL_NUM
+
+SIF ARG != ARG:1
+	RETURN 0
+CALLFORM SKILL_EFECT_{CFLAG:ARG:입력행동}
+SIF RESULT != 1 || CFLAG:ARG:타겟 < 1
+	RETURN 0
+RETURN 1
+
+;====================================================
+;스킬 및 행동의 실행
+;====================================================
+@ACTION_コスモリアクター,ARG,ARG:1,SKILL_NUM
+#DIM SKILL_NUM
+
+CFLAG:ARG:크리티컬강화 = MIN(9, CFLAG:ARG:크리티컬강화 + 1)
+PRINTFORMW %CALLNAME:ARG%의 크리티컬률이 약간 높아졌다！
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;전투중 이외에서의 실행
+;====================================================
+;@ACTION_FIELD_コスモリアクター,ARG,ARG:1,SKILL_NUM
+;#DIM SKILL_NUM
+
+;CALL HEAL_SINGLE,ARG,POS(ARG:1),SKILL_NUM	;単体回復
+;CALL HEAL_FIELD,ARG,ARG:1,SKILL_NUM		;範囲回復(列、全体)
+;CALL ALL_HEAL, POS(ARG:1), 0				;単体前回復
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;追加コマンド(EXTRAの下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_EXTRA_コスモリアクター,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(MAGICの下、魔封だと消える)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_MAGIC_コスモリアクター,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(一番下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_コスモリアクター,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;コマンド実行
+;====================================================
+;@INPUT_COM_コスモリアクター,ARG
+;RETURN -1
+;-1 再びコマンド選択へ
+; 1 キャラ選択へ
+
+;====================================================
+;戦闘中スキルゲージの可視化
+;====================================================
+;@SKILLGAGE_DISPLAY_コスモリアクター,ARG
+;SKILL_NUM = PU_SKILLNUM_GET(ARG,"コスモリアクター")
+;SKILLGAGE_D_GET(ARG,SKILL_NUM)
+
+
+;　説明文の表示
+@SKILL_EXPLAIN_コスモリアクター,ARG
+PRINTL 빛나는 세이버에게만 허락된 코스모적인 리액터
+PRINTL 다양한 것에 리액트하고 있는 것 같다
+PRINTL
+PRINTL 공격을 할 때마다、자신의의 크리티컬률이 약간 높아진다
+
+;没
+;@계승부위_コスモリアクター,ARG
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_コスモリアクター,ARG
+RETURN 0
+
+;ターゲット条件
+;↓のSKILL_T_RESERVEがRETURN 1 の時に使用する
+;@SKILL_SPECIAL_TARGET_コスモリアクター,USE_CHARA,ARG
+;#DIM USE_CHARA
+;RETURN 0
+
+;控えに使えるか
+;@SKILL_T_RESERVE_コスモリアクター,ARG
+;RETURN 0
+
+;어떤 배드스테이터스를 고칠수 있는가
+;@SKILL_CURE_STATE_コスモリアクター,USE_CHARA,ARG
+;#DIM USE_CHARA
+;SELECTCASE GET_STATE(ARG)
+;	CASE "HAPPY","CLOSE"
+;		RETURN 1
+;ENDSELECT
+;RETURN 0
+
+;この技を複数持てるか
+;@중복습득수_コスモリアクター,ARG
+;RETURN 1
+
+;スキル重複で役に立つ関数
+;HAVE_SKILL_OVERLAP(ARG,PU_SKILLNUM_GET(ARG,"コスモリアクター"))
+
+;スキルゲージで役に立つ関数
+;SKILLGAGE_H_GET(ARG,PU_SKILLNUM_GET(ARG,"コスモリアクター"))
+;CALL SKILLGAGE_H_SET,ARG,PU_SKILLNUM_GET(ARG,"コスモリアクター"),0
+

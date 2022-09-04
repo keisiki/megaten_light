@@ -1,0 +1,49 @@
+﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;
+;	Module		:FATE_鯖共通5_ライダー.ERB
+;	Facility	:
+;
+;	Licence		:ライセンスフリー
+;
+;	Modification Data:
+;
+;	Edit	Date			Author					Reason
+;	000		20XX/XX/XX		----					テンプレ
+;	001		2021/08/12		SUIHOU					作成
+;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
+;スキル名
+@SKILL_NAME_ライダー,ARG
+RESULTS = 라이더
+
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_ライダー,ARG
+RETURN 0
+;どちらでもない
+
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_ライダー,ARG
+RETURN 6
+
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_ライダー,ARG
+RETURN 23
+;검격
+
+
+;　説明文の表示
+@SKILL_EXPLAIN_ライダー,ARG
+PRINTL 서번트로 소환된 자의 증거
+PRINTL 클래스에 맞춘 보정을 받고 있다
+PRINTL 
+PRINTL 타격 속성의 공격에 플러스 보정
+PRINTL 피데미지가 경감된다
+
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_ライダー,ARG
+RETURN 0
+
+;PU_SKILLNUM_GET(ARG,"ライダー")

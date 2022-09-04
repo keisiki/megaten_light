@@ -1,0 +1,29 @@
+﻿;-------------------------------------------------------------------------------
+;    BAR의 색이 다른 버전
+;-------------------------------------------------------------------------------
+;    예  PRINTFORM %PRINT_COLORBAR(40,100,8,%UNICODE(0x2584)%,%UNICODE(0x2584)%,,0x404040)% 
+;        [===     ]
+;    인수는 BAR와 거의 동일 + ARGS로 묘사 문자 변경 가능(지정하지 않을 경우 BAR와 동일사양)
+;    ARG:3은 바의 색(0xFFFFFF 형식으로 지정), ARG:4는 바의 배경색(0xFFFFFF 형식으로 지정)
+;===============================================================================
+@PRINT_COLORBAR(ARG, ARG:1, ARG:2, ARGS = "*", ARGS:1 = ".", ARG:3, ARG:4)
+#LOCALSIZE 5
+LOCAL:1 = ARG * ARG:2 / ARG:1
+LOCAL:2 = GETCOLOR()
+FOR LOCAL, 1, ARG:2 + 1
+	IF LOCAL:1 >= LOCAL
+		IF !LOCAL:3
+			SETCOLOR ARG:3
+			LOCAL:3 = 1
+		ENDIF
+		PRINTFORM %ARGS%
+	ELSE
+		IF !LOCAL:4
+			SETCOLOR ARG:4
+			LOCAL:4 = 1
+		ENDIF
+		PRINTFORM %ARGS:1%
+	ENDIF
+NEXT
+SETCOLOR LOCAL:2
+VARSET LOCAL

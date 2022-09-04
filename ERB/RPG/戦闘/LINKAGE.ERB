@@ -1,20 +1,4 @@
-﻿;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
-;
-;	Module		:LINKAGE.ERB
-;	Facility	:合体スキル用関数置き場
-;
-;	Licence		:ライセンスフリー。
-;
-;	Modification Data:
-;
-;	Edit	Date			Author					Reason
-;	001		20XX/XX/XX		----					新規作成
-;	002		2021/02/11		Rsp暇人 				ACTIONABLE_LINKAGEで使用されるD及びEの中身を参照型変数で保存するように。
-;													SHOW_LINKAGEで銃攻撃リンケージを表示でき、未解析のスキルを？？？？で表示するように。現在のパーティ編成で使用可能なリンケージは水色で表示するように。
-;	003		2021/01/20		Jガン					スキル参照のフラグなどを追加して、スキルの詳細が正しくなるように
-;	004		2021/04/22		Rsp暇人 				キャラクタ選択画面から発動可能なリンケージ一覧を表示し選択可能に。リンケージ参加者から参加リンケージをキャンセルできるように。
-;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
-
+﻿
 ;=================================================
 ;링케이지사용가능판정
 ;================================================
@@ -29,12 +13,12 @@ CATCH
 	RETURN 0
 ENDCATCH
 ;発動者が조건を満たしているか체크
-CALLFORM 発動者조건_{ARG},ARG:1
+CALLFORM 발동자조건_{ARG},ARG:1
 SIF RESULT == 0
 	RETURN 0
 
 ;참가者の人数を체크
-CALLFORM 참가人数_{ARG}
+CALLFORM 참가인수_{ARG}
 LOCAL:1 = RESULT
 
 ;조건を満たす참가者をDの枠に放り込む
@@ -46,12 +30,12 @@ FOR LOCAL, 1 , LOCAL:1+1
 		;発動者は참가者になれない
 		SIF POS(LOCAL:2) == ARG:1
 			CONTINUE
-		FLAG:スキル優先参照者 = POS(LOCAL:2)	;ADD 003
+		FLAG:스킬우선참조인 = POS(LOCAL:2)	;ADD 003
 		;---- EDIT 002 MOD START ---------------------------
 		;---- EDIT 004 ADD START ---------------------------
 		U = ARG:1
 		;---- EDIT 004 ADD END ---------------------------
-		CALLFORM 참가者조건_{ARG},POS(LOCAL:2),LOCAL
+		CALLFORM 참가자조건_{ARG},POS(LOCAL:2),LOCAL
 		SIF RESULT == 0
 			CONTINUE
 		;参加可能ならREF_LOCALをONにする
@@ -68,7 +52,7 @@ FOR LOCAL, 1 , LOCAL:1+1
 		SETBIT D:LOCAL ,LOCAL:2
 	NEXT
 NEXT
-FLAG:スキル優先参照者 = -1	;ADD 003
+FLAG:스킬우선참조인 = -1	;ADD 003
 
 ;0があると駄目
 LOCAL:2 = 1
@@ -188,7 +172,7 @@ NEXT
 NEXT
 ;使用済みのダミーを削除
 SIF !ARG
-	CALL キャラ삭제, CHARANUM - 1
+	CALL 캐릭터삭제, CHARANUM - 1
 ;---- EDIT 004 MOD END ---------------------------
 ;---- EDIT 002 MOD END ---------------------------
 
@@ -206,7 +190,7 @@ IF ARG == 2
 				CONTINUE
 			ENDCATCH
 			PRINTFORM [{LOCAL}] %RESULTS,20,LEFT%
-			CALLFORM 참가人数_{LOCAL}
+			CALLFORM 참가인수_{LOCAL}
 			FOR LOCAL:1, 1, RESULT + 2
 				SIF LOCAL:1 > 1
 					PRINT 　→　
@@ -218,7 +202,7 @@ IF ARG == 2
 	NEXT
 ELSE
 	;---- EDIT 004 MOD END ---------------------------
-FOR LOCAL, 4000 + TYPE * 40, 4000 + (TYPE+1) * 40
+	FOR LOCAL, 4000 + TYPE * 40, 4000 + (TYPE+1) * 40
 	;---- EDIT 002 MOD START ---------------------------
 		;未解析の場合は？？？？で存在を示唆するように
 		IF !GETBIT(FLAG:(1202+LOCAL / 63), LOCAL % 63)
@@ -228,7 +212,7 @@ FOR LOCAL, 4000 + TYPE * 40, 4000 + (TYPE+1) * 40
 			ENDCATCH
 			SETCOLOR 0x404040
 			PRINTPLAINFORM [{LOCAL}] %"？？？？",20,LEFT%
-			CALLFORM 참가人数_{LOCAL}
+			CALLFORM 참가인수_{LOCAL}
 			FOR LOCAL:1, 1, RESULT + 2
 				SIF LOCAL:1 > 1
 					PRINT 　→　
@@ -243,7 +227,7 @@ FOR LOCAL, 4000 + TYPE * 40, 4000 + (TYPE+1) * 40
 			SIF LINK_LOCAL:(LOCAL-4000):0:0 || (!ARG && LINK_LOCAL:(LOCAL-4000):1:0)
 				SETCOLOR COLOR("aqua")
 			PRINTFORM [{LOCAL}] %RESULTS,20,LEFT%
-			CALLFORM 참가人数_{LOCAL}
+			CALLFORM 참가인수_{LOCAL}
 			FOR LOCAL:1, 1, RESULT + 2
 				SIF LOCAL:1 > 1
 					PRINT 　→　
@@ -301,16 +285,16 @@ ELSEIF RESULT >= 4000 && RESULT <= 5000
 				CALLFORM SKILL_COST_{LOCAL}
 				PRINTFORM ＭＰ{RESULT,3}　　
 			ENDIF
-			CALLFORM 참가人数_{LOCAL}
+			CALLFORM 참가인수_{LOCAL}
 			LOCAL:1 = RESULT + 1
 			FOR LOCAL:2, 1, LOCAL:1
 				PRINTFORM 참가자{LOCAL:2}　
-				CALLFORM 링케이지コスト타입_{LOCAL}, LOCAL:2
+				CALLFORM 링케이지코스트타입_{LOCAL}, LOCAL:2
 				IF RESULT == 2
-					CALLFORM 링케이지コスト_{LOCAL}, LOCAL:2
+					CALLFORM 링케이지코스트_{LOCAL}, LOCAL:2
 					PRINTFORM ＨＰ{RESULT,3}％　
 				ELSE
-					CALLFORM 링케이지コスト_{LOCAL}, LOCAL:2
+					CALLFORM 링케이지코스트_{LOCAL}, LOCAL:2
 					PRINTFORM ＭＰ{RESULT,3}　　
 				ENDIF
 				IF LOCAL:1 == LOCAL:2 - 1
@@ -362,7 +346,7 @@ ELSEIF RESULT >= 4000 && RESULT <= 5000
 					DRAWLINE
 					CALL INPUT_COM_11, POS(LOCAL:1), LOCAL
 					RESULT:2 = RESULT
-					DEBUGPRINTFORML 발동자%CALLNAME:POS(LOCAL:1)%　발동번호{CFLAG:POS(LOCAL:1):입력行動} 방어 \@CFLAG:POS(LOCAL:1):방어フラグ? ON # OFF \@
+					DEBUGPRINTFORML 발동자%CALLNAME:POS(LOCAL:1)%　발동번호{CFLAG:POS(LOCAL:1):입력행동} 방어 \@CFLAG:POS(LOCAL:1):방어플래그? ON # OFF \@
 					RETURN POS(LOCAL:1)
 				ELSE
 					GOTO INPUT_LOOP1
@@ -394,13 +378,13 @@ SIF !INRANGE(ARG, 0, CHARANUM-1)
 SIF CFLAG:ARG:링케이지참가 < 1
 	RETURN 0
 LOCAL = CFLAG:ARG:링케이지참가 - 1
-TRYCCALLFORM SKILL_NAME_{CFLAG:LOCAL:입력行動}
+TRYCCALLFORM SKILL_NAME_{CFLAG:LOCAL:입력행동}
 	PRINTPLAINFORM %CALLNAME:ARG%は[{CPOS(LOCAL)}] %CALLNAME:LOCAL%のリンケージスキル：%RESULTS%に参加中です
 CATCH
 	PRINTPLAINFORM %CALLNAME:ARG%は[{CPOS(LOCAL)}] %CALLNAME:LOCAL%のリンケージスキルに参加中？です
 ENDCATCH
 PRINTL
-PRINTL 参加をキャンセルしますか？ 
+PRINTL 참가를 취소하시겠습니까？ 
 CALL INPUT_YN("네","아니오",2)
 SIF RESULT
 	RETURN 0
@@ -410,8 +394,8 @@ FOR LCOUNT, 1, 6
 	ENDIF
 NEXT
 CFLAG:LOCAL:링케이지발동 = 0
-CFLAG:LOCAL:ＲＥＰＥＡＴ行動 = -1
-CFLAG:LOCAL:방어フラグ = 1
+CFLAG:LOCAL:ＲＥＰＥＡＴ행동 = -1
+CFLAG:LOCAL:방어플래그 = 1
 RETURN 1
 RETURN 0
 ;---- EDIT 004 ADD END ---------------------------

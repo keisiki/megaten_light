@@ -4,14 +4,14 @@
 ;조건
 ;====================
 @PLAYABLE_COLOSSEUM_89
-SIF (FLAG:組織貢献度 + FLAG:名声 * 100 ) < 60000 || MONEY < 10000
+SIF (FLAG:조직공헌도 + FLAG:명성 * 100 ) < 60000 || MONEY < 10000
 	RETURN 0
-IF 투기장フラグ:89:0 < 1
+IF 투기장플래그:89:0 < 1
 	CALL MESSAGE_WINDOW, "", "길을 걷고 있는데 선배가 말을 걸어왔다"
 	CALL MESSAGE_WINDOW, "선배", "여어 꽤나 열심히 하고 있잖아/니 얘기가 꽤나 들리던데"
 	CALL MESSAGE_WINDOW, "선배", "그러니 좋은 정보를 알려줄께/이기면 보석이 손에 들어오는 투기장이야/라그 아저씨가 원하는 거말야"
 	CALL MESSAGE_WINDOW, "선배", "그 대신 참가비가 있는데 말야…"
-	투기장フラグ:89:0 = 1
+	투기장플래그:89:0 = 1
 ENDIF
 RESULTS = 보석쟁탈전 (참가비:￥10000)
 RETURN 1
@@ -21,49 +21,49 @@ RETURN 1
 ;内容
 ;====================
 @COLOSSEUM_89
-LOCAL:0 = 0;低랭크の宝石が손に入る확률
-LOCAL:1 = 0;中랭크の宝石が손に入る확률
-LOCAL:2 = 0;高랭크の宝石が손に入る확률
-LOCAL:3 = 0;宝石が손に入る個数（10以外は4つだが必ず4以上손に入る）
+LOCAL:0 = 0;低랭크の宝石が手に入る확률
+LOCAL:1 = 0;中랭크の宝石が手に入る확률
+LOCAL:2 = 0;高랭크の宝石が手に入る확률
+LOCAL:3 = 0;宝石が手に入る個数（10以外は4つだが必ず4以上手に入る）
 MONEY -= 10000
-투기장フラグ:89:1 = 0
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+투기장플래그:89:1 = 0
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 FLAG:선제기습취소 = 1
 $LP
 CUSTOMDRAWLINE =
 PRINTL 어떤 난이도로 싸웁니까？
 PRINT 　[1]
-SIF FLAG:闘技場랭크 > 0 && 투기장フラグ:89:2 > 0;e
+SIF FLAG:투기장랭크 > 0 && 투기장플래그:89:2 > 0;e
 	PRINT 　[2]
-SIF FLAG:闘技場랭크 > 1 && 투기장フラグ:89:2 > 1;d
+SIF FLAG:투기장랭크 > 1 && 투기장플래그:89:2 > 1;d
 	PRINT 　[3]
-SIF FLAG:闘技場랭크 > 2 && 투기장フラグ:89:2 > 2;c
+SIF FLAG:투기장랭크 > 2 && 투기장플래그:89:2 > 2;c
 	PRINTL 　[4]
-SIF FLAG:闘技場랭크 > 3 && 투기장フラグ:89:2 > 3;b
+SIF FLAG:투기장랭크 > 3 && 투기장플래그:89:2 > 3;b
 	PRINT 　[5]
-SIF FLAG:闘技場랭크 > 4 && 투기장フラグ:89:2 > 4;a
+SIF FLAG:투기장랭크 > 4 && 투기장플래그:89:2 > 4;a
 	PRINT 　[6]
-SIF FLAG:闘技場랭크 > 4 && 투기장フラグ:89:2 > 5;a
+SIF FLAG:투기장랭크 > 4 && 투기장플래그:89:2 > 5;a
 	PRINT 　[7]
-SIF FLAG:闘技場랭크 > 4 && 투기장フラグ:89:2 > 6;a
+SIF FLAG:투기장랭크 > 4 && 투기장플래그:89:2 > 6;a
 	PRINTL 　[8]
-SIF FLAG:闘技場랭크 > 4 && 투기장フラグ:89:2 > 7;a
+SIF FLAG:투기장랭크 > 4 && 투기장플래그:89:2 > 7;a
 	PRINT 　[9]
-SIF FLAG:闘技場랭크 > 4 && 투기장フラグ:89:2 > 8;a
+SIF FLAG:투기장랭크 > 4 && 투기장플래그:89:2 > 8;a
 	PRINTL 　[10]EX
 PRINTL 
 
 INPUT
-SIF 투기장フラグ:89:2 < RESULT-1
+SIF 투기장플래그:89:2 < RESULT-1
 	GOTO LP
-IF FLAG:闘技場랭크 < 5
-	SIF FLAG:闘技場랭크 < RESULT-1
+IF FLAG:투기장랭크 < 5
+	SIF FLAG:투기장랭크 < RESULT-1
 		GOTO LP
 ENDIF
-투기장フラグ:89:1 = RESULT
-SIF 투기장フラグ:89:2 < RESULT
-	투기장フラグ:89:2 = RESULT
+투기장플래그:89:1 = RESULT
+SIF 투기장플래그:89:2 < RESULT
+	투기장플래그:89:2 = RESULT
 SELECTCASE RESULT
 CASE 1
 	IF RAND:2
@@ -199,7 +199,7 @@ CASE 1
 	LOCAL:0 = 90
 	LOCAL:1 = 10
 	LOCAL:2 = 0
-	투기장フラグ:89:1 = 1
+	투기장플래그:89:1 = 1
 CASE 2
 	IF RAND:2
 		;物理공격+타루카쟈
@@ -278,7 +278,7 @@ CASE 2
 		
 		CALL SET_ENEMY,10,1601,20,0,0
 		ABL:(CHARANUM-1):스킬1 = 1211;마린카린
-		ABL:(CHARANUM-1):스킬2 = 802;부후라
+		ABL:(CHARANUM-1):스킬2 = 802;부흐라
 		ABL:(CHARANUM-1):스킬3 = 904;마하・지오
 		ABL:(CHARANUM-1):스킬4 = 0
 		ABL:(CHARANUM-1):스킬5 = 0
@@ -286,7 +286,7 @@ CASE 2
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,11,1601,20,0,0
 		ABL:(CHARANUM-1):스킬1 = 1211;마린카린
-		ABL:(CHARANUM-1):스킬2 = 802;부후라
+		ABL:(CHARANUM-1):스킬2 = 802;부흐라
 		ABL:(CHARANUM-1):스킬3 = 904;마하・지오
 		ABL:(CHARANUM-1):스킬4 = 0
 		ABL:(CHARANUM-1):스킬5 = 0
@@ -311,12 +311,12 @@ CASE 2
 	LOCAL:0 = 75
 	LOCAL:1 = 20
 	LOCAL:2 = 5
-	투기장フラグ:89:1 = 2
+	투기장플래그:89:1 = 2
 CASE 3
 	IF RAND:2
 		;신경이상공격
 		CALL SET_ENEMY,7,952,30,0,0
-		ABL:(CHARANUM-1):스킬1 = 905;マハ지온가
+		ABL:(CHARANUM-1):스킬1 = 905;마하지온가
 		ABL:(CHARANUM-1):스킬2 = 903;지오다인
 		ABL:(CHARANUM-1):스킬3 = 1102
 		ABL:(CHARANUM-1):스킬4 = 1101
@@ -324,7 +324,7 @@ CASE 3
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,8,952,30,0,0
-		ABL:(CHARANUM-1):스킬1 = 905;マハ지온가
+		ABL:(CHARANUM-1):스킬1 = 905;마하지온가
 		ABL:(CHARANUM-1):스킬2 = 903;지오다인
 		ABL:(CHARANUM-1):스킬3 = 1102
 		ABL:(CHARANUM-1):스킬4 = 1101
@@ -370,8 +370,8 @@ CASE 3
 		;魔法공격+마카카쟈
 		CALL SET_ENEMY,7,1615,30,0,0
 		ABL:(CHARANUM-1):스킬1 = 1502;마그나스
-		ABL:(CHARANUM-1):스킬2 = 805;마하・부후라
-		ABL:(CHARANUM-1):스킬3 = 803;부후다인
+		ABL:(CHARANUM-1):스킬2 = 805;마하・부흐라
+		ABL:(CHARANUM-1):스킬3 = 803;부흐다인
 		ABL:(CHARANUM-1):스킬4 = 1505
 		ABL:(CHARANUM-1):스킬5 = 0
 		CALL SYNC_STATUS,(CHARANUM-1)
@@ -434,7 +434,7 @@ CASE 3
 	LOCAL:0 = 45
 	LOCAL:1 = 50
 	LOCAL:2 = 5
-	투기장フラグ:89:1 = 3
+	투기장플래그:89:1 = 3
 CASE 4
 	IF RAND:2
 		;이상+공격
@@ -493,8 +493,8 @@ CASE 4
 		;チャージ+物理
 		CALL SET_ENEMY,9,471,45,0,1
 				CSTR:(CHARANUM-1):사고패턴 = チャージマン
-				CFLAG:(CHARANUM-1):行動횟수 = 2
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):행동횟수 = 2
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 		ABL:(CHARANUM-1):스킬1 = 211;기간피스트
 		ABL:(CHARANUM-1):스킬2 = 254
@@ -510,7 +510,7 @@ CASE 4
 	LOCAL:0 = 20
 	LOCAL:1 = 70
 	LOCAL:2 = 10
-	투기장フラグ:89:1 = 4
+	투기장플래그:89:1 = 4
 CASE 5
 	IF RAND:2
 		;キル+공격
@@ -576,7 +576,7 @@ CASE 5
 				BASE:(CHARANUM-1):비구 = 100
 				MAXBASE:(CHARANUM-1):전술 = 100
 				BASE:(CHARANUM-1):전술 = 100
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 		ABL:(CHARANUM-1):스킬1 = 2012
 		ABL:(CHARANUM-1):스킬2 = 2067
@@ -586,7 +586,7 @@ CASE 5
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,14,217,50,0,1
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 		ABL:(CHARANUM-1):스킬1 = 2002
 		ABL:(CHARANUM-1):스킬2 = 2001
@@ -597,12 +597,12 @@ CASE 5
 	LOCAL:0 = 10
 	LOCAL:1 = 70
 	LOCAL:2 = 20
-	투기장フラグ:89:1 = 5
+	투기장플래그:89:1 = 5
 CASE 6
 	IF RAND:2
 		;即死
 		CALL SET_ENEMY,7,1009,60,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1403;축시의참배
 		ABL:(CHARANUM-1):스킬2 = 1405
 		ABL:(CHARANUM-1):스킬3 = 7;산산조각베기
@@ -611,7 +611,7 @@ CASE 6
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,8,1009,60,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1403;축시의참배
 		ABL:(CHARANUM-1):스킬2 = 1405
 		ABL:(CHARANUM-1):스킬3 = 7;산산조각베기
@@ -621,7 +621,7 @@ CASE 6
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,10,370,60,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1303
 		ABL:(CHARANUM-1):스킬2 = 1309
 		ABL:(CHARANUM-1):스킬3 = 215;아카샤아츠
@@ -630,7 +630,7 @@ CASE 6
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,11,370,60,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1303
 		ABL:(CHARANUM-1):스킬2 = 1309
 		ABL:(CHARANUM-1):스킬3 = 215;아카샤아츠
@@ -640,20 +640,20 @@ CASE 6
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,12,312,60,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,16,312,60,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 	ELSE
 		;魔法+集中
 		CALL SET_ENEMY,9,1562,67,0,1
 				CSTR:(CHARANUM-1):사고패턴 = 魔法集中
-				CFLAG:(CHARANUM-1):行動횟수 = 2
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):행동횟수 = 2
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 		ABL:(CHARANUM-1):스킬1 = 723
 		ABL:(CHARANUM-1):스킬2 = 724
@@ -669,13 +669,13 @@ CASE 6
 	LOCAL:0 = 10
 	LOCAL:1 = 60
 	LOCAL:2 = 30
-	투기장フラグ:89:1 = 6
+	투기장플래그:89:1 = 6
 	
 CASE 7
 	IF RAND:2
 		;即死
 		CALL SET_ENEMY,7,913,70,0,0
-		CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+		CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 315
 		ABL:(CHARANUM-1):스킬2 = 259
 		ABL:(CHARANUM-1):스킬3 = 316
@@ -684,7 +684,7 @@ CASE 7
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,8,913,70,0,0
-		CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+		CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 315
 		ABL:(CHARANUM-1):스킬2 = 259
 		ABL:(CHARANUM-1):스킬3 = 316
@@ -694,7 +694,7 @@ CASE 7
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,10,882,70,0,0
-		CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+		CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 261
 		ABL:(CHARANUM-1):스킬2 = 316
 		ABL:(CHARANUM-1):스킬3 = 1313
@@ -703,7 +703,7 @@ CASE 7
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,11,882,70,0,0
-		CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+		CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 261
 		ABL:(CHARANUM-1):스킬2 = 316
 		ABL:(CHARANUM-1):스킬3 = 1313
@@ -713,7 +713,7 @@ CASE 7
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,12,372,70,0,0
-		CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+		CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 2038
 		ABL:(CHARANUM-1):스킬2 = 1309
 		ABL:(CHARANUM-1):스킬3 = 1303
@@ -722,7 +722,7 @@ CASE 7
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,13,372,70,0,0
-		CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+		CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 2038
 		ABL:(CHARANUM-1):스킬2 = 1309
 		ABL:(CHARANUM-1):스킬3 = 1303
@@ -732,7 +732,7 @@ CASE 7
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,15,1625,70,0,0
-		CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+		CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1403
 		ABL:(CHARANUM-1):스킬2 = 1413
 		ABL:(CHARANUM-1):스킬3 = 1405
@@ -741,7 +741,7 @@ CASE 7
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,16,1625,70,0,0
-		CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+		CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1403
 		ABL:(CHARANUM-1):스킬2 = 1413
 		ABL:(CHARANUM-1):스킬3 = 1405
@@ -753,8 +753,8 @@ CASE 7
 		;チャージ+物理
 		CALL SET_ENEMY,9,1423,77,0,1
 				CSTR:(CHARANUM-1):사고패턴 = チャージマン
-				CFLAG:(CHARANUM-1):行動횟수 = 2
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):행동횟수 = 2
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 		ABL:(CHARANUM-1):스킬1 = 6;虚空斬破
 		ABL:(CHARANUM-1):스킬2 = 2067
@@ -768,13 +768,13 @@ CASE 7
 	LOCAL:0 = 10
 	LOCAL:1 = 50
 	LOCAL:2 = 40
-	투기장フラグ:89:1 = 7
+	투기장플래그:89:1 = 7
 
 CASE 8
 	IF RAND:2
 		;即死
 		CALL SET_ENEMY,7,1009,80,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1403;축시의참배
 		ABL:(CHARANUM-1):스킬2 = 1405
 		ABL:(CHARANUM-1):스킬3 = 7;산산조각베기
@@ -783,7 +783,7 @@ CASE 8
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,8,1009,80,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1403;축시의참배
 		ABL:(CHARANUM-1):스킬2 = 1405
 		ABL:(CHARANUM-1):스킬3 = 7;산산조각베기
@@ -793,7 +793,7 @@ CASE 8
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,10,370,80,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1303
 		ABL:(CHARANUM-1):스킬2 = 1309
 		ABL:(CHARANUM-1):스킬3 = 215;아카샤아츠
@@ -802,7 +802,7 @@ CASE 8
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL SET_ENEMY,11,370,80,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		ABL:(CHARANUM-1):스킬1 = 1303
 		ABL:(CHARANUM-1):스킬2 = 1309
 		ABL:(CHARANUM-1):스킬3 = 215;아카샤아츠
@@ -812,20 +812,20 @@ CASE 8
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,12,312,80,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		
 		CALL SET_ENEMY,16,312,80,0,0
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 	ELSE
 		;魔法+集中
 		CALL SET_ENEMY,9,216,87,0,1
 				CSTR:(CHARANUM-1):사고패턴 = 魔法集中
-				CFLAG:(CHARANUM-1):行動횟수 = 2
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):행동횟수 = 2
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 		ABL:(CHARANUM-1):스킬1 = 2003
 		ABL:(CHARANUM-1):스킬2 = 2003
@@ -841,15 +841,15 @@ CASE 8
 	LOCAL:0 = 10
 	LOCAL:1 = 30
 	LOCAL:2 = 60
-	투기장フラグ:89:1 = 8
+	투기장플래그:89:1 = 8
 
 CASE 9
 	IF RAND:2
 		;90物理
 		CALL SET_ENEMY,9,4303,97,0,1
 				CSTR:(CHARANUM-1):사고패턴 = 90物理
-				CFLAG:(CHARANUM-1):行動횟수 = 3
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):행동횟수 = 3
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 		ABL:(CHARANUM-1):스킬1 = 2048
 		ABL:(CHARANUM-1):스킬2 = 2044
@@ -865,8 +865,8 @@ CASE 9
 		;90魔法
 		CALL SET_ENEMY,9,1512,97,0,1
 				CSTR:(CHARANUM-1):사고패턴 = 90魔法
-				CFLAG:(CHARANUM-1):行動횟수 = 3
-				CFLAG:(CHARANUM-1):バステ무효フラグ = 1
+				CFLAG:(CHARANUM-1):행동횟수 = 3
+				CFLAG:(CHARANUM-1):BS무효플래그 = 1
 				CFLAG:(CHARANUM-1):ＭＰ보정 = 99999
 		ABL:(CHARANUM-1):스킬1 = 2003
 		ABL:(CHARANUM-1):스킬2 = 2008
@@ -882,7 +882,7 @@ CASE 9
 	LOCAL:0 = 10
 	LOCAL:1 = 10
 	LOCAL:2 = 80
-	투기장フラグ:89:1 = 9
+	투기장플래그:89:1 = 9
 ENDSELECT
 
 FOR LOCAL:4,7,17
@@ -892,11 +892,11 @@ FOR LOCAL:4,7,17
 		GOTO LP
 NEXT
 
-FLAG:現던전 = [[던전:콜로세움던전]]
-FLAG:現M = 1
-FLAG:現X = 4
-FLAG:現Y = 6
-CALL MAKE_FLOOR, FLAG:現던전
+FLAG:현던전 = [[던전:콜로세움던전]]
+FLAG:현M = 1
+FLAG:현X = 4
+FLAG:현Y = 6
+CALL MAKE_FLOOR, FLAG:현던전
 DA:4:4 = 4
 CALL FLOOR_ANALYZE
 CALL SHOW_FLOOR
@@ -908,13 +908,13 @@ CALL MESSAGE_WINDOW_D, "사회자", @"과연 어떤 경기로 우리를 매료�
 CALL MESSAGE_WINDOW_D, "사회자", @"화이트！！" , , , , , , , , , "CENTER"
 
 CALL BATTLE_START
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 
-IF 투기장フラグ:89:1 > 0
-	FLAG:名声 += 10 * 투기장フラグ:89:1
-	FLAG:闘技場名声 += 10 * 투기장フラグ:89:1
+IF 투기장플래그:89:1 > 0
+	FLAG:명성 += 10 * 투기장플래그:89:1
+	FLAG:투기장명성 += 10 * 투기장플래그:89:1
 	LOCAL:10 = 0
 	LOCAL:11 = 0
 	LOCAL:12 = 0
@@ -927,7 +927,7 @@ IF 투기장フラグ:89:1 > 0
 	LOCAL:19 = 0
 	LOCAL:20 = 0
 	LOCAL:21 = 0
-	SIF 투기장フラグ:89:1 < 10 || LOCAL:3 < 4
+	SIF 투기장플래그:89:1 < 10 || LOCAL:3 < 4
 		LOCAL:3 = 4
 	IF 0 == LOCAL:0 + LOCAL:1 + LOCAL:2
 		LOCAL:0 = 10
@@ -1003,31 +1003,31 @@ RETURN 0
 @EVENT_COLOSSEUM_LOSE_89
 #LOCALSIZE 10
 ;一応、複数回きてしまうことに対策しておく
-SIF FLAG:勝利フラグ
+SIF FLAG:승리플래그
 	RETURN 1
-;進行させるために勝利フラグを通すようにする
-FLAG:勝利フラグ = 1
+;進行させるために승리플래그を通すようにする
+FLAG:승리플래그 = 1
 
-투기장フラグ:89:1 = 0
+투기장플래그:89:1 = 0
 
 
 @SET_ACTION_90魔法,ARG
-	IF CFLAG:ARG:行動した횟수 == 0 && CFLAG:ARG:集中フラグ == 0 && RAND:4
-		CFLAG:ARG:입력行動 = 512
+	IF CFLAG:ARG:행동한횟수 == 0 && CFLAG:ARG:집중플래그 == 0 && RAND:4
+		CFLAG:ARG:입력행동 = 512
 		CALL RANDOM_TARGET,ARG,512
 		RETURN 1
 	ENDIF
-IF CFLAG:ARG:行動した횟수 == 2 && RAND:3
+IF CFLAG:ARG:행동한횟수 == 2 && RAND:3
 	IF !RAND:3
-		CFLAG:ARG:입력行動 = 4205
+		CFLAG:ARG:입력행동 = 4205
 		CALL RANDOM_TARGET,ARG,4205
 		RETURN 1
 	ELSEIF RAND:2
-		CFLAG:ARG:입력行動 = 4216
+		CFLAG:ARG:입력행동 = 4216
 		CALL RANDOM_TARGET,ARG,4216
 		RETURN 1
 	ELSE
-		CFLAG:ARG:입력行動 = 2066
+		CFLAG:ARG:입력행동 = 2066
 		CALL RANDOM_TARGET,ARG,2066
 		RETURN 1
 	ENDIF
@@ -1035,30 +1035,30 @@ ENDIF
 CALL 랜덤행동 , ARG
 
 @SET_ACTION_90物理,ARG
-IF CFLAG:ARG:行動した횟수 == 0 && FLAG:経過ターン数 % 6 == 0
-		CFLAG:ARG:입력行動 = 517
+IF CFLAG:ARG:행동한횟수 == 0 && FLAG:경과턴수 % 6 == 0
+		CFLAG:ARG:입력행동 = 517
 		CALL RANDOM_TARGET,ARG,517
 		RETURN 1
-ELSEIF CFLAG:ARG:行動した횟수 == 0 && CFLAG:ARG:기합フラグ == 0 && RAND:4
-		CFLAG:ARG:입력行動 = 511
+ELSEIF CFLAG:ARG:행동한횟수 == 0 && CFLAG:ARG:기합플래그 == 0 && RAND:4
+		CFLAG:ARG:입력행동 = 511
 		CALL RANDOM_TARGET,ARG,511
 		RETURN 1
-ELSEIF CFLAG:ARG:行動した횟수 == 0 && CFLAG:ARG:베어내기フラグ == 0 && RAND:4
-		CFLAG:ARG:입력行動 = 534
+ELSEIF CFLAG:ARG:행동한횟수 == 0 && CFLAG:ARG:베어내기플래그 == 0 && RAND:4
+		CFLAG:ARG:입력행동 = 534
 		CALL RANDOM_TARGET,ARG,534
 		RETURN 1
 ENDIF
-IF CFLAG:ARG:１moreフラグ > 0
+IF CFLAG:ARG:１more플래그 > 0
 	IF !RAND:3
-		CFLAG:ARG:입력行動 = 530
+		CFLAG:ARG:입력행동 = 530
 		CALL RANDOM_TARGET,ARG,530
 		RETURN 1
 	ELSEIF RAND:2
-		CFLAG:ARG:입력行動 = 523
+		CFLAG:ARG:입력행동 = 523
 		CALL RANDOM_TARGET,ARG,523
 		RETURN 1
 	ELSE
-		CFLAG:ARG:입력行動 = 2066
+		CFLAG:ARG:입력행동 = 2066
 		CALL RANDOM_TARGET,ARG,2066
 		RETURN 1
 	ENDIF
@@ -1067,16 +1067,16 @@ CALL 랜덤행동 , ARG
 
 
 @SET_ACTION_魔法集中,ARG
-	IF CFLAG:ARG:集中フラグ == 0
-		CFLAG:ARG:입력行動 = 512
+	IF CFLAG:ARG:집중플래그 == 0
+		CFLAG:ARG:입력행동 = 512
 		CALL RANDOM_TARGET,ARG,512
 		RETURN 1
 	ENDIF
 CALL 랜덤행동 , ARG
 
 @SET_ACTION_チャージマン,ARG
-	IF CFLAG:ARG:기합フラグ == 0
-		CFLAG:ARG:입력行動 = 511
+	IF CFLAG:ARG:기합플래그 == 0
+		CFLAG:ARG:입력행동 = 511
 		CALL RANDOM_TARGET,ARG,511
 		RETURN 1
 	ENDIF

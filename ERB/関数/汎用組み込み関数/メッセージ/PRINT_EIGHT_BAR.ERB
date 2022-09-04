@@ -1,0 +1,51 @@
+﻿;-------------------------------------------------
+;8분할 컬러바 표시함수 @PRINT_EIGHT_BAR
+;	인수0：바의 길이（반각 1/8문자 단위）
+;	인수1：바의 전체길이（반각1/8문자 단위）
+;		또한、바의 길이가 가장 긴 수치(ARG:1*8-1)를 초과할 경우、표시는 0으로 돌아간다
+;	인수2：바의 시작 색상（16진。RGBCOLOR함수 사용 가능。생략하면 현재 문자색으로）
+;	인수3：바의 끝 색상（상동。생략하면 단색 바）
+;	인수4：始色比率（시작 색상이 진해짐）
+;	인수5：終色比率（끝 색상이 진해짐）
+;
+;독자형식의 인수입니다。주의해주세요
+;@PRINT_EIGHT_BAR의 인수가 독자형식이기 때문에、기존의 BAR형식으로도 호출할 수 있도록 준비했습니다。
+;반각의 1/8문자로 바를 표시할수는 있지만、바에 사용할 문자를 지정할 수 없습니다。또한、바의 배경색도 사용할 수 없습니다。
+;인수3・4를 지정하는 것으로 그라데이션을 할 수 있습니다만、이 경우 색이 바뀌는 단위는 반각 1 문자마다가 됩니다。
+;-------------------------------------------------
+@PRINT_EIGHT_BAR(ARG, ARG:1 = 32, ARG:2 = -1, ARG:3 = -1, ARG:4 = 1, ARG:5 = 1)
+#DIM COLOR
+#DIM RED, 3
+#DIM BLUE, 3
+#DIM GREEN, 3
+#DIM 始色比率
+#DIM 終色比率
+始色比率 = ARG:4
+終色比率 = ARG:5
+COLOR = GETCOLOR()
+IF ARG:2  >= 0 && ARG:3 >= 0
+	RED:1 = ARG:2 / 256 / 256
+	GREEN:1 = ARG:2 / 256 % 256
+	BLUE:1 = ARG:2 % 256
+	RED:2 = ARG:3 / 256 / 256
+	GREEN:2 = ARG:3 / 256 % 256
+	BLUE:2 = ARG:3 % 256
+ELSEIF ARG:2 >= 0
+	SETCOLOR ARG:2
+ENDIF
+FOR LOCAL, 0, ARG:1
+	IF ARG:2 >= 0 && ARG:3 >= 0
+		RED = (RED:1 * (ARG:1 - LOCAL) * 始色比率 + RED:2 * LOCAL * 終色比率) / ((ARG:1 -LOCAL) * 始色比率 + LOCAL * 終色比率)
+		GREEN = (GREEN:1 * (ARG:1 - LOCAL) * 始色比率 + GREEN:2 * LOCAL * 終色比率) / ((ARG:1 -LOCAL) * 始色比率 + LOCAL * 終色比率)
+		BLUE = (BLUE:1 * (ARG:1 - LOCAL) * 始色比率 + BLUE:2 * LOCAL * 終色比率) / ((ARG:1 -LOCAL) * 始色比率 + LOCAL * 終色比率)
+		SETCOLOR RED, GREEN, BLUE
+	ENDIF
+	IF LOCAL < MAX((ARG % (ARG:1 * 8) / 8),0)
+		PRINTFORM %UNICODE(0x2588)%
+	ELSEIF LOCAL == MAX((ARG % (ARG:1 * 8) / 8),0)
+		PRINTFORM \@ARG % (ARG:1 * 8) % 8 ? %UNICODE(0x2588 + 8 - (ARG % (ARG:1 * 8) % 8))%# %" "%\@
+	ELSE
+		PRINTFORM  
+	ENDIF
+NEXT
+SETCOLOR COLOR

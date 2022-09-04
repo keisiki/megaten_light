@@ -1,0 +1,15 @@
+﻿;-------------------------------------------------
+;수치형 시간제한 입력함수 @TINPUTINT
+;	인수0：제한시간(ms)
+;	인수1：시간만료 시의 반환값
+;	인수2：=1 이면 남은시간 표시
+;	인수3～22：입력 가능한 숫자
+;인수3 이후 주어진 번호를 유효한 선택지로 보고 수치 입력을 받습니다
+;인수에 포함되지 않는 숫자라면 수정。RESULT에 선택한 값을 반환합니다
+;PANCTION으로부터의 이식
+;-------------------------------------------------
+@TINPUTINT(ARG:0, ARG:1, ARG:2, ARG:3, ARG:4, ARG:5, ARG:6, ARG:7, ARG:8, ARG:9, ARG:10, ARG:11, ARG:12, ARG:13, ARG:14, ARG:15, ARG:16, ARG:17, ARG:18, ARG:19, ARG:20, ARG:21, ARG:22)
+TINPUT ARG, ARG:1, ARG:2
+SIF RESULT == ARG:1 || EQUALCHECK(RESULT, ARG:3, ARG:4, ARG:5, ARG:6, ARG:7, ARG:8, ARG:9, ARG:10, ARG:11, ARG:12, ARG:13, ARG:14, ARG:15, ARG:16, ARG:17, ARG:18, ARG:19, ARG:20, ARG:21, ARG:22)
+	RETURN RESULT
+RESTART

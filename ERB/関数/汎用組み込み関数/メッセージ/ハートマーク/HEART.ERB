@@ -1,0 +1,16 @@
+﻿;-------------------------------------------------
+;하트마크 함수 @HEART
+;	인수0：하트 수（생략하면 1개）
+;	인수1：사용할 폰트명（생락하면 Verdana）
+;중간이 빈 하트마크(♡)를 표시합니다
+;-------------------------------------------------
+@HEART(ARG = 1, ARGS)
+LOCAL = RESULT
+ARGS = \@ ARGS == "" ? Times New Roman # %ARGS% \@
+LOCALS = %GETFONT()%
+
+SETFONT CHKFONT(ARGS) ? ARGS # LOCALS
+PRINTFORM %UNICODE(0x2661)*ARG%
+
+SETFONT LOCALS
+RETURN LOCAL

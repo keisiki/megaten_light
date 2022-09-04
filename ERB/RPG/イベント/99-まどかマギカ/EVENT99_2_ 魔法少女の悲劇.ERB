@@ -1,18 +1,18 @@
-﻿;이벤트フラグ:99:0 リスト
+﻿;이벤트플래그:99:0 リスト
 ;0:開始前				1:인큐베이터受け取ってない		2:인큐베이터受け取り		3:마법소녀脱走解決
 ;4:ラスボス対決準備		5:ラスボスと対決直前		6:ラスボス撃破		7:キュウべえの誘いを蹴った（이벤트종료）
 
-;이벤트フラグ:99:1 リスト
+;이벤트플래그:99:1 リスト
 ;0:호무라ルート		1:キュウべえルート
 
-;이벤트フラグ:99:2 リスト
+;이벤트플래그:99:2 リスト
 ;0:オクタヴィア撃破		1:さやか救済		2:オフィーリア撃破		3:キャンデロロ撃破
 
 @EVENT_99_2
 
 CUSTOMDRAWLINE =
 
-IF 이벤트フラグ:99:0 == 2
+IF 이벤트플래그:99:0 == 2
 	PRINTL 아무래도、장기전이 될 것 같은 의뢰를 받아들인 것 같다….
 	PRINTW 이 이벤트를 진행합니까?
 	PRINTL [ 0] 진행한다
@@ -79,7 +79,7 @@ IF 이벤트フラグ:99:0 == 2
 			PRINTW …은의 장식이 붙어있는, 보석을 찾았다.
 			PRINTW 흑옥이나 오닉스의 친척 같은 것인가 생각하고 있으면, 묘하게 꺼림칙한 느낌이 감돈다.
 			PRINTW 조사해 볼 필요가 있을 것 같다. 주워 두자.
-			RESULTS = 악세사리 【그리프시드】를 손에 넣었다
+			RESULTS = 악세서리 【그리프시드】를 손에 넣었다
 			CALL MESSAGE_B(1, RESULTS)
 			ITEM:5498 += 1
 			PRINTW 
@@ -88,8 +88,8 @@ IF 이벤트フラグ:99:0 == 2
 			;ほむほむ健在
 			IF FINDCHARA_B(4398) == 2
 				PRINTW 이쪽의 파티에 있는 아케미 호무라와 굉장히 닮았는데…?
-			PRINTW 「…거기에 있는 건 과거의 나구나.」
-			PRINTW 「왜 거기에 내가 있는 것인지는 모르겠지만… 그런 건 중요한 게 아니지.」
+				PRINTW 「…거기에 있는 건 과거의 나구나.」
+				PRINTW 「왜 거기에 내가 있는 것인지는 모르겠지만… 그런 건 중요한 게 아니지.」
 			ENDIF
 			PRINTW 조금도 기척을 느낄 수 없었다. 대체 어느 새 등 뒤에 자리잡은 건지.
 			PRINTW 「… 두려워하고 있던 일이 일어나 버렸어.」
@@ -104,7 +104,7 @@ IF 이벤트フラグ:99:0 == 2
 			PRINTL 
 			PRINTL 
 			;さやか救済
-			이벤트フラグ:99:2 = 1
+			이벤트플래그:99:2 = 1
 		;원환의이치がいない場合、さやマミかさや杏とバトル
 		ELSEIF RAND:2 == 0
 			PRINTL 
@@ -134,7 +134,7 @@ IF 이벤트フラグ:99:0 == 2
 			CALL SYNC_STATUS,(CHARANUM-1)
 			CALL HEALTH_CHARA,(CHARANUM-1)
 			;優先・数値を[[]]に변경すべし
-			ABL:(CHARANUM-1):스킬1 = 2996;스쿠왈타로레
+			ABL:(CHARANUM-1):스킬1 = 2996;스쿠왈타토레
 
 			;- SET:사쿠라 교코
 			;優先・数値を[[]]に변경すべし
@@ -151,18 +151,18 @@ IF 이벤트フラグ:99:0 == 2
 			ABL:(CHARANUM-1):스킬1 = 2995;롯소・판타즈마
 
 			;- 전투前処理
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
+			FLAG:도주불가플래그 = 1
+			FLAG:회화불능플래그 = 1
 			SIF FLAG:(13397) == 1
-				FLAG:회화불능フラグ = 0
+				FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 1
 
 			;- 전투開始
 			CALL BATTLE_START
 
 			;- 전투종료
-			FLAG:도주불가フラグ = 0
-			FLAG:회화불능フラグ = 0
+			FLAG:도주불가플래그 = 0
+			FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 0
 
 			;2/3の確立でオフィーリアとバトル
@@ -229,7 +229,7 @@ IF 이벤트フラグ:99:0 == 2
 			CALL SYNC_STATUS,(CHARANUM-1)
 			CALL HEALTH_CHARA,(CHARANUM-1)
 			;優先・数値を[[]]に변경すべし
-			ABL:(CHARANUM-1):스킬1 = 2996;스쿠왈타로레
+			ABL:(CHARANUM-1):스킬1 = 2996;스쿠왈타토레
 
 			;- SET:토모에 마미
 			;優先・数値を[[]]に변경すべし
@@ -246,18 +246,18 @@ IF 이벤트フラグ:99:0 == 2
 			ABL:(CHARANUM-1):스킬1 = 2997;티로・피날레
 
 			;- 전투前処理
-			FLAG:도주불가フラグ = 1
-			FLAG:회화불능フラグ = 1
+			FLAG:도주불가플래그 = 1
+			FLAG:회화불능플래그 = 1
 			SIF FLAG:(13397) == 1
-				FLAG:회화불능フラグ = 0
+				FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 1
 
 			;- 전투開始
 			CALL BATTLE_START
 
 			;- 전투종료
-			FLAG:도주불가フラグ = 0
-			FLAG:회화불능フラグ = 0
+			FLAG:도주불가플래그 = 0
+			FLAG:회화불능플래그 = 0
 			FLAG:선제기습취소 = 0
 
 			;2/3の確立でキャンデロロとバトル
@@ -300,17 +300,17 @@ IF 이벤트フラグ:99:0 == 2
 		ENDIF
 		CALL EVENT_99_GET_MADOKA
 		MONEY += 75000
-		FLAG:名声 += 60
+		FLAG:명성 += 60
 		PRINTW 탈주한 마법소녀를 토벌해,  ￥75000의 포상과, 명성 60을 얻었다
 		PRINTW 그렇지만, 마음에 걸리는 것이 있다.
 		PRINTW 흑발의 마법소녀가 남긴 경고의 말.
 		PRINTW 그저 단순한 위협이라 하기에는, 이상할만큼 가슴이 뛴다-------
 		PRINTL 
 		PRINTL 마녀 합체가 가능해졌습니다.
-		PRINTW 【그리프시드】를 악세사리에 장비하고, 마법소녀 대신 마녀를 생성할 수 있습니다.
+		PRINTW 【그리프시드】를 악세서리에 장비하고, 마법소녀 대신 마녀를 생성할 수 있습니다.
 		;이벤트次の단계へ
-		이벤트フラグ:99:0 = 3
-		;이벤트フラグ리셋
+		이벤트플래그:99:0 = 3
+		;이벤트플래그리셋
 		CALL EVENT_99_FLAG_RESET
 	ELSE
 		PRINTW …무엇인가가 일어난다해도, 그리 빠르지는 않을 것이다.
@@ -340,11 +340,11 @@ PRINTL
 CALL SET_ENEMY,9,3399,30,0,1
 CFLAG:(CHARANUM-1):ＨＰ보정 += 400
 CFLAG:(CHARANUM-1):ＭＰ보정 += 1000
-CFLAG:(CHARANUM-1):行動횟수 = 2
+CFLAG:(CHARANUM-1):행동횟수 = 2
 ABL:(CHARANUM-1):최저공격횟수 = 2
 ABL:(CHARANUM-1):최대공격횟수 = 2
 ;優先・数値を[[]]に변경すべし
-ABL:(CHARANUM-1):스킬8 = 2996;스쿠왈타로레
+ABL:(CHARANUM-1):스킬8 = 2996;스쿠왈타토레
 CALL SYNC_STATUS,(CHARANUM-1)
 CALL HEALTH_CHARA,(CHARANUM-1)
 ABL:(CHARANUM-1):아이템1 = 5498
@@ -369,23 +369,23 @@ CFLAG:(CHARANUM-1):ＨＰ보정 += 200
 CFLAG:(CHARANUM-1):ＭＰ보정 += 1000
 
 ;- 전투前処理
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 SIF FLAG:(13397) == 1
-	FLAG:회화불능フラグ = 0
+	FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 1
 
 ;- 전투開始
 CALL BATTLE_START
 
 ;- 전투종료
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 PRINTW 인어의 마녀가 쓰러진 순간, 주변의 경치는 원래대로 상업시설로 되돌아왔다….
 PRINTL 
 ;さやか撃破
-이벤트フラグ:99:2 = 0
+이벤트플래그:99:2 = 0
 
 
 
@@ -412,7 +412,7 @@ PRINTW 마녀 Ophelia 가 2체 나타났다!
 CALL SET_ENEMY,8,3393,30,0,1
 CFLAG:(CHARANUM-1):ＨＰ보정 += 400
 CFLAG:(CHARANUM-1):ＭＰ보정 += 1000
-CFLAG:(CHARANUM-1):行動횟수 = 2
+CFLAG:(CHARANUM-1):행동횟수 = 2
 ABL:(CHARANUM-1):최저공격횟수 = 2
 ABL:(CHARANUM-1):최대공격횟수 = 2
 ;優先・数値を[[]]に변경すべし
@@ -427,7 +427,7 @@ ABL:(CHARANUM-1):입수확률1 = 100
 CALL SET_ENEMY,10,3393,30,0,1
 CFLAG:(CHARANUM-1):ＨＰ보정 += 130
 CFLAG:(CHARANUM-1):ＭＰ보정 += 1000
-CFLAG:(CHARANUM-1):行動횟수 = 2
+CFLAG:(CHARANUM-1):행동횟수 = 2
 ABL:(CHARANUM-1):최저공격횟수 = 2
 ABL:(CHARANUM-1):최대공격횟수 = 2
 CALL SYNC_STATUS,(CHARANUM-1)
@@ -435,23 +435,23 @@ CALL HEALTH_CHARA,(CHARANUM-1)
 ABL:(CHARANUM-1):스킬1 = 2;히트웨이브
 
 ;- 전투前処理
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 SIF FLAG:(13397) == 1
-	FLAG:회화불능フラグ = 0
+	FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 1
 
 ;- 전투開始
 CALL BATTLE_START
 
 ;- 전투종료
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 PRINTW 무단(武旦)의 마녀가 쓰러진 순간, 주변의 경치는 원래대로 상업시설로 되돌아왔다….
 PRINTL 
 ;杏子撃破
-이벤트フラグ:99:2 = 2
+이벤트플래그:99:2 = 2
 
 
 
@@ -474,7 +474,7 @@ PRINTW 마녀 Candeloro 와 그 사역마가 나타났다!
 CALL SET_ENEMY,9,3394,30,0,1
 CFLAG:(CHARANUM-1):ＨＰ보정 += 400
 CFLAG:(CHARANUM-1):ＭＰ보정 += 1000
-CFLAG:(CHARANUM-1):行動횟수 = 2
+CFLAG:(CHARANUM-1):행동횟수 = 2
 ABL:(CHARANUM-1):최저공격횟수 = 2
 ABL:(CHARANUM-1):최대공격횟수 = 2
 ;優先・数値を[[]]に변경すべし
@@ -497,23 +497,23 @@ CFLAG:(CHARANUM-1):ＨＰ보정 += 200
 CFLAG:(CHARANUM-1):ＭＰ보정 += 1000
 
 ;- 전투前処理
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 SIF FLAG:(13397) == 1
-	FLAG:회화불능フラグ = 0
+	FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 1
 
 ;- 전투開始
 CALL BATTLE_START
 
 ;- 전투종료
-FLAG:도주불가フラグ = 0
-FLAG:회화불능フラグ = 0
+FLAG:도주불가플래그 = 0
+FLAG:회화불능플래그 = 0
 FLAG:선제기습취소 = 0
 PRINTW 치장의 마녀가 쓰러진 순간, 주변의 경치는 원래대로 상업시설로 되돌아왔다….
 PRINTL 
 ;マミ撃破
-이벤트フラグ:99:2 = 3
+이벤트플래그:99:2 = 3
 
 
 

@@ -1,0 +1,241 @@
+﻿;通常攻撃
+;スキルのテンプレートになっています
+
+;スキル名
+@SKILL_NAME_3960,ARG
+RESULTS = 다단촉수고문
+
+;　명중
+@SKILL_HITRATE_3960, ARG
+RETURN 100
+
+;　위력
+;最大まで育てれば240～360でダイン系ぐらいな感じ。 初期でも80は入る。
+@SKILL_POWER_3960, ARG
+LOCAL = 40 + MIN((FLAG:촉수레벨 / 5) , 20)
+RETURN LOCAL
+
+;初期でも最低限使い物になるように2-2は確保。
+;最大まで育てると4～6でバステ付きとかなりの性能になる。
+;최저공격횟수
+@SKILL_MINATTACKNUMBER_3960,ARG
+LOCAL = 2 + MIN((FLAG:촉수레벨 / 50) , 2)
+RETURN LOCAL
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_3960,ARG
+LOCAL = 2 + MIN((FLAG:촉수레벨 / 25) , 4)
+RETURN LOCAL
+
+;　2 ＨＰ지불　3 ＭＰ지불
+@SKILL_COSTTYPE_3960, ARG
+RETURN 1
+;消費なし＝1
+
+;　코스트량
+@SKILL_COST_3960,ARG
+RETURN 0
+
+;　상성
+@SKILL_TYPE_3960,ARG
+RETURN GET_TYPE_NUM("전술")
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_3960, ARG
+RETURN 0
+;
+
+;　1 물리데미지로 계산　2 마법데미지로 계산
+@SKILL_DAMAGETYPE_3960, ARG
+RETURN 1
+
+;　対象が1敵か2味方か3場全体か4特殊か
+@SKILL_TARGET_3960
+RETURN 1
+
+;　사거리
+@SKILL_RANGE_3960,ARG
+RETURN 2
+
+;　범위　1 1체　2 1열　3 전체　4 적아군전체
+@SKILL_SPHERE_3960,ARG
+RETURN 1
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_3960
+RETURN 1
+
+;　 특수처리 여부 및 처리내용
+@SKILL_SPECIALEFECT_3960,ARG
+;ARG = 1인 경우는 처리 여부를 반환합니다
+SIF ARG == 1
+	RETURN 0
+;아래쪽에 특수처리를 기술합니다
+
+;계승타입
+@SKILL_SUCCESSION_TYPE_3960
+RETURN 0
+
+;속도보정
+@SKILL_SPEED_3960, ARG = -1
+RETURN 0
+
+;　口上の表示とそのタイプ
+@SKILL_MESSAGE_3960,ARG
+
+;전투시 이외에 사용 가능한가
+@SKILL_ACTIONABLE_FIELD_3960
+RETURN 0
+
+;스킬변화？용 랭크
+@SKILL_RANK_3960
+RETURN 0
+
+@SKILL_RANKUP_3960
+;ランクアップなし
+RETURN 0
+
+;템플릿용、추가효과 시리즈
+;추가효과ステータス
+@SKILL_ADDTIONAL_STATE_3960,ARG
+SIF FLAG:공격횟수 == 5
+	RETURN GET_STATE_NUM("HAPPY")
+SIF FLAG:공격횟수 == 4
+	RETURN GET_STATE_NUM("CHARM")
+SIF FLAG:공격횟수 == 3
+	RETURN GET_STATE_NUM("BIND")
+SIF FLAG:공격횟수 == 2
+	RETURN GET_STATE_NUM("PALYZE")
+SIF FLAG:공격횟수 == 1
+	RETURN GET_STATE_NUM("POISON")
+	RETURN GET_STATE_NUM("HAPPY")
+
+;추가효과 상성
+@SKILL_ADDTIONAL_TYPE_3960,ARG
+SIF FLAG:공격횟수 == 5
+;ムフフONで発生する発情状態は精神耐性に寄らないのをイメージし、性感による万能HAPPYを与える。
+	RETURN GET_TYPE_NUM("만능")
+SIF FLAG:공격횟수 == 4
+	RETURN GET_TYPE_NUM("정신")
+SIF FLAG:공격횟수 == 3
+	RETURN GET_TYPE_NUM("신경")
+SIF FLAG:공격횟수 == 2
+	RETURN GET_TYPE_NUM("신경")
+SIF FLAG:공격횟수 == 1
+	RETURN GET_TYPE_NUM("신경")
+	RETURN GET_TYPE_NUM("정신")
+
+;추가효과基本付与確率
+@SKILL_ADDTIONAL_BASE_RATE_3960,ARG
+LOCAL = 10 + MIN((FLAG:촉수레벨 / 10) , 10)
+RETURN LOCAL
+
+;추가효과付与確率上限
+@SKILL_ADDTIONAL_MAX_RATE_3960,ARG
+LOCAL = 20 + MIN((FLAG:촉수레벨 / 5) , 20)
+RETURN LOCAL
+
+;====================================================
+;스킬 및 행동의 실행
+;====================================================
+@ACTION_3960,ARG,ARG:1
+IF CFLAG:ARG:PT플래그 > 0
+	IF BASE:(ARG):ＭＡＧ < MAX(MAXBASE:(ARG):ＭＡＧ/20,1)
+		FLAG:촉수에너지 += (BASE:(ARG):ＭＡＧ)
+		BASE:(ARG):ＭＡＧ = 0
+		PRINTFORML %ARG는% 건네줄 ＭＡＧ가 부족해 촉수에게 벌을 받았다！
+		CFLAG:ARG:상태이상 = GET_STATE_NUM("HAPPY")
+	ELSE
+		FLAG:촉수에너지 += MAX(MAXBASE:(ARG):ＭＡＧ/200,1)
+		BASE:(ARG):ＭＡＧ -= MAX(MAXBASE:(ARG):ＭＡＧ/20,1)
+		CALL ATTACK_SINGLE,ARG,POS(CFLAG:(ARG):타겟),3960
+		PRINTFORML %CALLNAME:ARG% >>>>> {MAX(MAXBASE:(ARG):ＭＡＧ/20,1)} 소비 (잔여{BASE:ARG:ＭＡＧ})
+	ENDIF
+ELSE
+ENDIF
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;　 説明文の表示
+@SKILL_EXPLAIN_3960,ARG
+PRINTL 키워낸 다종다양한 촉수를 휘두르고、적 1체에 전술 상성의 공격을 여러 차례 행하면서 다양한 BS상태를 부여한다。
+PRINTL 사용자의 MAG를 5% 소비하고、소비 MAG의 1할은 촉수에너지로 환원된다。 촉수레벨에 따라 성능이 높아진다。
+PRINTFORML %CALLNAME:ARG% 의 잔여MAG {BASE:ARG:ＭＡＧ} 상정소비 {MAX(MAXBASE:(ARG):ＭＡＧ/20,1)} 사용후MAG {BASE:ARG:ＭＡＧ-MAX(MAXBASE:(ARG):ＭＡＧ/20,1)}
+
+;계승에 필요한 부위
+@계승부위_3960,ARG
+RETURN 1
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_3960,ARG
+RETURN 1
+;とくにない
+
+;====================================================
+;追加コマンド(一番下)
+;====================================================
+@SKILL_SPECIAL_COMMAND_3960,ARG,LOCAL
+#LOCALSIZE 1
+PRINTFORML [{LOCAL}] ＴＥＮＴＡＣＬＥ
+C:LOCAL = 13960
+LOCAL += 1
+RETURN LOCAL
+;====================================================
+;コマンド実行
+;====================================================
+@INPUT_COM_13960,ARG
+$INPUT_LOOP
+;GOTO用のラベルを設定
+PRINTFORML 촉수에 의한 특수공격을 선택
+PRINTL [1] 다단촉수고문
+PRINTL [2] 촉수흉포화
+DRAWLINE
+PRINTL [0] ＣＡＮＣＥＬ
+CALL INPUTINT(0,1,2)
+;INPUTINTの時点で指定した値を選択した時にループが入るのでELSEは要らない
+IF RESULT == 1
+;IF分岐の際、TAB（インデント）で列を分けることで読みやすくする
+    ;列分けはこんな感じ
+    
+    CALL CHECK_ACTIONABLE,ARG,3960
+    IF RESULT == 0
+        PRINTW 실행에 실패했습니다。 버그 보고에 올려주세요。
+        ;デバッグ確認の為にメッセージ設置
+        GOTO INPUT_LOOP
+        ;RETURN 0だとコマンドメニュー戻って選択し直すのが手間なので「GOTO (ラベル名)」で関数の開始時点に跳ぶ
+    ENDIF
+    TRYCALLFORM SKILL_EXPLAIN_3960
+    CALL SELECT_SKILL_TARGET,3960,ARG
+    IF RESULT == -1
+        GOTO INPUT_LOOP
+        ;RETURN -1だとコマンドメニュー戻って選択し直すのが手間なので「GOTO (ラベル名)」で関数の開始時点に跳ぶ
+    ENDIF
+    CFLAG:(ARG):타겟 = RESULT
+    CFLAG:(ARG):입력행동 = 3960
+    CFLAG:(ARG):ＲＥＰＥＡＴ행동 = 3960
+    CFLAG:(ARG):ＲＥＰＥＡＴ타겟 = CFLAG:(ARG):타겟
+    RETURN 1
+    ENDIF
+    IF RESULT == 2
+    CALL CHECK_ACTIONABLE,ARG,3961
+    IF RESULT == 0
+        PRINTW 실행에 실패했습니다。 버그 보고에 올려주세요。
+        ;デバッグ確認の為にメッセージ設置
+        GOTO INPUT_LOOP
+        ;RETURN 0だとコマンドメニュー戻って選択し直すのが手間なので「GOTO (ラベル名)」で関数の開始時点に跳ぶ
+    ENDIF
+    TRYCALLFORM SKILL_EXPLAIN_3961
+    CALL SELECT_SKILL_TARGET,3961,ARG
+    IF RESULT == -1
+        GOTO INPUT_LOOP
+        ;RETURN -1だとコマンドメニュー戻って選択し直すのが手間なので「GOTO (ラベル名)」で関数の開始時点に跳ぶ
+    ENDIF
+    CFLAG:(ARG):타겟 = RESULT
+    CFLAG:(ARG):입력행동 = 3961
+    CFLAG:(ARG):ＲＥＰＥＡＴ행동 = 3961
+    CFLAG:(ARG):ＲＥＰＥＡＴ타겟 = CFLAG:(ARG):타겟
+    RETURN 1
+ENDIF
+RETURN -1

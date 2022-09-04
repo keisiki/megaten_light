@@ -1,0 +1,305 @@
+﻿;専用スキル用のテンプレート
+;「王の見えざる手」を別の名前に置き換えてください
+
+;アクティブスキルに必須なものはそのままにしており
+;なくてもいいものはコメントアウトしております
+;必要だと思ったらコメントアウトを外して設定してください
+;スキルのテンプレートになっています
+
+;スキル名
+@SKILL_NAME_王の見えざる手,ARG
+RESULTS = 왕의 보이지 않는 손
+
+;　명중
+@SKILL_HITRATE_王の見えざる手, ARG
+RETURN 100
+
+;　위력
+@SKILL_POWER_王の見えざる手, ARG
+RETURN 100
+
+;;クリティカル率
+;@SKILL_CRITICAL_RATE_王の見えざる手, ARG
+;RETURN 5
+
+;;　吸収率
+;@SKILL_HP_ABSORBER_王の見えざる手, ARG
+;RETURN 0
+
+;　최저공격횟수
+@SKILL_MINATTACKNUMBER_王の見えざる手,ARG
+RETURN 1
+
+;　최대공격횟수
+@SKILL_MAXATTACKNUMBER_王の見えざる手,ARG
+RETURN 1
+
+;;一体辺りの最大ＨＩＴ数
+;;※ランダム攻撃系に使う
+;@SKILL_MAXATK_PER_王の見えざる手,ARG
+;RETURN 1
+
+;;一体辺りの最低ＨＩＴ数
+;;※ランダム攻撃系に使う
+;@SKILL_MINATK_PER_王の見えざる手,ARG
+;RETURN 1
+
+;　2 ＨＰ지불　3 ＭＰ지불
+@SKILL_COSTTYPE_王の見えざる手, ARG
+RETURN 3
+;消費なし＝1
+
+;　코스트량
+@SKILL_COST_王の見えざる手,ARG
+RETURN 20
+
+;　상성
+@SKILL_TYPE_王の見えざる手,ARG
+RETURN 0
+
+;　1 EXTRA　2 MAGIC
+@SKILL_DECIDE_TYPE_王の見えざる手,ARG
+RETURN 1
+
+;　1 물리데미지로 계산　2 마법데미지로 계산
+@SKILL_DAMAGETYPE_王の見えざる手,ARG
+RETURN 2
+
+
+;　対象が1敵か2味方か3場全体か4特殊か
+@SKILL_TARGET_王の見えざる手,ARG
+RETURN 2
+
+;　사거리
+@SKILL_RANGE_王の見えざる手,ARG
+RETURN 3
+
+;　범위　1 1체　2 1열　3 전체　4 적아군전체
+@SKILL_SPHERE_王の見えざる手,ARG
+RETURN 1
+
+;　 효과타입　1 공격、2 회복、3 상태변화、4 특수、5 상태회복
+@SKILL_EFECT_王の見えざる手,ARG
+RETURN 4
+
+;　 특수처리 여부 및 처리내용
+;@SKILL_SPECIALEFECT_王の見えざる手,ARG
+;ARG = 1인 경우는 처리 여부를 반환합니다
+;SIF ARG == 1
+;	RETURN 0
+;아래쪽에 특수처리를 기술합니다
+
+;계승타입
+;@SKILL_SUCCESSION_TYPE_王の見えざる手,ARG
+;RETURN 23
+;검격
+
+;속도보정
+@SKILL_SPEED_王の見えざる手, ARG = -1
+RETURN 0
+
+;;　口上の表示とそのタイプ
+;@SKILL_MESSAGE_王の見えざる手,ARG
+
+
+;전투시 이외에 사용 가능한가
+@SKILL_ACTIONABLE_FIELD_王の見えざる手, ARG = -1
+RETURN 0
+
+;没
+;@SKILL_RANK_王の見えざる手
+;@SKILL_RANKUP_王の見えざる手
+;@계승불능_王の見えざる手
+
+;템플릿용、추가효과 시리즈
+;추가효과ステータス
+@SKILL_ADDTIONAL_STATE_王の見えざる手,ARG
+RETURN 0
+
+;추가효과 상성
+@SKILL_ADDTIONAL_TYPE_王の見えざる手,ARG
+RETURN 0
+
+;추가효과基本付与確率
+@SKILL_ADDTIONAL_BASE_RATE_王の見えざる手,ARG
+RETURN 0
+
+;추가효과付与確率上限
+@SKILL_ADDTIONAL_MAX_RATE_王の見えざる手,ARG
+RETURN 0
+
+;;拡散攻撃用追加処理
+;;ブレスなどの拡散攻撃に使う
+;@SKILL_SPREAD_王の見えざる手,ARG
+;RETURN 0
+
+;====================================================
+;トリガー発動条件
+;====================================================
+;@SKILL_TRIGGER_ACTIONABLE_王の見えざる手,ARG,ARG:1
+;RETURN 0
+
+;====================================================
+;カウンター発動条件
+;====================================================
+;@SKILL_COUNTER_ACTIONABLE_王の見えざる手,ARG,ARG:1
+;RETURN RESULT
+
+;====================================================
+;ヒット時ダメージ前処理
+;====================================================
+;@SKILL_HIT_EFFECT_王の見えざる手,ARG,ARG:1
+
+;====================================================
+;ダメージ発動時
+;====================================================
+;@SKILL_DAMAGE_EFFECT_王の見えざる手,ARG,ARG:1
+
+;====================================================
+;行動によるスキルゲージ操作
+;====================================================
+;@SKILLGAGE_CHARGE_王の見えざる手,ARG,ARG:1
+
+
+
+;====================================================
+;스킬 및 행동의 실행
+;====================================================
+@ACTION_王の見えざる手,ARG,ARG:1,SKILL_NUM
+#DIM SKILL_NUM
+#DIM LOCALSIZE,3
+
+IF CFLAG:ARG:PT플래그 == 0
+	LOCAL:1 = 7
+	LOCAL:2 = 17
+ELSE
+	LOCAL:1 = 1
+	LOCAL:2 = 7
+ENDIF
+
+CFLAG:POS(ARG:1):크리티컬강화 = MAX(-8, CFLAG:POS(ARG:1):크리티컬강화 - 4)
+
+FOR LOCAL, LOCAL:1, LOCAL:2
+	SIF POS(LOCAL) < 0 || LOCAL == ARG:1
+		CONTINUE
+	CFLAG:POS(LOCAL):크리티컬강화 = MIN(8, CFLAG:POS(LOCAL):크리티컬강화 + 4)
+	CFLAG:POS(LOCAL):공격강화 = MIN(32, CFLAG:POS(LOCAL):공격강화 + 4)
+NEXT
+PRINTFORML %CALLNAME:POS(ARG:1)%의 크리티컬률이 대폭 낮아졌다！
+PRINTFORML %CALLNAME:POS(ARG:1)%以外の\@ CFLAG:ARG:PT플래그 == 0 ? 적 # 아군 \@의 크리티컬률이 높아졌다！
+PRINTFORMW \@ CFLAG:ARG:PT플래그 == 0 ? 적 # 아군 \@의 공격력이 높아졌다！
+
+;CALL ATTACK_SINGLE,ARG,POS(ARG:1),SKILL_NUM;	単体攻撃
+;CALL ATTACK_FIELD,ARG,ARG:1,SKILL_NUM;			範囲攻撃(列、全体)
+;CALL ATTACK_SPREAD,ARG,ARG:1,SKILL_NUM;		拡散攻撃
+;CALL ATTACK_RAND,ARG,ARG:1,SKILL_NUM;			ランダム攻撃
+
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;전투중 이외에서의 실행
+;====================================================
+;@ACTION_FIELD_王の見えざる手,ARG,ARG:1,SKILL_NUM
+;#DIM SKILL_NUM
+
+;CALL HEAL_SINGLE,ARG,POS(ARG:1),SKILL_NUM	;単体回復
+;CALL HEAL_FIELD,ARG,ARG:1,SKILL_NUM		;範囲回復(列、全体)
+;CALL ALL_HEAL, POS(ARG:1), 0				;単体前回復
+
+;====================================================
+;실행내용 여기까지
+;====================================================
+
+;====================================================
+;追加コマンド(EXTRAの下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_EXTRA_王の見えざる手,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(MAGICの下、魔封だと消える)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_MAGIC_王の見えざる手,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;追加コマンド(一番下)
+;====================================================
+;@SKILL_SPECIAL_COMMAND_王の見えざる手,ARG,LOCAL,SKILL_NUM
+;#DIM SKILL_NUM
+;#LOCALSIZE 1
+;PRINTFORML [{LOCAL}] 剣質変化
+;C:(LOCAL++) = 10000 + SKILL_NUM;←必須
+;RETURN LOCAL;←必須
+
+;====================================================
+;コマンド実行
+;====================================================
+;@INPUT_COM_王の見えざる手,ARG
+;RETURN -1
+;-1 再びコマンド選択へ
+; 1 キャラ選択へ
+
+;====================================================
+;戦闘中スキルゲージの可視化
+;====================================================
+;@SKILLGAGE_DISPLAY_王の見えざる手,ARG
+;SKILL_NUM = PU_SKILLNUM_GET(ARG,"王の見えざる手")
+;SKILLGAGE_D_GET(ARG,SKILL_NUM)
+
+
+;　説明文の表示
+@SKILL_EXPLAIN_王の見えざる手,ARG
+PRINTL 암흑의 제왕학。
+PRINTL 싸움의 흐름을 잡고 유리하게 이끌도록 동포를 뒤에서 조종해、그들의 능력을 충분히 이끌어내는 기술。
+PRINTL 
+PRINTL 아군 1인의 크리티컬률을 대폭 낮추는 대신 다른 아군의 크리티컬률을 높이고、추가로 아군의 공격력을 높인다。
+
+;没
+;@계승부위_王の見えざる手,ARG
+
+;사용조건
+@SKILL_SPECIAL_ACTIONABLE_王の見えざる手,ARG
+RETURN 1
+
+;ターゲット条件
+;↓のSKILL_T_RESERVEがRETURN 1 の時に使用する
+;@SKILL_SPECIAL_TARGET_王の見えざる手,USE_CHARA,ARG
+;#DIM USE_CHARA
+;RETURN 0
+
+;控えに使えるか
+;@SKILL_T_RESERVE_王の見えざる手,ARG
+;RETURN 0
+
+;어떤 배드스테이터스를 고칠수 있는가
+;@SKILL_CURE_STATE_王の見えざる手,USE_CHARA,ARG
+;#DIM USE_CHARA
+;SELECTCASE GET_STATE(ARG)
+;	CASE "HAPPY","CLOSE"
+;		RETURN 1
+;ENDSELECT
+;RETURN 0
+
+;この技を複数持てるか
+;@중복습득수_王の見えざる手,ARG
+;RETURN 1
+
+;スキル重複で役に立つ関数
+;HAVE_SKILL_OVERLAP(ARG,PU_SKILLNUM_GET(ARG,"王の見えざる手"))
+
+;スキルゲージで役に立つ関数
+;SKILLGAGE_H_GET(ARG,PU_SKILLNUM_GET(ARG,"王の見えざる手"))
+;CALL SKILLGAGE_H_SET,ARG,PU_SKILLNUM_GET(ARG,"王の見えざる手"),0
+

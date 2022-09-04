@@ -1,0 +1,210 @@
+﻿@CLOTHES_NAME_722
+RESULTS = 촉수수트
+
+;노출부위
+@CLOTHES_EXPOSE_722,ARG
+;ARG = 노출되는부위
+;1 = 팔노출 2 = 발노출 3 = 다리노출 4 = 유방노출 5 = 유두노출 6 = 배꼽노출 7 = 음순노출 8 = 둔부노출
+SELECTCASE ARG
+	CASE 1,2,3,4,5,6,7,8
+		RETURN 0
+	CASEELSE
+		RETURN 1
+ENDSELECT
+
+;장비부위
+@CLOTHES_PART_722
+RETURN 7
+
+;옷의 앞쪽이 열리는가
+;1 열 수 있다、2 열린 채
+@CLOTHES_OPENFRONT_722
+RETURN 1
+
+;胸の構造
+; 0:開けられない 1:ボタン式 2:チャック式 4:上からこんにちは 8:たくしあげてこんにちは 16:기모노など、合わせる衣装 32:前から差し込めそうな穴 64:입元-胸元間にペニス入るスペース（ビット演算）
+@CLOTHES_BREAST_722
+RETURN 2
+
+;고간의구조
+;1 = 바지、2 = 비키니타입、3 = 스커트、4 = 구멍뚫림、5 앞열림、6 개폐가능
+@CLOTHES_CROTCH_722
+RETURN 2
+
+;장비시의 조교효과
+@CLOTHES_SOURCE_722,ARG = -1
+IF FLAG:SHOP커맨드 == 0
+	IF ARG == TARGET
+		TFLAG:19 = 1
+	ENDIF
+	SOURCE:ARG:쾌Ｃ += 130 + (ABL:ARG:23 * 2)
+	SOURCE:ARG:쾌Ｂ += 130 + (ABL:ARG:23 * 2)
+	
+	SOURCE:ARG:쾌Ｖ += 130 + (ABL:ARG:23 * 2)
+	SOURCE:ARG:무서움 += 50
+	SOURCE:ARG:정애 += (ABL:ARG:23 * 10)
+	SOURCE:ARG:중독충족 += 10 + (ABL:ARG:23 * 10)
+	SOURCE:ARG:액체 += 10
+	SOURCE:ARG:불결 += 10 - ABL:ARG:23
+	SOURCE:ARG:일탈 += 50
+
+	;抑圧、抵抗持ちには、抑鬱ソース追加
+	SIF TALENT:ARG:억압 || TALENT:ARG:저항
+		SOURCE:ARG:울굴 += 20
+		
+	;Vへの苦痛は先に処理しておく
+	;EXP:ARG:Ｖ경험をみる（処女はありえない）
+	A = 25
+	B = 20
+	IF EXP:ARG:0 < EXPLV:2
+		TIMES A , 0.80
+		TIMES B , 1.20
+	ELSEIF EXP:ARG:0 < EXPLV:3
+		TIMES A , 0.40
+	ELSEIF EXP:ARG:0 < EXPLV:4
+		TIMES A , 0.10
+	ELSEIF EXP:ARG:0 < EXPLV:5
+		TIMES A , 0.00
+	ELSEIF EXP:ARG:0 >= EXPLV:5
+		TIMES A , 0.00
+	ENDIF
+
+	;PALAM:ARG:윤활をみる
+	IF PALAM:ARG:4 < PALAMLV:1
+		TIMES A , 1.20
+		TIMES B , 1.50
+	ELSEIF PALAM:ARG:4 < PALAMLV:2
+		TIMES A , 0.70
+		TIMES B , 1.20
+	ELSEIF PALAM:ARG:4 < PALAMLV:3
+		TIMES A , 0.40
+	ELSEIF PALAM:ARG:4 < PALAMLV:4
+		TIMES A , 0.10
+	ELSEIF PALAM:ARG:4 >= PALAMLV:4
+		TIMES A , 0.10
+	ENDIF
+	SOURCE:ARG:7 += A
+	SOURCE:ARG:18 += B
+	
+	SOURCE:ARG:쾌Ａ += 130 + (ABL:ARG:23 * 2)
+	SOURCE:ARG:아픔 += 50
+	SOURCE:ARG:노출 += 25
+	SOURCE:ARG:일탈 += 50
+	SOURCE:ARG:반감 += 40
+
+	;抑圧、抵抗持ちには、抑鬱ソース追加
+	SIF TALENT:ARG:억압 || TALENT:ARG:저항
+		SOURCE:ARG:울굴 += 20
+		
+	;Vへの苦痛は先に処理しておく
+	;EXP:ARG:Ｖ경험をみる（処女はありえない）
+	A = 100
+	B = 40
+	IF EXP:ARG:1 < EXPLV:1
+		TIMES A , 3.00
+		TIMES B , 3.00
+	ELSEIF EXP:ARG:1 < EXPLV:2
+		TIMES A , 1.20
+		TIMES B , 2.00
+	ELSEIF EXP:ARG:1 < EXPLV:3
+		TIMES A , 0.80
+		TIMES B , 1.50
+	ELSEIF EXP:ARG:1 < EXPLV:4
+		TIMES A , 0.60
+		TIMES B , 1.20
+	ELSEIF EXP:ARG:1 < EXPLV:5
+		TIMES A , 0.40
+	ELSEIF EXP:ARG:1 >= EXPLV:5
+		TIMES A , 0.20
+	ENDIF
+
+
+	;PALAM:ARG:윤활をみる
+	IF PALAM:ARG:4 < PALAMLV:1
+		TIMES A , 1.20
+		TIMES B , 2.00
+	ELSEIF PALAM:ARG:4 < PALAMLV:2
+		TIMES A , 1.00
+		TIMES B , 1.50
+	ELSEIF PALAM:ARG:4 < PALAMLV:3
+		TIMES A , 0.60
+	ELSEIF PALAM:ARG:4 < PALAMLV:4
+		TIMES A , 0.30
+	ELSEIF PALAM:ARG:4 >= PALAMLV:4
+		TIMES A , 0.20
+	ENDIF
+	SOURCE:ARG:7 += A
+	SOURCE:ARG:18 += B
+	IF ARG == TARGET
+		DOWNBASE:ARG:0 += 30
+		DOWNBASE:ARG:1 += 80
+		DOWNBASE:ARG:1 += 50
+		DOWNBASE:ARG:0 += 10
+	ENDIF
+	
+ELSE
+ENDIF
+
+;장비시의 경험추가
+@CLOTHES_EXP_722,ARG = -1
+IF FLAG:SHOP커맨드 == 0
+	SIF ARG == -1
+		RETURN 0
+	TCVAR:ARG:획득촉수경험 += 4
+	PRINTFORML <촉수수트착용중>\@ ARG == MASTER ? (주인) #\@\@ ARG == ASSI ? (조수) #\@
+	IF TCVAR:ARG:획득가학쾌락경험
+		TCVAR:ARG:획득가학쾌락경험 += MAX(TCVAR:ARG:획득가학쾌락경험*140/100 , 1)
+		SIF ARG == TARGET
+			TIMES DOWNBASE:ARG:1 , 1.20
+	ENDIF
+	IF TCVAR:ARG:획득촉수경험
+		TCVAR:ARG:획득촉수경험 += MAX(TCVAR:ARG:획득촉수경험*140/100 , 1)
+		SIF EXP:ARG:촉수경험 == 0
+			CALL ADDS_ABNORMAL_EXP("촉수첫경험", ARG)
+		IF SELECTCOM == 11
+			TCVAR:ARG:획득Ｖ경험 += 2
+			TCVAR:ARG:획득Ａ경험 += 2
+		ELSE
+			TCVAR:ARG:획득Ｖ경험 += 1
+			TCVAR:ARG:획득Ａ경험 += 1
+		ENDIF
+		SIF ARG == TARGET
+			TIMES DOWNBASE:ARG:1 , 1.20
+		
+	ENDIF
+ELSE
+ENDIF
+
+;装備するための条件
+@CLOTHES_PREREQUISITE_722,ARG
+SIF IS_MALE(ARG)
+	RETURN 0
+SIF TALENT:ARG:1 || TALENT:ARG:2
+	RETURN 0
+SIF ARG == MASTER
+	RETURN 1
+SIF EXP:ARG:Ｖ경험 < 10
+	RETURN 0
+SIF EXP:ARG:Ａ경험 < 30 && ABL:ARG:Ａ감각 < 2
+	RETURN 0
+SIF TALENT:ARG:소인체형 && EXP:ARG:Ｖ확장경험 < 3 && EXP:ARG:Ａ확장경험 < 3 && TALENT:MASTER:금단의지식 == 0
+	RETURN 0
+SIF ABL:ARG:순종 >= 6
+	RETURN 1
+SIF ABL:ARG:마조끼 >= 3
+	RETURN 1
+SIF ABL:ARG:Ｖ감각 >= 2 && ABL:ARG:Ａ감각 >= 3
+	RETURN 1
+RETURN 0
+
+@CLOTHES_PRICE_722
+RETURN 2000
+
+;촉각
+;1 = 통과  2 = 위에서부터 전해진다  4 = 집어넣을수 있다
+;ARG 0 = Ｃ 1 = Ｖ 2 = Ａ 3 = 유두 4 = 유방
+@CLOTHES_촉각_722,ARG
+SELECTCASE ARG
+	CASE 0 TO 4
+		RETURN 2
+ENDSELECT

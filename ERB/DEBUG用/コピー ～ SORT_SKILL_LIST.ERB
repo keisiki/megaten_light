@@ -27,9 +27,9 @@ PRINTFORML ;%RESULTS%
 PRINTFORML ;-------------------------------
 PRINTFORML ;-------------------------------
 PRINTFORML ;この資料は資料フォルダ内にある
-PRINTFORML ;SORT_SKILL_LIST.ERBを이용して作成されています
-PRINTFORML ;何か추가する際はコピペするのではなく、
-PRINTFORML ;SORT_SKILL_LIST.ERBを이용して출력してください
+PRINTFORML ;SORT_SKILL_LIST.ERBを利用して作成されています
+PRINTFORML ;何か追加する際はコピペするのではなく、
+PRINTFORML ;SORT_SKILL_LIST.ERBを利用して出力してください
 PRINTFORML ;-------------------------------
 FOR LOCAL, 0 ,3000
 	SIF LOCAL == 2303
@@ -42,7 +42,7 @@ FOR LOCAL, 0 ,3000
 			PRINTFORM %RESULTS%,
 		ENDIF
 		SELECTCASE LOCAL
-			;罪아군の専用마법シリーズはターゲットいねーと落ちるので
+			;罪아군の専用마법シリーズは타겟いねーと落ちるので
 			CASE 1520, 1620, 1720 ,1923, 2025
 				PRINTFORM 특수,
 			CASEELSE

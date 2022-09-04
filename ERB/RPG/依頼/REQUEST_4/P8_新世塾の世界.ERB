@@ -19,8 +19,8 @@ PRINTL
 ;====================
 @REQUEST_4_P8
 #LOCALSIZE 2
-FLAG:도주불가フラグ = 1
-FLAG:회화불능フラグ = 1
+FLAG:도주불가플래그 = 1
+FLAG:회화불능플래그 = 1
 FLAG:선제기습취소 = 1
 CALL SHOW_PICTURE, "NONFLOORD", "야외音楽堂"
 CALL MESSAGE_WINDOW, "", @"＞지정된 시간에 %CALLNAME:MASTER%이 야외음악당에 도착하자/＞거기에 두 사람이 싸우고 있었다。/하나는 칠자매학원의 의뢰로 행동을 함께 했던 스오우 카츠야다……", , , , , 4
@@ -103,7 +103,7 @@ CALL MESSAGE_WINDOW, "", @"＞………………/＞…………/＞……" , , 
 CALL MESSAGE_WINDOW, "", @"＞%CALLNAME:MASTER%가 가져온 정보는/＞신세숙의 숨통이 걸린 조직의 세부 사항 및/＞지금가지의 활동기록 등으로 밝혀졌다……" , , , , , 4
 CALL MESSAGE_WINDOW, "", "＞이 활동이 인정되어、/＞계좌에 ￥ 50000이 입금되었다。/＞명성 25를 손에 넣었다。" , , , , , 4
 MONEY += 50000
-FLAG:名声 += 25
+FLAG:명성 += 25
 
 ;-------------------------------
 ;시마즈관리관
@@ -114,29 +114,29 @@ LOCAL = 0
 FOR LOCAL, 1, 7
 	SIF POS(LOCAL) <= 0
 		CONTINUE
-	SIF !CFLAG:POS(LOCAL):BS付着率강화
+	SIF !CFLAG:POS(LOCAL):BS부착률강화
 		SETBIT LOCAL, 0
 	SIF !CFLAG:POS(LOCAL):비구가드킬
 		SETBIT LOCAL, 1
 NEXT
-CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:입력행동 = -1
 SELECTCASE RAND:100
 	CASE IS < 30
-		CFLAG:ARG:입력行動 = [[스킬:미들샷]]
+		CFLAG:ARG:입력행동 = [[스킬:미들샷]]
 	CASE IS < 65
-		CFLAG:ARG:입력行動 = GETBIT(LOCAL, 0) ? [[스킬:무거운공기]] # [[스킬:플레어샷]]
+		CFLAG:ARG:입력행동 = GETBIT(LOCAL, 0) ? [[스킬:무거운공기]] # [[스킬:플레어샷]]
 	CASEELSE
-		CFLAG:ARG:입력行動 = GETBIT(LOCAL, 1) ? [[스킬:비구가드브레이크]] # [[스킬:플레어샷]]
+		CFLAG:ARG:입력행동 = GETBIT(LOCAL, 1) ? [[스킬:비구가드브레이크]] # [[스킬:플레어샷]]
 ENDSELECT
 ;アクション実行不能なら自動的に방어にする
-CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력행동
 IF RESULT == 0
-	CFLAG:ARG:입력行動 = -1
-	CFLAG:ARG:방어フラグ = 1
+	CFLAG:ARG:입력행동 = -1
+	CFLAG:ARG:방어플래그 = 1
 ENDIF
-;랜덤ターゲットをよんで決定
-SIF CFLAG:ARG:입력行動 >= 0
-	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+;랜덤타겟をよんで決定
+SIF CFLAG:ARG:입력행동 >= 0
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 RETURN 1
 
 ;-------------------------------
@@ -145,24 +145,24 @@ RETURN 1
 @SET_ACTION_SAT, ARG
 #LOCALSIZE 1
 LOCAL = 0
-CFLAG:ARG:입력行動 = -1
+CFLAG:ARG:입력행동 = -1
 SELECTCASE RAND:100
 	CASE IS < 20
-		CFLAG:ARG:입력行動 = [[스킬:저격]]
+		CFLAG:ARG:입력행동 = [[스킬:저격]]
 	CASE IS < 40
-		CFLAG:ARG:입력行動 = [[스킬:연속사격]]
+		CFLAG:ARG:입력행동 = [[스킬:연속사격]]
 	CASE IS < 50
-		CFLAG:ARG:입력行動 = [[스킬:스파이럴밤]]
+		CFLAG:ARG:입력행동 = [[스킬:스파이럴밤]]
 	CASEELSE
-		CFLAG:ARG:입력行動 = [[스킬:싱글샷]]
+		CFLAG:ARG:입력행동 = [[스킬:싱글샷]]
 ENDSELECT
 ;アクション実行不能なら自動的に방어にする
-CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력行動
+CALL CHECK_ACTIONABLE, ARG, CFLAG:ARG:입력행동
 IF RESULT == 0
-	CFLAG:ARG:입력行動 = -1
-	CFLAG:ARG:방어フラグ = 1
+	CFLAG:ARG:입력행동 = -1
+	CFLAG:ARG:방어플래그 = 1
 ENDIF
-;랜덤ターゲットをよんで決定
-SIF CFLAG:ARG:입력行動 >= 0
-	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력行動
+;랜덤타겟をよんで決定
+SIF CFLAG:ARG:입력행동 >= 0
+	CALL RANDOM_TARGET, ARG, CFLAG:ARG:입력행동
 RETURN 1

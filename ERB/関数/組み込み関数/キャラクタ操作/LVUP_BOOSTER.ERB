@@ -1,0 +1,303 @@
+﻿;=================================================================================
+;인스톨소프트・악세서리에 의한레벨업시 능력치 부스트
+;=================================================================================
+;ARG   대상캐릭터
+;ARG:1 시행횟수
+@LVUP_BOOSTER,ARG,ARG:1
+#LOCALSIZE 2
+#LOCALSSIZE 1
+#DIM DYNAMIC 적용횟수,1
+#DIMS DYNAMIC 능력치명,6 = "힘","지혜","마력","인내력","속도","운"
+#DIMS DYNAMIC 인스톨소프트명,6 = "헤라클레스","오디세우스","오르페우스","오리온","아킬레스","테세우스"
+#DIMS DYNAMIC 악세서리명,6 = "스트렝스소스","인텔리전스소스","매직소스","바이탈리티소스","어질리티소스","럭키소스"
+#DIM DYNAMIC 상한치,6
+#DIM DYNAMIC 루프,1
+
+FOR 적용횟수,0,ARG:1
+	;能力値名・インストール名・アクセサリ名をランダムにシャッフル
+	FOR 루프,6-1,0,-1
+		LOCAL = RAND(루프+1)
+		LOCALS = %능력치명:루프%
+		능력치명:루프 = %능력치명:LOCAL%
+		능력치명:LOCAL  = %LOCALS%
+
+		LOCALS = %인스톨소프트명:루프%
+		인스톨소프트명:루프 = %인스톨소프트명:LOCAL%
+		인스톨소프트명:LOCAL  = %LOCALS%
+
+		LOCALS = %악세서리명:루프%
+		악세서리명:루프 = %악세서리명:LOCAL%
+		악세서리명:LOCAL  = %LOCALS%
+	NEXT
+
+	;シャッフルした順番で能力値上昇判定
+	FOR 루프,0,6
+		IF !IS_HUMAN(ARG) && NUM_SUMMONER() && EQUIP:MASTER:(인스톨소프트명:루프)
+		ELSEIF EQUIP:ARG:악세서리 == GETNUM(ITEM,악세서리명:루프)
+		ELSE
+			CONTINUE
+		ENDIF
+		LOCAL  = 1250
+		LOCAL:1 = 100 - CFLAG:ARG:능력강화횟수 - CFLAG:ARG:(능력치명:루프+"강화횟수") + BASE:ARG:LV
+		SIF LOCAL:1 == 0
+			LOCAL:1 = 1
+		LOCAL /= LOCAL:1
+		LOCAL *= 100
+		SIF RAND(10000) >= LOCAL
+			CONTINUE
+
+		상한치:(GET_BASESTATUS_NUM(능력치명:루프)-1) += 1
+		CFLAG:ARG:능력강화횟수 += 1
+		CFLAG:ARG:(능력치명:루프+"강화횟수") += 1
+		MAXBASE:ARG:(능력치명:루프) += 1
+		BREAK
+	NEXT
+NEXT
+
+SIF MAX(상한치:0,상한치:1,상한치:2,상한치:3,상한치:4,상한치:5) == 0
+	RETURN
+
+DRAWLINE
+PRINTFORML □%!IS_HUMAN(ARG) ? "ＣＯＭＰ" # "악세서리"%의 효과로 능력치가 증강되었다
+FOR LOCAL,1,7
+	LOCALS = %GET_BASESTATUS(LOCAL)%
+	PRINTFORML %LOCALS,4%：{BASE:ARG:LOCALS,4}({MAXBASE:ARG:LOCALS,4}) [ +{상한치:(LOCAL-1),2}]
+NEXT
+DRAWLINE
+RETURN
+
+;=================================================================================
+;마가타마에 의한 레벨업시 능력 부스트
+;=================================================================================
+@LVUP_BOOSTER_MAGATAMA,ARG,ARG:1
+
+;인수라이외는 무효
+SIF TALENT:ARG:인수라 == 0
+	RETURN
+
+FOR LOCAL,0,ARG:1
+	;装備してる勾玉ごとに、耐性が強化
+	SELECTCASE EQUIP:ARG:(GET_EQUIP(6))
+		;下位マガタマ(上限・物理75/属性50)
+		CASE 8200
+			;마로가레의 경우
+			;隠し成長扱い。即死耐性50まで成長する
+			IF BASE:ARG:DYING > -50
+				BASE:ARG:DYING = BASE:ARG:DYING - 5
+				;上限を超えた場合は上限に再설정
+				SIF BASE:ARG:DYING <= -50
+					BASE:ARG:DYING = -50
+			ENDIF
+		CASE 8201
+			;마다트미의 경우
+			IF BASE:ARG:빙결 > 50
+				BASE:ARG:빙결 = BASE:ARG:빙결 - 5
+				SIF BASE:ARG:빙결 <= 50
+					BASE:ARG:빙결 = 50
+			ENDIF
+		CASE 8202
+			;안고의 경우
+			IF BASE:ARG:파마 > 50
+				BASE:ARG:파마 = BASE:ARG:파마 - 5
+				SIF BASE:ARG:파마 <= 50
+					BASE:ARG:파마 = 50
+			ENDIF
+		CASE 8203
+			;이요만테의 경우
+			IF BASE:ARG:정신 > 50
+				BASE:ARG:정신 = BASE:ARG:정신 - 5
+				SIF BASE:ARG:정신 <= 50
+					BASE:ARG:정신 = 50
+			ENDIF
+		CASE 8204
+			;시라누이의 경우
+			IF BASE:ARG:화염 > 50
+				BASE:ARG:화염 = BASE:ARG:화염 - 5
+				SIF BASE:ARG:화염 <= 50
+					BASE:ARG:화염 = 50
+			ENDIF
+		CASE 8205
+			;히후미의 경우
+			IF BASE:ARG:충격 > 50
+				BASE:ARG:충격 = BASE:ARG:충격 - 5
+				SIF BASE:ARG:충격 <= 50
+					BASE:ARG:충격 = 50
+			ENDIF
+		CASE 8206
+			;카무도의 경우
+			IF BASE:ARG:검격 > 75
+				BASE:ARG:검격 = BASE:ARG:검격 - 5
+				SIF BASE:ARG:검격 <= 75
+					BASE:ARG:검격 = 75
+			ENDIF
+			IF BASE:ARG:타격 > 75
+				BASE:ARG:타격 = BASE:ARG:타격 - 5
+				SIF BASE:ARG:타격 <= 75
+					BASE:ARG:타격 = 75
+			ENDIF
+		CASE 8207
+			;나루카미의 경우
+			IF BASE:ARG:전격 > 50
+				BASE:ARG:전격 = BASE:ARG:전격 - 5
+				SIF BASE:ARG:전격 <= 50
+					BASE:ARG:전격 = 50
+			ENDIF
+		;中位マガタマ(上限・물리50/속성25)
+		CASE 8208
+			;아나테마의 경우
+			IF BASE:ARG:주살 > 25
+				BASE:ARG:주살 = BASE:ARG:주살 - 5
+				SIF BASE:ARG:주살 <= 25
+					BASE:ARG:주살 = 25
+			ENDIF
+		CASE 8209
+			;미아즈마의 경우
+			IF BASE:ARG:빙결 > 25
+				BASE:ARG:빙결 = BASE:ARG:빙결 - 5
+				SIF BASE:ARG:빙결 <= 25
+					BASE:ARG:빙결 = 25
+			ENDIF
+		CASE 8210
+			;니르바나의 경우
+			IF BASE:ARG:파마 > 25
+				BASE:ARG:파마 = BASE:ARG:파마 - 5
+				SIF BASE:ARG:파마 <= 25
+					BASE:ARG:파마 = 25
+			ENDIF
+		CASE 8211
+			;무라쿠모의 경우
+			IF BASE:ARG:비구 > 50
+				BASE:ARG:비구 = BASE:ARG:비구 - 5
+				SIF BASE:ARG:비구 <= 50
+					BASE:ARG:비구 = 50
+			ENDIF
+			IF BASE:ARG:전술 > 50
+				BASE:ARG:전술 = BASE:ARG:전술 - 5
+				SIF BASE:ARG:전술 <= 50
+					BASE:ARG:전술 = 50
+			ENDIF
+		CASE 8212
+			;게쉬의 경우
+			;アンクより成長率高い
+			IF BASE:ARG:파마 > 25
+				BASE:ARG:파마 = BASE:ARG:파마 - 10
+				SIF BASE:ARG:파마 <= 25
+					BASE:ARG:파마 = 25
+			ENDIF
+		CASE 8213
+			;제드의 경우
+			IF BASE:ARG:신경 > 25
+				BASE:ARG:신경 = BASE:ARG:신경 - 5
+				SIF BASE:ARG:신경 <= 25
+					BASE:ARG:신경 = 25
+			ENDIF
+		CASE 8214
+			;무스펠의 경우
+			IF BASE:ARG:신경 > 25
+				BASE:ARG:신경 = BASE:ARG:신경 - 5
+				SIF BASE:ARG:신경 <= 25
+					BASE:ARG:신경 = 25
+			ENDIF
+			IF BASE:ARG:정신 > 25
+				BASE:ARG:정신 = BASE:ARG:정신 - 5
+				SIF BASE:ARG:정신 <= 25
+					BASE:ARG:정신 = 25
+			ENDIF
+		;上位マガタマ(上限・물리25/속성0)
+		CASE 8215
+			;게헨나의 경우
+			IF BASE:ARG:화염 > 0
+				BASE:ARG:화염 = BASE:ARG:화염 - 10
+				SIF BASE:ARG:화염 <= 0
+					BASE:ARG:화염 = 0
+			ENDIF
+		CASE 8216
+			;카무로기의 경우
+			IF BASE:ARG:검격 > 25
+				BASE:ARG:검격 = BASE:ARG:검격 - 5
+				SIF BASE:ARG:검격 <= 25
+					BASE:ARG:검격 = 25
+			ENDIF
+			IF BASE:ARG:비구 > 25
+				BASE:ARG:비구 = BASE:ARG:비구 - 5
+				SIF BASE:ARG:비구 <= 25
+					BASE:ARG:비구 = 25
+			ENDIF
+			IF BASE:ARG:타격 > 25
+				BASE:ARG:타격 = BASE:ARG:타격 - 5
+				SIF BASE:ARG:타격 <= 25
+					BASE:ARG:타격 = 25
+			ENDIF
+			IF BASE:ARG:전술 > 25
+				BASE:ARG:전술 = BASE:ARG:전술 - 5
+				SIF BASE:ARG:전술 <= 25
+					BASE:ARG:전술 = 25
+			ENDIF
+		CASE 8217
+			;사탄의 경우
+			;アナテマより成長率高い
+			IF BASE:ARG:주살 > 0
+				BASE:ARG:주살 = BASE:ARG:주살 - 10
+				SIF BASE:ARG:주살 <= 0
+					BASE:ARG:주살 = 0
+			ENDIF
+		CASE 8218
+			;아다마의 경우
+			IF BASE:ARG:전격 > 0
+				BASE:ARG:전격 = BASE:ARG:전격 - 10
+				SIF BASE:ARG:전격 <= 0
+					BASE:ARG:전격 = 0
+			ENDIF
+		CASE 8219
+			;뷔마나의 경우
+			IF BASE:ARG:신경 > 0
+				BASE:ARG:신경 = BASE:ARG:신경 - 10
+				SIF BASE:ARG:신경 <= 0
+					BASE:ARG:신경 = 0
+			ENDIF
+		CASE 8220
+			;군다리의 경우
+			IF BASE:ARG:충격 > 0
+				BASE:ARG:충격 = BASE:ARG:충격 - 10
+				SIF BASE:ARG:충격 <= 0
+					BASE:ARG:충격 = 0
+			ENDIF
+		CASE 8221
+			;소피아의 경우
+			IF BASE:ARG:파마 > 0
+				BASE:ARG:파마 = BASE:ARG:파마 - 10
+				SIF BASE:ARG:파마 <= 0
+					BASE:ARG:파마 = 0
+			ENDIF
+		CASE 8222
+			;가이아의 경우
+			IF BASE:ARG:타격 > 25
+				BASE:ARG:타격 = BASE:ARG:타격 - 10
+				SIF BASE:ARG:타격 <= 25
+					BASE:ARG:타격 = 25
+			ENDIF
+			IF BASE:ARG:전술 > 0
+				BASE:ARG:전술 = BASE:ARG:전술 - 10
+				SIF BASE:ARG:전술 <= 25
+					BASE:ARG:전술 = 25
+			ENDIF
+		CASE 8223
+			;카일러스의 경우
+			IF BASE:ARG:DYING > -100
+				BASE:ARG:DYING = BASE:ARG:DYING - 10
+				SIF BASE:ARG:DYING <= -100
+					BASE:ARG:DYING = -100
+			ENDIF
+		CASE 8224
+			;마사카두스의 경우
+			;만능내성75まで成長する
+			IF BASE:ARG:만능 > 75
+				BASE:ARG:만능 = BASE:ARG:만능 - 5
+				SIF BASE:ARG:만능 <= 75
+					BASE:ARG:만능 = 75
+			ENDIF
+		CASEELSE
+			;マガタマ以外は強化されない
+	ENDSELECT
+NEXT
+

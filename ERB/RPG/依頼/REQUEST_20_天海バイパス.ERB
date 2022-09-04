@@ -3,7 +3,7 @@
 ;조건
 ;====================
 @PLAYABLE_REQUEST_20
-IF BASE:MASTER:LV >= 10 && 의뢰フラグ:20:0 == 0
+IF BASE:MASTER:LV >= 10 && 의뢰플래그:20:0 == 0
 	RESULTS = 아마미 바이패스의 유령 토벌 의뢰
 	RETURN 1
 ENDIF
@@ -48,8 +48,8 @@ RETURN 0
 	PRINTFORMW
 	PRINTL 괴이　스피드 데몬이 １체 나타났다!
 	PRINTL 시귀　목없는 라이더가 3체 나타났다!
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
 	CUSTOMDRAWLINE =
 	WAIT
@@ -57,12 +57,12 @@ RETURN 0
 		CALL SET_ENEMY,9,1026,15,0,0
 		CALL SET_ENEMY,10,1026,15,0,0
 		CALL SET_ENEMY,14,1027,18,0,1
-		CFLAG:(CHARANUM-1):行動횟수 = 2
+		CFLAG:(CHARANUM-1):행동횟수 = 2
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
 		CALL BATTLE_START
-		FLAG:도주불가フラグ = 0
-		FLAG:회화불능フラグ = 0
+		FLAG:도주불가플래그 = 0
+		FLAG:회화불능플래그 = 0
 		FLAG:선제기습취소 = 0
 	WAIT
 	PRINTL 악마들을 쓰러트렸다.
@@ -78,6 +78,6 @@ RETURN 0
 	PRINTFORML 의뢰 달성의 보수로 20000엔을 얻었다.
 	PRINTFORMW 
 	MONEY += 20000
-	의뢰フラグ:20:0 = 1
+	의뢰플래그:20:0 = 1
 
 

@@ -3,7 +3,8 @@
 ;
 ;	Edit	Date			Author					Reason
 ;	001		20XX/XX/XX		--------				新規作成
-;	002		2019/08/29		空気					デビルチェンバー사용時の挙動を修正。また、DDMがONなら容量いっぱいでも仲魔になって自動的にストレージに送られるように
+;	002		2019/08/29		空気					デビルチェンバー使用時の挙動を修正。また、DDMがONなら容量いっぱいでも仲魔になって自動的にストレージに送られるように
+;	003		2022/03/25		aroaro					武田→武多に修正
 ;_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/#
 ;=======================================================================
 ;조시가야공원묘지
@@ -12,7 +13,7 @@
 ;=======================================================================
 
 ;スイッチ管理
-;던전フラグ:33:0 = 初進入フラグ 던전フラグ:33:1〜99 케르베로스の報酬フラグ
+;던전플래그:33:0 = 初進入フラグ 던전플래그:33:1〜99 케르베로스の報酬フラグ
 ;
 
 ;=======================================================================
@@ -20,7 +21,7 @@
 ;=======================================================================
 @PREREQUISITE_DUNGEON_33
 ;에코빌딩クリア後
-SIF 던전フラグ:1:1 == 1
+SIF 던전플래그:1:1 == 1
 	RETURN 1
 RETURN 0
 
@@ -34,7 +35,7 @@ RESULTS = 조시가야공원묘지
 
 
 ;=======================================================================
-;フ로어名표시
+;플로어名표시
 ;=======================================================================
 @FLOORNAME_33
 PRINT 조시가야공원묘지
@@ -49,9 +50,9 @@ PRINT 조시가야공원묘지
 ;스타ト地点입력
 ;=======================================================================
 @START_DUNGEON_33,ARG
-FLAG:現M = 0
-FLAG:現X = 14
-FLAG:現Y = 4
+FLAG:현M = 0
+FLAG:현X = 14
+FLAG:현Y = 4
 ;CALL AUTOMAP
 
 
@@ -63,10 +64,10 @@ CALL CAN_ENTER,ARG,ARG:1
 RETURN RESULT
 
 ;=======================================================================
-;フ로어데이터
+;플로어데이터
 ;=======================================================================
 @MAKE_FLOOR_33
-SELECTCASE FLAG:現M
+SELECTCASE FLAG:현M
 	CASE 0
 	;１階
 		FLAG:최대X = 15
@@ -96,24 +97,24 @@ ENDSELECT
 @EVENT_CHECK_DUNGEON_33
 
 ;==========
-;出입の処理
+;出口の処理
 ;==========
-IF DA:(FLAG:現X):(FLAG:現Y) == 8
+IF DA:(FLAG:현X):(FLAG:현Y) == 8
 	CALL DUNGEON_EXIT
 	RETURN 1
 ;========
 ;宝の処理
 ;========
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 3
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 3
 	RETURN 1
 ;=======
 ;階段
 ;=======
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 6
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 6
 RETURN 1
 
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 7
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 9
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 7
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 9
 	CALL DUNGEON_TERMINAL
 	RETURN 1
 RETURN 1
@@ -129,34 +130,34 @@ ENDIF
 @EVENT_ENTER_DUNGEON_33,ARG
 ;ARG = 進入時の向き　0の場合ワープなど
 ;==========
-;出입の処理
+;出口の処理
 ;==========
-IF DA:(FLAG:現X):(FLAG:現Y) == 8
+IF DA:(FLAG:현X):(FLAG:현Y) == 8
 	CALL DUNGEON_EXIT
 	RETURN 1
 ;========
 ;宝の処理
 ;========
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 3
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 3
 	RETURN 1
 ;=======
 ;階段
 ;=======
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 6
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 6
 
 RETURN 1
 
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 7
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 7
 	RETURN 1
 
 
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 9
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 9
 RETURN 1
 
 ;==========
 ;扉の処理
 ;==========
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 2
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 2
 	CALL DUNGEON_DOOR,ARG
 	RETURN 1
 
@@ -164,9 +165,9 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 2
 ;========================
 ;이벤트
 ;========================
-ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
-	IF FLAG:現M == 0 && FLAG:現X == 13 && FLAG:現Y == 4 
-		IF 던전フラグ:33:0 == 0
+ELSEIF DA:(FLAG:현X):(FLAG:현Y) == 4
+	IF FLAG:현M == 0 && FLAG:현X == 13 && FLAG:현Y == 4 
+		IF 던전플래그:33:0 == 0
 			CUSTOMDRAWLINE =
 			PRINTW 인적없는 공원묘지 입구에 악마의 모습이 보인다….
 			PRINTW 「나는 마수 케르베로스… 이곳은 내 세력권이다. 썩 나가라」
@@ -181,33 +182,33 @@ ELSEIF DA:(FLAG:現X):(FLAG:現Y) == 4
 			PRINTW 「이것을 사용해 묘비를 조사해라. 설명은 이상이다. 뒷일은 맡기지」
 			PRINTW 케르베로스는 그 자리에 누워서 배를 긁기 시작했다.
 			PRINTW 가만히 놔 두자….
-			던전フラグ:33:0 = 1
-			DA:(FLAG:現X):(FLAG:現Y) = 1
+			던전플래그:33:0 = 1
+			DA:(FLAG:현X):(FLAG:현Y) = 1
 		ELSE
 			CUSTOMDRAWLINE =
 			PRINTL 「소환사인가… 변함없이 나는 제대로 잘 수가 없다…」
 			PRINTW 가만히 놔 두자….
-			DA:(FLAG:現X):(FLAG:現Y) = 1
+			DA:(FLAG:현X):(FLAG:현Y) = 1
 		ENDIF
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 11 && FLAG:現Y == 3 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 11 && FLAG:현Y == 3 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,0
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 9 && FLAG:現Y == 3 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 9 && FLAG:현Y == 3 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,10
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 7 && FLAG:現Y == 3 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 7 && FLAG:현Y == 3 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,20
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 5 && FLAG:現Y == 3 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 5 && FLAG:현Y == 3 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,30
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 3 && FLAG:現Y == 3 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 3 && FLAG:현Y == 3 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,40
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 11 && FLAG:現Y == 6 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 11 && FLAG:현Y == 6 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,50
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 9 && FLAG:現Y == 6 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 9 && FLAG:현Y == 6 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,60
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 7 && FLAG:現Y == 6 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 7 && FLAG:현Y == 6 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,70
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 5 && FLAG:現Y == 6 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 5 && FLAG:현Y == 6 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,80
-	ELSEIF FLAG:現M == 0 && FLAG:現X == 3 && FLAG:現Y == 6 && 던전フラグ:33:0 == 1
+	ELSEIF FLAG:현M == 0 && FLAG:현X == 3 && FLAG:현Y == 6 && 던전플래그:33:0 == 1
 		CALL TOMB_STONE,90
 	ENDIF
 ENDIF
@@ -334,26 +335,26 @@ ENDIF
 
 
 ;=======================================================================
-;エンカウント率
+;인카운트율
 ;=======================================================================
 @ENCOUNT_RATE_33
-SELECTCASE FLAG:現M
+SELECTCASE FLAG:현M
 	;エンカウントなし
 	CASE 0
-		FLAG:エンカウント率 = FLAG:未遭遇歩数*0
+		FLAG:인카운트율 = FLAG:미조우걸음수*0
 ENDSELECT
-SIF FLAG:未遭遇歩数 < 5
-	FLAG:エンカウント率 = 0
+SIF FLAG:미조우걸음수 < 5
+	FLAG:인카운트율 = 0
 
 
 ;=======================================================================
 ;エンカウント処理
 ;=======================================================================
 @CHECK_ENCOUNT_33
-IF RAND:100 < FLAG:エンカウント率
+IF RAND:100 < FLAG:인카운트율
 ENDIF
 ;=======================================================================
-;추가用テン플레이트。#を空いている번호に置換する。全ておなじ번호
+;추가用テンプレート。#を空いている번호に置換する。全ておなじ번호
 ;=======================================================================
 ;ボスの번호を표시
 ;@BOSS_NAME_#
@@ -367,17 +368,17 @@ ENDIF
 ;@BOSS_SUMMON_#
 ;	;전투後の경험치処理をスキップする
 ;
-;	FLAG:RESULTスキップ = 1
+;	FLAG:RESULT스킵 = 1
 ;	この部分に추가したいボスの強さなどを설정する
 ;	
-;	FLAG:RESULTスキップ = 0
+;	FLAG:RESULT스킵 = 0
 ;	CALL BOSS_RESULT_#
 	
 ;케르베로스からの報酬	
 ;@BOSS_RESULT_#
-;IF 던전フラグ:33:# == 1
+;IF 던전플래그:33:# == 1
 ;	適当なセリフと報酬を記述する
-;	던전フラグ:33:# = 1
+;	던전플래그:33:# = 1
 ;ENDIF
 
 ;후생의토령可フラグ 必須。0で転生不可
@@ -392,7 +393,7 @@ ENDIF
 ;IF LOCAL >= 4501 && LOCAL <= 4999 && (BASE:MASTER:LV >= CSVBASE(LOCAL,30,0))
 ;	;인간は此処に추가する
 ;ELSE
-;	IF FLAG:ＣＯＭＰ용량 > NUM_NAKAMA() + ソフト용량() && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+;	IF FLAG:ＣＯＭＰ용량 > NUM_NAKAMA() + 소프트용량() && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 ;		;악마を추가する
 ;		CALL ADD_NEW_COMPANION,LOCAL:ARG,200
 ;		;악마個人구상とか入れても良いかも
@@ -411,7 +412,7 @@ ENDIF
 ;ボスの번호を표시
 @BOSS_NAME_1
 ;조건：에코빌딩クリア
-	IF 던전フラグ:1:1 == 1
+	IF 던전플래그:1:1 == 1
 		RETURN 4201
 	ENDIF
 RETURN 0
@@ -421,32 +422,32 @@ RETURN 0
 	PRINTL 초인 도우만이 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
 	;전투後の경험치処理をスキップする
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,4201,10,0,1
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CFLAG:(CHARANUM-1):ＨＰ보정 += 500
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_1
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_1
-IF 던전フラグ:33:1 == 0
+IF 던전플래그:33:1 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:1 = 1
+	던전플래그:33:1 = 1
 ENDIF
 
 ;후생의토령可否
@@ -461,7 +462,7 @@ LOCAL = RESULT
 IF LOCAL >= 4501 && LOCAL <= 4999 && (BASE:MASTER:LV >= CSVBASE(LOCAL,30,0))
 	;인간は此処に추가する
 ELSE
-	IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+	IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 		CALL ADD_NEW_COMPANION,LOCAL,200
 		;악마個人구상とか入れても良いかも
 		IF CSVCSTR(LOCAL,20,0) != ""
@@ -480,7 +481,7 @@ ENDIF
 ;ボスの번호を표시
 @BOSS_NAME_2
 ;조건：軽高で오퀴페테を倒す
-	IF 던전フラグ:2:11 == 1
+	IF 던전플래그:2:11 == 1
 		RETURN 903
 	ENDIF
 RETURN 0
@@ -490,29 +491,29 @@ RETURN 0
 	PRINTL 요조 오퀴페테가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
 	;전투後の경험치処理をスキップする
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,903,19,0,1
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_2
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_2
-IF 던전フラグ:33:2 == 0
+IF 던전플래그:33:2 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 100마카를 손에 넣었다.
 	MONEY:1 += 100
-	던전フラグ:33:2 = 1
+	던전플래그:33:2 = 1
 ENDIF
 
 @BOSS_BELLCHECK_2
@@ -524,7 +525,7 @@ RETURN 0
 ;ボスの번호を표시
 @BOSS_NAME_3
 ;조건：신주쿠위생병원で유키죠로を倒す
-	IF 던전フラグ:3:1 == 1
+	IF 던전플래그:3:1 == 1
 		RETURN 603
 	ENDIF
 RETURN 0
@@ -534,31 +535,31 @@ RETURN 0
 	PRINTL 귀녀 유키죠로가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
 	;전투後の경험치処理をスキップする
-	FLAG:RESULTスキップ = 1	
+	FLAG:RESULT스킵 = 1	
 	CALL SET_ENEMY,9,603,21,0,1
 	ABL:(CHARANUM-1):스킬3 = 805
 	ABL:(CHARANUM-1):스킬4 = 1223
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_3
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_3
-IF 던전フラグ:33:3 == 0
+IF 던전플래그:33:3 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 100마카를 손에 넣었다.
 	MONEY:1 += 100
-	던전フラグ:33:3 = 1
+	던전플래그:33:3 = 1
 ENDIF
 
 @BOSS_BELLCHECK_3
@@ -570,7 +571,7 @@ RETURN 0
 ;ボスの번호を표시
 @BOSS_NAME_4
 ;조건：정신세계で알케니を倒す
-	IF 던전フラグ:4:0 == 1
+	IF 던전플래그:4:0 == 1
 		RETURN 805
 	ENDIF
 RETURN 0
@@ -580,28 +581,28 @@ RETURN 0
 	PRINTL 마수 알케니가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,805,28,0,1
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_4
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_4
-IF 던전フラグ:33:4 == 0
+IF 던전플래그:33:4 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 125마카를 손에 넣었다.
 	MONEY:1 += 125
-	던전フラグ:33:4 = 1
+	던전플래그:33:4 = 1
 ENDIF
 @BOSS_BELLCHECK_4
 RETURN 0
@@ -611,7 +612,7 @@ RETURN 0
 ;ボスの번호を표시
 @BOSS_NAME_5
 ;조건：ダイダロスの塔で미노타우로스を倒す
-	IF 던전フラグ:5:12 == 1
+	IF 던전플래그:5:12 == 1
 		RETURN [[キャラ:미노타우로스]]
 	ENDIF
 RETURN 0
@@ -621,10 +622,10 @@ RETURN 0
 	PRINTL 초수 미노타우로스가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 		CALL SET_ENEMY,9,[[キャラ:미노타우로스]],30,0,1
 		LOCAL = CHARANUM-1
 		LOCAL:1 = FLAG:전투난이도 - 3 > 0 ? 120 + (FLAG:전투난이도 - 3) * 20 # 100
@@ -656,23 +657,23 @@ RETURN 0
 		
 		CALL SYNC_STATUS,(CHARANUM-1)
 		CALL HEALTH_CHARA,(CHARANUM-1)
-		CFLAG:LOCAL:行動횟수 = 2
+		CFLAG:LOCAL:행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_5
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_5
-IF 던전フラグ:33:5 == 0
+IF 던전플래그:33:5 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 150마카를 손에 넣었다.
 	MONEY:1 += 150
-	던전フラグ:33:5 = 1
+	던전플래그:33:5 = 1
 ENDIF
 
 ;후생의토령可否
@@ -683,7 +684,7 @@ RETURN 1
 @BOSS_BELL_5
 CALL BOSS_NAME_5
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -700,7 +701,7 @@ ENDIF
 ;ボスの번호を표시
 @BOSS_NAME_6
 ;조건：콜로세움던전성냥でレッドベアーを倒す
-	IF 던전フラグ:6:0 == 2
+	IF 던전플래그:6:0 == 2
 		RETURN [[キャラ:레드・베어]]
 	ENDIF
 RETURN 0
@@ -710,27 +711,27 @@ RETURN 0
 	PRINTW 전사 레드･베어가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,[[キャラ:레드・베어]],22,0,1
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_6
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_6
-IF 던전フラグ:33:6 == 0
+IF 던전플래그:33:6 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 75마카를 손에 넣었다.
 	MONEY:1 += 75
-	던전フラグ:33:6 = 1
+	던전플래그:33:6 = 1
 ENDIF
 
 ;후생의토령可否
@@ -741,7 +742,7 @@ RETURN 1
 @BOSS_BELL_6
 CALL BOSS_NAME_6
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -758,7 +759,7 @@ ENDIF
 ;ボスの번호を표시
 @BOSS_NAME_7
 ;조건：軽校上層で하자마を倒す
-	IF 던전フラグ:7:1 == 1
+	IF 던전플래그:7:1 == 1
 		RETURN 4202
 	ENDIF
 RETURN 0
@@ -768,31 +769,31 @@ RETURN 0
 	PRINTW 초인 하자마가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,4202,80,0,1
 	CFLAG:(CHARANUM-1):ＨＰ보정 = 5000
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_7
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_7
-IF 던전フラグ:33:7 == 0
+IF 던전플래그:33:7 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 250마카를 손에 넣었다.
 	MONEY:1 += 250
-	던전フラグ:33:7 = 1
+	던전플래그:33:7 = 1
 ENDIF
 
 ;후생의토령可否
@@ -803,7 +804,7 @@ RETURN 1
 @BOSS_BELL_7
 CALL BOSS_NAME_7
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -820,7 +821,7 @@ ENDIF
 ;ボスの번호を표시
 @BOSS_NAME_8
 ;조건：ヴァルハラの回廊で로키を倒す
-	IF 던전フラグ:8:14 == 1
+	IF 던전플래그:8:14 == 1
 		RETURN [[キャラ:로키]]
 	ENDIF
 RETURN 0
@@ -830,30 +831,30 @@ RETURN 0
 	PRINTL 폭군 로키가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,[[キャラ:로키]],50,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_8
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_8
-IF 던전フラグ:33:8 == 0
+IF 던전플래그:33:8 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 250마카를 손에 넣었다.
 	MONEY:1 += 250
-	던전フラグ:33:8 = 1
+	던전플래그:33:8 = 1
 ENDIF
 
 ;후생의토령可否
@@ -864,7 +865,7 @@ RETURN 1
 @BOSS_BELL_8
 CALL BOSS_NAME_8
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -881,7 +882,7 @@ ENDIF
 ;ボスの번호を표시
 @BOSS_NAME_9
 ;조건：地下鉄で한냐(NOT校長)を倒す
-	IF 던전フラグ:9:0 == 1
+	IF 던전플래그:9:0 == 1
 		RETURN 604
 	ENDIF
 RETURN 0
@@ -891,32 +892,32 @@ RETURN 0
 	PRINTL 요귀 한냐가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,604,25,0,1
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CFLAG:(CHARANUM-1):ＨＰ보정 += 500
 	BASE:(CHARANUM-1):힘 += 5
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_9
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_9
-IF 던전フラグ:33:9 == 0
+IF 던전플래그:33:9 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 100마카를 손에 넣었다.
 	MONEY:1 += 100
-	던전フラグ:33:9 = 1
+	던전플래그:33:9 = 1
 ENDIF
 
 @BOSS_BELLCHECK_9
@@ -927,8 +928,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_10
-;조건：SEBEC빌딩で武田たちを倒す
-	IF 던전フラグ:10:8 == 1
+;条件：SEBECビルで武多たちを倒す
+	IF 던전플래그:10:8 == 1
 		RETURN 4203
 	ENDIF
 RETURN 0
@@ -938,31 +939,31 @@ RETURN 0
 	PRINTL 타케다와 부하들이 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,8,4203,40,0
 	CALL SET_ENEMY,9,4203,40,0
 	CALL SET_ENEMY,10,4203,40,0
 	CALL SET_ENEMY,14,4203,40,0,1
 	ABL:(CHARANUM-1):스킬1 = 1505
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_10
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_10
-IF 던전フラグ:33:10 == 0
+IF 던전플래그:33:10 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 150마카를 손에 넣었다.
 	MONEY:1 += 150
-	던전フラグ:33:10 = 1
+	던전플래그:33:10 = 1
 ENDIF
 
 ;후생의토령可否
@@ -973,7 +974,7 @@ RETURN 1
 @BOSS_BELL_10
 CALL BOSS_NAME_10
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -990,7 +991,7 @@ ENDIF
 ;ボスの번호を표시
 @BOSS_NAME_11
 ;조건：데바・유가で神取を倒す
-	IF 던전フラグ:11:7 != 0
+	IF 던전플래그:11:7 != 0
 		RETURN 4204
 	ENDIF
 RETURN 0
@@ -1000,30 +1001,30 @@ RETURN 0
 	PRINTL 초인 칸도리 타카히사가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,4204,45,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_11
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_11
-IF 던전フラグ:33:11 == 0
+IF 던전플래그:33:11 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 200마카를 손에 넣었다.
 	MONEY:1 += 200
-	던전フラグ:33:11 = 1
+	던전플래그:33:11 = 1
 ENDIF
 
 ;후생의토령可否
@@ -1034,7 +1035,7 @@ RETURN 1
 @BOSS_BELL_11
 CALL BOSS_NAME_11
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -1051,7 +1052,7 @@ ENDIF
 ;ボスの번호を표시
 @BOSS_NAME_12
 ;조건：데바・유가で神取を倒す
-	IF 던전フラグ:11:7 != 0
+	IF 던전플래그:11:7 != 0
 		RETURN 4205
 	ENDIF
 RETURN 0
@@ -1061,30 +1062,30 @@ RETURN 0
 	PRINTL 초인 갓칸도리가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,4205,50,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_12
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_12
-IF 던전フラグ:33:12 == 0
+IF 던전플래그:33:12 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 225마카를 손에 넣었다.
 	MONEY:1 += 225
-	던전フラグ:33:12 = 1
+	던전플래그:33:12 = 1
 ENDIF
 
 ;후생의토령可否
@@ -1095,7 +1096,7 @@ RETURN 1
 @BOSS_BELL_12
 CALL BOSS_NAME_12
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -1111,8 +1112,8 @@ ENDIF
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_70
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 3118
 	ENDIF
 RETURN 0
@@ -1122,30 +1123,30 @@ RETURN 0
 	PRINTL 광인　다크서머너가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,3118,10,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_70
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_70
-IF 던전フラグ:33:70 == 0
+IF 던전플래그:33:70 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:70 = 1
+	던전플래그:33:70 = 1
 ENDIF
 
 ;후생의토령可否
@@ -1156,7 +1157,7 @@ RETURN 1
 @BOSS_BELL_70
 CALL BOSS_NAME_70
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -1172,8 +1173,8 @@ ENDIF
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_71
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 262
 	ENDIF
 RETURN 0
@@ -1183,30 +1184,30 @@ RETURN 0
 	PRINTL 마왕　라바나가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,262,90,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_71
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_71
-IF 던전フラグ:33:71 == 0
+IF 던전플래그:33:71 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:71 = 1
+	던전플래그:33:71 = 1
 	
 ENDIF
 	CALL LIFTING_A_BAN([[キャラ:라바나]])
@@ -1220,7 +1221,7 @@ RETURN 1
 @BOSS_BELL_71
 CALL BOSS_NAME_71
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -1237,8 +1238,8 @@ ENDIF
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_72
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 266
 	ENDIF
 RETURN 0
@@ -1248,30 +1249,30 @@ RETURN 0
 	PRINTL 마왕　수르트가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,266,61,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_72
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_72
-IF 던전フラグ:33:72 == 0
+IF 던전플래그:33:72 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:72 = 1
+	던전플래그:33:72 = 1
 	
 ENDIF
 CALL LIFTING_A_BAN([[キャラ:수르트]])
@@ -1297,30 +1298,30 @@ RETURN 0
 ;	PRINTL 마왕　아수라가 나타났다!
 ;	CUSTOMDRAWLINE =
 ;	WAIT
-;	FLAG:도주불가フラグ = 1
-;	FLAG:회화불능フラグ = 1
+;	FLAG:도주불가플래그 = 1
+;	FLAG:회화불능플래그 = 1
 ;	FLAG:선제기습취소 = 1
-;	FLAG:RESULTスキップ = 1
+;	FLAG:RESULT스킵 = 1
 ;	CALL SET_ENEMY,9,263,55,0,1
 ;	CALL SYNC_STATUS,(CHARANUM-1)
 ;	CALL HEALTH_CHARA,(CHARANUM-1)
-;	CFLAG:(CHARANUM-1):行動횟수 = 2
+;	CFLAG:(CHARANUM-1):행동횟수 = 2
 ;	CALL BATTLE_START
-;	FLAG:도주불가フラグ = 0
-;	FLAG:회화불능フラグ = 0
+;	FLAG:도주불가플래그 = 0
+;	FLAG:회화불능플래그 = 0
 ;	FLAG:선제기습취소 = 0
-;	FLAG:RESULTスキップ = 0
+;	FLAG:RESULT스킵 = 0
 ;	CALL BOSS_RESULT_72
 ;	
 ;;케르베로스からの報酬	
 ;@BOSS_RESULT_72
-;IF 던전フラグ:33:72 == 0
+;IF 던전플래그:33:72 == 0
 ;	PRINTL 케르베로스가 이쪽으로 다가왔다….
 ;	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 ;	PRINTW 「이것을 받아라. 또 부탁하지」
 ;	PRINTW 50마카를 손에 넣었다.
 ;	MONEY:1 += 50
-;	던전フラグ:33:72 = 1
+;	던전플래그:33:72 = 1
 ;	
 ;ENDIF
 ;	FLAG:(10000+263) = 1
@@ -1335,8 +1336,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_73
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 371
 	ENDIF
 RETURN 0
@@ -1346,30 +1347,30 @@ RETURN 0
 	PRINTL 천사　메르카바가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,371,85,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_73
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_73
-IF 던전フラグ:33:73 == 0
+IF 던전플래그:33:73 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:73 = 1
+	던전플래그:33:73 = 1
 	
 ENDIF
 
@@ -1382,8 +1383,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_74
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 365
 	ENDIF
 RETURN 0
@@ -1393,30 +1394,30 @@ RETURN 0
 	PRINTL 천사　미카엘이 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,365,95,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_74
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_74
-IF 던전フラグ:33:74 == 0
+IF 던전플래그:33:74 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:74 = 1
+	던전플래그:33:74 = 1
 	
 ENDIF
 CALL LIFTING_A_BAN([[キャラ:미카엘]])
@@ -1430,7 +1431,7 @@ RETURN 1
 @BOSS_BELL_74
 CALL BOSS_NAME_74
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -1446,8 +1447,8 @@ ENDIF
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_75
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 278
 	ENDIF
 RETURN 0
@@ -1457,30 +1458,30 @@ RETURN 0
 	PRINTL 마왕　제불이 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,278,65,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_75
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_75
-IF 던전フラグ:33:75 == 0
+IF 던전플래그:33:75 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:75 = 1
+	던전플래그:33:75 = 1
 ENDIF
 CALL LIFTING_A_BAN([[キャラ:제불]])
 	;FLAG:(10000+278) = 1
@@ -1494,8 +1495,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 ;@BOSS_NAME_76
-;조건：発見エン디무ング5이상かつ3周눈이상
-;	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+;	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 ;		RETURN 1513
 ;	ENDIF
 ;RETURN 0
@@ -1505,30 +1506,30 @@ RETURN 0
 ;	PRINTL 마신　브라흐마가 나타났다!
 ;	CUSTOMDRAWLINE =
 ;	WAIT
-;	FLAG:도주불가フラグ = 1
-;	FLAG:회화불능フラグ = 1
+;	FLAG:도주불가플래그 = 1
+;	FLAG:회화불능플래그 = 1
 ;	FLAG:선제기습취소 = 1
-;	FLAG:RESULTスキップ = 1
+;	FLAG:RESULT스킵 = 1
 ;	CALL SET_ENEMY,9,1513,80,0,1
 ;	CALL SYNC_STATUS,(CHARANUM-1)
 ;	CALL HEALTH_CHARA,(CHARANUM-1)
-;	CFLAG:(CHARANUM-1):行動횟수 = 2
+;	CFLAG:(CHARANUM-1):행동횟수 = 2
 ;	CALL BATTLE_START
-;	FLAG:도주불가フラグ = 0
-;	FLAG:회화불능フラグ = 0
+;	FLAG:도주불가플래그 = 0
+;	FLAG:회화불능플래그 = 0
 ;	FLAG:선제기습취소 = 0
-;	FLAG:RESULTスキップ = 0
+;	FLAG:RESULT스킵 = 0
 ;	CALL BOSS_RESULT_76
 	
 ;케르베로스からの報酬	
 ;@BOSS_RESULT_76
-;IF 던전フラグ:33:76 == 0
+;IF 던전플래그:33:76 == 0
 ;	PRINTL 케르베로스가 이쪽으로 다가왔다….
 ;	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 ;	PRINTW 「이것을 받아라. 또 부탁하지」
 ;	PRINTW 50마카를 손에 넣었다.
 ;	MONEY:1 += 50
-;	던전フラグ:33:76 = 1
+;	던전플래그:33:76 = 1
 ;ENDIF
 ;	FLAG:(10000+1513) = 1
 
@@ -1540,7 +1541,7 @@ RETURN 0
 ;@BOSS_BELL_76
 ;CALL BOSS_NAME_76
 ;LOCAL = RESULT
-;IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+;IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 ;	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 ;	IF CSVCSTR(LOCAL,20,0) != ""
@@ -1557,8 +1558,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_76
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 4219
 	ENDIF
 RETURN 0
@@ -1568,30 +1569,30 @@ RETURN 0
 	PRINTL 초인　로우 히어로가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,4219,80,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_76
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_76
-IF 던전フラグ:33:76 == 0
+IF 던전플래그:33:76 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:76 = 1
+	던전플래그:33:76 = 1
 ENDIF
 
 ;후생의토령可否
@@ -1602,7 +1603,7 @@ RETURN 1
 @BOSS_BELL_76
 CALL BOSS_NAME_76
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -1620,8 +1621,8 @@ ENDIF
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_77
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 4220
 	ENDIF
 RETURN 0
@@ -1631,30 +1632,30 @@ RETURN 0
 	PRINTL 초인　카오스 히어로가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,4220,80,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_77
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_77
-IF 던전フラグ:33:77 == 0
+IF 던전플래그:33:77 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:77 = 1
+	던전플래그:33:77 = 1
 ENDIF
 
 ;후생의토령可否
@@ -1665,7 +1666,7 @@ RETURN 1
 @BOSS_BELL_77
 CALL BOSS_NAME_77
 LOCAL = RESULT
-IF (ＣＯＭＰ空き容量() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
+IF (ＣＯＭＰ빈용량() == 1 || SOFT_ON("ＤＤＭ")) && BASE:MASTER:LV >= CSVBASE(LOCAL,30,0)
 	CALL ADD_NEW_COMPANION,LOCAL,200
 	;악마個人구상とか入れても良いかも
 	IF CSVCSTR(LOCAL,20,0) != ""
@@ -1682,8 +1683,8 @@ ENDIF
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_78
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 251
 	ENDIF
 RETURN 0
@@ -1693,30 +1694,30 @@ RETURN 0
 	PRINTL 마왕　벨・이얼이 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,251,45,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_78
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_78
-IF 던전フラグ:33:78 == 0
+IF 던전플래그:33:78 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:78 = 1
+	던전플래그:33:78 = 1
 ENDIF
 
 ;후생의토령可否
@@ -1728,8 +1729,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_79
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 3301
 	ENDIF
 RETURN 0
@@ -1739,30 +1740,30 @@ RETURN 0
 	PRINTL 신령　가짜YHVH가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,3301,95,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_79
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_79
-IF 던전フラグ:33:79 == 0
+IF 던전플래그:33:79 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:79 = 1
+	던전플래그:33:79 = 1
 ENDIF
 
 ;후생의토령可否
@@ -1774,8 +1775,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_80
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 234
 	ENDIF
 RETURN 0
@@ -1785,30 +1786,30 @@ RETURN 0
 	PRINTL 마왕　솀하자이가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,234,52,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_80
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_80
-IF 던전フラグ:33:80 == 0
+IF 던전플래그:33:80 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:80 = 1
+	던전플래그:33:80 = 1
 ENDIF
 CALL LIFTING_A_BAN([[キャラ:솀하자이]])
 ;FLAG:(10000+234) = 1
@@ -1822,8 +1823,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_81
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 235
 	ENDIF
 RETURN 0
@@ -1833,30 +1834,30 @@ RETURN 0
 	PRINTL 마왕　아자젤이 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,235,68,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_81
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_81
-IF 던전フラグ:33:81 == 0
+IF 던전플래그:33:81 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:81 = 1
+	던전플래그:33:81 = 1
 ENDIF
 CALL LIFTING_A_BAN([[キャラ:아자젤]])
 ;FLAG:(10000+235) = 1
@@ -1870,8 +1871,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_82
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 236
 	ENDIF
 RETURN 0
@@ -1881,30 +1882,30 @@ RETURN 0
 	PRINTL 마왕　사타나엘이 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,236,70,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_82
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_82
-IF 던전フラグ:33:82 == 0
+IF 던전플래그:33:82 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:82 = 1
+	던전플래그:33:82 = 1
 ENDIF
 CALL LIFTING_A_BAN([[キャラ:사타나엘]])
 ;FLAG:(10000+236) = 1
@@ -1918,8 +1919,8 @@ RETURN 0
 ;=======================================================================
 ;ボスの번호を표시
 @BOSS_NAME_83
-;조건：発見エン디무ング5이상かつ3周눈이상
-	IF FLAG:경험ED数 > 4 && FLAG:周回횟수 >= 2
+;조건：発見エンディング5이상かつ3周눈이상
+	IF FLAG:경험ED수 > 4 && FLAG:주회횟수 >= 2
 		RETURN 4105
 	ENDIF
 RETURN 0
@@ -1929,30 +1930,30 @@ RETURN 0
 	PRINTL 마인　사악프로스트가 나타났다!
 	CUSTOMDRAWLINE =
 	WAIT
-	FLAG:도주불가フラグ = 1
-	FLAG:회화불능フラグ = 1
+	FLAG:도주불가플래그 = 1
+	FLAG:회화불능플래그 = 1
 	FLAG:선제기습취소 = 1
-	FLAG:RESULTスキップ = 1
+	FLAG:RESULT스킵 = 1
 	CALL SET_ENEMY,9,4105,75,0,1
 	CALL SYNC_STATUS,(CHARANUM-1)
 	CALL HEALTH_CHARA,(CHARANUM-1)
-	CFLAG:(CHARANUM-1):行動횟수 = 2
+	CFLAG:(CHARANUM-1):행동횟수 = 2
 	CALL BATTLE_START
-	FLAG:도주불가フラグ = 0
-	FLAG:회화불능フラグ = 0
+	FLAG:도주불가플래그 = 0
+	FLAG:회화불능플래그 = 0
 	FLAG:선제기습취소 = 0
-	FLAG:RESULTスキップ = 0
+	FLAG:RESULT스킵 = 0
 	CALL BOSS_RESULT_83
 	
 ;케르베로스からの報酬	
 @BOSS_RESULT_83
-IF 던전フラグ:33:83 == 0
+IF 던전플래그:33:83 == 0
 	PRINTL 케르베로스가 이쪽으로 다가왔다….
 	PRINTW 「잘 해주었다…. 이로써 조금은 조용해졌을 터」
 	PRINTW 「이것을 받아라. 또 부탁하지」
 	PRINTW 50마카를 손에 넣었다.
 	MONEY:1 += 50
-	던전フラグ:33:83 = 1
+	던전플래그:33:83 = 1
 ENDIF
 
 
